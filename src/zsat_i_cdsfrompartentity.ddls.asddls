@@ -10,8 +10,8 @@ define view ZSAT_I_CDSFromPartEntity
     inner join   dd02l as DbTable on  BaseTable.tabname = DbTable.tabname
                                   and DbTable.tabclass  = 'TRANSP'
 {
-  BaseTable.viewname  as DdlViewName,
-  BaseTable.tabname   as SourceEntity
+  BaseTable.viewname as DdlViewName,
+  BaseTable.tabname  as SourceEntity
 }
 -- CDS views which have Database Views (not DDL Views of CDS views) in select part
 union select from dd26s as BaseTable
@@ -23,17 +23,17 @@ union select from dd26s as BaseTable
   BaseTable.tabname  as SourceEntity
 }
 -- CDS views which have other CDS views in the select part
-union select from dd26s                 as BaseTable
+union select from dd26s                as BaseTable
   inner join      ZSAT_I_DdlDependency as DdlMap on BaseTable.tabname = DdlMap.ViewName
 {
   BaseTable.viewname as DdlViewName,
   DdlMap.EntityName  as SourceEntity
 }
 -- CDS views which have table functions in the select part
-union select from zsatdd26s_v as BaseTable
+union select from ZSAT_I_CdsBaseTable as BaseTable
 {
-  BaseTable.ddlview   as DdlViewName,
-  BaseTable.basetable as SourceEntity
+  BaseTable.DdlView   as DdlViewName,
+  BaseTable.BaseTable as SourceEntity
 }
 where
-  BaseTable.ddictype = 'STOB'
+  BaseTable.TadirType = 'STOB'

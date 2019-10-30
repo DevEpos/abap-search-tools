@@ -345,9 +345,9 @@ CLASS zcl_sat_ddic_repo_access IMPLEMENTATION.
 
     SELECT basetable AS entity_id,
            basetable AS entity_id_raw,
-           CASE ddictype WHEN 'VIEW' THEN 'V' WHEN 'TABL' THEN 'T' END AS entity_type,
+           entitytype as entity_type,
            ddtext AS description
-      FROM zsatdd26s_v AS base
+      FROM zsat_i_cdsbasetable AS base
         LEFT OUTER JOIN dd02t AS text ON base~basetable = text~tabname
                                      AND text~ddlanguage = @lv_descr_language
       WHERE ddlview = @iv_view_name

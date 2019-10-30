@@ -621,8 +621,8 @@ CLASS zcl_sat_cds_view_factory IMPLEMENTATION.
 
     TYPES: BEGIN OF lty_base_table.
         INCLUDE TYPE zsat_cds_view_base_table.
-    TYPES: ddictype TYPE trobjtype,
-           genflag  TYPE genflag.
+    TYPES: entitytype TYPE zsat_entity_type,
+           generationflag  TYPE genflag.
     TYPES: END OF lty_base_table.
 
     DATA: lt_base_tables    TYPE STANDARD TABLE OF lty_base_table,
@@ -635,24 +635,26 @@ CLASS zcl_sat_cds_view_factory IMPLEMENTATION.
 *.. Select all base tables for the given generated SQL View
     SELECT basetable AS entityname,
            basetable AS original_base_name,
-           ddictype,
-           genflag
-      FROM zsatdd26s_v
+           entitytype,
+           generationflag
+      FROM zsat_i_cdsbasetable
       WHERE ddlview = @iv_view_name
         AND basetable NOT IN @gt_helper_ddl_tab_names
-      ORDER BY tabpos
+      ORDER BY TablePosition
       INTO CORRESPONDING FIELDS OF TABLE @lt_base_tables.
 
     CHECK sy-subrc = 0.
 
     DATA(lv_description_language) = zcl_sat_system_helper=>get_system_language( ).
 
-    lt_tab_range = VALUE #( FOR table IN lt_base_tables WHERE ( ddictype = lc_table_type ) ( sign = 'I' option = 'EQ' low = table-entityname ) ).
+    lt_tab_range = VALUE #( FOR table IN lt_base_tables
+                            WHERE ( entitytype = zif_sat_c_entity_type=>table )
+                            ( sign = 'I' option = 'EQ' low = table-entityname ) ).
     lt_cds_view_range = VALUE #( FOR view IN lt_base_tables
-                                 WHERE ( genflag = abap_true )
+                                 WHERE ( generationflag = abap_true )
                                  ( sign = 'I' option = 'EQ' low = view-entityname ) ).
     lt_view_range = VALUE #( FOR view IN lt_base_tables
-                             WHERE ( genflag = abap_false AND ddictype = lc_view_type )
+                             WHERE ( generationflag = abap_false AND entitytype = zif_sat_c_entity_type=>view )
                              ( sign = 'I' option = 'EQ' low = view-entityname ) ).
 
 *.. Fill additional information for CDS views bases
@@ -670,7 +672,7 @@ CLASS zcl_sat_cds_view_factory IMPLEMENTATION.
       INTO TABLE @DATA(lt_cds_view).
 
       IF sy-subrc = 0.
-        LOOP AT lt_base_tables ASSIGNING <ls_base> WHERE genflag = abap_true.
+        LOOP AT lt_base_tables ASSIGNING <ls_base> WHERE generationflag = abap_true.
           ASSIGN lt_cds_view[ viewname = <ls_base>-entityname ] TO FIELD-SYMBOL(<ls_cds_view>).
           IF sy-subrc <> 0.
             ASSIGN lt_cds_view[ entityid = <ls_base>-entityname ] TO <ls_cds_view>.
@@ -698,8 +700,8 @@ CLASS zcl_sat_cds_view_factory IMPLEMENTATION.
       INTO TABLE @DATA(lt_view_data).
 
       IF sy-subrc = 0.
-        LOOP AT lt_base_tables ASSIGNING <ls_base> WHERE ddictype = lc_view_type
-                                                     AND genflag  = abap_false.
+        LOOP AT lt_base_tables ASSIGNING <ls_base> WHERE entitytype = zif_sat_c_entity_type=>view
+                                                     AND generationflag  = abap_false.
           ASSIGN lt_view_data[ viewname = <ls_base>-entityname ] TO FIELD-SYMBOL(<ls_view_data>).
           CHECK sy-subrc = 0.
 
@@ -720,7 +722,7 @@ CLASS zcl_sat_cds_view_factory IMPLEMENTATION.
       INTO TABLE @DATA(lt_table_data).
 
       IF sy-subrc = 0.
-        LOOP AT lt_base_tables ASSIGNING <ls_base> WHERE ddictype = lc_table_type.
+        LOOP AT lt_base_tables ASSIGNING <ls_base> WHERE entitytype = zif_sat_c_entity_type=>table.
           ASSIGN lt_table_data[ tablename = <ls_base>-entityname ] TO FIELD-SYMBOL(<ls_table_data>).
           CHECK sy-subrc = 0.
 
