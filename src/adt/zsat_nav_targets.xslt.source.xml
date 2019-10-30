@@ -1,0 +1,16 @@
+<?sap.transform simple?>
+<tt:transform xmlns:tt="http://www.sap.com/transformation-templates" xmlns:ddic="http://www.sap.com/abapxml/types/dictionary">
+
+  <tt:root name="NAVIGATION_TARGETS" type="ddic:zsat_adt_navigation_target_t"/>
+
+  <tt:template>
+    <navigationTargets tt:extensible="deep">
+      <tt:loop ref="NAVIGATION_TARGETS">
+        <navigationTarget tt:extensible="deep">
+          <tt:attribute name="name" value-ref="$ref.name"/>
+        </navigationTarget>
+      </tt:loop>
+    </navigationTargets>
+  </tt:template>
+
+</tt:transform>

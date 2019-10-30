@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_MSAG" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <T100A>
+    <ARBGB>ZSAT_ADT</ARBGB>
+    <MASTERLANG>E</MASTERLANG>
+    <STEXT>Messages for Search and Analysis Tools (ADT)</STEXT>
+   </T100A>
+   <T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSAT_ADT</ARBGB>
+     <MSGNR>001</MSGNR>
+     <TEXT>Object Type &amp;1 is not supported</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSAT_ADT</ARBGB>
+     <MSGNR>002</MSGNR>
+     <TEXT>Invalid Access Mode &amp;1</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSAT_ADT</ARBGB>
+     <MSGNR>003</MSGNR>
+     <TEXT>Missing parameter &apos;&amp;1&apos;</TEXT>
+    </T100>
+   </T100>
+  </asx:values>
+ </asx:abap>
+</abapGit>

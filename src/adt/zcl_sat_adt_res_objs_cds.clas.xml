@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_CLAS" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <VSEOCLASS>
+    <CLSNAME>ZCL_SAT_ADT_RES_OBJS_CDS</CLSNAME>
+    <LANGU>E</LANGU>
+    <DESCRIPT>Object Search Resource for CDS Search</DESCRIPT>
+    <STATE>1</STATE>
+    <CLSCCINCL>X</CLSCCINCL>
+    <FIXPT>X</FIXPT>
+    <UNICODE>X</UNICODE>
+   </VSEOCLASS>
+   <DESCRIPTIONS>
+    <SEOCOMPOTX>
+     <CLSNAME>ZCL_SAT_ADT_RES_OBJS_CDS</CLSNAME>
+     <CMPNAME>GET_ANNOTATION_PARAM</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Retrieve &apos;annotation&apos; parameter from request</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CLSNAME>ZCL_SAT_ADT_RES_OBJS_CDS</CLSNAME>
+     <CMPNAME>GET_ASSOCIATED_IN_PARAM</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Retrieve &apos;associatedIn&apos; parameter from request</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CLSNAME>ZCL_SAT_ADT_RES_OBJS_CDS</CLSNAME>
+     <CMPNAME>GET_EXTENDED_BY_PARAM</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Retrieve &apos;extendedBy&apos; parameter from request</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CLSNAME>ZCL_SAT_ADT_RES_OBJS_CDS</CLSNAME>
+     <CMPNAME>GET_HAS_PARAMS_PARAM</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Retrieve &apos;hasParams&apos; parameter from request</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CLSNAME>ZCL_SAT_ADT_RES_OBJS_CDS</CLSNAME>
+     <CMPNAME>GET_PARAM_PARAM</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Retrieve &apos;param&apos; parameter from request</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CLSNAME>ZCL_SAT_ADT_RES_OBJS_CDS</CLSNAME>
+     <CMPNAME>GET_SELECT_SOURCE_IN_PARAM</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Retrieve &apos;selectSourceIn&apos; parameter from request</DESCRIPT>
+    </SEOCOMPOTX>
+   </DESCRIPTIONS>
+  </asx:values>
+ </asx:abap>
+</abapGit>

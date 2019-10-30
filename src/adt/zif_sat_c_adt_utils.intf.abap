@@ -1,0 +1,108 @@
+"! <p class="shorttext synchronized" lang="en">Constants for ADT Tools of DB Browser</p>
+INTERFACE zif_sat_c_adt_utils
+  PUBLIC .
+
+  "! <p class="shorttext synchronized" lang="en">URI segment for positional DDLS URI</p>
+  CONSTANTS c_ddl_pos_uri_segment TYPE string VALUE '/source/main#start='.
+
+  CONSTANTS:
+    "! <p class="shorttext synchronized" lang="en">IDs of ADT Resource Handlers</p>
+    BEGIN OF c_resource_handler,
+      object_search              TYPE string VALUE 'ZCL_SAT_ADT_RES_OBJECT_SEARCH',
+      object_search_cds          TYPE string VALUE 'ZCL_SAT_ADT_RES_OBJS_CDS',
+      object_search_dbtabview    TYPE string VALUE 'ZCL_SAT_ADT_RES_OBJS_DBTABVIEW',
+      object_search_all          TYPE string VALUE 'ZCL_SAT_ADT_RES_OBJS_ALLTYPES',
+      element_info               TYPE string VALUE 'ZCL_SAT_ADT_RES_ELEMENT_INFO',
+      element_info_by_uri        TYPE string VALUE 'ZCL_SAT_ADT_RES_ELEMINFO_BYURI',
+      cds_secondary_element_info TYPE string VALUE 'ZCL_SAT_ADT_RES_CDS_SECELINFO',
+      cds_fields                 TYPE string VALUE 'ZCL_SAT_ADT_RES_CDSFIELD_VH',
+      db_table_fields            TYPE string VALUE 'ZCL_SAT_ADT_RES_TABFIELD_VH',
+      annotations                TYPE string VALUE 'ZCL_SAT_ADT_RES_ANNO_VH',
+      annotation_values          TYPE string VALUE 'ZCL_SAT_ADT_RES_ANNO_VALUE_VH',
+      database_entities          TYPE string VALUE 'ZCL_SAT_ADT_RES_DB_ENTITY_VH',
+      release_api_states         TYPE string VALUE 'ZCL_SAT_ADT_RES_API_STATE_VH',
+      cds_types                  TYPE string VALUE 'ZCL_SAT_ADT_RES_CDS_TYPE_VH',
+      cds_extensions             TYPE string VALUE 'ZCL_SAT_ADT_RES_CDS_EXT_VH',
+      cds_info                   TYPE string VALUE 'ZCL_SAT_ADT_RES_CDS_VIEW_EI',
+      db_table_info              TYPE string VALUE 'ZCL_SAT_ADT_RES_DB_TABLE_EI',
+      db_view_info               TYPE string VALUE 'ZCL_SAT_ADT_RES_DB_VIEW_EI',
+      sapaox_launcher            TYPE string VALUE 'ZCL_SAT_ADT_RES_AOX_LAUNCHER',
+      cds_analysis               TYPE string VALUE 'ZCL_SAT_ADT_RES_CDS_ANALYSIS',
+      navigation_targets         TYPE string VALUE 'ZCL_SAT_ADT_RES_NAV_TARGETS',
+      db_fields_hierarchy        TYPE string VALUE 'ZCL_SAT_ADT_RES_DBFIELD_HIER',
+      ddic_repo_access           TYPE string VALUE 'ZCL_SAT_ADT_RES_DDIC_REP_ACC',
+    END OF c_resource_handler.
+
+  CONSTANTS:
+    BEGIN OF c_element_info_parameter,
+      uri         TYPE string VALUE 'objectUri',
+      name        TYPE string VALUE 'objectName',
+      object_type TYPE string VALUE 'objectType',
+      basic_info  TYPE string VALUE 'basicInfoOnly',
+    END OF c_element_info_parameter.
+  CONSTANTS:
+    BEGIN OF c_cds_analysis_parameter,
+      cds_name          TYPE string VALUE 'cdsViewName',
+      with_associations TYPE string VALUE 'withAssociations',
+      usage_analysis    TYPE string VALUE 'usageAnalysis',
+    END OF c_cds_analysis_parameter.
+  CONSTANTS:
+    BEGIN OF c_cds_elem_info_parameter,
+      show_association_name TYPE string VALUE 'showAssocName',
+    END OF c_cds_elem_info_parameter.
+  CONSTANTS:
+    BEGIN OF c_search_query_parameter,
+      query                  TYPE string VALUE 'query',
+      object_name            TYPE string VALUE 'objectName',
+      object_type            TYPE string VALUE 'objectType',
+      max_rows               TYPE string VALUE 'maxRows',
+      user                   TYPE string VALUE 'userName',
+      select_from            TYPE string VALUE 'selectSourceIn',
+      association            TYPE string VALUE 'associatedIn',
+      release_state          TYPE string VALUE 'releaseState',
+      description            TYPE string VALUE 'description',
+      type                   TYPE string VALUE 'type',
+      package                TYPE string VALUE 'packageName',
+      annotation             TYPE string VALUE 'annotation',
+      param                  TYPE string VALUE 'param',
+      field                  TYPE string VALUE 'fieldName',
+      params                 TYPE string VALUE 'hasParams',
+      extended_by            TYPE string VALUE 'extendedBy',
+      use_and_for_filters    TYPE string VALUE 'useAndForFilters',
+      read_api_state         TYPE string VALUE 'withApiState',
+      get_all_results        TYPE string VALUE 'getAllResults',
+      read_package_hierarchy TYPE string VALUE 'withPackageHierarchy',
+    END OF c_search_query_parameter.
+  CONSTANTS:
+    BEGIN OF c_ddic_repo_access_params,
+      "! Access Mode for Respository access <br>
+      "! Possible options are:
+      "! <ul>
+      "! <li>getUriFromPaths</li>
+      "! <li>getFields</li>
+      "! </ul>
+      access_mode TYPE string VALUE 'accessMode',
+      uri         TYPE string VALUE 'uri',
+      paths       TYPE string VALUE 'path',
+      "! List of optional filters to be used during
+      "! the DDIC Access <br>
+      "! Use to the following filter pattern: <key>:<value>
+      filters     TYPE string VALUE 'filter',
+    END OF c_ddic_repo_access_params.
+  CONSTANTS:
+    BEGIN OF c_db_fields_info_parameter,
+      name               TYPE string VALUE 'name',
+      type               TYPE string VALUE 'type',
+      mode               TYPE string VALUE 'mode',
+      search_calc_fields TYPE string VALUE 'searchCalcFields',
+      search_db_views    TYPE string VALUE 'searchDbViewUsages',
+      field              TYPE string VALUE 'field',
+    END OF c_db_fields_info_parameter.
+
+  CONSTANTS:
+    BEGIN OF c_adt_types,
+      data_definition  TYPE string VALUE 'DDLS/DF',
+      table_definition TYPE string VALUE 'TABL/DT',
+      view_definition  TYPE string VALUE 'VIEW/DV',
+    END OF c_adt_types.
+ENDINTERFACE.

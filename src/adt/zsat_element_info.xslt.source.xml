@@ -1,0 +1,63 @@
+<?sap.transform simple?>
+<tt:transform xmlns:tt="http://www.sap.com/transformation-templates" xmlns:ddic="http://www.sap.com/abapxml/types/dictionary">
+
+  <tt:root name="ELEMENT_INFO" type="ddic:zsat_adt_element_info"/>
+
+  <tt:template>
+    <!--<elementInfo tt:extensible="deep">-->
+    <tt:apply name="elementInfo">
+      <tt:with-root name="ELEMENT_INFO" ref="ELEMENT_INFO"/>
+    </tt:apply>
+    <!--</elementInfo>-->
+  </tt:template>
+
+  <tt:template name="elementInfo">
+    <tt:context>
+      <tt:root name="ELEMENT_INFO"/>
+    </tt:context>
+    <elementInfo tt:extensible="deep">
+      <!-- serialize some scalar properties of the element -->
+      <tt:cond s-check="not-initial(ELEMENT_INFO.NAME)">
+        <tt:attribute name="name" value-ref="ELEMENT_INFO.NAME"/>
+      </tt:cond>
+      <tt:cond s-check="not-initial(ELEMENT_INFO.RAW_NAME)">
+        <tt:attribute name="rawName" value-ref="ELEMENT_INFO.RAW_NAME"/>
+      </tt:cond>
+      <tt:cond s-check="not-initial(ELEMENT_INFO.TYPE)">
+        <tt:attribute name="type" value-ref="ELEMENT_INFO.TYPE"/>
+      </tt:cond>
+      <tt:cond s-check="not-initial(ELEMENT_INFO.URI)">
+        <tt:attribute name="uri" value-ref="ELEMENT_INFO.URI"/>
+      </tt:cond>
+      <tt:cond s-check="not-initial(ELEMENT_INFO.OWNER)">
+        <tt:attribute name="owner" value-ref="ELEMENT_INFO.OWNER"/>
+      </tt:cond>
+      <tt:cond s-check="not-initial(ELEMENT_INFO.PACKAGE)">
+        <tt:attribute name="packageName" value-ref="ELEMENT_INFO.PACKAGE"/>
+      </tt:cond>
+      <tt:cond s-check="not-initial(ELEMENT_INFO.DESCRIPTION)">
+        <tt:attribute name="description" value-ref="ELEMENT_INFO.DESCRIPTION"/>
+      </tt:cond>
+
+      <!-- Serialize the properties (optional) -->
+      <tt:cond s-check="not-initial(ELEMENT_INFO.PROPERTIES)">
+        <properties>
+          <tt:loop ref="ELEMENT_INFO.PROPERTIES">
+            <tt:cond s-check="not-initial($ref.value)">
+              <property>
+                <tt:attribute name="key" value-ref="$ref.key"/>
+                <tt:value ref="$ref.value"/>
+              </property>
+            </tt:cond>
+          </tt:loop>
+        </properties>
+      </tt:cond>
+
+      <!-- Serialize children -->
+      <tt:call-method class="ZCL_SAT_ADT_ELEM_INFO_SERLZER" d-name="READ_EXT_ATTRIBUTES" reader="io_reader" s-name="SERIALIZE_EXT_ATTRIBUTES" writer="io_writer">
+        <tt:with-parameter name="code_element" ref="ELEMENT_INFO"/>
+        <tt:with-parameter name="transformation_name" val="C('ZSAT_ELEMENT_INFO')"/>
+      </tt:call-method>
+    </elementInfo>
+  </tt:template>
+</tt:transform>

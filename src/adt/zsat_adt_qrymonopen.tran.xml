@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_TRAN" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <TSTC>
+    <TCODE>ZSAT_ADT_QRYMONOPEN</TCODE>
+    <CINFO>Ag==</CINFO>
+   </TSTC>
+   <TSTCC>
+    <TCODE>ZSAT_ADT_QRYMONOPEN</TCODE>
+    <S_PLATIN>X</S_PLATIN>
+   </TSTCC>
+   <TSTCT>
+    <SPRSL>E</SPRSL>
+    <TCODE>ZSAT_ADT_QRYMONOPEN</TCODE>
+    <TTEXT>DB Browser (ADT) Start Query Monitor</TTEXT>
+   </TSTCT>
+   <TSTCP>
+    <TCODE>ZSAT_ADT_QRYMONOPEN</TCODE>
+    <PARAM>/*OS_APPLICATION CLASS=ZCL_SAT_ADT_OO_TRANS_UTIL;METHOD=START_QUERY_MONITOR;UPDATE_MODE=U;</PARAM>
+   </TSTCP>
+  </asx:values>
+ </asx:abap>
+</abapGit>

@@ -1,0 +1,72 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_CLAS" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <VSEOCLASS>
+    <CLSNAME>ZCL_SAT_ADT_DISCOVERY_APP</CLSNAME>
+    <LANGU>E</LANGU>
+    <DESCRIPT>ADT Utils for DB Browser</DESCRIPT>
+    <STATE>1</STATE>
+    <CLSCCINCL>X</CLSCCINCL>
+    <FIXPT>X</FIXPT>
+    <UNICODE>X</UNICODE>
+   </VSEOCLASS>
+   <DESCRIPTIONS>
+    <SEOCOMPOTX>
+     <CLSNAME>ZCL_SAT_ADT_DISCOVERY_APP</CLSNAME>
+     <CMPNAME>REGISTER_CDS_SELECT_ANALYSIS</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Registers Resources for CDS Analysis Tools</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CLSNAME>ZCL_SAT_ADT_DISCOVERY_APP</CLSNAME>
+     <CMPNAME>REGISTER_DB_FIELD_RESOURCES</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Registers Resources for DB Field accesses</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CLSNAME>ZCL_SAT_ADT_DISCOVERY_APP</CLSNAME>
+     <CMPNAME>REGISTER_DDIC_REPO_ACCESS</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Registers resource for DDIC Repository Access</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CLSNAME>ZCL_SAT_ADT_DISCOVERY_APP</CLSNAME>
+     <CMPNAME>REGISTER_ELEMENT_INFO</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Registers element info for tree expansion</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CLSNAME>ZCL_SAT_ADT_DISCOVERY_APP</CLSNAME>
+     <CMPNAME>REGISTER_NAVIGATION_TARGETS</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Registers Resources for detecting navigation targets</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CLSNAME>ZCL_SAT_ADT_DISCOVERY_APP</CLSNAME>
+     <CMPNAME>REGISTER_OBJECT_SEARCH_RES</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Register object search</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CLSNAME>ZCL_SAT_ADT_DISCOVERY_APP</CLSNAME>
+     <CMPNAME>REGISTER_SAPAOX_LAUNCHER</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Registers resources for SAP Analyis for Office Tools</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CLSNAME>ZCL_SAT_ADT_DISCOVERY_APP</CLSNAME>
+     <CMPNAME>REGISTER_VALUE_HELP_PROVIDERS</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Register value help providers</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CLSNAME>ZCL_SAT_ADT_DISCOVERY_APP</CLSNAME>
+     <CMPNAME>REG_OBJECT_SEARCH_TEMPLATE</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Registers template for Object search</DESCRIPT>
+    </SEOCOMPOTX>
+   </DESCRIPTIONS>
+  </asx:values>
+ </asx:abap>
+</abapGit>

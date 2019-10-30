@@ -1,0 +1,108 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_CLAS" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <VSEOCLASS>
+    <CLSNAME>ZCL_SAT_DDIC_REPO_ACCESS</CLSNAME>
+    <LANGU>E</LANGU>
+    <DESCRIPT>Access elements from DDIC Repository</DESCRIPT>
+    <STATE>1</STATE>
+    <CLSCCINCL>X</CLSCCINCL>
+    <FIXPT>X</FIXPT>
+    <UNICODE>X</UNICODE>
+   </VSEOCLASS>
+   <DESCRIPTIONS>
+    <SEOCOMPOTX>
+     <CLSNAME>ZCL_SAT_DDIC_REPO_ACCESS</CLSNAME>
+     <CMPNAME>FIND_BASE_TABLES_OF_VIEW</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Find base tables for database view</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CLSNAME>ZCL_SAT_DDIC_REPO_ACCESS</CLSNAME>
+     <CMPNAME>FIND_DATABASE_TAB_VIEW</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Find database tables/views</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CLSNAME>ZCL_SAT_DDIC_REPO_ACCESS</CLSNAME>
+     <CMPNAME>GET_DATA_ELEMENT</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Retrieve data element information</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CLSNAME>ZCL_SAT_DDIC_REPO_ACCESS</CLSNAME>
+     <CMPNAME>GET_DFIES_INFO_FOR_ROLLNAME</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Retrieve field information for rollname</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CLSNAME>ZCL_SAT_DDIC_REPO_ACCESS</CLSNAME>
+     <CMPNAME>GET_DOMAIN_FIX_VALUE_TEXT</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Retrieve description of domain fix value</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CLSNAME>ZCL_SAT_DDIC_REPO_ACCESS</CLSNAME>
+     <CMPNAME>GET_DTEL_INTTYPE</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Retrieve internal type of data element</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CLSNAME>ZCL_SAT_DDIC_REPO_ACCESS</CLSNAME>
+     <CMPNAME>GET_ENTITY</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Retrieve database entity for the given name</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CLSNAME>ZCL_SAT_DDIC_REPO_ACCESS</CLSNAME>
+     <CMPNAME>GET_ENTITY_BY_RANGE</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Retrieve entities in search range</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CLSNAME>ZCL_SAT_DDIC_REPO_ACCESS</CLSNAME>
+     <CMPNAME>GET_FOREIGN_KEY_TABLES</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Retrieve foreign key tables for the given table name</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CLSNAME>ZCL_SAT_DDIC_REPO_ACCESS</CLSNAME>
+     <CMPNAME>GET_TABLES_FOR_PACKAGE</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Retrieve table names for a package</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CLSNAME>ZCL_SAT_DDIC_REPO_ACCESS</CLSNAME>
+     <CMPNAME>GET_TABLE_DESCRIPTION</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Read description for table/view</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CLSNAME>ZCL_SAT_DDIC_REPO_ACCESS</CLSNAME>
+     <CMPNAME>GET_TABLE_FIELD_INFO</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Retrieve information about single table field</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CLSNAME>ZCL_SAT_DDIC_REPO_ACCESS</CLSNAME>
+     <CMPNAME>GET_TABLE_FIELD_INFOS</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Retrieve table fields information</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CLSNAME>ZCL_SAT_DDIC_REPO_ACCESS</CLSNAME>
+     <CMPNAME>GET_TABLE_INFO</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Retrieve information about table</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CLSNAME>ZCL_SAT_DDIC_REPO_ACCESS</CLSNAME>
+     <CMPNAME>GET_TEXT_TABLE</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Retrieve Text table</DESCRIPT>
+    </SEOCOMPOTX>
+   </DESCRIPTIONS>
+  </asx:values>
+ </asx:abap>
+</abapGit>

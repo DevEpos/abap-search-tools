@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_CLAS" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <VSEOCLASS>
+    <CLSNAME>ZCL_SAT_ADT_RES_DDIC_REP_ACC</CLSNAME>
+    <LANGU>E</LANGU>
+    <DESCRIPT>Resource for DDIC Repository Access</DESCRIPT>
+    <STATE>1</STATE>
+    <CLSCCINCL>X</CLSCCINCL>
+    <FIXPT>X</FIXPT>
+    <UNICODE>X</UNICODE>
+   </VSEOCLASS>
+   <DESCRIPTIONS>
+    <SEOCOMPOTX>
+     <CLSNAME>ZCL_SAT_ADT_RES_DDIC_REP_ACC</CLSNAME>
+     <CMPNAME>GET_COLUMNS</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Retrieves columns of requested ddic entity</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CLSNAME>ZCL_SAT_ADT_RES_DDIC_REP_ACC</CLSNAME>
+     <CMPNAME>GET_FILTERS</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Retrieves optional list of filters</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CLSNAME>ZCL_SAT_ADT_RES_DDIC_REP_ACC</CLSNAME>
+     <CMPNAME>GET_OBJECT_FROM_URI</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Retrieve object name and type from the given uri</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CLSNAME>ZCL_SAT_ADT_RES_DDIC_REP_ACC</CLSNAME>
+     <CMPNAME>GET_PARAMETERS</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Reads request parameters</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CLSNAME>ZCL_SAT_ADT_RES_DDIC_REP_ACC</CLSNAME>
+     <CMPNAME>GET_URI_IN_PATHS</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Reads URIs for list of paths</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CLSNAME>ZCL_SAT_ADT_RES_DDIC_REP_ACC</CLSNAME>
+     <CMPNAME>READ_CDS_VIEW_COLUMNS</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Reads CDS View columns</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CLSNAME>ZCL_SAT_ADT_RES_DDIC_REP_ACC</CLSNAME>
+     <CMPNAME>READ_TABLE_COLUMNS</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Reads database table columns</DESCRIPT>
+    </SEOCOMPOTX>
+   </DESCRIPTIONS>
+  </asx:values>
+ </asx:abap>
+</abapGit>
