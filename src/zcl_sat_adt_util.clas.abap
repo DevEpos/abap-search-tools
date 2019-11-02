@@ -52,6 +52,13 @@ CLASS zcl_sat_adt_util DEFINITION
         VALUE(es_object_type) TYPE wbobjtype
       RAISING
         cx_adt_uri_mapping.
+    "! <p class="shorttext synchronized" lang="en">Maps wb object to ADT object reference </p>
+    CLASS-METHODS map_tadir_obj_to_object_ref
+      IMPORTING
+        iv_name              TYPE seu_objkey
+        is_type              TYPE wbobjtype
+      RETURNING
+        VALUE(rs_object_ref) TYPE sadt_object_reference.
   PROTECTED SECTION.
   PRIVATE SECTION.
     TYPES:
@@ -171,19 +178,32 @@ CLASS zcl_sat_adt_util IMPLEMENTATION.
   METHOD get_adt_object_ref_uri.
     ASSIGN gt_adt_obj_ref_uri_map[ name = iv_name type = is_type ] TO FIELD-SYMBOL(<ls_uri>).
     IF sy-subrc <> 0.
-      DATA(lo_uri_mapper) = cl_adt_uri_mapper=>get_instance( ).
-      TRY.
-          rv_uri = lo_uri_mapper->if_adt_uri_mapper~get_adt_object_ref_uri(
-              name = iv_name
-              type = is_type
-          ).
-        CATCH cx_adt_uri_mapping.
-      ENDTRY.
-      INSERT VALUE #(
-        name = iv_name
-        type = is_type
-        uri  = rv_uri
-      ) INTO TABLE gt_adt_obj_ref_uri_map.
+      DATA(ls_obj_ref) = map_tadir_obj_to_object_ref(
+         iv_name            = iv_name
+         is_type            = is_type
+      ).
+      IF ls_obj_ref IS NOT INITIAL AND ls_obj_ref-uri IS NOT INITIAL.
+        rv_uri = ls_obj_ref-uri.
+        INSERT VALUE #(
+          name = iv_name
+          type = is_type
+          uri  = rv_uri
+        ) INTO TABLE gt_adt_obj_ref_uri_map.
+      ENDIF.
+***      DATA(lo_uri_mapper) = cl_adt_uri_mapper=>get_instance( ).
+***      TRY.
+****........ Method exists starting from NW 7.52
+***          rv_uri = lo_uri_mapper->if_adt_uri_mapper~get_adt_object_ref_uri(
+***              name = iv_name
+***              type = is_type
+***          ).
+***        CATCH cx_adt_uri_mapping.
+***      ENDTRY.
+***      INSERT VALUE #(
+***        name = iv_name
+***        type = is_type
+***        uri  = rv_uri
+***      ) INTO TABLE gt_adt_obj_ref_uri_map.
     ELSE.
       rv_uri = <ls_uri>-uri.
     ENDIF.
@@ -256,8 +276,8 @@ CLASS zcl_sat_adt_util IMPLEMENTATION.
       lv_obj_type = SWITCH trobjtype(
         iv_type
         WHEN zif_sat_c_entity_type=>cds_view THEN 'DDLS'
-        WHEN zif_sat_c_entity_type=>view THEN 'VIEW'
-        WHEN zif_sat_c_entity_type=>table THEN 'TABD'
+        WHEN zif_sat_c_entity_type=>view     THEN 'VIEW'
+        WHEN zif_sat_c_entity_type=>table    THEN 'TABD'
       ).
     ELSEIF iv_tadir_type IS SUPPLIED.
       lv_obj_type = iv_tadir_type.
@@ -304,6 +324,30 @@ CLASS zcl_sat_adt_util IMPLEMENTATION.
     ).
     ev_object_name = lo_wb_object->get_display_name( ).
     es_object_type = lo_wb_object->get_object_type_ref( )->get_transport_type( ).
+  ENDMETHOD.
+
+  METHOD map_tadir_obj_to_object_ref.
+    TRY.
+        cl_wb_object=>create_from_global_type(
+          EXPORTING
+            p_object_type             = is_type
+            p_object_key              = iv_name
+          RECEIVING
+            p_wb_object               = DATA(lo_wb_object)
+          EXCEPTIONS
+            objecttype_not_existing   = 1
+            input_data_not_sufficient = 2
+            OTHERS                    = 3
+        ).
+        CHECK sy-subrc = 0.
+        DATA(lo_adt_tools_core_f) = cl_adt_tools_core_factory=>get_instance( ).
+        DATA(lo_object_ref) = lo_adt_tools_core_f->get_uri_mapper( )->map_wb_object_to_objref(
+            wb_object          = lo_wb_object
+        ).
+        CHECK lo_object_ref IS BOUND.
+        rs_object_ref = lo_object_ref->ref_data.
+      CATCH cx_adt_uri_mapping.
+    ENDTRY.
   ENDMETHOD.
 
 ENDCLASS.
