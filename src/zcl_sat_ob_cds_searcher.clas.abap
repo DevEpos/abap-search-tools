@@ -116,9 +116,7 @@ CLASS zcl_sat_ob_cds_searcher IMPLEMENTATION.
     ).
 
     add_select_field( iv_fieldname = c_fields-entityid iv_fieldname_alias = 'entity_id' iv_entity = c_base_alias ).
-    IF sy-saprl >= 751.
-      add_select_field( iv_fieldname = 'sourcetype' iv_fieldname_alias = 'source_type' iv_entity = c_base_alias ).
-    ENDIF.
+    add_select_field( iv_fieldname = 'sourcetype' iv_fieldname_alias = 'source_type' iv_entity = c_base_alias ).
     add_select_field( iv_fieldname = 'ddlname'  iv_fieldname_alias = 'secondary_entity_id' iv_entity = c_base_alias ).
     add_select_field( iv_fieldname = 'createdby' iv_fieldname_alias = 'created_by' iv_entity = c_base_alias ).
     add_select_field( iv_fieldname = 'rawentityid' iv_fieldname_alias = 'entity_id_raw' iv_entity = c_base_alias ).
@@ -218,9 +216,7 @@ CLASS zcl_sat_ob_cds_searcher IMPLEMENTATION.
 
 *.......... Find views for a certain type e.g. function, hierarchy, view
         WHEN zif_sat_c_object_browser=>c_search_option-by_type.
-          IF sy-saprl >= 750.
-            add_type_option_filter( it_values = <ls_option>-value_range ).
-          ENDIF.
+          add_type_option_filter( it_values = <ls_option>-value_range ).
       ENDCASE.
     ENDLOOP.
 
@@ -252,9 +248,7 @@ CLASS zcl_sat_ob_cds_searcher IMPLEMENTATION.
 *.. Create grouping clause
     add_group_by_clause( |{ c_base_alias }~{ c_fields-entityid }| ).
     add_group_by_clause( |{ c_base_alias }~rawentityid| ).
-    IF sy-saprl >= 751.
-      add_group_by_clause( |{ c_base_alias }~sourcetype| ).
-    ENDIF.
+    add_group_by_clause( |{ c_base_alias }~sourcetype| ).
     add_group_by_clause( |{ c_base_alias }~ddlname| ).
     add_group_by_clause( |{ c_base_alias }~description| ).
     add_group_by_clause( |{ c_base_alias }~createdby| ).
@@ -423,15 +417,7 @@ CLASS zcl_sat_ob_cds_searcher IMPLEMENTATION.
       CASE ls_value-low.
 
         WHEN zif_sat_c_object_browser=>c_type_option_value-extend.
-          IF sy-saprl >= 751.
-            ls_value-low = zif_sat_c_cds_view_type=>extend.
-          ELSE.
-*.......... Exclude extension views
-            add_option_filter(
-                iv_fieldname    = |{ c_base_alias }~isextend|
-                it_values       = VALUE #( ( sign = 'I' option = 'EQ' low = abap_true ) )
-            ).
-          ENDIF.
+          ls_value-low = zif_sat_c_cds_view_type=>extend.
 
         WHEN zif_sat_c_object_browser=>c_type_option_value-function.
           ls_value-low = zif_sat_c_cds_view_type=>table_function.
