@@ -29,7 +29,9 @@ INTERFACE zif_sat_c_adt_utils
       sapaox_launcher            TYPE string VALUE 'ZCL_SAT_ADT_RES_AOX_LAUNCHER',
       cds_analysis               TYPE string VALUE 'ZCL_SAT_ADT_RES_CDS_ANALYSIS',
       navigation_targets         TYPE string VALUE 'ZCL_SAT_ADT_RES_NAV_TARGETS',
-      db_fields_hierarchy        TYPE string VALUE 'ZCL_SAT_ADT_RES_DBFIELD_HIER',
+      column_info                TYPE string VALUE 'ZCL_SAT_ADT_RES_COLUMN_INFO',
+      column_hierarchy           TYPE string VALUE 'ZCL_SAT_ADT_RES_COL_HIERARCHY',
+      column_where_used_list     TYPE string VALUE 'ZCL_SAT_ADT_RES_COL_WHERE_USED',
       ddic_repo_access           TYPE string VALUE 'ZCL_SAT_ADT_RES_DDIC_REP_ACC',
     END OF c_resource_handler.
 

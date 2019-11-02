@@ -3,9 +3,9 @@
  <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
   <asx:values>
    <VSEOCLASS>
-    <CLSNAME>ZCL_SAT_ADT_RES_DBFIELD_HIER</CLSNAME>
+    <CLSNAME>ZCL_SAT_ADT_RES_COL_WHERE_USED</CLSNAME>
     <LANGU>E</LANGU>
-    <DESCRIPT>Resource for reading Field Hierarchy of Database Field</DESCRIPT>
+    <DESCRIPT>Resource for getting Where-Used List of Column</DESCRIPT>
     <STATE>1</STATE>
     <CLSCCINCL>X</CLSCCINCL>
     <FIXPT>X</FIXPT>
@@ -13,28 +13,16 @@
    </VSEOCLASS>
    <DESCRIPTIONS>
     <SEOCOMPOTX>
-     <CLSNAME>ZCL_SAT_ADT_RES_DBFIELD_HIER</CLSNAME>
+     <CLSNAME>ZCL_SAT_ADT_RES_COL_WHERE_USED</CLSNAME>
      <CMPNAME>FILL_WHERE_USED_IN_CDS</CMPNAME>
      <LANGU>E</LANGU>
      <DESCRIPT>Fill where used in CDS information</DESCRIPT>
     </SEOCOMPOTX>
     <SEOCOMPOTX>
-     <CLSNAME>ZCL_SAT_ADT_RES_DBFIELD_HIER</CLSNAME>
+     <CLSNAME>ZCL_SAT_ADT_RES_COL_WHERE_USED</CLSNAME>
      <CMPNAME>FILL_WHERE_USED_IN_VIEW</CMPNAME>
      <LANGU>E</LANGU>
      <DESCRIPT>Fill where used in DB View</DESCRIPT>
-    </SEOCOMPOTX>
-    <SEOCOMPOTX>
-     <CLSNAME>ZCL_SAT_ADT_RES_DBFIELD_HIER</CLSNAME>
-     <CMPNAME>GET_FIELD_HIERARCHY</CMPNAME>
-     <LANGU>E</LANGU>
-     <DESCRIPT>Reads hierarchy of field</DESCRIPT>
-    </SEOCOMPOTX>
-    <SEOCOMPOTX>
-     <CLSNAME>ZCL_SAT_ADT_RES_DBFIELD_HIER</CLSNAME>
-     <CMPNAME>GET_FIELD_WHERE_USED</CMPNAME>
-     <LANGU>E</LANGU>
-     <DESCRIPT>Reads where-used references for field</DESCRIPT>
     </SEOCOMPOTX>
    </DESCRIPTIONS>
   </asx:values>

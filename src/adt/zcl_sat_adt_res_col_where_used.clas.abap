@@ -1,39 +1,23 @@
-"! <p class="shorttext synchronized" lang="en">Resource for reading Field Hierarchy of Database Field</p>
-CLASS zcl_sat_adt_res_dbfield_hier DEFINITION
+"! <p class="shorttext synchronized" lang="en">Resource for getting Where-Used List of Column</p>
+CLASS zcl_sat_adt_res_col_where_used DEFINITION
   PUBLIC
-  FINAL
-  INHERITING FROM cl_adt_rest_resource
+  INHERITING FROM zcl_sat_adt_res_column_info
   CREATE PUBLIC .
 
   PUBLIC SECTION.
-    METHODS get
-        REDEFINITION.
   PROTECTED SECTION.
+    METHODS internal_get
+        REDEFINITION.
+    METHODS get_parameters
+        REDEFINITION.
   PRIVATE SECTION.
-    CONSTANTS:
-      BEGIN OF c_field_mode,
-        hierarchy  TYPE string VALUE 'hierarchy',
-        where_used TYPE string VALUE 'whereUsed',
-      END OF c_field_mode.
-    CONSTANTS:
-      c_field_name    TYPE string VALUE 'FIELD' ##NO_TEXT,
-      c_source_type   TYPE string VALUE 'SOURCE_TYPE' ##NO_TEXT,
-      c_api_state     TYPE string VALUE 'API_STATE' ##NO_TEXT,
-      c_is_calculated TYPE string VALUE 'IS_CALCULATED' ##NO_TEXT.
+    CONSTANTS c_source_type   TYPE string VALUE 'SOURCE_TYPE' ##NO_TEXT.
+    CONSTANTS c_api_state     TYPE string VALUE 'API_STATE' ##NO_TEXT.
+    CONSTANTS c_is_calculated TYPE string VALUE 'IS_CALCULATED' ##NO_TEXT.
 
-    DATA mv_field TYPE fieldname.
-    DATA mv_object_name TYPE zsat_entity_id.
-    DATA mv_object_type TYPE zsat_entity_type.
-    DATA mv_mode TYPE string.
+    DATA mf_search_calc_fields TYPE abap_bool.
+    DATA mf_search_db_views TYPE abap_bool.
 
-    DATA ms_field_info TYPE zsat_adt_element_info.
-    DATA: mf_search_calc_fields TYPE string,
-          mf_search_db_views    TYPE string.
-
-    "! <p class="shorttext synchronized" lang="en">Reads where-used references for field</p>
-    METHODS get_field_where_used.
-    "! <p class="shorttext synchronized" lang="en">Reads hierarchy of field</p>
-    METHODS get_field_hierarchy.
     "! <p class="shorttext synchronized" lang="en">Fill where used in CDS information</p>
     METHODS fill_where_used_in_cds
       IMPORTING
@@ -48,66 +32,8 @@ ENDCLASS.
 
 
 
-CLASS zcl_sat_adt_res_dbfield_hier IMPLEMENTATION.
-
-  METHOD get.
-    mv_object_name = zcl_sat_adt_res_util=>get_request_param_value(
-      iv_param_name    = zif_sat_c_adt_utils=>c_db_fields_info_parameter-name
-      if_mandatory     = abap_true
-      io_request       = request
-    ).
-    mv_object_type = zcl_sat_adt_res_util=>get_request_param_value(
-      iv_param_name    = zif_sat_c_adt_utils=>c_db_fields_info_parameter-type
-      io_request       = request
-    ).
-    mv_field = zcl_sat_adt_res_util=>get_request_param_value(
-      iv_param_name    = zif_sat_c_adt_utils=>c_db_fields_info_parameter-field
-      if_mandatory     = abap_true
-      io_request       = request
-    ).
-    mv_mode = zcl_sat_adt_res_util=>get_request_param_value(
-      iv_param_name    = zif_sat_c_adt_utils=>c_db_fields_info_parameter-mode
-      if_mandatory     = abap_true
-      io_request       = request
-    ).
-
-    IF mv_mode = c_field_mode-hierarchy.
-      get_field_hierarchy( ).
-    ELSEIF mv_mode = c_field_mode-where_used.
-*.... Retrieve additional parameters which are only relevant for the where used query
-      mf_search_db_views = zcl_sat_adt_res_util=>get_request_param_value(
-        iv_param_name    = zif_sat_c_adt_utils=>c_db_fields_info_parameter-search_db_views
-        iv_default_value = abap_false
-        io_request       = request
-      ).
-      mf_search_calc_fields = zcl_sat_adt_res_util=>get_request_param_value(
-        iv_param_name    = zif_sat_c_adt_utils=>c_db_fields_info_parameter-search_calc_fields
-        iv_default_value = abap_false
-        io_request       = request
-      ).
-      mv_object_name = to_upper( mv_object_name ).
-      mv_field = to_upper( mv_field ).
-*.... Finds where-used list for fields
-      get_field_where_used( ).
-    ENDIF.
-
-    CHECK ms_field_info IS NOT INITIAL.
-
-    response->set_body_data(
-        content_handler = zcl_sat_adt_ch_factory=>create_generic_eleminfo_res_ch( )
-        data            = ms_field_info
-    ).
-  ENDMETHOD.
-
-  METHOD get_field_hierarchy.
-    DATA(lo_hierarchy_resolver) = NEW zcl_sat_cds_field_hier_res( ).
-    ms_field_info = lo_hierarchy_resolver->resolve_field_hierarchy(
-        iv_cds_view       = mv_object_name
-        iv_cds_view_field = mv_field
-    ).
-  ENDMETHOD.
-
-  METHOD get_field_where_used.
+CLASS zcl_sat_adt_res_col_where_used IMPLEMENTATION.
+  METHOD internal_get.
     DATA: lt_type_parts TYPE string_table.
     FIELD-SYMBOLS: <lt_where_used> TYPE zsat_adt_element_info_t.
 
@@ -148,6 +74,23 @@ CLASS zcl_sat_adt_res_dbfield_hier IMPLEMENTATION.
     ENDLOOP.
   ENDMETHOD.
 
+  METHOD get_parameters.
+    super->get_parameters( io_request ).
+    mv_object_name = to_upper( mv_object_name ).
+    mv_field = to_upper( mv_field ).
+
+*.. Retrieve additional parameters which are only relevant for the where used query
+    mf_search_db_views = zcl_sat_adt_res_util=>get_request_param_value(
+      iv_param_name    = zif_sat_c_adt_utils=>c_db_fields_info_parameter-search_db_views
+      iv_default_value = abap_false
+      io_request       = io_request
+    ).
+    mf_search_calc_fields = zcl_sat_adt_res_util=>get_request_param_value(
+      iv_param_name    = zif_sat_c_adt_utils=>c_db_fields_info_parameter-search_calc_fields
+      iv_default_value = abap_false
+      io_request       = io_request
+    ).
+  ENDMETHOD.
 
   METHOD fill_where_used_in_cds.
     DATA: lt_where_used TYPE zif_sat_ty_adt_types=>ty_t_field_usage.
