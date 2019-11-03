@@ -28,6 +28,7 @@ CLASS zcl_sat_adt_res_cdsfield_vh IMPLEMENTATION.
              rawfieldname AS name
       WHERE rawfieldname IS NOT INITIAL
         AND fieldname IN @lt_field_range
+      ORDER BY rawfieldname
     INTO CORRESPONDING FIELDS OF TABLE @p_named_item_list-items
       UP TO @p_filter_max_item_count ROWS.
 

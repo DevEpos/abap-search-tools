@@ -28,6 +28,7 @@ CLASS zcl_sat_adt_res_tabfield_vh IMPLEMENTATION.
              fieldname AS name
       WHERE fieldname IN @lt_field_range
         AND fieldname NOT LIKE '.%'
+      ORDER BY fieldname
     INTO CORRESPONDING FIELDS OF TABLE @p_named_item_list-items
       UP TO @p_filter_max_item_count ROWS.
 
