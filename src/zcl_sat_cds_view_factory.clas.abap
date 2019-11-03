@@ -621,8 +621,8 @@ CLASS zcl_sat_cds_view_factory IMPLEMENTATION.
 
     TYPES: BEGIN OF lty_base_table.
         INCLUDE TYPE zsat_cds_view_base_table.
-    TYPES: entitytype TYPE zsat_entity_type,
-           generationflag  TYPE genflag.
+    TYPES: entitytype     TYPE zsat_entity_type,
+           generationflag TYPE genflag.
     TYPES: END OF lty_base_table.
 
     DATA: lt_base_tables    TYPE STANDARD TABLE OF lty_base_table,
@@ -640,7 +640,7 @@ CLASS zcl_sat_cds_view_factory IMPLEMENTATION.
       FROM zsat_i_cdsbasetable
       WHERE ddlview = @iv_view_name
         AND basetable NOT IN @gt_helper_ddl_tab_names
-      ORDER BY TablePosition
+      ORDER BY tableposition
       INTO CORRESPONDING FIELDS OF TABLE @lt_base_tables.
 
     CHECK sy-subrc = 0.
@@ -665,7 +665,7 @@ CLASS zcl_sat_cds_view_factory IMPLEMENTATION.
              rawentityid,
              sourcetype,
              description,
-             \_apistate-apistate as apistate
+             \_apistate-apistate AS apistate
         FROM zsat_i_cdsentity( p_language = @lv_description_language )
         WHERE viewname IN @lt_cds_view_range
            OR entityid IN @lt_cds_view_range
