@@ -11,11 +11,12 @@ CLASS zcl_sat_adt_discovery_app DEFINITION
     CONSTANTS c_sapaox_launcher_uri TYPE string VALUE '/sapaox'.
     CONSTANTS c_db_fields_info_uri TYPE string VALUE '/dbfields/info'.
     CONSTANTS c_ddic_repo_access_uri TYPE string VALUE '/ddicaccess'.
-    CONSTANTS c_db_field_hierarchy_uri TYPE string VALUE '/dbfield/hierarchy'.
     CONSTANTS c_column_info_uri TYPE string VALUE '/columninfo'.
     CONSTANTS c_column_hierarchy_uri TYPE string VALUE '/columninfo/hierarchy'.
     CONSTANTS c_column_where_used_uri TYPE string VALUE '/columninfo/whereUsed'.
     CONSTANTS c_cds_analysis_uri TYPE string VALUE '/cds/analysis'.
+    CONSTANTS c_cds_top_down_analysis_uri TYPE string VALUE '/cds/analysis/topDown'.
+    CONSTANTS c_cds_used_entites_analy_uri TYPE string VALUE '/cds/analysis/usedEntities'.
     CONSTANTS c_element_info_uri TYPE string VALUE '/elementinfo'.
     CONSTANTS c_element_info_by_uri_uri TYPE string VALUE '/elementinfoByUri'.
     CONSTANTS c_nav_targets_uri TYPE string VALUE '/navigationtargets'.
@@ -45,7 +46,7 @@ CLASS zcl_sat_adt_discovery_app DEFINITION
       IMPORTING
         io_registry TYPE REF TO if_adt_disc_rest_rc_registry.
     "! <p class="shorttext synchronized" lang="en">Registers Resources for CDS Analysis Tools</p>
-    METHODS register_cds_select_analysis
+    METHODS register_cds_analysis
       IMPORTING
         io_registry TYPE REF TO if_adt_disc_rest_rc_registry.
     "! <p class="shorttext synchronized" lang="en">Registers Resources for detecting navigation targets</p>
@@ -90,7 +91,7 @@ CLASS zcl_sat_adt_discovery_app IMPLEMENTATION.
     register_value_help_providers( registry ).
     register_element_info( registry ).
     register_sapaox_launcher( registry ).
-    register_cds_select_analysis( registry ).
+    register_cds_analysis( registry ).
     register_navigation_targets( registry ).
     register_db_field_resources( registry ).
     register_ddic_repo_access( EXPORTING io_registry = registry ).
@@ -139,14 +140,14 @@ CLASS zcl_sat_adt_discovery_app IMPLEMENTATION.
                                      |\{&{ zif_sat_c_adt_utils=>c_search_query_parameter-params }*\}| &&
                                      |\{&{ zif_sat_c_adt_utils=>c_search_query_parameter-select_from }*\}| &&
                                      |\{&{ zif_sat_c_adt_utils=>c_search_query_parameter-association }*\}| &&
-                                     |\{&{ zif_sat_c_adt_utils=>c_search_query_parameter-annotation }*\}|.
+                                     |\{&{ zif_sat_c_adt_utils=>c_search_query_parameter-annotation }*\}| &&
+                                     |\{&{ zif_sat_c_adt_utils=>c_search_query_parameter-type }*\}| &&
+                                     |\{&{ zif_sat_c_adt_utils=>c_search_query_parameter-extended_by }*\}|.
 
-        IF sy-saprl >= 751.
+        IF sy-saprl >= 750.
           lv_template = lv_template &&
                         |\{&{ zif_sat_c_adt_utils=>c_search_query_parameter-release_state }*\}| &&
-                        |\{&{ zif_sat_c_adt_utils=>c_search_query_parameter-read_api_state }*\}| &&
-                        |\{&{ zif_sat_c_adt_utils=>c_search_query_parameter-extended_by }*\}| &&
-                        |\{&{ zif_sat_c_adt_utils=>c_search_query_parameter-type }*\}|.
+                        |\{&{ zif_sat_c_adt_utils=>c_search_query_parameter-read_api_state }*\}|.
         ENDIF.
 
       WHEN zif_sat_c_object_browser_mode=>database_table_view.
@@ -289,7 +290,7 @@ CLASS zcl_sat_adt_discovery_app IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD register_cds_select_analysis.
+  METHOD register_cds_analysis.
     DATA(lo_element_info_collection) = io_registry->register_discoverable_resource(
         url             = c_cds_analysis_uri
         handler_class   = zif_sat_c_adt_utils=>c_resource_handler-cds_analysis
@@ -298,13 +299,18 @@ CLASS zcl_sat_adt_discovery_app IMPLEMENTATION.
         category_term   = 'cdsanalysis'
     ).
 
-*.. Register URI template for Analyis of CDS Views
+*.. Register URI template for Top-Down Analysis
     lo_element_info_collection->register_disc_res_w_template(
-      template      = |{ c_cds_analysis_uri }\{?{ zif_sat_c_adt_utils=>c_cds_analysis_parameter-cds_name }\}| &&
-                      |\{&{ zif_sat_c_adt_utils=>c_cds_analysis_parameter-with_associations }*\}| &&
-                      |\{&{ zif_sat_c_adt_utils=>c_cds_analysis_parameter-usage_analysis }*\}|
-      handler_class = zif_sat_c_adt_utils=>c_resource_handler-cds_analysis
-      relation      = c_utils_rel_scheme && c_cds_analysis_uri
+      template      = |{ c_cds_top_down_analysis_uri }\{?{ zif_sat_c_adt_utils=>c_cds_analysis_parameter-cds_name }\}| &&
+                      |\{&{ zif_sat_c_adt_utils=>c_cds_analysis_parameter-with_associations }*\}|
+      handler_class = zif_sat_c_adt_utils=>c_resource_handler-cds_top_down_analysis
+      relation      = c_utils_rel_scheme && c_cds_top_down_analysis_uri
+    ).
+*.. Register URI template for Used Entities Analyis
+    lo_element_info_collection->register_disc_res_w_template(
+      template      = |{ c_cds_used_entites_analy_uri }\{?{ zif_sat_c_adt_utils=>c_cds_analysis_parameter-cds_name }\}|
+      handler_class = zif_sat_c_adt_utils=>c_resource_handler-cds_used_entities_analysis
+      relation      = c_utils_rel_scheme && c_cds_used_entites_analy_uri
     ).
   ENDMETHOD.
 
