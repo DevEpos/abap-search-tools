@@ -665,7 +665,7 @@ CLASS zcl_sat_cds_view_factory IMPLEMENTATION.
              rawentityid,
              sourcetype,
              description,
-             \_apistate-apistate
+             \_apistate-apistate as apistate
         FROM zsat_i_cdsentity( p_language = @lv_description_language )
         WHERE viewname IN @lt_cds_view_range
            OR entityid IN @lt_cds_view_range

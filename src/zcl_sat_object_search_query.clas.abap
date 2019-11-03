@@ -100,7 +100,6 @@ CLASS zcl_sat_object_search_query DEFINITION
     CONSTANTS c_option_separator TYPE string VALUE ':' ##NO_TEXT.
     CONSTANTS c_value_separator TYPE string VALUE ',' ##NO_TEXT.
     CONSTANTS c_negation_operator TYPE string VALUE '!' ##no_text.
-    CONSTANTS c_negation_operator2 TYPE string VALUE '<>' ##no_text.
     CONSTANTS c_key_value_pair_separator TYPE string VALUE '=' ##no_text.
 
     "! <p class="shorttext synchronized" lang="en">CONSTRUCTOR</p>
@@ -394,14 +393,11 @@ CLASS zcl_sat_object_search_query IMPLEMENTATION.
     ENDIF.
 
     IF iv_option = zif_sat_c_object_browser=>c_search_option-by_owner.
-      IF  cv_value = 'SY-UNAME' OR
-          cv_value = 'ME'.
+      IF  cv_value = 'ME'.
         cv_value = sy-uname.
-      ELSEIF cv_value CP '!SY-UNAME' OR
-             cv_value CP '<>SY-UNAME' OR
-             cv_value CP '!ME' OR
+      ELSEIF cv_value CP '!ME' OR
              cv_value CP '<>ME'.
-        cv_value = '!' && sy-uname.
+        cv_value = c_negation_operator && sy-uname.
       ENDIF.
     ENDIF.
   ENDMETHOD.
@@ -433,7 +429,7 @@ CLASS zcl_sat_object_search_query IMPLEMENTATION.
       ENDIF.
 
 *.... Check if string should be negated
-      IF lv_search_term(1) = '!'.
+      IF lv_search_term(1) = c_negation_operator.
         lv_sign = zif_sat_c_options=>excluding.
         lv_search_term = lv_search_term+1.
       ENDIF.
@@ -534,7 +530,6 @@ CLASS zcl_sat_object_search_query IMPLEMENTATION.
           high    = lv_value2 )
     ).
   ENDMETHOD.
-
 
   METHOD extract_option.
 
@@ -666,6 +661,7 @@ CLASS zcl_sat_object_search_query IMPLEMENTATION.
       ENDIF.
     ENDLOOP.
   ENDMETHOD.
+
 
   METHOD get_options.
     rt_options = mt_search_options.

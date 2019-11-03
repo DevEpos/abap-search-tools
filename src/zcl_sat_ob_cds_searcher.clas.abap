@@ -73,7 +73,6 @@ CLASS zcl_sat_ob_cds_searcher DEFINITION
     METHODS add_api_option_filter
       IMPORTING
         it_values TYPE zif_sat_ty_object_browser=>ty_search_option_values-value_range.
-
     "! <p class="shorttext synchronized" lang="en">Adds extensions filter to query</p>
     METHODS add_extensions_filter
       IMPORTING

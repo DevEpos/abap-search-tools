@@ -88,7 +88,6 @@ CLASS zcl_sat_adt_ch_factory IMPLEMENTATION.
       st_name   = 'ZSAT_NAV_TARGETS'
       root_name = 'NAVIGATION_TARGETS'
     ).
-
   ENDMETHOD.
 
 ENDCLASS.
