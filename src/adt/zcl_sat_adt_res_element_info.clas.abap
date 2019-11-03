@@ -145,10 +145,10 @@ CLASS zcl_sat_adt_res_element_info IMPLEMENTATION.
     ENDIF.
 
     IF ls_entity-source_type IS NOT INITIAL.
-      ls_element_info-properties = VALUE #( BASE ls_element_info-properties ( key = 'API_STATE' value = ls_entity-api_state ) ).
+      ls_element_info-properties = VALUE #( BASE ls_element_info-properties ( key = 'SOURCE_TYPE' value = ls_entity-source_type ) ).
     ENDIF.
     IF ls_entity-api_state IS NOT INITIAL.
-      ls_element_info-properties = VALUE #( BASE ls_element_info-properties ( key = 'SOURCE_TYPE' value = ls_entity-source_type ) ).
+      ls_element_info-properties = VALUE #( BASE ls_element_info-properties ( key = 'API_STATE' value = ls_entity-api_state ) ).
     ENDIF.
 
     TRY.
