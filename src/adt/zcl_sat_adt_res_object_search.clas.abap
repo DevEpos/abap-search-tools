@@ -108,7 +108,7 @@ CLASS zcl_sat_adt_res_object_search DEFINITION
         is_result_entity TYPE zsat_entity
       CHANGING
         cs_result        TYPE zsat_adt_element_info.
-        "! <p class="shorttext synchronized" lang="en">Sets the positional URI for the given DDLS result</p>
+    "! <p class="shorttext synchronized" lang="en">Sets the positional URI for the given DDLS result</p>
     METHODS set_ddl_positional_uri
       IMPORTING
         is_result_entity TYPE zsat_entity
@@ -210,8 +210,14 @@ CLASS zcl_sat_adt_res_object_search IMPLEMENTATION.
       post_process_result( ).
     ENDIF.
 
+    APPEND INITIAL LINE TO result ASSIGNING FIELD-SYMBOL(<ls_result>).
+    <ls_result>-type = 'rawResult'.
+    DATA(lr_t_raw_result) = NEW zsat_adt_element_info_t( ).
+    <ls_result>-children = lr_t_raw_result.
+    ASSIGN lr_t_raw_result->* TO FIELD-SYMBOL(<lt_raw_result>).
+
     LOOP AT mt_query_result ASSIGNING FIELD-SYMBOL(<ls_search_result>).
-      APPEND INITIAL LINE TO result ASSIGNING FIELD-SYMBOL(<ls_result>).
+      APPEND INITIAL LINE TO <lt_raw_result> ASSIGNING <ls_result>.
       DATA(ls_object_reference) = zcl_sat_adt_util=>create_adt_uri(
             iv_type = <ls_search_result>-entity_type
             iv_name = <ls_search_result>-entity_id
@@ -240,8 +246,16 @@ CLASS zcl_sat_adt_res_object_search IMPLEMENTATION.
     IF mf_with_package_hierarchy = abap_true.
       determine_package_hierarchy( ).
 
+      CHECK mt_super_package_all IS NOT INITIAL.
+
+      APPEND INITIAL LINE TO result ASSIGNING <ls_result>.
+      <ls_result>-type = 'packages'.
+      DATA(lr_packages) = NEW zsat_adt_element_info_t( ).
+      <ls_result>-children = lr_packages.
+      ASSIGN lr_packages->* TO FIELD-SYMBOL(<lt_package>).
+
       LOOP AT mt_super_package_all ASSIGNING FIELD-SYMBOL(<ls_package>).
-        APPEND INITIAL LINE TO result ASSIGNING <ls_result>.
+        APPEND INITIAL LINE TO <lt_package> ASSIGNING <ls_result>.
         ls_object_reference = zcl_sat_adt_util=>create_adt_uri(
               iv_tadir_type = 'DEVC'
               iv_name       = <ls_package>-package ).
