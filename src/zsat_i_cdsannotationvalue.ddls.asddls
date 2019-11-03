@@ -4,7 +4,7 @@
 @AccessControl.authorizationCheck: #CHECK
 @EndUserText.label: 'Possible Values for a CDS Annotation'
 define view ZSAT_I_CdsAnnotationValue
-  as select from ddla_rt_header
+  as select from ddla_rt_header // >= 7.51
 {
   key ddlaname                           as DdlAnnotationName,
   key key_upper                          as AnnotationNameUpper,
@@ -13,7 +13,7 @@ define view ZSAT_I_CdsAnnotationValue
 }
 where
   value_type = 'Boolean'
-union select from ddla_rt_header
+union select from ddla_rt_header // >= 7.51
 {
   key ddlaname                            as DdlAnnotationName,
   key key_upper                           as AnnotationNameUpper,
@@ -23,6 +23,7 @@ union select from ddla_rt_header
 where
   value_type = 'Boolean'
 union select from ddla_rt_header as Annotation
+  // >= NW 7.52
   inner join      ddla_rt_enums  as Enum on Annotation.key_guid = Enum.key_guid
 {
   key Annotation.ddlaname              as DdlAnnotationName,

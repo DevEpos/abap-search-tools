@@ -23,6 +23,7 @@ union select from ddheadanno
  * Also show CDS views if there are meta data extension files
  * which use the requested annotation
  */
+// >= NW 7.51
 union select from ddlx_rt_header as MetaExtensionHeader
   inner join      ddlx_rt_data   as MetaExtensionAnno on MetaExtensionHeader.ddlxname = MetaExtensionAnno.ddlxname
 {
@@ -35,6 +36,7 @@ union select from ddlx_rt_header as MetaExtensionHeader
  * -----------------------------
  * Show annotations of parameters
  */
+// >= NW 7.50 
 union select from ddparameteranno
 {
   strucobjn                       as EntityId,
