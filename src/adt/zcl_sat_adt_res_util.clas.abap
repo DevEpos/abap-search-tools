@@ -83,7 +83,7 @@ CLASS zcl_sat_adt_res_util IMPLEMENTATION.
          ).
         IF lv_value IS NOT INITIAL.
           lv_value = to_lower( lv_value ).
-          rf_value = COND #( WHEN lv_value = 'true' THEN abap_true ).
+          rf_value = COND #( WHEN lv_value = 'true' OR lv_value = 'x' THEN abap_true ).
         ENDIF.
       CATCH cx_adt_rest.
     ENDTRY.
