@@ -36,6 +36,7 @@ CLASS zcl_sat_adt_res_objs_dbtabview IMPLEMENTATION.
 
     get_max_rows_param( EXPORTING io_request = io_request  CHANGING  ct_options = et_options ).
     get_user_name_param( EXPORTING io_request = io_request  CHANGING  ct_options = et_options ).
+    get_type_param( EXPORTING io_request = io_request CHANGING ct_options = et_options ).
 *    get_release_state_param( EXPORTING io_request = io_request  CHANGING  ct_options = et_options ).
     get_description_param( EXPORTING io_request = io_request  CHANGING  ct_options = et_options ).
     get_package_name_param( EXPORTING io_request = io_request  CHANGING  ct_options = et_options ).

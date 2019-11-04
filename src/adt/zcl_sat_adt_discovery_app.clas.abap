@@ -151,7 +151,8 @@ CLASS zcl_sat_adt_discovery_app IMPLEMENTATION.
         ENDIF.
 
       WHEN zif_sat_c_object_browser_mode=>database_table_view.
-        lv_template = lv_template && |\{&{ zif_sat_c_adt_utils=>c_search_query_parameter-field }*\}|.
+        lv_template = lv_template && |\{&{ zif_sat_c_adt_utils=>c_search_query_parameter-field }*\}| &&
+                                     |\{&{ zif_sat_c_adt_utils=>c_search_query_parameter-type }*\}|.
 
     ENDCASE.
 
@@ -264,6 +265,14 @@ CLASS zcl_sat_adt_discovery_app IMPLEMENTATION.
         description     = 'Search for CDS Extension'
         category_scheme = lv_object_search_scheme
         category_term   = 'cdsextension'
+    ).
+
+    io_registry->register_discoverable_resource(
+        url             = '/tabletype'
+        handler_class   = zif_sat_c_adt_utils=>c_resource_handler-table_types
+        description     = 'Resource for Table Types'
+        category_scheme = lv_object_search_scheme
+        category_term   = 'tabletype'
     ).
 
   ENDMETHOD.

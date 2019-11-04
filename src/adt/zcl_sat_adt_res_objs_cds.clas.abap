@@ -14,42 +14,6 @@ CLASS zcl_sat_adt_res_objs_cds DEFINITION
     METHODS post_process_result
         REDEFINITION.
   PRIVATE SECTION.
-    "! <p class="shorttext synchronized" lang="en">Retrieve 'selectSourceIn' parameter from request</p>
-    METHODS get_select_source_in_param
-      IMPORTING
-        io_request TYPE REF TO if_adt_rest_request
-      CHANGING
-        ct_options TYPE zif_sat_ty_object_browser=>tt_search_option_values.
-    "! <p class="shorttext synchronized" lang="en">Retrieve 'associatedIn' parameter from request</p>
-    METHODS get_associated_in_param
-      IMPORTING
-        io_request TYPE REF TO if_adt_rest_request
-      CHANGING
-        ct_options TYPE zif_sat_ty_object_browser=>tt_search_option_values.
-    "! <p class="shorttext synchronized" lang="en">Retrieve 'annotation' parameter from request</p>
-    METHODS get_annotation_param
-      IMPORTING
-        io_request TYPE REF TO if_adt_rest_request
-      CHANGING
-        ct_options TYPE zif_sat_ty_object_browser=>tt_search_option_values.
-    "! <p class="shorttext synchronized" lang="en">Retrieve 'extendedBy' parameter from request</p>
-    METHODS get_extended_by_param
-      IMPORTING
-        io_request TYPE REF TO if_adt_rest_request
-      CHANGING
-        ct_options TYPE zif_sat_ty_object_browser=>tt_search_option_values.
-    "! <p class="shorttext synchronized" lang="en">Retrieve 'hasParams' parameter from request</p>
-    METHODS get_has_params_param
-      IMPORTING
-        io_request TYPE REF TO if_adt_rest_request
-      CHANGING
-        ct_options TYPE zif_sat_ty_object_browser=>tt_search_option_values.
-    "! <p class="shorttext synchronized" lang="en">Retrieve 'param' parameter from request</p>
-    METHODS get_param_param
-      IMPORTING
-        io_request TYPE REF TO if_adt_rest_request
-      CHANGING
-        ct_options TYPE zif_sat_ty_object_browser=>tt_search_option_values.
 ENDCLASS.
 
 
@@ -57,6 +21,14 @@ ENDCLASS.
 CLASS zcl_sat_adt_res_objs_cds IMPLEMENTATION.
 
   METHOD get_query_parameter.
+    DEFINE _get_param.
+      get_search_parameter( EXPORTING io_request      = io_request
+                                      iv_param_name   = &1
+                                      iv_option_Name  = &2
+                                      if_single_value = &3
+                            CHANGING  ct_option       = et_options ).
+    END-OF-DEFINITION.
+
     ev_type = zif_sat_c_object_browser_mode=>cds_view.
 
     ev_query = zcl_sat_adt_res_util=>get_request_param_value(
@@ -80,60 +52,19 @@ CLASS zcl_sat_adt_res_objs_cds IMPLEMENTATION.
 
     get_max_rows_param( EXPORTING io_request = io_request  CHANGING  ct_options = et_options ).
     get_user_name_param( EXPORTING io_request = io_request  CHANGING  ct_options = et_options ).
-    get_select_source_in_param( EXPORTING io_request = io_request  CHANGING  ct_options = et_options ).
-    get_associated_in_param( EXPORTING io_request = io_request  CHANGING  ct_options = et_options ).
     get_release_state_param( EXPORTING io_request = io_request  CHANGING  ct_options = et_options ).
     get_description_param( EXPORTING io_request = io_request  CHANGING  ct_options = et_options ).
     get_type_param( EXPORTING io_request = io_request  CHANGING  ct_options = et_options ).
     get_package_name_param( EXPORTING io_request = io_request  CHANGING  ct_options = et_options ).
-    get_annotation_param( EXPORTING io_request = io_request  CHANGING  ct_options = et_options ).
     get_field_name_param( EXPORTING io_request = io_request  CHANGING  ct_options = et_options ).
-    get_has_params_param( EXPORTING io_request = io_request  CHANGING  ct_options = et_options ).
-    get_param_param( EXPORTING io_request = io_request  CHANGING  ct_options = et_options ).
-    get_extended_by_param( EXPORTING io_request = io_request CHANGING ct_options = et_options ).
-  ENDMETHOD.
 
-  METHOD get_annotation_param.
-    map_request_param_to_option( EXPORTING iv_param_name   = zif_sat_c_adt_utils=>c_search_query_parameter-annotation
-                                           iv_option_name  = zif_sat_c_object_browser=>c_search_option-by_anno
-                                           io_request      = io_request
-                                 CHANGING  ct_option       = ct_options ).
-  ENDMETHOD.
-
-  METHOD get_associated_in_param.
-    map_request_param_to_option( EXPORTING iv_param_name   = zif_sat_c_adt_utils=>c_search_query_parameter-association
-                                           iv_option_name  = zif_sat_c_object_browser=>c_search_option-by_association
-                                           io_request      = io_request
-                                 CHANGING  ct_option       = ct_options ).
-  ENDMETHOD.
-
-  METHOD get_extended_by_param.
-    map_request_param_to_option( EXPORTING iv_param_name   = zif_sat_c_adt_utils=>c_search_query_parameter-extended_by
-                                           iv_option_name  = zif_sat_c_object_browser=>c_search_option-by_extensions
-                                           io_request      = io_request
-                                 CHANGING  ct_option       = ct_options ).
-  ENDMETHOD.
-
-  METHOD get_param_param.
-    map_request_param_to_option( EXPORTING iv_param_name   = zif_sat_c_adt_utils=>c_search_query_parameter-param
-                                           iv_option_name  = zif_sat_c_object_browser=>c_search_option-by_param
-                                           io_request      = io_request
-                                 CHANGING  ct_option       = ct_options ).
-  ENDMETHOD.
-
-  METHOD get_has_params_param.
-    map_request_param_to_option( EXPORTING iv_param_name   = zif_sat_c_adt_utils=>c_search_query_parameter-params
-                                           iv_option_name  = zif_sat_c_object_browser=>c_search_option-by_params
-                                           if_single_value = abap_true
-                                           io_request      = io_request
-                                 CHANGING  ct_option       = ct_options ).
-  ENDMETHOD.
-
-  METHOD get_select_source_in_param.
-    map_request_param_to_option( EXPORTING iv_param_name   = zif_sat_c_adt_utils=>c_search_query_parameter-select_from
-                                           iv_option_name  = zif_sat_c_object_browser=>c_search_option-by_select_from
-                                           io_request      = io_request
-                                 CHANGING  ct_option       = ct_options ).
+    _get_param:
+        zif_sat_c_adt_utils=>c_search_query_parameter-select_from  zif_sat_c_object_browser=>c_search_option-by_select_from abap_false,
+        zif_sat_c_adt_utils=>c_search_query_parameter-association  zif_sat_c_object_browser=>c_search_option-by_association abap_false,
+        zif_sat_c_adt_utils=>c_search_query_parameter-annotation   zif_sat_c_object_browser=>c_search_option-by_anno        abap_false,
+        zif_sat_c_adt_utils=>c_search_query_parameter-extended_by  zif_sat_c_object_browser=>c_search_option-by_extensions  abap_false,
+        zif_sat_c_adt_utils=>c_search_query_parameter-param        zif_sat_c_object_browser=>c_search_option-by_param       abap_false,
+        zif_sat_c_adt_utils=>c_search_query_parameter-params       zif_sat_c_object_browser=>c_search_option-by_params      abap_true.
   ENDMETHOD.
 
   METHOD post_process_result_entry.

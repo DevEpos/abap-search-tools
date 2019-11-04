@@ -86,6 +86,17 @@ CLASS zcl_sat_adt_res_object_search DEFINITION
         io_request       TYPE REF TO if_adt_rest_request
       RETURNING
         VALUE(rt_values) TYPE string_table.
+    "! <p class="shorttext synchronized" lang="en">Get search parameter value(s) from request</p>
+    "! @parameter iv_option_name | Optional name for search option<br>
+    "!      If not supplied the option name will be the parameter name
+    METHODS get_search_parameter
+      IMPORTING
+        io_request      TYPE REF TO if_adt_rest_request
+        iv_param_name   TYPE string
+        iv_option_name  TYPE string OPTIONAL
+        if_single_value TYPE abap_bool OPTIONAL
+      CHANGING
+        ct_option       TYPE zif_sat_ty_object_browser=>tt_search_option_values.
     "! <p class="shorttext synchronized" lang="en">Retrieve value of request parameter</p>
     METHODS get_request_param_value
       IMPORTING
@@ -93,15 +104,7 @@ CLASS zcl_sat_adt_res_object_search DEFINITION
         io_request      TYPE REF TO if_adt_rest_request
       RETURNING
         VALUE(rv_value) TYPE string.
-    "! <p class="shorttext synchronized" lang="en">Maps a request parameter to a query option</p>
-    METHODS map_request_param_to_option
-      IMPORTING
-        iv_param_name   TYPE string
-        iv_option_name  TYPE string
-        if_single_value TYPE abap_bool OPTIONAL
-        io_request      TYPE REF TO if_adt_rest_request
-      CHANGING
-        ct_option       TYPE zif_sat_ty_object_browser=>tt_search_option_values.
+
     "! <p class="shorttext synchronized" lang="en">Post processing for a search result entry</p>
     METHODS post_process_result_entry
       IMPORTING
@@ -325,56 +328,56 @@ CLASS zcl_sat_adt_res_object_search IMPLEMENTATION.
 
 
   METHOD get_description_param.
-    map_request_param_to_option( EXPORTING iv_param_name   = zif_sat_c_adt_utils=>c_search_query_parameter-description
-                                           iv_option_name  = zif_sat_c_object_browser=>c_search_option-by_description
-                                           io_request      = io_request
-                                 CHANGING  ct_option       = ct_options ).
+    get_search_parameter( EXPORTING iv_param_name   = zif_sat_c_adt_utils=>c_search_query_parameter-description
+                                    iv_option_name  = zif_sat_c_object_browser=>c_search_option-by_description
+                                    io_request      = io_request
+                          CHANGING  ct_option       = ct_options ).
   ENDMETHOD.
 
   METHOD get_field_name_param.
-    map_request_param_to_option( EXPORTING iv_param_name   = zif_sat_c_adt_utils=>c_search_query_parameter-field
-                                           iv_option_name  = zif_sat_c_object_browser=>c_search_option-by_field
-                                           io_request      = io_request
-                                 CHANGING  ct_option       = ct_options ).
+    get_search_parameter( EXPORTING iv_param_name   = zif_sat_c_adt_utils=>c_search_query_parameter-field
+                                    iv_option_name  = zif_sat_c_object_browser=>c_search_option-by_field
+                                    io_request      = io_request
+                          CHANGING  ct_option       = ct_options ).
   ENDMETHOD.
 
 
   METHOD get_max_rows_param.
-    map_request_param_to_option( EXPORTING iv_param_name   = zif_sat_c_adt_utils=>c_search_query_parameter-max_rows
-                                           iv_option_name  = zif_sat_c_object_browser=>c_search_option-max_rows
-                                           if_single_value = abap_true
-                                           io_request      = io_request
-                                 CHANGING  ct_option       = ct_options ).
+    get_search_parameter( EXPORTING iv_param_name   = zif_sat_c_adt_utils=>c_search_query_parameter-max_rows
+                                    iv_option_name  = zif_sat_c_object_browser=>c_search_option-max_rows
+                                    if_single_value = abap_true
+                                    io_request      = io_request
+                          CHANGING  ct_option       = ct_options ).
   ENDMETHOD.
 
 
   METHOD get_package_name_param.
-    map_request_param_to_option( EXPORTING iv_param_name   = zif_sat_c_adt_utils=>c_search_query_parameter-package
-                                           iv_option_name  = zif_sat_c_object_browser=>c_search_option-by_package
-                                           io_request      = io_request
-                                 CHANGING  ct_option       = ct_options ).
+    get_search_parameter( EXPORTING iv_param_name   = zif_sat_c_adt_utils=>c_search_query_parameter-package
+                                    iv_option_name  = zif_sat_c_object_browser=>c_search_option-by_package
+                                    io_request      = io_request
+                          CHANGING  ct_option       = ct_options ).
   ENDMETHOD.
 
   METHOD get_release_state_param.
-    map_request_param_to_option( EXPORTING iv_param_name   = zif_sat_c_adt_utils=>c_search_query_parameter-release_state
-                                           iv_option_name  = zif_sat_c_object_browser=>c_search_option-by_api
-                                           io_request      = io_request
-                                 CHANGING  ct_option       = ct_options ).
+    get_search_parameter( EXPORTING iv_param_name   = zif_sat_c_adt_utils=>c_search_query_parameter-release_state
+                                    iv_option_name  = zif_sat_c_object_browser=>c_search_option-by_api
+                                    io_request      = io_request
+                          CHANGING  ct_option       = ct_options ).
   ENDMETHOD.
 
 
   METHOD get_type_param.
-    map_request_param_to_option( EXPORTING iv_param_name   = zif_sat_c_adt_utils=>c_search_query_parameter-type
-                                           iv_option_name  = zif_sat_c_object_browser=>c_search_option-by_type
-                                           io_request      = io_request
-                                 CHANGING  ct_option       = ct_options ).
+    get_search_parameter( EXPORTING iv_param_name   = zif_sat_c_adt_utils=>c_search_query_parameter-type
+                                    iv_option_name  = zif_sat_c_object_browser=>c_search_option-by_type
+                                    io_request      = io_request
+                          CHANGING  ct_option       = ct_options ).
   ENDMETHOD.
 
   METHOD get_user_name_param.
-    map_request_param_to_option( EXPORTING iv_param_name   = zif_sat_c_adt_utils=>c_search_query_parameter-user
-                                           iv_option_name  = zif_sat_c_object_browser=>c_search_option-by_owner
-                                           io_request      = io_request
-                                 CHANGING  ct_option       = ct_options ).
+    get_search_parameter( EXPORTING iv_param_name   = zif_sat_c_adt_utils=>c_search_query_parameter-user
+                                    iv_option_name  = zif_sat_c_object_browser=>c_search_option-by_owner
+                                    io_request      = io_request
+                          CHANGING  ct_option       = ct_options ).
   ENDMETHOD.
 
   METHOD get_request_param_value.
@@ -397,16 +400,17 @@ CLASS zcl_sat_adt_res_object_search IMPLEMENTATION.
     ENDTRY.
   ENDMETHOD.
 
-  METHOD map_request_param_to_option.
+  METHOD get_search_parameter.
     DATA: lt_option_values TYPE zif_sat_ty_object_browser=>tt_search_option_values.
 
+    DATA(lv_option_name) = COND #( WHEN iv_option_name IS NOT INITIAL THEN iv_option_name ELSE iv_param_name ).
     IF if_single_value = abap_true.
-      DATA(lv_param_value) =  get_request_param_value(
+      DATA(lv_param_value) = get_request_param_value(
         iv_param_name = iv_param_name
         io_request    = io_request
       ).
       IF lv_param_value IS NOT INITIAL.
-        ct_option = VALUE #( BASE ct_option ( option      = iv_option_name
+        ct_option = VALUE #( BASE ct_option ( option      = lv_option_name
                                               value_range = VALUE #( ( low = lv_param_value ) ) ) ).
       ENDIF.
     ELSE.
@@ -415,12 +419,11 @@ CLASS zcl_sat_adt_res_object_search IMPLEMENTATION.
         io_request    = io_request
       ).
       IF lt_param_values IS NOT INITIAL.
-        ct_option = VALUE #( BASE ct_option ( option      = iv_option_name
+        ct_option = VALUE #( BASE ct_option ( option      = lv_option_name
                                               value_range = VALUE #( FOR value IN lt_param_values ( low = value ) ) ) ).
       ENDIF.
     ENDIF.
   ENDMETHOD.
-
 
   METHOD post_process_result_entry ##needed.
   ENDMETHOD.
@@ -446,5 +449,6 @@ CLASS zcl_sat_adt_res_object_search IMPLEMENTATION.
       cs_result-uri = |{ cs_result-uri }{ zif_sat_c_adt_utils=>c_ddl_pos_uri_segment }{ lv_row },{ lv_col }|.
     ENDIF.
   ENDMETHOD.
+
 
 ENDCLASS.
