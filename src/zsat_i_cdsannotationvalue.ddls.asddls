@@ -3,6 +3,7 @@
 @AbapCatalog.preserveKey: true
 @AccessControl.authorizationCheck: #CHECK
 @EndUserText.label: 'Possible Values for a CDS Annotation'
+
 define view ZSAT_I_CdsAnnotationValue
   as select from ddla_rt_header // >= 7.51
 {
@@ -22,12 +23,3 @@ union select from ddla_rt_header // >= 7.51
 }
 where
   value_type = 'Boolean'
-union select from ddla_rt_header as Annotation
-  // >= NW 7.52
-  inner join      ddla_rt_enums  as Enum on Annotation.key_guid = Enum.key_guid
-{
-  key Annotation.ddlaname              as DdlAnnotationName,
-  key Annotation.key_upper             as AnnotationNameUpper,
-  key Annotation.key_raw               as AnnotationNameRaw,
-      concat('#',Enum.symbol)          as Value
-}

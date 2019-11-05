@@ -27,10 +27,6 @@ CLASS zcx_sat_adt_ddic_access_error DEFINITION
         !msgv3      TYPE symsgv DEFAULT sy-msgv3
         !msgv4      TYPE symsgv DEFAULT sy-msgv4
         !properties TYPE REF TO if_adt_exception_properties OPTIONAL .
-    METHODS get_http_status
-        REDEFINITION.
-    METHODS get_namespace
-        REDEFINITION.
     METHODS get_type
         REDEFINITION.
   PROTECTED SECTION.
@@ -58,14 +54,6 @@ CLASS zcx_sat_adt_ddic_access_error IMPLEMENTATION.
     ELSE.
       if_t100_message~t100key = textid.
     ENDIF.
-  ENDMETHOD.
-
-  METHOD get_http_status.
-    result = cl_rest_status_code=>gc_server_error_internal.
-  ENDMETHOD.
-
-  METHOD get_namespace.
-    result = 'com.devepos.adt.saat'.
   ENDMETHOD.
 
   METHOD get_type.

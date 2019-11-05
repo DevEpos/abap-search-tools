@@ -11,6 +11,14 @@
     <FIXPT>X</FIXPT>
     <UNICODE>X</UNICODE>
    </VSEOCLASS>
+   <DESCRIPTIONS>
+    <SEOCOMPOTX>
+     <CLSNAME>ZCL_SAT_ADT_RES_ANNO_VALUE_VH</CLSNAME>
+     <CMPNAME>FIND_ENUM_VALUES</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Find enum values for the given criteria</DESCRIPT>
+    </SEOCOMPOTX>
+   </DESCRIPTIONS>
   </asx:values>
  </asx:abap>
 </abapGit>

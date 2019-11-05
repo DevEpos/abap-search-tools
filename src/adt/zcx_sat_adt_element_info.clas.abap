@@ -18,10 +18,8 @@ CLASS zcx_sat_adt_element_info DEFINITION
         msgv3      TYPE symsgv DEFAULT sy-msgv3
         msgv4      TYPE symsgv DEFAULT sy-msgv4
         properties TYPE REF TO if_adt_exception_properties OPTIONAL .
-    METHODS: get_http_status REDEFINITION,
-      get_namespace REDEFINITION,
-      get_type REDEFINITION.
-
+    METHODS get_type
+        REDEFINITION.
   PROTECTED SECTION.
   PRIVATE SECTION.
 ENDCLASS.
@@ -47,14 +45,6 @@ CLASS zcx_sat_adt_element_info IMPLEMENTATION.
     ELSE.
       if_t100_message~t100key = textid.
     ENDIF.
-  ENDMETHOD.
-
-  METHOD get_http_status.
-    result = cl_rest_status_code=>gc_server_error_internal.
-  ENDMETHOD.
-
-  METHOD get_namespace.
-    result = 'com.devepos.adt.saat'.
   ENDMETHOD.
 
   METHOD get_type.
