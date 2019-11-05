@@ -7,8 +7,7 @@ This Repository is the ADT Backend that is needed to use the eclipse plugin
 
 NW version|Branch name
 ----------|-----------
-\>= 7.52  |master
-7.51|nw-751
+\>= 7.51  |master
 7.50|nw-750
 7.40|nw-740
 < 7.40|*Not officially supported*
