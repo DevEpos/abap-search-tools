@@ -6,7 +6,6 @@
     <DDLNAME>ZSAT_I_DBFIELDUSEDINVIEW</DDLNAME>
     <DDLANGUAGE>E</DDLANGUAGE>
     <DDTEXT>Information about DB Field Usage</DDTEXT>
-    <SOURCE_TYPE>V</SOURCE_TYPE>
    </DDLS>
   </asx:values>
  </asx:abap>

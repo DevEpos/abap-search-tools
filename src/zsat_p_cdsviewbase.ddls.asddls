@@ -20,8 +20,11 @@ define view ZSAT_P_CDSViewBase
   StructuredObject.DdlName,
   StructuredObject.ViewName,
   Source.parentname             as ParentDdlName,
-  Source.source_type            as SourceType,
   Source.source                 as DdlSource,
+  case
+    when Source.parentname = '' then 'V'
+    else                             'E'
+  end                           as SourceType,
   Repo.devclass                 as DevelopmentPackage,
   Repo.author                   as CreatedBy,
   Repo.created_on               as CreatedDate,

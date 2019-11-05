@@ -1,5 +1,5 @@
 @AbapCatalog.sqlViewName: 'ZSATIDBTABTS'
-@AbapCatalog.compiler.compareFilter: true
+@AbapCatalog.compiler.CompareFilter: true
 @AbapCatalog.preserveKey: true
 @AccessControl.authorizationCheck: #CHECK
 @EndUserText.label: 'Technical Settings of Db Table'

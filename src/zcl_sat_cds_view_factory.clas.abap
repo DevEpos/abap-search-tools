@@ -71,14 +71,7 @@ CLASS zcl_sat_cds_view_factory DEFINITION
         !iv_max_rows      TYPE sy-tabix DEFAULT 50
       RETURNING
         VALUE(result)     TYPE zsat_entity_t .
-    "! <p class="shorttext synchronized" lang="en">Read API states for Cds View</p>
-    "!
-    "! @parameter iv_cds_view | <p class="shorttext synchronized" lang="en"></p>
-    CLASS-METHODS get_api_states
-      IMPORTING
-        !iv_cds_view         TYPE zsat_cds_view_name
-      RETURNING
-        VALUE(rt_api_states) TYPE zif_sat_ty_global=>ty_t_cds_api_state .
+
     "! <p class="shorttext synchronized" lang="en">Get author of given CDS View</p>
     "!
     "! @parameter iv_cds_view | <p class="shorttext synchronized" lang="en"></p>
@@ -208,13 +201,6 @@ CLASS zcl_sat_cds_view_factory DEFINITION
       IMPORTING
           et_anno_name_range
           sender.
-    "! <p class="shorttext synchronized" lang="en">Event Handler for lazy loading of CDS View API states</p>
-    "!
-    "! @parameter sender | <p class="shorttext synchronized" lang="en"></p>
-    CLASS-METHODS on_api_states_loading_request
-          FOR EVENT request_api_states OF zcl_sat_cds_view
-      IMPORTING
-          !sender .
     "! <p class="shorttext synchronized" lang="en">Event Handler for lazy loading of CDS View author</p>
     "!
     "! @parameter sender | <p class="shorttext synchronized" lang="en"></p>
@@ -461,22 +447,6 @@ CLASS zcl_sat_cds_view_factory IMPLEMENTATION.
 
   ENDMETHOD.
 
-
-  METHOD get_api_states.
-    SELECT filtervalue
-     FROM zsat_i_apistates
-     WHERE objectname = @iv_cds_view
-       AND objecttype = 'DDLS'
-     INTO TABLE @rt_api_states.
-
-    IF sy-subrc <> 0.
-      rt_api_states = VALUE #( ( zif_sat_c_cds_api_state=>not_released ) ).
-    ELSE.
-
-    ENDIF.
-  ENDMETHOD.
-
-
   METHOD get_tadir_entry.
     SELECT SINGLE author AS created_by, created_on AS created_date, devclass
       FROM tadir
@@ -487,10 +457,6 @@ CLASS zcl_sat_cds_view_factory IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD get_annotations.
-    SELECT *
-      FROM zsat_i_cdsannotation
-      WHERE name IN @it_annotation_name
-    INTO CORRESPONDING FIELDS OF TABLE @rt_anno.
   ENDMETHOD.
 
 
@@ -582,14 +548,6 @@ CLASS zcl_sat_cds_view_factory IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD on_api_states_loading_request.
-    sender->mt_api_states = get_api_states( sender->mv_view_name ).
-
-    SET HANDLER:
-        on_api_states_loading_request FOR sender ACTIVATION abap_false.
-  ENDMETHOD.
-
-
   METHOD on_tadir_info_loading_request.
     sender->ms_tadir_info = get_tadir_entry( sender->mv_view_name ).
 
@@ -621,8 +579,8 @@ CLASS zcl_sat_cds_view_factory IMPLEMENTATION.
 
     TYPES: BEGIN OF lty_base_table.
         INCLUDE TYPE zsat_cds_view_base_table.
-    TYPES: entitytype     TYPE zsat_entity_type,
-           generationflag TYPE genflag.
+    TYPES: entitytype TYPE zsat_entity_type,
+           generationflag  TYPE genflag.
     TYPES: END OF lty_base_table.
 
     DATA: lt_base_tables    TYPE STANDARD TABLE OF lty_base_table,
@@ -640,7 +598,7 @@ CLASS zcl_sat_cds_view_factory IMPLEMENTATION.
       FROM zsat_i_cdsbasetable
       WHERE ddlview = @iv_view_name
         AND basetable NOT IN @gt_helper_ddl_tab_names
-      ORDER BY tableposition
+      ORDER BY TablePosition
       INTO CORRESPONDING FIELDS OF TABLE @lt_base_tables.
 
     CHECK sy-subrc = 0.
@@ -664,8 +622,7 @@ CLASS zcl_sat_cds_view_factory IMPLEMENTATION.
              entityid,
              rawentityid,
              sourcetype,
-             description,
-             \_apistate-apistate AS apistate
+             description
         FROM zsat_i_cdsentity( p_language = @lv_description_language )
         WHERE viewname IN @lt_cds_view_range
            OR entityid IN @lt_cds_view_range
@@ -684,7 +641,6 @@ CLASS zcl_sat_cds_view_factory IMPLEMENTATION.
           <ls_base>-entityname = <ls_cds_view>-entityid.
           <ls_base>-entityname_raw = <ls_cds_view>-rawentityid.
           <ls_base>-description = <ls_cds_view>-description.
-          <ls_base>-api_state = <ls_cds_view>-apistate.
           <ls_base>-source_type = <ls_cds_view>-sourcetype.
           <ls_base>-secondary_entity_id = <ls_cds_view>-ddlname.
         ENDLOOP.
@@ -848,7 +804,6 @@ CLASS zcl_sat_cds_view_factory IMPLEMENTATION.
         SET HANDLER:
           on_base_table_loading_request FOR result,
           on_annotation_read_request FOR result,
-          on_api_states_loading_request FOR result,
           on_tadir_info_loading_request FOR result,
           on_description_loading_request FOR result.
 

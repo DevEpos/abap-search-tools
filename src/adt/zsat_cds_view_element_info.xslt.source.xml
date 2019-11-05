@@ -59,15 +59,6 @@
       </tt:apply>
     </tt:cond>
 
-    <!-- Properties for Table Function View (Optional) -->
-    <tt:cond s-check="not-initial(CDS_VIEW_ELEMENT_INFO.AMDP_REF)">
-      <amdpReference>
-        <tt:apply name="objectReference">
-          <tt:with-root name="OBJECT_REFERENCE" ref="CDS_VIEW_ELEMENT_INFO.AMDP_REF"/>
-        </tt:apply>
-      </amdpReference>
-    </tt:cond>
-
   </tt:template>
 
   <tt:template name="association">

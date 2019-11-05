@@ -9,7 +9,7 @@ INTERFACE zif_sat_ty_adt_types
       rawentityid   TYPE ddstrucobjname,
       fieldname     TYPE fieldname,
       ddlname       TYPE ddlname,
-      sourcetype    TYPE ddddlsrctype,
+      sourcetype    TYPE char1,
       apistate      TYPE string,
       is_calculated TYPE abap_bool,
     END OF ty_s_field_usage.

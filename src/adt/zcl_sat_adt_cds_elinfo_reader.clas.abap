@@ -5,12 +5,7 @@ CLASS zcl_sat_adt_cds_elinfo_reader DEFINITION
 
   PUBLIC SECTION.
     INTERFACES zif_sat_adt_elinfo_reader.
-    "! <p class="shorttext synchronized" lang="en">Create ADT Object reference for AMDP class</p>
-    CLASS-METHODS create_amdp_object_ref
-      IMPORTING
-        iv_entity_id    TYPE zsat_entity_id
-      RETURNING
-        VALUE(r_result) TYPE sadt_object_reference.
+
     "! <p class="shorttext synchronized" lang="en">CONSTRUCTOR</p>
     METHODS constructor
       IMPORTING
@@ -40,12 +35,7 @@ CLASS zcl_sat_adt_cds_elinfo_reader DEFINITION
       RETURNING
         VALUE(rt_association) TYPE ty_t_association.
 
-    "! <p class="shorttext synchronized" lang="en">Retrieve API state and text for CDS view</p>
-    METHODS get_api_state
-      IMPORTING
-        io_cds_view         TYPE REF TO zcl_sat_cds_view
-      RETURNING
-        VALUE(rv_api_state) TYPE string.
+
     "! <p class="shorttext synchronized" lang="en">Fills Base table element information</p>
     METHODS fill_base_table_infos
       IMPORTING
@@ -70,35 +60,6 @@ ENDCLASS.
 
 CLASS zcl_sat_adt_cds_elinfo_reader IMPLEMENTATION.
 
-  METHOD create_amdp_object_ref.
-    SELECT
-      SINGLE
-      FROM ddtbfuncdep
-      FIELDS amdp_name
-      WHERE strucobjn = @iv_entity_id
-    INTO @DATA(lv_amdp).
-
-    CHECK sy-subrc = 0.
-
-    SPLIT lv_amdp AT '=>' INTO DATA(lv_class) DATA(lv_method).
-
-    SELECT
-      SINGLE
-      FROM seoclasstx
-      FIELDS descript
-      WHERE clsname = @lv_class
-        AND langu   = @sy-langu
-    INTO @DATA(lv_description).
-
-*.. TODO: use cl_src_adt_res_obj_struc to read the object structure to be able
-*........ to get the ADT URI for the specific AMDP method
-    r_result = zcl_sat_adt_util=>create_adt_uri(
-      iv_tadir_type = 'CLAS'
-      iv_name       = CONV #( lv_class )
-    ).
-    r_result-description = lv_description.
-  ENDMETHOD.
-
   METHOD constructor.
     mo_request = io_request.
     mv_cds_view_name = iv_cds_view_name.
@@ -110,27 +71,20 @@ CLASS zcl_sat_adt_cds_elinfo_reader IMPLEMENTATION.
 
         DATA(lo_cds_view) = zcl_sat_cds_view_factory=>read_cds_view( iv_cds_view = mv_cds_view_name ).
         DATA(lt_associations) = get_cds_associations( lo_cds_view ).
-        DATA(lt_base_entities) = lo_cds_view->get_base_tables( ). " get_base_tables( lo_cds_view ).
+        DATA(lt_base_entities) = lo_cds_view->get_base_tables( ).
         DATA(ls_header) = lo_cds_view->get_header( ).
         mv_ddl_view = ls_header-ddlname.
         DATA(ls_tadir_props) = lo_cds_view->get_tadir_info( ).
-
-        IF ls_header-source_type = zif_sat_c_cds_view_type=>table_function.
-*........ retrieve AMDP class from table
-          DATA(ls_amdp_ref) = create_amdp_object_ref( iv_entity_id = mv_cds_view_name ).
-        ENDIF.
 
         ms_element_info = VALUE #(
            name         = lo_cds_view->mv_view_name
            raw_name     = ls_header-entityname_raw
            is_query     = is_analytics_query( lo_cds_view )
-           amdp_ref     = ls_amdp_ref
            properties   = VALUE #(
               package      = ls_tadir_props-devclass
               owner        = ls_tadir_props-created_by
               created_date = ls_tadir_props-created_date
               changed_date = ls_header-chgdate
-***              api_state    = get_api_state( lo_cds_view )
            )
         ).
 
@@ -180,9 +134,8 @@ CLASS zcl_sat_adt_cds_elinfo_reader IMPLEMENTATION.
     IF lt_entity_range IS NOT INITIAL.
       SELECT ddlname,
              entityid,
-             sourcetype,
-             \_apistate-apistate AS apistate
-        FROM zsat_i_cdsentity
+             sourcetype
+        FROM zsat_i_cdsentity( p_language = @sy-langu )
         WHERE entityid IN @lt_entity_range
       INTO TABLE @DATA(lt_ddlname_map).
     ENDIF.
@@ -191,20 +144,10 @@ CLASS zcl_sat_adt_cds_elinfo_reader IMPLEMENTATION.
       LOOP AT rt_association ASSIGNING <ls_assoc> WHERE ref_cds_view = <ls_ddl_map>-entityid.
         <ls_assoc>-ddlname = <ls_ddl_map>-ddlname.
         <ls_assoc>-source_type = <ls_ddl_map>-sourcetype.
-        <ls_assoc>-api_state = <ls_ddl_map>-apistate.
       ENDLOOP.
     ENDLOOP.
   ENDMETHOD.
 
-
-  METHOD get_api_state.
-    DATA(lt_api_state_fix_vals) = CAST cl_abap_elemdescr( cl_abap_typedescr=>describe_by_data( VALUE zsat_cds_api_state( ) ) )->get_ddic_fixed_values( ).
-    DATA(lt_api_states) = io_cds_view->get_api_states( ).
-
-    CHECK lt_api_states IS NOT INITIAL.
-
-    rv_api_state = VALUE #( lt_api_state_fix_vals[ low = lt_api_states[ 1 ] ]-ddtext OPTIONAL ).
-  ENDMETHOD.
 
   METHOD fill_association_infos.
     LOOP AT it_association ASSIGNING FIELD-SYMBOL(<ls_assoc>).

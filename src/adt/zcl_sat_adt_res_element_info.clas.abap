@@ -91,12 +91,11 @@ CLASS zcl_sat_adt_res_element_info IMPLEMENTATION.
                     rawentityid AS entity_id_raw,
                     createdby AS created_by,
                     description,
-                    \_apistate-filtervalue AS api_state,
                     sourcetype AS source_type,
                     ddlsource AS source_code,
                     ddlname AS secondary_entity_id,
                     developmentpackage AS devclass
-        FROM zsat_i_cdsentity
+        FROM zsat_i_cdsentity( p_language = @sy-langu )
         WHERE entityid = @lv_entity
            OR ddlname  = @lv_entity
       INTO CORRESPONDING FIELDS OF @ls_entity.
@@ -108,7 +107,7 @@ CLASS zcl_sat_adt_res_element_info IMPLEMENTATION.
                     description,
                     createdby AS created_by,
                     developmentpackage AS devclass
-        FROM zsat_i_databasetablesandviews
+        FROM zsat_i_databasetablesandviews( p_language = @sy-langu )
         WHERE entity = @lv_entity
       INTO CORRESPONDING FIELDS OF @ls_entity.
 
@@ -146,9 +145,6 @@ CLASS zcl_sat_adt_res_element_info IMPLEMENTATION.
 
     IF ls_entity-source_type IS NOT INITIAL.
       ls_element_info-properties = VALUE #( BASE ls_element_info-properties ( key = 'SOURCE_TYPE' value = ls_entity-source_type ) ).
-    ENDIF.
-    IF ls_entity-api_state IS NOT INITIAL.
-      ls_element_info-properties = VALUE #( BASE ls_element_info-properties ( key = 'API_STATE' value = ls_entity-api_state ) ).
     ENDIF.
 
     TRY.

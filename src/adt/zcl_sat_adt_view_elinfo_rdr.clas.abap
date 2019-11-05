@@ -28,7 +28,7 @@ CLASS zcl_sat_adt_view_elinfo_rdr IMPLEMENTATION.
 
   METHOD zif_sat_adt_elinfo_reader~read_element_information.
     SELECT SINGLE *
-      FROM zsat_i_databaseview
+      FROM zsat_i_databaseview( p_language = @sy-langu )
       WHERE viewname = @mv_viewname
     INTO @DATA(ls_entity).
 

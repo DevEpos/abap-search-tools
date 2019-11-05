@@ -6,7 +6,6 @@
     <DDLNAME>ZSAT_I_ASSOCIATEDINCDS</DDLNAME>
     <DDLANGUAGE>E</DDLANGUAGE>
     <DDTEXT>Entity which is associated in CDS View</DDTEXT>
-    <SOURCE_TYPE>V</SOURCE_TYPE>
    </DDLS>
   </asx:values>
  </asx:abap>

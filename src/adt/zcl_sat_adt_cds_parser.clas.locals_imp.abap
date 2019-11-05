@@ -21,7 +21,6 @@ CLASS lcl_node_helper IMPLEMENTATION.
       WHEN iv_datasource_type = cl_qlast_constants=>datasource_inner THEN zcl_sat_adt_cds_parser=>c_sql_relation-inner_join
       WHEN iv_datasource_type = cl_qlast_constants=>datasource_left  THEN zcl_sat_adt_cds_parser=>c_sql_relation-left_outer_join
       WHEN iv_datasource_type = cl_qlast_constants=>datasource_right THEN zcl_sat_adt_cds_parser=>c_sql_relation-right_outer_join
-      WHEN iv_datasource_type = cl_qlast_constants=>datasource_cross THEN zcl_sat_adt_cds_parser=>c_sql_relation-cross_join
       WHEN iv_datasource_type = cl_qlast_constants=>datasource_full  THEN zcl_sat_adt_cds_parser=>c_sql_relation-full_outer_join
     ).
   ENDMETHOD.
@@ -248,16 +247,14 @@ CLASS lcl_ddl_view_stmnt_intrpt IMPLEMENTATION.
           iv_relation    = mo_node_helper->get_relation( io_parent_node      = io_parent_node
                                                           iv_datasource_type = iv_parent_type )
           iv_entity_type = SWITCH #( lo_table_datasource->get_tabletype( )
-             WHEN cl_qlast_constants=>tabtype_entity OR
-                  cl_qlast_constants=>tabtype_table_function THEN zif_sat_c_entity_type=>cds_view
-             WHEN cl_qlast_constants=>tabtype_transparent THEN zif_sat_c_entity_type=>table
-             WHEN cl_qlast_constants=>tabtype_view THEN zif_sat_c_entity_type=>view
+             WHEN 'B' THEN zif_sat_c_entity_type=>cds_view
+             WHEN 'T' THEN zif_sat_c_entity_type=>table
+             WHEN 'J' THEN zif_sat_c_entity_type=>view
           )
           iv_alias = lo_table_datasource->get_alias( upper_case = abap_false )
         ).
 
       WHEN cl_qlast_constants=>datasource_inner OR
-           cl_qlast_constants=>datasource_cross OR
            cl_qlast_constants=>datasource_left OR
            cl_qlast_constants=>datasource_right OR
            cl_qlast_constants=>datasource_full.
@@ -289,27 +286,13 @@ CLASS lcl_ddl_view_stmnt_intrpt IMPLEMENTATION.
         iv_entity_name = lo_target->get_name( )
         iv_relation    = zcl_sat_adt_cds_parser=>c_sql_relation-association
         iv_entity_type = SWITCH #( lo_target->get_tabletype( )
-           WHEN cl_qlast_constants=>tabtype_entity OR
-                cl_qlast_constants=>tabtype_table_function THEN zif_sat_c_entity_type=>cds_view
-           WHEN cl_qlast_constants=>tabtype_transparent THEN zif_sat_c_entity_type=>table
-           WHEN cl_qlast_constants=>tabtype_view THEN zif_sat_c_entity_type=>view
+          WHEN 'B' THEN zif_sat_c_entity_type=>cds_view
+          WHEN 'T' THEN zif_sat_c_entity_type=>table
+          WHEN 'J' THEN zif_sat_c_entity_type=>view
         )
       ).
       lo_node->name2 = lo_association->get_name( upper_case = abap_false ).
     ENDLOOP.
-  ENDMETHOD.
-
-ENDCLASS.
-
-CLASS lcl_ddl_tab_func_stmnt_intrpt IMPLEMENTATION.
-
-  METHOD constructor.
-    super->constructor( io_node_helper ).
-    mo_stmnt = io_stmnt.
-  ENDMETHOD.
-
-  METHOD interpret.
-
   ENDMETHOD.
 
 ENDCLASS.

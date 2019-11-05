@@ -190,20 +190,6 @@ CLASS zcl_sat_adt_util IMPLEMENTATION.
           uri  = rv_uri
         ) INTO TABLE gt_adt_obj_ref_uri_map.
       ENDIF.
-***      DATA(lo_uri_mapper) = cl_adt_uri_mapper=>get_instance( ).
-***      TRY.
-****........ Method exists starting from NW 7.52
-***          rv_uri = lo_uri_mapper->if_adt_uri_mapper~get_adt_object_ref_uri(
-***              name = iv_name
-***              type = is_type
-***          ).
-***        CATCH cx_adt_uri_mapping.
-***      ENDTRY.
-***      INSERT VALUE #(
-***        name = iv_name
-***        type = is_type
-***        uri  = rv_uri
-***      ) INTO TABLE gt_adt_obj_ref_uri_map.
     ELSE.
       rv_uri = <ls_uri>-uri.
     ENDIF.

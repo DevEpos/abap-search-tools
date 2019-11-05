@@ -1,5 +1,5 @@
 @AbapCatalog.sqlViewName: 'ZSATICDSFPE'
-@AbapCatalog.compiler.compareFilter: true
+@AbapCatalog.compiler.CompareFilter: true
 @AbapCatalog.preserveKey: true
 @AccessControl.authorizationCheck: #CHECK
 @EndUserText.label: 'Entities in Select From clause of CDS'

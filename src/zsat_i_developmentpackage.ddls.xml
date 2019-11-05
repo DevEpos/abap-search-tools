@@ -6,7 +6,6 @@
     <DDLNAME>ZSAT_I_DEVELOPMENTPACKAGE</DDLNAME>
     <DDLANGUAGE>E</DDLANGUAGE>
     <DDTEXT>Development Package Information</DDTEXT>
-    <SOURCE_TYPE>V</SOURCE_TYPE>
    </DDLS>
   </asx:values>
  </asx:abap>

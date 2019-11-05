@@ -74,12 +74,6 @@
     </SEOCOMPOTX>
     <SEOCOMPOTX>
      <CLSNAME>ZCL_SAT_ADT_RES_OBJECT_SEARCH</CLSNAME>
-     <CMPNAME>GET_SEARCH_PARAMETER</CMPNAME>
-     <LANGU>E</LANGU>
-     <DESCRIPT>Get search parameter value(s) from request</DESCRIPT>
-    </SEOCOMPOTX>
-    <SEOCOMPOTX>
-     <CLSNAME>ZCL_SAT_ADT_RES_OBJECT_SEARCH</CLSNAME>
      <CMPNAME>GET_TYPE_PARAM</CMPNAME>
      <LANGU>E</LANGU>
      <DESCRIPT>Retrieve &apos;type&apos; parameter from request</DESCRIPT>

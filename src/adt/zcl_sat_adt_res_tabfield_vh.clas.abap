@@ -8,7 +8,7 @@ CLASS zcl_sat_adt_res_tabfield_vh DEFINITION
   PUBLIC SECTION.
   PROTECTED SECTION.
     METHODS get_named_items
-        REDEFINITION.
+         REDEFINITION.
   PRIVATE SECTION.
 ENDCLASS.
 
@@ -22,10 +22,9 @@ CLASS zcl_sat_adt_res_tabfield_vh IMPLEMENTATION.
       lt_field_range = VALUE #( ( sign = 'I' option = 'CP' low = to_upper( p_filter_name ) ) ).
     ENDIF.
 
-    SELECT
+    SELECT DISTINCT
+           fieldname AS name
       FROM zsat_i_tablefield AS field
-      FIELDS DISTINCT
-             fieldname AS name
       WHERE fieldname IN @lt_field_range
         AND fieldname NOT LIKE '.%'
       ORDER BY fieldname

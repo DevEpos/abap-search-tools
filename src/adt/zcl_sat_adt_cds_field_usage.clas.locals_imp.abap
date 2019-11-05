@@ -47,25 +47,11 @@ CLASS lcl_field_visitor IMPLEMENTATION.
 *       ( classname = 'CL_QLAST_STDFUNC_EXPRESSION'     method = 'VISIT_CALC'  )
     ).
 
-    mv_ignore = if_qlast_visitor=>bitmask_ignore_associations BIT-OR
-                if_qlast_visitor=>bitmask_ignore_path BIT-OR
-                if_qlast_visitor=>bitmask_ignore_annotations BIT-OR
-                if_qlast_visitor=>bitmask_ignore_group_by BIT-OR
-                if_qlast_visitor=>bitmask_ignore_where BIT-OR
-                if_qlast_visitor=>bitmask_ignore_from BIT-OR
-                if_qlast_visitor=>bitmask_ignore_filter BIT-OR
-                if_qlast_visitor=>bitmask_ignore_order_by BIT-OR
-                if_qlast_visitor=>bitmask_ignore_ast_base.
   ENDMETHOD.
 
 
   METHOD get_found_fields.
     rt_found_fields = mt_found_fields.
-  ENDMETHOD.
-
-
-  METHOD if_qlast_visitor~ignore.
-    mask = mv_ignore.
   ENDMETHOD.
 
 ENDCLASS.

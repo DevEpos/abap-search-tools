@@ -6,7 +6,6 @@
     <DDLNAME>ZSAT_I_CDSFIELDENDUSERTEXT</DDLNAME>
     <DDLANGUAGE>E</DDLANGUAGE>
     <DDTEXT>Enduser Text Labels for CDS field</DDTEXT>
-    <SOURCE_TYPE>V</SOURCE_TYPE>
    </DDLS>
   </asx:values>
  </asx:abap>

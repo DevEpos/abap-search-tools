@@ -75,11 +75,6 @@ CLASS lcl_qov_cds IMPLEMENTATION.
         WHEN OTHERS.
           lf_invalid = abap_true.
       ENDCASE.
-    ELSEIF iv_option = zif_sat_c_object_browser=>c_search_option-by_api.
-      lcl_exclusion_helper=>remove_exclusion_string( CHANGING cv_value = lv_value ).
-
-      lf_invalid = xsdbool( lv_value NOT IN gt_api_states ).
-
     ELSEIF iv_option = zif_sat_c_object_browser=>c_search_option-by_params.
       IF lv_value <> 'TRUE' AND lv_value <> 'FALSE'.
         lf_invalid = abap_true.
@@ -96,8 +91,6 @@ CLASS lcl_qov_cds IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD class_constructor.
-    DATA(lt_api_states) = cl_ris_adt_res_release_states=>get_all( i_with_longtext = abap_false ).
-    gt_api_states = VALUE #( FOR api IN lt_api_states ( sign = 'I' option = 'EQ' low = api-name ) ).
   ENDMETHOD.
 
 ENDCLASS.

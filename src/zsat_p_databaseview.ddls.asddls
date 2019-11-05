@@ -1,5 +1,5 @@
 @AbapCatalog.sqlViewName: 'ZSATPDBVIEW'
-@AbapCatalog.compiler.compareFilter: true
+@AbapCatalog.compiler.CompareFilter: true
 @AbapCatalog.preserveKey: true
 @AccessControl.authorizationCheck: #NOT_REQUIRED
 @EndUserText.label: 'Information about Database view'
@@ -20,8 +20,8 @@ define view ZSAT_P_DatabaseView
 }
 where
        DbView.as4local = 'A'
-  and  genflag         = #genflag.' '
+  and  genflag         = ' '
   and(
-       viewclass       = #viewclass.' '
-    or viewclass       = #viewclass.'D'
+       viewclass       = ' '
+    or viewclass       = 'D'
   )

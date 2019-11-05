@@ -1,12 +1,11 @@
 @AbapCatalog.sqlViewName: 'ZSATIDBVIEW'
-@AbapCatalog.compiler.compareFilter: true
+@AbapCatalog.compiler.CompareFilter: true
 @AbapCatalog.preserveKey: true
 @AccessControl.authorizationCheck: #CHECK
 @EndUserText.label: 'Database view'
 
 define view ZSAT_I_DatabaseView
   with parameters
-    @Environment.systemField: #SYSTEM_LANGUAGE
     p_language : abap.lang
   as select from    ZSAT_P_DatabaseView as DbView
     left outer join dd25t                as Text         on  DbView.ViewName = Text.viewname
@@ -20,10 +19,6 @@ define view ZSAT_I_DatabaseView
     when Text.ddtext is not null then Text.ddtext
     else FallBackText.ddtext
   end                    as Description,
-  case
-    when Text.ddtext is not null then upper(Text.ddtext)
-    else upper(FallBackText.ddtext)
-  end                    as DescriptionUpper,
   CreatedBy,
   CreatedDate,
   ChangedDate,

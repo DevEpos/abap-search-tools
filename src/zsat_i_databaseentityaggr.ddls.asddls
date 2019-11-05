@@ -1,5 +1,5 @@
 @AbapCatalog.sqlViewName: 'ZSATDBEAGG'
-@AbapCatalog.compiler.compareFilter: true
+@AbapCatalog.compiler.CompareFilter: true
 @AbapCatalog.preserveKey: true
 @AccessControl.authorizationCheck: #CHECK
 @EndUserText.label: 'Aggr. Database Entities by package/type'

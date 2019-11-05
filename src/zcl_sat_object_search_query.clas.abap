@@ -202,7 +202,6 @@ CLASS zcl_sat_object_search_query IMPLEMENTATION.
     gt_search_option_map = VALUE #(
 *.... CDS View options)
       ( type = zif_sat_c_object_browser_mode=>cds_view option = c_search_option-by_owner       )
-      ( type = zif_sat_c_object_browser_mode=>cds_view option = c_search_option-by_api         )
       ( type = zif_sat_c_object_browser_mode=>cds_view option = c_search_option-by_params      )
       ( type = zif_sat_c_object_browser_mode=>cds_view option = c_search_option-by_param       )
       ( type = zif_sat_c_object_browser_mode=>cds_view option = c_search_option-by_select_from )

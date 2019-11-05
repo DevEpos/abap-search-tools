@@ -5,8 +5,7 @@
    <DDLS>
     <DDLNAME>ZSAT_I_CDSASSOCIATIONHEADER</DDLNAME>
     <DDLANGUAGE>E</DDLANGUAGE>
-    <DDTEXT>Header of Association in CDS View</DDTEXT>
-    <SOURCE_TYPE>V</SOURCE_TYPE>
+    <DDTEXT>Header of Association in CDS view</DDTEXT>
    </DDLS>
   </asx:values>
  </asx:abap>

@@ -1,5 +1,5 @@
 @AbapCatalog.sqlViewName: 'ZSATIDBFUSINV'
-@AbapCatalog.compiler.compareFilter: true
+@AbapCatalog.compiler.CompareFilter: true
 @AbapCatalog.preserveKey: true
 @AccessControl.authorizationCheck: #CHECK
 @EndUserText.label: 'Information about DB Field Usage'

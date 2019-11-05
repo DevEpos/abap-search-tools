@@ -6,7 +6,6 @@
     <DDLNAME>ZSAT_I_CDSFIELDVALUEWITHVH</DDLNAME>
     <DDLANGUAGE>E</DDLANGUAGE>
     <DDTEXT>CDS View fields with assigned Value Helps</DDTEXT>
-    <SOURCE_TYPE>V</SOURCE_TYPE>
    </DDLS>
   </asx:values>
  </asx:abap>

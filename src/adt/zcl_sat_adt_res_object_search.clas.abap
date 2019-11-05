@@ -194,10 +194,9 @@ CLASS zcl_sat_adt_res_object_search IMPLEMENTATION.
                           WHERE ( tadir_type  = 'DDLS' )
                           ( sign = 'I' option = 'EQ' low = res-secondary_entity_id ) ).
 
-    SELECT
+    SELECT ddlname,
+           source
        FROM ddddlsrc
-       FIELDS ddlname,
-              source
        WHERE as4local = 'A'
          AND ddlname  IN @lt_ddlname
     INTO CORRESPONDING FIELDS OF TABLE @mt_ddls_source.
@@ -311,7 +310,7 @@ CLASS zcl_sat_adt_res_object_search IMPLEMENTATION.
       SELECT developmentpackage,
              createdby,
              description
-         FROM zsat_i_developmentpackage
+         FROM zsat_i_developmentpackage( p_language = @sy-langu )
          FOR ALL ENTRIES IN @mt_super_package_all
          WHERE developmentpackage = @mt_super_package_all-package
       INTO TABLE @lt_package_info.

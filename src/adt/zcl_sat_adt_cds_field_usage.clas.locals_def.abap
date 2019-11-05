@@ -21,12 +21,9 @@ CLASS lcl_field_visitor DEFINITION
     METHODS get_found_fields
       RETURNING
         VALUE(rt_found_fields) TYPE ty_t_fields.
-    METHODS if_qlast_visitor~ignore
-        REDEFINITION.
   PRIVATE SECTION.
     DATA mt_found_fields TYPE ty_t_fields.
     DATA mv_source_field TYPE string.
     DATA mv_source_entityname TYPE string.
     DATA mf_calc_field_found TYPE abap_bool.
-    DATA mv_ignore TYPE if_qlast_visitor=>bitmask.
 ENDCLASS.

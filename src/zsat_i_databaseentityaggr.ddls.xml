@@ -6,7 +6,6 @@
     <DDLNAME>ZSAT_I_DATABASEENTITYAGGR</DDLNAME>
     <DDLANGUAGE>E</DDLANGUAGE>
     <DDTEXT>Aggregated Database Entities by package and type</DDTEXT>
-    <SOURCE_TYPE>V</SOURCE_TYPE>
    </DDLS>
   </asx:values>
  </asx:abap>

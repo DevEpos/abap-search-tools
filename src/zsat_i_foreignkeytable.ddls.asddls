@@ -1,5 +1,5 @@
 @AbapCatalog.sqlViewName: 'ZSATIFORKEYTAB'
-@AbapCatalog.compiler.compareFilter: true
+@AbapCatalog.compiler.CompareFilter: true
 @AbapCatalog.preserveKey: true
 @AccessControl.authorizationCheck: #CHECK
 @EndUserText.label: 'Database tables of for. key definition'

@@ -5,8 +5,7 @@
    <DDLS>
     <DDLNAME>ZSAT_I_CDSEXTENSIONVIEWS</DDLNAME>
     <DDLANGUAGE>E</DDLANGUAGE>
-    <DDTEXT>Cds Extension Views</DDTEXT>
-    <SOURCE_TYPE>V</SOURCE_TYPE>
+    <DDTEXT>CDS Extension Views</DDTEXT>
    </DDLS>
   </asx:values>
  </asx:abap>

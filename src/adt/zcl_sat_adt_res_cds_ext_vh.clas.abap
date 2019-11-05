@@ -23,10 +23,9 @@ CLASS zcl_sat_adt_res_cds_ext_vh IMPLEMENTATION.
       lt_extend_range = VALUE #( ( sign = 'I' option = 'CP' low = to_upper( p_filter_name ) ) ).
     ENDIF.
 
-    SELECT
-      FROM zsat_i_cdsentity
-      FIELDS rawentityid AS name,
-             description AS description
+    SELECT rawentityid AS name,
+           description AS description
+      FROM zsat_i_cdsentity( p_language = @sy-langu )
       WHERE ddlname IN @lt_extend_range
         AND sourcetype = @zif_sat_c_cds_view_type=>extend
       ORDER BY ddlname

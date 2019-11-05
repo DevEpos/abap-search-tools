@@ -46,7 +46,6 @@ INHERITING FROM lcl_query_option_validator.
         REDEFINITION.
     CLASS-METHODS class_constructor.
   PRIVATE SECTION.
-    CLASS-DATA gt_api_states TYPE RANGE OF string.
 ENDCLASS.
 
 CLASS lcl_qov_database_tab_view DEFINITION

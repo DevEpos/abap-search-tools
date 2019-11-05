@@ -20,11 +20,10 @@ CLASS zcl_sat_adt_res_db_entity_vh IMPLEMENTATION.
       lt_entity_range = VALUE #( ( sign = 'I' option = 'CP' low = to_upper( p_filter_name ) ) ).
     ENDIF.
 
-    SELECT
+    SELECT entityraw AS name,
+           type AS data,
+           description
       FROM zsat_i_databaseentity( p_language = @sy-langu ) AS field
-      FIELDS entityraw AS name,
-             type AS data,
-             description
       WHERE entity IN @lt_entity_range
       ORDER BY Entity
     INTO CORRESPONDING FIELDS OF TABLE @p_named_item_list-items

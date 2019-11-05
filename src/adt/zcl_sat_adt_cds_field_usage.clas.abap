@@ -79,8 +79,8 @@ CLASS zcl_sat_adt_cds_field_usage IMPLEMENTATION.
            base~ddlname,
            base~sourcetype,
            field~viewfield
-      FROM zsat_i_cdsfrompartentity AS frompart
-        INNER JOIN zsat_p_cdsviewbase AS base
+      FROM zsaticdsfpe AS frompart
+        INNER JOIN zsatpcdsvb AS base
           ON base~viewname = frompart~ddlviewname
         INNER JOIN dd27s AS field
           ON field~viewname = base~viewname
@@ -94,22 +94,21 @@ CLASS zcl_sat_adt_cds_field_usage IMPLEMENTATION.
 
   METHOD parse_view.
 
-    SELECT SINGLE
+    SELECT SINGLE *
         FROM ddddlsrc
-        FIELDS *
         WHERE ddlname = @is_cds_view-ddlname
       INTO @DATA(ls_cds).
 
     CHECK sy-subrc = 0.
 
     DATA(lo_parser) = NEW cl_ddl_parser( ).
-    DATA(lo_stmnt) = lo_parser->parse_cds(
-      EXPORTING
-        it_sources   = VALUE #( ( ls_cds ) )
-        iv_bitset    = cl_ddl_parser=>set_bitmask(
-                            iv_ars_check_off           = abap_true
-                            iv_extresol                = abap_true )
-    ).
+    TRY.
+        DATA(lo_stmnt) = lo_parser->parse_ddl(
+            source  = ls_cds-source
+        ).
+      CATCH cx_ddl_parser_exception.
+        RETURN.
+    ENDTRY.
 
     DATA(lo_visitor) = NEW lcl_field_visitor(
       iv_source_entityname = |{ mv_cds_view }|
@@ -125,12 +124,9 @@ CLASS zcl_sat_adt_cds_field_usage IMPLEMENTATION.
     DATA(lo_select_list) = lo_view_stmnt->get_select( )->get_selectlist( ).
 
     TRY.
-*        write: / |Process { lines( it_fields ) } Fields in View { is_cds_view-entityid }|.
         LOOP AT it_fields INTO DATA(ls_field).
           lo_visitor->mv_current_field = ls_field-field.
-          DATA(lo_expression) = lo_select_list->get_expression( name = ls_field-field ).
-          CHECK lo_expression IS BOUND.
-          lo_expression->accept( lo_visitor ).
+          lo_select_list->accept( lo_visitor ).
         ENDLOOP.
         DATA(lt_fields) = lo_visitor->get_found_fields( ).
 

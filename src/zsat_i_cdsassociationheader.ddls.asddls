@@ -1,5 +1,5 @@
 @AbapCatalog.sqlViewName: 'ZSATICDSASSHEAD'
-@AbapCatalog.compiler.compareFilter: true
+@AbapCatalog.compiler.CompareFilter: true
 @AbapCatalog.preserveKey: true
 @AccessControl.authorizationCheck: #CHECK
 @EndUserText.label: 'Header of Association in CDS View'

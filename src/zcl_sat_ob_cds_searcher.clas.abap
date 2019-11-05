@@ -24,7 +24,6 @@ CLASS zcl_sat_ob_cds_searcher DEFINITION
       c_base_alias                TYPE string VALUE 'base' ##NO_TEXT,
       c_anno_alias                TYPE string VALUE 'anno' ##NO_TEXT,
       c_extension_view_alias      TYPE string VALUE 'ext' ##no_text,
-      c_api_alias                 TYPE string VALUE 'api' ##NO_TEXT,
       c_param_alias               TYPE string VALUE 'param' ##NO_TEXT,
       c_select_from_alias         TYPE string VALUE 'frompart' ##NO_TEXT,
       c_parameterized_view_alias  TYPE string VALUE 'paramviews' ##NO_TEXT,
@@ -69,16 +68,11 @@ CLASS zcl_sat_ob_cds_searcher DEFINITION
     METHODS add_from_option_filter
       IMPORTING
         it_values TYPE zif_sat_ty_object_browser=>ty_search_option_values-value_range.
-    "! <p class="shorttext synchronized" lang="en">Create filter for API option</p>
-    METHODS add_api_option_filter
-      IMPORTING
-        it_values TYPE zif_sat_ty_object_browser=>ty_search_option_values-value_range.
     "! <p class="shorttext synchronized" lang="en">Adds extensions filter to query</p>
     METHODS add_extensions_filter
       IMPORTING
         it_values TYPE zif_sat_ty_object_browser=>ty_search_option_values-value_range.
-    "! <p class="shorttext synchronized" lang="en">Add API state information for results</p>
-    METHODS add_api_state_info.
+
     "! <p class="shorttext synchronized" lang="en">Add search terms of query to search filter</p>
     METHODS add_search_terms_to_search.
 ENDCLASS.
@@ -110,8 +104,9 @@ CLASS zcl_sat_ob_cds_searcher IMPLEMENTATION.
   METHOD zif_sat_object_searcher~search.
 
     set_base_select_table(
-        iv_entity = zif_sat_c_select_source_id=>zsat_i_cdsentity
+        iv_entity = get_cds_sql_name( CONV #( zif_sat_c_select_source_id=>zsat_i_cdsentity ) )
         iv_alias  = c_base_alias
+        it_parameters = value #( ( param_name = 'p_language' param_value = sy-langu ) )
     ).
 
     add_select_field( iv_fieldname = c_fields-entityid iv_fieldname_alias = 'entity_id' iv_entity = c_base_alias ).
@@ -157,19 +152,6 @@ CLASS zcl_sat_ob_cds_searcher IMPLEMENTATION.
             iv_fieldname = 'developmentpackage'
             it_values    = <ls_option>-value_range
           ).
-
-*.......... Find views regarding the release status of the cds view
-        WHEN zif_sat_c_object_browser=>c_search_option-by_api.
-          DATA(lv_api_state_table) = get_cds_sql_name( |{ zif_sat_c_select_source_id=>zsat_i_apistates }| ).
-          add_join_table(
-              iv_join_table = |{ lv_api_state_table }|
-              iv_alias      = c_api_alias
-              it_conditions = VALUE #(
-                 ( field = 'objectname' ref_field = 'ddlname' ref_table_alias = c_base_alias type = zif_sat_c_join_cond_type=>field and_or = zif_sat_c_selection_condition=>and )
-                 ( field = 'objecttype' tabname_alias = CONV #( c_api_alias ) value = 'DDLS' type = zif_sat_c_join_cond_type=>filter )
-              )
-          ).
-          add_api_option_filter( it_values = <ls_option>-value_range ).
 
 *.......... Find views where the filter exists in the FROM part of the cds view
         WHEN zif_sat_c_object_browser=>c_search_option-by_select_from.
@@ -222,10 +204,6 @@ CLASS zcl_sat_ob_cds_searcher IMPLEMENTATION.
     new_and_cond_list( ).
 
     search( ).
-
-    IF mt_result IS NOT INITIAL AND mo_search_query->ms_search_engine_params-with_api_state = abap_true.
-      add_api_state_info( ).
-    ENDIF.
 
     rt_result = mt_result.
   ENDMETHOD.
@@ -371,40 +349,6 @@ CLASS zcl_sat_ob_cds_searcher IMPLEMENTATION.
       ENDLOOP.
 
       new_and_cond_list( ).
-    ENDIF.
-  ENDMETHOD.
-
-  METHOD add_api_option_filter.
-    DATA: lt_api_filters   TYPE zif_sat_ty_object_browser=>ty_t_value_range,
-          lt_state_filters TYPE zif_sat_ty_object_browser=>ty_t_value_range.
-
-    LOOP AT it_values INTO DATA(ls_value).
-
-      CASE ls_value-low.
-
-        WHEN zif_sat_c_object_browser=>c_api_option_value-released OR
-             zif_sat_c_object_browser=>c_api_option_value-deprecated.
-          lt_state_filters = VALUE #( BASE lt_state_filters ( ls_value ) ).
-
-        WHEN OTHERS.
-          lt_api_filters = VALUE #( BASE lt_api_filters ( ls_value ) ).
-      ENDCASE.
-
-    ENDLOOP.
-
-    IF lt_api_filters IS NOT INITIAL.
-
-      add_option_filter(
-          iv_fieldname = |{ c_api_alias }~filtervalue|
-          it_values    = lt_api_filters
-      ).
-    ENDIF.
-
-    IF lt_state_filters IS NOT INITIAL.
-      add_option_filter(
-          iv_fieldname = |{ c_api_alias }~apistate|
-          it_values    = lt_state_filters
-      ).
     ENDIF.
   ENDMETHOD.
 
@@ -568,24 +512,6 @@ CLASS zcl_sat_ob_cds_searcher IMPLEMENTATION.
           ( LINES OF lt_ext_join_filter )
         )
     ).
-  ENDMETHOD.
-
-
-  METHOD add_api_state_info.
-    SELECT DISTINCT
-           objectname AS entity_id,
-           apistate AS api_state
-      FROM zsat_i_apistates
-      FOR ALL ENTRIES IN @mt_result
-      WHERE objectname = @mt_result-secondary_entity_id
-        AND filtervalue <> @zif_sat_c_cds_api_state=>add_custom_fields
-    INTO TABLE @DATA(lt_api_states).
-
-    CHECK sy-subrc = 0.
-
-    LOOP AT mt_result ASSIGNING FIELD-SYMBOL(<ls_result>).
-      <ls_result>-api_state = VALUE #( lt_api_states[ entity_id = <ls_result>-secondary_entity_id ]-api_state OPTIONAL ).
-    ENDLOOP.
   ENDMETHOD.
 
 

@@ -16,8 +16,6 @@ CLASS zcl_sat_cds_view DEFINITION
     EVENTS request_annotations
       EXPORTING
         VALUE(et_anno_name_range) TYPE zif_sat_ty_global=>ty_t_cds_anno_name_range.
-    "! <p class="shorttext synchronized" lang="en">Requests API States</p>
-    EVENTS request_api_states .
     "! <p class="shorttext synchronized" lang="en">Requests author of CDS View</p>
     EVENTS request_tadir_info.
     "! <p class="shorttext synchronized" lang="en">Requests Base Tables</p>
@@ -41,12 +39,7 @@ CLASS zcl_sat_cds_view DEFINITION
       RETURNING
         VALUE(rt_annotation) TYPE zif_sat_ty_global=>ty_t_cds_annotation.
 
-    "! <p class="shorttext synchronized" lang="en">Retrieve API States of CDS View</p>
-    "!
-    "! @parameter rt_api_states | <p class="shorttext synchronized" lang="en"></p>
-    METHODS get_api_states
-      RETURNING
-        VALUE(rt_api_states) TYPE zif_sat_ty_global=>ty_t_cds_api_state .
+
     "! <p class="shorttext synchronized" lang="en">Returns associations</p>
     METHODS get_associations
       RETURNING
@@ -164,17 +157,6 @@ CLASS zcl_sat_cds_view IMPLEMENTATION.
     ENDLOOP.
   ENDMETHOD.
 
-
-  METHOD get_api_states.
-    IF mf_api_states_loaded = abap_false.
-      RAISE EVENT request_api_states.
-      mf_api_states_loaded = abap_true.
-    ENDIF.
-
-    rt_api_states = mt_api_states.
-  ENDMETHOD.
-
-
   METHOD get_associations.
     result = mt_association.
   ENDMETHOD.
@@ -250,6 +232,7 @@ CLASS zcl_sat_cds_view IMPLEMENTATION.
     DATA(lt_anno) = get_annotations( VALUE #( ( sign = 'I' option = 'EQ' low = 'ANALYTICS.QUERY' ) ) ).
     IF lt_anno IS NOT INITIAL.
       DATA(lv_query_anno_val) = VALUE #( lt_anno[ 1 ]-value DEFAULT 'FALSE' ).
+      TRANSLATE lv_query_anno_val TO UPPER CASE.
       rf_is_query = xsdbool( lv_query_anno_val = 'TRUE' ).
     ENDIF.
   ENDMETHOD.

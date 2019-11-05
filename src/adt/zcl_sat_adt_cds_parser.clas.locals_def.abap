@@ -102,23 +102,6 @@ CLASS lcl_ddl_stmnt_interpreter DEFINITION ABSTRACT.
     DATA mo_node_helper TYPE REF TO lcl_node_helper.
 ENDCLASS.
 
-CLASS lcl_ddl_tab_func_stmnt_intrpt DEFINITION
- INHERITING FROM lcl_ddl_stmnt_interpreter.
-
-  PUBLIC SECTION.
-    "! <p class="shorttext synchronized" lang="en">CONSTRUCTOR</p>
-    METHODS constructor
-      IMPORTING
-        io_node_helper TYPE REF TO lcl_node_helper
-        io_stmnt       TYPE REF TO cl_qlast_tab_func_definition.
-    METHODS interpret
-        REDEFINITION.
-  PRIVATE SECTION.
-    DATA mo_stmnt TYPE REF TO cl_qlast_tab_func_definition.
-ENDCLASS.
-
-
-
 CLASS lcl_ddl_view_stmnt_intrpt DEFINITION
   INHERITING FROM lcl_ddl_stmnt_interpreter.
   PUBLIC SECTION.

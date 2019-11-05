@@ -12,11 +12,9 @@ CLASS zcl_sat_adt_discovery_app DEFINITION
     CONSTANTS c_db_fields_info_uri TYPE string VALUE '/dbfields/info'.
     CONSTANTS c_ddic_repo_access_uri TYPE string VALUE '/ddicaccess'.
     CONSTANTS c_column_info_uri TYPE string VALUE '/columninfo'.
-    CONSTANTS c_column_hierarchy_uri TYPE string VALUE '/columninfo/hierarchy'.
     CONSTANTS c_column_where_used_uri TYPE string VALUE '/columninfo/whereUsed'.
     CONSTANTS c_cds_analysis_uri TYPE string VALUE '/cds/analysis'.
     CONSTANTS c_cds_top_down_analysis_uri TYPE string VALUE '/cds/analysis/topDown'.
-    CONSTANTS c_cds_used_entites_analy_uri TYPE string VALUE '/cds/analysis/usedEntities'.
     CONSTANTS c_element_info_uri TYPE string VALUE '/elementinfo'.
     CONSTANTS c_element_info_by_uri_uri TYPE string VALUE '/elementinfoByUri'.
     CONSTANTS c_nav_targets_uri TYPE string VALUE '/navigationtargets'.
@@ -144,12 +142,6 @@ CLASS zcl_sat_adt_discovery_app IMPLEMENTATION.
                                      |\{&{ zif_sat_c_adt_utils=>c_search_query_parameter-type }*\}| &&
                                      |\{&{ zif_sat_c_adt_utils=>c_search_query_parameter-extended_by }*\}|.
 
-        IF sy-saprl >= 750.
-          lv_template = lv_template &&
-                        |\{&{ zif_sat_c_adt_utils=>c_search_query_parameter-release_state }*\}| &&
-                        |\{&{ zif_sat_c_adt_utils=>c_search_query_parameter-read_api_state }*\}|.
-        ENDIF.
-
       WHEN zif_sat_c_object_browser_mode=>database_table_view.
         lv_template = lv_template && |\{&{ zif_sat_c_adt_utils=>c_search_query_parameter-field }*\}| &&
                                      |\{&{ zif_sat_c_adt_utils=>c_search_query_parameter-type }*\}|.
@@ -219,22 +211,6 @@ CLASS zcl_sat_adt_discovery_app IMPLEMENTATION.
         category_scheme = lv_object_search_scheme
         category_term   = 'tablefield'
     ).
-    IF sy-saprl >= 752.
-      io_registry->register_discoverable_resource(
-          url             = '/annotation'
-          handler_class   = zif_sat_c_adt_utils=>c_resource_handler-annotations
-          description     = 'Search for Annotation'
-          category_scheme = lv_object_search_scheme
-          category_term   = 'annotation'
-      ).
-      io_registry->register_discoverable_resource(
-          url             = '/annotationvalue'
-          handler_class   = zif_sat_c_adt_utils=>c_resource_handler-annotation_values
-          description     = 'Search for Annotation Values'
-          category_scheme = lv_object_search_scheme
-          category_term   = 'annotationvalue'
-      ).
-    ENDIF.
     io_registry->register_discoverable_resource(
         url             = '/dbentity'
         handler_class   = zif_sat_c_adt_utils=>c_resource_handler-database_entities
@@ -242,22 +218,14 @@ CLASS zcl_sat_adt_discovery_app IMPLEMENTATION.
         category_scheme = lv_object_search_scheme
         category_term   = 'dbentity'
     ).
-    IF sy-saprl >= 751.
-      io_registry->register_discoverable_resource(
-          url             = '/releasestate'
-          handler_class   = zif_sat_c_adt_utils=>c_resource_handler-release_api_states
-          description     = 'Search for Release API states'
-          category_scheme = lv_object_search_scheme
-          category_term   = 'releasestate'
-      ).
-      io_registry->register_discoverable_resource(
-          url             = '/cdstype'
-          handler_class   = zif_sat_c_adt_utils=>c_resource_handler-cds_types
-          description     = 'Search for CDS source types'
-          category_scheme = lv_object_search_scheme
-          category_term   = 'cdstype'
-      ).
-    ENDIF.
+
+    io_registry->register_discoverable_resource(
+        url             = '/cdstype'
+        handler_class   = zif_sat_c_adt_utils=>c_resource_handler-cds_types
+        description     = 'Search for CDS source types'
+        category_scheme = lv_object_search_scheme
+        category_term   = 'cdstype'
+    ).
 
     io_registry->register_discoverable_resource(
         url             = '/cdsextension'
@@ -315,12 +283,6 @@ CLASS zcl_sat_adt_discovery_app IMPLEMENTATION.
       handler_class = zif_sat_c_adt_utils=>c_resource_handler-cds_top_down_analysis
       relation      = c_utils_rel_scheme && c_cds_top_down_analysis_uri
     ).
-*.. Register URI template for Used Entities Analyis
-    lo_element_info_collection->register_disc_res_w_template(
-      template      = |{ c_cds_used_entites_analy_uri }\{?{ zif_sat_c_adt_utils=>c_cds_analysis_parameter-cds_name }\}|
-      handler_class = zif_sat_c_adt_utils=>c_resource_handler-cds_used_entities_analysis
-      relation      = c_utils_rel_scheme && c_cds_used_entites_analy_uri
-    ).
   ENDMETHOD.
 
   METHOD register_navigation_targets.
@@ -360,15 +322,6 @@ CLASS zcl_sat_adt_discovery_app IMPLEMENTATION.
                       |\{&{ zif_sat_c_adt_utils=>c_db_fields_info_parameter-search_db_views }*\}|
       handler_class = zif_sat_c_adt_utils=>c_resource_handler-column_where_used_list
       relation      = c_utils_rel_scheme && c_column_where_used_uri
-    ).
-*.. Register template for column hierarchy
-    CHECK cl_abap_dbfeatures=>use_features(
-            requested_features = VALUE #( ( cl_abap_dbfeatures=>amdp_table_function ) ) ).
-    lo_element_info_collection->register_disc_res_w_template(
-      template      = |{ c_column_hierarchy_uri }\{?{ zif_sat_c_adt_utils=>c_db_fields_info_parameter-name }\}| &&
-                      |\{&{ zif_sat_c_adt_utils=>c_db_fields_info_parameter-field }\}|
-      handler_class = zif_sat_c_adt_utils=>c_resource_handler-column_hierarchy
-      relation      = c_utils_rel_scheme && c_column_hierarchy_uri
     ).
   ENDMETHOD.
 

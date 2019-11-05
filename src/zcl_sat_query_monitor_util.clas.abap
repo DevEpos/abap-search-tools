@@ -91,9 +91,9 @@ CLASS zcl_sat_query_monitor_util IMPLEMENTATION.
 
     CHECK lv_genid IS NOT INITIAL.
 
-    CALL FUNCTION 'RSRT_BICS_START'
-      EXPORTING
-        i_genuniid = lv_genid.
+    SUBMIT rsrt_bics WITH genuniid = lv_genid
+       AND RETURN.
+
   ENDMETHOD.
 
 ENDCLASS.
