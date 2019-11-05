@@ -219,22 +219,6 @@ CLASS zcl_sat_adt_discovery_app IMPLEMENTATION.
         category_scheme = lv_object_search_scheme
         category_term   = 'tablefield'
     ).
-    IF sy-saprl >= 752.
-      io_registry->register_discoverable_resource(
-          url             = '/annotation'
-          handler_class   = zif_sat_c_adt_utils=>c_resource_handler-annotations
-          description     = 'Search for Annotation'
-          category_scheme = lv_object_search_scheme
-          category_term   = 'annotation'
-      ).
-      io_registry->register_discoverable_resource(
-          url             = '/annotationvalue'
-          handler_class   = zif_sat_c_adt_utils=>c_resource_handler-annotation_values
-          description     = 'Search for Annotation Values'
-          category_scheme = lv_object_search_scheme
-          category_term   = 'annotationvalue'
-      ).
-    ENDIF.
     io_registry->register_discoverable_resource(
         url             = '/dbentity'
         handler_class   = zif_sat_c_adt_utils=>c_resource_handler-database_entities
@@ -242,22 +226,22 @@ CLASS zcl_sat_adt_discovery_app IMPLEMENTATION.
         category_scheme = lv_object_search_scheme
         category_term   = 'dbentity'
     ).
-    IF sy-saprl >= 751.
-      io_registry->register_discoverable_resource(
-          url             = '/releasestate'
-          handler_class   = zif_sat_c_adt_utils=>c_resource_handler-release_api_states
-          description     = 'Search for Release API states'
-          category_scheme = lv_object_search_scheme
-          category_term   = 'releasestate'
-      ).
-      io_registry->register_discoverable_resource(
-          url             = '/cdstype'
-          handler_class   = zif_sat_c_adt_utils=>c_resource_handler-cds_types
-          description     = 'Search for CDS source types'
-          category_scheme = lv_object_search_scheme
-          category_term   = 'cdstype'
-      ).
-    ENDIF.
+
+    io_registry->register_discoverable_resource(
+        url             = '/releasestate'
+        handler_class   = zif_sat_c_adt_utils=>c_resource_handler-release_api_states
+        description     = 'Search for Release API states'
+        category_scheme = lv_object_search_scheme
+        category_term   = 'releasestate'
+    ).
+
+    io_registry->register_discoverable_resource(
+        url             = '/cdstype'
+        handler_class   = zif_sat_c_adt_utils=>c_resource_handler-cds_types
+        description     = 'Search for CDS source types'
+        category_scheme = lv_object_search_scheme
+        category_term   = 'cdstype'
+    ).
 
     io_registry->register_discoverable_resource(
         url             = '/cdsextension'
@@ -274,7 +258,6 @@ CLASS zcl_sat_adt_discovery_app IMPLEMENTATION.
         category_scheme = lv_object_search_scheme
         category_term   = 'tabletype'
     ).
-
   ENDMETHOD.
 
   METHOD register_sapaox_launcher.

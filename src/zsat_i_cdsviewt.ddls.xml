@@ -6,7 +6,6 @@
     <DDLNAME>ZSAT_I_CDSVIEWT</DDLNAME>
     <DDLANGUAGE>E</DDLANGUAGE>
     <DDTEXT>Text for CDS View</DDTEXT>
-    <SOURCE_TYPE>V</SOURCE_TYPE>
    </DDLS>
   </asx:values>
  </asx:abap>

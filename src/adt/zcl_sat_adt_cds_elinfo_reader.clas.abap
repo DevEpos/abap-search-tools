@@ -130,7 +130,6 @@ CLASS zcl_sat_adt_cds_elinfo_reader IMPLEMENTATION.
               owner        = ls_tadir_props-created_by
               created_date = ls_tadir_props-created_date
               changed_date = ls_header-chgdate
-***              api_state    = get_api_state( lo_cds_view )
            )
         ).
 
@@ -153,10 +152,16 @@ CLASS zcl_sat_adt_cds_elinfo_reader IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD get_parameters.
-    mf_show_association_name = zcl_sat_adt_res_util=>get_boolean_req_param(
-       iv_param_name = zif_sat_c_adt_utils=>c_cds_elem_info_parameter-show_association_name
-       io_request    = mo_request
+    DATA: lv_show_assoc_name_param TYPE string.
+
+    mo_request->get_uri_query_parameter(
+      EXPORTING name      = zif_sat_c_adt_utils=>c_cds_elem_info_parameter-show_association_name
+                default   = 'true'
+      IMPORTING value     = lv_show_assoc_name_param
     ).
+
+    mf_show_association_name = COND #( WHEN lv_show_assoc_name_param = 'true' THEN abap_true ).
+
   ENDMETHOD.
 
   METHOD get_cds_associations.

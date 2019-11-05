@@ -6,7 +6,6 @@
     <DDLNAME>ZSAT_I_CDSFIELDHIERARCHY</DDLNAME>
     <DDLANGUAGE>E</DDLANGUAGE>
     <DDTEXT>CDS Field Hierarchy</DDTEXT>
-    <SOURCE_TYPE>F</SOURCE_TYPE>
    </DDLS>
   </asx:values>
  </asx:abap>

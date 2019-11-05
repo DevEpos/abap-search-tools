@@ -141,8 +141,7 @@ CLASS zcl_sat_cds_dep_analyzer IMPLEMENTATION.
       ELSE.
 *...... Add the entity to the dependency list
         IF <ls_dependency>-type = cl_ddls_dependency_visitor=>co_node_type-cds_view OR
-          <ls_dependency>-type = cl_ddls_dependency_visitor=>co_node_type-cds_table_function OR
-          <ls_dependency>-type = cl_ddls_dependency_visitor=>co_node_type-cds_db_view.
+          <ls_dependency>-type = cl_ddls_dependency_visitor=>co_node_type-cds_table_function.
           lv_entity_type = zif_sat_c_entity_type=>cds_view.
         ELSEIF <ls_dependency>-type = cl_ddls_dependency_visitor=>co_node_type-table.
           lv_entity_type = zif_sat_c_entity_type=>table.
@@ -181,8 +180,7 @@ CLASS zcl_sat_cds_dep_analyzer IMPLEMENTATION.
     LOOP AT it_children ASSIGNING FIELD-SYMBOL(<ls_child>).
 *.... Add the entity to the dependency list
       IF <ls_child>-type = cl_ddls_dependency_visitor=>co_node_type-cds_view OR
-        <ls_child>-type = cl_ddls_dependency_visitor=>co_node_type-cds_table_function OR
-        <ls_child>-type = cl_ddls_dependency_visitor=>co_node_type-cds_db_view.
+        <ls_child>-type = cl_ddls_dependency_visitor=>co_node_type-cds_table_function.
         ADD 1 TO cv_used_entity_count.
       ELSEIF <ls_child>-type = cl_ddls_dependency_visitor=>co_node_type-table.
         ADD 1 TO cv_used_entity_count.

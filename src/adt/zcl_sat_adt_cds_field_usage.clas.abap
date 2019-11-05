@@ -107,7 +107,6 @@ CLASS zcl_sat_adt_cds_field_usage IMPLEMENTATION.
       EXPORTING
         it_sources   = VALUE #( ( ls_cds ) )
         iv_bitset    = cl_ddl_parser=>set_bitmask(
-                            iv_ars_check_off           = abap_true
                             iv_extresol                = abap_true )
     ).
 
@@ -125,12 +124,9 @@ CLASS zcl_sat_adt_cds_field_usage IMPLEMENTATION.
     DATA(lo_select_list) = lo_view_stmnt->get_select( )->get_selectlist( ).
 
     TRY.
-*        write: / |Process { lines( it_fields ) } Fields in View { is_cds_view-entityid }|.
         LOOP AT it_fields INTO DATA(ls_field).
           lo_visitor->mv_current_field = ls_field-field.
-          DATA(lo_expression) = lo_select_list->get_expression( name = ls_field-field ).
-          CHECK lo_expression IS BOUND.
-          lo_expression->accept( lo_visitor ).
+          lo_select_list->accept( lo_visitor ).
         ENDLOOP.
         DATA(lt_fields) = lo_visitor->get_found_fields( ).
 

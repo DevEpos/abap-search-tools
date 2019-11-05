@@ -6,7 +6,6 @@
     <DDLNAME>ZSAT_I_CDSENTITY</DDLNAME>
     <DDLANGUAGE>E</DDLANGUAGE>
     <DDTEXT>Entity in Data Definition</DDTEXT>
-    <SOURCE_TYPE>V</SOURCE_TYPE>
    </DDLS>
   </asx:values>
  </asx:abap>

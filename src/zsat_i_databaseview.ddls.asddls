@@ -20,10 +20,6 @@ define view ZSAT_I_DatabaseView
     when Text.ddtext is not null then Text.ddtext
     else FallBackText.ddtext
   end                    as Description,
-  case
-    when Text.ddtext is not null then upper(Text.ddtext)
-    else upper(FallBackText.ddtext)
-  end                    as DescriptionUpper,
   CreatedBy,
   CreatedDate,
   ChangedDate,

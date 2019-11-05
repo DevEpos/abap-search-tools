@@ -250,6 +250,7 @@ CLASS zcl_sat_cds_view IMPLEMENTATION.
     DATA(lt_anno) = get_annotations( VALUE #( ( sign = 'I' option = 'EQ' low = 'ANALYTICS.QUERY' ) ) ).
     IF lt_anno IS NOT INITIAL.
       DATA(lv_query_anno_val) = VALUE #( lt_anno[ 1 ]-value DEFAULT 'FALSE' ).
+      TRANSLATE lv_query_anno_val TO UPPER CASE.
       rf_is_query = xsdbool( lv_query_anno_val = 'TRUE' ).
     ENDIF.
   ENDMETHOD.

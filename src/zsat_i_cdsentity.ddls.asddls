@@ -36,10 +36,6 @@ define view ZSAT_I_CDSEntity
     when Text.ddtext is null or Text.ddtext = '' then FallbackText.ddtext
     else Text.ddtext
   end                    as Description,
-  case
-    when Text.ddtext is null or Text.ddtext = '' then upper( FallbackText.ddtext )
-    else upper( Text.ddtext )
-  end                    as DescriptionUpper,
   Base.CreatedBy,
   Base.CreatedDate,
   Base.ChangedDate,

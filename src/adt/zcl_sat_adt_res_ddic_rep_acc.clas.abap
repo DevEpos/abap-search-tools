@@ -166,8 +166,7 @@ CLASS zcl_sat_adt_res_ddic_rep_acc IMPLEMENTATION.
         lo_path_resolver->resolve(
           EXPORTING i_paths             = mt_paths
                     i_uri_required      = abap_true
-                    i_exact_match       = abap_true
-                    i_completion_scopes = VALUE #( ( cl_ddic_adt_res_ddl_rep_access=>co_completion_scope_all ) )
+                    i_completion_scope  = cl_ddic_adt_res_ddl_rep_access=>co_completion_scope_all
           IMPORTING r_result            = DATA(lt_result)
         ).
         LOOP AT lt_result ASSIGNING FIELD-SYMBOL(<ls_result>).

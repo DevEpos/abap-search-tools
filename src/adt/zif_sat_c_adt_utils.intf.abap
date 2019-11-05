@@ -18,7 +18,6 @@ INTERFACE zif_sat_c_adt_utils
       cds_fields                 TYPE string VALUE 'ZCL_SAT_ADT_RES_CDSFIELD_VH',
       db_table_fields            TYPE string VALUE 'ZCL_SAT_ADT_RES_TABFIELD_VH',
       annotations                TYPE string VALUE 'ZCL_SAT_ADT_RES_ANNO_VH',
-      annotation_values          TYPE string VALUE 'ZCL_SAT_ADT_RES_ANNO_VALUE_VH',
       database_entities          TYPE string VALUE 'ZCL_SAT_ADT_RES_DB_ENTITY_VH',
       release_api_states         TYPE string VALUE 'CL_RIS_ADT_RES_RELEASE_STATES',
       cds_types                  TYPE string VALUE 'ZCL_SAT_ADT_RES_CDS_TYPE_VH',

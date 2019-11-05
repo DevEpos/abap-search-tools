@@ -96,7 +96,7 @@ CLASS lcl_qov_cds IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD class_constructor.
-    DATA(lt_api_states) = cl_ris_adt_res_release_states=>get_all( i_with_longtext = abap_false ).
+    DATA(lt_api_states) = cl_ris_adt_res_release_states=>get_all(  ).
     gt_api_states = VALUE #( FOR api IN lt_api_states ( sign = 'I' option = 'EQ' low = api-name ) ).
   ENDMETHOD.
 

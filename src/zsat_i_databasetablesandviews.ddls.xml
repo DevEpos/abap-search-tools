@@ -6,7 +6,6 @@
     <DDLNAME>ZSAT_I_DATABASETABLESANDVIEWS</DDLNAME>
     <DDLANGUAGE>E</DDLANGUAGE>
     <DDTEXT>DB Tables and DB views</DDTEXT>
-    <SOURCE_TYPE>V</SOURCE_TYPE>
    </DDLS>
   </asx:values>
  </asx:abap>

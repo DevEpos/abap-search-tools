@@ -21,7 +21,6 @@ CLASS lcl_node_helper IMPLEMENTATION.
       WHEN iv_datasource_type = cl_qlast_constants=>datasource_inner THEN zcl_sat_adt_cds_parser=>c_sql_relation-inner_join
       WHEN iv_datasource_type = cl_qlast_constants=>datasource_left  THEN zcl_sat_adt_cds_parser=>c_sql_relation-left_outer_join
       WHEN iv_datasource_type = cl_qlast_constants=>datasource_right THEN zcl_sat_adt_cds_parser=>c_sql_relation-right_outer_join
-      WHEN iv_datasource_type = cl_qlast_constants=>datasource_cross THEN zcl_sat_adt_cds_parser=>c_sql_relation-cross_join
       WHEN iv_datasource_type = cl_qlast_constants=>datasource_full  THEN zcl_sat_adt_cds_parser=>c_sql_relation-full_outer_join
     ).
   ENDMETHOD.
@@ -257,7 +256,6 @@ CLASS lcl_ddl_view_stmnt_intrpt IMPLEMENTATION.
         ).
 
       WHEN cl_qlast_constants=>datasource_inner OR
-           cl_qlast_constants=>datasource_cross OR
            cl_qlast_constants=>datasource_left OR
            cl_qlast_constants=>datasource_right OR
            cl_qlast_constants=>datasource_full.

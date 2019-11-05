@@ -18,10 +18,6 @@ define view ZSAT_I_CDSViewT
             when EndUserText.ddtext <> '' then EndUserText.ddtext
             else FallbackText.ddtext
          end                     as Description,
-         case
-            when EndUserText.ddtext <> '' then upper(EndUserText.ddtext)
-            else upper(FallbackText.ddtext)
-         end                     as DescriptionUpper,
          FallbackText.ddtext     as FallbackDescription,
          EndUserText.ddtext      as EnduserDescription
 }
