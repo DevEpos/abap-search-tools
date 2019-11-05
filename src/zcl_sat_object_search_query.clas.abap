@@ -131,20 +131,10 @@ CLASS zcl_sat_object_search_query DEFINITION
         ct_options     TYPE zif_sat_ty_object_browser=>tt_search_option_values
       RAISING
         zcx_sat_object_search.
-
     "! <p class="shorttext synchronized" lang="en">Enhance certain query options</p>
     CLASS-METHODS enhance_options
       CHANGING
         ct_options TYPE zif_sat_ty_object_browser=>tt_search_option_values
-      RAISING
-        zcx_sat_object_search.
-    "! <p class="shorttext synchronized" lang="en">Validate option value</p>
-    "!
-    CLASS-METHODS validate_option_value
-      IMPORTING
-        iv_option      TYPE string
-        iv_search_type TYPE zsat_obj_browser_mode
-        iv_value       TYPE string
       RAISING
         zcx_sat_object_search.
     "! <p class="shorttext synchronized" lang="en">Converts option value for correct selection</p>
@@ -349,10 +339,12 @@ CLASS zcl_sat_object_search_query IMPLEMENTATION.
 
     ASSIGN gt_search_option_setting[ option = is_option-option ] TO FIELD-SYMBOL(<ls_option_info>).
 
+    data(lo_validator) = lcl_query_option_validator=>create_validator( iv_search_type ).
+
     LOOP AT lt_value_range ASSIGNING FIELD-SYMBOL(<ls_value_range>).
       DATA(lv_value) = <ls_value_range>-low.
       convert_option_value( EXPORTING iv_option = is_option-option CHANGING cv_value = lv_value ).
-      validate_option_value( iv_option = is_option-option iv_search_type = iv_search_type iv_value = lv_value ).
+      lo_validator->validate( iv_option = is_option-option iv_value = lv_value ).
       add_option_value(
         EXPORTING is_option  = <ls_option_info>
                   iv_value   = lv_value
@@ -547,6 +539,8 @@ CLASS zcl_sat_object_search_query IMPLEMENTATION.
     ENDIF.
     ASSIGN gt_search_option_setting[ option = lv_option ] TO FIELD-SYMBOL(<ls_option_info>).
 
+    data(lo_validator) = lcl_query_option_validator=>create_validator( iv_search_type ).
+
 *.. Get all included values for this option
     IF lv_value_list CS c_value_separator.
       IF <ls_option_info>-single = abap_true.
@@ -564,7 +558,7 @@ CLASS zcl_sat_object_search_query IMPLEMENTATION.
       SPLIT lv_value_list AT c_value_separator INTO TABLE lt_values.
       LOOP AT lt_values ASSIGNING FIELD-SYMBOL(<lv_value>).
         convert_option_value( EXPORTING iv_option = lv_option CHANGING cv_value = <lv_value> ).
-        validate_option_value( iv_option = lv_option iv_search_type = iv_search_type iv_value = <lv_value> ).
+        lo_validator->validate( iv_option = lv_option iv_value = <lv_value> ).
         add_option_value(
           EXPORTING is_option  = <ls_option_info>
                     iv_value   = <lv_value>
@@ -574,7 +568,7 @@ CLASS zcl_sat_object_search_query IMPLEMENTATION.
     ELSE.
 *.... Only a single value is included in the query
       convert_option_value( EXPORTING iv_option = lv_option CHANGING cv_value = lv_value_list ).
-      validate_option_value( iv_option = lv_option iv_search_type = iv_search_type iv_value = lv_value_list ).
+      lo_validator->validate( iv_option = lv_option iv_value = lv_value_list ).
       add_option_value(
         EXPORTING is_option  = <ls_option_info>
                   iv_value   = lv_value_list
@@ -602,10 +596,6 @@ CLASS zcl_sat_object_search_query IMPLEMENTATION.
       WHEN OTHERS.
     ENDCASE.
 
-  ENDMETHOD.
-
-  METHOD validate_option_value.
-    lcl_query_option_validator=>create_validator( iv_search_type )->validate( iv_option = iv_option iv_value = iv_value ).
   ENDMETHOD.
 
   METHOD get_option.
@@ -661,7 +651,6 @@ CLASS zcl_sat_object_search_query IMPLEMENTATION.
       ENDIF.
     ENDLOOP.
   ENDMETHOD.
-
 
   METHOD get_options.
     rt_options = mt_search_options.

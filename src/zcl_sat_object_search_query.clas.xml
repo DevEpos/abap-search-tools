@@ -128,12 +128,6 @@
      <LANGU>E</LANGU>
      <DESCRIPT>Add search option to query</DESCRIPT>
     </SEOCOMPOTX>
-    <SEOCOMPOTX>
-     <CLSNAME>ZCL_SAT_OBJECT_SEARCH_QUERY</CLSNAME>
-     <CMPNAME>VALIDATE_OPTION_VALUE</CMPNAME>
-     <LANGU>E</LANGU>
-     <DESCRIPT>Validate option value</DESCRIPT>
-    </SEOCOMPOTX>
    </DESCRIPTIONS>
   </asx:values>
  </asx:abap>

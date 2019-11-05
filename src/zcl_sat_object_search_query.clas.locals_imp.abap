@@ -19,6 +19,9 @@ CLASS lcl_query_option_validator IMPLEMENTATION.
 
       WHEN zif_sat_c_object_browser_mode=>package.
         rr_validator = NEW lcl_qov_package( ).
+
+      WHEN OTHERS.
+        rr_validator = NEW lcl_qov_default( ).
     ENDCASE.
 
   ENDMETHOD.
@@ -168,6 +171,17 @@ CLASS lcl_exclusion_helper IMPLEMENTATION.
       cv_value = cv_value+2.
       cv_sign = zif_sat_c_options=>excluding.
     ENDIF.
+  ENDMETHOD.
+
+ENDCLASS.
+
+CLASS lcl_qov_default IMPLEMENTATION.
+
+  METHOD validate.
+    super->validate(
+        iv_option = iv_option
+        iv_value  = iv_value
+    ).
   ENDMETHOD.
 
 ENDCLASS.

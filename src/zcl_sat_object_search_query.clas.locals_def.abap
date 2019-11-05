@@ -31,6 +31,14 @@ ABSTRACT.
         VALUE(rr_validator) TYPE REF TO lcl_query_option_validator.
 ENDCLASS.
 
+CLASS lcl_qov_default DEFINITION
+INHERITING FROM lcl_query_option_validator.
+  PUBLIC SECTION.
+    METHODS validate
+        REDEFINITION.
+ENDCLASS.
+
+
 CLASS lcl_qov_cds DEFINITION
 INHERITING FROM lcl_query_option_validator.
   PUBLIC SECTION.

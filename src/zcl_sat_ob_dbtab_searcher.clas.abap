@@ -96,10 +96,7 @@ CLASS zcl_sat_ob_dbtab_searcher IMPLEMENTATION.
 
 *.......... Find only objects with a certain type
         WHEN zif_sat_c_object_browser=>c_search_option-by_type.
-          IF lines( <ls_option>-value_range ) = 1.
-            DATA(ls_option) = <ls_option>-value_range[ 1 ].
-
-          ENDIF.
+          add_type_option_filter( <ls_option>-value_range ).
 
 *.......... Find objects by field
         WHEN zif_sat_c_object_browser=>c_search_option-by_field.
