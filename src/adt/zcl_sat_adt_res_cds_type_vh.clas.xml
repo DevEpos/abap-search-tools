@@ -15,36 +15,18 @@
     <item>
      <ID>I</ID>
      <KEY>001</KEY>
-     <ENTRY>CDS Table Function View</ENTRY>
-     <LENGTH>46</LENGTH>
-    </item>
-    <item>
-     <ID>I</ID>
-     <KEY>002</KEY>
-     <ENTRY>Hierarchy View</ENTRY>
-     <LENGTH>24</LENGTH>
-    </item>
-    <item>
-     <ID>I</ID>
-     <KEY>003</KEY>
      <ENTRY>Standard CDS View</ENTRY>
      <LENGTH>27</LENGTH>
     </item>
     <item>
      <ID>I</ID>
-     <KEY>004</KEY>
-     <ENTRY>Abstract Entity</ENTRY>
-     <LENGTH>25</LENGTH>
+     <KEY>002</KEY>
+     <ENTRY>CDS Table Function View</ENTRY>
+     <LENGTH>46</LENGTH>
     </item>
     <item>
      <ID>I</ID>
-     <KEY>005</KEY>
-     <ENTRY>Custom Entity</ENTRY>
-     <LENGTH>23</LENGTH>
-    </item>
-    <item>
-     <ID>I</ID>
-     <KEY>006</KEY>
+     <KEY>003</KEY>
      <ENTRY>Extension View</ENTRY>
      <LENGTH>24</LENGTH>
     </item>

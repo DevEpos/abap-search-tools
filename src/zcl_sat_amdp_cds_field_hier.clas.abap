@@ -88,8 +88,7 @@ CLASS zcl_sat_amdp_cds_field_hier IMPLEMENTATION.
 
     -- enhance final result WITH raw entity names and raw fieldnames
 
-    RETURN SELECT DISTINCT cast( '   ' as "$ABAP.type( mandt )" ) as mandt,
-                           all_fields.viewname,
+    RETURN SELECT DISTINCT all_fields.viewname,
                            all_fields.viewfield,
                            all_fields.level,
                            coalesce(view.rawentityid, all_fields.entityname) as entityname,

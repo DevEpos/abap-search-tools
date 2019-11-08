@@ -1,3 +1,4 @@
+@ClientDependent: false
 @AccessControl.authorizationCheck: #NOT_REQUIRED
 @EndUserText.label: 'CDS Field Hierarchy'
 
@@ -7,7 +8,6 @@ define table function ZSAT_I_CdsFieldHierarchy
     p_cdsFieldName : fieldname
 returns
 {
-  key mandt          : mandt;
   key ViewName       : tabname;
   key ViewField      : fieldname;
   key Level          : abap.int1;
