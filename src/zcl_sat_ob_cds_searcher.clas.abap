@@ -292,9 +292,8 @@ CLASS zcl_sat_ob_cds_searcher IMPLEMENTATION.
     ENDIF.
 
     IF lt_including IS NOT INITIAL.
-      DATA(lv_param_table) = get_cds_sql_name( |{ zif_sat_c_select_source_id=>dd10b }| ).
       add_join_table(
-          iv_join_table = |{ lv_param_table }|
+          iv_join_table = CONV #( zif_sat_c_select_source_id=>dd10b )
           iv_alias      = c_param_alias
           it_conditions = VALUE #( ( field = 'strucobjn' ref_field = c_fields-entityid ref_table_alias = c_base_alias type = zif_sat_c_join_cond_type=>field ) )
       ).
