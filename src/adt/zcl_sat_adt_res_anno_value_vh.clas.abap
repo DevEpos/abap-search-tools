@@ -93,7 +93,8 @@ CLASS zcl_sat_adt_res_anno_value_vh IMPLEMENTATION.
                concat( '#',enum~symbol )  AS name
           FROM (lt_from)
           WHERE upper( concat( '#', enum~symbol ) ) IN @it_anno_value_range
-        INTO CORRESPONDING FIELDS OF TABLE @cs_named_items-items
+            AND key_upper                           IN @it_anno_name_range
+        APPENDING CORRESPONDING FIELDS OF TABLE @cs_named_items-items
           UP TO @iv_max_row_count ROWS.
 
       CATCH cx_root INTO DATA(lx_error).
