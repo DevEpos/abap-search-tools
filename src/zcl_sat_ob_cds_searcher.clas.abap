@@ -129,42 +129,42 @@ CLASS zcl_sat_ob_cds_searcher IMPLEMENTATION.
       CASE <ls_option>-option.
 
 *.......... Find views which have a certain extension
-        WHEN zif_sat_c_object_browser=>c_search_option-by_extensions.
+        WHEN zif_sat_c_object_search=>c_search_option-by_extensions.
           add_extensions_filter( EXPORTING it_values = <ls_option>-value_range ).
 
 *.......... Find views via its description
-        WHEN zif_sat_c_object_browser=>c_search_option-by_description.
+        WHEN zif_sat_c_object_search=>c_search_option-by_description.
           add_option_filter(
             iv_fieldname = mv_description_filter_field
             it_values    = <ls_option>-value_range
           ).
 
 *.......... Find views with a certain responsible person
-        WHEN zif_sat_c_object_browser=>c_search_option-by_owner.
+        WHEN zif_sat_c_object_search=>c_search_option-by_owner.
           add_option_filter(
             iv_fieldname = 'createdby'
             it_values    = <ls_option>-value_range
           ).
 
 *.......... Find views which exist in a certain development package
-        WHEN zif_sat_c_object_browser=>c_search_option-by_package.
+        WHEN zif_sat_c_object_search=>c_search_option-by_package.
           add_option_filter(
             iv_fieldname = 'developmentpackage'
             it_values    = <ls_option>-value_range
           ).
 
 *.......... Find views where the filter exists in the FROM part of the cds view
-        WHEN zif_sat_c_object_browser=>c_search_option-by_select_from.
+        WHEN zif_sat_c_object_search=>c_search_option-by_select_from.
           add_from_option_filter( <ls_option>-value_range ).
 
 *.......... Find views which have a certain annotation
-        WHEN zif_sat_c_object_browser=>c_search_option-by_anno.
+        WHEN zif_sat_c_object_search=>c_search_option-by_anno.
           add_anno_option_filter(
             it_values = <ls_option>-value_range
           ).
 
 *.......... Find views that are parameterized
-        WHEN zif_sat_c_object_browser=>c_search_option-by_params.
+        WHEN zif_sat_c_object_search=>c_search_option-by_params.
           CHECK <ls_option>-value_range IS NOT INITIAL.
           DATA(lf_views_with_parameters) = xsdbool( <ls_option>-value_range[ 1 ]-low = 'TRUE' ).
           IF lf_views_with_parameters = abap_true.
@@ -184,19 +184,19 @@ CLASS zcl_sat_ob_cds_searcher IMPLEMENTATION.
           ENDIF.
 
 *.......... Find views that have a certain parameter
-        WHEN zif_sat_c_object_browser=>c_search_option-by_param.
+        WHEN zif_sat_c_object_search=>c_search_option-by_param.
           add_param_option_filter( <ls_option>-value_range ).
 
 *.......... Find views which have a certain field a component
-        WHEN zif_sat_c_object_browser=>c_search_option-by_field.
+        WHEN zif_sat_c_object_search=>c_search_option-by_field.
           add_field_option_filter( <ls_option>-value_range ).
 
 *.......... Find views where an entity is used as an association
-        WHEN zif_sat_c_object_browser=>c_search_option-by_association.
+        WHEN zif_sat_c_object_search=>c_search_option-by_association.
           add_association_option_filter( <ls_option>-value_range ).
 
 *.......... Find views for a certain type e.g. function, hierarchy, view
-        WHEN zif_sat_c_object_browser=>c_search_option-by_type.
+        WHEN zif_sat_c_object_search=>c_search_option-by_type.
           add_type_option_filter( it_values = <ls_option>-value_range ).
       ENDCASE.
     ENDLOOP.
@@ -358,22 +358,22 @@ CLASS zcl_sat_ob_cds_searcher IMPLEMENTATION.
     LOOP AT it_values INTO DATA(ls_value).
       CASE ls_value-low.
 
-        WHEN zif_sat_c_object_browser=>c_type_option_value-extend.
+        WHEN zif_sat_c_object_search=>c_type_option_value-extend.
           ls_value-low = zif_sat_c_cds_view_type=>extend.
 
-        WHEN zif_sat_c_object_browser=>c_type_option_value-function.
+        WHEN zif_sat_c_object_search=>c_type_option_value-function.
           ls_value-low = zif_sat_c_cds_view_type=>table_function.
 
-        WHEN zif_sat_c_object_browser=>c_type_option_value-hierarchy.
+        WHEN zif_sat_c_object_search=>c_type_option_value-hierarchy.
           ls_value-low = zif_sat_c_cds_view_type=>hierarchy.
 
-        WHEN zif_sat_c_object_browser=>c_type_option_value-view.
+        WHEN zif_sat_c_object_search=>c_type_option_value-view.
           ls_value-low = zif_sat_c_cds_view_type=>view.
 
-        WHEN zif_sat_c_object_browser=>c_type_option_value-abstract_entity.
+        WHEN zif_sat_c_object_search=>c_type_option_value-abstract_entity.
           ls_value-low = zif_sat_c_cds_view_type=>abstract_entity.
 
-        WHEN zif_sat_c_object_browser=>c_type_option_value-custom_entity.
+        WHEN zif_sat_c_object_search=>c_type_option_value-custom_entity.
           ls_value-low = zif_sat_c_cds_view_type=>custom_entity.
       ENDCASE.
 

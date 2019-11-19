@@ -36,7 +36,7 @@ CLASS lcl_query_option_validator IMPLEMENTATION.
 
     CASE iv_option.
 
-      WHEN zif_sat_c_object_browser=>c_search_option-max_rows.
+      WHEN zif_sat_c_object_search=>c_search_option-max_rows.
         IF iv_value CN '0123456789'.
           RAISE EXCEPTION TYPE zcx_sat_object_search
             EXPORTING
@@ -61,21 +61,21 @@ CLASS lcl_qov_cds IMPLEMENTATION.
 *.. Remove exclusion characters before the actual validation
     DATA(lv_value) = iv_value.
 
-    IF iv_option = zif_sat_c_object_browser=>c_search_option-by_type.
+    IF iv_option = zif_sat_c_object_search=>c_search_option-by_type.
       lcl_exclusion_helper=>remove_exclusion_string( CHANGING cv_value = lv_value ).
       CASE lv_value.
 
-        WHEN zif_sat_c_object_browser=>c_type_option_value-function OR
-             zif_sat_c_object_browser=>c_type_option_value-hierarchy OR
-             zif_sat_c_object_browser=>c_type_option_value-abstract_entity OR
-             zif_sat_c_object_browser=>c_type_option_value-custom_entity OR
-             zif_sat_c_object_browser=>c_type_option_value-view OR
-             zif_sat_c_object_browser=>c_type_option_value-extend.
+        WHEN zif_sat_c_object_search=>c_type_option_value-function OR
+             zif_sat_c_object_search=>c_type_option_value-hierarchy OR
+             zif_sat_c_object_search=>c_type_option_value-abstract_entity OR
+             zif_sat_c_object_search=>c_type_option_value-custom_entity OR
+             zif_sat_c_object_search=>c_type_option_value-view OR
+             zif_sat_c_object_search=>c_type_option_value-extend.
 
         WHEN OTHERS.
           lf_invalid = abap_true.
       ENDCASE.
-    ELSEIF iv_option = zif_sat_c_object_browser=>c_search_option-by_params.
+    ELSEIF iv_option = zif_sat_c_object_search=>c_search_option-by_params.
       IF lv_value <> 'TRUE' AND lv_value <> 'FALSE'.
         lf_invalid = abap_true.
       ENDIF.
@@ -107,12 +107,12 @@ CLASS lcl_qov_database_tab_view IMPLEMENTATION.
 
     DATA(lv_value) = iv_value.
 
-    IF iv_option = zif_sat_c_object_browser=>c_search_option-by_type.
+    IF iv_option = zif_sat_c_object_search=>c_search_option-by_type.
       lcl_exclusion_helper=>remove_exclusion_string( CHANGING cv_value = lv_value ).
       CASE lv_value.
 
-        WHEN zif_sat_c_object_browser=>c_type_option_value-table OR
-             zif_sat_c_object_browser=>c_type_option_value-view.
+        WHEN zif_sat_c_object_search=>c_type_option_value-table OR
+             zif_sat_c_object_search=>c_type_option_value-view.
 
         WHEN OTHERS.
           lf_invalid = abap_true.
