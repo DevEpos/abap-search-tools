@@ -151,7 +151,7 @@ CLASS zcl_sat_adt_res_object_search IMPLEMENTATION.
 
 *.. Determine if the package hierarchy of the result should also be determined
     mf_with_package_hierarchy = zcl_sat_adt_res_util=>get_request_param_value(
-        iv_param_name    = zif_sat_c_adt_utils=>c_search_query_parameter-read_package_hierarchy
+        iv_param_name    = zif_sat_c_adt_utils=>c_general_search_params-read_package_hierarchy
         iv_default_value = abap_false
         io_request       = request ).
 
@@ -328,23 +328,23 @@ CLASS zcl_sat_adt_res_object_search IMPLEMENTATION.
 
 
   METHOD get_description_param.
-    get_search_parameter( EXPORTING iv_param_name   = zif_sat_c_adt_utils=>c_search_query_parameter-description
-                                    iv_option_name  = zif_sat_c_object_browser=>c_search_option-by_description
+    get_search_parameter( EXPORTING iv_param_name   = zif_sat_c_adt_utils=>c_general_search_params-description
+                                    iv_option_name  = zif_sat_c_object_search=>c_search_option-by_description
                                     io_request      = io_request
                           CHANGING  ct_option       = ct_options ).
   ENDMETHOD.
 
   METHOD get_field_name_param.
-    get_search_parameter( EXPORTING iv_param_name   = zif_sat_c_adt_utils=>c_search_query_parameter-field
-                                    iv_option_name  = zif_sat_c_object_browser=>c_search_option-by_field
+    get_search_parameter( EXPORTING iv_param_name   = zif_sat_c_adt_utils=>c_cds_search_params-field
+                                    iv_option_name  = zif_sat_c_object_search=>c_search_option-by_field
                                     io_request      = io_request
                           CHANGING  ct_option       = ct_options ).
   ENDMETHOD.
 
 
   METHOD get_max_rows_param.
-    get_search_parameter( EXPORTING iv_param_name   = zif_sat_c_adt_utils=>c_search_query_parameter-max_rows
-                                    iv_option_name  = zif_sat_c_object_browser=>c_search_option-max_rows
+    get_search_parameter( EXPORTING iv_param_name   = zif_sat_c_adt_utils=>c_general_search_params-max_rows
+                                    iv_option_name  = zif_sat_c_object_search=>c_search_option-max_rows
                                     if_single_value = abap_true
                                     io_request      = io_request
                           CHANGING  ct_option       = ct_options ).
@@ -352,30 +352,30 @@ CLASS zcl_sat_adt_res_object_search IMPLEMENTATION.
 
 
   METHOD get_package_name_param.
-    get_search_parameter( EXPORTING iv_param_name   = zif_sat_c_adt_utils=>c_search_query_parameter-package
-                                    iv_option_name  = zif_sat_c_object_browser=>c_search_option-by_package
+    get_search_parameter( EXPORTING iv_param_name   = zif_sat_c_adt_utils=>c_general_search_params-package
+                                    iv_option_name  = zif_sat_c_object_search=>c_search_option-by_package
                                     io_request      = io_request
                           CHANGING  ct_option       = ct_options ).
   ENDMETHOD.
 
   METHOD get_release_state_param.
-    get_search_parameter( EXPORTING iv_param_name   = zif_sat_c_adt_utils=>c_search_query_parameter-release_state
-                                    iv_option_name  = zif_sat_c_object_browser=>c_search_option-by_api
+    get_search_parameter( EXPORTING iv_param_name   = zif_sat_c_adt_utils=>c_general_search_params-release_state
+                                    iv_option_name  = zif_sat_c_object_search=>c_search_option-by_api
                                     io_request      = io_request
                           CHANGING  ct_option       = ct_options ).
   ENDMETHOD.
 
 
   METHOD get_type_param.
-    get_search_parameter( EXPORTING iv_param_name   = zif_sat_c_adt_utils=>c_search_query_parameter-type
-                                    iv_option_name  = zif_sat_c_object_browser=>c_search_option-by_type
+    get_search_parameter( EXPORTING iv_param_name   = zif_sat_c_adt_utils=>c_general_search_params-type
+                                    iv_option_name  = zif_sat_c_object_search=>c_search_option-by_type
                                     io_request      = io_request
                           CHANGING  ct_option       = ct_options ).
   ENDMETHOD.
 
   METHOD get_user_name_param.
-    get_search_parameter( EXPORTING iv_param_name   = zif_sat_c_adt_utils=>c_search_query_parameter-user
-                                    iv_option_name  = zif_sat_c_object_browser=>c_search_option-by_owner
+    get_search_parameter( EXPORTING iv_param_name   = zif_sat_c_adt_utils=>c_general_search_params-user
+                                    iv_option_name  = zif_sat_c_object_search=>c_search_option-by_owner
                                     io_request      = io_request
                           CHANGING  ct_option       = ct_options ).
   ENDMETHOD.

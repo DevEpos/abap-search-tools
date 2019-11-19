@@ -5,7 +5,6 @@ CLASS zcl_sat_ob_generic_searcher DEFINITION
   CREATE PUBLIC .
 
   PUBLIC SECTION.
-    INTERFACES zif_sat_c_object_browser.
     INTERFACES zif_sat_c_join_cond_type.
 
     ALIASES c_field_cond

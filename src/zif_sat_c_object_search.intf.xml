@@ -3,25 +3,19 @@
  <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
   <asx:values>
    <VSEOINTERF>
-    <CLSNAME>ZIF_SAT_C_OBJECT_BROWSER</CLSNAME>
+    <CLSNAME>ZIF_SAT_C_OBJECT_SEARCH</CLSNAME>
     <LANGU>E</LANGU>
-    <DESCRIPT>Constants for Object Browser</DESCRIPT>
+    <DESCRIPT>Constants for Object search</DESCRIPT>
     <EXPOSURE>2</EXPOSURE>
     <STATE>1</STATE>
     <UNICODE>X</UNICODE>
    </VSEOINTERF>
    <DESCRIPTIONS>
     <SEOCOMPOTX>
-     <CLSNAME>ZIF_SAT_C_OBJECT_BROWSER</CLSNAME>
+     <CLSNAME>ZIF_SAT_C_OBJECT_SEARCH</CLSNAME>
      <CMPNAME>C_SEARCH_OPTION</CMPNAME>
      <LANGU>E</LANGU>
      <DESCRIPT>Search option for object browser</DESCRIPT>
-    </SEOCOMPOTX>
-    <SEOCOMPOTX>
-     <CLSNAME>ZIF_SAT_C_OBJECT_BROWSER</CLSNAME>
-     <CMPNAME>C_TREE_NODE_TYPE</CMPNAME>
-     <LANGU>E</LANGU>
-     <DESCRIPT>Type for tree node of object browser</DESCRIPT>
     </SEOCOMPOTX>
    </DESCRIPTIONS>
   </asx:values>

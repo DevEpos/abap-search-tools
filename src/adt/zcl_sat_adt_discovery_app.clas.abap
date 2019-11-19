@@ -121,38 +121,38 @@ CLASS zcl_sat_adt_discovery_app IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD reg_object_search_template.
-    DATA(lv_template) = |{ c_object_search_uri }/{ iv_search_type_term }\{?{ zif_sat_c_adt_utils=>c_search_query_parameter-object_name }*\}| &&
-                        |\{&{ zif_sat_c_adt_utils=>c_search_query_parameter-max_rows }*\}| &&
-                        |\{&{ zif_sat_c_adt_utils=>c_search_query_parameter-user }*\}| &&
-                        |\{&{ zif_sat_c_adt_utils=>c_search_query_parameter-package }*\}| &&
-                        |\{&{ zif_sat_c_adt_utils=>c_search_query_parameter-description }*\}| &&
-                        |\{&{ zif_sat_c_adt_utils=>c_search_query_parameter-get_all_results }*\}| &&
-                        |\{&{ zif_sat_c_adt_utils=>c_search_query_parameter-use_and_for_filters }*\}| &&
-                        |\{&{ zif_sat_c_adt_utils=>c_search_query_parameter-read_package_hierarchy }*\}|.
+    DATA(lv_template) = |{ c_object_search_uri }/{ iv_search_type_term }\{?{ zif_sat_c_adt_utils=>c_general_search_params-object_name }*\}| &&
+                        |\{&{ zif_sat_c_adt_utils=>c_general_search_params-max_rows }*\}| &&
+                        |\{&{ zif_sat_c_adt_utils=>c_general_search_params-user }*\}| &&
+                        |\{&{ zif_sat_c_adt_utils=>c_general_search_params-package }*\}| &&
+                        |\{&{ zif_sat_c_adt_utils=>c_general_search_params-description }*\}| &&
+                        |\{&{ zif_sat_c_adt_utils=>c_general_search_params-get_all_results }*\}| &&
+                        |\{&{ zif_sat_c_adt_utils=>c_general_search_params-use_and_for_filters }*\}| &&
+                        |\{&{ zif_sat_c_adt_utils=>c_general_search_params-read_package_hierarchy }*\}|.
 
     CASE iv_search_type.
 
       WHEN zif_sat_c_object_browser_mode=>all.
 
       WHEN zif_sat_c_object_browser_mode=>cds_view.
-        lv_template = lv_template && |\{&{ zif_sat_c_adt_utils=>c_search_query_parameter-field }*\}| &&
-                                     |\{&{ zif_sat_c_adt_utils=>c_search_query_parameter-param }*\}| &&
-                                     |\{&{ zif_sat_c_adt_utils=>c_search_query_parameter-params }*\}| &&
-                                     |\{&{ zif_sat_c_adt_utils=>c_search_query_parameter-select_from }*\}| &&
-                                     |\{&{ zif_sat_c_adt_utils=>c_search_query_parameter-association }*\}| &&
-                                     |\{&{ zif_sat_c_adt_utils=>c_search_query_parameter-annotation }*\}| &&
-                                     |\{&{ zif_sat_c_adt_utils=>c_search_query_parameter-type }*\}| &&
-                                     |\{&{ zif_sat_c_adt_utils=>c_search_query_parameter-extended_by }*\}|.
+        lv_template = lv_template && |\{&{ zif_sat_c_adt_utils=>c_cds_search_params-field }*\}| &&
+                                     |\{&{ zif_sat_c_adt_utils=>c_cds_search_params-param }*\}| &&
+                                     |\{&{ zif_sat_c_adt_utils=>c_cds_search_params-params }*\}| &&
+                                     |\{&{ zif_sat_c_adt_utils=>c_cds_search_params-select_from }*\}| &&
+                                     |\{&{ zif_sat_c_adt_utils=>c_cds_search_params-association }*\}| &&
+                                     |\{&{ zif_sat_c_adt_utils=>c_cds_search_params-annotation }*\}| &&
+                                     |\{&{ zif_sat_c_adt_utils=>c_general_search_params-type }*\}| &&
+                                     |\{&{ zif_sat_c_adt_utils=>c_cds_search_params-extended_by }*\}|.
 
         IF sy-saprl >= 750.
           lv_template = lv_template &&
-                        |\{&{ zif_sat_c_adt_utils=>c_search_query_parameter-release_state }*\}| &&
-                        |\{&{ zif_sat_c_adt_utils=>c_search_query_parameter-read_api_state }*\}|.
+                        |\{&{ zif_sat_c_adt_utils=>c_general_search_params-release_state }*\}| &&
+                        |\{&{ zif_sat_c_adt_utils=>c_general_search_params-read_api_state }*\}|.
         ENDIF.
 
       WHEN zif_sat_c_object_browser_mode=>database_table_view.
-        lv_template = lv_template && |\{&{ zif_sat_c_adt_utils=>c_search_query_parameter-field }*\}| &&
-                                     |\{&{ zif_sat_c_adt_utils=>c_search_query_parameter-type }*\}|.
+        lv_template = lv_template && |\{&{ zif_sat_c_adt_utils=>c_dbtab_search_params-field }*\}| &&
+                                     |\{&{ zif_sat_c_adt_utils=>c_general_search_params-type }*\}|.
 
     ENDCASE.
 

@@ -32,20 +32,20 @@ CLASS zcl_sat_adt_res_objs_cds IMPLEMENTATION.
     ev_type = zif_sat_c_object_browser_mode=>cds_view.
 
     ev_query = zcl_sat_adt_res_util=>get_request_param_value(
-        iv_param_name    = zif_sat_c_adt_utils=>c_search_query_parameter-object_name
+        iv_param_name    = zif_sat_c_adt_utils=>c_general_search_params-object_name
         io_request       = io_request
     ).
     es_search_engine_params = VALUE #(
       use_and_cond_for_options = zcl_sat_adt_res_util=>get_request_param_value(
-        iv_param_name    = zif_sat_c_adt_utils=>c_search_query_parameter-use_and_for_filters
+        iv_param_name    = zif_sat_c_adt_utils=>c_general_search_params-use_and_for_filters
         iv_default_value = abap_false
         io_request       = io_request )
       with_api_state           = zcl_sat_adt_res_util=>get_request_param_value(
-         iv_param_name    = zif_sat_c_adt_utils=>c_search_query_parameter-read_api_state
+         iv_param_name    = zif_sat_c_adt_utils=>c_general_search_params-read_api_state
          iv_default_value = abap_false
          io_request       = io_request )
       get_all                  = zcl_sat_adt_res_util=>get_request_param_value(
-         iv_param_name    = zif_sat_c_adt_utils=>c_search_query_parameter-get_all_results
+         iv_param_name    = zif_sat_c_adt_utils=>c_general_search_params-get_all_results
          iv_default_value = abap_false
          io_request       = io_request )
     ).
@@ -59,12 +59,12 @@ CLASS zcl_sat_adt_res_objs_cds IMPLEMENTATION.
     get_field_name_param( EXPORTING io_request = io_request  CHANGING  ct_options = et_options ).
 
     _get_param:
-        zif_sat_c_adt_utils=>c_search_query_parameter-select_from  zif_sat_c_object_browser=>c_search_option-by_select_from abap_false,
-        zif_sat_c_adt_utils=>c_search_query_parameter-association  zif_sat_c_object_browser=>c_search_option-by_association abap_false,
-        zif_sat_c_adt_utils=>c_search_query_parameter-annotation   zif_sat_c_object_browser=>c_search_option-by_anno        abap_false,
-        zif_sat_c_adt_utils=>c_search_query_parameter-extended_by  zif_sat_c_object_browser=>c_search_option-by_extensions  abap_false,
-        zif_sat_c_adt_utils=>c_search_query_parameter-param        zif_sat_c_object_browser=>c_search_option-by_param       abap_false,
-        zif_sat_c_adt_utils=>c_search_query_parameter-params       zif_sat_c_object_browser=>c_search_option-by_params      abap_true.
+        zif_sat_c_adt_utils=>c_cds_search_params-select_from  zif_sat_c_object_search=>c_search_option-by_select_from abap_false,
+        zif_sat_c_adt_utils=>c_cds_search_params-association  zif_sat_c_object_search=>c_search_option-by_association abap_false,
+        zif_sat_c_adt_utils=>c_cds_search_params-annotation   zif_sat_c_object_search=>c_search_option-by_anno        abap_false,
+        zif_sat_c_adt_utils=>c_cds_search_params-extended_by  zif_sat_c_object_search=>c_search_option-by_extensions  abap_false,
+        zif_sat_c_adt_utils=>c_cds_search_params-param        zif_sat_c_object_search=>c_search_option-by_param       abap_false,
+        zif_sat_c_adt_utils=>c_cds_search_params-params       zif_sat_c_object_search=>c_search_option-by_params      abap_true.
   ENDMETHOD.
 
   METHOD post_process_result_entry.
