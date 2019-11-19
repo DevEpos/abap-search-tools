@@ -4,10 +4,10 @@ CLASS zcl_sat_object_search_query DEFINITION
   CREATE PRIVATE.
 
   PUBLIC SECTION.
-    INTERFACES zif_sat_c_object_browser.
+    INTERFACES zif_sat_c_object_search.
     INTERFACES zif_sat_ty_object_browser.
     ALIASES:
-      c_search_option FOR zif_sat_c_object_browser~c_search_option,
+      c_search_option FOR zif_sat_c_object_search~c_search_option,
       ty_search_option_values FOR zif_sat_ty_object_browser~ty_search_option_values.
 
     DATA mv_search_string TYPE string READ-ONLY.
@@ -366,7 +366,7 @@ CLASS zcl_sat_object_search_query IMPLEMENTATION.
 
     mv_max_rows = 50.
     IF mt_search_options IS NOT INITIAL.
-      mv_max_rows = VALUE #( mt_search_options[ option = zif_sat_c_object_browser=>c_search_option-max_rows ]-value_range[ 1 ]-low DEFAULT 50 ).
+      mv_max_rows = VALUE #( mt_search_options[ option = c_search_option-max_rows ]-value_range[ 1 ]-low DEFAULT 50 ).
     ENDIF.
   ENDMETHOD.
 
@@ -376,15 +376,15 @@ CLASS zcl_sat_object_search_query IMPLEMENTATION.
     ELSE.
       CASE iv_option.
 
-        WHEN zif_sat_c_object_browser=>c_search_option-by_description OR
-             zif_sat_c_object_browser=>c_search_option-by_anno.
+        WHEN c_search_option-by_description OR
+             c_search_option-by_anno.
 
         WHEN OTHERS.
           TRANSLATE cv_value TO UPPER CASE.
       ENDCASE.
     ENDIF.
 
-    IF iv_option = zif_sat_c_object_browser=>c_search_option-by_owner.
+    IF iv_option = c_search_option-by_owner.
       IF  cv_value = 'ME'.
         cv_value = sy-uname.
       ELSEIF cv_value CP '!ME' OR
@@ -489,7 +489,7 @@ CLASS zcl_sat_object_search_query IMPLEMENTATION.
 *.. Special case for annotation value. As it is possible to annotate via
 *... Array/Object notation it is required to prefix the dots with a wildcard as
 *... annotations are stored with a <annokey1>$[0-9]$.<annokey2> like syntax
-    IF is_option-option = zif_sat_c_object_browser=>c_search_option-by_anno.
+    IF is_option-option = c_search_option-by_anno.
       lv_value = replace( val = lv_value occ = 0 sub = '.' with = '*.' ).
       DATA(lv_value_length) = strlen( lv_value ) - 1.
 **      IF lv_value IS NOT INITIAL AND lv_value+lv_value_length(1) <> '*'.
@@ -549,7 +549,7 @@ CLASS zcl_sat_object_search_query IMPLEMENTATION.
             textid = zcx_sat_object_search=>no_intervals_for_option
             msgv1  = |{ SWITCH #(
                           lv_option
-                          WHEN zif_sat_c_object_browser=>c_search_option-max_rows THEN
+                          WHEN c_search_option-max_rows THEN
                             |{ lv_option }({ 'Max Rows'(001) })|
                           ELSE lv_option
                         ) }|.
@@ -589,8 +589,8 @@ CLASS zcl_sat_object_search_query IMPLEMENTATION.
     CASE iv_search_type.
 
       WHEN zif_sat_c_object_browser_mode=>cds_view.
-        IF line_exists( ct_options[ option = zif_sat_c_object_browser=>c_search_option-by_param ] ).
-          DELETE ct_options WHERE option = zif_sat_c_object_browser=>c_search_option-by_params.
+        IF line_exists( ct_options[ option = c_search_option-by_param ] ).
+          DELETE ct_options WHERE option = c_search_option-by_params.
         ENDIF.
 
       WHEN OTHERS.
@@ -610,8 +610,8 @@ CLASS zcl_sat_object_search_query IMPLEMENTATION.
       mt_search_options = VALUE #( BASE mt_search_options ( is_option ) ).
     ENDIF.
 
-    IF is_option-option = zif_sat_c_object_browser=>c_search_option-max_rows.
-      mv_max_rows = VALUE #( mt_search_options[ option = zif_sat_c_object_browser=>c_search_option-max_rows ]-value_range[ 1 ]-low DEFAULT 50 ).
+    IF is_option-option = c_search_option-max_rows.
+      mv_max_rows = VALUE #( mt_search_options[ option = c_search_option-max_rows ]-value_range[ 1 ]-low DEFAULT 50 ).
     ENDIF.
 
   ENDMETHOD.

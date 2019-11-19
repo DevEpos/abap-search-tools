@@ -74,35 +74,32 @@ CLASS zcl_sat_ob_dbtab_searcher IMPLEMENTATION.
       CASE <ls_option>-option.
 
 *.......... Find objects via its description
-        WHEN zif_sat_c_object_browser=>c_search_option-by_description.
+        WHEN zif_sat_c_object_search=>c_search_option-by_description.
           add_option_filter(
             iv_fieldname = mv_description_filter_field
             it_values    = <ls_option>-value_range
           ).
 
 *.......... Find objects with a certain responsible person
-        WHEN zif_sat_c_object_browser=>c_search_option-by_owner.
+        WHEN zif_sat_c_object_search=>c_search_option-by_owner.
           add_option_filter(
             iv_fieldname = 'createdby'
             it_values    = <ls_option>-value_range
           ).
 
 *.......... Find objects which exist in a certain development package
-        WHEN zif_sat_c_object_browser=>c_search_option-by_package.
+        WHEN zif_sat_c_object_search=>c_search_option-by_package.
           add_option_filter(
             iv_fieldname = 'developmentpackage'
             it_values    = <ls_option>-value_range
           ).
 
 *.......... Find only objects with a certain type
-        WHEN zif_sat_c_object_browser=>c_search_option-by_type.
-          IF lines( <ls_option>-value_range ) = 1.
-            DATA(ls_option) = <ls_option>-value_range[ 1 ].
-
-          ENDIF.
+        WHEN zif_sat_c_object_search=>c_search_option-by_type.
+          add_type_option_filter( <ls_option>-value_range ).
 
 *.......... Find objects by field
-        WHEN zif_sat_c_object_browser=>c_search_option-by_field.
+        WHEN zif_sat_c_object_search=>c_search_option-by_field.
           add_field_filter( <ls_option>-value_range ).
 
       ENDCASE.
@@ -155,10 +152,10 @@ CLASS zcl_sat_ob_dbtab_searcher IMPLEMENTATION.
     LOOP AT it_values INTO DATA(ls_value).
       CASE ls_value-low.
 
-        WHEN zif_sat_c_object_browser=>c_type_option_value-table.
+        WHEN zif_sat_c_object_search=>c_type_option_value-table.
           ls_value-low = zif_sat_c_entity_type=>table.
 
-        WHEN zif_sat_c_object_browser=>c_type_option_value-view.
+        WHEN zif_sat_c_object_search=>c_type_option_value-view.
           ls_value-low = zif_sat_c_entity_type=>view.
 
       ENDCASE.
@@ -177,16 +174,16 @@ CLASS zcl_sat_ob_dbtab_searcher IMPLEMENTATION.
     DATA: lf_set_default_table TYPE abap_bool.
 
     IF mo_search_query->has_options( ).
-      DATA(ls_type_option) = mo_search_query->get_option( zif_sat_c_object_browser=>c_search_option-by_type ).
+      DATA(ls_type_option) = mo_search_query->get_option( zif_sat_c_object_search=>c_search_option-by_type ).
 
       IF ls_type_option IS NOT INITIAL AND lines( ls_type_option-value_range ) = 1.
         DATA(ls_type_value) = ls_type_option-value_range[ 1 ].
 
-        IF ls_type_value-low = zif_sat_c_object_browser=>c_type_option_value-table.
+        IF ls_type_value-low = zif_sat_c_object_search=>c_type_option_value-table.
           ev_base_table = get_cds_sql_name( |{ zif_sat_c_select_source_id=>zsat_i_databasetable }| ).
           ev_entity_fieldname =
           ev_raw_entity_fieldname = 'tablename'.
-        ELSEIF ls_type_value-low = zif_sat_c_object_browser=>c_type_option_value-view.
+        ELSEIF ls_type_value-low = zif_sat_c_object_search=>c_type_option_value-view.
           ev_base_table = get_cds_sql_name( |{ zif_sat_c_select_source_id=>zsat_i_databaseview }| ).
           ev_entity_fieldname =
           ev_raw_entity_fieldname = 'viewname'.
