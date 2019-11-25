@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_CLAS" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <VSEOCLASS>
+    <CLSNAME>ZCL_SAT_OBJECT_QUERY_PARSER</CLSNAME>
+    <LANGU>E</LANGU>
+    <DESCRIPT>Parser for object search query</DESCRIPT>
+    <STATE>1</STATE>
+    <CLSCCINCL>X</CLSCCINCL>
+    <FIXPT>X</FIXPT>
+    <UNICODE>X</UNICODE>
+   </VSEOCLASS>
+   <DESCRIPTIONS>
+    <SEOCOMPOTX>
+     <CLSNAME>ZCL_SAT_OBJECT_QUERY_PARSER</CLSNAME>
+     <CMPNAME>ADD_OPTION_VALUE</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Adds value for option</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CLSNAME>ZCL_SAT_OBJECT_QUERY_PARSER</CLSNAME>
+     <CMPNAME>ADJUST_QUERY_STRING</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Adjust the current query string</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CLSNAME>ZCL_SAT_OBJECT_QUERY_PARSER</CLSNAME>
+     <CMPNAME>CONVERT_OPTION_VALUE</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Converts option value for correct selection</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CLSNAME>ZCL_SAT_OBJECT_QUERY_PARSER</CLSNAME>
+     <CMPNAME>ENHANCE_OPTIONS</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Enhance certain query options</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CLSNAME>ZCL_SAT_OBJECT_QUERY_PARSER</CLSNAME>
+     <CMPNAME>EXTRACT_OPTION</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Extract search option from token</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CLSNAME>ZCL_SAT_OBJECT_QUERY_PARSER</CLSNAME>
+     <CMPNAME>GET_SEARCH_TERMS</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Retrieves the search terms from the given string</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CLSNAME>ZCL_SAT_OBJECT_QUERY_PARSER</CLSNAME>
+     <CMPNAME>PARSE_OPTION</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Checks the given option and its values</DESCRIPT>
+    </SEOCOMPOTX>
+   </DESCRIPTIONS>
+  </asx:values>
+ </asx:abap>
+</abapGit>

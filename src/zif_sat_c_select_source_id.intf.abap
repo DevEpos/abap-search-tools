@@ -29,6 +29,7 @@ INTERFACE zif_sat_c_select_source_id
     zsat_i_cdsviewfield           TYPE string VALUE 'ZSAT_I_CDSVIEWFIELD',
     zsat_i_cdsviewwithparameter   TYPE string VALUE 'ZSAT_I_CDSVIEWWITHPARAMETER',
     zsat_i_cdsannotation          TYPE string VALUE 'ZSAT_I_CDSANNOTATION',
-    zsat_i_tablefield             TYPE string VALUE 'ZSAT_I_TABLEFIELD'.
-
+    zsat_i_tablefield             TYPE string VALUE 'ZSAT_I_TABLEFIELD',
+    zsat_i_classinterface         TYPE string VALUE 'ZSAT_I_CLASSINTERFACE',
+    zsat_i_classinterfacet        TYPE string VALUE 'ZSAT_I_CLASSINTERFACET'.
 ENDINTERFACE.

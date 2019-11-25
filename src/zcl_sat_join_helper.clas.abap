@@ -326,8 +326,10 @@ CLASS zcl_sat_join_helper IMPLEMENTATION.
         <ls_table>-join_type = zif_sat_c_join_types=>inner_join.
       ENDIF.
 
-      LOOP AT <ls_table>-conditions ASSIGNING <ls_condition> WHERE operator IS INITIAL OR
-                                                                   ( tabname IS INITIAL AND tabname_alias IS INITIAL ).
+      LOOP AT <ls_table>-conditions ASSIGNING <ls_condition>.
+        IF <ls_condition>-type IS INITIAL.
+          <ls_condition>-type = zif_sat_c_join_cond_type=>field.
+        ENDIF.
         IF <ls_condition>-operator IS INITIAL.
           <ls_condition>-operator = zif_sat_c_operator=>equals.
         ENDIF.
