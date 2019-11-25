@@ -32,9 +32,9 @@ CLASS zcl_sat_adt_res_object_search DEFINITION
         io_request              TYPE REF TO if_adt_rest_request
       EXPORTING
         ev_query                TYPE string
-        ev_type                 TYPE zsat_obj_browser_mode
-        es_search_engine_params TYPE zif_sat_ty_object_browser=>ty_s_search_engine_params
-        et_options              TYPE zif_sat_ty_object_browser=>tt_search_option_values
+        ev_type                 TYPE zif_sat_ty_object_search=>ty_search_type
+        es_search_engine_params TYPE zif_sat_ty_object_search=>ty_s_search_engine_params
+        et_options              TYPE zif_sat_ty_object_search=>ty_t_search_option
       RAISING
         cx_adt_rest .
     "! <p class="shorttext synchronized" lang="en">Retrieve 'maxRows' parameter from request</p>
@@ -42,43 +42,43 @@ CLASS zcl_sat_adt_res_object_search DEFINITION
       IMPORTING
         io_request TYPE REF TO if_adt_rest_request
       CHANGING
-        ct_options TYPE zif_sat_ty_object_browser=>tt_search_option_values.
+        ct_options TYPE zif_sat_ty_object_search=>ty_t_search_option.
     "! <p class="shorttext synchronized" lang="en">Retrieve 'userName' parameter from request</p>
     METHODS get_user_name_param
       IMPORTING
         io_request TYPE REF TO if_adt_rest_request
       CHANGING
-        ct_options TYPE zif_sat_ty_object_browser=>tt_search_option_values.
+        ct_options TYPE zif_sat_ty_object_search=>ty_t_search_option.
     "! <p class="shorttext synchronized" lang="en">Retrieve 'releaseState' parameter from request</p>
     METHODS get_release_state_param
       IMPORTING
         io_request TYPE REF TO if_adt_rest_request
       CHANGING
-        ct_options TYPE zif_sat_ty_object_browser=>tt_search_option_values.
+        ct_options TYPE zif_sat_ty_object_search=>ty_t_search_option.
     "! <p class="shorttext synchronized" lang="en">Retrieve 'description' parameter from request</p>
     METHODS get_description_param
       IMPORTING
         io_request TYPE REF TO if_adt_rest_request
       CHANGING
-        ct_options TYPE zif_sat_ty_object_browser=>tt_search_option_values.
+        ct_options TYPE zif_sat_ty_object_search=>ty_t_search_option.
     "! <p class="shorttext synchronized" lang="en">Retrieve 'type' parameter from request</p>
     METHODS get_type_param
       IMPORTING
         io_request TYPE REF TO if_adt_rest_request
       CHANGING
-        ct_options TYPE zif_sat_ty_object_browser=>tt_search_option_values.
+        ct_options TYPE zif_sat_ty_object_search=>ty_t_search_option.
     "! <p class="shorttext synchronized" lang="en">Retrieve 'packageName' parameter from request</p>
     METHODS get_package_name_param
       IMPORTING
         io_request TYPE REF TO if_adt_rest_request
       CHANGING
-        ct_options TYPE zif_sat_ty_object_browser=>tt_search_option_values.
+        ct_options TYPE zif_sat_ty_object_search=>ty_t_search_option.
     "! <p class="shorttext synchronized" lang="en">Retrieve 'fieldName' parameter from request</p>
     METHODS get_field_name_param
       IMPORTING
         io_request TYPE REF TO if_adt_rest_request
       CHANGING
-        ct_options TYPE zif_sat_ty_object_browser=>tt_search_option_values.
+        ct_options TYPE zif_sat_ty_object_search=>ty_t_search_option.
     "! <p class="shorttext synchronized" lang="en">Retrieve values of request parameter</p>
     METHODS get_request_param_values
       IMPORTING
@@ -96,7 +96,7 @@ CLASS zcl_sat_adt_res_object_search DEFINITION
         iv_option_name  TYPE string OPTIONAL
         if_single_value TYPE abap_bool OPTIONAL
       CHANGING
-        ct_option       TYPE zif_sat_ty_object_browser=>tt_search_option_values.
+        ct_option       TYPE zif_sat_ty_object_search=>ty_t_search_option.
     "! <p class="shorttext synchronized" lang="en">Retrieve value of request parameter</p>
     METHODS get_request_param_value
       IMPORTING
@@ -135,8 +135,6 @@ ENDCLASS.
 CLASS zcl_sat_adt_res_object_search IMPLEMENTATION.
 
   METHOD get.
-    DATA: lo_query TYPE REF TO zcl_sat_object_search_query.
-
     get_query_parameter(
       EXPORTING
         io_request              = request
@@ -156,23 +154,18 @@ CLASS zcl_sat_adt_res_object_search IMPLEMENTATION.
         io_request       = request ).
 
     TRY.
-        lo_query = zcl_sat_object_search_query=>create_query(
-          iv_search_string        = lv_query
-          iv_type                 = lv_type
-          is_search_engine_params = ls_search_engine_params
-          it_options              = lt_options
+
+        DATA(lo_search_engine) = CAST zif_sat_search_engine( zcl_sat_ioc_lookup=>get_instance(
+                                      iv_contract = 'zif_sat_search_engine'
+                                      iv_filter   = |{ lv_type }| )
+                                    ).
+        lo_search_engine->search_objects(
+          EXPORTING iv_search_terms         = lv_query
+                    it_options              = lt_options
+                    iv_search_type          = lv_type
+                    is_search_engine_params = ls_search_engine_params
+          IMPORTING et_results              = mt_query_result
         ).
-
-        CASE lv_type.
-          WHEN zif_sat_c_object_browser_mode=>cds_view.
-            mt_query_result = NEW zcl_sat_ob_cds_searcher( lo_query )->zif_sat_object_searcher~search( ).
-
-          WHEN zif_sat_c_object_browser_mode=>database_table_view.
-            mt_query_result = NEW zcl_sat_ob_dbtab_searcher( lo_query )->zif_sat_object_searcher~search( ).
-
-          WHEN zif_sat_c_object_browser_mode=>all.
-
-        ENDCASE.
 
       CATCH zcx_sat_object_search INTO DATA(lx_search_error).
         RAISE EXCEPTION TYPE zcx_sat_adt_object_search
@@ -400,7 +393,7 @@ CLASS zcl_sat_adt_res_object_search IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD get_search_parameter.
-    DATA: lt_option_values TYPE zif_sat_ty_object_browser=>tt_search_option_values.
+    DATA: lt_option_values TYPE zif_sat_ty_object_search=>ty_t_search_option.
 
     DATA(lv_option_name) = COND #( WHEN iv_option_name IS NOT INITIAL THEN iv_option_name ELSE iv_param_name ).
     IF if_single_value = abap_true.

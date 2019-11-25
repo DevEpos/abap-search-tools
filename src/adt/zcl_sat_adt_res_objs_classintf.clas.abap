@@ -1,5 +1,5 @@
-"! <p class="shorttext synchronized" lang="en">Object Search Resource for DB Table/View Search</p>
-CLASS zcl_sat_adt_res_objs_dbtabview DEFINITION
+"! <p class="shorttext synchronized" lang="en">Resource for Class search</p>
+CLASS zcl_sat_adt_res_objs_classintf DEFINITION
   PUBLIC
   INHERITING FROM zcl_sat_adt_res_object_search
   FINAL
@@ -7,17 +7,25 @@ CLASS zcl_sat_adt_res_objs_dbtabview DEFINITION
 
   PUBLIC SECTION.
   PROTECTED SECTION.
+
     METHODS get_query_parameter
-        REDEFINITION.
+        REDEFINITION .
   PRIVATE SECTION.
 ENDCLASS.
 
 
 
-CLASS zcl_sat_adt_res_objs_dbtabview IMPLEMENTATION.
+CLASS zcl_sat_adt_res_objs_classintf IMPLEMENTATION.
+
 
   METHOD get_query_parameter.
-    ev_type = zif_sat_c_object_search=>c_search_type-db_tab_view.
+    DEFINE _get_param.
+      get_search_parameter( EXPORTING io_request      = io_request
+                                      iv_param_name   = &1
+                            CHANGING  ct_option       = et_options ).
+    END-OF-DEFINITION.
+
+    ev_type = zif_sat_c_object_search=>c_search_type-class_interface.
 
     ev_query = zcl_sat_adt_res_util=>get_request_param_value(
         iv_param_name    = zif_sat_c_adt_utils=>c_general_search_params-object_name
@@ -36,10 +44,14 @@ CLASS zcl_sat_adt_res_objs_dbtabview IMPLEMENTATION.
 
     get_max_rows_param( EXPORTING io_request = io_request  CHANGING  ct_options = et_options ).
     get_user_name_param( EXPORTING io_request = io_request  CHANGING  ct_options = et_options ).
-    get_type_param( EXPORTING io_request = io_request CHANGING ct_options = et_options ).
+*    get_release_state_param( EXPORTING io_request = io_request  CHANGING  ct_options = et_options ).
     get_description_param( EXPORTING io_request = io_request  CHANGING  ct_options = et_options ).
     get_package_name_param( EXPORTING io_request = io_request  CHANGING  ct_options = et_options ).
-    get_field_name_param( EXPORTING io_request = io_request  CHANGING  ct_options = et_options ).
-  ENDMETHOD.
 
+    _get_param: zif_sat_c_object_search=>c_class_intf_search_option-by_method,
+                zif_sat_c_object_search=>c_class_intf_search_option-by_attribute,
+                zif_sat_c_object_search=>c_class_intf_search_option-by_super_type,
+                zif_sat_c_object_search=>c_class_intf_search_option-by_sub_type,
+                zif_sat_c_object_search=>c_class_intf_search_option-by_friend.
+  ENDMETHOD.
 ENDCLASS.

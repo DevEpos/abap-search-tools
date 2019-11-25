@@ -59,7 +59,7 @@ CLASS zcl_sat_adt_discovery_app DEFINITION
     METHODS reg_object_search_template
       IMPORTING
         io_collection       TYPE REF TO if_adt_discovery_collection
-        iv_search_type      TYPE zsat_obj_browser_mode
+        iv_search_type      TYPE zif_sat_ty_object_search=>ty_search_type
         iv_handler_class    TYPE string
         iv_search_type_term TYPE string.
     "! <p class="shorttext synchronized" lang="en">Registers resource for DDIC Repository Access</p>
@@ -106,12 +106,16 @@ CLASS zcl_sat_adt_discovery_app IMPLEMENTATION.
 
     reg_object_search_template( io_collection       = lo_search_collection
                                 iv_handler_class    = zif_sat_c_adt_utils=>c_resource_handler-object_search_cds
-                                iv_search_type      = zif_sat_c_object_browser_mode=>cds_view
+                                iv_search_type      = zif_sat_c_object_search=>c_search_type-cds_view
                                 iv_search_type_term = |cds| ).
     reg_object_search_template( io_collection       = lo_search_collection
                                 iv_handler_class    = zif_sat_c_adt_utils=>c_resource_handler-object_search_dbtabview
-                                iv_search_type      = zif_sat_c_object_browser_mode=>database_table_view
+                                iv_search_type      = zif_sat_c_object_search=>c_search_type-db_tab_view
                                 iv_search_type_term = |dbtabview| ).
+    reg_object_search_template( io_collection       = lo_search_collection
+                                iv_handler_class    = zif_sat_c_adt_utils=>c_resource_handler-object_search_class_interface
+                                iv_search_type      = zif_sat_c_object_search=>c_search_type-class_interface
+                                iv_search_type_term = |classintf| ).
 ***    reg_object_search_template( io_collection       = lo_search_collection
 ***                                iv_handler_class    = zif_sat_c_adt_utils=>c_resource_handler-object_search_all
 ***                                iv_search_type      = zif_sat_c_object_browser_mode=>all
@@ -130,9 +134,9 @@ CLASS zcl_sat_adt_discovery_app IMPLEMENTATION.
 
     CASE iv_search_type.
 
-      WHEN zif_sat_c_object_browser_mode=>all.
+*      WHEN zif_sat_c_object_browser_mode=>all.
 
-      WHEN zif_sat_c_object_browser_mode=>cds_view.
+      WHEN zif_sat_c_object_search=>c_search_type-cds_view.
         lv_template = lv_template && |\{&{ zif_sat_c_adt_utils=>c_cds_search_params-field }*\}| &&
                                      |\{&{ zif_sat_c_adt_utils=>c_cds_search_params-param }*\}| &&
                                      |\{&{ zif_sat_c_adt_utils=>c_cds_search_params-params }*\}| &&
@@ -142,9 +146,17 @@ CLASS zcl_sat_adt_discovery_app IMPLEMENTATION.
                                      |\{&{ zif_sat_c_adt_utils=>c_general_search_params-type }*\}| &&
                                      |\{&{ zif_sat_c_adt_utils=>c_cds_search_params-extended_by }*\}|.
 
-      WHEN zif_sat_c_object_browser_mode=>database_table_view.
+      WHEN zif_sat_c_object_search=>c_search_type-db_tab_view.
         lv_template = lv_template && |\{&{ zif_sat_c_adt_utils=>c_dbtab_search_params-field }*\}| &&
                                      |\{&{ zif_sat_c_adt_utils=>c_general_search_params-type }*\}|.
+
+      WHEN zif_sat_c_object_search=>c_search_type-class_interface.
+        lv_template = lv_template && |\{&{ zif_sat_c_object_search=>c_class_intf_search_option-by_method }*\}| &&
+                                     |\{&{ zif_sat_c_object_search=>c_class_intf_search_option-by_attribute }*\}| &&
+                                     |\{&{ zif_sat_c_object_search=>c_class_intf_search_option-by_interface }*\}| &&
+                                     |\{&{ zif_sat_c_object_search=>c_class_intf_search_option-by_sub_type }*\}| &&
+                                     |\{&{ zif_sat_c_object_search=>c_class_intf_search_option-by_super_type }*\}| &&
+                                     |\{&{ zif_sat_c_object_search=>c_class_intf_search_option-by_friend }*\}|.
 
     ENDCASE.
 

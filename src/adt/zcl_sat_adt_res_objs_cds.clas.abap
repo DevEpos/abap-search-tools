@@ -29,7 +29,7 @@ CLASS zcl_sat_adt_res_objs_cds IMPLEMENTATION.
                             CHANGING  ct_option       = et_options ).
     END-OF-DEFINITION.
 
-    ev_type = zif_sat_c_object_browser_mode=>cds_view.
+    ev_type = zif_sat_c_object_search=>c_search_type-cds_view.
 
     ev_query = zcl_sat_adt_res_util=>get_request_param_value(
         iv_param_name    = zif_sat_c_adt_utils=>c_general_search_params-object_name
