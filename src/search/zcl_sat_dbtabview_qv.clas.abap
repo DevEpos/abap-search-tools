@@ -26,7 +26,7 @@ CLASS zcl_sat_dbtabview_qv IMPLEMENTATION.
 
     DATA(lv_value) = iv_value.
 
-    IF iv_option = zif_sat_c_object_search=>c_search_option-by_type.
+    IF iv_option = zif_sat_c_object_search=>c_general_search_params-type.
       zcl_sat_search_util=>remove_exclusion_string( CHANGING cv_value = lv_value ).
 
       CASE lv_value.

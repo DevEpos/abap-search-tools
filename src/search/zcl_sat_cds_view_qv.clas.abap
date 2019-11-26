@@ -30,7 +30,7 @@ CLASS zcl_sat_cds_view_qv IMPLEMENTATION.
 *.. Remove exclusion characters before the actual validation
     DATA(lv_value) = iv_value.
 
-    IF iv_option = zif_sat_c_object_search=>c_search_option-by_type.
+    IF iv_option = zif_sat_c_object_search=>c_general_search_params-type.
       zcl_sat_search_util=>remove_exclusion_string( CHANGING cv_value = lv_value ).
       CASE lv_value.
 
@@ -60,8 +60,8 @@ CLASS zcl_sat_cds_view_qv IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD zif_sat_query_validator~check_option_integrity.
-    IF line_exists( ct_options[ option = zif_sat_c_object_search=>c_search_option-by_param ] ).
-      DELETE ct_options WHERE option = zif_sat_c_object_search=>c_search_option-by_params.
+    IF line_exists( ct_options[ option = zif_sat_c_object_search=>c_cds_search_params-param ] ).
+      DELETE ct_options WHERE option = zif_sat_c_object_search=>c_cds_search_params-params.
     ENDIF.
   ENDMETHOD.
 

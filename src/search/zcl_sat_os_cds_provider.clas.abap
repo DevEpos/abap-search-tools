@@ -9,20 +9,23 @@ CLASS zcl_sat_os_cds_provider DEFINITION
 
     ALIASES:
       ty_t_value_range FOR zif_sat_ty_object_search~ty_t_value_range.
-    "! <p class="shorttext synchronized" lang="en">CLASS-CONSTRUCTOR</p>
-    CLASS-METHODS class_constructor.
+    "! <p class="shorttext synchronized" lang="en">CONSTRUCTOR</p>
+    METHODS constructor.
   PROTECTED SECTION.
     METHODS determine_grouping
         REDEFINITION.
     METHODS prepare_search
         REDEFINITION.
   PRIVATE SECTION.
-    CLASS-DATA gv_field_subquery TYPE string.
-    CLASS-DATA gv_anno_subquery TYPE string.
-    CLASS-DATA gv_select_from_subquery TYPE string.
-    CLASS-DATA gv_assoc_subquery TYPE string.
-    CLASS-DATA gv_param_subquery TYPE string.
-    CLASS-DATA gv_params_subquery TYPE string.
+    ALIASES:
+      c_cds_search_params FOR zif_sat_c_object_search~c_cds_search_params.
+
+    DATA mv_field_subquery TYPE string.
+    DATA mv_anno_subquery TYPE string.
+    DATA mv_select_from_subquery TYPE string.
+    DATA mv_assoc_subquery TYPE string.
+    DATA mv_param_subquery TYPE string.
+    DATA mv_params_subquery TYPE string.
 
     CONSTANTS:
       c_base_alias                TYPE string VALUE 'base' ##NO_TEXT,
@@ -81,24 +84,25 @@ ENDCLASS.
 
 
 CLASS zcl_sat_os_cds_provider IMPLEMENTATION.
-  METHOD class_constructor.
+  METHOD constructor.
+    super->constructor( ).
 *.. Create sub queries for parameters where boolean operation AND is senseful
-    gv_field_subquery = |SELECT DISTINCT entityid | && c_cr_lf &&
+    mv_field_subquery = |SELECT DISTINCT entityid | && c_cr_lf &&
                         | FROM { get_cds_sql_name( conv #( zif_sat_c_select_source_id=>zsat_i_cdsviewfield ) ) } | && c_cr_lf &&
                         | WHERE |.
-    gv_anno_subquery = |SELECT DISTINCT entityid | && c_cr_lf &&
+    mv_anno_subquery = |SELECT DISTINCT entityid | && c_cr_lf &&
                        | FROM { get_cds_sql_name( conv #( zif_sat_c_select_source_id=>zsat_i_cdsannotation ) ) } | && c_cr_lf &&
                        | WHERE |.
-    gv_assoc_subquery = |SELECT DISTINCT ddlname | && c_cr_lf &&
+    mv_assoc_subquery = |SELECT DISTINCT ddlname | && c_cr_lf &&
                         | FROM { get_cds_sql_name( CONV #( zif_sat_c_select_source_id=>zsat_i_associatedincds ) ) } | && c_cr_lf &&
                         | WHERE |.
-    gv_select_from_subquery = |SELECT DISTINCT ddlviewname | && c_cr_lf &&
+    mv_select_from_subquery = |SELECT DISTINCT ddlviewname | && c_cr_lf &&
                               | FROM { get_cds_sql_name( CONV #( zif_sat_c_select_source_id=>zsat_i_cdsfrompartentity ) ) } | && c_cr_lf &&
                               | WHERE |.
-    gv_param_subquery = |SELECT DISTINCT parametername | && c_cr_lf &&
+    mv_param_subquery = |SELECT DISTINCT parametername | && c_cr_lf &&
                         | FROM { zif_sat_c_select_source_id=>dd10b } | && c_cr_lf &&
                         | WHERE |.
-    gv_params_subquery = |SELECT DISTINCT entityid | && c_cr_lf &&
+    mv_params_subquery = |SELECT DISTINCT entityid | && c_cr_lf &&
                          | FROM { get_cds_sql_name( CONV #( zif_sat_c_select_source_id=>zsat_i_cdsviewwithparameter ) ) }|.
   ENDMETHOD.
 
@@ -132,47 +136,47 @@ CLASS zcl_sat_os_cds_provider IMPLEMENTATION.
       CASE <ls_option>-option.
 
 *.......... Find views which have a certain extension
-        WHEN zif_sat_c_object_search=>c_search_option-by_extensions.
+        WHEN c_cds_search_params-extended_by.
           add_extensions_filter( EXPORTING it_values = <ls_option>-value_range ).
 
 *.......... Find views via its description
-        WHEN zif_sat_c_object_search=>c_search_option-by_description.
+        WHEN c_general_search_options-description.
           add_option_filter(
             iv_fieldname = mv_description_filter_field
             it_values    = <ls_option>-value_range
           ).
 
 *.......... Find views with a certain responsible person
-        WHEN zif_sat_c_object_search=>c_search_option-by_owner.
+        WHEN c_general_search_options-user.
           add_option_filter(
             iv_fieldname = 'createdby'
             it_values    = <ls_option>-value_range
           ).
 
 *.......... Find views which exist in a certain development package
-        WHEN zif_sat_c_object_search=>c_search_option-by_package.
+        WHEN c_general_search_options-package.
           add_option_filter(
             iv_fieldname = 'developmentpackage'
             it_values    = <ls_option>-value_range
           ).
 
 *.......... Find views where the filter exists in the FROM part of the cds view
-        WHEN zif_sat_c_object_search=>c_search_option-by_select_from.
+        WHEN c_cds_search_params-select_from.
           add_from_option_filter( <ls_option>-value_range ).
 
 *.......... Find views which have a certain annotation
-        WHEN zif_sat_c_object_search=>c_search_option-by_anno.
+        WHEN c_cds_search_params-annotation.
           add_anno_option_filter(
             it_values = <ls_option>-value_range
           ).
 
 *.......... Find views that are parameterized
-        WHEN zif_sat_c_object_search=>c_search_option-by_params.
+        WHEN c_cds_search_params-params.
           CHECK <ls_option>-value_range IS NOT INITIAL.
           DATA(lf_views_with_parameters) = xsdbool( <ls_option>-value_range[ 1 ]-low = 'TRUE' ).
           IF lf_views_with_parameters = abap_true.
             add_join_table(
-                iv_join_table = |{ get_cds_sql_name( |{ zif_sat_c_select_source_id=>zsat_i_cdsviewwithparameter }| ) }|
+                iv_join_table = |{ zif_sat_c_select_source_id=>zsat_i_cdsviewwithparameter }|
                 iv_alias      = c_parameterized_view_alias
                 it_conditions = VALUE #(
                   ( field = CONV #( c_fields-entityid ) ref_field = c_fields-entityid ref_table_alias = c_base_alias type = zif_sat_c_join_cond_type=>field )
@@ -181,25 +185,25 @@ CLASS zcl_sat_os_cds_provider IMPLEMENTATION.
           ELSE.
             add_subquery_filter(
                 iv_fieldname = |{ c_base_alias }~{ c_fields-entityid }|
-                iv_subquery  = gv_params_subquery
+                iv_subquery  = mv_params_subquery
                 iv_option    = zif_sat_c_options=>not_in_subquery
             ).
           ENDIF.
 
 *.......... Find views that have a certain parameter
-        WHEN zif_sat_c_object_search=>c_search_option-by_param.
+        WHEN c_cds_search_params-param.
           add_param_option_filter( <ls_option>-value_range ).
 
 *.......... Find views which have a certain field a component
-        WHEN zif_sat_c_object_search=>c_search_option-by_field.
+        WHEN c_cds_search_params-field.
           add_field_option_filter( <ls_option>-value_range ).
 
 *.......... Find views where an entity is used as an association
-        WHEN zif_sat_c_object_search=>c_search_option-by_association.
+        WHEN c_cds_search_params-association.
           add_association_option_filter( <ls_option>-value_range ).
 
 *.......... Find views for a certain type e.g. function, hierarchy, view
-        WHEN zif_sat_c_object_search=>c_search_option-by_type.
+        WHEN c_general_search_options-type.
           add_type_option_filter( it_values = <ls_option>-value_range ).
       ENDCASE.
     ENDLOOP.
@@ -264,7 +268,7 @@ CLASS zcl_sat_os_cds_provider IMPLEMENTATION.
           iv_subquery_fieldname = 'parametername'
           iv_fieldname          = |{ c_base_alias }~entityid|
           it_excluding          = lt_excluding
-          iv_subquery           = gv_param_subquery
+          iv_subquery           = mv_param_subquery
       ).
     ENDIF.
 
@@ -316,14 +320,14 @@ CLASS zcl_sat_os_cds_provider IMPLEMENTATION.
       create_not_in_filter_for_where(
           it_where     = zcl_sat_where_clause_builder=>create_or_condition( lt_or_seltab )
           iv_fieldname = |{ c_base_alias }~{ c_fields-entityid }|
-          iv_subquery  = gv_anno_subquery
+          iv_subquery  = mv_anno_subquery
       ).
     ENDIF.
 
 *.. Add filters for including annotation key/value pairs
     IF lt_including IS NOT INITIAL.
       add_join_table(
-          iv_join_table = |{ get_cds_sql_name( |{ zif_sat_c_select_source_id=>zsat_i_cdsannotation }| ) }|
+          iv_join_table = |{ zif_sat_c_select_source_id=>zsat_i_cdsannotation }|
           iv_alias      = c_anno_alias
           it_conditions = VALUE #(
             ( field = c_fields-entityid ref_field = c_fields-entityid ref_table_alias = c_base_alias type = zif_sat_c_join_cond_type=>field )
@@ -387,14 +391,13 @@ CLASS zcl_sat_os_cds_provider IMPLEMENTATION.
           iv_subquery_fieldname = 'usedentity'
           iv_fieldname          = |{ c_base_alias }~ddlname|
           it_excluding          = lt_excluding
-          iv_subquery           = gv_assoc_subquery
+          iv_subquery           = mv_assoc_subquery
       ).
     ENDIF.
 
     IF lt_including IS NOT INITIAL.
-      DATA(lv_association_usage_table) = get_cds_sql_name( |{ zif_sat_c_select_source_id=>zsat_i_associatedincds }| ).
       add_join_table(
-          iv_join_table = |{ lv_association_usage_table }|
+          iv_join_table = |{ zif_sat_c_select_source_id=>zsat_i_associatedincds }|
           iv_alias      = c_used_in_association_alias
           it_conditions = VALUE #(
             ( field = 'ddlname' ref_field = 'ddlname' ref_table_alias = c_base_alias type = zif_sat_c_join_cond_type=>field )
@@ -421,13 +424,13 @@ CLASS zcl_sat_os_cds_provider IMPLEMENTATION.
           iv_subquery_fieldname = 'fieldname'
           iv_fieldname          = |{ c_base_alias }~{ c_fields-entityid }|
           it_excluding          = lt_excluding
-          iv_subquery           = gv_field_subquery
+          iv_subquery           = mv_field_subquery
       ).
     ENDIF.
 
     IF lt_including IS NOT INITIAL.
       add_join_table(
-          iv_join_table = |{ get_cds_sql_name( |{ zif_sat_c_select_source_id=>zsat_i_cdsviewfield }| ) }|
+          iv_join_table = |{ zif_sat_c_select_source_id=>zsat_i_cdsviewfield }|
           iv_alias      = c_fields-alias
           it_conditions = VALUE #(
             ( field = c_fields-entityid ref_field = c_fields-entityid ref_table_alias = c_base_alias type = zif_sat_c_join_cond_type=>field )
@@ -453,14 +456,13 @@ CLASS zcl_sat_os_cds_provider IMPLEMENTATION.
           iv_subquery_fieldname = 'sourceentity'
           iv_fieldname          = |{ c_base_alias }~viewname|
           it_excluding          = lt_excluding
-          iv_subquery           = gv_select_from_subquery
+          iv_subquery           = mv_select_from_subquery
       ).
     ENDIF.
 
     IF lt_including IS NOT INITIAL.
-      DATA(lv_from_part_table) = get_cds_sql_name( |{ zif_sat_c_select_source_id=>zsat_i_cdsfrompartentity }| ).
       add_join_table(
-          iv_join_table = |{ lv_from_part_table }|
+          iv_join_table = |{ zif_sat_c_select_source_id=>zsat_i_cdsfrompartentity }|
           iv_alias      = c_select_from_alias
           it_conditions = VALUE #( ( field = 'ddlviewname' ref_field = 'viewname' ref_table_alias = c_base_alias type = zif_sat_c_join_cond_type=>field ) )
       ).
@@ -492,7 +494,7 @@ CLASS zcl_sat_os_cds_provider IMPLEMENTATION.
     ENDLOOP.
 
     add_join_table(
-        iv_join_table = |{ get_cds_sql_name( |{ zif_sat_c_select_source_id=>zsat_i_cdsextensionviews }| ) }|
+        iv_join_table = |{ zif_sat_c_select_source_id=>zsat_i_cdsextensionviews }|
         iv_alias      = c_extension_view_alias
         it_conditions = VALUE #(
           ( field = 'parentddl' ref_field = 'ddlname' ref_table_alias = c_base_alias type = zif_sat_c_join_cond_type=>field and_or = zif_sat_c_selection_condition=>and )

@@ -32,20 +32,54 @@ INTERFACE zif_sat_c_object_search
     BEGIN OF c_class_intf_search_option,
 *.... The following options are only for AIE so no convenient
 *...... short form is needed
-      by_attribute      TYPE string VALUE 'attribute',
-      by_method         TYPE string VALUE 'method',
-      by_super_type     TYPE string VALUE 'superType',
-      by_sub_type       TYPE string VALUE 'subType',
-      by_interface      TYPE string VALUE 'interface',
-      by_friend         TYPE string VALUE 'friend',
-      by_is             TYPE string VALUE 'is',
-      by_isnot          TYPE string VALUE 'isNot',
-      by_exposure       TYPE string VALUE 'exposure',
-      by_abap_lang      TYPE string VALUE 'abapLanguage',
-      by_nw_release     TYPE string VALUE 'nwRelease',
-      by_program_status TYPE string VALUE 'programStatus',
-      by_ref_object     TYPE string VALUE 'refObject',
+      attribute      TYPE string VALUE 'attribute',
+      method         TYPE string VALUE 'method',
+      super_type     TYPE string VALUE 'superType',
+      sub_type       TYPE string VALUE 'subType',
+      interface      TYPE string VALUE 'interface',
+      friend         TYPE string VALUE 'friend',
+      is             TYPE string VALUE 'is',
+      isot           TYPE string VALUE 'isNot',
+      exposure       TYPE string VALUE 'exposure',
+      abap_lang      TYPE string VALUE 'abapLanguage',
+      nw_release     TYPE string VALUE 'nwRelease',
+      program_status TYPE string VALUE 'programStatus',
+      ref_object     TYPE string VALUE 'refObject',
     END OF c_class_intf_search_option.
+
+  CONSTANTS:
+    BEGIN OF c_general_search_params,
+      query                  TYPE string VALUE 'query',
+      object_name            TYPE string VALUE 'objectName',
+      object_type            TYPE string VALUE 'objectType',
+      max_rows               TYPE string VALUE 'maxRows',
+      user                   TYPE string VALUE 'userName',
+      release_state          TYPE string VALUE 'releaseState',
+      description            TYPE string VALUE 'description',
+      type                   TYPE string VALUE 'type',
+      package                TYPE string VALUE 'packageName',
+      use_and_for_filters    TYPE string VALUE 'useAndForFilters',
+      read_api_state         TYPE string VALUE 'withApiState',
+      get_all_results        TYPE string VALUE 'getAllResults',
+      read_package_hierarchy TYPE string VALUE 'withPackageHierarchy',
+    END OF c_general_search_params.
+
+  CONSTANTS:
+    BEGIN OF c_cds_search_params,
+      field             TYPE string VALUE 'fieldName',
+      select_from       TYPE string VALUE 'selectSourceIn',
+      association       TYPE string VALUE 'associatedIn',
+      only_local_assocs TYPE string VALUE 'localDeclaredAssocOnly',
+      annotation        TYPE string VALUE 'annotation',
+      param             TYPE string VALUE 'param',
+      params            TYPE string VALUE 'hasParams',
+      extended_by       TYPE string VALUE 'extendedBy',
+    END OF c_cds_search_params.
+
+  CONSTANTS:
+    BEGIN OF c_dbtab_search_params,
+      field TYPE string VALUE 'fieldName',
+    END OF c_dbtab_search_params.
 
   CONSTANTS:
     "! Values for API option

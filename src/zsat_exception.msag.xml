@@ -140,6 +140,12 @@
      <MSGNR>021</MSGNR>
      <TEXT>No value supplied for Parameter &apos;&amp;1&apos;</TEXT>
     </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZSAT_EXCEPTION</ARBGB>
+     <MSGNR>022</MSGNR>
+     <TEXT>No search terms and search options supplied</TEXT>
+    </T100>
    </T100>
   </asx:values>
  </asx:abap>

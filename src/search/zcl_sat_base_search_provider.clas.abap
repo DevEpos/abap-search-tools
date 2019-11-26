@@ -6,6 +6,7 @@ CLASS zcl_sat_base_search_provider DEFINITION
 
   PUBLIC SECTION.
     INTERFACES zif_sat_c_join_cond_type.
+    INTERFACES zif_sat_c_object_search.
     INTERFACES zif_sat_object_search_provider
       FINAL METHODS search.
 
@@ -16,10 +17,13 @@ CLASS zcl_sat_base_search_provider DEFINITION
 
     METHODS constructor.
   PROTECTED SECTION.
+    ALIASES:
+      c_general_search_options FOR zif_sat_c_object_search~c_general_search_params.
+
     CONSTANTS c_cr_lf TYPE string VALUE cl_abap_char_utilities=>cr_lf.
 
     DATA mo_search_query TYPE REF TO zif_sat_object_search_query.
-    data ms_search_engine_params TYPE zif_sat_ty_object_search=>ty_s_search_engine_params.
+    DATA ms_search_engine_params TYPE zif_sat_ty_object_search=>ty_s_search_engine_params.
     DATA mt_result TYPE zsat_entity_t.
     DATA mt_criteria TYPE zif_sat_ty_global=>ty_t_seltab_sql.
     DATA mt_criteria_or TYPE zif_sat_ty_global=>ty_t_or_seltab_sql.
@@ -182,7 +186,7 @@ CLASS zcl_sat_base_search_provider IMPLEMENTATION.
     mo_search_query = io_query.
     ms_search_engine_params = is_search_engine_params.
 
-    clear: mt_result,
+    CLEAR: mt_result,
            mt_criteria,
            mt_criteria_or,
            mt_criteria_and,

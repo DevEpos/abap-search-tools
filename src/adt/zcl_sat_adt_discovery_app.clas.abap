@@ -58,10 +58,10 @@ CLASS zcl_sat_adt_discovery_app DEFINITION
     "! <p class="shorttext synchronized" lang="en">Registers template for Object search</p>
     METHODS reg_object_search_template
       IMPORTING
-        io_collection       TYPE REF TO if_adt_discovery_collection
-        iv_search_type      TYPE zif_sat_ty_object_search=>ty_search_type
-        iv_handler_class    TYPE string
-        iv_search_type_term TYPE string.
+        io_collection    TYPE REF TO if_adt_discovery_collection
+        io_search_config TYPE REF TO zif_sat_object_search_config
+        iv_handler_class TYPE string
+        iv_search_type   TYPE zif_sat_ty_object_search=>ty_search_type.
     "! <p class="shorttext synchronized" lang="en">Registers resource for DDIC Repository Access</p>
     METHODS register_ddic_repo_access
       IMPORTING
@@ -105,65 +105,54 @@ CLASS zcl_sat_adt_discovery_app IMPLEMENTATION.
     ).
 
     reg_object_search_template( io_collection       = lo_search_collection
+                                io_search_config    = CAST #( zcl_sat_ioc_lookup=>get_instance(
+                                                                iv_contract = 'zif_sat_object_search_config'
+                                                                iv_filter   = |{ zif_sat_c_object_search=>c_search_type-cds_view }| ) )
                                 iv_handler_class    = zif_sat_c_adt_utils=>c_resource_handler-object_search_cds
-                                iv_search_type      = zif_sat_c_object_search=>c_search_type-cds_view
-                                iv_search_type_term = |cds| ).
+                                iv_search_type      = zif_sat_c_object_search=>c_search_type-cds_view ).
     reg_object_search_template( io_collection       = lo_search_collection
-                                iv_handler_class    = zif_sat_c_adt_utils=>c_resource_handler-object_search_dbtabview
-                                iv_search_type      = zif_sat_c_object_search=>c_search_type-db_tab_view
-                                iv_search_type_term = |dbtabview| ).
+                                io_search_config    = CAST #( zcl_sat_ioc_lookup=>get_instance(
+                                                                iv_contract = 'zif_sat_object_search_config'
+                                                                iv_filter   = |{ zif_sat_c_object_search=>c_search_type-db_tab_view }| ) )
+                                iv_handler_class    = zif_sat_c_adt_utils=>c_resource_handler-object_search
+                                iv_search_type      = zif_sat_c_object_search=>c_search_type-db_tab_view ).
     reg_object_search_template( io_collection       = lo_search_collection
-                                iv_handler_class    = zif_sat_c_adt_utils=>c_resource_handler-object_search_class_interface
-                                iv_search_type      = zif_sat_c_object_search=>c_search_type-class_interface
-                                iv_search_type_term = |classintf| ).
-***    reg_object_search_template( io_collection       = lo_search_collection
-***                                iv_handler_class    = zif_sat_c_adt_utils=>c_resource_handler-object_search_all
-***                                iv_search_type      = zif_sat_c_object_browser_mode=>all
-***                                iv_search_type_term = |all| ).
+                                io_search_config    = CAST #( zcl_sat_ioc_lookup=>get_instance(
+                                                                iv_contract = 'zif_sat_object_search_config'
+                                                                iv_filter   = |{ zif_sat_c_object_search=>c_search_type-class_interface }| ) )
+                                iv_handler_class    = zif_sat_c_adt_utils=>c_resource_handler-object_search
+                                iv_search_type      = zif_sat_c_object_search=>c_search_type-class_interface ).
   ENDMETHOD.
 
   METHOD reg_object_search_template.
-    DATA(lv_template) = |{ c_object_search_uri }/{ iv_search_type_term }\{?{ zif_sat_c_adt_utils=>c_general_search_params-object_name }*\}| &&
-                        |\{&{ zif_sat_c_adt_utils=>c_general_search_params-max_rows }*\}| &&
-                        |\{&{ zif_sat_c_adt_utils=>c_general_search_params-user }*\}| &&
-                        |\{&{ zif_sat_c_adt_utils=>c_general_search_params-package }*\}| &&
-                        |\{&{ zif_sat_c_adt_utils=>c_general_search_params-description }*\}| &&
-                        |\{&{ zif_sat_c_adt_utils=>c_general_search_params-get_all_results }*\}| &&
-                        |\{&{ zif_sat_c_adt_utils=>c_general_search_params-use_and_for_filters }*\}| &&
-                        |\{&{ zif_sat_c_adt_utils=>c_general_search_params-read_package_hierarchy }*\}|.
+    DATA: lt_handler_params TYPE abap_parmbind_tab.
 
-    CASE iv_search_type.
+    DATA(lt_allowed_options) = io_search_config->get_allowed_options( ).
+    DATA(lv_template) = |{ c_object_search_uri }/{ to_lower( iv_search_type ) }\{?{ zif_sat_c_object_search=>c_general_search_params-object_name }*\}| &&
+                        |\{&{ zif_sat_c_object_search=>c_general_search_params-get_all_results }*\}| &&
+                        |\{&{ zif_sat_c_object_search=>c_general_search_params-use_and_for_filters }*\}| &&
+                        |\{&{ zif_sat_c_object_search=>c_general_search_params-read_package_hierarchy }*\}|.
 
-*      WHEN zif_sat_c_object_browser_mode=>all.
+    DATA(lv_size) = lines( lt_allowed_options ).
+    LOOP AT lt_allowed_options INTO DATA(ls_option).
+      lv_template = lv_template && |\{&{ ls_option-low }*\}|.
+    ENDLOOP.
 
-      WHEN zif_sat_c_object_search=>c_search_type-cds_view.
-        lv_template = lv_template && |\{&{ zif_sat_c_adt_utils=>c_cds_search_params-field }*\}| &&
-                                     |\{&{ zif_sat_c_adt_utils=>c_cds_search_params-param }*\}| &&
-                                     |\{&{ zif_sat_c_adt_utils=>c_cds_search_params-params }*\}| &&
-                                     |\{&{ zif_sat_c_adt_utils=>c_cds_search_params-select_from }*\}| &&
-                                     |\{&{ zif_sat_c_adt_utils=>c_cds_search_params-association }*\}| &&
-                                     |\{&{ zif_sat_c_adt_utils=>c_cds_search_params-annotation }*\}| &&
-                                     |\{&{ zif_sat_c_adt_utils=>c_general_search_params-type }*\}| &&
-                                     |\{&{ zif_sat_c_adt_utils=>c_cds_search_params-extended_by }*\}|.
-
-      WHEN zif_sat_c_object_search=>c_search_type-db_tab_view.
-        lv_template = lv_template && |\{&{ zif_sat_c_adt_utils=>c_dbtab_search_params-field }*\}| &&
-                                     |\{&{ zif_sat_c_adt_utils=>c_general_search_params-type }*\}|.
-
-      WHEN zif_sat_c_object_search=>c_search_type-class_interface.
-        lv_template = lv_template && |\{&{ zif_sat_c_object_search=>c_class_intf_search_option-by_method }*\}| &&
-                                     |\{&{ zif_sat_c_object_search=>c_class_intf_search_option-by_attribute }*\}| &&
-                                     |\{&{ zif_sat_c_object_search=>c_class_intf_search_option-by_interface }*\}| &&
-                                     |\{&{ zif_sat_c_object_search=>c_class_intf_search_option-by_sub_type }*\}| &&
-                                     |\{&{ zif_sat_c_object_search=>c_class_intf_search_option-by_super_type }*\}| &&
-                                     |\{&{ zif_sat_c_object_search=>c_class_intf_search_option-by_friend }*\}|.
-
-    ENDCASE.
+*.. Creates parameter table for Resource Handler class
+    DATA(ls_param) = VALUE abap_parmbind(
+        kind = cl_abap_objectdescr=>exporting
+        name = 'IV_SEARCH_TYPE'
+    ).
+    CREATE DATA ls_param-value LIKE iv_search_type.
+    ASSIGN ls_param-value->* TO FIELD-SYMBOL(<lv_search_type>).
+    <lv_search_type> = iv_search_type.
+    INSERT ls_param INTO TABLE lt_handler_params.
 
     io_collection->register_disc_res_w_template(
       template      = lv_template
       handler_class = iv_handler_class
-      relation      = 'http://www.devepos.com/adt/relations/saat/objectsearch/' && iv_search_type_term
+      parameters    = lt_handler_params
+      relation      = 'http://www.devepos.com/adt/relations/saat/objectsearch/' && to_lower( iv_search_type )
     ).
   ENDMETHOD.
 
@@ -216,6 +205,7 @@ CLASS zcl_sat_adt_discovery_app IMPLEMENTATION.
         category_scheme = lv_object_search_scheme
         category_term   = 'cdsfield'
     ).
+
     io_registry->register_discoverable_resource(
         url             = '/tablefield'
         handler_class   = zif_sat_c_adt_utils=>c_resource_handler-db_table_fields
@@ -223,6 +213,7 @@ CLASS zcl_sat_adt_discovery_app IMPLEMENTATION.
         category_scheme = lv_object_search_scheme
         category_term   = 'tablefield'
     ).
+
     io_registry->register_discoverable_resource(
         url             = '/dbentity'
         handler_class   = zif_sat_c_adt_utils=>c_resource_handler-database_entities
