@@ -11,11 +11,13 @@ INTERFACE zif_sat_object_search_config
       single         TYPE abap_bool,
       key_value      TYPE abap_bool,
       no_negation    TYPE abap_bool,
-    END OF ty_s_option_setting.
+    END OF ty_s_option_setting,
+    "! <p class="shorttext synchronized" lang="en">List of option configurations</p>
+    ty_t_option_setting TYPE STANDARD TABLE OF ty_s_option_setting WITH KEY option.
 
   "! <p class="shorttext synchronized" lang="en">Returns a table of allowed search options</p>
   "!
-  "! @parameter rt_options | <p class="shorttext synchronized" lang="en">Range </p>
+  "! @parameter rt_options | <p class="shorttext synchronized" lang="en">Range of allowed options</p>
   METHODS get_allowed_options
     RETURNING
       VALUE(rt_options) TYPE ty_t_options.
@@ -46,4 +48,18 @@ INTERFACE zif_sat_object_search_config
   METHODS get_type
     RETURNING
       VALUE(rv_type) TYPE zif_sat_ty_object_search=>ty_search_type.
+
+  "! <p class="shorttext synchronized" lang="en">Maps search option to another</p>
+  "!
+  "! @parameter cv_option | <p class="shorttext synchronized" lang="en">The option name to be mapped</p>
+  METHODS map_option DEFAULT IGNORE
+    CHANGING
+      cv_option TYPE string.
+
+  "! <p class="shorttext synchronized" lang="en">Returns the search options with their settings</p>
+  "!
+  "! @parameter rt_options | <p class="shorttext synchronized" lang="en">List of of search option configurations</p>
+  METHODS get_options
+    RETURNING
+      VALUE(rt_options) TYPE ty_t_option_setting.
 ENDINTERFACE.

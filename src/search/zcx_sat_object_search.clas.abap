@@ -108,6 +108,17 @@ CLASS zcx_sat_object_search DEFINITION
         attr4 TYPE scx_attrname VALUE '',
       END OF invalid_query_option.
 
+    CONSTANTS:
+      "! <p class="shorttext synchronized" lang="en">No search terms and/or options</p>
+      BEGIN OF empty_query,
+        msgid TYPE symsgid VALUE 'ZSAT_EXCEPTION',
+        msgno TYPE symsgno VALUE '022',
+        attr1 TYPE scx_attrname VALUE '',
+        attr2 TYPE scx_attrname VALUE '',
+        attr3 TYPE scx_attrname VALUE '',
+        attr4 TYPE scx_attrname VALUE '',
+      END OF empty_query .
+
     "! <p class="shorttext synchronized" lang="en">Raise generic object search error</p>
     "!
     "! @parameter iv_text | <p class="shorttext synchronized" lang="en"></p>

@@ -5,6 +5,7 @@ CLASS zcl_sat_general_qv DEFINITION
 
   PUBLIC SECTION.
     INTERFACES zif_sat_query_validator.
+    INTERFACES zif_sat_c_object_search.
 
     ALIASES:
        validate FOR zif_sat_query_validator~validate_option.

@@ -5,20 +5,21 @@ CLASS zcl_sat_os_dbtab_provider DEFINITION
   INHERITING FROM zcl_sat_base_search_provider.
 
   PUBLIC SECTION.
-    "! <p class="shorttext synchronized" lang="en">CLASS CONSTRUCTOR</p>
-    CLASS-METHODS class_constructor.
+    "! <p class="shorttext synchronized" lang="en">CONSTRUCTOR</p>
+    METHODS constructor.
   PROTECTED SECTION.
     METHODS determine_grouping
         REDEFINITION.
     METHODS prepare_search
         REDEFINITION.
   PRIVATE SECTION.
+    aliases:
+       c_dbtab_search_params for zif_sat_c_object_search~c_dbtab_search_params.
     CONSTANTS:
       c_base_table  TYPE string VALUE 'base',
       c_field_table TYPE string VALUE 'field'.
 
-    CLASS-DATA gv_field_subquery TYPE string.
-
+    DATA mv_field_subquery TYPE string.
     DATA mv_field_filter_count TYPE i.
     DATA mv_entity_fieldname     TYPE string.
     DATA mv_raw_entity_fieldname TYPE string.
@@ -45,8 +46,9 @@ ENDCLASS.
 
 CLASS zcl_sat_os_dbtab_provider IMPLEMENTATION.
 
-  METHOD class_constructor.
-    gv_field_subquery = |SELECT DISTINCT tablename | && c_cr_lf &&
+  METHOD constructor.
+    super->constructor( ).
+    mv_field_subquery = |SELECT DISTINCT tablename | && c_cr_lf &&
                         | FROM { zif_sat_c_select_source_id=>zsat_i_tablefield } | && c_cr_lf &&
                         | WHERE |.
   ENDMETHOD.
@@ -74,32 +76,32 @@ CLASS zcl_sat_os_dbtab_provider IMPLEMENTATION.
       CASE <ls_option>-option.
 
 *.......... Find objects via its description
-        WHEN zif_sat_c_object_search=>c_search_option-by_description.
+        WHEN c_general_search_options-description.
           add_option_filter(
             iv_fieldname = mv_description_filter_field
             it_values    = <ls_option>-value_range
           ).
 
 *.......... Find objects with a certain responsible person
-        WHEN zif_sat_c_object_search=>c_search_option-by_owner.
+        WHEN c_general_search_options-user.
           add_option_filter(
             iv_fieldname = 'createdby'
             it_values    = <ls_option>-value_range
           ).
 
 *.......... Find objects which exist in a certain development package
-        WHEN zif_sat_c_object_search=>c_search_option-by_package.
+        WHEN c_general_search_options-package.
           add_option_filter(
             iv_fieldname = 'developmentpackage'
             it_values    = <ls_option>-value_range
           ).
 
 *.......... Find only objects with a certain type
-        WHEN zif_sat_c_object_search=>c_search_option-by_type.
+        WHEN c_general_search_options-type.
           add_type_option_filter( <ls_option>-value_range ).
 
 *.......... Find objects by field
-        WHEN zif_sat_c_object_search=>c_search_option-by_field.
+        WHEN c_dbtab_search_params-field.
           add_field_filter( <ls_option>-value_range ).
 
       ENDCASE.
@@ -177,11 +179,11 @@ CLASS zcl_sat_os_dbtab_provider IMPLEMENTATION.
         DATA(ls_type_value) = ls_type_option-value_range[ 1 ].
 
         IF ls_type_value-low = zif_sat_c_object_search=>c_type_option_value-table.
-          ev_base_table = get_cds_sql_name( |{ zif_sat_c_select_source_id=>zsat_i_databasetable }| ).
+          ev_base_table = zif_sat_c_select_source_id=>zsat_i_databasetable.
           ev_entity_fieldname =
           ev_raw_entity_fieldname = 'tablename'.
         ELSEIF ls_type_value-low = zif_sat_c_object_search=>c_type_option_value-view.
-          ev_base_table = get_cds_sql_name( |{ zif_sat_c_select_source_id=>zsat_i_databaseview }| ).
+          ev_base_table = zif_sat_c_select_source_id=>zsat_i_databaseview.
           ev_entity_fieldname =
           ev_raw_entity_fieldname = 'viewname'.
         ENDIF.
@@ -194,7 +196,7 @@ CLASS zcl_sat_os_dbtab_provider IMPLEMENTATION.
     ENDIF.
 
     IF lf_set_default_table = abap_true.
-      ev_base_table = get_cds_sql_name( |{ zif_sat_c_select_source_id=>zsat_i_databasetablesandviews }| ).
+      ev_base_table = zif_sat_c_select_source_id=>zsat_i_databasetablesandviews.
       ev_entity_fieldname = 'entity'.
       ev_raw_entity_fieldname = 'entityraw'.
     ENDIF.
@@ -203,7 +205,7 @@ CLASS zcl_sat_os_dbtab_provider IMPLEMENTATION.
 
   METHOD add_field_filter.
     add_join_table(
-        iv_join_table = |{ get_cds_sql_name( |{ zif_sat_c_select_source_id=>zsat_i_tablefield }| ) }|
+        iv_join_table = |{ zif_sat_c_select_source_id=>zsat_i_tablefield }|
         iv_alias      = |{ c_field_table }|
         it_conditions = VALUE #(
           ( field = 'tablename' ref_field = mv_entity_fieldname ref_table_alias = c_base_table type = zif_sat_c_join_cond_type=>field )
@@ -220,7 +222,7 @@ CLASS zcl_sat_os_dbtab_provider IMPLEMENTATION.
         iv_subquery_fieldname = 'fieldname'
         iv_fieldname          = |{ c_base_table }~tablename|
         it_excluding          = lt_excluding
-        iv_subquery           = gv_field_subquery
+        iv_subquery           = mv_field_subquery
     ).
 
     add_option_filter(
