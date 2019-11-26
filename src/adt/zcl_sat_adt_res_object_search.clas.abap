@@ -7,6 +7,9 @@ CLASS zcl_sat_adt_res_object_search DEFINITION
 
     METHODS get
         REDEFINITION.
+    METHODS constructor
+      IMPORTING
+        iv_search_type TYPE zif_sat_ty_object_search=>ty_search_type.
   PROTECTED SECTION.
     TYPES:
       BEGIN OF ty_s_package,
@@ -20,11 +23,13 @@ CLASS zcl_sat_adt_res_object_search DEFINITION
         source  TYPE string,
       END OF ty_s_ddls_source,
       ty_lt_ddlname TYPE RANGE OF ddlname.
+
     DATA mt_query_result TYPE zsat_entity_t.
     DATA mf_with_package_hierarchy TYPE abap_bool.
-
-    DATA: mt_super_package_all TYPE SORTED TABLE OF ty_s_package WITH UNIQUE KEY package,
-          mt_ddls_source       TYPE HASHED TABLE OF ty_s_ddls_source WITH UNIQUE KEY ddlname.
+    DATA mv_search_type TYPE zif_sat_ty_object_search=>ty_search_type.
+    DATA mt_super_package_all TYPE SORTED TABLE OF ty_s_package WITH UNIQUE KEY package.
+    DATA mt_ddls_source       TYPE HASHED TABLE OF ty_s_ddls_source WITH UNIQUE KEY ddlname.
+    DATA mo_search_config TYPE REF TO zif_sat_object_search_config.
 
     "! <p class="shorttext synchronized" lang="en">Retrieve query parameters from request</p>
     METHODS get_query_parameter
@@ -32,53 +37,11 @@ CLASS zcl_sat_adt_res_object_search DEFINITION
         io_request              TYPE REF TO if_adt_rest_request
       EXPORTING
         ev_query                TYPE string
-        ev_type                 TYPE zif_sat_ty_object_search=>ty_search_type
         es_search_engine_params TYPE zif_sat_ty_object_search=>ty_s_search_engine_params
         et_options              TYPE zif_sat_ty_object_search=>ty_t_search_option
       RAISING
         cx_adt_rest .
-    "! <p class="shorttext synchronized" lang="en">Retrieve 'maxRows' parameter from request</p>
-    METHODS get_max_rows_param
-      IMPORTING
-        io_request TYPE REF TO if_adt_rest_request
-      CHANGING
-        ct_options TYPE zif_sat_ty_object_search=>ty_t_search_option.
-    "! <p class="shorttext synchronized" lang="en">Retrieve 'userName' parameter from request</p>
-    METHODS get_user_name_param
-      IMPORTING
-        io_request TYPE REF TO if_adt_rest_request
-      CHANGING
-        ct_options TYPE zif_sat_ty_object_search=>ty_t_search_option.
-    "! <p class="shorttext synchronized" lang="en">Retrieve 'releaseState' parameter from request</p>
-    METHODS get_release_state_param
-      IMPORTING
-        io_request TYPE REF TO if_adt_rest_request
-      CHANGING
-        ct_options TYPE zif_sat_ty_object_search=>ty_t_search_option.
-    "! <p class="shorttext synchronized" lang="en">Retrieve 'description' parameter from request</p>
-    METHODS get_description_param
-      IMPORTING
-        io_request TYPE REF TO if_adt_rest_request
-      CHANGING
-        ct_options TYPE zif_sat_ty_object_search=>ty_t_search_option.
-    "! <p class="shorttext synchronized" lang="en">Retrieve 'type' parameter from request</p>
-    METHODS get_type_param
-      IMPORTING
-        io_request TYPE REF TO if_adt_rest_request
-      CHANGING
-        ct_options TYPE zif_sat_ty_object_search=>ty_t_search_option.
-    "! <p class="shorttext synchronized" lang="en">Retrieve 'packageName' parameter from request</p>
-    METHODS get_package_name_param
-      IMPORTING
-        io_request TYPE REF TO if_adt_rest_request
-      CHANGING
-        ct_options TYPE zif_sat_ty_object_search=>ty_t_search_option.
-    "! <p class="shorttext synchronized" lang="en">Retrieve 'fieldName' parameter from request</p>
-    METHODS get_field_name_param
-      IMPORTING
-        io_request TYPE REF TO if_adt_rest_request
-      CHANGING
-        ct_options TYPE zif_sat_ty_object_search=>ty_t_search_option.
+
     "! <p class="shorttext synchronized" lang="en">Retrieve values of request parameter</p>
     METHODS get_request_param_values
       IMPORTING
@@ -119,6 +82,8 @@ CLASS zcl_sat_adt_res_object_search DEFINITION
         cs_result        TYPE zsat_adt_element_info.
     "! <p class="shorttext synchronized" lang="en">Post processing for search results</p>
     METHODS post_process_result.
+    "! <p class="shorttext synchronized" lang="en">Reads DDL Sources in for search result</p>
+    "!
     METHODS read_ddl_sources.
   PRIVATE SECTION.
 
@@ -134,35 +99,41 @@ ENDCLASS.
 
 CLASS zcl_sat_adt_res_object_search IMPLEMENTATION.
 
+  METHOD constructor.
+    super->constructor( ).
+    mv_search_type = iv_search_type.
+    mo_search_config = CAST #( zcl_sat_ioc_lookup=>get_instance(
+                                 iv_contract = 'zif_sat_object_search_config'
+                                 iv_filter   = |{ mv_search_type }| ) ).
+  ENDMETHOD.
+
   METHOD get.
+    CHECK: mv_search_type IS NOT INITIAL,
+           mo_search_config IS BOUND.
+
     get_query_parameter(
       EXPORTING
         io_request              = request
       IMPORTING
         ev_query                = DATA(lv_query)
-        ev_type                 = DATA(lv_type)
         es_search_engine_params = DATA(ls_search_engine_params)
         et_options              = DATA(lt_options)
     ).
 
-    CHECK lv_type IS NOT INITIAL.
-
 *.. Determine if the package hierarchy of the result should also be determined
     mf_with_package_hierarchy = zcl_sat_adt_res_util=>get_request_param_value(
-        iv_param_name    = zif_sat_c_adt_utils=>c_general_search_params-read_package_hierarchy
+        iv_param_name    = zif_sat_c_object_search=>c_general_search_params-read_package_hierarchy
         iv_default_value = abap_false
         io_request       = request ).
 
     TRY.
 
         DATA(lo_search_engine) = CAST zif_sat_search_engine( zcl_sat_ioc_lookup=>get_instance(
-                                      iv_contract = 'zif_sat_search_engine'
-                                      iv_filter   = |{ lv_type }| )
-                                    ).
+                                      iv_contract = 'zif_sat_search_engine' ) ).
         lo_search_engine->search_objects(
           EXPORTING iv_search_terms         = lv_query
                     it_options              = lt_options
-                    iv_search_type          = lv_type
+                    iv_search_type          = mv_search_type
                     is_search_engine_params = ls_search_engine_params
           IMPORTING et_results              = mt_query_result
         ).
@@ -197,7 +168,34 @@ CLASS zcl_sat_adt_res_object_search IMPLEMENTATION.
 
   ENDMETHOD.
 
-  METHOD get_query_parameter ##needed.
+  METHOD get_query_parameter.
+    ev_query = zcl_sat_adt_res_util=>get_request_param_value(
+        iv_param_name    = zif_sat_c_object_search=>c_general_search_params-object_name
+        io_request       = io_request
+    ).
+    es_search_engine_params = VALUE #(
+      use_and_cond_for_options = zcl_sat_adt_res_util=>get_request_param_value(
+        iv_param_name    = zif_sat_c_object_search=>c_general_search_params-use_and_for_filters
+        iv_default_value = abap_false
+        io_request       = io_request )
+      with_api_state = zcl_sat_adt_res_util=>get_request_param_value(
+         iv_param_name         = zif_sat_c_object_search=>c_general_search_params-read_api_state
+         iv_default_value = abap_false
+         io_request       = io_request )
+      get_all                  = zcl_sat_adt_res_util=>get_request_param_value(
+         iv_param_name    = zif_sat_c_object_search=>c_general_search_params-get_all_results
+         iv_default_value = abap_false
+         io_request       = io_request )
+    ).
+
+    LOOP AT mo_search_config->get_options( ) ASSIGNING FIELD-SYMBOL(<ls_option>).
+      get_search_parameter(
+        EXPORTING io_request      = io_request
+                  iv_param_name   = <ls_option>-option
+                  if_single_value = <ls_option>-single
+        CHANGING  ct_option       = et_options
+      ).
+    ENDLOOP.
   ENDMETHOD.
 
   METHOD create_response.
@@ -319,59 +317,6 @@ CLASS zcl_sat_adt_res_object_search IMPLEMENTATION.
     ENDIF.
   ENDMETHOD.
 
-
-  METHOD get_description_param.
-    get_search_parameter( EXPORTING iv_param_name   = zif_sat_c_adt_utils=>c_general_search_params-description
-                                    iv_option_name  = zif_sat_c_object_search=>c_search_option-by_description
-                                    io_request      = io_request
-                          CHANGING  ct_option       = ct_options ).
-  ENDMETHOD.
-
-  METHOD get_field_name_param.
-    get_search_parameter( EXPORTING iv_param_name   = zif_sat_c_adt_utils=>c_cds_search_params-field
-                                    iv_option_name  = zif_sat_c_object_search=>c_search_option-by_field
-                                    io_request      = io_request
-                          CHANGING  ct_option       = ct_options ).
-  ENDMETHOD.
-
-
-  METHOD get_max_rows_param.
-    get_search_parameter( EXPORTING iv_param_name   = zif_sat_c_adt_utils=>c_general_search_params-max_rows
-                                    iv_option_name  = zif_sat_c_object_search=>c_search_option-max_rows
-                                    if_single_value = abap_true
-                                    io_request      = io_request
-                          CHANGING  ct_option       = ct_options ).
-  ENDMETHOD.
-
-
-  METHOD get_package_name_param.
-    get_search_parameter( EXPORTING iv_param_name   = zif_sat_c_adt_utils=>c_general_search_params-package
-                                    iv_option_name  = zif_sat_c_object_search=>c_search_option-by_package
-                                    io_request      = io_request
-                          CHANGING  ct_option       = ct_options ).
-  ENDMETHOD.
-
-  METHOD get_release_state_param.
-    get_search_parameter( EXPORTING iv_param_name   = zif_sat_c_adt_utils=>c_general_search_params-release_state
-                                    iv_option_name  = zif_sat_c_object_search=>c_search_option-by_api
-                                    io_request      = io_request
-                          CHANGING  ct_option       = ct_options ).
-  ENDMETHOD.
-
-
-  METHOD get_type_param.
-    get_search_parameter( EXPORTING iv_param_name   = zif_sat_c_adt_utils=>c_general_search_params-type
-                                    iv_option_name  = zif_sat_c_object_search=>c_search_option-by_type
-                                    io_request      = io_request
-                          CHANGING  ct_option       = ct_options ).
-  ENDMETHOD.
-
-  METHOD get_user_name_param.
-    get_search_parameter( EXPORTING iv_param_name   = zif_sat_c_adt_utils=>c_general_search_params-user
-                                    iv_option_name  = zif_sat_c_object_search=>c_search_option-by_owner
-                                    io_request      = io_request
-                          CHANGING  ct_option       = ct_options ).
-  ENDMETHOD.
 
   METHOD get_request_param_value.
     TRY.

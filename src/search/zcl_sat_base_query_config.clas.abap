@@ -8,10 +8,11 @@ CLASS zcl_sat_base_query_config DEFINITION
     INTERFACES zif_sat_object_search_config
       ABSTRACT METHODS get_type.
     INTERFACES zif_sat_c_object_search.
-    ALIASES:
-      c_search_option FOR zif_sat_c_object_search~c_search_option.
   PROTECTED SECTION.
-    DATA mt_options TYPE TABLE OF zif_sat_object_search_config=>ty_s_option_setting.
+    ALIASES:
+      c_search_option FOR zif_sat_c_object_search~c_search_option,
+      c_general_options FOR zif_sat_c_object_search~c_general_search_params.
+    DATA mt_options TYPE zif_sat_object_search_config=>ty_t_option_setting.
     DATA mt_allowed_options TYPE zif_sat_object_search_config=>ty_t_options.
   PRIVATE SECTION.
 ENDCLASS.
@@ -35,6 +36,10 @@ CLASS zcl_sat_base_query_config IMPLEMENTATION.
 
   METHOD zif_sat_object_search_config~has_option.
     rf_has_option = xsdbool( line_exists( mt_options[ option = iv_option ] ) ).
+  ENDMETHOD.
+
+  METHOD zif_sat_object_search_config~get_options.
+    rt_options = mt_options.
   ENDMETHOD.
 
 ENDCLASS.

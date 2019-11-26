@@ -35,10 +35,7 @@ CLASS zcl_sat_object_query_parser DEFINITION
     CONSTANTS c_negation_operator TYPE string VALUE '!' ##no_text.
     CONSTANTS c_key_value_pair_separator TYPE string VALUE '=' ##no_text.
 
-    "! <p class="shorttext synchronized" lang="en">Adjust the current query string</p>
-    METHODS adjust_query_string
-      CHANGING
-        cv_query TYPE string.
+
     "! <p class="shorttext synchronized" lang="en">Retrieves the search terms from the given string</p>
     METHODS get_search_terms
       IMPORTING
@@ -143,7 +140,7 @@ CLASS zcl_sat_object_query_parser IMPLEMENTATION.
 
     enhance_options( CHANGING ct_options = lt_options ).
 
-    ro_query = new zcl_sat_object_search_query(
+    ro_query = NEW zcl_sat_object_search_query(
       iv_query                = lv_search_terms
       iv_type                 = mo_configuration->get_type( )
       it_search_term          = get_search_terms( lv_search_terms )
@@ -164,9 +161,18 @@ CLASS zcl_sat_object_query_parser IMPLEMENTATION.
 
     enhance_options( CHANGING ct_options = lt_options ).
 
-    ro_query = new zcl_sat_object_search_query(
+    DATA(lt_search_terms) = get_search_terms( iv_search_terms ).
+
+    IF lt_search_terms IS INITIAL AND
+       lt_options IS INITIAL.
+      RAISE EXCEPTION TYPE zcx_sat_object_search
+        EXPORTING
+          textid = zcx_sat_object_search=>empty_query.
+    ENDIF.
+
+    ro_query = NEW zcl_sat_object_search_query(
       iv_type                 = mo_configuration->get_type( )
-      it_search_term          = get_search_terms( iv_search_terms )
+      it_search_term          = lt_search_terms
       it_search_options       = lt_options
     ).
   ENDMETHOD.
@@ -248,19 +254,6 @@ CLASS zcl_sat_object_query_parser IMPLEMENTATION.
     ENDLOOP.
   ENDMETHOD.
 
-  METHOD adjust_query_string.
-    CHECK cv_query IS NOT INITIAL.
-
-*.. Check last character of query
-    DATA(lv_length) = strlen( cv_query ).
-    DATA(lv_last_char_offset) = lv_length - 1.
-
-    IF cv_query+lv_last_char_offset(1) = '<'.
-      cv_query = cv_query(lv_last_char_offset).
-    ELSEIF cv_query+lv_last_char_offset(1) <> '*'.
-      cv_query = |{ cv_query }*|.
-    ENDIF.
-  ENDMETHOD.
 
   METHOD add_option_value.
     ASSIGN ct_options[ option = is_option-option ] TO FIELD-SYMBOL(<ls_option>).
@@ -349,6 +342,8 @@ CLASS zcl_sat_object_query_parser IMPLEMENTATION.
 
     SPLIT iv_token AT c_option_separator INTO lv_option lv_value_list.
     TRANSLATE lv_option TO UPPER CASE.
+    mo_configuration->map_option( changing cv_option = lv_option ).
+
     IF NOT mo_configuration->has_option( lv_option ).
       RAISE EXCEPTION TYPE zcx_sat_object_search
         EXPORTING

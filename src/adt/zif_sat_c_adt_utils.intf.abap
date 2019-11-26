@@ -10,9 +10,7 @@ INTERFACE zif_sat_c_adt_utils
     BEGIN OF c_resource_handler,
       object_search                 TYPE string VALUE 'ZCL_SAT_ADT_RES_OBJECT_SEARCH',
       object_search_cds             TYPE string VALUE 'ZCL_SAT_ADT_RES_OBJS_CDS',
-      object_search_dbtabview       TYPE string VALUE 'ZCL_SAT_ADT_RES_OBJS_DBTABVIEW',
       object_search_class_interface TYPE string VALUE 'ZCL_SAT_ADT_RES_OBJS_CLASSINTF',
-      object_search_all             TYPE string VALUE 'ZCL_SAT_ADT_RES_OBJS_ALLTYPES',
       element_info                  TYPE string VALUE 'ZCL_SAT_ADT_RES_ELEMENT_INFO',
       element_info_by_uri           TYPE string VALUE 'ZCL_SAT_ADT_RES_ELEMINFO_BYURI',
       cds_secondary_element_info    TYPE string VALUE 'ZCL_SAT_ADT_RES_CDS_SECELINFO',
@@ -53,38 +51,6 @@ INTERFACE zif_sat_c_adt_utils
     BEGIN OF c_cds_elem_info_parameter,
       show_association_name TYPE string VALUE 'showAssocName',
     END OF c_cds_elem_info_parameter.
-  CONSTANTS:
-    BEGIN OF c_general_search_params,
-      query                  TYPE string VALUE 'query',
-      object_name            TYPE string VALUE 'objectName',
-      object_type            TYPE string VALUE 'objectType',
-      max_rows               TYPE string VALUE 'maxRows',
-      user                   TYPE string VALUE 'userName',
-      release_state          TYPE string VALUE 'releaseState',
-      description            TYPE string VALUE 'description',
-      type                   TYPE string VALUE 'type',
-      package                TYPE string VALUE 'packageName',
-      use_and_for_filters    TYPE string VALUE 'useAndForFilters',
-      read_api_state         TYPE string VALUE 'withApiState',
-      get_all_results        TYPE string VALUE 'getAllResults',
-      read_package_hierarchy TYPE string VALUE 'withPackageHierarchy',
-    END OF c_general_search_params.
-
-  CONSTANTS:
-    BEGIN OF c_cds_search_params,
-      field       TYPE string VALUE 'fieldName',
-      select_from TYPE string VALUE 'selectSourceIn',
-      association TYPE string VALUE 'associatedIn',
-      annotation  TYPE string VALUE 'annotation',
-      param       TYPE string VALUE 'param',
-      params      TYPE string VALUE 'hasParams',
-      extended_by TYPE string VALUE 'extendedBy',
-    END OF c_cds_search_params.
-
-  CONSTANTS:
-    BEGIN OF c_dbtab_search_params,
-      field TYPE string VALUE 'fieldName',
-    END OF c_dbtab_search_params.
 
   CONSTANTS:
     BEGIN OF c_ddic_repo_access_params,

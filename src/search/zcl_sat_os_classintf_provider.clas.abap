@@ -11,6 +11,8 @@ CLASS zcl_sat_os_classintf_provider DEFINITION
     METHODS do_after_search
         REDEFINITION.
   PRIVATE SECTION.
+    aliases:
+       c_class_intf_search_option for zif_sat_c_object_search~c_class_intf_search_option.
     CONSTANTS:
       c_base_table TYPE string VALUE 'base',
       c_text_alias TYPE string VALUE 'text'.
@@ -54,7 +56,7 @@ CLASS zcl_sat_os_classintf_provider IMPLEMENTATION.
       CASE <ls_option>-option.
 
 *.......... Find objects via its description
-        WHEN zif_sat_c_object_search=>c_search_option-by_description.
+        WHEN c_general_search_options-description.
           add_join_table(
               iv_join_table = |{ zif_sat_c_select_source_id=>zsat_i_classinterfacet }|
               iv_alias      = c_text_alias
@@ -69,21 +71,21 @@ CLASS zcl_sat_os_classintf_provider IMPLEMENTATION.
           ).
 
 *.......... Find objects with a certain responsible person
-        WHEN zif_sat_c_object_search=>c_search_option-by_owner.
+        WHEN c_general_search_options-user.
           add_option_filter(
             iv_fieldname = |{ c_base_table }~{ 'createdby' }|
             it_values    = <ls_option>-value_range
           ).
 
 *.......... Find objects which exist in a certain development package
-        WHEN zif_sat_c_object_search=>c_search_option-by_package.
+        WHEN c_general_search_options-package.
           add_option_filter(
             iv_fieldname = |{ c_base_table }~{ 'developmentpackage' }|
             it_values    = <ls_option>-value_range
           ).
 
 *.......... Find only objects with a certain type
-        WHEN zif_sat_c_object_search=>c_search_option-by_type.
+        WHEN c_general_search_options-type.
 
       ENDCASE.
     ENDLOOP.
