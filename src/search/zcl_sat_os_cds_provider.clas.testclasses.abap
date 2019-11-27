@@ -61,7 +61,7 @@ CLASS ltcl_abap_unit IMPLEMENTATION.
     TRY.
         DATA(lo_query) = NEW lcl_query( iv_type  = zif_sat_c_object_search=>c_search_type-cds_view
                                         it_search_options = VALUE #(
-                                          ( option = zif_sat_c_object_search=>c_search_option-by_anno
+                                          ( option = zif_sat_c_object_search=>c_cds_search_params-annotation
                                             value_range = VALUE #(
                                               ( sign = 'E' option = 'CP' low = 'objectmodel.*usagetype.*sizecategory' )
                                               ( sign = 'E' option = 'CP' low = 'vmd*.private' option2 = 'EQ' high = 'true' )
@@ -87,10 +87,24 @@ CLASS ltcl_abap_unit IMPLEMENTATION.
         DATA(lo_query) = NEW lcl_query( iv_type  = zif_sat_c_object_search=>c_search_type-cds_view
                                         iv_query = 'C_'
                                         it_search_options = VALUE #(
-                                          ( option = zif_sat_c_object_search=>c_search_option-by_anno
+                                          ( option = zif_sat_c_object_search=>c_cds_search_params-annotation
                                             value_range = VALUE #(
                                               ( sign = 'E' option = 'CP' low = 'objectmodel.*usagetype' )
                                               ( sign = 'E' option = 'CP' low = 'vmd*.private' option2 = 'EQ' high = 'true' )
+                                            )
+                                          )
+                                      ) ).
+        mr_cut->zif_sat_object_search_provider~search(
+          EXPORTING io_query = lo_query
+          IMPORTING et_result = DATA(lt_result)
+        ).
+      CATCH zcx_sat_object_search INTO DATA(lx_search_error).
+    ENDTRY.
+
+    cl_abap_unit_assert=>assert_not_bound(
+        act  = lx_search_error
+    ).
+  ENDMETHOD.
                                             )
                                           )
                                       ) ).
