@@ -21,7 +21,7 @@ CLASS zcl_sat_adt_discovery_app DEFINITION
     CONSTANTS c_element_info_by_uri_uri TYPE string VALUE '/elementinfoByUri'.
     CONSTANTS c_nav_targets_uri TYPE string VALUE '/navigationtargets'.
     CONSTANTS c_static_uri TYPE string VALUE '/devepos/adt/saat'.
-    CONSTANTS c_app_title TYPE string VALUE 'Discovery Provider for DB Browser Utils'.
+    CONSTANTS c_app_title TYPE string VALUE 'Discovery Provider for ABAP Search and Analysis Tools'.
 
     METHODS if_adt_rest_rfc_application~get_static_uri_path
         REDEFINITION.
