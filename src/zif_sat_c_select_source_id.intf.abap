@@ -2,17 +2,19 @@ INTERFACE zif_sat_c_select_source_id
   PUBLIC .
 
   CONSTANTS:
-    "! Table for DDL Sources
+    "! <p class="shorttext synchronized" lang="en">Table for DDL Sources</p>
     ddddlsrc                      TYPE string VALUE 'DDDDLSRC',
-    "! Table for Texts of DDL Sources
+    "! <p class="shorttext synchronized" lang="en">Table for Texts of DDL Sources</p>
     ddddlsrct                     TYPE string VALUE 'DDDDLSRCT',
-    "! Table for Enduser texts of DDL Sources
+    "! <p class="shorttext synchronized" lang="en">Table for Enduser texts of DDL Sources</p>
     ddddlscr02bt                  TYPE string VALUE 'DDDDLSRC02BT',
-    "! Table for dependent objects of database views
+    "! <p class="shorttext synchronized" lang="en">Table for dependent objects of database views</p>
     ddldependency                 TYPE string VALUE 'DDLDEPENDENCY',
     zsat_i_ddldependency          TYPE string VALUE 'ZSAT_I_DDLDEPENDENCY',
-    "! Table for CDS Parameters
+    "! <p class="shorttext synchronized" lang="en">Table for CDS Parameters</p>
     dd10b                         TYPE string VALUE 'DD10B',
+    " <p class="shorttext synchronized" lang="en">Table for CDS Association Header</p>
+    dd08b                         TYPE string VALUE 'DD08B',
     zsat_i_associatedincds        TYPE string VALUE 'ZSAT_I_ASSOCIATEDINCDS',
     zsat_i_cdsfrompartentity      TYPE string VALUE 'ZSAT_I_CDSFROMPARTENTITY',
     zsat_i_databasetable          TYPE string VALUE 'ZSAT_I_DATABASETABLE',
