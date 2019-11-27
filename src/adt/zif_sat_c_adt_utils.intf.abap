@@ -10,7 +10,6 @@ INTERFACE zif_sat_c_adt_utils
     BEGIN OF c_resource_handler,
       object_search                 TYPE string VALUE 'ZCL_SAT_ADT_RES_OBJECT_SEARCH',
       object_search_cds             TYPE string VALUE 'ZCL_SAT_ADT_RES_OBJS_CDS',
-      object_search_class_interface TYPE string VALUE 'ZCL_SAT_ADT_RES_OBJS_CLASSINTF',
       element_info                  TYPE string VALUE 'ZCL_SAT_ADT_RES_ELEMENT_INFO',
       element_info_by_uri           TYPE string VALUE 'ZCL_SAT_ADT_RES_ELEMINFO_BYURI',
       cds_secondary_element_info    TYPE string VALUE 'ZCL_SAT_ADT_RES_CDS_SECELINFO',
