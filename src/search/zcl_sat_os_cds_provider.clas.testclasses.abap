@@ -48,7 +48,8 @@ CLASS ltcl_abap_unit DEFINITION FINAL FOR TESTING
 
     METHODS:
       test_negation_query FOR TESTING,
-      test_anno_exclusion FOR TESTING.
+      test_anno_exclusion FOR TESTING,
+      test_only_local_annos FOR TESTING.
 ENDCLASS.
 
 
@@ -80,17 +81,20 @@ CLASS ltcl_abap_unit IMPLEMENTATION.
     ).
   ENDMETHOD.
 
-  METHOD test_anno_exclusion.
+  METHOD test_only_local_annos.
     mr_cut = NEW #( ).
 
     TRY.
         DATA(lo_query) = NEW lcl_query( iv_type  = zif_sat_c_object_search=>c_search_type-cds_view
-                                        iv_query = 'C_'
                                         it_search_options = VALUE #(
-                                          ( option = zif_sat_c_object_search=>c_cds_search_params-annotation
+                                          ( option = zif_sat_c_object_search=>c_cds_search_params-only_local_assocs
                                             value_range = VALUE #(
-                                              ( sign = 'E' option = 'CP' low = 'objectmodel.*usagetype' )
-                                              ( sign = 'E' option = 'CP' low = 'vmd*.private' option2 = 'EQ' high = 'true' )
+                                              ( sign = 'I' option = 'EQ' low = abap_true )
+                                            )
+                                          )
+                                          ( option = zif_sat_c_object_search=>c_cds_search_params-association
+                                            value_range = VALUE #(
+                                              ( sign = 'I' option = 'EQ' low = 'I_PRODUCT' )
                                             )
                                           )
                                       ) ).
@@ -105,6 +109,18 @@ CLASS ltcl_abap_unit IMPLEMENTATION.
         act  = lx_search_error
     ).
   ENDMETHOD.
+
+  METHOD test_anno_exclusion.
+    mr_cut = NEW #( ).
+
+    TRY.
+        DATA(lo_query) = NEW lcl_query( iv_type  = zif_sat_c_object_search=>c_search_type-cds_view
+                                        iv_query = 'C_'
+                                        it_search_options = VALUE #(
+                                          ( option = zif_sat_c_object_search=>c_cds_search_params-annotation
+                                            value_range = VALUE #(
+                                              ( sign = 'E' option = 'CP' low = 'objectmodel.*usagetype' )
+                                              ( sign = 'E' option = 'CP' low = 'vmd*.private' option2 = 'EQ' high = 'true' )
                                             )
                                           )
                                       ) ).

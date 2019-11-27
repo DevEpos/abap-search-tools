@@ -26,6 +26,7 @@ CLASS zcl_sat_os_cds_provider DEFINITION
     DATA mv_anno_subquery TYPE string.
     DATA mv_select_from_subquery TYPE string.
     DATA mv_assoc_subquery TYPE string.
+    DATA mv_only_local_assoc_subquery TYPE string.
     DATA mv_param_subquery TYPE string.
     DATA mv_params_subquery TYPE string.
 
@@ -88,7 +89,6 @@ CLASS zcl_sat_os_cds_provider DEFINITION
         it_values TYPE ty_t_value_range.
     "! <p class="shorttext synchronized" lang="en">Add API state information for results</p>
     METHODS add_api_state_info.
-
 ENDCLASS.
 
 
@@ -103,9 +103,13 @@ CLASS zcl_sat_os_cds_provider IMPLEMENTATION.
     mv_anno_subquery = |SELECT DISTINCT entityid | && c_cr_lf &&
                        | FROM { zif_sat_c_select_source_id=>zsat_i_cdsannotation } | && c_cr_lf &&
                        | WHERE |.
-    mv_assoc_subquery = |SELECT DISTINCT ddlname | && c_cr_lf &&
-                        | FROM { zif_sat_c_select_source_id=>zsat_i_associatedincds } | && c_cr_lf &&
+    mv_assoc_subquery = |SELECT DISTINCT strucobjn | && c_cr_lf &&
+                        | FROM { zif_sat_c_select_source_id=>dd08b } | && c_cr_lf &&
                         | WHERE |.
+    mv_only_local_assoc_subquery = |SELECT DISTINCT strucobjn | && c_cr_lf &&
+                                   | FROM { zif_sat_c_select_source_id=>dd08b } | && c_cr_lf &&
+                                   | WHERE strucobjn_s = @space| && c_cr_lf &&
+                                   |   AND |.
     mv_select_from_subquery = |SELECT DISTINCT ddlviewname | && c_cr_lf &&
                               | FROM { zif_sat_c_select_source_id=>zsat_i_cdsfrompartentity } | && c_cr_lf &&
                               | WHERE |.
@@ -265,7 +269,7 @@ CLASS zcl_sat_os_cds_provider IMPLEMENTATION.
     ENDIF.
 
     IF mv_assoc_filter_count > 1.
-      add_having_clause( iv_field = |{ c_used_in_association_alias }~usedentity| iv_counter_compare = mv_assoc_filter_count ).
+      add_having_clause( iv_field = |{ c_used_in_association_alias }~strucobjn_t| iv_counter_compare = mv_assoc_filter_count ).
     ENDIF.
 
     IF mv_from_filter_count > 1.
@@ -451,6 +455,14 @@ CLASS zcl_sat_os_cds_provider IMPLEMENTATION.
 
 
   METHOD add_association_option_filter.
+    DATA: lf_only_local_assoc TYPE abap_bool.
+    DATA(lt_local_assocs_only_option) = VALUE #( mo_search_query->mt_search_options[
+                                                    option = c_cds_search_params-only_local_assocs
+                                                 ]-value_range OPTIONAL ).
+    IF lt_local_assocs_only_option IS NOT INITIAL.
+      lf_only_local_assoc = lt_local_assocs_only_option[ 1 ]-low.
+    ENDIF.
+
     split_including_excluding(
       EXPORTING it_values    = it_values
       IMPORTING et_including = DATA(lt_including)
@@ -459,26 +471,36 @@ CLASS zcl_sat_os_cds_provider IMPLEMENTATION.
 
     IF lt_excluding IS NOT INITIAL.
       create_not_in_filter(
-          iv_subquery_fieldname = 'usedentity'
+          iv_subquery_fieldname = 'strucobjn_t'
           iv_fieldname          = |{ c_base_alias }~ddlname|
           it_excluding          = lt_excluding
-          iv_subquery           = mv_assoc_subquery
+          iv_subquery           = COND #( WHEN lf_only_local_assoc = abap_true THEN
+                                            mv_only_local_assoc_subquery
+                                          ELSE
+                                            mv_assoc_subquery )
       ).
     ENDIF.
 
     IF lt_including IS NOT INITIAL.
       add_join_table(
-          iv_join_table = |{ zif_sat_c_select_source_id=>zsat_i_associatedincds }|
+          iv_join_table = |{ zif_sat_c_select_source_id=>dd08b }|
           iv_alias      = c_used_in_association_alias
           it_conditions = VALUE #(
-            ( field = 'ddlname' ref_field = 'ddlname' ref_table_alias = c_base_alias type = zif_sat_c_join_cond_type=>field )
+            ( field = 'strucobjn' ref_field = 'ddlname' ref_table_alias = c_base_alias type = zif_sat_c_join_cond_type=>field )
           )
       ).
 
       add_option_filter(
-          iv_fieldname = |{ c_used_in_association_alias }~usedentity|
+          iv_fieldname = |{ c_used_in_association_alias }~strucobjn_t|
           it_values    = it_values
       ).
+      IF lf_only_local_assoc = abap_true.
+*...... Only the locally defined Associations are considered as a usage
+        add_option_filter(
+            iv_fieldname = |{ c_used_in_association_alias }~strucobjn_s|
+            it_values    = VALUE #( ( sign = zif_sat_c_options=>including option = zif_sat_c_options=>equals ) )
+        ).
+      ENDIF.
       mv_assoc_filter_count = lines( lt_including ).
     ENDIF.
   ENDMETHOD.
@@ -591,5 +613,6 @@ CLASS zcl_sat_os_cds_provider IMPLEMENTATION.
       <ls_result>-api_state = VALUE #( lt_api_states[ entity_id = <ls_result>-secondary_entity_id ]-api_state OPTIONAL ).
     ENDLOOP.
   ENDMETHOD.
+
 
 ENDCLASS.

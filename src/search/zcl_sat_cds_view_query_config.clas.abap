@@ -37,6 +37,13 @@ CLASS zcl_sat_cds_view_query_config IMPLEMENTATION.
       ( option = c_cds_options-extended_by allowed_length = 30 no_negation = abap_true )
       ( option = c_general_options-max_rows single = abap_true no_negation = abap_true )
     ).
+
+
+    IF sy-saprl >= 752.
+      mt_options = VALUE #( BASE mt_options
+        ( option = c_cds_options-only_local_assocs single = abap_true )
+      ).
+    ENDIF.
   ENDMETHOD.
 
   METHOD zif_sat_object_search_config~get_type.
