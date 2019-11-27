@@ -8,7 +8,8 @@ CLASS zcl_sat_object_query_parser DEFINITION
     INTERFACES zif_sat_c_object_search.
     INTERFACES zif_sat_ty_object_search.
     ALIASES:
-      c_search_option FOR zif_sat_c_object_search~c_search_option,
+      c_general_search_options FOR zif_sat_c_object_search~c_general_search_params,
+      c_cds_search_params  for zif_sat_c_object_search~c_cds_search_params,
       c_class_intf_options FOR zif_sat_c_object_search~c_class_intf_search_option,
       ty_t_search_option FOR zif_sat_ty_object_search~ty_t_search_option,
       ty_s_search_option FOR zif_sat_ty_object_search~ty_s_search_option.
@@ -201,15 +202,15 @@ CLASS zcl_sat_object_query_parser IMPLEMENTATION.
     ELSE.
       CASE iv_option.
 
-        WHEN c_search_option-by_description OR
-             c_search_option-by_anno.
+        WHEN c_general_search_options-description OR
+             c_cds_search_params-annotation.
 
         WHEN OTHERS.
           TRANSLATE cv_value TO UPPER CASE.
       ENDCASE.
     ENDIF.
 
-    IF iv_option = c_search_option-by_owner.
+    IF iv_option = c_general_search_options-user.
       IF  cv_value = 'ME'.
         cv_value = sy-uname.
       ELSEIF cv_value CP '!ME'.
@@ -300,7 +301,7 @@ CLASS zcl_sat_object_query_parser IMPLEMENTATION.
 *.. Special case for annotation value. As it is possible to annotate via
 *... Array/Object notation it is required to prefix the dots with a wildcard as
 *... annotations are stored with a <annokey1>$[0-9]$.<annokey2> like syntax
-    IF is_option-option = c_search_option-by_anno.
+    IF is_option-option = c_cds_search_params-annotation.
       lv_value = replace( val = lv_value occ = 0 sub = '.' with = '*.' ).
       DATA(lv_value_length) = strlen( lv_value ) - 1.
 **      IF lv_value IS NOT INITIAL AND lv_value+lv_value_length(1) <> '*'.
@@ -361,7 +362,7 @@ CLASS zcl_sat_object_query_parser IMPLEMENTATION.
             textid = zcx_sat_object_search=>no_intervals_for_option
             msgv1  = |{ SWITCH #(
                           lv_option
-                          WHEN c_search_option-max_rows THEN
+                          WHEN c_general_search_options-max_rows THEN
                             |{ lv_option }({ 'Max Rows'(001) })|
                           ELSE lv_option
                         ) }|.
@@ -402,7 +403,7 @@ CLASS zcl_sat_object_query_parser IMPLEMENTATION.
 
     LOOP AT ct_options ASSIGNING FIELD-SYMBOL(<ls_option>).
 
-      IF <ls_option>-option = c_search_option-by_package.
+      IF <ls_option>-option = c_general_search_options-package.
         lt_package_range = VALUE #( FOR range IN <ls_option>-value_range WHERE ( option = zif_sat_c_options=>contains_pattern ) ( range ) ).
 
         LOOP AT <ls_option>-value_range ASSIGNING FIELD-SYMBOL(<ls_value_range>) WHERE option <> zif_sat_c_options=>contains_pattern.
