@@ -3,9 +3,10 @@
  <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
   <asx:values>
    <DDLS>
-    <DDLNAME>ZSAT_I_CLASSINTERFACE</DDLNAME>
+    <DDLNAME>ZSAT_I_SUPERCLASS</DDLNAME>
     <DDLANGUAGE>E</DDLANGUAGE>
-    <DDTEXT>ABAP OO Class/Interface</DDTEXT>
+    <DDTEXT>Super class releationship</DDTEXT>
+    <SOURCE_TYPE>V</SOURCE_TYPE>
    </DDLS>
   </asx:values>
  </asx:abap>

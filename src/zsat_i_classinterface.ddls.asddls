@@ -2,41 +2,37 @@
 @AbapCatalog.compiler.compareFilter: true
 @AbapCatalog.preserveKey: true
 @AccessControl.authorizationCheck: #CHECK
-@EndUserText.label: 'Properties of Class/Interface'
+@EndUserText.label: 'ABAP OO Class/Interface'
 
 define view ZSAT_I_ClassInterface
-  as select from seoclassdf as ClassIntf
-    inner join   tadir      as Repo on  ClassIntf.clsname = Repo.obj_name
-                                    and Repo.pgmid        = 'R3TR'
-                                    and (
-                                       Repo.object        = 'CLAS'
-                                       or Repo.object     = 'INTF'
-                                     )
+  as select from ZSAT_P_Class as Class
+    inner join   tadir        as Repo on  Class.ClassName = Repo.obj_name
+                                      and Class.TadirType = Repo.object
+                                      and Repo.pgmid      = 'R3TR'
 {
-  key ClassIntf.clsname         as ClassInterface,
-      Repo.devclass             as DevelopmentPackage,
-      Repo.object               as TadirType,
-      ClassIntf.category        as Category,
-      ClassIntf.exposure        as Exposure,
-      ClassIntf.state           as State,
-      ClassIntf.author          as CreatedBy,
-      ClassIntf.createdon       as CreatedOn,
-      ClassIntf.changedby       as ChangedBy,
-      ClassIntf.changedon       as ChangedOn,
-      ClassIntf.clsabstrct      as IsAbstract,
-      ClassIntf.clsfinal        as IsFinal,
-      ClassIntf.refclsname      as ReferencedObject,
-      ClassIntf.fixpt           as HasFixPointArithmetic,
-      ClassIntf.unicode         as ABAPVersion,
-      ClassIntf.rstat           as ProgramStatus,
-      ClassIntf.r3release       as ReleaseNumber,
-      ClassIntf.msg_id          as MessageClass,
-      ClassIntf.clsproxy        as ProxyClassCategory,
-      ClassIntf.clssharedmemory as IsSharedMemoryEnabled,
-      ClassIntf.with_unit_tests as HasUnitTests,
-      ClassIntf.duration_type   as DurationType,
-      ClassIntf.risk_level      as RiskLevel,
-      ClassIntf.within_package  as IsOpenedForPackage
+      //ZSAT_P_Class
+  key ClassName,
+      TadirType,
+      Repo.devclass as DevelopmentPackage,
+      Category,
+      Exposure,
+      State,
+      CreatedBy,
+      CreatedOn,
+      ChangedBy,
+      ChangedOn,
+      IsAbstract,
+      IsFinal,
+      ReferencedObject,
+      HasFixPointArithmetic,
+      ABAPVersion,
+      ProgramStatus,
+      ReleaseNumber,
+      MessageClass,
+      ProxyClassCategory,
+      IsSharedMemoryEnabled,
+      HasUnitTests,
+      DurationType,
+      RiskLevel,
+      IsOpenedForPackage
 }
-where
-  version = '1' // only active classes
