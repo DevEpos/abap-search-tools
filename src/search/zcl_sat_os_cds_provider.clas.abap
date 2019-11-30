@@ -48,11 +48,6 @@ CLASS zcl_sat_os_cds_provider DEFINITION
     DATA mv_from_filter_count TYPE i.
     DATA mv_assoc_filter_count TYPE i.
 
-    "! <p class="shorttext synchronized" lang="en">Create filter for TYPE option</p>
-    "!
-    METHODS add_type_option_filter
-      IMPORTING
-        it_values TYPE ty_t_value_range.
     "! <p class="shorttext synchronized" lang="en">Create filter for ANNO option</p>
     "!
     METHODS add_anno_option_filter
@@ -204,7 +199,10 @@ CLASS zcl_sat_os_cds_provider IMPLEMENTATION.
 
 *.......... Find views for a certain type e.g. function, hierarchy, view
         WHEN c_general_search_options-type.
-          add_type_option_filter( it_values = <ls_option>-value_range ).
+          add_option_filter(
+              iv_fieldname = 'sourcetype'
+              it_values    = <ls_option>-value_range
+          ).
       ENDCASE.
     ENDLOOP.
 
@@ -355,30 +353,6 @@ CLASS zcl_sat_os_cds_provider IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD add_type_option_filter.
-    DATA: lt_type_filters TYPE ty_t_value_range.
-
-    LOOP AT it_values INTO DATA(ls_value).
-      CASE ls_value-low.
-
-        WHEN zif_sat_c_object_search=>c_type_option_value-extend.
-          ls_value-low = zif_sat_c_cds_view_type=>extend.
-
-        WHEN zif_sat_c_object_search=>c_type_option_value-view.
-          ls_value-low = zif_sat_c_cds_view_type=>view.
-
-      ENDCASE.
-
-      lt_type_filters = VALUE #( BASE lt_type_filters ( ls_value ) ).
-    ENDLOOP.
-
-    add_option_filter(
-        iv_fieldname = 'sourcetype'
-        it_values    = lt_type_filters
-    ).
-  ENDMETHOD.
-
-
   METHOD add_association_option_filter.
     split_including_excluding(
       EXPORTING it_values    = it_values
@@ -488,7 +462,8 @@ CLASS zcl_sat_os_cds_provider IMPLEMENTATION.
           value         = <ls_value_range>-low
           value_type    = zif_sat_c_join_cond_val_type=>typed_input
           tabname_alias = c_extension_view_alias
-          and_or        = lv_and_or )
+          and_or        = lv_and_or
+          type          = zif_sat_c_join_cond_type=>filter )
       ).
       lv_and_or = zif_sat_c_selection_condition=>or.
     ENDLOOP.

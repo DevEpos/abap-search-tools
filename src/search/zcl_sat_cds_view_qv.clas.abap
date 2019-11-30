@@ -12,7 +12,6 @@ CLASS zcl_sat_cds_view_qv DEFINITION
         REDEFINITION.
   PROTECTED SECTION.
   PRIVATE SECTION.
-    CLASS-DATA gt_api_states TYPE RANGE OF string.
 ENDCLASS.
 
 
@@ -25,14 +24,11 @@ CLASS zcl_sat_cds_view_qv IMPLEMENTATION.
     super->validate(
         iv_option = iv_option
         iv_value  = iv_value
+        iv_value2 = iv_value2
     ).
 
-*.. Remove exclusion characters before the actual validation
-    DATA(lv_value) = iv_value.
-
     IF iv_option = zif_sat_c_object_search=>c_general_search_params-type.
-      zcl_sat_search_util=>remove_exclusion_string( CHANGING cv_value = lv_value ).
-      CASE lv_value.
+      CASE iv_value.
 
         WHEN zif_sat_c_object_search=>c_type_option_value-function OR
              zif_sat_c_object_search=>c_type_option_value-hierarchy OR
@@ -44,8 +40,8 @@ CLASS zcl_sat_cds_view_qv IMPLEMENTATION.
         WHEN OTHERS.
           lf_invalid = abap_true.
       ENDCASE.
-    ELSEIF iv_option = zif_sat_c_object_search=>c_search_option-by_params.
-      IF lv_value <> 'TRUE' AND lv_value <> 'FALSE'.
+    ELSEIF iv_option = zif_sat_c_object_search=>c_cds_search_params-params.
+      IF iv_value <> 'TRUE' AND iv_value <> 'FALSE'.
         lf_invalid = abap_true.
       ENDIF.
     ENDIF.
@@ -55,7 +51,7 @@ CLASS zcl_sat_cds_view_qv IMPLEMENTATION.
         EXPORTING
           textid = zcx_sat_object_search=>invalid_option_value
           msgv1  = |{ iv_option }|
-          msgv2  = |{ lv_value }|.
+          msgv2  = |{ iv_value }|.
     ENDIF.
   ENDMETHOD.
 

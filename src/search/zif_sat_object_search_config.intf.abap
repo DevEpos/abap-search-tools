@@ -8,6 +8,7 @@ INTERFACE zif_sat_object_search_config
     BEGIN OF ty_s_option_setting,
       option         TYPE string,
       allowed_length TYPE i,
+      no_uppercase   TYPE abap_bool,
       single         TYPE abap_bool,
       key_value      TYPE abap_bool,
       no_negation    TYPE abap_bool,

@@ -96,9 +96,11 @@ CLASS zcl_sat_adt_discovery_app IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD register_object_search_res.
+    CONSTANTS: lc_object_search_handler TYPE string VALUE 'ZCL_SAT_ADT_RES_OBJECT_SEARCH'.
+
     DATA(lo_search_collection) = io_registry->register_discoverable_resource(
         url             = c_object_search_uri
-        handler_class   = zif_sat_c_adt_utils=>c_resource_handler-object_search
+        handler_class   = lc_object_search_handler
         description     = 'Extended Object Search'
         category_scheme = c_utils_root_scheme && c_object_search_uri
         category_term   = 'search'
@@ -108,19 +110,19 @@ CLASS zcl_sat_adt_discovery_app IMPLEMENTATION.
                                 io_search_config    = CAST #( zcl_sat_ioc_lookup=>get_instance(
                                                                 iv_contract = 'zif_sat_object_search_config'
                                                                 iv_filter   = |{ zif_sat_c_object_search=>c_search_type-cds_view }| ) )
-                                iv_handler_class    = zif_sat_c_adt_utils=>c_resource_handler-object_search_cds
+                                iv_handler_class    = 'ZCL_SAT_ADT_RES_OBJS_CDS'
                                 iv_search_type      = zif_sat_c_object_search=>c_search_type-cds_view ).
     reg_object_search_template( io_collection       = lo_search_collection
                                 io_search_config    = CAST #( zcl_sat_ioc_lookup=>get_instance(
                                                                 iv_contract = 'zif_sat_object_search_config'
                                                                 iv_filter   = |{ zif_sat_c_object_search=>c_search_type-db_tab_view }| ) )
-                                iv_handler_class    = zif_sat_c_adt_utils=>c_resource_handler-object_search
+                                iv_handler_class    = lc_object_search_handler
                                 iv_search_type      = zif_sat_c_object_search=>c_search_type-db_tab_view ).
     reg_object_search_template( io_collection       = lo_search_collection
                                 io_search_config    = CAST #( zcl_sat_ioc_lookup=>get_instance(
                                                                 iv_contract = 'zif_sat_object_search_config'
                                                                 iv_filter   = |{ zif_sat_c_object_search=>c_search_type-class_interface }| ) )
-                                iv_handler_class    = zif_sat_c_adt_utils=>c_resource_handler-object_search
+                                iv_handler_class    = lc_object_search_handler
                                 iv_search_type      = zif_sat_c_object_search=>c_search_type-class_interface ).
   ENDMETHOD.
 
@@ -157,9 +159,11 @@ CLASS zcl_sat_adt_discovery_app IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD register_element_info.
+    CONSTANTS: lc_eleminfo_handler TYPE string VALUE 'ZCL_SAT_ADT_RES_ELEMENT_INFO'.
+
     DATA(lo_element_info_collection) = io_registry->register_discoverable_resource(
         url             = c_element_info_uri
-        handler_class   = zif_sat_c_adt_utils=>c_resource_handler-element_info
+        handler_class   = lc_eleminfo_handler
         description     = 'Element info provider'
         category_scheme = c_utils_root_scheme && c_element_info_uri
         category_term   = 'elementinfo'
@@ -171,7 +175,7 @@ CLASS zcl_sat_adt_discovery_app IMPLEMENTATION.
                       |{ zif_sat_c_adt_utils=>c_element_info_parameter-object_type }\}| &&
                       |\{&{ zif_sat_c_adt_utils=>c_cds_elem_info_parameter-show_association_name }*\}| &&
                       |\{&{ zif_sat_c_adt_utils=>c_element_info_parameter-basic_info }*\}|
-      handler_class = zif_sat_c_adt_utils=>c_resource_handler-element_info
+      handler_class = lc_eleminfo_handler
       relation      = 'http://www.devepos.com/adt/relations/saat/elementinfo'
     ).
 
@@ -180,7 +184,7 @@ CLASS zcl_sat_adt_discovery_app IMPLEMENTATION.
       template      = |{ c_element_info_by_uri_uri }\{?{ zif_sat_c_adt_utils=>c_element_info_parameter-uri }\}| &&
                       |\{&{ zif_sat_c_adt_utils=>c_cds_elem_info_parameter-show_association_name }*\}| &&
                       |\{&{ zif_sat_c_adt_utils=>c_element_info_parameter-basic_info }*\}|
-      handler_class = zif_sat_c_adt_utils=>c_resource_handler-element_info_by_uri
+      handler_class = 'ZCL_SAT_ADT_RES_ELEMINFO_BYURI'
       relation      = 'http://www.devepos.com/adt/relations/saat/elementinfo/byUri'
     ).
 
@@ -188,7 +192,7 @@ CLASS zcl_sat_adt_discovery_app IMPLEMENTATION.
     lo_element_info_collection->register_disc_res_w_template(
       template      = '/elementinfo/cds/secondary' &&
                       |\{?{ zif_sat_c_adt_utils=>c_element_info_parameter-name }\}|
-      handler_class = zif_sat_c_adt_utils=>c_resource_handler-cds_secondary_element_info
+      handler_class = 'ZCL_SAT_ADT_RES_CDS_SECELINFO'
       relation      = 'http://www.devepos.com/adt/relations/saat/elementinfo/cds/secondary'
     ).
   ENDMETHOD.
@@ -200,7 +204,7 @@ CLASS zcl_sat_adt_discovery_app IMPLEMENTATION.
 
     io_registry->register_discoverable_resource(
         url             = '/cdsfield'
-        handler_class   = zif_sat_c_adt_utils=>c_resource_handler-cds_fields
+        handler_class   = 'ZCL_SAT_ADT_RES_CDSFIELD_VH'
         description     = 'Search for CDS View field.'
         category_scheme = lv_object_search_scheme
         category_term   = 'cdsfield'
@@ -208,7 +212,7 @@ CLASS zcl_sat_adt_discovery_app IMPLEMENTATION.
 
     io_registry->register_discoverable_resource(
         url             = '/tablefield'
-        handler_class   = zif_sat_c_adt_utils=>c_resource_handler-db_table_fields
+        handler_class   = 'ZCL_SAT_ADT_RES_TABFIELD_VH'
         description     = 'Search for Table Field'
         category_scheme = lv_object_search_scheme
         category_term   = 'tablefield'
@@ -216,7 +220,7 @@ CLASS zcl_sat_adt_discovery_app IMPLEMENTATION.
 
     io_registry->register_discoverable_resource(
         url             = '/dbentity'
-        handler_class   = zif_sat_c_adt_utils=>c_resource_handler-database_entities
+        handler_class   = 'ZCL_SAT_ADT_RES_DB_ENTITY_VH'
         description     = 'Search for Database entities'
         category_scheme = lv_object_search_scheme
         category_term   = 'dbentity'
@@ -224,7 +228,7 @@ CLASS zcl_sat_adt_discovery_app IMPLEMENTATION.
 
     io_registry->register_discoverable_resource(
         url             = '/cdstype'
-        handler_class   = zif_sat_c_adt_utils=>c_resource_handler-cds_types
+        handler_class   = 'ZCL_SAT_ADT_RES_CDS_TYPE_VH'
         description     = 'Search for CDS source types'
         category_scheme = lv_object_search_scheme
         category_term   = 'cdstype'
@@ -232,7 +236,7 @@ CLASS zcl_sat_adt_discovery_app IMPLEMENTATION.
 
     io_registry->register_discoverable_resource(
         url             = '/cdsextension'
-        handler_class   = zif_sat_c_adt_utils=>c_resource_handler-cds_extensions
+        handler_class   = 'ZCL_SAT_ADT_RES_CDS_EXT_VH'
         description     = 'Search for CDS Extension'
         category_scheme = lv_object_search_scheme
         category_term   = 'cdsextension'
@@ -240,18 +244,44 @@ CLASS zcl_sat_adt_discovery_app IMPLEMENTATION.
 
     io_registry->register_discoverable_resource(
         url             = '/tabletype'
-        handler_class   = zif_sat_c_adt_utils=>c_resource_handler-table_types
+        handler_class   = 'ZCL_SAT_ADT_RES_TABLE_TYPE_VH'
         description     = 'Resource for Table Types'
         category_scheme = lv_object_search_scheme
         category_term   = 'tabletype'
     ).
 
+    io_registry->register_discoverable_resource(
+        url             = '/classcategory'
+        handler_class   = 'ZCL_SAT_ADT_RES_CLASS_CATEG_VH'
+        description     = 'Resource for ABAP Class Categories'
+        category_scheme = lv_object_search_scheme
+        category_term   = 'classcategory'
+    ).
+
+    io_registry->register_discoverable_resource(
+        url             = '/classflag'
+        handler_class   = 'ZCL_SAT_ADT_RES_CLASS_FLAG_VH'
+        description     = 'Resource for ABAP Class Flags'
+        category_scheme = lv_object_search_scheme
+        category_term   = 'classflag'
+    ).
+
+    io_registry->register_discoverable_resource(
+        url             = '/classtype'
+        handler_class   = 'ZCL_SAT_ADT_RES_CLASS_TYPE_VH'
+        description     = 'Resource for Class Type'
+        category_scheme = lv_object_search_scheme
+        category_term   = 'classtype'
+    ).
+
   ENDMETHOD.
 
   METHOD register_sapaox_launcher.
+    CONSTANTS: lc_handler TYPE string VALUE 'ZCL_SAT_ADT_RES_AOX_LAUNCHER'.
+
     DATA(lo_element_info_collection) = io_registry->register_discoverable_resource(
         url             = c_sapaox_launcher_uri
-        handler_class   = zif_sat_c_adt_utils=>c_resource_handler-sapaox_launcher
+        handler_class   = lc_handler
         description     = 'Analysis for Office Launcher'
         category_scheme = c_utils_root_scheme && c_sapaox_launcher_uri
         category_term   = 'sapaox'
@@ -263,7 +293,7 @@ CLASS zcl_sat_adt_discovery_app IMPLEMENTATION.
 *.. Register URI template for Analyis for Office launcher
     lo_element_info_collection->register_disc_res_w_template(
       template      = lv_template
-      handler_class = zif_sat_c_adt_utils=>c_resource_handler-sapaox_launcher
+      handler_class = lc_handler
       relation      = c_utils_rel_scheme && c_sapaox_launcher_uri
     ).
 
@@ -273,7 +303,7 @@ CLASS zcl_sat_adt_discovery_app IMPLEMENTATION.
   METHOD register_cds_analysis.
     DATA(lo_element_info_collection) = io_registry->register_discoverable_resource(
         url             = c_cds_analysis_uri
-        handler_class   = zif_sat_c_adt_utils=>c_resource_handler-cds_analysis
+        handler_class   = 'ZCL_SAT_ADT_RES_CDS_ANALYSIS'
         description     = 'Resource for CDS Analysis'
         category_scheme = c_utils_root_scheme && c_cds_analysis_uri
         category_term   = 'cdsanalysis'
@@ -283,15 +313,17 @@ CLASS zcl_sat_adt_discovery_app IMPLEMENTATION.
     lo_element_info_collection->register_disc_res_w_template(
       template      = |{ c_cds_top_down_analysis_uri }\{?{ zif_sat_c_adt_utils=>c_cds_analysis_parameter-cds_name }\}| &&
                       |\{&{ zif_sat_c_adt_utils=>c_cds_analysis_parameter-with_associations }*\}|
-      handler_class = zif_sat_c_adt_utils=>c_resource_handler-cds_top_down_analysis
+      handler_class = 'ZCL_SAT_ADT_RES_CDS_A_TOPDOWN'
       relation      = c_utils_rel_scheme && c_cds_top_down_analysis_uri
     ).
   ENDMETHOD.
 
   METHOD register_navigation_targets.
+    CONSTANTS: lc_handler TYPE string VALUE 'ZCL_SAT_ADT_RES_NAV_TARGETS'.
+
     DATA(lo_element_info_collection) = io_registry->register_discoverable_resource(
         url             = c_nav_targets_uri
-        handler_class   = zif_sat_c_adt_utils=>c_resource_handler-navigation_targets
+        handler_class   = lc_handler
         description     = 'Resource for Navigation targets'
         category_scheme = c_utils_root_scheme && c_nav_targets_uri
         category_term   = 'navigationtargets'
@@ -300,7 +332,7 @@ CLASS zcl_sat_adt_discovery_app IMPLEMENTATION.
     lo_element_info_collection->register_disc_res_w_template(
       template      = |{ c_nav_targets_uri }\{?{ zif_sat_c_adt_utils=>c_element_info_parameter-name }\}| &&
                       |\{&{ zif_sat_c_adt_utils=>c_element_info_parameter-object_type }\}|
-      handler_class = zif_sat_c_adt_utils=>c_resource_handler-navigation_targets
+      handler_class = lc_handler
       relation      = c_utils_rel_scheme && c_nav_targets_uri
     ).
 
@@ -311,7 +343,7 @@ CLASS zcl_sat_adt_discovery_app IMPLEMENTATION.
 *.. Register resource for reading the hierarchy or where-used list of Table / View / CDS Field
     DATA(lo_element_info_collection) = io_registry->register_discoverable_resource(
        url             = c_column_info_uri
-       handler_class   = zif_sat_c_adt_utils=>c_resource_handler-column_info
+       handler_class   = 'ZCL_SAT_ADT_RES_COLUMN_INFO'
        description     = 'Resource for reading information about a column of an entity'
        category_scheme = c_utils_root_scheme && c_column_info_uri
        category_term   = 'column-information'
@@ -323,17 +355,18 @@ CLASS zcl_sat_adt_discovery_app IMPLEMENTATION.
                       |\{&{ zif_sat_c_adt_utils=>c_db_fields_info_parameter-field }\}| &&
                       |\{&{ zif_sat_c_adt_utils=>c_db_fields_info_parameter-search_calc_fields }*\}| &&
                       |\{&{ zif_sat_c_adt_utils=>c_db_fields_info_parameter-search_db_views }*\}|
-      handler_class = zif_sat_c_adt_utils=>c_resource_handler-column_where_used_list
+      handler_class = 'ZCL_SAT_ADT_RES_COL_WHERE_USED'
       relation      = c_utils_rel_scheme && c_column_where_used_uri
     ).
   ENDMETHOD.
 
 
   METHOD register_ddic_repo_access.
+    CONSTANTS: lc_handler TYPE string VALUE 'ZCL_SAT_ADT_RES_DDIC_REP_ACC'.
 **.. Register resource for DDIC Repository access
     DATA(lo_element_info_collection) = io_registry->register_discoverable_resource(
        url             = c_db_fields_info_uri
-       handler_class   = zif_sat_c_adt_utils=>c_resource_handler-ddic_repo_access
+       handler_class   = lc_handler
        description     = 'Resource for Repository DDIC Access'
        category_scheme = c_utils_root_scheme && c_ddic_repo_access_uri
        category_term   = 'ddicAccess'
@@ -344,7 +377,7 @@ CLASS zcl_sat_adt_discovery_app IMPLEMENTATION.
                       |\{&{ zif_sat_c_adt_utils=>c_ddic_repo_access_params-uri }*\}| &&
                       |\{&{ zif_sat_c_adt_utils=>c_ddic_repo_access_params-paths }*\}| &&
                       |\{&{ zif_sat_c_adt_utils=>c_ddic_repo_access_params-filters }*\}|
-      handler_class = zif_sat_c_adt_utils=>c_resource_handler-ddic_repo_access
+      handler_class = lc_handler
       relation      = c_utils_rel_scheme && c_ddic_repo_access_uri
     ).
   ENDMETHOD.

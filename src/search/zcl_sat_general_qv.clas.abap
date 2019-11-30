@@ -34,6 +34,7 @@ CLASS zcl_sat_general_qv IMPLEMENTATION.
               textid = zcx_sat_object_search=>option_val_not_numeric
               msgv1  = |{ iv_option }|.
         ENDIF.
+
     ENDCASE.
   ENDMETHOD.
 

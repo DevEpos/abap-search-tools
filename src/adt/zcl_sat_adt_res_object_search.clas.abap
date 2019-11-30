@@ -212,9 +212,10 @@ CLASS zcl_sat_adt_res_object_search IMPLEMENTATION.
     LOOP AT mt_query_result ASSIGNING FIELD-SYMBOL(<ls_search_result>).
       APPEND INITIAL LINE TO <lt_raw_result> ASSIGNING <ls_result>.
       DATA(ls_object_reference) = zcl_sat_adt_util=>create_adt_uri(
-            iv_type = <ls_search_result>-entity_type
-            iv_name = <ls_search_result>-entity_id
-            iv_name2 = <ls_search_result>-secondary_entity_id ).
+            iv_type       = <ls_search_result>-entity_type
+            iv_tadir_type = <ls_search_result>-tadir_type
+            iv_name       = <ls_search_result>-entity_id
+            iv_name2      = <ls_search_result>-secondary_entity_id ).
       <ls_result> = VALUE #(
         name             = <ls_search_result>-entity_id
         raw_name         = <ls_search_result>-entity_id_raw

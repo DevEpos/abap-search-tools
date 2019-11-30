@@ -6,30 +6,6 @@ INTERFACE zif_sat_c_adt_utils
   CONSTANTS c_ddl_pos_uri_segment TYPE string VALUE '/source/main#start='.
 
   CONSTANTS:
-    "! <p class="shorttext synchronized" lang="en">IDs of ADT Resource Handlers</p>
-    BEGIN OF c_resource_handler,
-      object_search                 TYPE string VALUE 'ZCL_SAT_ADT_RES_OBJECT_SEARCH',
-      object_search_cds             TYPE string VALUE 'ZCL_SAT_ADT_RES_OBJS_CDS',
-      element_info                  TYPE string VALUE 'ZCL_SAT_ADT_RES_ELEMENT_INFO',
-      element_info_by_uri           TYPE string VALUE 'ZCL_SAT_ADT_RES_ELEMINFO_BYURI',
-      cds_secondary_element_info    TYPE string VALUE 'ZCL_SAT_ADT_RES_CDS_SECELINFO',
-      cds_fields                    TYPE string VALUE 'ZCL_SAT_ADT_RES_CDSFIELD_VH',
-      db_table_fields               TYPE string VALUE 'ZCL_SAT_ADT_RES_TABFIELD_VH',
-      annotations                   TYPE string VALUE 'ZCL_SAT_ADT_RES_ANNO_VH',
-      database_entities             TYPE string VALUE 'ZCL_SAT_ADT_RES_DB_ENTITY_VH',
-      cds_types                     TYPE string VALUE 'ZCL_SAT_ADT_RES_CDS_TYPE_VH',
-      table_types                   TYPE string VALUE 'ZCL_SAT_ADT_RES_TABLE_TYPE_VH',
-      cds_extensions                TYPE string VALUE 'ZCL_SAT_ADT_RES_CDS_EXT_VH',
-      sapaox_launcher               TYPE string VALUE 'ZCL_SAT_ADT_RES_AOX_LAUNCHER',
-      cds_analysis                  TYPE string VALUE 'ZCL_SAT_ADT_RES_CDS_ANALYSIS',
-      cds_top_down_analysis         TYPE string VALUE 'ZCL_SAT_ADT_RES_CDS_A_TOPDOWN',
-      navigation_targets            TYPE string VALUE 'ZCL_SAT_ADT_RES_NAV_TARGETS',
-      column_info                   TYPE string VALUE 'ZCL_SAT_ADT_RES_COLUMN_INFO',
-      column_where_used_list        TYPE string VALUE 'ZCL_SAT_ADT_RES_COL_WHERE_USED',
-      ddic_repo_access              TYPE string VALUE 'ZCL_SAT_ADT_RES_DDIC_REP_ACC',
-    END OF c_resource_handler.
-
-  CONSTANTS:
     BEGIN OF c_element_info_parameter,
       uri         TYPE string VALUE 'objectUri',
       name        TYPE string VALUE 'objectName',

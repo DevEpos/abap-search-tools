@@ -1,5 +1,5 @@
 @AbapCatalog.sqlViewName: 'ZSATICLSFLAGS'
-@AbapCatalog.compiler.compareFilter: true
+@AbapCatalog.compiler.CompareFilter: true
 @AbapCatalog.preserveKey: true
 @AccessControl.authorizationCheck: #CHECK
 @EndUserText.label: 'Flags in a Class/Interface'
@@ -50,3 +50,13 @@ union select distinct from seoclassdf
 where
       version    = '1'
   and clsabstrct = 'X'
+union select distinct from seoclassdf
+
+{
+  key clsname    as ClassName,
+      'UNICODE' as Flag
+}
+where
+      version    = '1'
+  and unicode    = 'X'
+  

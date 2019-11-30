@@ -9,26 +9,20 @@ CLASS zcl_sat_object_query_parser DEFINITION
     INTERFACES zif_sat_ty_object_search.
     ALIASES:
       c_general_search_options FOR zif_sat_c_object_search~c_general_search_params,
-      c_cds_search_params  for zif_sat_c_object_search~c_cds_search_params,
+      c_cds_search_params  FOR zif_sat_c_object_search~c_cds_search_params,
       c_class_intf_options FOR zif_sat_c_object_search~c_class_intf_search_option,
       ty_t_search_option FOR zif_sat_ty_object_search~ty_t_search_option,
       ty_s_search_option FOR zif_sat_ty_object_search~ty_s_search_option.
     METHODS constructor
       IMPORTING
         io_configuration TYPE REF TO zif_sat_object_search_config
-        io_validator     TYPE REF TO zif_sat_query_validator.
+        io_validator     TYPE REF TO zif_sat_query_validator
+        io_converter     TYPE REF TO zif_sat_query_converter.
   PROTECTED SECTION.
     TYPES: BEGIN OF ty_allowed_option_by_type,
              type   TYPE char1,
              option TYPE string,
            END OF ty_allowed_option_by_type.
-    TYPES: BEGIN OF ty_option_setting,
-             option         TYPE string,
-             allowed_length TYPE i,
-             single         TYPE abap_bool,
-             key_value      TYPE abap_bool,
-             no_negation    TYPE abap_bool,
-           END OF ty_option_setting.
     TYPES:
       ty_lt_allowed_options TYPE RANGE OF string.
     CONSTANTS c_option_separator TYPE string VALUE ':' ##NO_TEXT.
@@ -57,13 +51,7 @@ CLASS zcl_sat_object_query_parser DEFINITION
         ct_options TYPE ty_t_search_option
       RAISING
         zcx_sat_object_search.
-    "! <p class="shorttext synchronized" lang="en">Converts option value for correct selection</p>
-    "!
-    METHODS convert_option_value
-      IMPORTING
-        iv_option TYPE string
-      CHANGING
-        cv_value  TYPE string.
+
     "! <p class="shorttext synchronized" lang="en">Extract search option from token</p>
     "! Splits token at character ':' and collects the option and its value
     "! if it exists in the list of allowed search options
@@ -79,14 +67,17 @@ CLASS zcl_sat_object_query_parser DEFINITION
     "!
     METHODS add_option_value
       IMPORTING
-        is_option  TYPE ty_option_setting
+        is_option  TYPE zif_sat_object_search_config=>ty_s_option_setting
         iv_value   TYPE string
       CHANGING
-        ct_options TYPE ty_t_search_option.
+        ct_options TYPE ty_t_search_option
+      RAISING
+        zcx_sat_object_search.
 
   PRIVATE SECTION.
     DATA mo_configuration TYPE REF TO zif_sat_object_search_config.
     DATA mo_validator TYPE REF TO zif_sat_query_validator.
+    DATA mo_converter TYPE REF TO zif_sat_query_converter.
 ENDCLASS.
 
 
@@ -96,6 +87,7 @@ CLASS zcl_sat_object_query_parser IMPLEMENTATION.
   METHOD constructor.
     mo_configuration = io_configuration.
     mo_validator = io_validator.
+    mo_converter = io_converter.
   ENDMETHOD.
 
   METHOD zif_sat_object_query_parser~parse_query.
@@ -135,7 +127,6 @@ CLASS zcl_sat_object_query_parser IMPLEMENTATION.
         ENDIF.
       ENDIF.
     ENDLOOP.
-
 
     mo_validator->check_option_integrity( CHANGING ct_options = lt_options ).
 
@@ -184,40 +175,14 @@ CLASS zcl_sat_object_query_parser IMPLEMENTATION.
     DATA(ls_option_config) = mo_configuration->get_option_config( is_option-option ).
 
     LOOP AT lt_value_range ASSIGNING FIELD-SYMBOL(<ls_value_range>).
-      DATA(lv_value) = <ls_value_range>-low.
-      convert_option_value( EXPORTING iv_option = is_option-option CHANGING cv_value = lv_value ).
-      mo_validator->validate_option( iv_option = is_option-option iv_value = lv_value ).
       add_option_value(
         EXPORTING is_option  = ls_option_config
-                  iv_value   = lv_value
+                  iv_value   = <ls_value_range>-low
         CHANGING  ct_options = ct_options
       ).
     ENDLOOP.
   ENDMETHOD.
 
-
-  METHOD convert_option_value.
-    IF sy-saprl >= 751. " upper() function in CDS view
-      TRANSLATE cv_value TO UPPER CASE.
-    ELSE.
-      CASE iv_option.
-
-        WHEN c_general_search_options-description OR
-             c_cds_search_params-annotation.
-
-        WHEN OTHERS.
-          TRANSLATE cv_value TO UPPER CASE.
-      ENDCASE.
-    ENDIF.
-
-    IF iv_option = c_general_search_options-user.
-      IF  cv_value = 'ME'.
-        cv_value = sy-uname.
-      ELSEIF cv_value CP '!ME'.
-        cv_value = c_negation_operator && sy-uname.
-      ENDIF.
-    ENDIF.
-  ENDMETHOD.
 
   METHOD get_search_terms.
     DATA: lt_search_terms TYPE TABLE OF string.
@@ -271,7 +236,7 @@ CLASS zcl_sat_object_query_parser IMPLEMENTATION.
 
     IF is_option-no_negation = abap_false.
       zcl_sat_search_util=>remove_exclusion_string( CHANGING cv_value = lv_value
-                                                              cv_sign  = lv_sign  ).
+                                                             cv_sign  = lv_sign  ).
     ENDIF.
 
 *.. Consider key-value options in a special way
@@ -284,35 +249,33 @@ CLASS zcl_sat_object_query_parser IMPLEMENTATION.
           CLEAR: lv_value2,
                  lv_sign2.
         ELSE.
-          IF sy-saprl >= 751. " upper() function available!
+          IF is_option-no_uppercase = abap_false.
             TRANSLATE lv_value2 TO UPPER CASE.
           ENDIF.
-
           IF is_option-no_negation = abap_false.
             zcl_sat_search_util=>remove_exclusion_string( CHANGING cv_value = lv_value2
-                                                                    cv_sign  = lv_sign2   ).
+                                                                   cv_sign  = lv_sign2   ).
           ENDIF.
         ENDIF.
       ELSE.
         TRANSLATE lv_value TO UPPER CASE.
       ENDIF.
-    ENDIF.
-
-*.. Special case for annotation value. As it is possible to annotate via
-*... Array/Object notation it is required to prefix the dots with a wildcard as
-*... annotations are stored with a <annokey1>$[0-9]$.<annokey2> like syntax
-    IF is_option-option = c_cds_search_params-annotation.
-      lv_value = replace( val = lv_value occ = 0 sub = '.' with = '*.' ).
-      DATA(lv_value_length) = strlen( lv_value ) - 1.
-**      IF lv_value IS NOT INITIAL AND lv_value+lv_value_length(1) <> '*'.
-**        lv_value = lv_value && '*'.
-**      ENDIF.
+    ELSE.
+      IF is_option-no_uppercase = abap_false.
+        TRANSLATE lv_value TO UPPER CASE.
+      ENDIF.
     ENDIF.
 
 *.. Translate to Open SQL Wildcard character
     lv_value = replace( val = lv_value sub = '?' occ = 0  with = '+' ).
     lv_value2 = replace( val = lv_value2 sub = '?' occ = 0  with = '+' ).
 
+    mo_validator->validate_option( iv_option = is_option-option
+                                   iv_value  = lv_value
+                                   iv_value2 = lv_value2 ).
+    mo_converter->convert_value( EXPORTING iv_option = is_option-option
+                                 CHANGING  cv_value  = lv_value
+                                           cv_value2 = lv_value2 ).
 *.. Crop input if necessary
     IF lv_value NA '*+' AND
        is_option-allowed_length > 0 AND
@@ -343,7 +306,7 @@ CLASS zcl_sat_object_query_parser IMPLEMENTATION.
 
     SPLIT iv_token AT c_option_separator INTO lv_option lv_value_list.
     TRANSLATE lv_option TO UPPER CASE.
-    mo_configuration->map_option( changing cv_option = lv_option ).
+    mo_configuration->map_option( CHANGING cv_option = lv_option ).
 
     IF NOT mo_configuration->has_option( lv_option ).
       RAISE EXCEPTION TYPE zcx_sat_object_search
@@ -370,8 +333,6 @@ CLASS zcl_sat_object_query_parser IMPLEMENTATION.
 
       SPLIT lv_value_list AT c_value_separator INTO TABLE lt_values.
       LOOP AT lt_values ASSIGNING FIELD-SYMBOL(<lv_value>).
-        convert_option_value( EXPORTING iv_option = lv_option CHANGING cv_value = <lv_value> ).
-        mo_validator->validate_option( iv_option = lv_option iv_value = <lv_value> ).
         add_option_value(
           EXPORTING is_option  = ls_option_info
                     iv_value   = <lv_value>
@@ -380,8 +341,6 @@ CLASS zcl_sat_object_query_parser IMPLEMENTATION.
       ENDLOOP.
     ELSE.
 *.... Only a single value is included in the query
-      convert_option_value( EXPORTING iv_option = lv_option CHANGING cv_value = lv_value_list ).
-      mo_validator->validate_option( iv_option = lv_option iv_value = lv_value_list ).
       add_option_value(
         EXPORTING is_option  = ls_option_info
                   iv_value   = lv_value_list
