@@ -30,24 +30,72 @@ INTERFACE zif_sat_c_object_search
   CONSTANTS:
     "! <p class="shorttext synchronized" lang="en">Search options for class/interface object search</p>
     BEGIN OF c_class_intf_search_option,
-*.... The following options are only for AIE so no convenient
-*...... short form is needed
-      attribute      TYPE string VALUE 'attribute',
-      method         TYPE string VALUE 'method',
-      super_type     TYPE string VALUE 'superType',
-      sub_type       TYPE string VALUE 'subType',
-      interface      TYPE string VALUE 'interface',
-      friend         TYPE string VALUE 'friend',
-      is             TYPE string VALUE 'is',
-      isot           TYPE string VALUE 'isNot',
-      exposure       TYPE string VALUE 'exposure',
-      abap_lang      TYPE string VALUE 'abapLanguage',
-      nw_release     TYPE string VALUE 'nwRelease',
-      program_status TYPE string VALUE 'programStatus',
-      ref_object     TYPE string VALUE 'refObject',
+      attribute  TYPE string VALUE 'attribute',
+      method     TYPE string VALUE 'method',
+      super_type TYPE string VALUE 'superType',
+      interface  TYPE string VALUE 'interface',
+      "! Category of the class/interface (see data element SEOCATEGRY)
+      "! --> check against current NW stack to get valid options
+      category   TYPE string VALUE 'category',
+      friend     TYPE string VALUE 'friend',
+      "! Checks for the following criteria
+      "! <ul>
+      "!   <li>abstract</li>
+      "!   <li>final</li>
+      "!   <li>test</li>
+      "!   <li>fixpoint</li>
+      "!   <li>shared_memory</li>
+      "! </ul>
+      flag       TYPE string VALUE 'flag',
+      "! Exposure (for methods/attributes). Possible values are
+      "! <ul>
+      "!   <li>private</li>
+      "!   <li>protected</li>
+      "!   <li>public</li>
+      "! </ul>
+      exposure   TYPE string VALUE 'exposure',
+      "! Holds the name of re
+      ref_object TYPE string VALUE 'refObject',
     END OF c_class_intf_search_option.
 
   CONSTANTS:
+    "! <p class="shorttext synchronized" lang="en">Flags for Class/Interface</p>
+    BEGIN OF c_class_intf_flags,
+      is_abstract        TYPE string VALUE 'ABSTRACT',
+      is_final           TYPE string VALUE 'FINAL',
+      has_test           TYPE string VALUE 'TEST',
+      is_fixpoint        TYPE string VALUE 'FIXPOINT',
+      is_shared_memory   TYPE string VALUE 'SHARED_MEMORY',
+      has_unicode_checks TYPE string VALUE 'UNICODE',
+    END OF c_class_intf_flags.
+
+  CONSTANTS:
+    "! <p class="shorttext synchronized" lang="en">Categories of ABAP OO Class</p>
+    BEGIN OF c_class_categories,
+      general      TYPE string VALUE 'GENERAL',
+      exit         TYPE string VALUE 'EXIT',
+      persistent   TYPE string VALUE 'PERSISTENT',
+      pers_factory TYPE string VALUE 'PERS_FACTORY',
+      exception    TYPE string VALUE 'EXCEPTION',
+      test_class   TYPE string VALUE 'TEST_CLASS',
+      area_class   TYPE string VALUE 'AREA_CLASS',
+      wd_runtime   TYPE string VALUE 'WD_RUNTIME',
+      behavior     TYPE string VALUE 'BEHAVIOR',
+    END OF c_class_categories.
+
+  CONSTANTS:
+    "! <p class="shorttext synchronized" lang="en">ABAP Language versions</p>
+    BEGIN OF c_abap_lang_versions,
+      unicode                 TYPE string VALUE 'UNICODE',
+      key_user                TYPE string VALUE 'KEY_USER',
+      static_abap_limited_use TYPE string VALUE 'STATIC_ABAP_LIMITED_USE',
+      std_abap_limited_use    TYPE string VALUE 'STD_ABAP_LIMITED_USE',
+      cloud_platform          TYPE string VALUE 'CLOUD_PLATFORM',
+      non_unicode             TYPE string VALUE 'NON_UNICODE',
+    END OF c_abap_lang_versions.
+
+  CONSTANTS:
+    "! <p class="shorttext synchronized" lang="en">General search options</p>
     BEGIN OF c_general_search_params,
       query                  TYPE string VALUE 'query',
       object_name            TYPE string VALUE 'objectName',
@@ -65,11 +113,11 @@ INTERFACE zif_sat_c_object_search
     END OF c_general_search_params.
 
   CONSTANTS:
+    "! <p class="shorttext synchronized" lang="en">Search options for CDS Search</p>
     BEGIN OF c_cds_search_params,
       field             TYPE string VALUE 'fieldName',
       select_from       TYPE string VALUE 'selectSourceIn',
       association       TYPE string VALUE 'associatedIn',
-      only_local_assocs TYPE string VALUE 'localDeclaredAssocOnly',
       annotation        TYPE string VALUE 'annotation',
       param             TYPE string VALUE 'param',
       params            TYPE string VALUE 'hasParams',
@@ -77,6 +125,14 @@ INTERFACE zif_sat_c_object_search
     END OF c_cds_search_params.
 
   CONSTANTS:
+    "! <p class="shorttext synchronized" lang="en">Types for class/interface</p>
+    BEGIN OF c_class_types,
+      class     TYPE string VALUE 'CLAS',
+      interface TYPE string VALUE 'INTF',
+    END OF c_class_types.
+
+  CONSTANTS:
+    "! <p class="shorttext synchronized" lang="en">Search options DB search</p>
     BEGIN OF c_dbtab_search_params,
       field TYPE string VALUE 'fieldName',
     END OF c_dbtab_search_params.

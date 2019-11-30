@@ -9,13 +9,13 @@ define view ZSAT_I_ClassAttribute
     inner join   seocompodf as Def on  Comp.clsname = Def.clsname
                                    and Comp.cmpname = Def.cmpname
 {
-  key Comp.clsname                           as ClassName,
-  key Comp.cmpname                           as AttributeName,
+  key Comp.clsname                    as ClassName,
+  key Comp.cmpname                    as AttributeName,
       // 0 - Instance
       // 1 - Static
       // 2 - Constant
-      Def.attdecltyp                         as DeclarationType,
-      upper(replace(Def.attvalue, '''', '')) as Value
+      Def.attdecltyp                  as DeclarationType,
+      replace(Def.attvalue, '''', '') as Value
 }
 where
   Comp.cmptype = '0'

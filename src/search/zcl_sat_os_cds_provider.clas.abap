@@ -18,6 +18,7 @@ CLASS zcl_sat_os_cds_provider DEFINITION
         REDEFINITION.
     METHODS do_after_search
         REDEFINITION.
+
   PRIVATE SECTION.
     ALIASES:
       c_cds_search_params FOR zif_sat_c_object_search~c_cds_search_params.
@@ -52,11 +53,6 @@ CLASS zcl_sat_os_cds_provider DEFINITION
     DATA mv_from_filter_count TYPE i.
     DATA mv_assoc_filter_count TYPE i.
 
-    "! <p class="shorttext synchronized" lang="en">Create filter for TYPE option</p>
-    "!
-    METHODS add_type_option_filter
-      IMPORTING
-        it_values TYPE ty_t_value_range.
     "! <p class="shorttext synchronized" lang="en">Create filter for ANNO option</p>
     "!
     METHODS add_anno_option_filter
@@ -79,10 +75,7 @@ CLASS zcl_sat_os_cds_provider DEFINITION
     METHODS add_from_option_filter
       IMPORTING
         it_values TYPE ty_t_value_range.
-    "! <p class="shorttext synchronized" lang="en">Create filter for API option</p>
-    METHODS add_api_option_filter
-      IMPORTING
-        it_values TYPE ty_t_value_range.
+
     "! <p class="shorttext synchronized" lang="en">Adds extensions filter to query</p>
     METHODS add_extensions_filter
       IMPORTING
@@ -175,15 +168,12 @@ CLASS zcl_sat_os_cds_provider IMPLEMENTATION.
 
 *.......... Find views regarding the release status of the cds view
         WHEN c_general_search_options-release_state.
-          add_join_table(
-              iv_join_table = |{ zif_sat_c_select_source_id=>zsat_i_apistates }|
-              iv_alias      = c_api_alias
-              it_conditions = VALUE #(
-                 ( field = 'objectname' ref_field = 'ddlname' ref_table_alias = c_base_alias type = zif_sat_c_join_cond_type=>field and_or = zif_sat_c_selection_condition=>and )
-                 ( field = 'objecttype' tabname_alias = CONV #( c_api_alias ) value = 'DDLS' type = zif_sat_c_join_cond_type=>filter )
-              )
+          add_api_option_filter(
+              it_values          = <ls_option>-value_range
+              iv_ref_field       = 'ddlname'
+              iv_ref_table_alias = c_base_alias
+              it_tadir_type      = value #( ( 'DDLS' ) )
           ).
-          add_api_option_filter( it_values = <ls_option>-value_range ).
 
 *.......... Find views where the filter exists in the FROM part of the cds view
         WHEN c_cds_search_params-select_from.
@@ -229,7 +219,10 @@ CLASS zcl_sat_os_cds_provider IMPLEMENTATION.
 
 *.......... Find views for a certain type e.g. function, hierarchy, view
         WHEN c_general_search_options-type.
-          add_type_option_filter( it_values = <ls_option>-value_range ).
+          add_option_filter(
+              iv_fieldname = 'sourcetype'
+              it_values    = <ls_option>-value_range
+          ).
       ENDCASE.
     ENDLOOP.
 
@@ -384,85 +377,8 @@ CLASS zcl_sat_os_cds_provider IMPLEMENTATION.
     ENDIF.
   ENDMETHOD.
 
-  METHOD add_api_option_filter.
-    DATA: lt_api_filters   TYPE ty_t_value_range,
-          lt_state_filters TYPE ty_t_value_range.
-
-    LOOP AT it_values INTO DATA(ls_value).
-
-      CASE ls_value-low.
-
-        WHEN zif_sat_c_object_search=>c_api_option_value-released OR
-             zif_sat_c_object_search=>c_api_option_value-deprecated.
-          lt_state_filters = VALUE #( BASE lt_state_filters ( ls_value ) ).
-
-        WHEN OTHERS.
-          lt_api_filters = VALUE #( BASE lt_api_filters ( ls_value ) ).
-      ENDCASE.
-
-    ENDLOOP.
-
-    IF lt_api_filters IS NOT INITIAL.
-
-      add_option_filter(
-          iv_fieldname = |{ c_api_alias }~filtervalue|
-          it_values    = lt_api_filters
-      ).
-    ENDIF.
-
-    IF lt_state_filters IS NOT INITIAL.
-      add_option_filter(
-          iv_fieldname = |{ c_api_alias }~apistate|
-          it_values    = lt_state_filters
-      ).
-    ENDIF.
-  ENDMETHOD.
-
-
-  METHOD add_type_option_filter.
-    DATA: lt_type_filters TYPE ty_t_value_range.
-
-    LOOP AT it_values INTO DATA(ls_value).
-      CASE ls_value-low.
-
-        WHEN zif_sat_c_object_search=>c_type_option_value-extend.
-          ls_value-low = zif_sat_c_cds_view_type=>extend.
-
-        WHEN zif_sat_c_object_search=>c_type_option_value-function.
-          ls_value-low = zif_sat_c_cds_view_type=>table_function.
-
-        WHEN zif_sat_c_object_search=>c_type_option_value-hierarchy.
-          ls_value-low = zif_sat_c_cds_view_type=>hierarchy.
-
-        WHEN zif_sat_c_object_search=>c_type_option_value-view.
-          ls_value-low = zif_sat_c_cds_view_type=>view.
-
-        WHEN zif_sat_c_object_search=>c_type_option_value-abstract_entity.
-          ls_value-low = zif_sat_c_cds_view_type=>abstract_entity.
-
-        WHEN zif_sat_c_object_search=>c_type_option_value-custom_entity.
-          ls_value-low = zif_sat_c_cds_view_type=>custom_entity.
-      ENDCASE.
-
-      lt_type_filters = VALUE #( BASE lt_type_filters ( ls_value ) ).
-    ENDLOOP.
-
-    add_option_filter(
-        iv_fieldname = 'sourcetype'
-        it_values    = lt_type_filters
-    ).
-  ENDMETHOD.
-
 
   METHOD add_association_option_filter.
-    DATA: lf_only_local_assoc TYPE abap_bool.
-    DATA(lt_local_assocs_only_option) = VALUE #( mo_search_query->mt_search_options[
-                                                    option = c_cds_search_params-only_local_assocs
-                                                 ]-value_range OPTIONAL ).
-    IF lt_local_assocs_only_option IS NOT INITIAL.
-      lf_only_local_assoc = lt_local_assocs_only_option[ 1 ]-low.
-    ENDIF.
-
     split_including_excluding(
       EXPORTING it_values    = it_values
       IMPORTING et_including = DATA(lt_including)
@@ -474,10 +390,7 @@ CLASS zcl_sat_os_cds_provider IMPLEMENTATION.
           iv_subquery_fieldname = 'strucobjn_t'
           iv_fieldname          = |{ c_base_alias }~ddlname|
           it_excluding          = lt_excluding
-          iv_subquery           = COND #( WHEN lf_only_local_assoc = abap_true THEN
-                                            mv_only_local_assoc_subquery
-                                          ELSE
-                                            mv_assoc_subquery )
+          iv_subquery           = mv_assoc_subquery
       ).
     ENDIF.
 
@@ -494,13 +407,6 @@ CLASS zcl_sat_os_cds_provider IMPLEMENTATION.
           iv_fieldname = |{ c_used_in_association_alias }~strucobjn_t|
           it_values    = it_values
       ).
-      IF lf_only_local_assoc = abap_true.
-*...... Only the locally defined Associations are considered as a usage
-        add_option_filter(
-            iv_fieldname = |{ c_used_in_association_alias }~strucobjn_s|
-            it_values    = VALUE #( ( sign = zif_sat_c_options=>including option = zif_sat_c_options=>equals ) )
-        ).
-      ENDIF.
       mv_assoc_filter_count = lines( lt_including ).
     ENDIF.
   ENDMETHOD.
@@ -581,7 +487,8 @@ CLASS zcl_sat_os_cds_provider IMPLEMENTATION.
           value         = <ls_value_range>-low
           value_type    = zif_sat_c_join_cond_val_type=>typed_input
           tabname_alias = c_extension_view_alias
-          and_or        = lv_and_or )
+          and_or        = lv_and_or
+          type          = zif_sat_c_join_cond_type=>filter )
       ).
       lv_and_or = zif_sat_c_selection_condition=>or.
     ENDLOOP.

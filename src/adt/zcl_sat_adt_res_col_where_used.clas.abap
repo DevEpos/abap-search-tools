@@ -51,7 +51,7 @@ CLASS zcl_sat_adt_res_col_where_used IMPLEMENTATION.
         FROM zsat_p_cdsviewbase
         WHERE entityid = @lv_base_table
       INTO @lv_base_table.
-	  
+	
       IF lv_source_type = zif_sat_c_cds_view_type=>table_function OR
          lv_base_table IS INITIAL.
         lv_base_table = mv_object_name.

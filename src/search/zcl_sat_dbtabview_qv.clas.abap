@@ -22,14 +22,12 @@ CLASS zcl_sat_dbtabview_qv IMPLEMENTATION.
     super->validate(
         iv_option = iv_option
         iv_value  = iv_value
+        iv_value2 = iv_value2
     ).
 
-    DATA(lv_value) = iv_value.
-
     IF iv_option = zif_sat_c_object_search=>c_general_search_params-type.
-      zcl_sat_search_util=>remove_exclusion_string( CHANGING cv_value = lv_value ).
 
-      CASE lv_value.
+      CASE iv_value.
 
         WHEN zif_sat_c_object_search=>c_type_option_value-table OR
              zif_sat_c_object_search=>c_type_option_value-view.
@@ -44,7 +42,7 @@ CLASS zcl_sat_dbtabview_qv IMPLEMENTATION.
         EXPORTING
           textid = zcx_sat_object_search=>invalid_option_value
           msgv1  = |{ iv_option }|
-          msgv2  = |{ lv_value }|.
+          msgv2  = |{ iv_value }|.
     ENDIF.
   ENDMETHOD.
 

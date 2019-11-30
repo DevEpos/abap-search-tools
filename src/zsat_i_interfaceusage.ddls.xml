@@ -6,7 +6,6 @@
     <DDLNAME>ZSAT_I_INTERFACEUSAGE</DDLNAME>
     <DDLANGUAGE>E</DDLANGUAGE>
     <DDTEXT>Interface usage in Class/Interface</DDTEXT>
-    <SOURCE_TYPE>V</SOURCE_TYPE>
    </DDLS>
   </asx:values>
  </asx:abap>

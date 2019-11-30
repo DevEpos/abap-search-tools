@@ -50,3 +50,13 @@ union select distinct from seoclassdf
 where
       version    = '1'
   and clsabstrct = 'X'
+union select distinct from seoclassdf
+
+{
+  key clsname    as ClassName,
+      'UNICODE' as Flag
+}
+where
+      version    = '1'
+  and unicode    = 'X'
+  

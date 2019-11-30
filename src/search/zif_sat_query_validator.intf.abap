@@ -6,11 +6,13 @@ INTERFACE zif_sat_query_validator
   "!
   "! @parameter iv_option | <p class="shorttext synchronized" lang="en">Name of a query option</p>
   "! @parameter iv_value | <p class="shorttext synchronized" lang="en">Value for the given option</p>
+  "! @parameter iv_value2 | <p class="shorttext synchronized" lang="en">Additional value for key/value options</p>
   "! @raising zcx_sat_object_search | <p class="shorttext synchronized" lang="en">Error if validation failed</p>
   METHODS validate_option
     IMPORTING
       iv_option TYPE string
       iv_value  TYPE string
+      iv_value2 TYPE string OPTIONAL
     RAISING
       zcx_sat_object_search.
 

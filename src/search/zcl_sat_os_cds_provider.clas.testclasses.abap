@@ -48,8 +48,7 @@ CLASS ltcl_abap_unit DEFINITION FINAL FOR TESTING
 
     METHODS:
       test_negation_query FOR TESTING,
-      test_anno_exclusion FOR TESTING,
-      test_only_local_annos FOR TESTING.
+      test_anno_exclusion FOR TESTING.
 ENDCLASS.
 
 
@@ -81,34 +80,6 @@ CLASS ltcl_abap_unit IMPLEMENTATION.
     ).
   ENDMETHOD.
 
-  METHOD test_only_local_annos.
-    mr_cut = NEW #( ).
-
-    TRY.
-        DATA(lo_query) = NEW lcl_query( iv_type  = zif_sat_c_object_search=>c_search_type-cds_view
-                                        it_search_options = VALUE #(
-                                          ( option = zif_sat_c_object_search=>c_cds_search_params-only_local_assocs
-                                            value_range = VALUE #(
-                                              ( sign = 'I' option = 'EQ' low = abap_true )
-                                            )
-                                          )
-                                          ( option = zif_sat_c_object_search=>c_cds_search_params-association
-                                            value_range = VALUE #(
-                                              ( sign = 'I' option = 'EQ' low = 'I_PRODUCT' )
-                                            )
-                                          )
-                                      ) ).
-        mr_cut->zif_sat_object_search_provider~search(
-          EXPORTING io_query = lo_query
-          IMPORTING et_result = DATA(lt_result)
-        ).
-      CATCH zcx_sat_object_search INTO DATA(lx_search_error).
-    ENDTRY.
-
-    cl_abap_unit_assert=>assert_not_bound(
-        act  = lx_search_error
-    ).
-  ENDMETHOD.
 
   METHOD test_anno_exclusion.
     mr_cut = NEW #( ).
