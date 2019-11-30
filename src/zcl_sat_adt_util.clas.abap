@@ -272,15 +272,17 @@ CLASS zcl_sat_adt_util IMPLEMENTATION.
       RETURN.
     ENDIF.
 
-    IF iv_type IS SUPPLIED.
+    IF iv_type IS NOT INITIAL.
       lv_obj_type = SWITCH trobjtype(
         iv_type
         WHEN zif_sat_c_entity_type=>cds_view THEN 'DDLS'
         WHEN zif_sat_c_entity_type=>view     THEN 'VIEW'
         WHEN zif_sat_c_entity_type=>table    THEN 'TABD'
       ).
-    ELSEIF iv_tadir_type IS SUPPLIED.
+    ELSEIF iv_tadir_type IS NOT INITIAL.
       lv_obj_type = iv_tadir_type.
+    ELSE.
+      RETURN.
     ENDIF.
 
     DATA(lv_name) = SWITCH sobj_name(

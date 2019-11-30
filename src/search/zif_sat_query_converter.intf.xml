@@ -3,19 +3,19 @@
  <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
   <asx:values>
    <VSEOINTERF>
-    <CLSNAME>ZIF_SAT_C_ADT_UTILS</CLSNAME>
+    <CLSNAME>ZIF_SAT_QUERY_CONVERTER</CLSNAME>
     <LANGU>E</LANGU>
-    <DESCRIPT>Constants for ADT Tools of DB Browser</DESCRIPT>
+    <DESCRIPT>Converter for Object Search Query</DESCRIPT>
     <EXPOSURE>2</EXPOSURE>
     <STATE>1</STATE>
     <UNICODE>X</UNICODE>
    </VSEOINTERF>
    <DESCRIPTIONS>
     <SEOCOMPOTX>
-     <CLSNAME>ZIF_SAT_C_ADT_UTILS</CLSNAME>
-     <CMPNAME>C_DDL_POS_URI_SEGMENT</CMPNAME>
+     <CLSNAME>ZIF_SAT_QUERY_CONVERTER</CLSNAME>
+     <CMPNAME>CONVERT_VALUE</CMPNAME>
      <LANGU>E</LANGU>
-     <DESCRIPT>URI segment for positional DDLS URI</DESCRIPT>
+     <DESCRIPT>Converts value of search option (if necessary)</DESCRIPT>
     </SEOCOMPOTX>
    </DESCRIPTIONS>
   </asx:values>

@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_CLAS" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <VSEOCLASS>
+    <CLSNAME>ZCL_SAT_CLIF_SEARCH_PARAM_UTIL</CLSNAME>
+    <LANGU>E</LANGU>
+    <DESCRIPT>Utility for mapping search parameters for Class/Interface</DESCRIPT>
+    <STATE>1</STATE>
+    <CLSCCINCL>X</CLSCCINCL>
+    <FIXPT>X</FIXPT>
+    <UNICODE>X</UNICODE>
+   </VSEOCLASS>
+   <DESCRIPTIONS>
+    <SEOCOMPOTX>
+     <CLSNAME>ZCL_SAT_CLIF_SEARCH_PARAM_UTIL</CLSNAME>
+     <CMPNAME>CONVERT_ABAP_LANG_TO_EXT</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Converts abap language to external format</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CLSNAME>ZCL_SAT_CLIF_SEARCH_PARAM_UTIL</CLSNAME>
+     <CMPNAME>CONVERT_ABAP_LANG_TO_INT</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Converts abap language to internal format</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CLSNAME>ZCL_SAT_CLIF_SEARCH_PARAM_UTIL</CLSNAME>
+     <CMPNAME>CONVERT_CATEGORY_TO_EXT</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Converts class category to external format</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CLSNAME>ZCL_SAT_CLIF_SEARCH_PARAM_UTIL</CLSNAME>
+     <CMPNAME>CONVERT_CATEGORY_TO_INT</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Converts class category to internal format</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CLSNAME>ZCL_SAT_CLIF_SEARCH_PARAM_UTIL</CLSNAME>
+     <CMPNAME>GET_CATEGORIES</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Retrieves possible class categories</DESCRIPT>
+    </SEOCOMPOTX>
+   </DESCRIPTIONS>
+  </asx:values>
+ </asx:abap>
+</abapGit>

@@ -160,6 +160,17 @@ CLASS zcl_sat_base_search_provider DEFINITION
     METHODS prepare_search ABSTRACT
       RAISING
         zcx_sat_object_search.
+    "! <p class="shorttext synchronized" lang="en">Create filter for API option</p>
+    "! @parameter it_values | <p class="shorttext synchronized" lang="en">Filter values</p>
+    "! @parameter iv_ref_field | <p class="shorttext synchronized" lang="en">Reference field for Join</p>
+    "! @parameter iv_ref_table_alias | <p class="shorttext synchronized" lang="en">Alias of reference table</p>
+    "! @parameter it_tadir_type | <p class="shorttext synchronized" lang="en">TADIR Type(s) to be used to get correct API state</p>
+    METHODS add_api_option_filter
+      IMPORTING
+        it_values          TYPE zif_sat_ty_object_search=>ty_t_value_range
+        iv_ref_field       TYPE fieldname
+        iv_ref_table_alias TYPE string
+        it_tadir_type      TYPE trobjtype_tab.
   PRIVATE SECTION.
     METHODS get_select_string
       RETURNING
@@ -239,6 +250,76 @@ CLASS zcl_sat_base_search_provider IMPLEMENTATION.
 
     new_and_cond_list( ).
 
+  ENDMETHOD.
+
+  METHOD add_api_option_filter.
+    CONSTANTS c_api_alias TYPE string VALUE 'api' ##NO_TEXT.
+
+    DATA: lt_api_filters   TYPE zif_sat_ty_object_search=>ty_t_value_range,
+          lt_state_filters TYPE zif_sat_ty_object_search=>ty_t_value_range.
+
+    DATA(lf_single_tadir_type) = xsdbool( lines( it_tadir_type ) = 1 ).
+
+    DATA(lt_conditions) = VALUE zsat_join_condition_data_t(
+      ( field           = 'objectname'
+        ref_field       = iv_ref_field
+        ref_table_alias = iv_ref_table_alias
+        type            = zif_sat_c_join_cond_type=>field )
+    ).
+
+    IF lf_single_tadir_type = abap_true.
+      lt_conditions = VALUE #( BASE lt_conditions
+         ( field         = 'objecttype'
+           tabname_alias = CONV #( c_api_alias )
+           value         = it_tadir_type[ 1 ]
+           type          = zif_sat_c_join_cond_type=>filter )
+      ).
+    ENDIF.
+
+    add_join_table(
+        iv_join_table = |{ zif_sat_c_select_source_id=>zsat_i_apistates }|
+        iv_alias      = c_api_alias
+        it_conditions = lt_conditions
+    ).
+
+    LOOP AT it_values INTO DATA(ls_value).
+
+      CASE ls_value-low.
+
+        WHEN zif_sat_c_object_search=>c_api_option_value-released OR
+             zif_sat_c_object_search=>c_api_option_value-deprecated.
+          lt_state_filters = VALUE #( BASE lt_state_filters ( ls_value ) ).
+
+        WHEN OTHERS.
+          lt_api_filters = VALUE #( BASE lt_api_filters ( ls_value ) ).
+      ENDCASE.
+
+    ENDLOOP.
+
+    IF lf_single_tadir_type = abap_false.
+      add_option_filter(
+          iv_fieldname    = |{ c_api_alias }~objecttype|
+          it_values       = VALUE #(
+            FOR type IN it_tadir_type
+            ( sign = 'I' option = 'EQ' low = type )
+          )
+      ).
+    ENDIF.
+
+    IF lt_api_filters IS NOT INITIAL.
+
+      add_option_filter(
+          iv_fieldname = |{ c_api_alias }~filtervalue|
+          it_values    = lt_api_filters
+      ).
+    ENDIF.
+
+    IF lt_state_filters IS NOT INITIAL.
+      add_option_filter(
+          iv_fieldname = |{ c_api_alias }~apistate|
+          it_values    = lt_state_filters
+      ).
+    ENDIF.
   ENDMETHOD.
 
 
