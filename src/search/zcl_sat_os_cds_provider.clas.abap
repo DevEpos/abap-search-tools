@@ -94,7 +94,7 @@ CLASS zcl_sat_os_cds_provider IMPLEMENTATION.
     mv_select_from_subquery = |SELECT DISTINCT ddlviewname | && c_cr_lf &&
                               | FROM { get_cds_sql_name( CONV #( zif_sat_c_select_source_id=>zsat_i_cdsfrompartentity ) ) } | && c_cr_lf &&
                               | WHERE |.
-    mv_param_subquery = |SELECT DISTINCT parametername | && c_cr_lf &&
+    mv_param_subquery = |SELECT DISTINCT strucobjn | && c_cr_lf &&
                         | FROM { zif_sat_c_select_source_id=>dd10b } | && c_cr_lf &&
                         | WHERE |.
     mv_params_subquery = |SELECT DISTINCT entityid | && c_cr_lf &&
