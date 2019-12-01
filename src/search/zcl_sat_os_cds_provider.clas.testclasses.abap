@@ -105,19 +105,5 @@ CLASS ltcl_abap_unit IMPLEMENTATION.
         act  = lx_search_error
     ).
   ENDMETHOD.
-                                            )
-                                          )
-                                      ) ).
-        mr_cut->zif_sat_object_search_provider~search(
-          EXPORTING io_query = lo_query
-          IMPORTING et_result = DATA(lt_result)
-        ).
-      CATCH zcx_sat_object_search INTO DATA(lx_search_error).
-    ENDTRY.
-
-    cl_abap_unit_assert=>assert_not_bound(
-        act  = lx_search_error
-    ).
-  ENDMETHOD.
 
 ENDCLASS.
