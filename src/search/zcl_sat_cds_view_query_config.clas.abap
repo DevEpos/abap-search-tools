@@ -25,7 +25,6 @@ CLASS zcl_sat_cds_view_query_config IMPLEMENTATION.
     mt_options = VALUE #(
       ( option = c_general_options-package allowed_length = 30 )
       ( option = c_general_options-user allowed_length = 12 )
-      ( option = c_general_options-release_state )
       ( option = c_cds_options-params single = abap_true no_negation = abap_true )
       ( option = c_cds_options-param )
       ( option = c_cds_options-select_from allowed_length = 30 )
