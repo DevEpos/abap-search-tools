@@ -176,7 +176,7 @@ CLASS zcl_sat_os_cds_provider IMPLEMENTATION.
           DATA(lf_views_with_parameters) = xsdbool( <ls_option>-value_range[ 1 ]-low = 'TRUE' ).
           IF lf_views_with_parameters = abap_true.
             add_join_table(
-                iv_join_table = |{ zif_sat_c_select_source_id=>zsat_i_cdsviewwithparameter }|
+                iv_join_table = get_cds_sql_name( |{ zif_sat_c_select_source_id=>zsat_i_cdsviewwithparameter }| )
                 iv_alias      = c_parameterized_view_alias
                 it_conditions = VALUE #(
                   ( field = CONV #( c_fields-entityid ) ref_field = c_fields-entityid ref_table_alias = c_base_alias type = zif_sat_c_join_cond_type=>field )
@@ -327,7 +327,7 @@ CLASS zcl_sat_os_cds_provider IMPLEMENTATION.
 *.. Add filters for including annotation key/value pairs
     IF lt_including IS NOT INITIAL.
       add_join_table(
-          iv_join_table = |{ zif_sat_c_select_source_id=>zsat_i_cdsannotation }|
+          iv_join_table = get_cds_sql_name( |{ zif_sat_c_select_source_id=>zsat_i_cdsannotation }| )
           iv_alias      = c_anno_alias
           it_conditions = VALUE #(
             ( field = c_fields-entityid ref_field = c_fields-entityid ref_table_alias = c_base_alias type = zif_sat_c_join_cond_type=>field )
@@ -397,7 +397,7 @@ CLASS zcl_sat_os_cds_provider IMPLEMENTATION.
 
     IF lt_including IS NOT INITIAL.
       add_join_table(
-          iv_join_table = |{ zif_sat_c_select_source_id=>zsat_i_associatedincds }|
+          iv_join_table = get_cds_sql_name( |{ zif_sat_c_select_source_id=>zsat_i_associatedincds }| )
           iv_alias      = c_used_in_association_alias
           it_conditions = VALUE #(
             ( field = 'ddlname' ref_field = 'ddlname' ref_table_alias = c_base_alias type = zif_sat_c_join_cond_type=>field )
@@ -430,7 +430,7 @@ CLASS zcl_sat_os_cds_provider IMPLEMENTATION.
 
     IF lt_including IS NOT INITIAL.
       add_join_table(
-          iv_join_table = |{ zif_sat_c_select_source_id=>zsat_i_cdsviewfield }|
+          iv_join_table = get_cds_sql_name( |{ zif_sat_c_select_source_id=>zsat_i_cdsviewfield }| )
           iv_alias      = c_fields-alias
           it_conditions = VALUE #(
             ( field = c_fields-entityid ref_field = c_fields-entityid ref_table_alias = c_base_alias type = zif_sat_c_join_cond_type=>field )
@@ -462,7 +462,7 @@ CLASS zcl_sat_os_cds_provider IMPLEMENTATION.
 
     IF lt_including IS NOT INITIAL.
       add_join_table(
-          iv_join_table = |{ zif_sat_c_select_source_id=>zsat_i_cdsfrompartentity }|
+          iv_join_table = get_cds_sql_name( |{ zif_sat_c_select_source_id=>zsat_i_cdsfrompartentity }| )
           iv_alias      = c_select_from_alias
           it_conditions = VALUE #( ( field = 'ddlviewname' ref_field = 'viewname' ref_table_alias = c_base_alias type = zif_sat_c_join_cond_type=>field ) )
       ).
@@ -494,7 +494,7 @@ CLASS zcl_sat_os_cds_provider IMPLEMENTATION.
     ENDLOOP.
 
     add_join_table(
-        iv_join_table = |{ zif_sat_c_select_source_id=>zsat_i_cdsextensionviews }|
+        iv_join_table = get_cds_sql_name( |{ zif_sat_c_select_source_id=>zsat_i_cdsextensionviews }| )
         iv_alias      = c_extension_view_alias
         it_conditions = VALUE #(
           ( field = 'parentddl' ref_field = 'ddlname' ref_table_alias = c_base_alias type = zif_sat_c_join_cond_type=>field and_or = zif_sat_c_selection_condition=>and )

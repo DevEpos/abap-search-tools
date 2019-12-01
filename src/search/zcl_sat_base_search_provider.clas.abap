@@ -50,11 +50,11 @@ CLASS zcl_sat_base_search_provider DEFINITION
     "! <p class="shorttext synchronized" lang="en">Get SQL name for CDS view</p>
     "! Depending on the current release the internal ddic sql views are taken
     "! instead of the cds view name
-    CLASS-METHODS get_cds_sql_name
+    METHODS get_cds_sql_name
       IMPORTING
         iv_entity_id        TYPE zsat_entity_id
       RETURNING
-        VALUE(rv_ddic_view) TYPE string.
+        VALUE(rv_ddic_view) TYPE tabname.
 
     "! <p class="shorttext synchronized" lang="en">Adds the given select field</p>
     METHODS add_select_field
@@ -351,13 +351,8 @@ CLASS zcl_sat_base_search_provider IMPLEMENTATION.
   ENDMETHOD.
 
 
-
   METHOD get_cds_sql_name.
-    IF sy-saprl < 750.
-      rv_ddic_view = zcl_sat_cds_view_factory=>read_ddl_ddic_view( iv_ddl_name = |{ iv_entity_id }| ).
-    ELSE.
-      rv_ddic_view = iv_entity_id.
-    ENDIF.
+    rv_ddic_view = zcl_sat_cds_view_factory=>read_ddl_ddic_view( iv_ddl_name = |{ iv_entity_id }| ).
   ENDMETHOD.
 
 
