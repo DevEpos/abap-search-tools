@@ -10,7 +10,6 @@ INTERFACE zif_sat_ty_global
     ty_api_state             TYPE c LENGTH 30,
     ty_t_cds_api_state       TYPE STANDARD TABLE OF ty_api_state WITH EMPTY KEY,
     ty_sql_fieldname         TYPE c LENGTH 62,
-    ty_selopt_value          TYPE c LENGTH 128,
     ty_selopt_tab_position   TYPE n LENGTH 3.
 
   TYPES:
@@ -50,8 +49,8 @@ INTERFACE zif_sat_ty_global
     BEGIN OF ty_s_selopt,
       sign   TYPE ddsign,
       option TYPE ddoption,
-      low    TYPE ty_selopt_value,
-      high   TYPE ty_selopt_value,
+      low    TYPE zsat_value,
+      high   TYPE zsat_value,
     END OF ty_s_selopt,
 
     "! <p class="shorttext synchronized" lang="en">Generic range table</p>
