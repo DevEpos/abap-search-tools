@@ -26,7 +26,7 @@ CLASS zcl_sat_adt_res_cdsfield_vh IMPLEMENTATION.
       FROM zsat_i_cdsviewfield AS field
       FIELDS DISTINCT
              rawfieldname AS name
-      WHERE rawfieldname IS NOT INITIAL
+      WHERE rawfieldname IS NOT NULL
         AND fieldname IN @lt_field_range
       ORDER BY rawfieldname
     INTO CORRESPONDING FIELDS OF TABLE @p_named_item_list-items
