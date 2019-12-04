@@ -85,7 +85,8 @@ CLASS zcl_sat_query_monitor_util IMPLEMENTATION.
         subscreen TYPE bdcdata-fnam VALUE 'BDC_SUBSCR',
         ok_code   TYPE bdcdata-fnam VALUE 'BDC_OKCODE',
       END OF c_general_fields .
-    DATA: lt_bdc_input TYPE bdcdata_tab,
+
+    DATA: lt_bdc_input TYPE TABLE OF bdcdata,
           ls_options   TYPE ctu_params.
 
     lt_bdc_input = VALUE #(
