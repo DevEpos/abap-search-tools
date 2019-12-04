@@ -79,21 +79,41 @@ CLASS zcl_sat_query_monitor_util IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD open_in_query_monitor.
-    DATA: lv_genid TYPE rsgenuniid.
+    CONSTANTS:
+      BEGIN OF c_general_fields,
+        cursor    TYPE bdcdata-fnam VALUE 'BDC_CURSOR',
+        subscreen TYPE bdcdata-fnam VALUE 'BDC_SUBSCR',
+        ok_code   TYPE bdcdata-fnam VALUE 'BDC_OKCODE',
+      END OF c_general_fields .
+    DATA: lt_bdc_input TYPE bdcdata_tab,
+          ls_options   TYPE ctu_params.
 
-    DATA(lv_query_string) = |2C{ iv_query_ddlname }|.
+    lt_bdc_input = VALUE #(
+      ( program = 'SAPMRRI1'      dynpro = '0100' dynbegin = abap_true )
+      ( fnam = c_general_fields-cursor   fval = 'GENUNIID' )
+      ( fnam = c_general_fields-ok_code  fval = '/00' )
+      ( fnam = 'GENUNIID'                fval = '2C/' && iv_query_ddlname )
+*.... ABAP BICS
+      ( fnam = 'G_DISPMODE'              fval = '3' )
+      ( program = 'SAPMRRI1'      dynpro = '0100' dynbegin = abap_true )
+      ( fnam = c_general_fields-cursor   fval = 'GENUNIID' )
+      ( fnam = c_general_fields-ok_code  fval = '=GO' )
+      ( fnam = 'GENUNIID'                fval = '2C' && iv_query_ddlname )
+*.... ABAP BICS
+      ( fnam = 'G_DISPMODE'              fval = '3' )
+    ).
 
-    CALL FUNCTION 'CONVERSION_EXIT_GENID_INPUT'
-      EXPORTING
-        input  = lv_query_string
-      IMPORTING
-        output = lv_genid.
+    ls_options-dismode = 'E'.
+    ls_options-defsize = space.
 
-    CHECK lv_genid IS NOT INITIAL.
+    TRY .
+        CALL TRANSACTION 'RSRT' WITH AUTHORITY-CHECK
+                                USING lt_bdc_input
+                                OPTIONS FROM ls_options.
+      CATCH cx_sy_authorization_error INTO DATA(lx_auth_error).
+      CATCH cx_root INTO DATA(lx_error).
+    ENDTRY.
 
-    CALL FUNCTION 'RSRT_BICS_START'
-      EXPORTING
-        i_genuniid = lv_genid.
   ENDMETHOD.
 
 ENDCLASS.
