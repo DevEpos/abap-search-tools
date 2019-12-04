@@ -3,6 +3,10 @@ INTERFACE zif_sat_ty_global
   PUBLIC .
 
   TYPES:
+   ty_tswpos TYPE numc3,
+   ty_char62 type c LENGTH 62.
+
+  TYPES:
     ty_t_tabname_range       TYPE RANGE OF tabname,
     ty_t_string_range        TYPE RANGE OF string,
     "! <p class="shorttext synchronized" lang="en">Range for Annotation name</p>
@@ -55,7 +59,7 @@ INTERFACE zif_sat_ty_global
 
     "! <p class="shorttext synchronized" lang="en">Extended SELOPT for SQL Where condition</p>
     BEGIN OF ty_s_seltab_sql,
-      sqlfieldname TYPE  char62,
+      sqlfieldname TYPE  ty_char62,
       field        TYPE  zsat_fieldname_with_alias,
       sign         TYPE  ddsign,
       option       TYPE  ddoption,
@@ -69,7 +73,7 @@ INTERFACE zif_sat_ty_global
 
   TYPES:
     BEGIN OF ty_s_or_seltab_sql,
-      pos    TYPE tswpos,
+      pos    TYPE ty_tswpos,
       values TYPE ty_t_seltab_sql,
     END  OF ty_s_or_seltab_sql,
 
