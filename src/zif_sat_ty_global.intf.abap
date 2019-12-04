@@ -7,7 +7,11 @@ INTERFACE zif_sat_ty_global
     ty_t_string_range        TYPE RANGE OF string,
     "! <p class="shorttext synchronized" lang="en">Range for Annotation name</p>
     ty_t_cds_anno_name_range TYPE RANGE OF ddannotation_key,
-    ty_t_cds_api_state       TYPE STANDARD TABLE OF char30 WITH EMPTY KEY.
+    ty_api_state             TYPE c LENGTH 30,
+    ty_t_cds_api_state       TYPE STANDARD TABLE OF ty_api_state WITH EMPTY KEY,
+    ty_sql_fieldname         TYPE c LENGTH 62,
+    ty_selopt_value          TYPE c LENGTH 128,
+    ty_selopt_tab_position   TYPE n LENGTH 3.
 
   TYPES:
     "! <p class="shorttext synchronized" lang="en">Information about TADIR entry</p>
@@ -44,10 +48,10 @@ INTERFACE zif_sat_ty_global
   TYPES:
     "! <p class="shorttext synchronized" lang="en">Generic range structure</p>
     BEGIN OF ty_s_selopt,
-      sign   TYPE   char1,
-      option TYPE   char2,
-      low    TYPE   char128,
-      high   TYPE   char128,
+      sign   TYPE ddsign,
+      option TYPE ddoption,
+      low    TYPE ty_selopt_value,
+      high   TYPE ty_selopt_value,
     END OF ty_s_selopt,
 
     "! <p class="shorttext synchronized" lang="en">Generic range table</p>
@@ -55,21 +59,21 @@ INTERFACE zif_sat_ty_global
 
     "! <p class="shorttext synchronized" lang="en">Extended SELOPT for SQL Where condition</p>
     BEGIN OF ty_s_seltab_sql,
-      sqlfieldname TYPE  char62,
-      field        TYPE  zsat_fieldname_with_alias,
-      sign         TYPE  ddsign,
-      option       TYPE  ddoption,
-      low          TYPE  zsat_value,
-      high         TYPE  zsat_value,
-      subquery     TYPE  string,
-      sql_function TYPE  zsat_sql_function,
+      sqlfieldname TYPE ty_sql_fieldname,
+      field        TYPE zsat_fieldname_with_alias,
+      sign         TYPE ddsign,
+      option       TYPE ddoption,
+      low          TYPE zsat_value,
+      high         TYPE zsat_value,
+      subquery     TYPE string,
+      sql_function TYPE zsat_sql_function,
     END OF ty_s_seltab_sql,
 
     ty_t_seltab_sql TYPE STANDARD TABLE OF ty_s_seltab_sql WITH EMPTY KEY.
 
   TYPES:
     BEGIN OF ty_s_or_seltab_sql,
-      pos    TYPE tswpos,
+      pos    TYPE ty_selopt_tab_position,
       values TYPE ty_t_seltab_sql,
     END  OF ty_s_or_seltab_sql,
 
@@ -91,11 +95,11 @@ INTERFACE zif_sat_ty_global
 
   TYPES:
     BEGIN OF ty_s_join_filter_condition,
-      tabname       TYPE  tabname,
-      tabname_alias TYPE  zsat_entity_alias,
-      fieldname     TYPE  fieldname,
-      value_type    TYPE  zsat_join_cond_value_type,
-      operator      TYPE  voperator,
+      tabname       TYPE tabname,
+      tabname_alias TYPE zsat_entity_alias,
+      fieldname     TYPE fieldname,
+      value_type    TYPE zsat_join_cond_value_type,
+      operator      TYPE voperator,
       value         TYPE zsat_value,
       value2        TYPE zsat_value,
       and_or        TYPE vsconj,
