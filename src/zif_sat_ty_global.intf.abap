@@ -3,8 +3,9 @@ INTERFACE zif_sat_ty_global
   PUBLIC .
 
   TYPES:
-   ty_tswpos TYPE numc3,
-   ty_char62 type c LENGTH 62.
+    ty_tswpos      TYPE numc3,
+    ty_char62      TYPE c LENGTH 62,
+    ty_se16n_value TYPE c LENGTH 132.
 
   TYPES:
     ty_t_tabname_range       TYPE RANGE OF tabname,

@@ -25,8 +25,8 @@ CLASS zcl_sat_data_converter DEFINITION
         !iv_tabname   TYPE tabname
         !iv_fieldname TYPE fieldname
       CHANGING
-        !cv_value1    TYPE se16n_value OPTIONAL
-        !cv_value2    TYPE se16n_value OPTIONAL .
+        !cv_value1    TYPE zif_sat_ty_global=>ty_se16n_value OPTIONAL
+        !cv_value2    TYPE zif_sat_ty_global=>ty_se16n_value OPTIONAL .
     CLASS-METHODS convert_values_to_int_format
       IMPORTING
         !iv_rollname            TYPE rollname OPTIONAL
@@ -43,23 +43,23 @@ CLASS zcl_sat_data_converter DEFINITION
         !iv_fieldname           TYPE fieldname
         !if_print_error_message TYPE abap_bool DEFAULT abap_true
       CHANGING
-        !cv_value1              TYPE se16n_value OPTIONAL
-        !cv_value2              TYPE se16n_value OPTIONAL .
+        !cv_value1              TYPE zif_sat_ty_global=>ty_se16n_value OPTIONAL
+        !cv_value2              TYPE zif_sat_ty_global=>ty_se16n_value OPTIONAL .
     CLASS-METHODS convert_dates_to_int_format
       IMPORTING
         !iv_tabname             TYPE tabname
         !iv_fieldname           TYPE fieldname
         !if_print_error_message TYPE abap_bool DEFAULT abap_true
       CHANGING
-        !cv_value1              TYPE se16n_value
-        !cv_value2              TYPE se16n_value .
+        !cv_value1              TYPE zif_sat_ty_global=>ty_se16n_value
+        !cv_value2              TYPE zif_sat_ty_global=>ty_se16n_value .
     CLASS-METHODS convert_dates_to_out_format
       IMPORTING
         !iv_tabname   TYPE tabname
         !iv_fieldname TYPE fieldname
       CHANGING
-        !cv_value1    TYPE se16n_value OPTIONAL
-        !cv_value2    TYPE se16n_value OPTIONAL .
+        !cv_value1    TYPE zif_sat_ty_global=>ty_se16n_value OPTIONAL
+        !cv_value2    TYPE zif_sat_ty_global=>ty_se16n_value OPTIONAL .
   PROTECTED SECTION.
   PRIVATE SECTION.
 ENDCLASS.
@@ -171,7 +171,7 @@ CLASS zcl_sat_data_converter IMPLEMENTATION.
                                      EXCEPTIONS illegal_value     = 1 ).
         IF sy-subrc = 1.
           IF if_print_error_message = abap_true.
-            zcL_sat_message_helper=>print_system_message( ).
+            zcl_sat_message_helper=>print_system_message( ).
           ELSE.
             DATA(lr_conversion_exc) = zcx_sat_conversion_exc=>create_from_sy( ).
             RAISE EXCEPTION lr_conversion_exc.
@@ -205,13 +205,13 @@ CLASS zcl_sat_data_converter IMPLEMENTATION.
     IF cv_value1 <> space.
       lr_converter->output_convert( EXPORTING field_value_int = cv_value1
                                     IMPORTING field_value_ext = cv_value1
-                                    exceptions others = 1 ).
+                                    EXCEPTIONS OTHERS = 1 ).
     ENDIF.
 
     IF cv_value2 <> space.
       lr_converter->output_convert( EXPORTING field_value_int = cv_value2
                                     IMPORTING field_value_ext = cv_value2
-                                    exceptions others = 1 ).
+                                    EXCEPTIONS OTHERS = 1 ).
     ENDIF.
 
   ENDMETHOD.
@@ -252,7 +252,7 @@ CLASS zcl_sat_data_converter IMPLEMENTATION.
                                      EXCEPTIONS illegal_value     = 1 ).
         IF sy-subrc = 1.
           IF if_print_error_message = abap_true.
-            zcL_sat_message_helper=>print_system_message( ).
+            zcl_sat_message_helper=>print_system_message( ).
           ELSE.
             DATA(lr_conversion_exc) = zcx_sat_conversion_exc=>create_from_sy( ).
             RAISE EXCEPTION lr_conversion_exc.
