@@ -9,7 +9,7 @@ CLASS zcl_sat_where_clause_builder DEFINITION
     CLASS-METHODS add_selopt_as_or_seltab
       IMPORTING
         it_select_option TYPE ANY TABLE
-        iv_sqlfieldname  TYPE char62
+        iv_sqlfieldname  TYPE zif_sat_ty_global=>ty_sql_fieldname
         iv_sql_function  TYPE zsat_sql_function OPTIONAL
       CHANGING
         ct_and_seltab    TYPE zif_sat_ty_global=>ty_t_and_seltab_sql.
@@ -17,7 +17,7 @@ CLASS zcl_sat_where_clause_builder DEFINITION
     CLASS-METHODS add_selopt_to_or_seltab
       IMPORTING
         it_select_option TYPE ANY TABLE
-        iv_sqlfieldname  TYPE char62
+        iv_sqlfieldname  TYPE zif_sat_ty_global=>ty_sql_fieldname
         iv_sql_function  TYPE zsat_sql_function OPTIONAL
       CHANGING
         ct_or_seltab     TYPE zif_sat_ty_global=>ty_t_or_seltab_sql.
@@ -29,7 +29,7 @@ CLASS zcl_sat_where_clause_builder DEFINITION
     CLASS-METHODS create_or_seltab
       IMPORTING
         it_select_option    TYPE ANY TABLE
-        iv_sqlfieldname     TYPE char62
+        iv_sqlfieldname     TYPE zif_sat_ty_global=>ty_sql_fieldname
         iv_sql_function     TYPE zsat_sql_function OPTIONAL
       RETURNING
         VALUE(rs_or_seltab) TYPE zif_sat_ty_global=>ty_s_or_seltab_sql.
@@ -72,7 +72,7 @@ CLASS zcl_sat_where_clause_builder DEFINITION
 
     TYPES:
       BEGIN OF ty_s_field_selection,
-        sqlfieldname TYPE char62,
+        sqlfieldname TYPE zif_sat_ty_global=>ty_sql_fieldname,
         field        TYPE zsat_fieldname_with_alias,
         sql_function TYPE zsat_sql_function,
         options      TYPE ty_t_selopt,
@@ -106,7 +106,7 @@ CLASS zcl_sat_where_clause_builder DEFINITION
         cv_subrc     LIKE sy-subrc.
     CLASS-METHODS add_fieldname_to_clause
       IMPORTING
-        iv_fieldname    TYPE char62
+        iv_fieldname    TYPE zif_sat_ty_global=>ty_sql_fieldname
         iv_sql_function TYPE zsat_sql_function OPTIONAL
       CHANGING
         ct_where        TYPE ty_t_where_clause
@@ -124,7 +124,7 @@ CLASS zcl_sat_where_clause_builder DEFINITION
         cv_offset      TYPE i.
     CLASS-METHODS single_clause_new
       IMPORTING
-        iv_fieldname        TYPE char62
+        iv_fieldname        TYPE zif_sat_ty_global=>ty_sql_fieldname
         iv_sql_function     TYPE zsat_sql_function OPTIONAL
         is_option           TYPE ty_s_selopt
         iv_fieldname_length TYPE i
@@ -134,7 +134,7 @@ CLASS zcl_sat_where_clause_builder DEFINITION
         cv_offset           TYPE i.
     CLASS-METHODS single_subquery_clause_new
       IMPORTING
-        iv_fieldname        TYPE char62
+        iv_fieldname        TYPE zif_sat_ty_global=>ty_sql_fieldname
         iv_subquery         TYPE string
         iv_option           TYPE ddoption
         iv_fieldname_length TYPE i
@@ -251,7 +251,7 @@ CLASS zcl_sat_where_clause_builder IMPLEMENTATION.
           ls_field_range  TYPE ty_s_field_selection,
           ls_selopt       TYPE ty_s_selopt,
           lv_field_length TYPE i,
-          lv_old_field    TYPE char62.
+          lv_old_field    TYPE zif_sat_ty_global=>ty_sql_fieldname.
 
     CHECK: it_sel IS NOT INITIAL.
 

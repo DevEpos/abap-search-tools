@@ -107,7 +107,6 @@ CLASS zcl_sat_adt_cds_field_usage IMPLEMENTATION.
       EXPORTING
         it_sources   = VALUE #( ( ls_cds ) )
         iv_bitset    = cl_ddl_parser=>set_bitmask(
-                            iv_ars_check_off           = abap_true
                             iv_extresol                = abap_true )
     ).
 

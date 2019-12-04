@@ -129,7 +129,6 @@ CLASS zcl_sat_adt_cds_parser IMPLEMENTATION.
         it_sources = VALUE #( ( ls_cds ) )
         iv_bitset  = cl_ddl_parser=>set_bitmask(
            iv_semantic      = abap_true
-           iv_ars_check_off = abap_true
            iv_trace         = abap_false
            iv_locally       = abap_false
            iv_aiepp         = abap_false
