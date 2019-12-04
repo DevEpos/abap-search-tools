@@ -9,7 +9,7 @@ CLASS zcl_sat_where_clause_builder DEFINITION
     CLASS-METHODS add_selopt_as_or_seltab
       IMPORTING
         it_select_option TYPE ANY TABLE
-        iv_sqlfieldname  TYPE char62
+        iv_sqlfieldname  TYPE zif_sat_ty_global=>ty_char62
         iv_sql_function  TYPE zsat_sql_function OPTIONAL
       CHANGING
         ct_and_seltab    TYPE zif_sat_ty_global=>ty_t_and_seltab_sql.
@@ -17,7 +17,7 @@ CLASS zcl_sat_where_clause_builder DEFINITION
     CLASS-METHODS add_selopt_to_or_seltab
       IMPORTING
         it_select_option TYPE ANY TABLE
-        iv_sqlfieldname  TYPE char62
+        iv_sqlfieldname  TYPE zif_sat_ty_global=>ty_char62
         iv_sql_function  TYPE zsat_sql_function OPTIONAL
       CHANGING
         ct_or_seltab     TYPE zif_sat_ty_global=>ty_t_or_seltab_sql.
@@ -29,7 +29,7 @@ CLASS zcl_sat_where_clause_builder DEFINITION
     CLASS-METHODS create_or_seltab
       IMPORTING
         it_select_option    TYPE ANY TABLE
-        iv_sqlfieldname     TYPE char62
+        iv_sqlfieldname     TYPE zif_sat_ty_global=>ty_char62
         iv_sql_function     TYPE zsat_sql_function OPTIONAL
       RETURNING
         VALUE(rs_or_seltab) TYPE zif_sat_ty_global=>ty_s_or_seltab_sql.
@@ -65,14 +65,14 @@ CLASS zcl_sat_where_clause_builder DEFINITION
   PRIVATE SECTION.
     TYPES: ty_filter_value TYPE c LENGTH 100.
     TYPES: BEGIN OF ty_s_selopt.
-        INCLUDE TYPE zif_sat_ty_global=>ty_s_selopt.
-    TYPES: subquery TYPE string.
+             INCLUDE TYPE zif_sat_ty_global=>ty_s_selopt.
+             TYPES: subquery TYPE string.
     TYPES: END OF ty_s_selopt.
     TYPES: ty_t_selopt TYPE STANDARD TABLE OF ty_s_selopt WITH EMPTY KEY.
 
     TYPES:
       BEGIN OF ty_s_field_selection,
-        sqlfieldname TYPE char62,
+        sqlfieldname TYPE zif_sat_ty_global=>ty_char62,
         field        TYPE zsat_fieldname_with_alias,
         sql_function TYPE zsat_sql_function,
         options      TYPE ty_t_selopt,
@@ -106,7 +106,7 @@ CLASS zcl_sat_where_clause_builder DEFINITION
         cv_subrc     LIKE sy-subrc.
     CLASS-METHODS add_fieldname_to_clause
       IMPORTING
-        iv_fieldname    TYPE char62
+        iv_fieldname    TYPE zif_sat_ty_global=>ty_char62
         iv_sql_function TYPE zsat_sql_function OPTIONAL
       CHANGING
         ct_where        TYPE ty_t_where_clause
@@ -124,7 +124,7 @@ CLASS zcl_sat_where_clause_builder DEFINITION
         cv_offset      TYPE i.
     CLASS-METHODS single_clause_new
       IMPORTING
-        iv_fieldname        TYPE char62
+        iv_fieldname        TYPE zif_sat_ty_global=>ty_char62
         iv_sql_function     TYPE zsat_sql_function OPTIONAL
         is_option           TYPE ty_s_selopt
         iv_fieldname_length TYPE i
@@ -134,7 +134,7 @@ CLASS zcl_sat_where_clause_builder DEFINITION
         cv_offset           TYPE i.
     CLASS-METHODS single_subquery_clause_new
       IMPORTING
-        iv_fieldname        TYPE char62
+        iv_fieldname        TYPE zif_sat_ty_global=>ty_char62
         iv_subquery         TYPE string
         iv_option           TYPE ddoption
         iv_fieldname_length TYPE i
@@ -151,7 +151,44 @@ ENDCLASS.
 
 
 
-CLASS zcl_sat_where_clause_builder IMPLEMENTATION.
+CLASS ZCL_SAT_WHERE_CLAUSE_BUILDER IMPLEMENTATION.
+
+
+  METHOD add_fieldname_to_clause.
+    DATA: lv_fieldname LIKE iv_fieldname.
+
+    lv_fieldname = iv_fieldname.
+
+    IF iv_sql_function IS NOT INITIAL.
+
+      CASE iv_sql_function.
+
+        WHEN zif_sat_c_sql_function=>upper.
+          IF sy-saprl >= 751.
+            lv_fieldname = |UPPER( { iv_fieldname } )|.
+
+*.......... Convert low/high to upper case
+            IF cv_low IS NOT INITIAL.
+              TRANSLATE cv_low TO UPPER CASE.
+            ENDIF.
+
+            IF cv_high IS NOT INITIAL.
+              TRANSLATE cv_high TO UPPER CASE.
+            ENDIF.
+          ENDIF.
+
+      ENDCASE.
+    ENDIF.
+
+    where_single_word_new(
+      EXPORTING iv_word        = CONV #( lv_fieldname )
+                iv_word_length = strlen( lv_fieldname )
+      CHANGING  ct_where       = ct_where
+                cv_where       = cv_where
+                cv_offset      = cv_offset
+    ).
+  ENDMETHOD.
+
 
   METHOD add_selopt_as_or_seltab.
     DATA(lt_or_seltab) = VALUE zif_sat_ty_global=>ty_t_or_seltab_sql( ).
@@ -166,6 +203,7 @@ CLASS zcl_sat_where_clause_builder IMPLEMENTATION.
     ct_and_seltab = VALUE #( BASE ct_and_seltab ( lt_or_seltab ) ).
   ENDMETHOD.
 
+
   METHOD add_selopt_to_or_seltab.
     DATA(ls_or_seltab) = create_or_seltab(
        it_select_option = it_select_option
@@ -176,30 +214,6 @@ CLASS zcl_sat_where_clause_builder IMPLEMENTATION.
     ct_or_seltab = VALUE #( BASE ct_or_seltab ( ls_or_seltab ) ).
   ENDMETHOD.
 
-  METHOD create_or_seltab.
-    CHECK it_select_option IS NOT INITIAL.
-
-    LOOP AT it_select_option ASSIGNING FIELD-SYMBOL(<ls_selopt>).
-      ASSIGN COMPONENT 'SIGN' OF STRUCTURE <ls_selopt> TO FIELD-SYMBOL(<lv_sign>).
-      ASSIGN COMPONENT 'OPTION' OF STRUCTURE <ls_selopt> TO FIELD-SYMBOL(<lv_option>).
-      ASSIGN COMPONENT 'LOW' OF STRUCTURE <ls_selopt> TO FIELD-SYMBOL(<lv_low>).
-      ASSIGN COMPONENT 'HIGH' OF STRUCTURE <ls_selopt> TO FIELD-SYMBOL(<lv_high>).
-
-      CHECK <lv_sign> IS ASSIGNED AND
-            <lv_option> IS ASSIGNED AND
-            <lv_low> IS ASSIGNED AND
-            <lv_high> IS ASSIGNED.
-
-      rs_or_seltab-values = VALUE #( BASE rs_or_seltab-values
-        ( sqlfieldname = iv_sqlfieldname
-          sql_function = iv_sql_function
-          sign         = <lv_sign>
-          option       = <lv_option>
-          low          = |{ <lv_low> ALIGN = LEFT }|
-          high         = |{ <lv_high> ALIGN = LEFT }| )
-      ).
-    ENDLOOP.
-  ENDMETHOD.
 
   METHOD create_and_condition.
     DATA(lf_multi_and) = xsdbool( lines( it_and_seltab ) > 1 ).
@@ -251,7 +265,7 @@ CLASS zcl_sat_where_clause_builder IMPLEMENTATION.
           ls_field_range  TYPE ty_s_field_selection,
           ls_selopt       TYPE ty_s_selopt,
           lv_field_length TYPE i,
-          lv_old_field    TYPE char62.
+          lv_old_field    TYPE zif_sat_ty_global=>ty_char62.
 
     CHECK: it_sel IS NOT INITIAL.
 
@@ -367,6 +381,64 @@ CLASS zcl_sat_where_clause_builder IMPLEMENTATION.
   ENDMETHOD.
 
 
+  METHOD create_or_seltab.
+    CHECK it_select_option IS NOT INITIAL.
+
+    LOOP AT it_select_option ASSIGNING FIELD-SYMBOL(<ls_selopt>).
+      ASSIGN COMPONENT 'SIGN' OF STRUCTURE <ls_selopt> TO FIELD-SYMBOL(<lv_sign>).
+      ASSIGN COMPONENT 'OPTION' OF STRUCTURE <ls_selopt> TO FIELD-SYMBOL(<lv_option>).
+      ASSIGN COMPONENT 'LOW' OF STRUCTURE <ls_selopt> TO FIELD-SYMBOL(<lv_low>).
+      ASSIGN COMPONENT 'HIGH' OF STRUCTURE <ls_selopt> TO FIELD-SYMBOL(<lv_high>).
+
+      CHECK <lv_sign> IS ASSIGNED AND
+            <lv_option> IS ASSIGNED AND
+            <lv_low> IS ASSIGNED AND
+            <lv_high> IS ASSIGNED.
+
+      rs_or_seltab-values = VALUE #( BASE rs_or_seltab-values
+        ( sqlfieldname = iv_sqlfieldname
+          sql_function = iv_sql_function
+          sign         = <lv_sign>
+          option       = <lv_option>
+          low          = |{ <lv_low> ALIGN = LEFT }|
+          high         = |{ <lv_high> ALIGN = LEFT }| )
+      ).
+    ENDLOOP.
+  ENDMETHOD.
+
+
+  METHOD free_selections_to_where.
+
+    DATA: l_subrc  TYPE sy-subrc,
+          lt_where TYPE ty_t_where_clause.
+
+    LOOP AT it_field_range ASSIGNING FIELD-SYMBOL(<ls_field_selection>).
+      CLEAR: lt_where.
+
+      where_for_one_field(
+        EXPORTING
+          is_field_sel = <ls_field_selection>
+        CHANGING
+          ct_where     = lt_where
+          cv_subrc     = l_subrc
+      ).
+      CHECK l_subrc = 0.
+
+      IF rt_where IS INITIAL.
+        rt_where = lt_where.
+      ELSE.
+        ASSIGN lt_where[ 1 ] TO FIELD-SYMBOL(<lv_where>).
+        IF sy-subrc = 0.
+          <lv_where>(3) = 'AND'.
+          rt_where = VALUE #( BASE rt_where ( LINES OF CORRESPONDING #( lt_where ) ) ).
+        ENDIF.
+      ENDIF.
+
+    ENDLOOP.
+
+  ENDMETHOD.
+
+
   METHOD get_option.
 
     DATA: lf_low_cp TYPE abap_bool.
@@ -419,272 +491,6 @@ CLASS zcl_sat_where_clause_builder IMPLEMENTATION.
 
   ENDMETHOD.
 
-  METHOD free_selections_to_where.
-
-    DATA: l_subrc  TYPE sy-subrc,
-          lt_where TYPE ty_t_where_clause.
-
-    LOOP AT it_field_range ASSIGNING FIELD-SYMBOL(<ls_field_selection>).
-      CLEAR: lt_where.
-
-      where_for_one_field(
-        EXPORTING
-          is_field_sel = <ls_field_selection>
-        CHANGING
-          ct_where     = lt_where
-          cv_subrc     = l_subrc
-      ).
-      CHECK l_subrc = 0.
-
-      IF rt_where IS INITIAL.
-        rt_where = lt_where.
-      ELSE.
-        ASSIGN lt_where[ 1 ] TO FIELD-SYMBOL(<lv_where>).
-        IF sy-subrc = 0.
-          <lv_where>(3) = 'AND'.
-          rt_where = VALUE #( BASE rt_where ( LINES OF CORRESPONDING #( lt_where ) ) ).
-        ENDIF.
-      ENDIF.
-
-    ENDLOOP.
-
-  ENDMETHOD.
-
-  METHOD where_for_one_field.
-
-    DATA: lv_fieldname_length TYPE i,
-          lv_and_offset       TYPE i VALUE 4,         " Space for 'AND' word
-          l_i_num             TYPE i,
-          l_info              TYPE ty_s_where_info,
-          lv_where            TYPE ty_where_line.
-
-    FIELD-SYMBOLS: <ls_option> TYPE ty_s_selopt.
-
-*.. always use length of name to spare some spaces
-    lv_fieldname_length = strlen( is_field_sel-sqlfieldname ).
-    IF NOT lv_fieldname_length > 0.
-      lv_fieldname_length = 1.
-    ENDIF.
-
-    TRY.
-        cl_abap_dyn_prg=>check_column_name( is_field_sel-field ).
-      CATCH cx_abap_invalid_name.
-        MESSAGE e080(sldbv) WITH is_field_sel-field.
-    ENDTRY.
-
-    CLEAR ct_where.
-
-    cv_subrc = 1.                  " Keine Abgrenzungen
-    CHECK is_field_sel-options IS NOT INITIAL.
-
-    cv_subrc = 0.
-
-    MOVE: is_field_sel-convert-where_leng TO l_info-ilength.
-    DATA(lf_first) = abap_true.
-
-    LOOP AT is_field_sel-options ASSIGNING <ls_option> WHERE sign = 'I'.
-
-      IF lf_first = abap_false.
-
-        where_single_word_new(
-          EXPORTING iv_word        = 'OR'
-                    iv_word_length = 2
-          CHANGING  ct_where       = ct_where
-                    cv_where       = lv_where
-                    cv_offset      = lv_and_offset
-        ).
-      ELSE.
-        where_single_word_new(
-          EXPORTING iv_word        = '('
-                    iv_word_length = 1
-          CHANGING  ct_where       = ct_where
-                    cv_where       = lv_where
-                    cv_offset      = lv_and_offset
-        ).
-
-        CLEAR lf_first.
-      ENDIF.
-
-      single_clause_new(
-        EXPORTING iv_fieldname        = is_field_sel-sqlfieldname
-                  iv_sql_function     = is_field_sel-sql_function
-                  is_option           = <ls_option>
-                  iv_fieldname_length = lv_fieldname_length
-        CHANGING  ct_where            = ct_where
-                  cv_where            = lv_where
-                  cv_offset           = lv_and_offset
-      ).
-      ADD 1 TO l_i_num.
-    ENDLOOP.
-
-    IF l_i_num > 0.
-      where_single_word_new(
-        EXPORTING iv_word        = ')'
-                  iv_word_length = 1
-        CHANGING  ct_where       = ct_where
-                  cv_where       = lv_where
-                  cv_offset      = lv_and_offset
-      ).
-    ENDIF.
-
-    lf_first = abap_true.
-
-    LOOP AT is_field_sel-options ASSIGNING <ls_option> WHERE sign = 'E'.
-      IF lf_first = abap_false OR l_i_num > 0.
-        where_single_word_new(
-          EXPORTING iv_word        = 'AND'
-                    iv_word_length = 3
-          CHANGING  ct_where       = ct_where
-                    cv_where       = lv_where
-                    cv_offset      = lv_and_offset
-        ).
-      ENDIF.
-      CLEAR lf_first.
-      single_clause_new(
-        EXPORTING iv_fieldname        = is_field_sel-sqlfieldname
-                  iv_sql_function     = is_field_sel-sql_function
-                  is_option           = <ls_option>
-                  iv_fieldname_length = lv_fieldname_length
-        CHANGING  ct_where            = ct_where
-                  cv_where            = lv_where
-                  cv_offset           = lv_and_offset
-      ).
-    ENDLOOP.
-
-    ct_where = VALUE #( BASE ct_where ( lv_where ) ).
-  ENDMETHOD.
-
-  METHOD where_single_word_new.
-
-    DATA: lv_remaining TYPE i.
-    FIELD-SYMBOLS: <lv_new_word> TYPE any.
-
-    lv_remaining = c_line_length - cv_offset.
-
-    IF iv_word_length < lv_remaining.
-      ASSIGN cv_where+cv_offset(iv_word_length) TO <lv_new_word>.
-      <lv_new_word> = iv_word.
-      cv_offset = cv_offset + iv_word_length + 1.  " Add blank character
-    ELSE.
-      ct_where = VALUE #( BASE ct_where ( cv_where ) ).
-      cv_where = iv_word.
-      cv_offset = iv_word_length + 1. " Add blank character
-    ENDIF.
-  ENDMETHOD.
-
-  METHOD start_new_line.
-    CHECK cv_where IS NOT INITIAL.
-
-    ct_where = VALUE #( BASE ct_where ( cv_where ) ).
-    cv_offset = 4.
-    CLEAR cv_where.
-  ENDMETHOD.
-
-  METHOD add_fieldname_to_clause.
-    DATA: lv_fieldname LIKE iv_fieldname.
-
-    lv_fieldname = iv_fieldname.
-
-    IF iv_sql_function IS NOT INITIAL.
-
-      CASE iv_sql_function.
-
-        WHEN zif_sat_c_sql_function=>upper.
-          IF sy-saprl >= 751.
-            lv_fieldname = |UPPER( { iv_fieldname } )|.
-
-*.......... Convert low/high to upper case
-            IF cv_low IS NOT INITIAL.
-              TRANSLATE cv_low TO UPPER CASE.
-            ENDIF.
-
-            IF cv_high IS NOT INITIAL.
-              TRANSLATE cv_high TO UPPER CASE.
-            ENDIF.
-          ENDIF.
-
-      ENDCASE.
-    ENDIF.
-
-    where_single_word_new(
-      EXPORTING iv_word        = CONV #( lv_fieldname )
-                iv_word_length = strlen( lv_fieldname )
-      CHANGING  ct_where       = ct_where
-                cv_where       = cv_where
-                cv_offset      = cv_offset
-    ).
-  ENDMETHOD.
-
-  METHOD single_subquery_clause_new.
-    DATA: lt_subquery TYPE string_table.
-
-*.. Always start a new row for a subquery clause
-    start_new_line( CHANGING ct_where  = ct_where
-                             cv_where  = cv_where
-                             cv_offset = cv_offset ).
-
-    IF  iv_option = zif_sat_c_options=>not_in_subquery OR
-        iv_option = zif_sat_c_options=>in_subquery.
-
-      add_fieldname_to_clause(
-        EXPORTING iv_fieldname    = iv_fieldname
-        CHANGING  ct_where        = ct_where
-                  cv_where        = cv_where
-                  cv_offset       = cv_offset
-      ).
-
-      IF iv_option = zif_sat_c_options=>not_in_subquery.
-
-        where_single_word_new(
-          EXPORTING iv_word        = 'NOT'
-                    iv_word_length = 3
-          CHANGING  ct_where       = ct_where
-                    cv_where       = cv_where
-                    cv_offset      = cv_offset
-        ).
-      ENDIF.
-      where_single_word_new(
-        EXPORTING iv_word        = 'IN'
-                  iv_word_length = 2
-        CHANGING  ct_where       = ct_where
-                  cv_where       = cv_where
-                  cv_offset      = cv_offset
-      ).
-*.... Wrap subquery in parenthesis
-      where_single_word_new(
-        EXPORTING iv_word        = '('
-                  iv_word_length = 1
-        CHANGING  ct_where       = ct_where
-                  cv_where       = cv_where
-                  cv_offset      = cv_offset
-      ).
-*.... Add subquery clause
-      SPLIT iv_subquery AT cl_abap_char_utilities=>cr_lf INTO TABLE lt_subquery.
-      LOOP AT lt_subquery ASSIGNING FIELD-SYMBOL(<lv_query_line>).
-        start_new_line( CHANGING ct_where  = ct_where
-                                 cv_where  = cv_where
-                                 cv_offset = cv_offset  ).
-        where_single_word_new(
-          EXPORTING iv_word        = <lv_query_line>
-                    iv_word_length = strlen( <lv_query_line> )
-          CHANGING  ct_where       = ct_where
-                    cv_where       = cv_where
-                    cv_offset      = cv_offset
-        ).
-      ENDLOOP.
-*.... Close the subquery clause
-      where_single_word_new(
-        EXPORTING iv_word        = ')'
-                  iv_word_length = 1
-        CHANGING  ct_where       = ct_where
-                  cv_where       = cv_where
-                  cv_offset      = cv_offset
-      ).
-
-    ELSE.
-*.... Exists is not supported yet
-    ENDIF.
-  ENDMETHOD.
 
   METHOD single_clause_new.
 
@@ -1002,4 +808,208 @@ CLASS zcl_sat_where_clause_builder IMPLEMENTATION.
     ENDCASE.
   ENDMETHOD.
 
+
+  METHOD single_subquery_clause_new.
+    DATA: lt_subquery TYPE string_table.
+
+*.. Always start a new row for a subquery clause
+    start_new_line( CHANGING ct_where  = ct_where
+                             cv_where  = cv_where
+                             cv_offset = cv_offset ).
+
+    IF  iv_option = zif_sat_c_options=>not_in_subquery OR
+        iv_option = zif_sat_c_options=>in_subquery.
+
+      add_fieldname_to_clause(
+        EXPORTING iv_fieldname    = iv_fieldname
+        CHANGING  ct_where        = ct_where
+                  cv_where        = cv_where
+                  cv_offset       = cv_offset
+      ).
+
+      IF iv_option = zif_sat_c_options=>not_in_subquery.
+
+        where_single_word_new(
+          EXPORTING iv_word        = 'NOT'
+                    iv_word_length = 3
+          CHANGING  ct_where       = ct_where
+                    cv_where       = cv_where
+                    cv_offset      = cv_offset
+        ).
+      ENDIF.
+      where_single_word_new(
+        EXPORTING iv_word        = 'IN'
+                  iv_word_length = 2
+        CHANGING  ct_where       = ct_where
+                  cv_where       = cv_where
+                  cv_offset      = cv_offset
+      ).
+*.... Wrap subquery in parenthesis
+      where_single_word_new(
+        EXPORTING iv_word        = '('
+                  iv_word_length = 1
+        CHANGING  ct_where       = ct_where
+                  cv_where       = cv_where
+                  cv_offset      = cv_offset
+      ).
+*.... Add subquery clause
+      SPLIT iv_subquery AT cl_abap_char_utilities=>cr_lf INTO TABLE lt_subquery.
+      LOOP AT lt_subquery ASSIGNING FIELD-SYMBOL(<lv_query_line>).
+        start_new_line( CHANGING ct_where  = ct_where
+                                 cv_where  = cv_where
+                                 cv_offset = cv_offset  ).
+        where_single_word_new(
+          EXPORTING iv_word        = <lv_query_line>
+                    iv_word_length = strlen( <lv_query_line> )
+          CHANGING  ct_where       = ct_where
+                    cv_where       = cv_where
+                    cv_offset      = cv_offset
+        ).
+      ENDLOOP.
+*.... Close the subquery clause
+      where_single_word_new(
+        EXPORTING iv_word        = ')'
+                  iv_word_length = 1
+        CHANGING  ct_where       = ct_where
+                  cv_where       = cv_where
+                  cv_offset      = cv_offset
+      ).
+
+    ELSE.
+*.... Exists is not supported yet
+    ENDIF.
+  ENDMETHOD.
+
+
+  METHOD start_new_line.
+    CHECK cv_where IS NOT INITIAL.
+
+    ct_where = VALUE #( BASE ct_where ( cv_where ) ).
+    cv_offset = 4.
+    CLEAR cv_where.
+  ENDMETHOD.
+
+
+  METHOD where_for_one_field.
+
+    DATA: lv_fieldname_length TYPE i,
+          lv_and_offset       TYPE i VALUE 4,         " Space for 'AND' word
+          l_i_num             TYPE i,
+          l_info              TYPE ty_s_where_info,
+          lv_where            TYPE ty_where_line.
+
+    FIELD-SYMBOLS: <ls_option> TYPE ty_s_selopt.
+
+*.. always use length of name to spare some spaces
+    lv_fieldname_length = strlen( is_field_sel-sqlfieldname ).
+    IF NOT lv_fieldname_length > 0.
+      lv_fieldname_length = 1.
+    ENDIF.
+
+    TRY.
+        cl_abap_dyn_prg=>check_column_name( is_field_sel-field ).
+      CATCH cx_abap_invalid_name.
+        MESSAGE e080(sldbv) WITH is_field_sel-field.
+    ENDTRY.
+
+    CLEAR ct_where.
+
+    cv_subrc = 1.                  " Keine Abgrenzungen
+    CHECK is_field_sel-options IS NOT INITIAL.
+
+    cv_subrc = 0.
+
+    MOVE: is_field_sel-convert-where_leng TO l_info-ilength.
+    DATA(lf_first) = abap_true.
+
+    LOOP AT is_field_sel-options ASSIGNING <ls_option> WHERE sign = 'I'.
+
+      IF lf_first = abap_false.
+
+        where_single_word_new(
+          EXPORTING iv_word        = 'OR'
+                    iv_word_length = 2
+          CHANGING  ct_where       = ct_where
+                    cv_where       = lv_where
+                    cv_offset      = lv_and_offset
+        ).
+      ELSE.
+        where_single_word_new(
+          EXPORTING iv_word        = '('
+                    iv_word_length = 1
+          CHANGING  ct_where       = ct_where
+                    cv_where       = lv_where
+                    cv_offset      = lv_and_offset
+        ).
+
+        CLEAR lf_first.
+      ENDIF.
+
+      single_clause_new(
+        EXPORTING iv_fieldname        = is_field_sel-sqlfieldname
+                  iv_sql_function     = is_field_sel-sql_function
+                  is_option           = <ls_option>
+                  iv_fieldname_length = lv_fieldname_length
+        CHANGING  ct_where            = ct_where
+                  cv_where            = lv_where
+                  cv_offset           = lv_and_offset
+      ).
+      ADD 1 TO l_i_num.
+    ENDLOOP.
+
+    IF l_i_num > 0.
+      where_single_word_new(
+        EXPORTING iv_word        = ')'
+                  iv_word_length = 1
+        CHANGING  ct_where       = ct_where
+                  cv_where       = lv_where
+                  cv_offset      = lv_and_offset
+      ).
+    ENDIF.
+
+    lf_first = abap_true.
+
+    LOOP AT is_field_sel-options ASSIGNING <ls_option> WHERE sign = 'E'.
+      IF lf_first = abap_false OR l_i_num > 0.
+        where_single_word_new(
+          EXPORTING iv_word        = 'AND'
+                    iv_word_length = 3
+          CHANGING  ct_where       = ct_where
+                    cv_where       = lv_where
+                    cv_offset      = lv_and_offset
+        ).
+      ENDIF.
+      CLEAR lf_first.
+      single_clause_new(
+        EXPORTING iv_fieldname        = is_field_sel-sqlfieldname
+                  iv_sql_function     = is_field_sel-sql_function
+                  is_option           = <ls_option>
+                  iv_fieldname_length = lv_fieldname_length
+        CHANGING  ct_where            = ct_where
+                  cv_where            = lv_where
+                  cv_offset           = lv_and_offset
+      ).
+    ENDLOOP.
+
+    ct_where = VALUE #( BASE ct_where ( lv_where ) ).
+  ENDMETHOD.
+
+
+  METHOD where_single_word_new.
+
+    DATA: lv_remaining TYPE i.
+    FIELD-SYMBOLS: <lv_new_word> TYPE any.
+
+    lv_remaining = c_line_length - cv_offset.
+
+    IF iv_word_length < lv_remaining.
+      ASSIGN cv_where+cv_offset(iv_word_length) TO <lv_new_word>.
+      <lv_new_word> = iv_word.
+      cv_offset = cv_offset + iv_word_length + 1.  " Add blank character
+    ELSE.
+      ct_where = VALUE #( BASE ct_where ( cv_where ) ).
+      cv_where = iv_word.
+      cv_offset = iv_word_length + 1. " Add blank character
+    ENDIF.
+  ENDMETHOD.
 ENDCLASS.
