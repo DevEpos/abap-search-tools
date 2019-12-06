@@ -3,7 +3,11 @@
 This Repository contains the ADT Backend that is needed to use the eclipse plugin
 [ABAP Search and Analysis Tools](https://www.github.com/stockbal/abap-search-tools-ui)
 
-### Choosing the correct branch for your System
+### Installation
+
+Install this repository using [abapGit](https://github.com/larshp/abapGit#abapgit).
+
+#### Choosing the correct branch for your System
 
 NW version|Branch name
 ----------|-----------
