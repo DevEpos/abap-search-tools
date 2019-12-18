@@ -133,10 +133,10 @@ CLASS zcl_sat_object_query_parser IMPLEMENTATION.
     enhance_options( CHANGING ct_options = lt_options ).
 
     ro_query = NEW zcl_sat_object_search_query(
-      iv_query                = lv_search_terms
-      iv_type                 = mo_configuration->get_type( )
-      it_search_term          = get_search_terms( lv_search_terms )
-      it_search_options       = lt_options
+      iv_query          = iv_search_query
+      iv_type           = mo_configuration->get_type( )
+      it_search_term    = get_search_terms( lv_search_terms )
+      it_search_options = lt_options
     ).
   ENDMETHOD.
 
@@ -163,9 +163,9 @@ CLASS zcl_sat_object_query_parser IMPLEMENTATION.
     ENDIF.
 
     ro_query = NEW zcl_sat_object_search_query(
-      iv_type                 = mo_configuration->get_type( )
-      it_search_term          = lt_search_terms
-      it_search_options       = lt_options
+      iv_type           = mo_configuration->get_type( )
+      it_search_term    = lt_search_terms
+      it_search_options = lt_options
     ).
   ENDMETHOD.
 
