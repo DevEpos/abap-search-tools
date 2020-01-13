@@ -134,6 +134,7 @@ CLASS zcl_sat_adt_discovery_app IMPLEMENTATION.
     DATA(lt_allowed_options) = io_search_config->get_allowed_options( ).
     DATA(lv_template) = |{ c_object_search_uri }/{ to_lower( iv_search_type ) }\{?{ zif_sat_c_object_search=>c_general_search_params-object_name }*\}| &&
                         |\{&{ zif_sat_c_object_search=>c_general_search_params-get_all_results }*\}| &&
+                        |\{&{ zif_sat_c_object_search=>c_general_search_params-read_api_state }*\}| &&
                         |\{&{ zif_sat_c_object_search=>c_general_search_params-use_and_for_filters }*\}| &&
                         |\{&{ zif_sat_c_object_search=>c_general_search_params-read_package_hierarchy }*\}|.
 
