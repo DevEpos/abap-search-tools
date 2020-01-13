@@ -1,0 +1,16 @@
+{
+"BASEINFO":
+{
+"FROM":
+[
+"ZSAT_I_DOMAINFIXVALUE",
+"DARTT",
+"DD02L",
+"DD09L"
+],
+"ASSOCIATED":
+[],
+"BASE":
+[]
+}
+}

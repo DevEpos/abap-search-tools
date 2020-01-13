@@ -1,0 +1,17 @@
+{
+"BASEINFO":
+{
+"FROM":
+[
+"ZSAT_P_CDSVIEWBASE",
+"DDDDLSRC02BT",
+"DDDDLSRCT"
+],
+"ASSOCIATED":
+[
+"ZSAT_I_APISTATES"
+],
+"BASE":
+[]
+}
+}

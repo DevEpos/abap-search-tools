@@ -1,0 +1,14 @@
+{
+"BASEINFO":
+{
+"FROM":
+[
+"ZSAT_P_CLASS",
+"TADIR"
+],
+"ASSOCIATED":
+[],
+"BASE":
+[]
+}
+}

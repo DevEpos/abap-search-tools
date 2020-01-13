@@ -1,0 +1,16 @@
+{
+"BASEINFO":
+{
+"FROM":
+[
+"ZSAT_I_DDLDEPENDENCY",
+"DD02B",
+"DDDDLSRC",
+"TADIR"
+],
+"ASSOCIATED":
+[],
+"BASE":
+[]
+}
+}

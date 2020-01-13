@@ -1,0 +1,15 @@
+{
+"BASEINFO":
+{
+"FROM":
+[
+"TADIR",
+"TDEVC",
+"TDEVCT"
+],
+"ASSOCIATED":
+[],
+"BASE":
+[]
+}
+}

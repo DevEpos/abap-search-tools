@@ -1,0 +1,14 @@
+{
+"BASEINFO":
+{
+"FROM":
+[
+"ZSAT_P_DATABASEVIEW",
+"DD25T"
+],
+"ASSOCIATED":
+[],
+"BASE":
+[]
+}
+}

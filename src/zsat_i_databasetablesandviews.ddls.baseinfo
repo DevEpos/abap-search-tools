@@ -1,0 +1,14 @@
+{
+"BASEINFO":
+{
+"FROM":
+[
+"ZSAT_I_DATABASETABLE",
+"ZSAT_I_DATABASEVIEW"
+],
+"ASSOCIATED":
+[],
+"BASE":
+[]
+}
+}

@@ -1,0 +1,16 @@
+{
+"BASEINFO":
+{
+"FROM":
+[
+"ZSAT_I_APISTATES",
+"ZSAT_I_CDSVIEWFIELD",
+"ZSAT_P_CDSVIEWBASE",
+"DD27S"
+],
+"ASSOCIATED":
+[],
+"BASE":
+[]
+}
+}
