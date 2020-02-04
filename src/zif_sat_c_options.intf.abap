@@ -1,6 +1,7 @@
 INTERFACE zif_sat_c_options
   PUBLIC .
 
+  CONSTANTS default TYPE char2 VALUE space ##NO_TEXT.
 
   CONSTANTS including TYPE char1 VALUE 'I' ##NO_TEXT.
   CONSTANTS excluding TYPE char1 VALUE 'E' ##NO_TEXT.
