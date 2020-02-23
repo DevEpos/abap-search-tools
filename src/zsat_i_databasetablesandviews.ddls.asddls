@@ -18,6 +18,7 @@ define view ZSAT_I_DatabaseTablesAndViews
   DevelopmentPackage,
   CreatedBy,
   CreatedDate,
+  ChangedBy,
   ChangedDate,
   Type
 }
@@ -31,6 +32,7 @@ union select from ZSAT_I_DatabaseView(p_language : $parameters.p_language)
   DevelopmentPackage,
   CreatedBy,
   CreatedDate,
+  ChangedBy,
   ChangedDate,
   Type
 }
