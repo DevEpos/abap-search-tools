@@ -13,6 +13,7 @@ define view ZSAT_I_CDSEntity
     p_language : abap.lang
   as select from    ZSAT_P_CDSViewBase as Base
     left outer join ddddlsrc02bt       as Text         on  Text.ddlname    = Base.DdlName
+                                                       and Text.strucobjn  = Base.EntityId
                                                        and Text.ddlanguage = $parameters.p_language
     left outer join ddddlsrct          as FallbackText on  FallbackText.ddlname    = Base.DdlName
                                                        and FallbackText.ddlanguage = Base.OriginalLanguage
@@ -38,6 +39,7 @@ define view ZSAT_I_CDSEntity
   end                    as Description,
   Base.CreatedBy,
   Base.CreatedDate,
+  Base.ChangedBy,
   Base.ChangedDate,
   'C'                    as Type,
   _ApiState

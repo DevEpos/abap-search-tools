@@ -17,7 +17,19 @@ CLASS zcl_sat_os_dbtab_provider DEFINITION
        c_dbtab_search_params for zif_sat_c_object_search~c_dbtab_search_params.
     CONSTANTS:
       c_base_table  TYPE string VALUE 'base',
-      c_field_table TYPE string VALUE 'field'.
+      c_field_table TYPE string VALUE 'field',
+        BEGIN OF c_fields,
+        alias               TYPE string VALUE 'field' ##NO_TEXT,
+        entityid            TYPE string VALUE 'entityid' ##NO_TEXT,
+        type                TYPE string VALUE 'type' ##NO_TEXT,
+        fieldname           TYPE string VALUE 'fieldname' ##NO_TEXT,
+        description         TYPE string VALUE 'description' ##NO_TEXT,
+        development_package TYPE string VALUE 'developmentpackage' ##NO_TEXT,
+        created_by          TYPE string VALUE 'createdby' ##NO_TEXT,
+        created_date        TYPE string VALUE 'createddate' ##NO_TEXT,
+        changed_by          TYPE string VALUE 'changedby' ##NO_TEXT,
+        changed_date        TYPE string VALUE 'changeddate' ##NO_TEXT,
+      END OF c_fields.
 
     DATA mv_field_subquery TYPE string.
     DATA mv_field_filter_count TYPE i.
@@ -85,14 +97,14 @@ CLASS zcl_sat_os_dbtab_provider IMPLEMENTATION.
 *.......... Find objects with a certain responsible person
         WHEN c_general_search_options-user.
           add_option_filter(
-            iv_fieldname = 'createdby'
+            iv_fieldname = c_fields-created_by
             it_values    = <ls_option>-value_range
           ).
 
 *.......... Find objects which exist in a certain development package
         WHEN c_general_search_options-package.
           add_option_filter(
-            iv_fieldname = 'developmentpackage'
+            iv_fieldname = c_fields-development_package
             it_values    = <ls_option>-value_range
           ).
 
@@ -113,10 +125,13 @@ CLASS zcl_sat_os_dbtab_provider IMPLEMENTATION.
 
     add_select_field( iv_fieldname = mv_entity_fieldname iv_fieldname_alias = 'entity_id' iv_entity = c_base_table ).
     add_select_field( iv_fieldname = mv_raw_entity_fieldname iv_fieldname_alias = 'entity_id_raw' iv_entity = c_base_table ).
-    add_select_field( iv_fieldname = 'description' iv_entity = c_base_table ).
-    add_select_field( iv_fieldname = 'createdby' iv_fieldname_alias = 'created_by' iv_entity = c_base_table ).
-    add_select_field( iv_fieldname = 'developmentpackage' iv_fieldname_alias = 'devclass' iv_entity = c_base_table ).
-    add_select_field( iv_fieldname = 'type' iv_fieldname_alias = 'entity_type' iv_entity = c_base_table ).
+    add_select_field( iv_fieldname = c_fields-description iv_entity = c_base_table ).
+    add_select_field( iv_fieldname = c_fields-created_by iv_fieldname_alias = 'created_by' iv_entity = c_base_table ).
+    add_select_field( iv_fieldname = c_fields-created_date iv_fieldname_alias = 'created_date' iv_entity = c_base_table ).
+    add_select_field( iv_fieldname = c_fields-changed_by iv_fieldname_alias = 'changed_by' iv_entity = c_base_table ).
+    add_select_field( iv_fieldname = c_fields-changed_date iv_fieldname_alias = 'changed_date' iv_entity = c_base_table ).
+    add_select_field( iv_fieldname = c_fields-development_package iv_fieldname_alias = 'devclass' iv_entity = c_base_table ).
+    add_select_field( iv_fieldname = c_fields-type iv_fieldname_alias = 'entity_type' iv_entity = c_base_table ).
 
     add_order_by( iv_fieldname = mv_entity_fieldname iv_entity = c_base_table  ).
 
@@ -135,13 +150,16 @@ CLASS zcl_sat_os_dbtab_provider IMPLEMENTATION.
 
     add_group_by_clause( |{ c_base_table }~{ mv_entity_fieldname }| ).
     add_group_by_clause( |{ c_base_table }~{ mv_raw_entity_fieldname }| ).
-    add_group_by_clause( |{ c_base_table }~description| ).
-    add_group_by_clause( |{ c_base_table }~createdby| ).
-    add_group_by_clause( |{ c_base_table }~developmentpackage| ).
-    add_group_by_clause( |{ c_base_table }~type| ).
+    add_group_by_clause( |{ c_base_table }~{ c_fields-description }| ).
+    add_group_by_clause( |{ c_base_table }~{ c_fields-created_by }| ).
+    add_group_by_clause( |{ c_base_table }~{ c_fields-created_date }| ).
+    add_group_by_clause( |{ c_base_table }~{ c_fields-changed_by }| ).
+    add_group_by_clause( |{ c_base_table }~{ c_fields-changed_date }| ).
+    add_group_by_clause( |{ c_base_table }~{ c_fields-development_package }| ).
+    add_group_by_clause( |{ c_base_table }~{ c_fields-type }| ).
 
     IF mv_field_filter_count > 1.
-      add_having_clause( iv_field = |{ c_field_table }~fieldname| iv_counter_compare = mv_field_filter_count ).
+      add_having_clause( iv_field = |{ c_field_table }~{ c_fields-fieldname }| iv_counter_compare = mv_field_filter_count ).
     ENDIF.
   ENDMETHOD.
 
@@ -163,7 +181,7 @@ CLASS zcl_sat_os_dbtab_provider IMPLEMENTATION.
     ENDLOOP.
 
     add_option_filter(
-        iv_fieldname = 'type'
+        iv_fieldname = c_fields-type
         it_values    = lt_type_filters
     ).
   ENDMETHOD.
@@ -219,14 +237,14 @@ CLASS zcl_sat_os_dbtab_provider IMPLEMENTATION.
     ).
 
     create_not_in_filter(
-        iv_subquery_fieldname = 'fieldname'
+        iv_subquery_fieldname = c_fields-fieldname
         iv_fieldname          = |{ c_base_table }~tablename|
         it_excluding          = lt_excluding
         iv_subquery           = mv_field_subquery
     ).
 
     add_option_filter(
-        iv_fieldname = |{ c_field_table }~fieldname|
+        iv_fieldname = |{ c_field_table }~{ c_fields-fieldname }|
         it_values    = it_values
     ).
 

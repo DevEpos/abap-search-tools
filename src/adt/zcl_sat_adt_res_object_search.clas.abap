@@ -227,8 +227,11 @@ CLASS zcl_sat_adt_res_object_search IMPLEMENTATION.
         description      = <ls_search_result>-description
         owner            = <ls_search_result>-created_by
         properties       = VALUE #(
-          ( key = 'API_STATE'   value = <ls_search_result>-api_state )
-          ( key = 'SOURCE_TYPE' value = <ls_search_result>-source_type )
+          ( key = 'API_STATE'     value = <ls_search_result>-api_state )
+          ( key = 'SOURCE_TYPE'   value = <ls_search_result>-source_type )
+          ( key = 'CREATED_DATE'  value = <ls_search_result>-created_date )
+          ( key = 'CREATED_BY'    value = <ls_search_result>-changed_by )
+          ( key = 'CHANGED_DATE'  value = <ls_search_result>-changed_date )
         )
       ).
       post_process_result_entry(
