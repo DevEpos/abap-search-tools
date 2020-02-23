@@ -10,13 +10,14 @@ define view ZSAT_P_DatabaseView
                                  and Repo.pgmid    = 'R3TR'
                                  and Repo.object   = 'VIEW'
 {
-  DbView.viewname        as ViewName,
-  author                 as CreatedBy,
-  Repo.created_on        as CreatedDate,
-  as4date                as ChangedDate,
-  devclass               as DevelopmentPackage,
-  Repo.masterlang        as OriginalLanguage,
-  'V'                    as Type
+  DbView.viewname as ViewName,
+  author          as CreatedBy,
+  Repo.created_on as CreatedDate,
+  as4date         as ChangedDate,
+  as4user         as ChangedBy,
+  devclass        as DevelopmentPackage,
+  Repo.masterlang as OriginalLanguage,
+  'V'             as Type
 }
 where
        DbView.as4local = 'A'

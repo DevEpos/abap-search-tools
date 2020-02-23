@@ -38,6 +38,9 @@ CLASS zcl_sat_os_classintf_provider DEFINITION
         value           TYPE string VALUE 'value',
         method          TYPE string VALUE 'methodname',
         author          TYPE string VALUE 'createdby',
+        created_on      TYPE string VALUE 'createdon',
+        changed_on      TYPE string VALUE 'changedon',
+        changed_by      TYPE string VALUE 'changedby',
         package         TYPE string VALUE 'developmentpackage',
         language        TYPE string VALUE 'language',
         tadir_type      TYPE string VALUE 'tadirtype',
@@ -112,11 +115,14 @@ CLASS zcl_sat_os_classintf_provider IMPLEMENTATION.
       add_search_terms_to_search( VALUE #( ( |{ c_alias_names-base }~{ c_fields-classintf }| ) ) ).
     ENDIF.
 
-    add_select_field( iv_fieldname = c_fields-classintf iv_fieldname_alias = 'entity_id' iv_entity = c_alias_names-base ).
-    add_select_field( iv_fieldname = c_fields-classintf iv_fieldname_alias = 'entity_id_raw' iv_entity = c_alias_names-base ).
-    add_select_field( iv_fieldname = c_fields-author iv_fieldname_alias = 'created_by' iv_entity = c_alias_names-base ).
-    add_select_field( iv_fieldname = c_fields-package  iv_fieldname_alias = 'devclass' iv_entity = c_alias_names-base ).
+    add_select_field( iv_fieldname = c_fields-classintf  iv_fieldname_alias = 'entity_id' iv_entity = c_alias_names-base ).
+    add_select_field( iv_fieldname = c_fields-classintf  iv_fieldname_alias = 'entity_id_raw' iv_entity = c_alias_names-base ).
+    add_select_field( iv_fieldname = c_fields-author     iv_fieldname_alias = 'created_by' iv_entity = c_alias_names-base ).
+    add_select_field( iv_fieldname = c_fields-package    iv_fieldname_alias = 'devclass' iv_entity = c_alias_names-base ).
     add_select_field( iv_fieldname = c_fields-tadir_type iv_fieldname_alias = 'tadir_type' iv_entity = c_alias_names-base ).
+    add_select_field( iv_fieldname = c_fields-created_on iv_fieldname_alias = 'created_date' iv_entity = c_alias_names-base ).
+    add_select_field( iv_fieldname = c_fields-changed_by iv_fieldname_alias = 'changed_by' iv_entity = c_alias_names-base ).
+    add_select_field( iv_fieldname = c_fields-changed_on iv_fieldname_alias = 'changed_date' iv_entity = c_alias_names-base ).
 
     add_order_by( iv_fieldname = c_fields-classintf iv_entity = c_alias_names-base  ).
 
@@ -261,6 +267,9 @@ CLASS zcl_sat_os_classintf_provider IMPLEMENTATION.
     add_group_by_clause( |{ c_alias_names-base }~{ c_fields-author }| ).
     add_group_by_clause( |{ c_alias_names-base }~{ c_fields-package }| ).
     add_group_by_clause( |{ c_alias_names-base }~{ c_fields-tadir_type }| ).
+    add_group_by_clause( |{ c_alias_names-base }~{ c_fields-created_on }| ).
+    add_group_by_clause( |{ c_alias_names-base }~{ c_fields-changed_by }| ).
+    add_group_by_clause( |{ c_alias_names-base }~{ c_fields-changed_on }| ).
 
     IF mv_flag_filter_count > 1.
       add_having_clause( iv_field = |{ c_alias_names-flags }~{ c_fields-flag }| iv_counter_compare = mv_flag_filter_count ).

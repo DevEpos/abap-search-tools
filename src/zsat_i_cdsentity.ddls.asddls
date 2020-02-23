@@ -29,6 +29,7 @@ define view ZSAT_I_CDSEntity
   Text.ddtext            as Description,
   Base.CreatedBy,
   Base.CreatedDate,
+  Base.ChangedBy,
   Base.ChangedDate,
   'C'                    as Type
 }
