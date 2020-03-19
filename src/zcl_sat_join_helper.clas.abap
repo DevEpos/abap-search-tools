@@ -315,7 +315,9 @@ CLASS zcl_sat_join_helper IMPLEMENTATION.
           <ls_condition>-type = zif_sat_c_join_cond_type=>filter.
         ENDLOOP.
 *...... remove the last condition operator
-        <ls_table>-conditions[ lines( <ls_table>-conditions ) ]-and_or = space.
+        IF <ls_table>-conditions IS NOT INITIAL.
+          <ls_table>-conditions[ lines( <ls_table>-conditions ) ]-and_or = space.
+        ENDIF.
       ENDIF.
       IF <ls_table>-entity_type = zif_sat_c_entity_type=>cds_view AND
          ( if_use_ddl_for_select = abap_true OR sy-saprl < 750 ).
