@@ -137,7 +137,8 @@ INTERFACE zif_sat_c_object_search
   CONSTANTS:
     "! <p class="shorttext synchronized" lang="en">Search options DB search</p>
     BEGIN OF c_dbtab_search_params,
-      field TYPE string VALUE 'fieldName',
+      field          TYPE string VALUE 'fieldName',
+      delivery_class TYPE string VALUE 'deliveryClass',
     END OF c_dbtab_search_params.
 
   CONSTANTS:

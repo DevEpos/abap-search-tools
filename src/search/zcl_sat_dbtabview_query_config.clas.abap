@@ -30,6 +30,7 @@ CLASS zcl_sat_dbtabview_query_config IMPLEMENTATION.
       ( option = c_general_options-user allowed_length = 12 )
       ( option = c_dbtab_options-field  allowed_length = 30 )
       ( option = c_general_options-type )
+      ( option = c_dbtab_options-delivery_class allowed_length = 1 )
       ( option = c_general_options-description allowed_length = 40 )
       ( option = c_general_options-max_rows single = abap_true no_negation = abap_true )
     ).

@@ -16,6 +16,7 @@ define view ZSAT_I_DatabaseTable
                                                 and FallBackText.ddlanguage = Repo.masterlang
 {
   key DbTable.tabname        as TableName,
+      DbTable.contflag       as DeliveryClass,
       $parameters.p_language as Language,
       case
         when Text.ddtext is not null then Text.ddtext
