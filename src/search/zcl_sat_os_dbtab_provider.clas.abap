@@ -13,11 +13,24 @@ CLASS zcl_sat_os_dbtab_provider DEFINITION
     METHODS prepare_search
         REDEFINITION.
   PRIVATE SECTION.
-    aliases:
-       c_dbtab_search_params for zif_sat_c_object_search~c_dbtab_search_params.
+    ALIASES:
+       c_dbtab_search_params FOR zif_sat_c_object_search~c_dbtab_search_params.
     CONSTANTS:
       c_base_table  TYPE string VALUE 'base',
-      c_field_table TYPE string VALUE 'field'.
+      c_field_table TYPE string VALUE 'field',
+      BEGIN OF c_fields,
+        alias               TYPE string VALUE 'field' ##NO_TEXT,
+        entityid            TYPE string VALUE 'entityid' ##NO_TEXT,
+        type                TYPE string VALUE 'type' ##NO_TEXT,
+        fieldname           TYPE string VALUE 'fieldname' ##NO_TEXT,
+        description         TYPE string VALUE 'description' ##NO_TEXT,
+        development_package TYPE string VALUE 'developmentpackage' ##NO_TEXT,
+        delivery_class      TYPE string VALUE 'deliveryclass' ##no_text,
+        created_by          TYPE string VALUE 'createdby' ##NO_TEXT,
+        created_date        TYPE string VALUE 'createddate' ##NO_TEXT,
+        changed_by          TYPE string VALUE 'changedby' ##NO_TEXT,
+        changed_date        TYPE string VALUE 'changeddate' ##NO_TEXT,
+      END OF c_fields.
 
     DATA mv_field_subquery TYPE string.
     DATA mv_field_filter_count TYPE i.
@@ -103,6 +116,13 @@ CLASS zcl_sat_os_dbtab_provider IMPLEMENTATION.
 *.......... Find objects by field
         WHEN c_dbtab_search_params-field.
           add_field_filter( <ls_option>-value_range ).
+
+*.......... Find objects by delivery class
+        WHEN c_dbtab_search_params-delivery_class.
+          add_option_filter(
+            iv_fieldname = c_fields-delivery_class
+            it_values    = <ls_option>-value_range
+          ).
 
       ENDCASE.
     ENDLOOP.
