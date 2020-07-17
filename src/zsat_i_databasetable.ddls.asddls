@@ -14,6 +14,7 @@ define view ZSAT_I_DatabaseTable
                                                 and Text.ddlanguage = $parameters.p_language
 {
   key DbTable.tabname        as TableName,
+      DbTable.contflag       as DeliveryClass,
       $parameters.p_language as Language,
       Text.ddtext            as Description,
       author                 as CreatedBy,
