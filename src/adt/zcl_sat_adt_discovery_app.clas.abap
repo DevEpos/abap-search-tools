@@ -274,6 +274,14 @@ CLASS zcl_sat_adt_discovery_app IMPLEMENTATION.
         category_term   = 'classtype'
     ).
 
+    io_registry->register_discoverable_resource(
+        url             = '/dclass'
+        handler_class   = 'ZCL_SAT_ADT_RES_DB_DLVCLASS_VH'
+        description     = 'Resource for Delivery Classes'
+        category_scheme = lv_object_search_scheme
+        category_term   = 'tabledeliveryclass'
+    ).
+
   ENDMETHOD.
 
   METHOD register_sapaox_launcher.
