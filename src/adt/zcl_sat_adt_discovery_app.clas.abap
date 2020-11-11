@@ -12,6 +12,7 @@ CLASS zcl_sat_adt_discovery_app DEFINITION
     CONSTANTS c_db_fields_info_uri TYPE string VALUE '/dbfields/info'.
     CONSTANTS c_ddic_repo_access_uri TYPE string VALUE '/ddicaccess'.
     CONSTANTS c_column_info_uri TYPE string VALUE '/columninfo'.
+    CONSTANTS c_column_hierarchy_uri TYPE string VALUE '/columninfo/hierarchy'.
     CONSTANTS c_column_where_used_uri TYPE string VALUE '/columninfo/whereUsed'.
     CONSTANTS c_cds_analysis_uri TYPE string VALUE '/cds/analysis'.
     CONSTANTS c_cds_top_down_analysis_uri TYPE string VALUE '/cds/analysis/topDown'.
@@ -365,6 +366,13 @@ CLASS zcl_sat_adt_discovery_app IMPLEMENTATION.
                       |\{&{ zif_sat_c_adt_utils=>c_db_fields_info_parameter-search_db_views }*\}|
       handler_class = 'ZCL_SAT_ADT_RES_COL_WHERE_USED'
       relation      = c_utils_rel_scheme && c_column_where_used_uri
+    ).
+*.. Register template for column hierarchy
+    lo_element_info_collection->register_disc_res_w_template(
+      template      = |{ c_column_hierarchy_uri }\{?{ zif_sat_c_adt_utils=>c_db_fields_info_parameter-name }\}| &&
+                      |\{&{ zif_sat_c_adt_utils=>c_db_fields_info_parameter-field }\}|
+      handler_class = 'ZCL_SAT_ADT_RES_COL_HIERARCHY'
+      relation      = c_utils_rel_scheme && c_column_hierarchy_uri
     ).
   ENDMETHOD.
 
