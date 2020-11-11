@@ -384,8 +384,6 @@ CLASS zcl_sat_adt_discovery_app IMPLEMENTATION.
       relation      = c_utils_rel_scheme && c_column_where_used_uri
     ).
 *.. Register template for column hierarchy
-    CHECK cl_abap_dbfeatures=>use_features(
-            requested_features = VALUE #( ( cl_abap_dbfeatures=>amdp_table_function ) ) ).
     lo_element_info_collection->register_disc_res_w_template(
       template      = |{ c_column_hierarchy_uri }\{?{ zif_sat_c_adt_utils=>c_db_fields_info_parameter-name }\}| &&
                       |\{&{ zif_sat_c_adt_utils=>c_db_fields_info_parameter-field }\}|
