@@ -22,20 +22,43 @@ CLASS zcl_sat_cds_field_hier_res DEFINITION
         VALUE(rs_hierarchy) TYPE zsat_adt_element_info.
   PROTECTED SECTION.
   PRIVATE SECTION.
-    TYPES: ty_t_field_hierarchy_flat TYPE STANDARD TABLE OF zsat_i_cdsfieldhierarchy.
     TYPES:
       BEGIN OF ty_s_cached_node,
         entity    TYPE tabname,
         field_ref TYPE REF TO lcl_field,
-      END OF ty_s_cached_node.
+      END OF ty_s_cached_node,
+      BEGIN OF ty_s_hierarchy_field,
+        viewname       TYPE tabname,
+        viewfield      TYPE fieldname,
+        ddlname        TYPE ddlname,
+        level          TYPE i,
+        entityname     TYPE tabname,
+        viewfieldraw   TYPE fieldname,
+        basetable      TYPE tabname,
+        baseddlname    TYPE ddlname,
+        basesourcetype TYPE zsat_cds_source_type,
+        baseentityname TYPE tabname,
+        basefield      TYPE fieldname,
+        basefieldraw   TYPE fieldname,
+      END OF ty_s_hierarchy_field,
+      ty_t_hierarchy_field TYPE STANDARD TABLE OF ty_s_hierarchy_field WITH EMPTY KEY.
+
     DATA mt_cached_nodes TYPE STANDARD TABLE OF ty_s_cached_node.
     DATA mo_path_resolver TYPE REF TO cl_ddic_adt_ddls_path_resolver.
+
+    "! <p class="shorttext synchronized" lang="en">Retrieve field hierarchy</p>
+    METHODS get_field_hierarchy
+      IMPORTING
+        iv_cds_view              TYPE zsat_cds_view_name
+        iv_cds_view_field        TYPE fieldname
+      RETURNING
+        VALUE(rt_hierarchy_flat) TYPE ty_t_hierarchy_field.
     "! <p class="shorttext synchronized" lang="en">Retrieve all child nodes for the given view field</p>
     METHODS get_children
       IMPORTING
         iv_viewname  TYPE tabname
         iv_fieldname TYPE fieldname
-        it_hierarchy TYPE ty_t_field_hierarchy_flat
+        it_hierarchy TYPE ty_t_hierarchy_field
         io_field     TYPE REF TO lcl_field.
 
     "! <p class="shorttext synchronized" lang="en">Converts field information to element info</p>
@@ -68,13 +91,12 @@ CLASS zcl_sat_cds_field_hier_res IMPLEMENTATION.
   METHOD resolve_field_hierarchy.
     FIELD-SYMBOLS: <ls_current_hierarchy> TYPE zsat_adt_element_info.
 
-    SELECT
-      FROM zsat_i_cdsfieldhierarchy( p_cdsviewname = @iv_cds_view, p_cdsfieldname = @iv_cds_view_field )
-      FIELDS *
-      ORDER BY level
-    INTO TABLE @DATA(lt_hierarchy_flat).
+    DATA(lt_hierarchy_flat) = get_field_hierarchy(
+      iv_cds_view       = to_upper( iv_cds_view )
+      iv_cds_view_field = to_upper( iv_cds_view_field )
+    ).
 
-    CHECK sy-subrc = 0.
+    CHECK lt_hierarchy_flat IS NOT INITIAL.
 
     DATA(ls_base_row) = lt_hierarchy_flat[ 1 ].
 
@@ -105,6 +127,145 @@ CLASS zcl_sat_cds_field_hier_res IMPLEMENTATION.
       EXPORTING io_field     = lo_root_field
       CHANGING  cs_elem_info = rs_hierarchy
     ).
+  ENDMETHOD.
+
+  METHOD get_field_hierarchy.
+    DATA: lt_view_fields TYPE STANDARD TABLE OF ty_s_hierarchy_field.
+
+    SELECT DISTINCT
+      field~viewname AS basetable,
+      field~viewfield AS basefield
+      FROM dd27s AS field
+        INNER JOIN zsat_p_cdsviewbase AS view_base
+           ON   view_base~viewname = field~viewname
+           AND  view_base~entityid = @iv_cds_view
+      WHERE field~viewfield = @iv_cds_view_field
+    INTO TABLE @DATA(lt_field_tables).
+
+
+    WHILE lines( lt_field_tables ) > 0.
+      SELECT DISTINCT
+        field~viewname AS viewname,
+        field~viewfield AS viewfield,
+        field~tabname AS basetable,
+        field~fieldname AS basefield
+        FROM dd27s AS field
+        FOR ALL ENTRIES IN @lt_field_tables
+        WHERE field~viewfield <> 'MANDT'
+          AND field~viewname = @lt_field_tables-basetable
+          AND field~viewfield = @lt_field_tables-basefield
+      INTO CORRESPONDING FIELDS OF TABLE @lt_view_fields.
+
+      IF sy-subrc <> 0.
+        EXIT.
+      ENDIF.
+
+      LOOP AT lt_view_fields ASSIGNING FIELD-SYMBOL(<ls_view_field>).
+        <ls_view_field>-level = 1.
+      ENDLOOP.
+
+      IF rt_hierarchy_flat IS INITIAL.
+        rt_hierarchy_flat = lt_view_fields.
+      ELSE.
+        LOOP AT lt_view_fields ASSIGNING <ls_view_field>.
+          ASSIGN rt_hierarchy_flat[ basetable = <ls_view_field>-viewname
+                                    basefield = <ls_view_field>-viewfield ] TO FIELD-SYMBOL(<ls_root_field>).
+          CHECK sy-subrc = 0.
+
+          APPEND INITIAL LINE TO rt_hierarchy_flat ASSIGNING FIELD-SYMBOL(<new_view_field>).
+          <new_view_field> = <ls_view_field>.
+          <new_view_field>-level = <ls_root_field>-level + 1.
+        ENDLOOP.
+      ENDIF.
+
+      " TODO: try to only include new base fields that are not already in the result hierarchy
+      lt_field_tables = CORRESPONDING #( lt_view_fields ).
+      SORT lt_field_tables BY basetable basefield.
+      DELETE ADJACENT DUPLICATES FROM lt_field_tables COMPARING basetable basefield.
+    ENDWHILE.
+
+    SELECT DISTINCT view~viewname,
+           view~rawentityid,
+           view~ddlname,
+           view~sourcetype
+      FROM zsat_p_cdsviewbase AS view
+      FOR ALL ENTRIES IN @rt_hierarchy_flat
+      WHERE view~viewname = @rt_hierarchy_flat-viewname
+         OR view~viewname = @rt_hierarchy_flat-basetable
+         OR view~entityid = @rt_hierarchy_flat-basetable
+    INTO TABLE @DATA(lt_additional_entity_infos).
+
+    " if additional view information could not be found it makes no sense to
+    " also look for additional field information
+    IF sy-subrc <> 0.
+      RETURN.
+    ENDIF.
+
+    SELECT DISTINCT view~viewname,
+           view~rawentityid,
+           view~ddlname,
+           view_field~rawfieldname,
+           view_field~fieldname
+      FROM zsat_p_cdsviewbase AS view
+        INNER JOIN zsat_i_cdsviewfield AS view_field
+          ON  view~entityid = view_field~entityid
+      FOR ALL ENTRIES IN @rt_hierarchy_flat
+      WHERE (    view~viewname = @rt_hierarchy_flat-viewname
+              OR view~viewname = @rt_hierarchy_flat-basetable
+              OR view~entityid = @rt_hierarchy_flat-basetable )
+        AND (    view_field~fieldname = @rt_hierarchy_flat-viewfield
+              OR view_field~fieldname = @rt_hierarchy_flat-basefield )
+    INTO TABLE @DATA(lt_additional_field_infos).
+
+    LOOP AT lt_additional_entity_infos ASSIGNING FIELD-SYMBOL(<ls_additional_entity_info>).
+
+      LOOP AT rt_hierarchy_flat ASSIGNING <ls_view_field> WHERE viewname = <ls_additional_entity_info>-viewname
+                                                             OR basetable = <ls_additional_entity_info>-viewname.
+        IF <ls_view_field>-viewname = <ls_additional_entity_info>-viewname.
+          <ls_view_field>-entityname = <ls_additional_entity_info>-rawentityid.
+          <ls_view_field>-ddlname = <ls_additional_entity_info>-ddlname.
+        ENDIF.
+        IF <ls_view_field>-basetable = <ls_additional_entity_info>-viewname.
+          <ls_view_field>-baseentityname = <ls_additional_entity_info>-rawentityid.
+          <ls_view_field>-baseddlname = <ls_additional_entity_info>-ddlname.
+          <ls_view_field>-basesourcetype = <ls_additional_entity_info>-sourcetype.
+        ENDIF.
+
+      ENDLOOP.
+
+    ENDLOOP.
+
+    LOOP AT lt_additional_field_infos ASSIGNING FIELD-SYMBOL(<ls_additional_field_info>).
+
+      LOOP AT rt_hierarchy_flat ASSIGNING <ls_view_field> WHERE ( viewname = <ls_additional_field_info>-viewname AND
+                                                                  viewfield = <ls_additional_field_info>-fieldname )
+                                                             OR ( basetable = <ls_additional_field_info>-viewname AND
+                                                                  basefield = <ls_additional_field_info>-fieldname ).
+        IF <ls_view_field>-viewname = <ls_additional_field_info>-viewname AND
+           <ls_view_field>-viewfield = <ls_additional_field_info>-fieldname.
+          <ls_view_field>-viewfieldraw = <ls_additional_entity_info>-rawentityid.
+        ENDIF.
+
+        IF <ls_view_field>-basetable = <ls_additional_field_info>-viewname AND
+           <ls_view_field>-basefield = <ls_additional_field_info>-fieldname.
+          <ls_view_field>-basefieldraw = <ls_additional_field_info>-rawfieldname.
+        ENDIF.
+
+      ENDLOOP.
+
+    ENDLOOP.
+
+    SORT rt_hierarchy_flat BY level
+                              viewname
+                              viewfield
+                              basetable
+                              basefield.
+    DELETE ADJACENT DUPLICATES FROM rt_hierarchy_flat COMPARING level
+                                                                viewname
+                                                                viewfield
+                                                                basetable
+                                                                basefield.
+
   ENDMETHOD.
 
   METHOD get_children.
