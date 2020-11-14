@@ -27,7 +27,8 @@ CLASS zcl_sat_adt_discovery_app DEFINITION
         REDEFINITION.
   PROTECTED SECTION.
     METHODS: get_application_title REDEFINITION,
-      register_resources REDEFINITION.
+      register_resources REDEFINITION,
+      fill_router REDEFINITION.
   PRIVATE SECTION.
     "! <p class="shorttext synchronized" lang="en">Register object search</p>
     METHODS register_object_search_res
@@ -74,6 +75,14 @@ ENDCLASS.
 
 
 CLASS zcl_sat_adt_discovery_app IMPLEMENTATION.
+
+  METHOD fill_router.
+    super->fill_router( CHANGING router = router ).
+    router->attach(
+        iv_template      = '/discovery'
+        iv_handler_class = cl_adt_res_discovery=>co_class_name
+    ).
+  ENDMETHOD.
 
 
   METHOD get_application_title.
