@@ -29,6 +29,7 @@ define view ZSAT_I_DatabaseTable
       author                 as CreatedBy,
       Repo.created_on        as CreatedDate,
       as4date                as ChangedDate,
+      as4user                as ChangedBy,
       devclass               as DevelopmentPackage,
       'T'                    as Type
 }

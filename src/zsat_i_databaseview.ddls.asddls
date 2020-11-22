@@ -28,6 +28,7 @@ define view ZSAT_I_DatabaseView
   CreatedBy,
   CreatedDate,
   ChangedDate,
+  ChangedBy,
   DevelopmentPackage,
   Type
 }

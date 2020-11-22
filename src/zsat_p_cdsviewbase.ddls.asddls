@@ -26,7 +26,8 @@ define view ZSAT_P_CDSViewBase
   Repo.author                   as CreatedBy,
   Repo.created_on               as CreatedDate,
   Repo.masterlang               as OriginalLanguage,
-  CdsEntityHeader.chgdate       as ChangedDate
+  CdsEntityHeader.chgdate       as ChangedDate,
+  CdsEntityHeader.chguser       as ChangedBy
 }
 where
   Source.as4local = 'A'
