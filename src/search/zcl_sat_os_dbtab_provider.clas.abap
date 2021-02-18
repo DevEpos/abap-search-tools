@@ -67,8 +67,7 @@ CLASS zcl_sat_os_dbtab_provider IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD prepare_search.
-    DATA: lf_has_type_option TYPE abap_bool,
-          lv_base_table      TYPE string.
+    DATA: lv_base_table      TYPE string.
 
     get_base_table_and_field(
       IMPORTING ev_base_table           = lv_base_table
@@ -79,9 +78,6 @@ CLASS zcl_sat_os_dbtab_provider IMPLEMENTATION.
     set_base_select_table(
         iv_entity     = lv_base_table
         iv_alias      = c_base_table
-        it_parameters = VALUE #(
-          ( param_name = 'p_language' param_value = zcl_sat_system_helper=>get_system_language( ) )
-        )
     ).
 
     LOOP AT mo_search_query->mt_search_options ASSIGNING FIELD-SYMBOL(<ls_option>).
