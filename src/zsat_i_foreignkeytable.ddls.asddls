@@ -5,10 +5,8 @@
 @EndUserText.label: 'Database tables of for. key definition'
 
 define view ZSAT_I_ForeignKeyTable
-  with parameters
-    p_language : abap.lang
-  as select distinct from dd08l                                                       as ForeignKey
-    left outer join       ZSAT_I_DatabaseTable( p_language: $parameters.p_language ) as DatabaseTable on ForeignKey.checktable = DatabaseTable.TableName
+  as select distinct from dd08l                as ForeignKey
+    left outer join       ZSAT_I_DatabaseTable as DatabaseTable on ForeignKey.checktable = DatabaseTable.TableName
 {
   key ForeignKey.tabname    as TableName,
   key ForeignKey.checktable as ForeignKeyTable,

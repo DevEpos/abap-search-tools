@@ -5,33 +5,30 @@
 @EndUserText.label: 'Database Table'
 
 define view ZSAT_I_DatabaseTable
-  with parameters
-    @Environment.systemField: #SYSTEM_LANGUAGE
-    p_language : abap.lang
   as select distinct from tadir as Repo
     inner join            dd02l as DbTable      on DbTable.tabname = Repo.obj_name
     left outer join       dd02t as Text         on  Text.tabname    = DbTable.tabname
-                                                and Text.ddlanguage = $parameters.p_language
+                                                and Text.ddlanguage = $session.system_language
     left outer join       dd02t as FallBackText on  FallBackText.tabname    = DbTable.tabname
                                                 and FallBackText.ddlanguage = Repo.masterlang
 {
-  key DbTable.tabname        as TableName,
-      DbTable.contflag       as DeliveryClass,
-      $parameters.p_language as Language,
+  key DbTable.tabname          as TableName,
+      DbTable.contflag         as DeliveryClass,
+      $session.system_language as Language,
       case
         when Text.ddtext is not null then Text.ddtext
         else FallBackText.ddtext
-      end                    as Description,
+      end                      as Description,
       case
         when Text.ddtext is not null then upper(Text.ddtext)
         else upper(FallBackText.ddtext)
-      end                    as DescriptionUpper,
-      author                 as CreatedBy,
-      Repo.created_on        as CreatedDate,
-      as4date                as ChangedDate,
-      as4user                as ChangedBy,
-      devclass               as DevelopmentPackage,
-      'T'                    as Type
+      end                      as DescriptionUpper,
+      author                   as CreatedBy,
+      Repo.created_on          as CreatedDate,
+      as4date                  as ChangedDate,
+      as4user                  as ChangedBy,
+      devclass                 as DevelopmentPackage,
+      'T'                      as Type
 }
 where
       tabclass         = #tabclass.'TRANSP'

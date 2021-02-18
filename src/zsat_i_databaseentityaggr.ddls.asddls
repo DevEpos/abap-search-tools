@@ -5,9 +5,7 @@
 @EndUserText.label: 'Aggr. Database Entities by package/type'
 
 define view ZSAT_I_DatabaseEntityAggr
-  with parameters
-    p_language : abap.lang
-  as select from ZSAT_I_DatabaseEntity( p_language: $parameters.p_language)
+  as select from ZSAT_I_DatabaseEntity
 {
   //ZSAT_I_DatabaseEntity
   Type,
