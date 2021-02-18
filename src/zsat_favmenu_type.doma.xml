@@ -15,7 +15,9 @@
     <DD07V>
      <DOMNAME>ZSAT_FAVMENU_TYPE</DOMNAME>
      <VALPOS>0001</VALPOS>
+     <DDLANGUAGE>E</DDLANGUAGE>
      <DOMVALUE_L>T</DOMVALUE_L>
+     <DDTEXT>Table</DDTEXT>
     </DD07V>
     <DD07V>
      <DOMNAME>ZSAT_FAVMENU_TYPE</DOMNAME>
@@ -27,7 +29,9 @@
     <DD07V>
      <DOMNAME>ZSAT_FAVMENU_TYPE</DOMNAME>
      <VALPOS>0003</VALPOS>
+     <DDLANGUAGE>E</DDLANGUAGE>
      <DOMVALUE_L>O</DOMVALUE_L>
+     <DDTEXT>Folder</DDTEXT>
     </DD07V>
     <DD07V>
      <DOMNAME>ZSAT_FAVMENU_TYPE</DOMNAME>
@@ -37,29 +41,6 @@
      <DDTEXT>CDS View</DDTEXT>
     </DD07V>
    </DD07V_TAB>
-   <I18N_LANGS>
-    <LANGU>D</LANGU>
-   </I18N_LANGS>
-   <DD01_TEXTS>
-    <item>
-     <DDLANGUAGE>D</DDLANGUAGE>
-     <DDTEXT>Type of favorite menu entry</DDTEXT>
-    </item>
-   </DD01_TEXTS>
-   <DD07_TEXTS>
-    <item>
-     <VALPOS>0001</VALPOS>
-     <DDLANGUAGE>D</DDLANGUAGE>
-     <DOMVALUE_L>T</DOMVALUE_L>
-     <DDTEXT>Tabelle</DDTEXT>
-    </item>
-    <item>
-     <VALPOS>0003</VALPOS>
-     <DDLANGUAGE>D</DDLANGUAGE>
-     <DOMVALUE_L>O</DOMVALUE_L>
-     <DDTEXT>Ordner</DDTEXT>
-    </item>
-   </DD07_TEXTS>
   </asx:values>
  </asx:abap>
 </abapGit>
