@@ -303,23 +303,20 @@ CLASS zcl_sat_ddic_repo_access IMPLEMENTATION.
       RETURN.
     ENDIF.
 
-
-    DATA(lv_descr_language) = zcl_sat_system_helper=>get_system_language( ).
-
     IF iv_type IS NOT INITIAL.
 
       CASE iv_type.
 
         WHEN zif_sat_c_entity_type=>table.
           SELECT tablename AS entity_id, tablename AS entity_id_raw, type AS entity_type, description
-            FROM zsat_i_databasetable( p_language = @lv_descr_language )
+            FROM zsat_i_databasetable
             WHERE developmentpackage IN @lt_package_range
               AND tablename             IN @lt_db_range
           INTO CORRESPONDING FIELDS OF TABLE @result
             UP TO @lv_max_rows ROWS.
         WHEN zif_sat_c_entity_type=>view.
           SELECT viewname AS entity_id, viewname AS entity_id_raw, type AS entity_type, description
-            FROM zsat_i_databaseview( p_language = @lv_descr_language )
+            FROM zsat_i_databaseview
             WHERE developmentpackage IN @lt_package_range
               AND viewname             IN @lt_db_range
           INTO CORRESPONDING FIELDS OF TABLE @result
@@ -328,7 +325,7 @@ CLASS zcl_sat_ddic_repo_access IMPLEMENTATION.
     ELSE.
 
       SELECT entity AS entity_id, entity AS entity_id_raw, type AS entity_type, description
-        FROM zsat_i_databaseentity( p_language = @lv_descr_language )
+        FROM zsat_i_databaseentity
         WHERE developmentpackage IN @lt_package_range
           AND entity             IN @lt_db_range
           AND type               <> @zif_sat_c_entity_type=>cds_view
@@ -345,7 +342,7 @@ CLASS zcl_sat_ddic_repo_access IMPLEMENTATION.
 
     SELECT basetable AS entity_id,
            basetable AS entity_id_raw,
-           entitytype as entity_type,
+           entitytype AS entity_type,
            ddtext AS description
       FROM zsat_i_cdsbasetable AS base
         LEFT OUTER JOIN dd02t AS text ON base~basetable = text~tabname
@@ -381,7 +378,7 @@ CLASS zcl_sat_ddic_repo_access IMPLEMENTATION.
                   entityraw AS entity_id_raw,
                   type AS entity_type,
                   description
-      FROM zsat_i_databaseentity( p_language = @lv_language )
+      FROM zsat_i_databaseentity
       WHERE entity = @iv_entity_id
     INTO CORRESPONDING FIELDS OF @rs_entity.
 
@@ -395,27 +392,23 @@ CLASS zcl_sat_ddic_repo_access IMPLEMENTATION.
 
 
   METHOD get_entity_by_range.
-    DATA(lv_language) = zcl_sat_system_helper=>get_system_language( ).
-
     SELECT entity AS entity_id,
            entityraw AS entity_id_raw,
            type AS entity_type,
            description
-      FROM zsat_i_databaseentity( p_language = @lv_language )
+      FROM zsat_i_databaseentity
       WHERE entity IN @it_entity_range
     INTO CORRESPONDING FIELDS OF TABLE @rt_entities.
   ENDMETHOD.
 
   METHOD get_foreign_key_tables.
-    DATA(lv_language) = zcl_sat_system_helper=>get_system_language( ).
-
     SELECT foreignkeytable AS entity_id,
            foreignkeytable AS entity_id_raw,
            createdby AS created_by,
            developmentpackage AS devclass,
            description,
            'T' AS entity_type
-      FROM zsat_i_foreignkeytable( p_language = @lv_language )
+      FROM zsat_i_foreignkeytable
       WHERE tablename = @iv_tabname
       ORDER BY foreignkeytable
     INTO CORRESPONDING FIELDS OF TABLE @rt_entity.

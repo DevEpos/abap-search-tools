@@ -21,7 +21,7 @@ CLASS zcl_sat_adt_res_db_entity_vh IMPLEMENTATION.
     ENDIF.
 
     SELECT
-      FROM zsat_i_databaseentity( p_language = @sy-langu ) AS field
+      FROM zsat_i_databaseentity AS field
       FIELDS entityraw AS name,
              type AS data,
              description

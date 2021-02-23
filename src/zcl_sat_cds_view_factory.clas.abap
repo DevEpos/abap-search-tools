@@ -204,36 +204,36 @@ CLASS zcl_sat_cds_view_factory DEFINITION
     "! <p class="shorttext synchronized" lang="en">Handler for REQUEST_ANNOTATIONS</p>
     "!
     CLASS-METHODS on_annotation_read_request
-          FOR EVENT request_annotations OF zcl_sat_cds_view
+      FOR EVENT request_annotations OF zcl_sat_cds_view
       IMPORTING
-          et_anno_name_range
-          sender.
+        et_anno_name_range
+        sender.
     "! <p class="shorttext synchronized" lang="en">Event Handler for lazy loading of CDS View API states</p>
     "!
     "! @parameter sender | <p class="shorttext synchronized" lang="en"></p>
     CLASS-METHODS on_api_states_loading_request
-          FOR EVENT request_api_states OF zcl_sat_cds_view
+      FOR EVENT request_api_states OF zcl_sat_cds_view
       IMPORTING
-          !sender .
+        !sender .
     "! <p class="shorttext synchronized" lang="en">Event Handler for lazy loading of CDS View author</p>
     "!
     "! @parameter sender | <p class="shorttext synchronized" lang="en"></p>
     CLASS-METHODS on_tadir_info_loading_request
-          FOR EVENT request_tadir_info OF zcl_sat_cds_view
+      FOR EVENT request_tadir_info OF zcl_sat_cds_view
       IMPORTING
-          !sender .
+        !sender .
     "! <p class="shorttext synchronized" lang="en">Event handler for lazy loading of CDS Views base tables</p>
     CLASS-METHODS on_base_table_loading_request
-          FOR EVENT request_base_tables OF zcl_sat_cds_view
+      FOR EVENT request_base_tables OF zcl_sat_cds_view
       IMPORTING
-          !sender .
+        !sender .
     "! <p class="shorttext synchronized" lang="en">Event Handler for lazy loading of CDS View description</p>
     "!
     "! @parameter sender | <p class="shorttext synchronized" lang="en"></p>
     CLASS-METHODS on_description_loading_request
-          FOR EVENT request_description OF zcl_sat_cds_view
+      FOR EVENT request_description OF zcl_sat_cds_view
       IMPORTING
-          !sender .
+        !sender .
     "! <p class="shorttext synchronized" lang="en">Reads base tables of DDL View</p>
     CLASS-METHODS read_cds_base_tables
       IMPORTING
@@ -346,22 +346,20 @@ CLASS zcl_sat_cds_view_factory IMPLEMENTATION.
     SORT lt_assoc_cds_view_range.
     DELETE ADJACENT DUPLICATES FROM lt_assoc_cds_view_range.
 
-    DATA(lv_descr_lang) = zcl_sat_system_helper=>get_system_language( ).
-
 *.. Read database table+text if there are any association which point to database tables
     IF line_exists( it_header[ typekind_t = zif_sat_c_cds_assoc_type=>table ] ).
       lt_db_table_range = VALUE #(
           FOR dbtab IN it_header WHERE ( typekind_t = zif_sat_c_cds_assoc_type=>table ) ( sign = 'I' option = 'EQ' low = dbtab-strucobjn_t )
       ).
       SELECT *
-          FROM zsat_i_databasetable( p_language = @lv_descr_lang )
+          FROM zsat_i_databasetable
           WHERE tablename IN @lt_db_table_range
       INTO CORRESPONDING FIELDS OF TABLE @lt_db_tables.
     ENDIF.
 
 *... read cds view texts for associations
     SELECT entityid, rawentityid, description
-      FROM zsat_i_cdsentity( p_language = @lv_descr_lang )
+      FROM zsat_i_cdsentity
       WHERE entityid IN @lt_assoc_cds_view_range
     INTO TABLE @DATA(lt_assoc_cds_view_header).
 
@@ -451,7 +449,7 @@ CLASS zcl_sat_cds_view_factory IMPLEMENTATION.
            'C' AS entity_type,
            description,
            developmentpackage AS devclass
-      FROM zsat_i_cdsentity( p_language = @lv_descr_language )
+      FROM zsat_i_cdsentity
       WHERE entityid           IN @lt_cds_view_range
         AND developmentpackage IN @lt_package_range
         AND description        IN @lt_description_range
@@ -539,10 +537,8 @@ CLASS zcl_sat_cds_view_factory IMPLEMENTATION.
 
 
   METHOD get_description.
-    DATA(lv_description_language) = zcl_sat_system_helper=>get_system_language( ).
-
     SELECT SINGLE description
-      FROM zsat_i_cdsentity( p_language = @lv_description_language )
+      FROM zsat_i_cdsentity
       WHERE entityid = @iv_cds_view
     INTO @rv_description.
 
@@ -620,9 +616,9 @@ CLASS zcl_sat_cds_view_factory IMPLEMENTATION.
                lc_view_type  TYPE trobjtype VALUE 'VIEW'.
 
     TYPES: BEGIN OF lty_base_table.
-        INCLUDE TYPE zsat_cds_view_base_table.
-    TYPES: entitytype     TYPE zsat_entity_type,
-           generationflag TYPE genflag.
+             INCLUDE TYPE zsat_cds_view_base_table.
+    TYPES:   entitytype     TYPE zsat_entity_type,
+             generationflag TYPE genflag.
     TYPES: END OF lty_base_table.
 
     DATA: lt_base_tables    TYPE STANDARD TABLE OF lty_base_table,
@@ -645,8 +641,6 @@ CLASS zcl_sat_cds_view_factory IMPLEMENTATION.
 
     CHECK sy-subrc = 0.
 
-    DATA(lv_description_language) = zcl_sat_system_helper=>get_system_language( ).
-
     lt_tab_range = VALUE #( FOR table IN lt_base_tables
                             WHERE ( entitytype = zif_sat_c_entity_type=>table )
                             ( sign = 'I' option = 'EQ' low = table-entityname ) ).
@@ -666,7 +660,7 @@ CLASS zcl_sat_cds_view_factory IMPLEMENTATION.
              sourcetype,
              description,
              \_apistate-apistate AS apistate
-        FROM zsat_i_cdsentity( p_language = @lv_description_language )
+        FROM zsat_i_cdsentity
         WHERE viewname IN @lt_cds_view_range
            OR entityid IN @lt_cds_view_range
       INTO TABLE @DATA(lt_cds_view).
@@ -695,7 +689,7 @@ CLASS zcl_sat_cds_view_factory IMPLEMENTATION.
     IF lt_view_range IS NOT INITIAL.
       SELECT viewname,
              description
-        FROM zsat_i_databaseview( p_language = @lv_description_language )
+        FROM zsat_i_databaseview
         WHERE viewname IN @lt_view_range
       INTO TABLE @DATA(lt_view_data).
 
@@ -717,7 +711,7 @@ CLASS zcl_sat_cds_view_factory IMPLEMENTATION.
     IF lt_tab_range IS NOT INITIAL.
       SELECT tablename,
              description
-        FROM zsat_i_databasetable( p_language = @lv_description_language )
+        FROM zsat_i_databasetable
         WHERE tablename IN @lt_tab_range
       INTO TABLE @DATA(lt_table_data).
 

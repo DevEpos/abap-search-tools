@@ -5,21 +5,19 @@
 @EndUserText.label: 'Technical Settings of Db Table'
 
 define view ZSAT_I_DbTableTechSettings
-  with parameters
-    p_language : abap.lang
-  as select from    dd09l                  as TechSettings
-    inner join      dd02l                  as Table             on TechSettings.tabname = Table.tabname
+  as select from    dd09l                 as TechSettings
+    inner join      dd02l                 as Table             on TechSettings.tabname = Table.tabname
     left outer join ZSAT_I_DomainFixValue as SizeCategoryText  on  SizeCategoryText.Low        = TechSettings.tabkat
-                                                                and SizeCategoryText.DomainName = 'TABKAT'
-                                                                and SizeCategoryText.Language   = $parameters.p_language
-    left outer join dartt                  as DataClassText     on  DataClassText.tabart  = TechSettings.tabart
-                                                                and DataClassText.ddlangu = $parameters.p_language
+                                                               and SizeCategoryText.DomainName = 'TABKAT'
+                                                               and SizeCategoryText.Language   = $session.system_language
+    left outer join dartt                 as DataClassText     on  DataClassText.tabart  = TechSettings.tabart
+                                                               and DataClassText.ddlangu = $session.system_language
     left outer join ZSAT_I_DomainFixValue as BufferTypeText    on  BufferTypeText.Low        = TechSettings.pufferung
-                                                                and BufferTypeText.DomainName = 'PUFFERUNG'
-                                                                and BufferTypeText.Language   = $parameters.p_language
+                                                               and BufferTypeText.DomainName = 'PUFFERUNG'
+                                                               and BufferTypeText.Language   = $session.system_language
     left outer join ZSAT_I_DomainFixValue as DeliveryClassText on  DeliveryClassText.Low        = Table.contflag
-                                                                and DeliveryClassText.DomainName = 'CONTFLAG'
-                                                                and DeliveryClassText.Language   = $parameters.p_language
+                                                               and DeliveryClassText.DomainName = 'CONTFLAG'
+                                                               and DeliveryClassText.Language   = $session.system_language
 {
   key Table.tabname          as TableName,
       Table.contflag         as DeliveryClass,

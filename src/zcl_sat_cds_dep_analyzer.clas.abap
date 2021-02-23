@@ -260,7 +260,7 @@ CLASS zcl_sat_cds_dep_analyzer IMPLEMENTATION.
              description,
              developmentpackage,
              createdby
-        FROM zsat_i_databasetablesandviews( p_language = @sy-langu )
+        FROM zsat_i_databasetablesandviews
         WHERE entity IN @lt_tabname_range
       APPENDING CORRESPONDING FIELDS OF TABLE @lt_entity_info.
     ENDIF.

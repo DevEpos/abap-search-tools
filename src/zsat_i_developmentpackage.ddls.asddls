@@ -9,8 +9,8 @@ define view ZSAT_I_DevelopmentPackage
     @Environment.systemField: #SYSTEM_LANGUAGE
     P_Language : abap.lang
   as select from    tdevc  as Package
-    left outer join tdevct as Text         on  Text.devclass = Package.devclass
-                                           and Text.spras    = $parameters.P_Language
+    left outer join tdevct as Text on  Text.devclass = Package.devclass
+                                   and Text.spras    = $session.system_language
 {
   key Package.devclass   as DevelopmentPackage,
       Package.created_by as CreatedBy,

@@ -5,24 +5,21 @@
 @EndUserText.label: 'Database Table'
 
 define view ZSAT_I_DatabaseTable
-  with parameters
-    @Environment.systemField: #SYSTEM_LANGUAGE
-    p_language : abap.lang
   as select distinct from tadir as Repo
-    inner join            dd02l as DbTable      on DbTable.tabname = Repo.obj_name
-    left outer join       dd02t as Text         on  Text.tabname    = DbTable.tabname
-                                                and Text.ddlanguage = $parameters.p_language
+    inner join            dd02l as DbTable on DbTable.tabname  = Repo.obj_name
+    left outer join       dd02t as Text    on  Text.tabname    = DbTable.tabname
+                                           and Text.ddlanguage = $session.system_language
 {
-  key DbTable.tabname        as TableName,
-      DbTable.contflag       as DeliveryClass,
-      $parameters.p_language as Language,
-      Text.ddtext            as Description,
-      author                 as CreatedBy,
-      Repo.created_on        as CreatedDate,
-      as4date                as ChangedDate,
-      as4user                as ChangedBy,
-      devclass               as DevelopmentPackage,
-      'T'                    as Type
+  key DbTable.tabname          as TableName,
+      DbTable.contflag         as DeliveryClass,
+      $session.system_language as Language,
+      Text.ddtext              as Description,
+      author                   as CreatedBy,
+      Repo.created_on          as CreatedDate,
+      as4date                  as ChangedDate,
+      as4user                  as ChangedBy,
+      devclass                 as DevelopmentPackage,
+      'T'                      as Type
 }
 where
       tabclass         = #tabclass.'TRANSP'

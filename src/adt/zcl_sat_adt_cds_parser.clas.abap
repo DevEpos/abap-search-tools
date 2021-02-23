@@ -239,7 +239,7 @@ CLASS zcl_sat_adt_cds_parser IMPLEMENTATION.
            rawentityid,
            ddlname,
            viewname,
-           \_apistate-apistate as apistate,
+           \_apistate-apistate AS apistate,
            sourcetype AS source_type,
            developmentpackage,
            createdby,
@@ -281,7 +281,7 @@ CLASS zcl_sat_adt_cds_parser IMPLEMENTATION.
            developmentpackage,
            createdby,
            description
-     FROM zsat_i_databasetable( p_language = @sy-langu )
+     FROM zsat_i_databasetable
      WHERE tablename IN @lt_tabname_range
     INTO TABLE @DATA(lt_entity_and_text).
 
@@ -309,7 +309,7 @@ CLASS zcl_sat_adt_cds_parser IMPLEMENTATION.
            rawentityid,
            ddlname,
            viewname,
-           \_apistate-apistate as apistate,
+           \_apistate-apistate AS apistate,
            sourcetype AS source_type,
            developmentpackage,
            createdby,
@@ -348,7 +348,7 @@ CLASS zcl_sat_adt_cds_parser IMPLEMENTATION.
            developmentpackage,
            createdby,
            description
-      FROM zsat_i_databaseview( p_language = @sy-langu )
+      FROM zsat_i_databaseview
       WHERE viewname IN @lt_view_range
     INTO CORRESPONDING FIELDS OF TABLE @lt_entity_and_text.
 
