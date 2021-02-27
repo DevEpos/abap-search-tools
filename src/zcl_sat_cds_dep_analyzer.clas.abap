@@ -36,12 +36,58 @@ CLASS zcl_sat_cds_dep_analyzer DEFINITION
         dependencies      TYPE ty_t_dependency,
       END OF ty_s_dependency_info.
 
+    TYPES:
+      BEGIN OF ty_s_dependency_graph_node,
+        "! db name, e.g. SQL view name
+        name                     TYPE string,
+        type                     TYPE string,
+        relation                 TYPE string,
+        entity_name              TYPE string,
+        "! Entity name in camel case
+        user_defined_entity_name TYPE string,
+        activation_state         TYPE string,
+        ddls_name                TYPE string,
+        children                 TYPE REF TO data,
+      END OF ty_s_dependency_graph_node,
+      ty_t_dependency_graph_nodes TYPE STANDARD TABLE OF ty_s_dependency_graph_node WITH EMPTY KEY.
+    CONSTANTS:
+      BEGIN OF c_node_type,
+        table                 TYPE string VALUE 'TABLE',
+        cds_view              TYPE string VALUE 'CDS_VIEW',
+        cds_db_view           TYPE string VALUE 'CDS_DB_VIEW',
+        view                  TYPE string VALUE 'VIEW',
+        cds_table_function    TYPE string VALUE 'CDS_TABLE_FUNCTION',
+        external_view         TYPE string VALUE 'EXTERNAL_VIEW',
+        select                TYPE string VALUE 'SELECT',
+        union                 TYPE string VALUE 'UNION',
+        union_all             TYPE string VALUE 'UNION_ALL',
+        result                TYPE string VALUE 'RESULT',
+        unknown               TYPE string VALUE 'UNKNOWN',
+        related_objects_tree  TYPE string VALUE 'RELATED_OBJECTS_TREE',
+        related_objects_entry TYPE string VALUE 'RELATED_OBJECTS_ENTRY',
+        dcl_objects_list      TYPE string VALUE 'DCLS_OBJECT_LIST',
+      END OF c_node_type,
+      BEGIN OF c_relation_type,
+        from             TYPE string VALUE 'FROM',
+        inner_join       TYPE string VALUE 'INNER_JOIN',
+        left_outer_join  TYPE string VALUE 'LEFT_OUTER_JOIN',
+        right_outer_join TYPE string VALUE 'RIGHT_OUTER_JOIN',
+        select           TYPE string VALUE 'SELECT',
+        union            TYPE string VALUE 'UNION',
+        union_all        TYPE string VALUE 'UNION_ALL',
+      END OF c_relation_type,
+      BEGIN OF c_activation_state,
+        active       TYPE string VALUE 'ACTIVE',
+        inactive     TYPE string VALUE 'INACTIVE',
+        inconsistent TYPE string VALUE 'INCONSISTENT',
+      END OF c_activation_state.
+
     "! <p class="shorttext synchronized" lang="en">Anaylyzes dependencies of View and returns tree</p>
     CLASS-METHODS analyze_dependency
       IMPORTING
         iv_cds_view_name           TYPE zsat_cds_view_name
       RETURNING
-        VALUE(rs_dependency_graph) TYPE cl_ddls_dependency_visitor=>ty_s_dependency_graph_node.
+        VALUE(rs_dependency_graph) TYPE ty_s_dependency_graph_node.
     "! <p class="shorttext synchronized" lang="en">Retrieve distinct entities and count</p>
     CLASS-METHODS get_used_entities
       IMPORTING
@@ -51,18 +97,11 @@ CLASS zcl_sat_cds_dep_analyzer DEFINITION
         VALUE(rs_dependency_info) TYPE ty_s_dependency_info.
   PROTECTED SECTION.
   PRIVATE SECTION.
-    TYPES:
-      BEGIN OF ty_s_dependency_graph_node,
-        parent                   TYPE string,
-        name                     TYPE string, " db name, e.g. SQL view name
-        type                     TYPE string, " DDIC view, CDS view or table
-        relation                 TYPE string,
-        entity_name              TYPE string,
-        user_defined_entity_name TYPE string, " with camel case
-        ddls_name                TYPE string,
-        children                 TYPE REF TO data,
-      END OF ty_s_dependency_graph_node,
-      ty_t_dependency_graph_nodes TYPE STANDARD TABLE OF ty_s_dependency_graph_node WITH DEFAULT KEY.
+    TYPES BEGIN OF ty_s_dep_graph_node_ext.
+    INCLUDE TYPE ty_s_dependency_graph_node.
+    TYPES parent TYPE string.
+    TYPES END OF ty_s_dep_graph_node_ext.
+    TYPES ty_t_dep_graph_node_ext TYPE STANDARD TABLE OF ty_s_dep_graph_node_ext WITH EMPTY KEY.
     "! <p class="shorttext synchronized" lang="en">Retrieve metrics about dependencies</p>
     CLASS-METHODS get_used_entity_count
       IMPORTING
@@ -96,7 +135,8 @@ CLASS zcl_sat_cds_dep_analyzer IMPLEMENTATION.
     DATA(lo_dependency_visitor) = NEW cl_ddls_dependency_visitor( ).
     lo_dependency_visitor->compute_dependency_information( to_upper( iv_cds_view_name ) ).
 
-    DATA(lt_dependencies) = VALUE ty_t_dependency_graph_nodes( ( CORRESPONDING #( DEEP lo_dependency_visitor->get_dependency_graph( ) ) ) ).
+    DATA(lt_dependencies) = VALUE ty_t_dep_graph_node_ext(
+      ( CORRESPONDING #( DEEP lo_dependency_visitor->get_dependency_graph( ) ) ) ).
 
     LOOP AT lt_dependencies ASSIGNING FIELD-SYMBOL(<ls_dependency>).
       DATA(lv_used_entity_count) = 0.
@@ -123,7 +163,9 @@ CLASS zcl_sat_cds_dep_analyzer IMPLEMENTATION.
              <ls_dependency>-name = cl_ddls_dependency_visitor=>co_node_type-union_all.
             <ls_child_enhanced>-parent = <ls_dependency>-parent.
           ELSE.
-            <ls_child_enhanced>-parent = COND #( WHEN <ls_dependency>-entity_name IS NOT INITIAL THEN <ls_dependency>-entity_name ELSE <ls_dependency>-name ).
+            <ls_child_enhanced>-parent = COND #(
+              WHEN <ls_dependency>-entity_name IS NOT INITIAL THEN <ls_dependency>-entity_name
+              ELSE <ls_dependency>-name ).
           ENDIF.
         ENDLOOP.
       ENDIF.
@@ -200,7 +242,8 @@ CLASS zcl_sat_cds_dep_analyzer IMPLEMENTATION.
       IF <ls_child>-children IS BOUND.
         get_used_entity_count(
           EXPORTING
-            it_children          = CAST cl_ddls_dependency_visitor=>ty_t_dependency_graph_nodes( <ls_child>-children )->*
+            it_children          = CAST cl_ddls_dependency_visitor=>ty_t_dependency_graph_nodes(
+                                     <ls_child>-children )->*
           CHANGING
             cv_used_entity_count = cv_used_entity_count
             cv_used_joins        = cv_used_joins
@@ -229,7 +272,7 @@ CLASS zcl_sat_cds_dep_analyzer IMPLEMENTATION.
                rawentityid AS entityraw,
                ddlname AS secondary_entity_id,
                sourcetype AS source_type,
-               \_apistate-apistate as api_state,
+               \_apistate-apistate AS api_state,
                description,
                developmentpackage,
                createdby
