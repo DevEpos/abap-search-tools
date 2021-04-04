@@ -543,7 +543,7 @@ CLASS zcl_sat_cds_view_factory IMPLEMENTATION.
 
     IF sy-subrc = 0.
       SORT sender->mt_annotations BY fieldname name.
-      DELETE ADJACENT DUPLICATES FROM sender->mt_annotations.
+      DELETE ADJACENT DUPLICATES FROM sender->mt_annotations COMPARING fieldname name.
     ENDIF.
   ENDMETHOD.
 
