@@ -210,7 +210,7 @@ CLASS zcl_sat_adt_res_cds_secelinfo IMPLEMENTATION.
       ORDER BY cls~clsname
     INTO TABLE @DATA(lt_classes).
 
-    LOOP AT lt_classes ASSIGNING FIELD-SYMBOL(<ls_class>).
+    LOOP AT lt_classes ASSIGNING FIELD-SYMBOL(<ls_class>) WHERE clsname IS NOT INITIAL.
       APPEND INITIAL LINE TO ms_secondary_element_info-referenced_classes ASSIGNING FIELD-SYMBOL(<ls_adt_object>).
 
       DATA(ls_adt_object) = zcl_sat_adt_util=>create_adt_uri(
