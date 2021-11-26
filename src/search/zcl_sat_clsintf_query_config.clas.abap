@@ -28,7 +28,7 @@ CLASS zcl_sat_clsintf_query_config IMPLEMENTATION.
       ( option = c_general_options-max_rows single = abap_true no_negation = abap_true )
       ( option = c_class_intf_search_option-flag )
       ( option = c_class_intf_search_option-category )
-      ( option = c_class_intf_search_option-method allowed_length = 30 )
+      ( option = c_class_intf_search_option-method allowed_length = 61 )
       ( option = c_class_intf_search_option-interface allowed_length = 30 )
       ( option = c_class_intf_search_option-attribute allowed_length = 30 key_value = abap_true  no_uppercase = abap_true )
       ( option = c_class_intf_search_option-friend allowed_length = 30 )
