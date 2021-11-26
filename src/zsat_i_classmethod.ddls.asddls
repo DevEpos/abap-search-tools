@@ -4,12 +4,12 @@
 @AccessControl.authorizationCheck: #NOT_REQUIRED
 @EndUserText.label: 'Method in Class/Interface'
 define view ZSAT_I_ClassMethod
-// Normal methods in interfaces and classes
+  // Normal methods in interfaces and classes
   as select from seocompo
 {
-  key clsname as ClassName,
-  key cmpname as MethodName,
-      mtdtype as MethodType
+  key clsname                       as ClassName,
+  key cast( cmpname as seocpdname ) as MethodName,
+      mtdtype                       as MethodType
 }
 where
   cmptype = '1'
