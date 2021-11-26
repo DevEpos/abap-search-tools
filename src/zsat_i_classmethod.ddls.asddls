@@ -7,9 +7,9 @@ define view ZSAT_I_ClassMethod
   // Normal methods in interfaces and classes
   as select from seocompo
 {
-  key clsname                       as ClassName,
-  key cast( cmpname as seocpdname ) as MethodName,
-      mtdtype                       as MethodType
+  key clsname                          as ClassName,
+  key cast( cmpname as abap.char(61) ) as MethodName,
+      mtdtype                          as MethodType
 }
 where
   cmptype = '1'
