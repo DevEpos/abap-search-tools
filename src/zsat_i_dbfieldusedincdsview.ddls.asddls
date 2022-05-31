@@ -1,10 +1,7 @@
-@AbapCatalog.sqlViewName: 'ZSATIDBFUSINCV'
-@AbapCatalog.compiler.compareFilter: true
-@AbapCatalog.preserveKey: true
 @AccessControl.authorizationCheck: #NOT_REQUIRED
 @EndUserText.label: 'View Field used CDS View'
 
-define view ZSAT_I_DbFieldUsedInCdsView
+define view entity ZSAT_I_DbFieldUsedInCdsView
   with parameters
     P_BaseTable : tabname,
     P_BaseField : fieldname

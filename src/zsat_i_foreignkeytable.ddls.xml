@@ -6,7 +6,7 @@
     <DDLNAME>ZSAT_I_FOREIGNKEYTABLE</DDLNAME>
     <DDLANGUAGE>E</DDLANGUAGE>
     <DDTEXT>Database tables of foreign key definition</DDTEXT>
-    <SOURCE_TYPE>V</SOURCE_TYPE>
+    <SOURCE_TYPE>W</SOURCE_TYPE>
    </DDLS>
   </asx:values>
  </asx:abap>

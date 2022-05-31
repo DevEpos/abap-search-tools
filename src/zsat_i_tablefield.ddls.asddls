@@ -1,10 +1,7 @@
-@AbapCatalog.sqlViewName: 'ZSATITABFLD'
-@AbapCatalog.compiler.compareFilter: true
-@AbapCatalog.preserveKey: true
 @AccessControl.authorizationCheck: #NOT_REQUIRED
 @EndUserText.label: 'Field in table'
 
-define view ZSAT_I_TableField
+define view entity ZSAT_I_TableField
   as select from dd03l as Field
     inner join   dd02l as Table on  Field.tabname    = Table.tabname
                                 and Table.as4local   = 'A'

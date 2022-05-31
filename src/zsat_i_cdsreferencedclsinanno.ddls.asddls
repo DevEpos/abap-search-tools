@@ -1,10 +1,7 @@
-@AbapCatalog.sqlViewName: 'ZSATICDSREFCA'
-@AbapCatalog.compiler.compareFilter: true
-@AbapCatalog.preserveKey: true
-@AccessControl.authorizationCheck: #CHECK
+@AccessControl.authorizationCheck: #NOT_REQUIRED
 @EndUserText.label: 'Referenced clses in CDS views via Annot.'
 
-define view ZSAT_I_CDSReferencedClsInAnno
+define view entity ZSAT_I_CDSReferencedClsInAnno
   as select from ZSAT_I_CdsAnnotation
 {
   EntityId,

@@ -1,10 +1,7 @@
-@AbapCatalog.sqlViewName: 'ZSATICLSATTR'
-@AbapCatalog.compiler.compareFilter: true
-@AbapCatalog.preserveKey: true
-@AccessControl.authorizationCheck: #CHECK
+@AccessControl.authorizationCheck: #NOT_REQUIRED
 @EndUserText.label: 'Attribute of Class/Interface'
 
-define view ZSAT_I_ClassAttribute
+define view entity ZSAT_I_ClassAttribute
   as select from seocompo   as Comp
     inner join   seocompodf as Def on  Comp.clsname = Def.clsname
                                    and Comp.cmpname = Def.cmpname

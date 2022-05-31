@@ -1,13 +1,10 @@
 /*
  * View which returns all the information of the DDLS and STOB parts of a CDS view
  */
-@AbapCatalog.sqlViewName: 'ZSATICDSEN'
-@AbapCatalog.compiler.compareFilter: true
-@AbapCatalog.preserveKey: true
-@AccessControl.authorizationCheck: #CHECK
+@AccessControl.authorizationCheck: #NOT_REQUIRED
 @EndUserText.label: 'Entity in Data Definition'
 
-define view ZSAT_I_CDSEntity
+define view entity ZSAT_I_CDSEntity
   as select from    ZSAT_P_CDSViewBase as Base
     left outer join ddddlsrc02bt       as Text         on  Text.ddlname    = Base.DdlName
                                                        and Text.strucobjn  = Base.EntityId

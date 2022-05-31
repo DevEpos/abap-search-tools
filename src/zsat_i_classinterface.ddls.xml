@@ -6,7 +6,7 @@
     <DDLNAME>ZSAT_I_CLASSINTERFACE</DDLNAME>
     <DDLANGUAGE>E</DDLANGUAGE>
     <DDTEXT>ABAP OO Class/Interface</DDTEXT>
-    <SOURCE_TYPE>V</SOURCE_TYPE>
+    <SOURCE_TYPE>W</SOURCE_TYPE>
    </DDLS>
   </asx:values>
  </asx:abap>

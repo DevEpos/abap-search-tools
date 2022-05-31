@@ -1,10 +1,7 @@
-@AbapCatalog.sqlViewName: 'ZSATDBEAGG'
-@AbapCatalog.compiler.compareFilter: true
-@AbapCatalog.preserveKey: true
-@AccessControl.authorizationCheck: #CHECK
+@AccessControl.authorizationCheck: #NOT_REQUIRED
 @EndUserText.label: 'Aggr. Database Entities by package/type'
 
-define view ZSAT_I_DatabaseEntityAggr
+define view entity ZSAT_I_DatabaseEntityAggr
   as select from ZSAT_I_DatabaseEntity
 {
   //ZSAT_I_DatabaseEntity

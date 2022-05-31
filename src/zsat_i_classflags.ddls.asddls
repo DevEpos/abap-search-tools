@@ -1,10 +1,8 @@
-@AbapCatalog.sqlViewName: 'ZSATICLSFLAGS'
-@AbapCatalog.compiler.compareFilter: true
-@AbapCatalog.preserveKey: true
-@AccessControl.authorizationCheck: #CHECK
+@AccessControl.authorizationCheck: #NOT_REQUIRED
 @EndUserText.label: 'Flags in a Class/Interface'
+@Metadata.ignorePropagatedAnnotations: true
 
-define view ZSAT_I_ClassFlags
+define view entity ZSAT_I_ClassFlags
   as select distinct from seoclassdf
 {
   key clsname         as ClassName,
@@ -36,7 +34,7 @@ union select distinct from seoclassdf
 
 {
   key clsname    as ClassName,
-      'FIXPOINT' as Flag
+  key 'FIXPOINT' as Flag
 }
 where
       version = '1'
@@ -45,7 +43,7 @@ union select distinct from seoclassdf
 
 {
   key clsname    as ClassName,
-      'ABSTRACT' as Flag
+  key 'ABSTRACT' as Flag
 }
 where
       version    = '1'

@@ -1,11 +1,9 @@
-@AbapCatalog.sqlViewName: 'ZSATICDSFPE'
-@AbapCatalog.compiler.compareFilter: true
-@AbapCatalog.preserveKey: true
-@AccessControl.authorizationCheck: #CHECK
+@AccessControl.authorizationCheck: #NOT_REQUIRED
 @EndUserText.label: 'Entities in Select From clause of CDS'
+@Metadata.ignorePropagatedAnnotations: true
 
 -- CDS views which have Database tables in select part
-define view ZSAT_I_CDSFromPartEntity
+define view entity ZSAT_I_CDSFromPartEntity
   as select from dd26s as BaseTable
     inner join   dd02l as DbTable on  BaseTable.tabname = DbTable.tabname
                                   and DbTable.tabclass  = 'TRANSP'

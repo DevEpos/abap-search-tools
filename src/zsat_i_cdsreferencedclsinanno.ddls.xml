@@ -6,7 +6,7 @@
     <DDLNAME>ZSAT_I_CDSREFERENCEDCLSINANNO</DDLNAME>
     <DDLANGUAGE>E</DDLANGUAGE>
     <DDTEXT>References classes in CDS views via Annoation</DDTEXT>
-    <SOURCE_TYPE>V</SOURCE_TYPE>
+    <SOURCE_TYPE>W</SOURCE_TYPE>
    </DDLS>
   </asx:values>
  </asx:abap>

@@ -1,9 +1,7 @@
-@AbapCatalog.sqlViewName: 'ZSATIINTFUSAGE'
-@AbapCatalog.compiler.compareFilter: true
-@AbapCatalog.preserveKey: true
-@AccessControl.authorizationCheck: #CHECK
+@AccessControl.authorizationCheck: #NOT_REQUIRED
 @EndUserText.label: 'Interface usage in Class/Interface'
-define view ZSAT_I_InterfaceUsage
+
+define view entity ZSAT_I_InterfaceUsage
   as select from seometarel
 {
   key clsname    as ClassName,

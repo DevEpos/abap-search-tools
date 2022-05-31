@@ -1,10 +1,7 @@
-@AbapCatalog.sqlViewName: 'ZSATIDEVPACK'
-@AbapCatalog.compiler.compareFilter: true
-@AbapCatalog.preserveKey: true
-@AccessControl.authorizationCheck: #CHECK
+@AccessControl.authorizationCheck: #NOT_REQUIRED
 @EndUserText.label: 'Development Package Information'
 
-define view ZSAT_I_DevelopmentPackage
+define view entity ZSAT_I_DevelopmentPackage
   as select from    tdevc  as Package
     inner join      tadir  as Repo         on  Repo.obj_name = Package.devclass
                                            and Repo.object   = 'DEVC'

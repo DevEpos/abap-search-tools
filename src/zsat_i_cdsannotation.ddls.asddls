@@ -1,9 +1,8 @@
-@AbapCatalog.sqlViewName: 'ZSATICDSANNO'
-@AbapCatalog.compiler.compareFilter: true
-@AbapCatalog.preserveKey: true
-@AccessControl.authorizationCheck: #CHECK
+@AccessControl.authorizationCheck: #NOT_REQUIRED
 @EndUserText.label: 'Annotations for CDS Views'
-define view ZSAT_I_CdsAnnotation
+@Metadata.ignorePropagatedAnnotations: true
+
+define view entity ZSAT_I_CdsAnnotation
   as select from ddfieldanno
 {
   strucobjn                       as EntityId,
@@ -27,16 +26,16 @@ union select from ddheadanno
 union select from ddlx_rt_header as MetaExtensionHeader
   inner join      ddlx_rt_data   as MetaExtensionAnno on MetaExtensionHeader.ddlxname = MetaExtensionAnno.ddlxname
 {
-  MetaExtensionHeader.extended_artifact as EntityId,
-  MetaExtensionAnno.element             as FieldName,
-  MetaExtensionAnno.name                as Name,
-  upper(replace(value, '''', ''))       as Value
+  MetaExtensionHeader.extended_artifact             as EntityId,
+  MetaExtensionAnno.element                         as FieldName,
+  MetaExtensionAnno.name                            as Name,
+  upper(replace(MetaExtensionAnno.value, '''', '')) as Value
 }
 /* Change on 2019/10/10
  * -----------------------------
  * Show annotations of parameters
  */
-// >= NW 7.50 
+// >= NW 7.50
 union select from ddparameteranno
 {
   strucobjn                       as EntityId,

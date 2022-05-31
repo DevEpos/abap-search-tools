@@ -1,10 +1,7 @@
-@AbapCatalog.sqlViewName: 'ZSATIDBVIEW'
-@AbapCatalog.compiler.compareFilter: true
-@AbapCatalog.preserveKey: true
-@AccessControl.authorizationCheck: #CHECK
+@AccessControl.authorizationCheck: #NOT_REQUIRED
 @EndUserText.label: 'Database view'
 
-define view ZSAT_I_DatabaseView
+define view entity ZSAT_I_DatabaseView
   as select from    ZSAT_P_DatabaseView as DbView
     left outer join dd25t               as Text         on  DbView.ViewName = Text.viewname
                                                         and Text.ddlanguage = $session.system_language
@@ -22,10 +19,10 @@ define view ZSAT_I_DatabaseView
     when Text.ddtext is not null then upper(Text.ddtext)
     else upper(FallBackText.ddtext)
   end                      as DescriptionUpper,
-  CreatedBy,
-  CreatedDate,
-  ChangedDate,
-  ChangedBy,
-  DevelopmentPackage,
-  Type
+  DbView.CreatedBy,
+  DbView.CreatedDate,
+  DbView.ChangedDate,
+  DbView.ChangedBy,
+  DbView.DevelopmentPackage,
+  DbView.Type
 }

@@ -1,10 +1,8 @@
-@AbapCatalog.sqlViewName: 'ZSATIDBTABAV'
-@AbapCatalog.compiler.compareFilter: true
-@AbapCatalog.preserveKey: true
 @AccessControl.authorizationCheck: #NOT_REQUIRED
 @EndUserText.label: 'DB Tables and DB views'
+@Metadata.ignorePropagatedAnnotations: true
 
-define view ZSAT_I_DatabaseTablesAndViews
+define view entity ZSAT_I_DatabaseTablesAndViews
   as select from ZSAT_I_DatabaseTable
 {
   TableName as Entity,

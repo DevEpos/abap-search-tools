@@ -1,28 +1,25 @@
-@AbapCatalog.sqlViewName: 'ZSATPDBVIEW'
-@AbapCatalog.compiler.compareFilter: true
-@AbapCatalog.preserveKey: true
 @AccessControl.authorizationCheck: #NOT_REQUIRED
 @EndUserText.label: 'Information about Database view'
 
-define view ZSAT_P_DatabaseView
+define view entity ZSAT_P_DatabaseView
   as select from tadir as Repo
     inner join   dd25l as DbView on  Repo.obj_name = DbView.viewname
                                  and Repo.pgmid    = 'R3TR'
                                  and Repo.object   = 'VIEW'
 {
   DbView.viewname as ViewName,
-  author          as CreatedBy,
+  Repo.author     as CreatedBy,
   Repo.created_on as CreatedDate,
-  as4date         as ChangedDate,
-  as4user         as ChangedBy,
-  devclass        as DevelopmentPackage,
+  DbView.as4date  as ChangedDate,
+  DbView.as4user  as ChangedBy,
+  Repo.devclass   as DevelopmentPackage,
   Repo.masterlang as OriginalLanguage,
   'V'             as Type
 }
 where
-       DbView.as4local = 'A'
-  and  genflag         = #genflag.' '
+       DbView.as4local  = 'A'
+  and  Repo.genflag     = ' '
   and(
-       viewclass       = #viewclass.' '
-    or viewclass       = #viewclass.'D'
+       DbView.viewclass = ' '
+    or DbView.viewclass = 'D'
   )

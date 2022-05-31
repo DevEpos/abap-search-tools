@@ -1,10 +1,7 @@
-@AbapCatalog.sqlViewName: 'ZSATIDBTABTS'
-@AbapCatalog.compiler.compareFilter: true
-@AbapCatalog.preserveKey: true
-@AccessControl.authorizationCheck: #CHECK
+@AccessControl.authorizationCheck: #NOT_REQUIRED
 @EndUserText.label: 'Technical Settings of Db Table'
 
-define view ZSAT_I_DbTableTechSettings
+define view entity ZSAT_I_DbTableTechSettings
   as select from    dd09l                 as TechSettings
     inner join      dd02l                 as Table             on TechSettings.tabname = Table.tabname
     left outer join ZSAT_I_DomainFixValue as SizeCategoryText  on  SizeCategoryText.Low        = TechSettings.tabkat
@@ -22,11 +19,11 @@ define view ZSAT_I_DbTableTechSettings
   key Table.tabname          as TableName,
       Table.contflag         as DeliveryClass,
       DeliveryClassText.Text as DeliveryClassText,
-      tabkat                 as SizeCategory,
+      TechSettings.tabkat    as SizeCategory,
       SizeCategoryText.Text  as SizeCategoryText,
       TechSettings.tabart    as DataClass,
       DataClassText.darttext as DataClassText,
-      pufferung              as BufferingIndicator,
+      TechSettings.pufferung as BufferingIndicator,
       BufferTypeText.Text    as BufferingIndicatorText,
       Table.as4user          as LastChangedBy,
       Table.as4date          as LastChangedDate

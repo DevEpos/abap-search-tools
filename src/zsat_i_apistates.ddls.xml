@@ -6,7 +6,7 @@
     <DDLNAME>ZSAT_I_APISTATES</DDLNAME>
     <DDLANGUAGE>E</DDLANGUAGE>
     <DDTEXT>API States for DDIC Objects</DDTEXT>
-    <SOURCE_TYPE>V</SOURCE_TYPE>
+    <SOURCE_TYPE>W</SOURCE_TYPE>
    </DDLS>
   </asx:values>
  </asx:abap>

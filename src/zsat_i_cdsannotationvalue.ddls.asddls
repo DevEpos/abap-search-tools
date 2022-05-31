@@ -1,10 +1,8 @@
-@AbapCatalog.sqlViewName: 'ZSATICDSANV'
-@AbapCatalog.compiler.compareFilter: true
-@AbapCatalog.preserveKey: true
-@AccessControl.authorizationCheck: #CHECK
+@AccessControl.authorizationCheck: #NOT_REQUIRED
 @EndUserText.label: 'Possible Values for a CDS Annotation'
+@Metadata.ignorePropagatedAnnotations: true
 
-define view ZSAT_I_CdsAnnotationValue
+define view entity ZSAT_I_CdsAnnotationValue
   as select from ddla_rt_header // >= 7.51
 {
   key ddlaname                           as DdlAnnotationName,

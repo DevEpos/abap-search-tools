@@ -1,19 +1,16 @@
-@AbapCatalog.sqlViewName: 'ZSATPCDSVB'
-@AbapCatalog.compiler.compareFilter: true
-@AbapCatalog.preserveKey: true
-@AccessControl.authorizationCheck: #CHECK
+@AccessControl.authorizationCheck: #NOT_REQUIRED
 @EndUserText.label: 'Base view for CDS with Repository info.'
 
 @VDM.private: true
 
-define view ZSAT_P_CDSViewBase
-  as select from ddddlsrc             as Source
-    inner join   ZSAT_I_DdlDependency as StructuredObject on Source.ddlname = StructuredObject.DdlName
-    inner join   dd02b                as CdsEntityHeader  on  StructuredObject.EntityName = CdsEntityHeader.strucobjn
-                                                          and CdsEntityHeader.as4local    = 'A'
-    inner join   tadir                as Repo             on  StructuredObject.DdlName = Repo.obj_name
-                                                          and Repo.pgmid               = 'R3TR'
-                                                          and object                   = 'DDLS'
+define view entity ZSAT_P_CDSViewBase
+  as select from    ddddlsrc             as Source
+    inner join ZSAT_I_DdlDependency as StructuredObject on Source.ddlname = StructuredObject.DdlName
+    inner join      dd02b                as CdsEntityHeader  on  StructuredObject.EntityName = CdsEntityHeader.strucobjn
+                                                             and CdsEntityHeader.as4local    = 'A'
+    inner join      tadir                as Repo             on  StructuredObject.DdlName = Repo.obj_name
+                                                             and Repo.pgmid               = 'R3TR'
+                                                             and Repo.object              = 'DDLS'
 {
   CdsEntityHeader.strucobjn     as EntityId,
   CdsEntityHeader.strucobjn_raw as RawEntityId,

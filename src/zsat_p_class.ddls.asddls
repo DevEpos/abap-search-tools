@@ -1,15 +1,13 @@
-@AbapCatalog.sqlViewName: 'ZSATPCLASS'
-@AbapCatalog.compiler.compareFilter: true
-@AbapCatalog.preserveKey: true
-@AccessControl.authorizationCheck: #CHECK
+@AccessControl.authorizationCheck: #NOT_REQUIRED
 @EndUserText.label: 'ABAP OO Class/Interface'
-define view ZSAT_P_Class
+
+define view entity ZSAT_P_Class
   as select from seoclass   as Class
     inner join   seoclassdf as ClassDef on Class.clsname = ClassDef.clsname
 {
   key ClassDef.clsname         as ClassName,
       case
-        when clstype = '0' then 'CLAS'
+        when Class.clstype = '0' then 'CLAS'
         else                    'INTF'
       end                      as TadirType,
       ClassDef.category        as Category,
@@ -41,4 +39,4 @@ define view ZSAT_P_Class
       ClassDef.within_package  as IsOpenedForPackage
 }
 where
-  version = '1' // only active classes
+  ClassDef.version = '1' // only active classes

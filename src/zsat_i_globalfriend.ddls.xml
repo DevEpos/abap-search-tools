@@ -6,7 +6,7 @@
     <DDLNAME>ZSAT_I_GLOBALFRIEND</DDLNAME>
     <DDLANGUAGE>E</DDLANGUAGE>
     <DDTEXT>Global Friend in ABAP OO Class</DDTEXT>
-    <SOURCE_TYPE>V</SOURCE_TYPE>
+    <SOURCE_TYPE>W</SOURCE_TYPE>
    </DDLS>
   </asx:values>
  </asx:abap>

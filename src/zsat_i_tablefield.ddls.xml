@@ -6,7 +6,7 @@
     <DDLNAME>ZSAT_I_TABLEFIELD</DDLNAME>
     <DDLANGUAGE>E</DDLANGUAGE>
     <DDTEXT>Field in table</DDTEXT>
-    <SOURCE_TYPE>V</SOURCE_TYPE>
+    <SOURCE_TYPE>W</SOURCE_TYPE>
    </DDLS>
   </asx:values>
  </asx:abap>

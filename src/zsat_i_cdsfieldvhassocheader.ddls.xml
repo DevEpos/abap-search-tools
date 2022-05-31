@@ -6,7 +6,7 @@
     <DDLNAME>ZSAT_I_CDSFIELDVHASSOCHEADER</DDLNAME>
     <DDLANGUAGE>E</DDLANGUAGE>
     <DDTEXT>Association Headers assigned to CDS fields</DDTEXT>
-    <SOURCE_TYPE>V</SOURCE_TYPE>
+    <SOURCE_TYPE>W</SOURCE_TYPE>
    </DDLS>
   </asx:values>
  </asx:abap>

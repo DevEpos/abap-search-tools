@@ -1,9 +1,8 @@
-@AbapCatalog.sqlViewName: 'ZSATICLSMETH'
-@AbapCatalog.compiler.compareFilter: true
-@AbapCatalog.preserveKey: true
 @AccessControl.authorizationCheck: #NOT_REQUIRED
 @EndUserText.label: 'Method in Class/Interface'
-define view ZSAT_I_ClassMethod
+@Metadata.ignorePropagatedAnnotations: true
+
+define view entity ZSAT_I_ClassMethod
   // Normal methods in interfaces and classes
   as select from seocompo
 {
