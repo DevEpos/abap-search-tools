@@ -11,7 +11,8 @@ Install this repository using [abapGit](https://github.com/larshp/abapGit#abapgi
 
 NW version|Branch name
 ----------|-----------
-&#8805; 7.53  |main
+7.54|nw-753
+7.53|nw-753
 7.52|nw-752
 7.51|nw-752 (_not tested_)
 7.50|nw-750
