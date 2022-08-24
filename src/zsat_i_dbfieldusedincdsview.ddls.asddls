@@ -5,11 +5,11 @@ define view entity ZSAT_I_DbFieldUsedInCdsView
   with parameters
     P_BaseTable : tabname,
     P_BaseField : fieldname
-  as select distinct from dd27s               as ViewField
-    inner join            ZSAT_P_CDSViewBase  as CdsBase  on ViewField.viewname = CdsBase.ViewName
+  as select distinct from ZSAT_I_CdsBaseField as ViewField
+    inner join            ZSAT_P_CDSViewBase  as CdsBase  on ViewField.ViewName = CdsBase.ViewName
     inner join            ZSAT_I_CdsViewField as CdsField on  CdsBase.EntityId   = CdsField.EntityId
-                                                          and CdsField.FieldName = ViewField.viewfield
-    left outer join       ZSAT_I_APIStates    as ApiState on  CdsBase.DdlName      =  ApiState.ObjectName
+                                                          and CdsField.FieldName = ViewField.ViewField
+    left outer join       ZSAT_I_APIStates    as ApiState on  CdsBase.ddlname      =  ApiState.ObjectName
                                                           and ApiState.FilterValue <> 'ADD_CUSTOM_FIELDS'
 {
   key case
@@ -20,11 +20,11 @@ define view entity ZSAT_I_DbFieldUsedInCdsView
        when CdsField.RawFieldName <> '' then CdsField.RawFieldName
        else CdsField.FieldName
       end as FieldName,
-      CdsBase.DdlName,
+      CdsBase.ddlname,
       CdsBase.SourceType,
       ApiState.APIState
 }
 where
-      ViewField.tabname     = $parameters.P_BaseTable
-  and ViewField.fieldname   = $parameters.P_BaseField
+      ViewField.BaseTable   = $parameters.P_BaseTable
+  and ViewField.FieldName   = $parameters.P_BaseField
   and CdsBase.ParentDdlName = ''

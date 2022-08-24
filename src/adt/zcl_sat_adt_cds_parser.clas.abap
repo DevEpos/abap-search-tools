@@ -96,50 +96,53 @@ ENDCLASS.
 
 
 
-CLASS zcl_sat_adt_cds_parser IMPLEMENTATION.
+CLASS ZCL_SAT_ADT_CDS_PARSER IMPLEMENTATION.
 
 
   METHOD constructor.
     mv_cds_view = iv_cds.
   ENDMETHOD.
 
+
   METHOD parse_cds.
     DATA: lv_ddlname TYPE ddlname,
           lv_entity  TYPE zsat_entity_id.
 
-*.. Determine the correct DDL name first
     SELECT SINGLE ddlname,
                   entityid
       FROM zsat_p_cdsviewbase
       WHERE entityid = @mv_cds_view
          OR ddlname  = @mv_cds_view
-    INTO (@lv_ddlname, @lv_entity).
+      INTO (@lv_ddlname, @lv_entity).
 
-    CHECK sy-subrc = 0.
+    IF sy-subrc <> 0.
+      RETURN.
+    ENDIF.
+
     SELECT SINGLE
-        FROM ddddlsrc
-        FIELDS *
-        WHERE ddlname = @lv_ddlname
+      FROM ddddlsrc
+      FIELDS *
+      WHERE ddlname = @lv_ddlname
       INTO @DATA(ls_cds).
 
-    CHECK sy-subrc = 0.
+    IF sy-subrc <> 0.
+      RETURN.
+    ENDIF.
 
     DATA(lo_parser) = NEW cl_ddl_parser( ).
     DATA(lo_stmnt) = lo_parser->parse_cds(
-        it_sources = VALUE #( ( ls_cds ) )
-        iv_bitset  = cl_ddl_parser=>set_bitmask(
-           iv_semantic      = abap_true
-           iv_ars_check_off = abap_true
-           iv_trace         = abap_false
-           iv_locally       = abap_false
-           iv_aiepp         = abap_false
-           iv_extresol      = abap_true )
-    ).
+      it_sources = VALUE #( ( ls_cds ) )
+      iv_bitset  = cl_ddl_parser=>set_bitmask(
+         iv_semantic      = abap_true
+         iv_ars_check_off = abap_true
+         iv_trace         = abap_false
+         iv_locally       = abap_false
+         iv_aiepp         = abap_false
+         iv_extresol      = abap_true ) ).
 
     DATA(lo_node_helper) = NEW lcl_node_helper(
-      iv_name            = |{ lv_entity }|
-      iv_entity_name     = |{ lv_entity }|
-    ).
+      iv_name        = |{ lv_entity }|
+      iv_entity_name = |{ lv_entity }| ).
 
     IF lo_stmnt IS BOUND.
       CASE lo_stmnt->get_type( ).
@@ -148,7 +151,13 @@ CLASS zcl_sat_adt_cds_parser IMPLEMENTATION.
           mo_interpreter = NEW lcl_ddl_view_stmnt_intrpt(
             if_associations = if_associations
             io_node_helper  = lo_node_helper
-            io_stmnt        = CAST cl_qlast_view_definition( lo_stmnt ) ).
+            io_stmnt        = CAST #( lo_stmnt ) ).
+
+        WHEN cl_qlast_constants=>ddlstmt_type_view_entity_def.
+          mo_interpreter = NEW lcl_ddl_view2_stmnt_intrpt(
+            if_associations = if_associations
+            io_node_helper  = lo_node_helper
+            io_stmnt        = CAST #( lo_stmnt ) ).
 
         WHEN cl_qlast_constants=>ddlstmt_type_tab_func_define.
           mo_interpreter = NEW lcl_ddl_tab_func_stmnt_intrpt(
@@ -166,12 +175,14 @@ CLASS zcl_sat_adt_cds_parser IMPLEMENTATION.
       fill_datasource_information( lo_node_helper ).
       fill_adt_uris( lo_node_helper ).
       lo_node_helper->convert_node_to_elem_info(
-        EXPORTING io_node      = lo_node_helper->mo_root_node
-        CHANGING  cs_elem_info = ms_select_element_info
-      ).
+        EXPORTING
+          io_node      = lo_node_helper->mo_root_node
+        CHANGING
+          cs_elem_info = ms_select_element_info ).
     ENDIF.
 
   ENDMETHOD.
+
 
   METHOD fill_adt_uris.
     TYPES:
@@ -185,20 +196,18 @@ CLASS zcl_sat_adt_cds_parser IMPLEMENTATION.
     FIELD-SYMBOLS: <ls_node> TYPE lcl_node=>ty_s_cached_node.
 
     lt_uri = VALUE #(
-        ( LINES OF VALUE #( FOR cds IN io_node_helper->mt_cds_views ( name = cds-name entity_type = cds-node->entity_type ddlname = cds-node->ddls_name ) ) )
-        ( LINES OF VALUE #( FOR table IN io_node_helper->mt_tables ( name = table-name entity_type = table-node->entity_type ) ) )
-        ( LINES OF VALUE #( FOR view IN io_node_helper->mt_views ( name = view-name entity_type = view-node->entity_type ) ) )
-    ).
+      ( LINES OF VALUE #( FOR cds IN io_node_helper->mt_cds_views ( name = cds-name entity_type = cds-node->entity_type ddlname = cds-node->ddls_name ) ) )
+      ( LINES OF VALUE #( FOR table IN io_node_helper->mt_tables ( name = table-name entity_type = table-node->entity_type ) ) )
+      ( LINES OF VALUE #( FOR view IN io_node_helper->mt_views ( name = view-name entity_type = view-node->entity_type ) ) ) ).
 
     SORT lt_uri BY name.
     DELETE ADJACENT DUPLICATES FROM lt_uri COMPARING name.
 
     LOOP AT lt_uri INTO DATA(ls_uri).
       DATA(ls_adt_object) = zcl_sat_adt_util=>create_adt_uri(
-          iv_type  = ls_uri-entity_type
-          iv_name  = ls_uri-name
-          iv_name2 = |{ ls_uri-ddlname }|
-      ).
+        iv_type  = ls_uri-entity_type
+        iv_name  = ls_uri-name
+        iv_name2 = |{ ls_uri-ddlname }| ).
       IF ls_uri-entity_type = zif_sat_c_entity_type=>cds_view.
         LOOP AT io_node_helper->mt_cds_views ASSIGNING <ls_node> WHERE name = ls_uri-name.
           <ls_node>-node->uri = ls_adt_object-uri.
@@ -248,7 +257,7 @@ CLASS zcl_sat_adt_cds_parser IMPLEMENTATION.
       FROM zsat_i_cdsentity
       WHERE entityid IN @lt_cds_range
          OR ddlname IN @lt_cds_range
-    INTO TABLE @DATA(lt_entity_and_text).
+      INTO TABLE @DATA(lt_entity_and_text).
 
     LOOP AT io_node_helper->mt_cds_views ASSIGNING FIELD-SYMBOL(<ls_node>).
       ASSIGN lt_entity_and_text[ ddlname = <ls_node>-name ] TO FIELD-SYMBOL(<ls_entity_info>).
@@ -269,6 +278,7 @@ CLASS zcl_sat_adt_cds_parser IMPLEMENTATION.
     ENDLOOP.
 
   ENDMETHOD.
+
 
   METHOD fill_table_info.
     DATA: lt_tabname_range TYPE RANGE OF tabname.
@@ -296,6 +306,7 @@ CLASS zcl_sat_adt_cds_parser IMPLEMENTATION.
 
   ENDMETHOD.
 
+
   METHOD fill_view_info.
     DATA: lt_view_range    TYPE RANGE OF viewname.
 
@@ -317,7 +328,7 @@ CLASS zcl_sat_adt_cds_parser IMPLEMENTATION.
            description
       FROM zsat_i_cdsentity
       WHERE viewname IN @lt_view_range
-    INTO TABLE @DATA(lt_entity_and_text).
+      INTO TABLE @DATA(lt_entity_and_text).
 
     LOOP AT io_node_helper->mt_views ASSIGNING <ls_node>.
       ASSIGN lt_entity_and_text[ viewname = <ls_node>-name ] TO FIELD-SYMBOL(<ls_entity_info>).
@@ -351,7 +362,7 @@ CLASS zcl_sat_adt_cds_parser IMPLEMENTATION.
            description
       FROM zsat_i_databaseview
       WHERE viewname IN @lt_view_range
-    INTO CORRESPONDING FIELDS OF TABLE @lt_entity_and_text.
+      INTO CORRESPONDING FIELDS OF TABLE @lt_entity_and_text.
 
     CHECK sy-subrc = 0.
 
@@ -391,10 +402,10 @@ CLASS zcl_sat_adt_cds_parser IMPLEMENTATION.
 
     SELECT amdp_name AS name,
            strucobjn AS entity
-       FROM ddtbfuncdep
-       WHERE strucobjn IN @lt_table_func_cds_range
-       ORDER BY amdp_name
-     INTO TABLE @DATA(lt_table_func).
+      FROM ddtbfuncdep
+      WHERE strucobjn IN @lt_table_func_cds_range
+      ORDER BY amdp_name
+      INTO TABLE @DATA(lt_table_func).
 
     CHECK sy-subrc = 0.
 
@@ -407,8 +418,8 @@ CLASS zcl_sat_adt_cds_parser IMPLEMENTATION.
 *.... TODO: use cl_src_adt_res_obj_struc to read the object structure to be able
 *.......... to get the ADT URI for the specific AMDP method
       DATA(ls_adt_object) = zcl_sat_adt_util=>create_adt_uri(
-          iv_tadir_type = 'CLAS'
-          iv_name       = CONV #( <ls_amdp_info>-class )
+        iv_tadir_type = 'CLAS'
+        iv_name       = CONV #( <ls_amdp_info>-class )
       ).
       lt_class_name_range = VALUE #( BASE lt_class_name_range ( sign = 'I' option = 'EQ' low = <ls_amdp_info>-class ) ).
       <ls_amdp_info>-uri = ls_adt_object-uri.
@@ -422,7 +433,7 @@ CLASS zcl_sat_adt_cds_parser IMPLEMENTATION.
       FROM seoclasstx
       WHERE clsname IN @lt_class_name_range
         AND langu   = @sy-langu
-    INTO TABLE @DATA(lt_description).
+      INTO TABLE @DATA(lt_description).
 
     LOOP AT lt_amdp_info ASSIGNING <ls_amdp_info>.
       DATA(lv_description) = VALUE #( lt_description[ clsname = <ls_amdp_info>-class ]-descript OPTIONAL ).
@@ -441,5 +452,4 @@ CLASS zcl_sat_adt_cds_parser IMPLEMENTATION.
     ENDLOOP.
 
   ENDMETHOD.
-
 ENDCLASS.

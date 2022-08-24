@@ -26,6 +26,9 @@ CLASS zcl_sat_cds_view_qc IMPLEMENTATION.
           WHEN zif_sat_c_object_search=>c_type_option_value-extend.
             cv_value = zif_sat_c_cds_view_type=>extend.
 
+          WHEN zif_sat_c_object_search=>c_type_option_value-extend2.
+            cv_value = zif_sat_c_cds_view_type=>extend2.
+
           WHEN zif_sat_c_object_search=>c_type_option_value-function.
             cv_value =  zif_sat_c_cds_view_type=>table_function.
 
@@ -34,6 +37,9 @@ CLASS zcl_sat_cds_view_qc IMPLEMENTATION.
 
           WHEN zif_sat_c_object_search=>c_type_option_value-view.
             cv_value =  zif_sat_c_cds_view_type=>view.
+
+          WHEN zif_sat_c_object_search=>c_type_option_value-view_entity.
+            cv_value =  zif_sat_c_cds_view_type=>view_entity.
 
           WHEN zif_sat_c_object_search=>c_type_option_value-abstract_entity.
             cv_value = zif_sat_c_cds_view_type=>abstract_entity.

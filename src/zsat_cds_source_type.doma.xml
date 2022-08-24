@@ -48,6 +48,18 @@
      <DOMVALUE_L>H</DOMVALUE_L>
      <DDTEXT>Hierarchy</DDTEXT>
     </DD07V>
+    <DD07V>
+     <VALPOS>0007</VALPOS>
+     <DDLANGUAGE>E</DDLANGUAGE>
+     <DOMVALUE_L>X</DOMVALUE_L>
+     <DDTEXT>Extend (Version 2)</DDTEXT>
+    </DD07V>
+    <DD07V>
+     <VALPOS>0008</VALPOS>
+     <DDLANGUAGE>E</DDLANGUAGE>
+     <DOMVALUE_L>W</DOMVALUE_L>
+     <DDTEXT>View Entity</DDTEXT>
+    </DD07V>
    </DD07V_TAB>
   </asx:values>
  </asx:abap>

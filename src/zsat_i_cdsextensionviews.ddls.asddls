@@ -4,12 +4,15 @@
 @VDM.viewType: #BASIC
 
 define view entity ZSAT_I_CdsExtensionViews
-  as select from ddddlsrc             as source
-    inner join   ZSAT_I_DdlDependency as dependency on source.ddlname = dependency.DdlName
+  as select from    ddddlsrc             as source
+    left outer join ZSAT_I_DdlDependency as dependency on source.ddlname = dependency.DdlName
 {
-  source.ddlname        as DdlName,
-  dependency.EntityName as EntityId,
-  source.parentname     as ParentDdl
+  key source.ddlname    as DdlName,
+      case
+        when dependency.EntityName is null then source.ddlname
+        else dependency.EntityName
+      end               as EntityId,
+      source.parentname as ParentDdl
 }
 where
       source.parentname <> ''

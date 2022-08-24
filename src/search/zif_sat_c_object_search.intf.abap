@@ -155,9 +155,11 @@ INTERFACE zif_sat_c_object_search
       function        TYPE string VALUE 'FUNCTION',
       hierarchy       TYPE string VALUE 'HIERARCHY',
       view            TYPE string VALUE 'VIEW',
+      view_entity     TYPE string VALUE 'VIEW_ENTITY',
       abstract_entity TYPE string VALUE 'ABSTRACT',
       custom_entity   TYPE string VALUE 'CUSTOM',
       table           TYPE string VALUE 'TABLE',
       extend          TYPE string VALUE 'EXTEND',
+      extend2         TYPE string VALUE 'EXTEND2',
     END OF c_type_option_value.
 ENDINTERFACE.

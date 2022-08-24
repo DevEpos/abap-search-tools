@@ -3,7 +3,9 @@ INTERFACE zif_sat_c_cds_view_type
 
 
   CONSTANTS view TYPE zsat_cds_source_type VALUE 'V' ##NO_TEXT.
+  CONSTANTS view_entity TYPE zsat_cds_source_type VALUE 'W' ##NO_TEXT.
   CONSTANTS extend TYPE zsat_cds_source_type VALUE 'E' ##NO_TEXT.
+  CONSTANTS extend2 TYPE zsat_cds_source_type VALUE 'X' ##NO_TEXT.
   CONSTANTS table_function TYPE zsat_cds_source_type VALUE 'F' ##NO_TEXT.
   CONSTANTS table_entity TYPE zsat_cds_source_type VALUE 'T' ##NO_TEXT.
   CONSTANTS abstract_entity TYPE zsat_cds_source_type VALUE 'A' ##NO_TEXT.

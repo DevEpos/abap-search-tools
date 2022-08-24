@@ -93,8 +93,7 @@ CLASS zcl_sat_cds_field_hier_res IMPLEMENTATION.
 
     DATA(lt_hierarchy_flat) = get_field_hierarchy(
       iv_cds_view       = to_upper( iv_cds_view )
-      iv_cds_view_field = to_upper( iv_cds_view_field )
-    ).
+      iv_cds_view_field = to_upper( iv_cds_view_field ) ).
 
     CHECK lt_hierarchy_flat IS NOT INITIAL.
 
@@ -110,23 +109,22 @@ CLASS zcl_sat_cds_field_hier_res IMPLEMENTATION.
     lo_root_field->adt_type = zif_sat_c_adt_utils=>c_adt_types-data_definition.
     lo_root_field->uri = zcl_sat_adt_util=>create_adt_uri(
       iv_name2 = CONV #( ls_base_row-ddlname )
-      iv_type  = zif_sat_c_entity_type=>cds_view
-    )-uri.
+      iv_type  = zif_sat_c_entity_type=>cds_view )-uri.
 
     get_children(
-        iv_viewname  = ls_base_row-viewname
-        iv_fieldname = ls_base_row-viewfield
-        it_hierarchy = lt_hierarchy_flat
-        io_field     = lo_root_field
-    ).
+      iv_viewname  = ls_base_row-viewname
+      iv_fieldname = ls_base_row-viewfield
+      it_hierarchy = lt_hierarchy_flat
+      io_field     = lo_root_field ).
 
     fill_type_information( ).
 
 *.. Convert result into element info structure for ADT resource
     convert_field_to_elem_info(
-      EXPORTING io_field     = lo_root_field
-      CHANGING  cs_elem_info = rs_hierarchy
-    ).
+      EXPORTING
+        io_field     = lo_root_field
+      CHANGING
+        cs_elem_info = rs_hierarchy ).
   ENDMETHOD.
 
   METHOD get_field_hierarchy.
@@ -135,26 +133,26 @@ CLASS zcl_sat_cds_field_hier_res IMPLEMENTATION.
     SELECT DISTINCT
       field~viewname AS basetable,
       field~viewfield AS basefield
-      FROM dd27s AS field
+      FROM ZSAT_I_CdsBaseField AS field
         INNER JOIN zsat_p_cdsviewbase AS view_base
            ON   view_base~viewname = field~viewname
            AND  view_base~entityid = @iv_cds_view
       WHERE field~viewfield = @iv_cds_view_field
-    INTO TABLE @DATA(lt_field_tables).
+      INTO TABLE @DATA(lt_field_tables).
 
 
     WHILE lines( lt_field_tables ) > 0.
       SELECT DISTINCT
-        field~viewname AS viewname,
-        field~viewfield AS viewfield,
-        field~tabname AS basetable,
+        field~viewname,
+        field~viewfield,
+        field~basetable,
         field~fieldname AS basefield
-        FROM dd27s AS field
+        FROM ZSAT_I_CdsBaseField AS field
         FOR ALL ENTRIES IN @lt_field_tables
         WHERE field~viewfield <> 'MANDT'
           AND field~viewname = @lt_field_tables-basetable
           AND field~viewfield = @lt_field_tables-basefield
-      INTO CORRESPONDING FIELDS OF TABLE @lt_view_fields.
+        INTO CORRESPONDING FIELDS OF TABLE @lt_view_fields.
 
       IF sy-subrc <> 0.
         EXIT.
@@ -184,6 +182,10 @@ CLASS zcl_sat_cds_field_hier_res IMPLEMENTATION.
       DELETE ADJACENT DUPLICATES FROM lt_field_tables COMPARING basetable basefield.
     ENDWHILE.
 
+    IF rt_hierarchy_flat IS INITIAL.
+      RETURN.
+    ENDIF.
+
     SELECT DISTINCT view~viewname,
            view~rawentityid,
            view~ddlname,
@@ -193,7 +195,7 @@ CLASS zcl_sat_cds_field_hier_res IMPLEMENTATION.
       WHERE view~viewname = @rt_hierarchy_flat-viewname
          OR view~viewname = @rt_hierarchy_flat-basetable
          OR view~entityid = @rt_hierarchy_flat-basetable
-    INTO TABLE @DATA(lt_additional_entity_infos).
+      INTO TABLE @DATA(lt_additional_entity_infos).
 
     " if additional view information could not be found it makes no sense to
     " also look for additional field information
@@ -215,7 +217,7 @@ CLASS zcl_sat_cds_field_hier_res IMPLEMENTATION.
               OR view~entityid = @rt_hierarchy_flat-basetable )
         AND (    view_field~fieldname = @rt_hierarchy_flat-viewfield
               OR view_field~fieldname = @rt_hierarchy_flat-basefield )
-    INTO TABLE @DATA(lt_additional_field_infos).
+      INTO TABLE @DATA(lt_additional_field_infos).
 
     LOOP AT lt_additional_entity_infos ASSIGNING FIELD-SYMBOL(<ls_additional_entity_info>).
 
@@ -292,11 +294,10 @@ CLASS zcl_sat_cds_field_hier_res IMPLEMENTATION.
 
 *.... Recursive call to get all the sub children
       get_children(
-          iv_viewname  = <ls_hierarchy>-basetable
-          iv_fieldname = <ls_hierarchy>-basefield
-          it_hierarchy = it_hierarchy
-          io_field     = lo_child_field
-      ).
+        iv_viewname  = <ls_hierarchy>-basetable
+        iv_fieldname = <ls_hierarchy>-basefield
+        it_hierarchy = it_hierarchy
+        io_field     = lo_child_field ).
 
       CHECK lo_child_field IS NOT INITIAL.
 
@@ -324,9 +325,10 @@ CLASS zcl_sat_cds_field_hier_res IMPLEMENTATION.
     LOOP AT io_field->children INTO DATA(lo_child).
       APPEND INITIAL LINE TO <lt_children> ASSIGNING FIELD-SYMBOL(<ls_child_eleminfo>).
       convert_field_to_elem_info(
-        EXPORTING io_field      = lo_child
-        CHANGING  cs_elem_info = <ls_child_eleminfo>
-      ).
+        EXPORTING
+          io_field     = lo_child
+        CHANGING
+          cs_elem_info = <ls_child_eleminfo> ).
     ENDLOOP.
   ENDMETHOD.
 
@@ -340,20 +342,17 @@ CLASS zcl_sat_cds_field_hier_res IMPLEMENTATION.
     IF io_field->raw_field IS NOT INITIAL.
       cs_elem_info-properties = VALUE #( BASE cs_elem_info-properties
         ( key   = 'FIELD'
-          value = io_field->raw_field )
-      ).
+          value = io_field->raw_field ) ).
     ENDIF.
     IF io_field->source_type IS NOT INITIAL.
       cs_elem_info-properties = VALUE #( BASE cs_elem_info-properties
         ( key   = 'SOURCE_TYPE'
-          value = io_field->source_type )
-      ).
+          value = io_field->source_type ) ).
     ENDIF.
     IF io_field->is_calculated = abap_true.
       cs_elem_info-properties = VALUE #( BASE cs_elem_info-properties
         ( key   = 'IS_CALCULATED'
-          value = 'X' )
-      ).
+          value = 'X' ) ).
     ENDIF.
   ENDMETHOD.
 
@@ -378,10 +377,9 @@ CLASS zcl_sat_cds_field_hier_res IMPLEMENTATION.
       LOOP AT mt_cached_nodes ASSIGNING FIELD-SYMBOL(<ls_cached_node>) WHERE entity = <ls_entity_type>-entity.
 *...... Fill the URI
         DATA(ls_adt_obj_ref) = zcl_sat_adt_util=>create_adt_uri(
-            iv_type  = <ls_entity_type>-type
-            iv_name  = CONV #( <ls_cached_node>-field_ref->view_name )
-            iv_name2 = CONV #( <ls_cached_node>-field_ref->secondary_entity )
-        ).
+          iv_type  = <ls_entity_type>-type
+          iv_name  = CONV #( <ls_cached_node>-field_ref->view_name )
+          iv_name2 = CONV #( <ls_cached_node>-field_ref->secondary_entity ) ).
         <ls_cached_node>-field_ref->uri = ls_adt_obj_ref-uri.
         <ls_cached_node>-field_ref->adt_type = ls_adt_obj_ref-type.
       ENDLOOP.

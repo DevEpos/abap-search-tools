@@ -68,7 +68,8 @@ ENDCLASS.
 
 
 
-CLASS zcl_sat_adt_cds_elinfo_reader IMPLEMENTATION.
+CLASS ZCL_SAT_ADT_CDS_ELINFO_READER IMPLEMENTATION.
+
 
   METHOD create_amdp_object_ref.
     SELECT
@@ -99,10 +100,12 @@ CLASS zcl_sat_adt_cds_elinfo_reader IMPLEMENTATION.
     r_result-description = lv_description.
   ENDMETHOD.
 
+
   METHOD constructor.
     mo_request = io_request.
     mv_cds_view_name = iv_cds_view_name.
   ENDMETHOD.
+
 
   METHOD zif_sat_adt_elinfo_reader~read_element_information.
     TRY.
@@ -152,12 +155,14 @@ CLASS zcl_sat_adt_cds_elinfo_reader IMPLEMENTATION.
     ENDTRY.
   ENDMETHOD.
 
+
   METHOD get_parameters.
     mf_show_association_name = zcl_sat_adt_res_util=>get_boolean_req_param(
        iv_param_name = zif_sat_c_adt_utils=>c_cds_elem_info_parameter-show_association_name
        io_request    = mo_request
     ).
   ENDMETHOD.
+
 
   METHOD get_cds_associations.
     DATA: lt_entity_range TYPE RANGE OF zsat_entity_id.
@@ -190,7 +195,7 @@ CLASS zcl_sat_adt_cds_elinfo_reader IMPLEMENTATION.
     LOOP AT lt_ddlname_map ASSIGNING FIELD-SYMBOL(<ls_ddl_map>).
       LOOP AT rt_association ASSIGNING <ls_assoc> WHERE ref_cds_view = <ls_ddl_map>-entityid.
         <ls_assoc>-ddlname = <ls_ddl_map>-ddlname.
-        <ls_assoc>-source_type = <ls_ddl_map>-sourcetype.
+        <ls_assoc>-source_type = <ls_ddl_map>-SourceType.
         <ls_assoc>-api_state = <ls_ddl_map>-apistate.
       ENDLOOP.
     ENDLOOP.
@@ -205,6 +210,7 @@ CLASS zcl_sat_adt_cds_elinfo_reader IMPLEMENTATION.
 
     rv_api_state = VALUE #( lt_api_state_fix_vals[ low = lt_api_states[ 1 ] ]-ddtext OPTIONAL ).
   ENDMETHOD.
+
 
   METHOD fill_association_infos.
     LOOP AT it_association ASSIGNING FIELD-SYMBOL(<ls_assoc>).
@@ -228,6 +234,7 @@ CLASS zcl_sat_adt_cds_elinfo_reader IMPLEMENTATION.
       <ls_assoc_line>-object-adt_type = ls_object_ref-type.
     ENDLOOP.
   ENDMETHOD.
+
 
   METHOD fill_base_table_infos.
     LOOP AT it_base_tables ASSIGNING FIELD-SYMBOL(<ls_base_entity>).
@@ -259,5 +266,4 @@ CLASS zcl_sat_adt_cds_elinfo_reader IMPLEMENTATION.
       rv_is_query = 'true'.
     ENDIF.
   ENDMETHOD.
-
 ENDCLASS.

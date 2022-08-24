@@ -5,6 +5,7 @@ INTERFACE zif_sat_ty_global
   TYPES:
     ty_t_tabname_range       TYPE RANGE OF tabname,
     ty_t_string_range        TYPE RANGE OF string,
+    ty_t_ddlname_range       TYPE RANGE OF ddlname,
     "! <p class="shorttext synchronized" lang="en">Range for Annotation name</p>
     ty_t_cds_anno_name_range TYPE RANGE OF ddannotation_key,
     ty_api_state             TYPE c LENGTH 30,

@@ -383,6 +383,7 @@ CLASS zcl_sat_cds_view_factory IMPLEMENTATION.
           entity_type      = SWITCH #(
             <ls_header>-typekind_t
             WHEN zif_sat_c_cds_assoc_type=>entity OR
+                 zif_sat_c_cds_assoc_type=>view_entity OR
                  zif_sat_c_cds_assoc_type=>abstract_entity OR
                  zif_sat_c_cds_assoc_type=>custom_entity OR
                  zif_sat_c_cds_assoc_type=>table_function THEN zif_sat_c_entity_type=>cds_view
@@ -1067,3 +1068,4 @@ CLASS zcl_sat_cds_view_factory IMPLEMENTATION.
   ENDMETHOD.
 
 ENDCLASS.
+

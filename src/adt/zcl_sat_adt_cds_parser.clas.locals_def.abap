@@ -42,13 +42,13 @@ CLASS lcl_node_helper DEFINITION
     DATA mt_tables TYPE lcl_node=>ty_t_cached_nodes.
     DATA mt_views TYPE lcl_node=>ty_t_cached_nodes.
 
-    "! <p class="shorttext synchronized" lang="en">Creates new element information</p>
+    "! Creates new element information
     METHODS constructor
       IMPORTING
         iv_name            TYPE string
         iv_entity_name     TYPE string OPTIONAL
         iv_raw_entity_name TYPE string OPTIONAL.
-    "! <p class="shorttext synchronized" lang="en">Adds the given element information as child</p>
+    "! Adds the given element information as child
     METHODS add_child
       IMPORTING
         io_parent_node     TYPE REF TO lcl_node
@@ -61,9 +61,9 @@ CLASS lcl_node_helper DEFINITION
         iv_raw_entity_name TYPE string OPTIONAL
       RETURNING
         VALUE(ro_added)    TYPE REF TO lcl_node.
-    "! <p class="shorttext synchronized" lang="en">Sets parent of current node as new parent node</p>
+    "! Sets parent of current node as new parent node
     METHODS set_parent_as_current_node.
-    "! <p class="shorttext synchronized" lang="en">Checks if the current parent element has children</p>
+    "! Checks if the current parent element has children
     METHODS current_parent_has_children
       RETURNING
         VALUE(rf_has_children) TYPE abap_bool.
@@ -73,7 +73,7 @@ CLASS lcl_node_helper DEFINITION
         iv_datasource_type     TYPE qlast_datasource_type
       RETURNING
         VALUE(rv_sql_relation) TYPE string.
-    "! <p class="shorttext synchronized" lang="en">Converts node into element information</p>
+    "! Converts node into element information
     METHODS convert_node_to_elem_info
       IMPORTING
         io_node      TYPE REF TO lcl_node
@@ -93,7 +93,7 @@ ENDCLASS.
 CLASS lcl_ddl_stmnt_interpreter DEFINITION ABSTRACT.
 
   PUBLIC SECTION.
-    "! <p class="shorttext synchronized" lang="en">Interpret the DDL statement</p>
+    "! Interpret the DDL statement
     METHODS interpret ABSTRACT.
     METHODS constructor
       IMPORTING
@@ -106,7 +106,6 @@ CLASS lcl_ddl_tab_func_stmnt_intrpt DEFINITION
  INHERITING FROM lcl_ddl_stmnt_interpreter.
 
   PUBLIC SECTION.
-    "! <p class="shorttext synchronized" lang="en">CONSTRUCTOR</p>
     METHODS constructor
       IMPORTING
         io_node_helper TYPE REF TO lcl_node_helper
@@ -118,11 +117,9 @@ CLASS lcl_ddl_tab_func_stmnt_intrpt DEFINITION
 ENDCLASS.
 
 
-
 CLASS lcl_ddl_view_stmnt_intrpt DEFINITION
   INHERITING FROM lcl_ddl_stmnt_interpreter.
   PUBLIC SECTION.
-    "! <p class="shorttext synchronized" lang="en">CONSTRUCTOR</p>
     METHODS constructor
       IMPORTING
         if_associations TYPE abap_bool OPTIONAL
@@ -130,31 +127,54 @@ CLASS lcl_ddl_view_stmnt_intrpt DEFINITION
         io_stmnt        TYPE REF TO cl_qlast_view_definition.
     METHODS interpret
         REDEFINITION.
-  PRIVATE SECTION.
-    DATA mo_stmnt TYPE REF TO cl_qlast_view_definition.
-    DATA mf_associations TYPE abap_bool.
+  PROTECTED SECTION.
 
-    "! <p class="shorttext synchronized" lang="en">Interpret Select statement</p>
+    METHODS get_root_select
+      RETURNING
+        VALUE(ro_select) TYPE REF TO cl_qlast_select.
+  PRIVATE SECTION.
+    DATA mf_associations TYPE abap_bool.
+    DATA mo_stmnt TYPE REF TO cl_qlast_view_definition.
+
+    "! Interpret Select statement
     METHODS interpret_select_stmnt
       IMPORTING
         io_parent_node TYPE REF TO lcl_node
         io_select      TYPE REF TO cl_qlast_select
         if_union       TYPE abap_bool OPTIONAL
         if_union_all   TYPE abap_bool OPTIONAL.
-    "! <p class="shorttext synchronized" lang="en">Interpret Join data source</p>
+    "! Interpret Join data source
     METHODS interpret_join
       IMPORTING
         io_parent_node     TYPE REF TO lcl_node
         io_join_datasource TYPE REF TO cl_qlast_join_datasource.
-    "! <p class="shorttext synchronized" lang="en">Interpret data source</p>
+    "! Interpret data source
     METHODS interpret_datasource
       IMPORTING
         io_parent_node TYPE REF TO lcl_node
         io_datasource  TYPE REF TO cl_qlast_datasource
         iv_parent_type TYPE qlast_datasource_type.
-    "! <p class="shorttext synchronized" lang="en">Get associations of data source</p>
+    "! Get associations of data source
     METHODS get_associations
       IMPORTING
         io_parent_node TYPE REF TO lcl_node
         io_select      TYPE REF TO cl_qlast_select.
+ENDCLASS.
+
+
+CLASS lcl_ddl_view2_stmnt_intrpt DEFINITION
+  INHERITING FROM lcl_ddl_view_stmnt_intrpt.
+
+  PUBLIC SECTION.
+    "! <p class="shorttext synchronized" lang="en">CONSTRUCTOR</p>
+    METHODS constructor
+      IMPORTING
+        if_associations TYPE abap_bool OPTIONAL
+        io_node_helper  TYPE REF TO lcl_node_helper
+        io_stmnt        TYPE REF TO cl_qlast_view_entity_def.
+  PROTECTED SECTION.
+    METHODS get_root_select
+        REDEFINITION.
+  PRIVATE SECTION.
+    DATA mo_stmnt TYPE REF TO cl_qlast_view_entity_def.
 ENDCLASS.

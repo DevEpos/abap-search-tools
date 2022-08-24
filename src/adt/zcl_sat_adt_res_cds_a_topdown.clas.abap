@@ -16,7 +16,9 @@ ENDCLASS.
 
 
 
-CLASS zcl_sat_adt_res_cds_a_topdown IMPLEMENTATION.
+CLASS ZCL_SAT_ADT_RES_CDS_A_TOPDOWN IMPLEMENTATION.
+
+
   METHOD get_internal.
     DATA(lo_cds_parser) = NEW zcl_sat_adt_cds_parser( iv_cds = mv_cds_view ).
     lo_cds_parser->parse_cds(
@@ -26,6 +28,7 @@ CLASS zcl_sat_adt_res_cds_a_topdown IMPLEMENTATION.
     ms_result = lo_cds_parser->ms_select_element_info.
   ENDMETHOD.
 
+
   METHOD get_parameters.
     super->get_parameters( io_request ).
     mf_with_associations = zcl_sat_adt_res_util=>get_request_param_value(
@@ -33,5 +36,4 @@ CLASS zcl_sat_adt_res_cds_a_topdown IMPLEMENTATION.
       iv_param_name = zif_sat_c_adt_utils=>c_cds_analysis_parameter-with_associations
     ).
   ENDMETHOD.
-
 ENDCLASS.

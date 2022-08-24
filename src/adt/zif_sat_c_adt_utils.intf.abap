@@ -6,6 +6,10 @@ INTERFACE zif_sat_c_adt_utils
   CONSTANTS c_ddl_pos_uri_segment TYPE string VALUE '/source/main#start='.
 
   CONSTANTS:
+    BEGIN OF c_cds_post_activation_param,
+      ddlname TYPE string VALUE 'ddlName',
+    END OF c_cds_post_activation_param.
+  CONSTANTS:
     BEGIN OF c_element_info_parameter,
       uri         TYPE string VALUE 'objectUri',
       name        TYPE string VALUE 'objectName',

@@ -22,8 +22,7 @@ CLASS lcl_node_helper IMPLEMENTATION.
       WHEN iv_datasource_type = cl_qlast_constants=>datasource_left  THEN zcl_sat_adt_cds_parser=>c_sql_relation-left_outer_join
       WHEN iv_datasource_type = cl_qlast_constants=>datasource_right THEN zcl_sat_adt_cds_parser=>c_sql_relation-right_outer_join
       WHEN iv_datasource_type = cl_qlast_constants=>datasource_cross THEN zcl_sat_adt_cds_parser=>c_sql_relation-cross_join
-      WHEN iv_datasource_type = cl_qlast_constants=>datasource_full  THEN zcl_sat_adt_cds_parser=>c_sql_relation-full_outer_join
-    ).
+      WHEN iv_datasource_type = cl_qlast_constants=>datasource_full  THEN zcl_sat_adt_cds_parser=>c_sql_relation-full_outer_join ).
   ENDMETHOD.
 
   METHOD add_child.
@@ -36,8 +35,7 @@ CLASS lcl_node_helper IMPLEMENTATION.
       WHEN iv_entity_type = zif_sat_c_entity_type=>cds_view THEN 'CDS_VIEW'
       WHEN iv_entity_type = zif_sat_c_entity_type=>table    THEN 'TABLE'
       WHEN iv_entity_type = zif_sat_c_entity_type=>view     THEN 'VIEW'
-      ELSE iv_type
-    ).
+      ELSE iv_type ).
     lo_child->relation = iv_relation.
     lo_child->alias = iv_alias.
     lo_child->parent = mo_current_node.
@@ -81,38 +79,32 @@ CLASS lcl_node_helper IMPLEMENTATION.
     IF io_node->relation IS NOT INITIAL.
       cs_elem_info-properties = VALUE #( BASE cs_elem_info-properties
         ( key   = zcl_sat_adt_cds_parser=>c_dependency_tree_property-relation
-          value = io_node->relation )
-      ).
+          value = io_node->relation ) ).
     ENDIF.
     IF io_node->alias IS NOT INITIAL AND io_node->alias NP '=*'.
       cs_elem_info-properties = VALUE #( BASE cs_elem_info-properties
         ( key   = zcl_sat_adt_cds_parser=>c_dependency_tree_property-alias
-          value = io_node->alias )
-      ).
+          value = io_node->alias ) ).
     ENDIF.
     IF io_node->api_state IS NOT INITIAL.
       cs_elem_info-properties = VALUE #( BASE cs_elem_info-properties
         ( key   = 'API_STATE'
-          value = io_node->api_state )
-      ).
+          value = io_node->api_state ) ).
     ENDIF.
     IF io_node->source_type IS NOT INITIAL.
       cs_elem_info-properties = VALUE #( BASE cs_elem_info-properties
         ( key   = 'SOURCE_TYPE'
-          value = io_node->source_type )
-      ).
+          value = io_node->source_type ) ).
     ENDIF.
     IF io_node->name2 IS NOT INITIAL AND io_node->relation = zcl_sat_adt_cds_parser=>c_sql_relation-association.
       cs_elem_info-properties = VALUE #( BASE cs_elem_info-properties
         ( key   = 'ASSOCIATION_NAME'
-          value = io_node->name2 )
-      ).
+          value = io_node->name2 ) ).
     ENDIF.
 
     cs_elem_info-properties = VALUE #( BASE cs_elem_info-properties
       ( key   = zcl_sat_adt_cds_parser=>c_dependency_tree_property-type
-        value = io_node->type )
-    ).
+        value = io_node->type ) ).
   ENDMETHOD.
 
   METHOD convert_node_to_elem_info.
@@ -128,9 +120,10 @@ CLASS lcl_node_helper IMPLEMENTATION.
     LOOP AT io_node->children INTO DATA(lo_child).
       APPEND INITIAL LINE TO <lt_children> ASSIGNING FIELD-SYMBOL(<ls_child_eleminfo>).
       convert_node_to_elem_info(
-        EXPORTING io_node      = lo_child
-        CHANGING  cs_elem_info = <ls_child_eleminfo>
-      ).
+        EXPORTING
+          io_node      = lo_child
+        CHANGING
+          cs_elem_info = <ls_child_eleminfo> ).
     ENDLOOP.
   ENDMETHOD.
 
@@ -151,28 +144,28 @@ CLASS lcl_ddl_view_stmnt_intrpt IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD interpret.
-    DATA(lo_select) = mo_stmnt->get_select( ).
+    DATA(lo_select) = get_root_select( ).
+    IF lo_select IS INITIAL.
+      RETURN.
+    ENDIF.
 
     DATA(lo_parent_node) = mo_node_helper->mo_root_node.
 
     IF lo_select->get_union( ) IS NOT INITIAL.
       lo_parent_node = mo_node_helper->add_child(
-          io_parent_node     = lo_parent_node
-          iv_name            = zcl_sat_adt_cds_parser=>c_node_type-select
-          iv_type            = zcl_sat_adt_cds_parser=>c_node_type-select
-      ).
+        io_parent_node = lo_parent_node
+        iv_name        = zcl_sat_adt_cds_parser=>c_node_type-select
+        iv_type        = zcl_sat_adt_cds_parser=>c_node_type-select ).
     ENDIF.
 
     interpret_select_stmnt(
       io_parent_node = lo_parent_node
-      io_select      = lo_select
-    ).
+      io_select      = lo_select ).
 
 *.. Retrieve associations if requested
     get_associations(
-        io_parent_node = mo_node_helper->mo_root_node
-        io_select      = lo_select
-    ).
+      io_parent_node = mo_node_helper->mo_root_node
+      io_select      = lo_select ).
   ENDMETHOD.
 
   METHOD interpret_select_stmnt.
@@ -188,49 +181,45 @@ CLASS lcl_ddl_view_stmnt_intrpt IMPLEMENTATION.
                               ELSE                               zcl_sat_adt_cds_parser=>c_node_type-union ).
 
       lo_parent_node = mo_node_helper->add_child(
-          io_parent_node     = io_parent_node->parent
-          iv_name            = lv_name
-          iv_type            = lv_name
-      ).
+        io_parent_node = io_parent_node->parent
+        iv_name        = lv_name
+        iv_type        = lv_name ).
     ENDIF.
     interpret_datasource(
-      io_parent_node     = lo_parent_node
-      io_datasource      = lo_from_datasource
-      iv_parent_type     = lo_from_datasource->get_type( )
-    ).
+      io_parent_node = lo_parent_node
+      io_datasource  = lo_from_datasource
+      iv_parent_type = lo_from_datasource->get_type( ) ).
 
     interpret_select_stmnt(
-        io_parent_node = io_parent_node
-        io_select    = io_select->get_union( )
-        if_union     = abap_true
-        if_union_all = io_select->is_union_all( )
-    ).
+      io_parent_node = io_parent_node
+      io_select      = io_select->get_union( )
+      if_union       = abap_true
+      if_union_all   = io_select->is_union_all( ) ).
   ENDMETHOD.
 
 
   METHOD interpret_join.
     interpret_datasource(
-      io_parent_node     = io_parent_node
-      io_datasource      = io_join_datasource->get_left( )
-      iv_parent_type     = io_join_datasource->get_type( )
+      io_parent_node = io_parent_node
+      io_datasource  = io_join_datasource->get_left( )
+      iv_parent_type = io_join_datasource->get_type( )
     ).
 
     DATA(lo_right_source) = io_join_datasource->get_right( ).
     DATA(lo_parent_node) = io_parent_node.
     IF lo_right_source->get_type( ) <> cl_qlast_constants=>datasource_table.
       lo_parent_node = mo_node_helper->add_child(
+        io_parent_node     = io_parent_node
+        iv_name            = zcl_sat_adt_cds_parser=>c_node_type-result
+        iv_type            = zcl_sat_adt_cds_parser=>c_node_type-result
+        iv_relation        = mo_node_helper->get_relation(
           io_parent_node     = io_parent_node
-          iv_name            = zcl_sat_adt_cds_parser=>c_node_type-result
-          iv_type            = zcl_sat_adt_cds_parser=>c_node_type-result
-          iv_relation        = mo_node_helper->get_relation( io_parent_node     = io_parent_node
-                                                             iv_datasource_type = io_join_datasource->get_type( ) )
-      ).
+          iv_datasource_type = io_join_datasource->get_type( ) ) ).
     ENDIF.
     interpret_datasource(
-      io_parent_node     = lo_parent_node
-      io_datasource      = lo_right_source
-      iv_parent_type     = io_join_datasource->get_type( )
-    ).
+      io_parent_node = lo_parent_node
+      io_datasource  = lo_right_source
+      iv_parent_type = io_join_datasource->get_type( ) ).
 
   ENDMETHOD.
 
@@ -245,16 +234,16 @@ CLASS lcl_ddl_view_stmnt_intrpt IMPLEMENTATION.
           io_parent_node = io_parent_node
           iv_name        = lo_table_datasource->get_name( )
           iv_entity_name = lo_table_datasource->get_name( )
-          iv_relation    = mo_node_helper->get_relation( io_parent_node      = io_parent_node
-                                                          iv_datasource_type = iv_parent_type )
+          iv_relation    = mo_node_helper->get_relation(
+            io_parent_node      = io_parent_node
+            iv_datasource_type = iv_parent_type )
           iv_entity_type = SWITCH #( lo_table_datasource->get_tabletype( )
              WHEN cl_qlast_constants=>tabtype_entity OR
+                  cl_qlast_constants=>tabtype_view_entity OR
                   cl_qlast_constants=>tabtype_table_function THEN zif_sat_c_entity_type=>cds_view
              WHEN cl_qlast_constants=>tabtype_transparent THEN zif_sat_c_entity_type=>table
-             WHEN cl_qlast_constants=>tabtype_view THEN zif_sat_c_entity_type=>view
-          )
-          iv_alias = lo_table_datasource->get_alias( upper_case = abap_false )
-        ).
+             WHEN cl_qlast_constants=>tabtype_view THEN zif_sat_c_entity_type=>view )
+          iv_alias = lo_table_datasource->get_alias( upper_case = abap_false ) ).
 
       WHEN cl_qlast_constants=>datasource_inner OR
            cl_qlast_constants=>datasource_cross OR
@@ -262,9 +251,8 @@ CLASS lcl_ddl_view_stmnt_intrpt IMPLEMENTATION.
            cl_qlast_constants=>datasource_right OR
            cl_qlast_constants=>datasource_full.
         interpret_join(
-            io_parent_node     = io_parent_node
-            io_join_datasource = CAST cl_qlast_join_datasource( io_datasource )
-        ).
+          io_parent_node     = io_parent_node
+          io_join_datasource = CAST cl_qlast_join_datasource( io_datasource ) ).
     ENDCASE.
   ENDMETHOD.
 
@@ -275,10 +263,9 @@ CLASS lcl_ddl_view_stmnt_intrpt IMPLEMENTATION.
     CHECK lo_associations IS NOT INITIAL.
 
     DATA(lo_associations_node) = mo_node_helper->add_child(
-        io_parent_node     = io_parent_node
-        iv_name            = zcl_sat_adt_cds_parser=>c_node_type-associations
-        iv_type            = zcl_sat_adt_cds_parser=>c_node_type-associations
-    ).
+      io_parent_node = io_parent_node
+      iv_name        = zcl_sat_adt_cds_parser=>c_node_type-associations
+      iv_type        = zcl_sat_adt_cds_parser=>c_node_type-associations ).
 
     LOOP AT lo_associations->get_entries( ) INTO DATA(lo_association).
       DATA(lo_target) = lo_association->get_target( ).
@@ -290,13 +277,17 @@ CLASS lcl_ddl_view_stmnt_intrpt IMPLEMENTATION.
         iv_relation    = zcl_sat_adt_cds_parser=>c_sql_relation-association
         iv_entity_type = SWITCH #( lo_target->get_tabletype( )
            WHEN cl_qlast_constants=>tabtype_entity OR
+                cl_qlast_constants=>tabtype_view_entity OR
                 cl_qlast_constants=>tabtype_table_function THEN zif_sat_c_entity_type=>cds_view
            WHEN cl_qlast_constants=>tabtype_transparent THEN zif_sat_c_entity_type=>table
-           WHEN cl_qlast_constants=>tabtype_view THEN zif_sat_c_entity_type=>view
-        )
-      ).
+           WHEN cl_qlast_constants=>tabtype_view THEN zif_sat_c_entity_type=>view ) ).
       lo_node->name2 = lo_association->get_name( upper_case = abap_false ).
     ENDLOOP.
+  ENDMETHOD.
+
+
+  METHOD get_root_select.
+    ro_select = mo_stmnt->get_select( ).
   ENDMETHOD.
 
 ENDCLASS.
@@ -310,6 +301,25 @@ CLASS lcl_ddl_tab_func_stmnt_intrpt IMPLEMENTATION.
 
   METHOD interpret.
 
+  ENDMETHOD.
+
+ENDCLASS.
+
+
+CLASS lcl_ddl_view2_stmnt_intrpt IMPLEMENTATION.
+
+  METHOD get_root_select.
+    IF mo_stmnt->get_query( ) IS INSTANCE OF cl_qlast_select.
+      ro_select = CAST #( mo_stmnt->get_query( ) ).
+    ENDIF.
+  ENDMETHOD.
+
+  METHOD constructor.
+    super->constructor(
+      if_associations = if_associations
+      io_node_helper  = io_node_helper
+      io_stmnt        = io_stmnt ).
+    mo_stmnt = io_stmnt.
   ENDMETHOD.
 
 ENDCLASS.

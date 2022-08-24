@@ -35,3 +35,10 @@ union select from ZSAT_I_CdsBaseTable as BaseTable
 }
 where
   BaseTable.TadirType = 'STOB'
+
+-- Base entities of CDS View entities
+union select from zsatcds2mbtab
+{
+  ddlname   as DdlViewName,
+  basetable as SourceEntity
+}
