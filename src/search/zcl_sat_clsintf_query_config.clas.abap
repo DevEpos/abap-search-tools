@@ -34,13 +34,7 @@ CLASS zcl_sat_clsintf_query_config IMPLEMENTATION.
       ( option = c_class_intf_search_option-attribute allowed_length = 30 key_value = abap_true )
       ( option = c_class_intf_search_option-friend allowed_length = 30 )
       ( option = c_class_intf_search_option-super_type allowed_length = 30 )
-    ).
-
-    IF sy-saprl >= 751.
-      mt_options = VALUE #( BASE mt_options
-        ( option = c_class_intf_search_option-abap_lang )
-      ).
-    ENDIF.
+      ( option = c_class_intf_search_option-abap_lang ) ).
   ENDMETHOD.
 
   METHOD zif_sat_object_search_config~get_type.

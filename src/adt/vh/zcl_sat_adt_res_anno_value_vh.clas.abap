@@ -66,12 +66,10 @@ CLASS zcl_sat_adt_res_anno_value_vh IMPLEMENTATION.
     INTO CORRESPONDING FIELDS OF TABLE @p_named_item_list-items
       UP TO @p_filter_max_item_count ROWS.
 
-    IF sy-saprl >= 752.
-      find_enum_values( EXPORTING it_anno_name_range = lt_anno_name_range
-                                  it_anno_value_range = lt_anno_value_range
-                                  iv_max_row_count    = p_filter_max_item_count
-                        CHANGING  cs_named_items      = p_named_item_list ).
-    ENDIF.
+    find_enum_values( EXPORTING it_anno_name_range  = lt_anno_name_range
+                                it_anno_value_range = lt_anno_value_range
+                                iv_max_row_count    = p_filter_max_item_count
+                      CHANGING  cs_named_items      = p_named_item_list ).
 
     p_filter_already_applied = abap_true.
     p_named_item_list-total_item_count = lines( p_named_item_list-items ).

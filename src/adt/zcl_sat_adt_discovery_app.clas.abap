@@ -115,24 +115,24 @@ CLASS zcl_sat_adt_discovery_app IMPLEMENTATION.
       category_scheme = c_utils_root_scheme && c_object_search_uri
       category_term   = 'search' ).
 
-    reg_object_search_template( io_collection       = lo_search_collection
-                                io_search_config    = CAST #( zcl_sat_ioc_lookup=>get_instance(
-                                                                iv_contract = 'zif_sat_object_search_config'
-                                                                iv_filter   = |{ zif_sat_c_object_search=>c_search_type-cds_view }| ) )
-                                iv_handler_class    = 'ZCL_SAT_ADT_RES_OBJS_CDS'
-                                iv_search_type      = zif_sat_c_object_search=>c_search_type-cds_view ).
-    reg_object_search_template( io_collection       = lo_search_collection
-                                io_search_config    = CAST #( zcl_sat_ioc_lookup=>get_instance(
-                                                                iv_contract = 'zif_sat_object_search_config'
-                                                                iv_filter   = |{ zif_sat_c_object_search=>c_search_type-db_tab_view }| ) )
-                                iv_handler_class    = lc_object_search_handler
-                                iv_search_type      = zif_sat_c_object_search=>c_search_type-db_tab_view ).
-    reg_object_search_template( io_collection       = lo_search_collection
-                                io_search_config    = CAST #( zcl_sat_ioc_lookup=>get_instance(
-                                                                iv_contract = 'zif_sat_object_search_config'
-                                                                iv_filter   = |{ zif_sat_c_object_search=>c_search_type-class_interface }| ) )
-                                iv_handler_class    = lc_object_search_handler
-                                iv_search_type      = zif_sat_c_object_search=>c_search_type-class_interface ).
+    reg_object_search_template( io_collection    = lo_search_collection
+                                io_search_config = CAST #( zcl_sat_ioc_lookup=>get_instance(
+                                                             iv_contract = 'zif_sat_object_search_config'
+                                                             iv_filter   = |{ zif_sat_c_object_search=>c_search_type-cds_view }| ) )
+                                iv_handler_class = 'ZCL_SAT_ADT_RES_OBJS_CDS'
+                                iv_search_type   = zif_sat_c_object_search=>c_search_type-cds_view ).
+    reg_object_search_template( io_collection    = lo_search_collection
+                                io_search_config = CAST #( zcl_sat_ioc_lookup=>get_instance(
+                                                             iv_contract = 'zif_sat_object_search_config'
+                                                             iv_filter   = |{ zif_sat_c_object_search=>c_search_type-db_tab_view }| ) )
+                                iv_handler_class = lc_object_search_handler
+                                iv_search_type   = zif_sat_c_object_search=>c_search_type-db_tab_view ).
+    reg_object_search_template( io_collection    = lo_search_collection
+                                io_search_config = CAST #( zcl_sat_ioc_lookup=>get_instance(
+                                                             iv_contract = 'zif_sat_object_search_config'
+                                                             iv_filter   = |{ zif_sat_c_object_search=>c_search_type-class_interface }| ) )
+                                iv_handler_class = lc_object_search_handler
+                                iv_search_type   = zif_sat_c_object_search=>c_search_type-class_interface ).
   ENDMETHOD.
 
   METHOD reg_object_search_template.
@@ -220,21 +220,19 @@ CLASS zcl_sat_adt_discovery_app IMPLEMENTATION.
       category_scheme = lv_object_search_scheme
       category_term   = 'tablefield' ).
 
-    IF sy-saprl >= 752.      
-      io_registry->register_discoverable_resource(
-        url             = '/annotation'
-        handler_class   = 'ZCL_SAT_ADT_RES_ANNO_VH'
-        description     = 'Search for Annotation'
-        category_scheme = lv_object_search_scheme
-        category_term   = 'annotation' ).
-  
-      io_registry->register_discoverable_resource(
-        url             = '/annotationvalue'
-        handler_class   = 'ZCL_SAT_ADT_RES_ANNO_VALUE_VH'
-        description     = 'Search for Annotation Values'
-        category_scheme = lv_object_search_scheme
-        category_term   = 'annotationvalue' ).
-    ENDIF.
+    io_registry->register_discoverable_resource(
+      url             = '/annotation'
+      handler_class   = 'ZCL_SAT_ADT_RES_ANNO_VH'
+      description     = 'Search for Annotation'
+      category_scheme = lv_object_search_scheme
+      category_term   = 'annotation' ).
+
+    io_registry->register_discoverable_resource(
+      url             = '/annotationvalue'
+      handler_class   = 'ZCL_SAT_ADT_RES_ANNO_VALUE_VH'
+      description     = 'Search for Annotation Values'
+      category_scheme = lv_object_search_scheme
+      category_term   = 'annotationvalue' ).
 
     io_registry->register_discoverable_resource(
       url             = '/dbentity'
