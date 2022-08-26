@@ -325,7 +325,7 @@ CLASS zcl_sat_adt_util IMPLEMENTATION.
         uri             = iv_uri
     ).
     ev_object_name = lo_wb_object->get_display_name( ).
-    es_object_type = lo_wb_object->get_object_type_ref( )->get_transport_type( ).
+    es_object_type = lo_wb_object->get_object_type_ref( )->get_main_global_type( ).
   ENDMETHOD.
 
   METHOD map_tadir_obj_to_object_ref.
