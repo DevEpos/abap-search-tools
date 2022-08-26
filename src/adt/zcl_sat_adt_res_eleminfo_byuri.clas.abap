@@ -43,7 +43,7 @@ CLASS zcl_sat_adt_res_eleminfo_byuri IMPLEMENTATION.
         ).
         IF ls_object_type-objtype_tr = 'DDLS'.
           mv_object_type = zif_sat_c_entity_type=>cds_view.
-        ELSEIF ls_object_type-objtype_tr = 'TABD'.
+        ELSEIF ls_object_type-objtype_tr = 'TABL' AND ls_object_type-subtype_wb = 'DT'.
           mv_object_type = zif_sat_c_entity_type=>table.
         ELSEIF ls_object_type-objtype_tr = 'VIEW'.
           mv_object_type = zif_sat_c_entity_type=>view.
