@@ -20,6 +20,34 @@ NW version|ABAP Platform|Branch name
 7.40||nw-740
 < 7.40||*Not officially supported*
 
+## Additional Configuration
+
+### Configure Job for updating the Metadata Index of CDS Views v2 (aka _View Entities_)
+
+> **Note**: Only relevant for NW 7.55 and higher
+
+With NW 7.55 a new version of CDS Views were introduced which do not have an accompanying DDIC View.  
+Therefore some Metadata information that is necessary for the following features:
+
+- ABAP Object Search; CDS View:
+  - Parameter `from`
+  - Parameter `field`
+- CDS Analyzer
+  - Where-Used Analysis
+  - Field Analysis
+
+is missing for these new CDS Views.
+
+To enable the aforementioned features for the new CDS Views as well, a daily job should be configured for the ABAP program `ZSAT_CDS_V2_META_INDEX_UPDATE`.
+This program will create the missing Metadata information in the tables:
+
+- `ZSATCDS2MHEAD`
+- `ZSATCDS2MTAB`
+- `ZSATCDS2MFIELD`
+
+The program will also remove any invalid indexes of deleted CDS Views.  
+In addition to this program the ADT plugin [ABAP Search and Analysis Tools](https://www.github.com/stockbal/abap-search-tools-ui) will also trigger an update of the index during the activation of one or more CDS Views.
+
 ## Necessary Authorizations
 
 To access the backend from ADT a user must have the following authorizations
