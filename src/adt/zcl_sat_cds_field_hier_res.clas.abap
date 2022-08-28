@@ -136,7 +136,7 @@ CLASS zcl_sat_cds_field_hier_res IMPLEMENTATION.
       field~viewname AS basetable,
       field~viewfield AS basefield
       FROM dd27s AS field
-        INNER JOIN zsat_p_cdsviewbase AS view_base
+        INNER JOIN zsatpcdsvb AS view_base
            ON   view_base~viewname = field~viewname
            AND  view_base~entityid = @iv_cds_view
       WHERE field~viewfield = @iv_cds_view_field
