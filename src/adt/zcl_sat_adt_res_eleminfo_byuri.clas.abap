@@ -46,7 +46,17 @@ CLASS zcl_sat_adt_res_eleminfo_byuri IMPLEMENTATION.
         ELSEIF ls_object_type-objtype_tr = 'TABL' AND ls_object_type-subtype_wb = 'DT'.
           mv_object_type = zif_sat_c_entity_type=>table.
         ELSEIF ls_object_type-objtype_tr = 'VIEW'.
-          mv_object_type = zif_sat_c_entity_type=>view.
+          " fallback if view is generated ddic sql view of ddls
+          SELECT SINGLE ddlname
+            FROM zsat_i_ddldependency
+            WHERE viewname = @lv_object_name
+            INTO @DATA(lv_ddlname_for_view).
+          IF sy-subrc = 0.
+            lv_object_name = lv_ddlname_for_view.
+            mv_object_type = zif_sat_c_entity_type=>cds_view.
+          ELSE.
+            mv_object_type = zif_sat_c_entity_type=>view.
+          ENDIF.
         ELSE.
           RAISE EXCEPTION TYPE zcx_sat_adt_element_info
             EXPORTING
