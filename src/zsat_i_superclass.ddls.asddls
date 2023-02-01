@@ -1,7 +1,9 @@
+@AbapCatalog.sqlViewName: 'ZSATISUPERCLS'
+@AbapCatalog.compiler.compareFilter: true
+@AbapCatalog.preserveKey: true
 @AccessControl.authorizationCheck: #NOT_REQUIRED
 @EndUserText.label: 'Super class releationship'
-
-define view entity ZSAT_I_SuperClass
+define view ZSAT_I_SuperClass
   as select from seometarel
 {
       //seometarel

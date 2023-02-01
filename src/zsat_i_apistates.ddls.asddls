@@ -1,7 +1,9 @@
+@AbapCatalog.sqlViewName: 'ZSATIAPST'
+@AbapCatalog.compiler.compareFilter: true
 @AccessControl.authorizationCheck: #NOT_REQUIRED
 @EndUserText.label: 'API states'
 
-define view entity ZSAT_I_APIStates
+define view ZSAT_I_APIStates
   as select from ARS_ADT_API_FILTER
 {
   key tadir_object                             as ObjectType,

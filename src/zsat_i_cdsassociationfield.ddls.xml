@@ -6,7 +6,7 @@
     <DDLNAME>ZSAT_I_CDSASSOCIATIONFIELD</DDLNAME>
     <DDLANGUAGE>E</DDLANGUAGE>
     <DDTEXT>On Condition Field of Association in CDS View</DDTEXT>
-    <SOURCE_TYPE>W</SOURCE_TYPE>
+    <SOURCE_TYPE>V</SOURCE_TYPE>
    </DDLS>
   </asx:values>
  </asx:abap>

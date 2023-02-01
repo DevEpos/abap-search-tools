@@ -1,7 +1,10 @@
+@AbapCatalog.sqlViewName: 'ZSATIGLBLFRND'
+@AbapCatalog.compiler.compareFilter: true
+@AbapCatalog.preserveKey: true
 @AccessControl.authorizationCheck: #NOT_REQUIRED
 @EndUserText.label: 'Global Friend in ABAP OO Class'
 
-define view entity ZSAT_I_GlobalFriend
+define view ZSAT_I_GlobalFriend
   as select from seofriends
 {
   key clsname    as ClassName,

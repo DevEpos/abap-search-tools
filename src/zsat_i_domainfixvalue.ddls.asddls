@@ -1,8 +1,11 @@
+@AbapCatalog.sqlViewName: 'ZSATIDOMFIXV'
+@AbapCatalog.compiler.compareFilter: true
+@AbapCatalog.preserveKey: true
 @AccessControl.authorizationCheck: #NOT_REQUIRED
 
 @EndUserText.label: 'Domain fix values'
 
-define view entity ZSAT_I_DomainFixValue
+define view ZSAT_I_DomainFixValue
   as select from    dd07l as FixedValue
     left outer join dd07t as ValueText on  FixedValue.domname    = ValueText.domname
                                        and FixedValue.domvalue_l = ValueText.domvalue_l

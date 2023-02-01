@@ -1,8 +1,9 @@
+@AbapCatalog.sqlViewName: 'ZSATICDSANNO'
+@AbapCatalog.compiler.compareFilter: true
+@AbapCatalog.preserveKey: true
 @AccessControl.authorizationCheck: #NOT_REQUIRED
 @EndUserText.label: 'Annotations for CDS Views'
-@Metadata.ignorePropagatedAnnotations: true
-
-define view entity ZSAT_I_CdsAnnotation
+define view ZSAT_I_CdsAnnotation
   as select from ddfieldanno
 {
   strucobjn                       as EntityId,

@@ -1,7 +1,10 @@
+@AbapCatalog.sqlViewName: 'ZSATIDBTAB'
+@AbapCatalog.compiler.compareFilter: true
+@AbapCatalog.preserveKey: true
 @AccessControl.authorizationCheck: #NOT_REQUIRED
 @EndUserText.label: 'Database Table'
 
-define view entity ZSAT_I_DatabaseTable
+define view ZSAT_I_DatabaseTable
   as select distinct from tadir as Repo
     inner join            dd02l as DbTable      on DbTable.tabname = Repo.obj_name
     left outer join       dd02t as Text         on  Text.tabname    = DbTable.tabname

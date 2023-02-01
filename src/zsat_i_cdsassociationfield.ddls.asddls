@@ -1,7 +1,10 @@
+@AbapCatalog.sqlViewName: 'ZSATICDSASSFLD'
+@AbapCatalog.compiler.compareFilter: true
+@AbapCatalog.preserveKey: true
 @AccessControl.authorizationCheck: #NOT_REQUIRED
 @EndUserText.label: 'On Condition Field of Assoc. in CDS View'
 
-define view entity ZSAT_I_CDSAssociationField
+define view ZSAT_I_CDSAssociationField
   as select from dd05b
 {
   key strucobjn       as Entity,

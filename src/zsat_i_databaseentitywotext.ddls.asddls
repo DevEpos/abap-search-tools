@@ -1,8 +1,10 @@
+@AbapCatalog.sqlViewName: 'ZSATDBENTWOT'
+@AbapCatalog.compiler.compareFilter: true
+@AbapCatalog.preserveKey: true
 @AccessControl.authorizationCheck: #NOT_REQUIRED
 @EndUserText.label: 'Database entity without text'
-@Metadata.ignorePropagatedAnnotations: true
 
-define view entity ZSAT_I_DatabaseEntityWoText
+define view ZSAT_I_DatabaseEntityWoText
   as select from tadir as Repo
     inner join   dd02l as Table on Repo.obj_name = Table.tabname
 {

@@ -1,9 +1,9 @@
-@AbapCatalog.viewEnhancementCategory: [#NONE]
+@AbapCatalog.sqlViewName: 'ZSATICDSBASEFLD'
 @AccessControl.authorizationCheck: #NOT_REQUIRED
 @EndUserText.label: 'Base Field of CDS View'
 @Metadata.ignorePropagatedAnnotations: true
 
-define view entity ZSAT_I_CdsBaseField
+define view ZSAT_I_CdsBaseField
   as select distinct from dd27s as BaseField
     inner join            tadir as Repo on  BaseField.viewname = Repo.obj_name
                                         and Repo.object        = 'VIEW'

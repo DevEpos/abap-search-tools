@@ -1,7 +1,10 @@
+@AbapCatalog.sqlViewName: 'ZSATICLSINTFT'
+@AbapCatalog.compiler.compareFilter: true
+@AbapCatalog.preserveKey: true
 @AccessControl.authorizationCheck: #NOT_REQUIRED
 @EndUserText.label: 'Text for Class/Interface'
 
-define view entity ZSAT_I_ClassInterfaceT
+define view ZSAT_I_ClassInterfaceT
   as select from seoclasstx
 {
   key clsname         as ClassName,

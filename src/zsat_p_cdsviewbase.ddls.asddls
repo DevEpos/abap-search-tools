@@ -1,9 +1,12 @@
+@AbapCatalog.sqlViewName: 'ZSATPCDSVB'
+@AbapCatalog.compiler.compareFilter: true
+@AbapCatalog.preserveKey: true
 @AccessControl.authorizationCheck: #NOT_REQUIRED
 @EndUserText.label: 'Base view for CDS with Repository info.'
 
 @VDM.private: true
 
-define view entity ZSAT_P_CDSViewBase
+define view ZSAT_P_CDSViewBase
   as select from    ddddlsrc             as Source
     left outer join ZSAT_I_DdlDependency as StructuredObject on Source.ddlname = StructuredObject.DdlName
     left outer join dd02b                as CdsEntityHeader  on  StructuredObject.EntityName = CdsEntityHeader.strucobjn
@@ -12,7 +15,7 @@ define view entity ZSAT_P_CDSViewBase
                                                              and Repo.pgmid     = 'R3TR'
                                                              and Repo.object    = 'DDLS'
 {
-  key Source.ddlname,
+  key Source.DdlName,
       cast(case
         when CdsEntityHeader.strucobjn is null then Source.ddlname
         else CdsEntityHeader.strucobjn

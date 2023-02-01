@@ -1,7 +1,10 @@
+@AbapCatalog.sqlViewName: 'ZSATICDSASSHEAD'
+@AbapCatalog.compiler.compareFilter: true
+@AbapCatalog.preserveKey: true
 @AccessControl.authorizationCheck: #NOT_REQUIRED
 @EndUserText.label: 'Header of Association in CDS View'
 
-define view entity ZSAT_I_CDSAssociationHeader
+define view ZSAT_I_CDSAssociationHeader
   as select from dd08b as Header
   association [1..*] to ZSAT_I_CDSAssociationField as _AssociationField on  Header.strucobjn       = _AssociationField.Entity
                                                                         and Header.associationname = _AssociationField.AssociationName

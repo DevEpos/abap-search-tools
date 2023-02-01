@@ -1,7 +1,10 @@
+@AbapCatalog.sqlViewName: 'ZSATICIMPLM'
+@AbapCatalog.compiler.compareFilter: true
+@AbapCatalog.preserveKey: true
 @AccessControl.authorizationCheck: #NOT_REQUIRED
 @EndUserText.label: 'Implemented Method from Interface'
 
-define view entity ZSAT_I_ClassImplementedMethod
+define view ZSAT_I_ClassImplementedMethod
   as select from    seometarel as Meta
     inner join      seocompo   as Method         on  Meta.refclsname = Method.clsname
                                                  and Meta.reltype    = '1'

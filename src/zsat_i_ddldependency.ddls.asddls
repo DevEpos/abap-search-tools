@@ -1,7 +1,9 @@
+@AbapCatalog.sqlViewName: 'ZSATIDDLDEP'
+@AbapCatalog.compiler.compareFilter: true
+@AbapCatalog.preserveKey: true
 @AccessControl.authorizationCheck: #NOT_REQUIRED
 @EndUserText.label: 'Resolved DDL Dependency'
-
-define view entity ZSAT_I_DdlDependency
+define view ZSAT_I_DdlDependency
   as select from    ddldependency as StructuredObject
     left outer join ddldependency as DdlDdicView on  StructuredObject.ddlname = DdlDdicView.ddlname
                                                  and DdlDdicView.objecttype   = 'VIEW'

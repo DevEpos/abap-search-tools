@@ -1,7 +1,10 @@
+@AbapCatalog.sqlViewName: 'ZSATICLASSINTF'
+@AbapCatalog.compiler.compareFilter: true
+@AbapCatalog.preserveKey: true
 @AccessControl.authorizationCheck: #NOT_REQUIRED
 @EndUserText.label: 'ABAP OO Class/Interface'
 
-define view entity ZSAT_I_ClassInterface
+define view ZSAT_I_ClassInterface
   as select from ZSAT_P_Class as Class
     inner join   tadir        as Repo on  Class.ClassName = Repo.obj_name
                                       and Class.TadirType = Repo.object

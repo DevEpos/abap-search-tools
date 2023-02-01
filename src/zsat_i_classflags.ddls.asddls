@@ -1,8 +1,10 @@
+@AbapCatalog.sqlViewName: 'ZSATICLSFLAGS'
+@AbapCatalog.compiler.compareFilter: true
+@AbapCatalog.preserveKey: true
 @AccessControl.authorizationCheck: #NOT_REQUIRED
 @EndUserText.label: 'Flags in a Class/Interface'
-@Metadata.ignorePropagatedAnnotations: true
 
-define view entity ZSAT_I_ClassFlags
+define view ZSAT_I_ClassFlags
   as select distinct from seoclassdf
 {
   key clsname         as ClassName,

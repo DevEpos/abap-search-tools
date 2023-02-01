@@ -6,7 +6,7 @@
     <DDLNAME>ZSAT_I_CLASSIMPLEMENTEDMETHOD</DDLNAME>
     <DDLANGUAGE>E</DDLANGUAGE>
     <DDTEXT>Implemented Method from Interface</DDTEXT>
-    <SOURCE_TYPE>W</SOURCE_TYPE>
+    <SOURCE_TYPE>V</SOURCE_TYPE>
    </DDLS>
   </asx:values>
  </asx:abap>

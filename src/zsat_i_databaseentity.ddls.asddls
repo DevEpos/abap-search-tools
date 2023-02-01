@@ -1,8 +1,10 @@
+@AbapCatalog.sqlViewName: 'ZSATIDBENT'
+@AbapCatalog.compiler.compareFilter: true
+@AbapCatalog.preserveKey: true
 @AccessControl.authorizationCheck: #NOT_REQUIRED
 @EndUserText.label: 'Database Entity like (View or Table)'
-@Metadata.ignorePropagatedAnnotations: true
 
-define view entity ZSAT_I_DatabaseEntity
+define view ZSAT_I_DatabaseEntity
   as select from ZSAT_I_DatabaseTable
 {
   TableName as Entity,

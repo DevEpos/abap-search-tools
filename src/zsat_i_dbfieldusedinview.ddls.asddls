@@ -1,7 +1,10 @@
+@AbapCatalog.sqlViewName: 'ZSATIDBFUSINV'
+@AbapCatalog.compiler.compareFilter: true
+@AbapCatalog.preserveKey: true
 @AccessControl.authorizationCheck: #NOT_REQUIRED
 @EndUserText.label: 'Information about DB Field Usage'
 
-define view entity ZSAT_I_DbFieldUsedInView
+define view ZSAT_I_DbFieldUsedInView
   with parameters
     P_BaseTable : tabname,
     P_BaseField : fieldname

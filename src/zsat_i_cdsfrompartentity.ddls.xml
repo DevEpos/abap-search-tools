@@ -6,7 +6,7 @@
     <DDLNAME>ZSAT_I_CDSFROMPARTENTITY</DDLNAME>
     <DDLANGUAGE>E</DDLANGUAGE>
     <DDTEXT>Entities in Select From clause of CDS view</DDTEXT>
-    <SOURCE_TYPE>W</SOURCE_TYPE>
+    <SOURCE_TYPE>V</SOURCE_TYPE>
    </DDLS>
   </asx:values>
  </asx:abap>

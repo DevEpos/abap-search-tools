@@ -1,7 +1,10 @@
+@AbapCatalog.sqlViewName: 'ZSATPDBVIEW'
+@AbapCatalog.compiler.compareFilter: true
+@AbapCatalog.preserveKey: true
 @AccessControl.authorizationCheck: #NOT_REQUIRED
 @EndUserText.label: 'Information about Database view'
 
-define view entity ZSAT_P_DatabaseView
+define view ZSAT_P_DatabaseView
   as select from tadir as Repo
     inner join   dd25l as DbView on  Repo.obj_name = DbView.viewname
                                  and Repo.pgmid    = 'R3TR'

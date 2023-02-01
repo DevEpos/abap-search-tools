@@ -1,7 +1,9 @@
+@AbapCatalog.sqlViewName: 'ZSATPCLASS'
+@AbapCatalog.compiler.compareFilter: true
+@AbapCatalog.preserveKey: true
 @AccessControl.authorizationCheck: #NOT_REQUIRED
 @EndUserText.label: 'ABAP OO Class/Interface'
-
-define view entity ZSAT_P_Class
+define view ZSAT_P_Class
   as select from seoclass   as Class
     inner join   seoclassdf as ClassDef on Class.clsname = ClassDef.clsname
 {

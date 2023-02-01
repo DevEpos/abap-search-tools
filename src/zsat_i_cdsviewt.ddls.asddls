@@ -1,9 +1,12 @@
+@AbapCatalog.sqlViewName: 'ZSATICDSVT'
+@AbapCatalog.compiler.compareFilter: true
+@AbapCatalog.preserveKey: true
 @AccessControl.authorizationCheck: #NOT_REQUIRED
 @EndUserText.label: 'Text for CDS View'
 
 @VDM.viewType: #BASIC
 
-define view entity ZSAT_I_CDSViewT
+define view ZSAT_I_CDSViewT
   as select distinct from ddddlsrct    as FallbackText
     left outer join       ddddlsrc02bt as EndUserText on  EndUserText.ddlname    = FallbackText.ddlname
                                                       and EndUserText.as4local   = 'A'

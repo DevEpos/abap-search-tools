@@ -1,11 +1,12 @@
+@AbapCatalog.sqlViewName: 'ZSATICDSBASET'
+@AbapCatalog.compiler.compareFilter: true
+@AbapCatalog.preserveKey: true
 @AccessControl.authorizationCheck: #NOT_REQUIRED
 @EndUserText.label: 'Base Table of a CDS View'
-@Metadata.ignorePropagatedAnnotations: true
-
 /*
  * Represents a Base Table of CDS view
  */
-define view entity ZSAT_I_CdsBaseTable
+define view ZSAT_I_CdsBaseTable
   as select from dd26s as BaseTable
     inner join   tadir as Repo on BaseTable.tabname = Repo.obj_name
 {

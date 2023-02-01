@@ -6,7 +6,7 @@
     <DDLNAME>ZSAT_I_CDSANNOTATIONVALUE</DDLNAME>
     <DDLANGUAGE>E</DDLANGUAGE>
     <DDTEXT>Possible Values for a CDS Annotation</DDTEXT>
-    <SOURCE_TYPE>W</SOURCE_TYPE>
+    <SOURCE_TYPE>V</SOURCE_TYPE>
    </DDLS>
   </asx:values>
  </asx:abap>

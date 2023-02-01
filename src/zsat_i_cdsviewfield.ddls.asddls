@@ -1,7 +1,10 @@
+@AbapCatalog.sqlViewName: 'ZSATICDSF'
+@AbapCatalog.compiler.compareFilter: true
+@AbapCatalog.preserveKey: true
 @AccessControl.authorizationCheck: #NOT_REQUIRED
 @EndUserText.label: 'Field for CDS'
 
-define view entity ZSAT_I_CdsViewField
+define view ZSAT_I_CdsViewField
   as select from dd03nd as Field
 {
   key  Field.strucobjn as EntityId,

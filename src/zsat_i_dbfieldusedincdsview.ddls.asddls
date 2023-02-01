@@ -1,7 +1,10 @@
+@AbapCatalog.sqlViewName: 'ZSATIDBFUSINCV'
+@AbapCatalog.compiler.compareFilter: true
+@AbapCatalog.preserveKey: true
 @AccessControl.authorizationCheck: #NOT_REQUIRED
 @EndUserText.label: 'View Field used CDS View'
 
-define view entity ZSAT_I_DbFieldUsedInCdsView
+define view ZSAT_I_DbFieldUsedInCdsView
   with parameters
     P_BaseTable : tabname,
     P_BaseField : fieldname
@@ -9,7 +12,7 @@ define view entity ZSAT_I_DbFieldUsedInCdsView
     inner join            ZSAT_P_CDSViewBase  as CdsBase  on ViewField.ViewName = CdsBase.ViewName
     inner join            ZSAT_I_CdsViewField as CdsField on  CdsBase.EntityId   = CdsField.EntityId
                                                           and CdsField.FieldName = ViewField.ViewField
-    left outer join       ZSAT_I_APIStates    as ApiState on  CdsBase.ddlname      =  ApiState.ObjectName
+    left outer join       ZSAT_I_APIStates    as ApiState on  CdsBase.DdlName      =  ApiState.ObjectName
                                                           and ApiState.FilterValue <> 'ADD_CUSTOM_FIELDS'
 {
   key case
@@ -20,7 +23,7 @@ define view entity ZSAT_I_DbFieldUsedInCdsView
        when CdsField.RawFieldName <> '' then CdsField.RawFieldName
        else CdsField.FieldName
       end as FieldName,
-      CdsBase.ddlname,
+      CdsBase.DdlName,
       CdsBase.SourceType,
       ApiState.APIState
 }

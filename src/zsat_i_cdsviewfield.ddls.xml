@@ -6,7 +6,7 @@
     <DDLNAME>ZSAT_I_CDSVIEWFIELD</DDLNAME>
     <DDLANGUAGE>E</DDLANGUAGE>
     <DDTEXT>Field for CDS</DDTEXT>
-    <SOURCE_TYPE>W</SOURCE_TYPE>
+    <SOURCE_TYPE>V</SOURCE_TYPE>
    </DDLS>
   </asx:values>
  </asx:abap>
