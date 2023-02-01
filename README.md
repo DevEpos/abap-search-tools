@@ -48,6 +48,10 @@ This program will create the missing Metadata information in the tables:
 The program will also remove any invalid indexes of deleted CDS Views.  
 In addition to this program the ADT plugin [ABAP Search and Analysis Tools](https://www.github.com/stockbal/abap-search-tools-ui) will also trigger an update of the index during the activation of one or more CDS Views.
 
+## Issues during installation
+
+- [Revert CDS View v2 to v1](https://github.com/stockbal/abap-search-tools/issues/17)
+
 ## Necessary Authorizations
 
 To access the backend from ADT a user must have the following authorizations
