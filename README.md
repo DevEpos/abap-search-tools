@@ -11,7 +11,7 @@ Install this repository using [abapGit](https://github.com/larshp/abapGit#abapgi
 
 NW version|ABAP Platform|Branch name
 ----------|-------------|-----------
-&#8805; 7.55|2020  |**main**
+&#8805; 7.55|&#8805; 2020  |**main**
 7.54|1909|nw-753
 7.53|1809|nw-753
 7.52||nw-752
