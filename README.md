@@ -50,7 +50,7 @@ In addition to this program the ADT plugin [ABAP Search and Analysis Tools](http
 
 ## Issues during installation
 
-- [Revert CDS View v2 to v1](https://github.com/stockbal/abap-search-tools/issues/17)
+See [Wiki](https://github.com/stockbal/abap-search-tools/wiki/Installation-Issues)
 
 ## Necessary Authorizations
 
