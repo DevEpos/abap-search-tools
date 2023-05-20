@@ -1,11 +1,11 @@
 # abap-search-tools
 
 This Repository contains the ADT Backend that is needed to use the eclipse plugin
-[ABAP Search and Analysis Tools](https://www.github.com/stockbal/abap-search-tools-ui)
+[ABAP Search and Analysis Tools](https://www.github.com/DevEpos/abap-search-tools-ui)
 
 ## Installation
 
-Install this repository using [abapGit](https://github.com/larshp/abapGit#abapgit).
+Install this repository using [abapGit](https://github.com/abapGit/abapGit#abapgit).
 
 ### Choosing the correct branch for your System
 
@@ -46,11 +46,11 @@ This program will create the missing Metadata information in the tables:
 - `ZSATCDS2MFIELD`
 
 The program will also remove any invalid indexes of deleted CDS Views.  
-In addition to this program the ADT plugin [ABAP Search and Analysis Tools](https://www.github.com/stockbal/abap-search-tools-ui) will also trigger an update of the index during the activation of one or more CDS Views.
+In addition to this program the ADT plugin [ABAP Search and Analysis Tools](https://www.github.com/DevEpos/abap-search-tools-ui) will also trigger an update of the index during the activation of one or more CDS Views.
 
 ## Issues during installation
 
-See [Wiki](https://github.com/stockbal/abap-search-tools/wiki/Installation-Issues)
+See [Wiki](https://github.com/DevEpos/abap-search-tools/wiki/Installation-Issues)
 
 ## Necessary Authorizations
 
