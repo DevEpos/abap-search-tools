@@ -19,13 +19,14 @@ ENDCLASS.
 
 CLASS zcl_sat_cds_view_qv IMPLEMENTATION.
 
+
   METHOD zif_sat_query_validator~validate_option.
     DATA: lf_invalid TYPE abap_bool.
 
     super->validate(
-        iv_option = iv_option
-        iv_value  = iv_value
-        iv_value2 = iv_value2
+      iv_option = iv_option
+      iv_value  = iv_value
+      iv_value2 = iv_value2
     ).
 
     IF iv_option = zif_sat_c_object_search=>c_general_search_params-type.
@@ -37,8 +38,9 @@ CLASS zcl_sat_cds_view_qv IMPLEMENTATION.
              zif_sat_c_object_search=>c_type_option_value-custom_entity OR
              zif_sat_c_object_search=>c_type_option_value-view OR
              zif_sat_c_object_search=>c_type_option_value-view_entity OR
-             zif_sat_c_object_search=>c_type_option_value-extend or
-             zif_sat_c_object_search=>c_type_option_value-extend2.
+             zif_sat_c_object_search=>c_type_option_value-extend OR
+             zif_sat_c_object_search=>c_type_option_value-extend2 OR
+             zif_sat_c_object_search=>c_type_option_value-projection.
 
         WHEN OTHERS.
           lf_invalid = abap_true.
@@ -58,10 +60,10 @@ CLASS zcl_sat_cds_view_qv IMPLEMENTATION.
     ENDIF.
   ENDMETHOD.
 
+
   METHOD zif_sat_query_validator~check_option_integrity.
     IF line_exists( ct_options[ option = zif_sat_c_object_search=>c_cds_search_params-param ] ).
       DELETE ct_options WHERE option = zif_sat_c_object_search=>c_cds_search_params-params.
     ENDIF.
   ENDMETHOD.
-
 ENDCLASS.

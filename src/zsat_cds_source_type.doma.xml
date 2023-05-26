@@ -60,6 +60,18 @@
      <DOMVALUE_L>W</DOMVALUE_L>
      <DDTEXT>View Entity</DDTEXT>
     </DD07V>
+    <DD07V>
+     <VALPOS>0009</VALPOS>
+     <DDLANGUAGE>E</DDLANGUAGE>
+     <DOMVALUE_L>Q</DOMVALUE_L>
+     <DDTEXT>Custom Entity</DDTEXT>
+    </DD07V>
+    <DD07V>
+     <VALPOS>0010</VALPOS>
+     <DDLANGUAGE>E</DDLANGUAGE>
+     <DOMVALUE_L>P</DOMVALUE_L>
+     <DDTEXT>Projection view</DDTEXT>
+    </DD07V>
    </DD07V_TAB>
   </asx:values>
  </asx:abap>
