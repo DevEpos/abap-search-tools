@@ -12,13 +12,11 @@
    </VSEOINTERF>
    <DESCRIPTIONS>
     <SEOCOMPOTX>
-     <CLSNAME>ZIF_SAT_C_OPTIONS</CLSNAME>
      <CMPNAME>BETWEEN</CMPNAME>
      <LANGU>E</LANGU>
      <DESCRIPT>Search Value lies between 2 values</DESCRIPT>
     </SEOCOMPOTX>
     <SEOCOMPOTX>
-     <CLSNAME>ZIF_SAT_C_OPTIONS</CLSNAME>
      <CMPNAME>NOT_BETWEEN</CMPNAME>
      <LANGU>E</LANGU>
      <DESCRIPT>Search Value does not lie between two values</DESCRIPT>
