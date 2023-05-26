@@ -13,7 +13,6 @@
    </VSEOCLASS>
    <DESCRIPTIONS>
     <SEOCOMPOTX>
-     <CLSNAME>ZCL_SAT_BASE_IOC</CLSNAME>
      <CMPNAME>ADD_CONTRACT</CMPNAME>
      <LANGU>E</LANGU>
      <DESCRIPT>Adds new contract definition to IoC</DESCRIPT>
