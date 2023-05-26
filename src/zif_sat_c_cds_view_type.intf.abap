@@ -9,4 +9,5 @@ INTERFACE zif_sat_c_cds_view_type
   CONSTANTS abstract_entity TYPE zsat_cds_source_type VALUE 'A' ##NO_TEXT.
   CONSTANTS custom_entity TYPE zsat_cds_source_type VALUE 'Q' ##NO_TEXT.
   CONSTANTS hierarchy TYPE zsat_cds_source_type VALUE 'H' ##NO_TEXT.
+  CONSTANTS projection TYPE zsat_cds_source_type VALUE 'P' ##NO_TEXT.
 ENDINTERFACE.
