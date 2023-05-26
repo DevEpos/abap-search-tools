@@ -37,9 +37,7 @@ CLASS zcl_sat_cds_view_qv IMPLEMENTATION.
              zif_sat_c_object_search=>c_type_option_value-abstract_entity OR
              zif_sat_c_object_search=>c_type_option_value-custom_entity OR
              zif_sat_c_object_search=>c_type_option_value-view OR
-             zif_sat_c_object_search=>c_type_option_value-view_entity OR
              zif_sat_c_object_search=>c_type_option_value-extend OR
-             zif_sat_c_object_search=>c_type_option_value-extend2 OR
              zif_sat_c_object_search=>c_type_option_value-projection.
 
         WHEN OTHERS.

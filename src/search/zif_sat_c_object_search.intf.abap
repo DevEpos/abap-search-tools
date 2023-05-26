@@ -159,7 +159,6 @@ INTERFACE zif_sat_c_object_search
       custom_entity   TYPE string VALUE 'CUSTOM',
       table           TYPE string VALUE 'TABLE',
       extend          TYPE string VALUE 'EXTEND',
-      extend2         TYPE string VALUE 'EXTEND2',
       projection      TYPE string VALUE 'PROJECTION',
     END OF c_type_option_value.
 ENDINTERFACE.
