@@ -386,6 +386,7 @@ CLASS zcl_sat_cds_view_factory IMPLEMENTATION.
                  zif_sat_c_cds_assoc_type=>view_entity OR
                  zif_sat_c_cds_assoc_type=>abstract_entity OR
                  zif_sat_c_cds_assoc_type=>custom_entity OR
+                 zif_sat_c_cds_assoc_type=>projection_entity OR
                  zif_sat_c_cds_assoc_type=>table_function THEN zif_sat_c_entity_type=>cds_view
             WHEN zif_sat_c_cds_assoc_type=>table OR
                  zif_sat_c_cds_assoc_type=>view THEN zif_sat_c_entity_type=>table
