@@ -12,7 +12,6 @@
    </VSEOINTERF>
    <DESCRIPTIONS>
     <SEOCOMPOTX>
-     <CLSNAME>ZIF_SAT_QUERY_CONVERTER</CLSNAME>
      <CMPNAME>CONVERT_VALUE</CMPNAME>
      <LANGU>E</LANGU>
      <DESCRIPT>Converts value of search option (if necessary)</DESCRIPT>
