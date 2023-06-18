@@ -13,14 +13,14 @@
    </VSEOCLASS>
    <DESCRIPTIONS>
     <SEOCOMPOTX>
+     <CMPNAME>CONVERT_TO_ADT_RESULT</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Convert entry to ADT result</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
      <CMPNAME>CREATE_RESPONSE</CMPNAME>
      <LANGU>E</LANGU>
      <DESCRIPT>Create response</DESCRIPT>
-    </SEOCOMPOTX>
-    <SEOCOMPOTX>
-     <CMPNAME>DETERMINE_PACKAGE_HIERARCHY</CMPNAME>
-     <LANGU>E</LANGU>
-     <DESCRIPT>Determine the package hierarchy of the search result</DESCRIPT>
     </SEOCOMPOTX>
     <SEOCOMPOTX>
      <CMPNAME>GET_QUERY_PARAMETER</CMPNAME>
@@ -46,21 +46,6 @@
      <CMPNAME>POST_PROCESS_RESULT</CMPNAME>
      <LANGU>E</LANGU>
      <DESCRIPT>Post processing for search results</DESCRIPT>
-    </SEOCOMPOTX>
-    <SEOCOMPOTX>
-     <CMPNAME>POST_PROCESS_RESULT_ENTRY</CMPNAME>
-     <LANGU>E</LANGU>
-     <DESCRIPT>Post processing for a search result entry</DESCRIPT>
-    </SEOCOMPOTX>
-    <SEOCOMPOTX>
-     <CMPNAME>READ_DDL_SOURCES</CMPNAME>
-     <LANGU>E</LANGU>
-     <DESCRIPT>Reads DDL Sources in for search result</DESCRIPT>
-    </SEOCOMPOTX>
-    <SEOCOMPOTX>
-     <CMPNAME>SET_DDL_POSITIONAL_URI</CMPNAME>
-     <LANGU>E</LANGU>
-     <DESCRIPT>Sets the positional URI for the given DDLS result</DESCRIPT>
     </SEOCOMPOTX>
    </DESCRIPTIONS>
   </asx:values>
