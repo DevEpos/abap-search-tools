@@ -16,6 +16,8 @@ CLASS zcl_sat_base_search_provider DEFINITION
     METHODS constructor.
 
   PROTECTED SECTION.
+    TYPES ty_search_term TYPE RANGE OF string.
+
     ALIASES c_general_search_options FOR zif_sat_c_object_search~c_general_search_params.
 
     CONSTANTS c_cr_lf TYPE string VALUE cl_abap_char_utilities=>cr_lf ##NO_TEXT.
@@ -155,7 +157,8 @@ CLASS zcl_sat_base_search_provider DEFINITION
     "! <p class="shorttext synchronized">Add search terms of query to search filter</p>
     METHODS add_search_terms_to_search
       IMPORTING
-        it_field_names TYPE string_table.
+        it_search_terms TYPE ty_search_term
+        it_field_names  TYPE string_table.
 
     "! <p class="shorttext synchronized">Performs task after the Search</p>
     METHODS do_after_search
@@ -221,6 +224,43 @@ CLASS zcl_sat_base_search_provider IMPLEMENTATION.
     search( ).
     do_after_search( ).
     et_result = mt_result.
+  ENDMETHOD.
+
+  METHOD search.
+    create_select_clause( ).
+    create_from_clause( ).
+    create_where_clause( ).
+    create_order_by_clause( ).
+    determine_grouping( ).
+
+    DATA(lv_max_rows) = COND #( WHEN ms_search_engine_params-get_all = abap_true
+                                THEN 0
+                                ELSE mo_search_query->mv_max_rows + 1 ).
+
+    TRY.
+        IF mt_group_by IS NOT INITIAL.
+          SELECT DISTINCT (mt_select)
+            FROM (mt_from)
+            WHERE (mt_where)
+            GROUP BY (mt_group_by)
+            HAVING (mt_having)
+            ORDER BY (mt_order_by)
+          INTO CORRESPONDING FIELDS OF TABLE @mt_result
+            UP TO @lv_max_rows ROWS.
+        ELSE.
+          SELECT DISTINCT (mt_select)
+            FROM (mt_from)
+            WHERE (mt_where)
+            ORDER BY (mt_order_by)
+          INTO CORRESPONDING FIELDS OF TABLE @mt_result
+            UP TO @lv_max_rows ROWS.
+        ENDIF.
+        " TODO: variable is assigned but never used (ABAP cleaner)
+        DATA(lv_sql) = get_select_string( ).
+      CATCH cx_sy_open_sql_error INTO DATA(lx_sql_error).
+        RAISE EXCEPTION TYPE zcx_sat_object_search
+          EXPORTING previous = lx_sql_error.
+    ENDTRY.
   ENDMETHOD.
 
   METHOD add_api_option_filter.
@@ -340,6 +380,8 @@ CLASS zcl_sat_base_search_provider IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD add_search_terms_to_search.
+    CHECK it_search_terms IS NOT INITIAL.
+
     DEFINE _add_filter.
       add_filter( VALUE #( sqlfieldname = &1
                            option       = &2-option
@@ -357,13 +399,13 @@ CLASS zcl_sat_base_search_provider IMPLEMENTATION.
 
     " .. If at least one search term with 'E'(Excluding) sign exists all search terms are connected
     " .... via AND in the SQL Clause
-    IF line_exists( mo_search_query->mt_search_term[ sign = zif_sat_c_options=>excluding ] ).
+    IF line_exists( it_search_terms[ sign = zif_sat_c_options=>excluding ] ).
       DATA(lf_use_and_between_terms) = abap_true.
     ENDIF.
 
     new_and_cond_list( ).
 
-    LOOP AT mo_search_query->mt_search_term ASSIGNING FIELD-SYMBOL(<ls_term>).
+    LOOP AT it_search_terms ASSIGNING FIELD-SYMBOL(<ls_term>).
       DATA(lv_tabix) = sy-tabix.
       DATA(lf_and) = xsdbool( <ls_term>-sign = zif_sat_c_options=>excluding ).
 
@@ -552,43 +594,6 @@ CLASS zcl_sat_base_search_provider IMPLEMENTATION.
       mt_criteria_or = VALUE #( BASE mt_criteria_or ( values = mt_criteria ) ).
       CLEAR mt_criteria.
     ENDIF.
-  ENDMETHOD.
-
-  METHOD search.
-    create_select_clause( ).
-    create_from_clause( ).
-    create_where_clause( ).
-    create_order_by_clause( ).
-    determine_grouping( ).
-
-    DATA(lv_max_rows) = COND #( WHEN ms_search_engine_params-get_all = abap_true
-                                THEN 0
-                                ELSE mo_search_query->mv_max_rows + 1 ).
-
-    TRY.
-        IF mt_group_by IS NOT INITIAL.
-          SELECT DISTINCT (mt_select)
-            FROM (mt_from)
-            WHERE (mt_where)
-            GROUP BY (mt_group_by)
-            HAVING (mt_having)
-            ORDER BY (mt_order_by)
-          INTO CORRESPONDING FIELDS OF TABLE @mt_result
-            UP TO @lv_max_rows ROWS.
-        ELSE.
-          SELECT DISTINCT (mt_select)
-            FROM (mt_from)
-            WHERE (mt_where)
-            ORDER BY (mt_order_by)
-          INTO CORRESPONDING FIELDS OF TABLE @mt_result
-            UP TO @lv_max_rows ROWS.
-        ENDIF.
-        " TODO: variable is assigned but never used (ABAP cleaner)
-        DATA(lv_sql) = get_select_string( ).
-      CATCH cx_sy_open_sql_error INTO DATA(lx_sql_error).
-        RAISE EXCEPTION TYPE zcx_sat_object_search
-          EXPORTING previous = lx_sql_error.
-    ENDTRY.
   ENDMETHOD.
 
   METHOD set_base_select_table.
