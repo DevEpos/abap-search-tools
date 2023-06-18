@@ -1,8 +1,8 @@
-"! <p class="shorttext synchronized" lang="en">Constants for ADT Tools of DB Browser</p>
+"! <p class="shorttext synchronized">Constants for ADT Tools of DB Browser</p>
 INTERFACE zif_sat_c_adt_utils
-  PUBLIC .
+  PUBLIC.
 
-  "! <p class="shorttext synchronized" lang="en">URI segment for positional DDLS URI</p>
+  "! <p class="shorttext synchronized">URI segment for positional DDLS URI</p>
   CONSTANTS c_ddl_pos_uri_segment TYPE string VALUE '/source/main#start='.
 
   CONSTANTS:
@@ -51,6 +51,7 @@ INTERFACE zif_sat_c_adt_utils
   CONSTANTS:
     BEGIN OF c_adt_types,
       data_definition  TYPE string VALUE 'DDLS/DF',
+      package          TYPE string VALUE 'DEVC/K',
       table_definition TYPE string VALUE 'TABL/DT',
       view_definition  TYPE string VALUE 'VIEW/DV',
     END OF c_adt_types.
