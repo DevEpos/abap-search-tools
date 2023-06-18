@@ -10,5 +10,8 @@ define view ZSAT_I_InterfaceUsage
   key refclsname as UsedInterface
 }
 where
-      version = '1'
-  and reltype = '1' // interface 
+       version = '1'
+  and(
+       reltype = '0' // interface composition
+    or reltype = '1' // interface implementation
+  )
