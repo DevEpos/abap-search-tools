@@ -67,65 +67,52 @@ CLASS zcl_sat_os_dbtab_provider IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD prepare_search.
-    DATA: lv_base_table      TYPE string.
+    DATA lv_base_table TYPE string.
 
-    get_base_table_and_field(
-      IMPORTING ev_base_table           = lv_base_table
-                ev_entity_fieldname     = mv_entity_fieldname
-                ev_raw_entity_fieldname = mv_raw_entity_fieldname
-    ).
+    get_base_table_and_field( IMPORTING ev_base_table           = lv_base_table
+                                        ev_entity_fieldname     = mv_entity_fieldname
+                                        ev_raw_entity_fieldname = mv_raw_entity_fieldname ).
 
-    set_base_select_table(
-        iv_entity     = lv_base_table
-        iv_alias      = c_base_table
-    ).
+    set_base_select_table( iv_entity = lv_base_table
+                           iv_alias  = c_base_table ).
 
     LOOP AT mo_search_query->mt_search_options ASSIGNING FIELD-SYMBOL(<ls_option>).
 
       CASE <ls_option>-option.
 
-*.......... Find objects via its description
+        " .......... Find objects via its description
         WHEN c_general_search_options-description.
-          add_option_filter(
-            iv_fieldname = mv_description_filter_field
-            it_values    = <ls_option>-value_range
-          ).
+          add_option_filter( iv_fieldname = mv_description_filter_field
+                             it_values    = <ls_option>-value_range ).
 
-*.......... Find objects with a certain responsible person
+        " .......... Find objects with a certain responsible person
         WHEN c_general_search_options-user.
-          add_option_filter(
-            iv_fieldname = c_fields-created_by
-            it_values    = <ls_option>-value_range
-          ).
+          add_option_filter( iv_fieldname = c_fields-created_by
+                             it_values    = <ls_option>-value_range ).
 
-*.......... Find objects which exist in a certain development package
+        " .......... Find objects which exist in a certain development package
         WHEN c_general_search_options-package.
-          add_option_filter(
-            iv_fieldname = c_fields-development_package
-            it_values    = <ls_option>-value_range
-          ).
+          add_option_filter( iv_fieldname = c_fields-development_package
+                             it_values    = <ls_option>-value_range ).
 
-*.......... Find only objects with a certain type
+        " .......... Find only objects with a certain type
         WHEN c_general_search_options-type.
           add_type_option_filter( <ls_option>-value_range ).
 
-*.......... Find objects by field
+        " .......... Find objects by field
         WHEN c_dbtab_search_params-field.
           add_field_filter( <ls_option>-value_range ).
 
-*.......... Find objects by delivery class
+        " .......... Find objects by delivery class
         WHEN c_dbtab_search_params-delivery_class.
-          add_option_filter(
-            iv_fieldname = c_fields-delivery_class
-            it_values    = <ls_option>-value_range
-          ).
+          add_option_filter( iv_fieldname = c_fields-delivery_class
+                             it_values    = <ls_option>-value_range ).
 
       ENDCASE.
     ENDLOOP.
 
-    IF mo_search_query->has_search_terms( ).
-      add_search_terms_to_search( VALUE #( ( |{ c_base_table }~{ mv_entity_fieldname }| ) ) ).
-    ENDIF.
+    add_search_terms_to_search( it_search_terms = mo_search_query->mt_search_term
+                                it_field_names  = VALUE #( ( |{ c_base_table }~{ mv_entity_fieldname }| ) ) ).
 
     add_select_field( iv_fieldname = mv_entity_fieldname iv_fieldname_alias = 'object_name' iv_entity = c_base_table ).
     add_select_field( iv_fieldname = mv_raw_entity_fieldname iv_fieldname_alias = 'raw_object_name' iv_entity = c_base_table ).
