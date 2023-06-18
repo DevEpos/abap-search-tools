@@ -7,6 +7,7 @@ INTERFACE zif_sat_c_object_search
       cds_view        TYPE zif_sat_ty_object_search=>ty_search_type VALUE 'CDS',
       db_tab_view     TYPE zif_sat_ty_object_search=>ty_search_type VALUE 'DBTABVIEW',
       class_interface TYPE zif_sat_ty_object_search=>ty_search_type VALUE 'CLASSINTF',
+      method          TYPE zif_sat_ty_object_search=>ty_search_type VALUE 'METHOD',
     END OF c_search_type.
 
   CONSTANTS:

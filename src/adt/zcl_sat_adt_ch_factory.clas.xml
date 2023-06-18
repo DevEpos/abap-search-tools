@@ -43,6 +43,11 @@
      <DESCRIPT>Create content handler for navigation targets</DESCRIPT>
     </SEOCOMPOTX>
     <SEOCOMPOTX>
+     <CMPNAME>CREATE_SEARCH_RESULT_CH</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Create content handler for search result</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
      <CLSNAME>ZCL_SAT_ADT_CH_FACTORY</CLSNAME>
      <CMPNAME>CREATE_TABLE_ELEM_INFO_RES_CH</CMPNAME>
      <LANGU>E</LANGU>

@@ -127,8 +127,8 @@ CLASS zcl_sat_os_dbtab_provider IMPLEMENTATION.
       add_search_terms_to_search( VALUE #( ( |{ c_base_table }~{ mv_entity_fieldname }| ) ) ).
     ENDIF.
 
-    add_select_field( iv_fieldname = mv_entity_fieldname iv_fieldname_alias = 'entity_id' iv_entity = c_base_table ).
-    add_select_field( iv_fieldname = mv_raw_entity_fieldname iv_fieldname_alias = 'entity_id_raw' iv_entity = c_base_table ).
+    add_select_field( iv_fieldname = mv_entity_fieldname iv_fieldname_alias = 'object_name' iv_entity = c_base_table ).
+    add_select_field( iv_fieldname = mv_raw_entity_fieldname iv_fieldname_alias = 'raw_object_name' iv_entity = c_base_table ).
     add_select_field( iv_fieldname = c_fields-description iv_entity = c_base_table ).
     add_select_field( iv_fieldname = c_fields-created_by iv_fieldname_alias = 'created_by' iv_entity = c_base_table ).
     add_select_field( iv_fieldname = c_fields-created_date iv_fieldname_alias = 'created_date' iv_entity = c_base_table ).
