@@ -131,14 +131,14 @@ CLASS zcl_sat_os_cds_provider IMPLEMENTATION.
         iv_alias  = c_base_alias
     ).
 
-    add_select_field( iv_fieldname = c_fields-entityid iv_fieldname_alias = 'entity_id' iv_entity = c_base_alias ).
-    add_select_field( iv_fieldname = c_fields-source_type iv_fieldname_alias = 'source_type' iv_entity = c_base_alias ).
-    add_select_field( iv_fieldname = c_fields-ddlname  iv_fieldname_alias = 'secondary_entity_id' iv_entity = c_base_alias ).
+    add_select_field( iv_fieldname = c_fields-entityid iv_fieldname_alias = 'object_name' iv_entity = c_base_alias ).
+    add_select_field( iv_fieldname = c_fields-source_type iv_fieldname_alias = 'custom_field1' iv_entity = c_base_alias ).
+    add_select_field( iv_fieldname = c_fields-ddlname  iv_fieldname_alias = 'alt_object_name' iv_entity = c_base_alias ).
     add_select_field( iv_fieldname = c_fields-created_by iv_fieldname_alias = 'created_by' iv_entity = c_base_alias ).
     add_select_field( iv_fieldname = c_fields-created_date iv_fieldname_alias = 'created_date' iv_entity = c_base_alias ).
     add_select_field( iv_fieldname = c_fields-changed_by iv_fieldname_alias = 'changed_by' iv_entity = c_base_alias ).
     add_select_field( iv_fieldname = c_fields-changed_date iv_fieldname_alias = 'changed_date' iv_entity = c_base_alias ).
-    add_select_field( iv_fieldname = c_fields-rawentity_id iv_fieldname_alias = 'entity_id_raw' iv_entity = c_base_alias ).
+    add_select_field( iv_fieldname = c_fields-rawentity_id iv_fieldname_alias = 'raw_object_name' iv_entity = c_base_alias ).
     add_select_field( iv_fieldname = c_fields-description  iv_entity = c_base_alias ).
     add_select_field( iv_fieldname = c_fields-development_package iv_fieldname_alias = 'devclass' iv_entity = c_base_alias ).
     add_select_field( iv_fieldname = |'C'| iv_fieldname_alias = 'entity_type' ).
@@ -545,14 +545,14 @@ CLASS zcl_sat_os_cds_provider IMPLEMENTATION.
            apistate AS api_state
       FROM zsat_i_apistates
       FOR ALL ENTRIES IN @mt_result
-      WHERE objectname = @mt_result-secondary_entity_id
+      WHERE objectname = @mt_result-alt_object_name
         AND filtervalue <> @zif_sat_c_cds_api_state=>add_custom_fields
     INTO TABLE @DATA(lt_api_states).
 
     CHECK sy-subrc = 0.
 
     LOOP AT mt_result ASSIGNING FIELD-SYMBOL(<ls_result>).
-      <ls_result>-api_state = VALUE #( lt_api_states[ entity_id = <ls_result>-secondary_entity_id ]-api_state OPTIONAL ).
+      <ls_result>-api_state = VALUE #( lt_api_states[ entity_id = <ls_result>-alt_object_name ]-api_state OPTIONAL ).
     ENDLOOP.
   ENDMETHOD.
 
