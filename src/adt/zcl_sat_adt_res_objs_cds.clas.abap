@@ -45,7 +45,7 @@ CLASS zcl_sat_adt_res_objs_cds IMPLEMENTATION.
                                   CHANGING  cs_result       = cs_result ).
 
     cs_result-properties = VALUE #( BASE cs_result-properties
-                                    ( key = 'SOURCE_TYPE' value = is_result_entry-custom_field1 ) ).
+                                    ( key = 'SOURCE_TYPE' value = is_result_entry-custom_field_short1 ) ).
     set_ddl_positional_uri( EXPORTING is_result_entity = is_result_entry
                             CHANGING  cs_result        = cs_result ).
   ENDMETHOD.
