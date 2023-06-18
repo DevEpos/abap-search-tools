@@ -144,16 +144,19 @@ CLASS zcl_sat_object_query_parser IMPLEMENTATION.
     enhance_options( CHANGING ct_options = lt_options ).
 
     DATA(lt_search_terms) = get_search_terms( iv_search_terms ).
+    DATA(lt_sub_search_terms) = get_search_terms( iv_sub_obj_search_terms ).
 
-    IF     lt_search_terms IS INITIAL
-       AND lt_options      IS INITIAL.
+    IF     lt_search_terms     IS INITIAL
+       AND lt_sub_search_terms IS INITIAL
+       AND lt_options          IS INITIAL.
       RAISE EXCEPTION TYPE zcx_sat_object_search
         EXPORTING textid = zcx_sat_object_search=>empty_query.
     ENDIF.
 
-    ro_query = NEW zcl_sat_object_search_query( iv_type           = mo_configuration->get_type( )
-                                                it_search_term    = lt_search_terms
-                                                it_search_options = lt_options ).
+    ro_query = NEW zcl_sat_object_search_query( iv_type            = mo_configuration->get_type( )
+                                                it_search_term     = lt_search_terms
+                                                it_sub_search_term = lt_sub_search_terms
+                                                it_search_options  = lt_options ).
   ENDMETHOD.
 
   METHOD parse_option.
@@ -219,7 +222,7 @@ CLASS zcl_sat_object_query_parser IMPLEMENTATION.
 
     IF is_option-no_negation = abap_false.
       zcl_sat_search_util=>remove_exclusion_string( CHANGING cv_value = lv_value
-                                                             cv_sign  = lv_sign  ).
+                                                             cv_sign  = lv_sign ).
     ENDIF.
 
     " Consider key-value options in a special way
