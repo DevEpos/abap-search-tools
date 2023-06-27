@@ -1,6 +1,6 @@
-"! <p class="shorttext synchronized" lang="en">Constants for Object search</p>
+"! <p class="shorttext synchronized">Constants for Object search</p>
 INTERFACE zif_sat_c_object_search
-  PUBLIC .
+  PUBLIC.
 
   CONSTANTS:
     BEGIN OF c_search_type,
@@ -8,7 +8,15 @@ INTERFACE zif_sat_c_object_search
       db_tab_view     TYPE zif_sat_ty_object_search=>ty_search_type VALUE 'DBTABVIEW',
       class_interface TYPE zif_sat_ty_object_search=>ty_search_type VALUE 'CLASSINTF',
       method          TYPE zif_sat_ty_object_search=>ty_search_type VALUE 'METHOD',
+      field           TYPE zif_sat_ty_object_search=>ty_search_type VALUE 'FIELD',
     END OF c_search_type.
+
+  CONSTANTS:
+    BEGIN OF c_filter_content_assist_type,
+      named_item TYPE string VALUE 'saat:NamedItemContentAssist',
+      ris        TYPE string VALUE 'saat:RisContentAssist',
+      user       TYPE string VALUE 'saat:UserContentAssist',
+    END OF c_filter_content_assist_type.
 
   CONSTANTS:
     "! <p class="shorttext synchronized" lang="en">General Search options for object search</p>
