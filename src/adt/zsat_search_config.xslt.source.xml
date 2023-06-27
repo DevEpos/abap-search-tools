@@ -1,0 +1,122 @@
+<?sap.transform simple?>
+<tt:transform
+    xmlns:tt="http://www.sap.com/transformation-templates"
+    xmlns:saat="http://www.devepos.com/adt/objectsearch"
+    xmlns:cl="http://www.sap.com/abapxml/types/class-pool/zif_sat_ty_object_search"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+  <tt:root name="search_config" type="cl:ty_s_search_config"/>
+
+  <tt:template>
+    <saat:searchConfig tt:extensible="deep">
+      <tt:namespace name="xsi" />
+      <tt:loop ref="search_config.search_types">
+        <tt:apply name="searchType">
+           <tt:with-root name="search_type" ref="$ref"/>
+        </tt:apply>
+      </tt:loop>
+    </saat:searchConfig>
+
+  </tt:template>
+
+  <tt:template name="searchType">
+    <tt:context>
+      <tt:root name="search_type" type="cl:ty_s_search_type"/>
+    </tt:context>
+
+    <saat:searchType>
+      <tt:attribute name="saat:name" value-ref="search_type.name"/>
+      <tt:attribute name="saat:label" value-ref="search_type.label"/>
+
+      <tt:loop ref="search_type.inputs">
+        <tt:apply name="input">
+          <tt:with-root name="input" ref="$ref"/>
+        </tt:apply>
+      </tt:loop>
+    </saat:searchType>
+  </tt:template>
+
+  <tt:template name="input">
+    <tt:context>
+      <tt:root name="input" type="cl:ty_s_input_field"/>
+    </tt:context>
+
+    <saat:input tt:extensible="deep">
+      <tt:attribute name="saat:name" value-ref="input.name"/>
+      <tt:attribute name="saat:label" value-ref="input.label"/>
+
+      <tt:cond check="exist(input.filters)">
+        <tt:loop ref="input.filters">
+          <tt:apply name="filter">
+            <tt:with-root name="filter" ref="$ref"/>
+          </tt:apply>
+        </tt:loop>
+      </tt:cond>
+    </saat:input>
+  </tt:template>
+
+  <tt:template name="filter">
+    <tt:context>
+      <tt:root name="filter" type="cl:ty_s_option_setting"/>
+    </tt:context>
+
+    <saat:filter tt:extensible="deep">
+      <tt:attribute name="saat:name" value-ref="filter.option"/>
+      <tt:attribute name="saat:dataType" value-ref="filter.data_type"/>
+      <tt:attribute name="saat:maxLength" value-ref="filter.allowed_length"/>
+      <tt:cond check="initial(filter.single)">
+        <tt:attribute map="xml('true')=val(''),xml('false')=val('X')" name="saat:multiple" value-ref="filter.single"/>
+      </tt:cond>
+      <tt:cond check="initial(filter.no_negation)">
+         <tt:attribute map="xml('true')=val(''),xml('false')=val('X')" name="saat:negatable" value-ref="filter.no_negation"/>
+      </tt:cond>
+      <tt:cond check="not-initial(filter.key_value)">
+        <tt:attribute name="saat:keyValuePair" option="format(boolean)" value-ref="filter.key_value" />
+      </tt:cond>
+      <tt:cond check="not-initial(filter.long_description)">
+        <tt:attribute name="saat:longDescription" value-ref="filter.long_description" />
+      </tt:cond>
+      <tt:cond check="not-initial(filter.img_key)">
+        <tt:attribute name="saat:imageKey" value-ref="filter.img_key" />
+      </tt:cond>
+
+      <tt:cond check="not-initial(filter.content_assist)">
+        <tt:apply name="contentAssist">
+          <tt:with-root name="content_assist" ref="filter.content_assist"/>
+        </tt:apply>
+      </tt:cond>
+
+    </saat:filter>
+  </tt:template>
+
+  <tt:template name="contentAssist">
+    <tt:context>
+      <tt:root name="content_assist" type="cl:ty_s_option_content_assist"/>
+    </tt:context>
+
+    <saat:contentAssist tt:extensible="deep">
+      <tt:attribute name="xsi:type" value-ref="content_assist.assist_type"/>
+
+      <tt:cond check="not-initial(content_assist.adt_object_type)">
+        <tt:attribute name="saat:adtObjectType" value-ref="content_assist.adt_object_type"/>
+      </tt:cond>
+
+      <tt:cond check="not-initial(content_assist.category_term)">
+        <tt:attribute name="saat:categoryTerm" value-ref="content_assist.category_term"/>
+      </tt:cond>
+
+      <tt:cond check="not-initial(content_assist.secondary_category_term)">
+        <tt:attribute name="saat:secondaryCategoryTerm" value-ref="content_assist.secondary_category_term"/>
+      </tt:cond>
+
+      <tt:cond check="not-initial(content_assist.category_scheme)">
+        <tt:attribute name="saat:categoryScheme" value-ref="content_assist.category_scheme"/>
+      </tt:cond>
+
+      <tt:cond check="not-initial(content_assist.entry_img_key)">
+        <tt:attribute name="saat:entryImgKey" value-ref="content_assist.entry_img_key"/>
+      </tt:cond>
+    </saat:contentAssist>
+  </tt:template>
+
+</tt:transform>
