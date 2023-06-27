@@ -71,7 +71,7 @@ CLASS zcl_sat_object_query_parser DEFINITION
     "!
     METHODS add_option_value
       IMPORTING
-        is_option  TYPE zif_sat_object_search_config=>ty_s_option_setting
+        is_option  TYPE zif_sat_ty_object_search=>ty_s_option_setting
         iv_value   TYPE string
       CHANGING
         ct_options TYPE ty_t_search_option
@@ -345,8 +345,8 @@ CLASS zcl_sat_object_query_parser IMPLEMENTATION.
         CONTINUE.
       ENDIF.
 
-      lt_package_range = VALUE #( FOR range IN <ls_option>-value_range WHERE
-                                  ( option = zif_sat_c_options=>contains_pattern )
+      lt_package_range = VALUE #( FOR range IN <ls_option>-value_range
+                                  WHERE ( option = zif_sat_c_options=>contains_pattern )
                                   ( range ) ).
 
       LOOP AT <ls_option>-value_range ASSIGNING FIELD-SYMBOL(<ls_value_range>) WHERE option <> zif_sat_c_options=>contains_pattern.
