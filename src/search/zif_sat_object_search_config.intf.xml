@@ -30,6 +30,11 @@
      <DESCRIPT>Retrieves configuration for search option</DESCRIPT>
     </SEOCOMPOTX>
     <SEOCOMPOTX>
+     <CMPNAME>GET_SEARCH_CONFIG</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Retrieves configuration of search type</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
      <CLSNAME>ZIF_SAT_OBJECT_SEARCH_CONFIG</CLSNAME>
      <CMPNAME>GET_TYPE</CMPNAME>
      <LANGU>E</LANGU>
@@ -48,13 +53,11 @@
      <DESCRIPT>Maps search option to another</DESCRIPT>
     </SEOCOMPOTX>
     <SEOCOMPOTX>
-     <CLSNAME>ZIF_SAT_OBJECT_SEARCH_CONFIG</CLSNAME>
      <CMPNAME>TY_S_OPTION_SETTING</CMPNAME>
      <LANGU>E</LANGU>
      <DESCRIPT>Setting for search option</DESCRIPT>
     </SEOCOMPOTX>
     <SEOCOMPOTX>
-     <CLSNAME>ZIF_SAT_OBJECT_SEARCH_CONFIG</CLSNAME>
      <CMPNAME>TY_T_OPTION_SETTING</CMPNAME>
      <LANGU>E</LANGU>
      <DESCRIPT>List of option configurations</DESCRIPT>

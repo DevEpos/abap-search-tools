@@ -18,6 +18,11 @@
      <DESCRIPT>Type for the object search</DESCRIPT>
     </SEOCOMPOTX>
     <SEOCOMPOTX>
+     <CMPNAME>TY_S_OPTION_SETTING</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Setting for search option</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
      <CLSNAME>ZIF_SAT_TY_OBJECT_SEARCH</CLSNAME>
      <CMPNAME>TY_S_SEARCH_ENGINE_PARAMS</CMPNAME>
      <LANGU>E</LANGU>
@@ -34,6 +39,11 @@
      <CMPNAME>TY_S_VALUE_RANGE</CMPNAME>
      <LANGU>E</LANGU>
      <DESCRIPT>Value range for search option value entry</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>TY_T_OPTION_SETTING</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>List of option configurations</DESCRIPT>
     </SEOCOMPOTX>
     <SEOCOMPOTX>
      <CLSNAME>ZIF_SAT_TY_OBJECT_SEARCH</CLSNAME>
