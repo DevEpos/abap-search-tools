@@ -76,6 +76,57 @@ INTERFACE zif_sat_ty_object_search
       use_and_cond_for_options TYPE abap_bool,
       with_api_state           TYPE abap_bool,
       get_all                  TYPE abap_bool,
-    END OF ty_s_search_engine_params.
+    END OF ty_s_search_engine_params,
+
+    ty_t_options TYPE RANGE OF string,
+
+    BEGIN OF ty_s_option_content_assist,
+      assist_type             TYPE string,
+      adt_object_type         TYPE string,
+      category_term           TYPE string,
+      secondary_category_term TYPE string,
+      category_scheme         TYPE string,
+      entry_img_key           TYPE string,
+    END OF ty_s_option_content_assist,
+
+    "! <p class="shorttext synchronized">Setting for search option</p>
+    BEGIN OF ty_s_option_setting,
+      option           TYPE string,
+      data_type        TYPE string,
+      allowed_length   TYPE i,
+      no_uppercase     TYPE abap_bool,
+      single           TYPE abap_bool,
+      key_value        TYPE abap_bool,
+      no_negation      TYPE abap_bool,
+      long_description TYPE string,
+      img_key          TYPE string,
+      content_assist   TYPE ty_s_option_content_assist,
+    END OF ty_s_option_setting,
+
+    "! <p class="shorttext synchronized">List of option configurations</p>
+    ty_t_option_setting TYPE STANDARD TABLE OF ty_s_option_setting WITH KEY option,
+
+    "! Input field for a search type
+    BEGIN OF ty_s_input_field,
+      name    TYPE string,
+      label   TYPE string,
+      filters TYPE ty_t_option_setting,
+    END OF ty_s_input_field,
+
+    ty_t_input_field TYPE STANDARD TABLE OF ty_s_input_field WITH KEY name,
+
+    "! Settings for a given search types
+    BEGIN OF ty_s_search_type,
+      name   TYPE string,
+      label  TYPE string,
+      inputs TYPE ty_t_input_field,
+    END OF ty_s_search_type,
+
+    ty_t_search_type TYPE STANDARD TABLE OF ty_s_search_type WITH KEY name,
+
+    "! Configuration for all available search types
+    BEGIN OF ty_s_search_config,
+      search_types TYPE ty_t_search_type,
+    END OF ty_s_search_config.
 
 ENDINTERFACE.
