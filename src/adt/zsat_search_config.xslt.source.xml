@@ -57,11 +57,11 @@
 
   <tt:template name="filter">
     <tt:context>
-      <tt:root name="filter" type="cl:ty_s_option_setting"/>
+      <tt:root name="filter" type="cl:ty_s_query_filter"/>
     </tt:context>
 
     <saat:filter tt:extensible="deep">
-      <tt:attribute name="saat:name" value-ref="filter.option"/>
+      <tt:attribute name="saat:name" value-ref="filter.name"/>
       <tt:attribute name="saat:dataType" value-ref="filter.data_type"/>
       <tt:attribute name="saat:maxLength" value-ref="filter.allowed_length"/>
       <tt:cond check="initial(filter.single)">
@@ -78,6 +78,15 @@
       </tt:cond>
       <tt:cond check="not-initial(filter.img_key)">
         <tt:attribute name="saat:imageKey" value-ref="filter.img_key" />
+      </tt:cond>
+      <tt:cond check="not-initial(filter.internal)">
+        <tt:attribute name="saat:internal" option="format(boolean)" value-ref="filter.internal" />
+      </tt:cond>
+      <tt:cond check="not-initial(filter.patterns)">
+        <tt:attribute name="saat:patterns" option="format(boolean)" value-ref="filter.patterns" />
+      </tt:cond>
+      <tt:cond check="not-initial(filter.caching)">
+        <tt:attribute name="saat:caching" option="format(boolean)" value-ref="filter.caching" />
       </tt:cond>
 
       <tt:cond check="not-initial(filter.content_assist)">
