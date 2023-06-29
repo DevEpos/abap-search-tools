@@ -22,6 +22,44 @@ CLASS zcl_sat_base_search_provider DEFINITION
 
     CONSTANTS c_cr_lf TYPE string VALUE cl_abap_char_utilities=>cr_lf ##NO_TEXT.
 
+    CONSTANTS:
+      BEGIN OF c_result_fields,
+        object_name          TYPE string VALUE 'OBJECT_NAME',
+        raw_object_name      TYPE string VALUE 'RAW_OBJECT_NAME',
+        alt_object_name      TYPE string VALUE 'ALT_OBJECT_NAME',
+        entity_type          TYPE string VALUE 'ENTITY_TYPE',
+        sub_object_name      TYPE string VALUE 'SUB_OBJECT_NAME',
+        sub_object_type      TYPE string VALUE 'SUB_OBJECT_TYPE',
+        tadir_type           TYPE string VALUE 'TADIR_TYPE',
+        description          TYPE string VALUE 'DESCRIPTION',
+        devclass             TYPE string VALUE 'DEVCLASS',
+        api_state            TYPE string VALUE 'API_STATE',
+        custom_field_short1  TYPE string VALUE 'CUSTOM_FIELD_SHORT1',
+        custom_field_short2  TYPE string VALUE 'CUSTOM_FIELD_SHORT2',
+        custom_field_short3  TYPE string VALUE 'CUSTOM_FIELD_SHORT3',
+        custom_field_short4  TYPE string VALUE 'CUSTOM_FIELD_SHORT4',
+        custom_field_short5  TYPE string VALUE 'CUSTOM_FIELD_SHORT5',
+        custom_field_short6  TYPE string VALUE 'CUSTOM_FIELD_SHORT6',
+        custom_field_short7  TYPE string VALUE 'CUSTOM_FIELD_SHORT7',
+        custom_field_short8  TYPE string VALUE 'CUSTOM_FIELD_SHORT8',
+        custom_field_short9  TYPE string VALUE 'CUSTOM_FIELD_SHORT9',
+        custom_field_short10 TYPE string VALUE 'CUSTOM_FIELD_SHORT10',
+        custom_field_medium1 TYPE string VALUE 'CUSTOM_FIELD_MEDIUM1',
+        custom_field_medium2 TYPE string VALUE 'CUSTOM_FIELD_MEDIUM2',
+        custom_field_medium3 TYPE string VALUE 'CUSTOM_FIELD_MEDIUM3',
+        custom_field_medium4 TYPE string VALUE 'CUSTOM_FIELD_MEDIUM4',
+        custom_field_medium5 TYPE string VALUE 'CUSTOM_FIELD_MEDIUM5',
+        custom_field_long1   TYPE string VALUE 'CUSTOM_FIELD_LONG1',
+        custom_field_long2   TYPE string VALUE 'CUSTOM_FIELD_LONG2',
+        custom_field_long3   TYPE string VALUE 'CUSTOM_FIELD_LONG3',
+        custom_field_long4   TYPE string VALUE 'CUSTOM_FIELD_LONG4',
+        custom_field_long5   TYPE string VALUE 'CUSTOM_FIELD_LONG5',
+        created_by           TYPE string VALUE 'CREATED_BY',
+        created_date         TYPE string VALUE 'CREATED_DATE',
+        changed_by           TYPE string VALUE 'CHANGED_BY',
+        changed_date         TYPE string VALUE 'CHANGED_DATE',
+      END OF c_result_fields.
+
     DATA mo_search_query             TYPE REF TO zif_sat_object_search_query.
     DATA ms_search_engine_params     TYPE zif_sat_ty_object_search=>ty_s_search_engine_params.
     DATA mt_result                   TYPE zif_sat_ty_object_search=>ty_t_search_result.
@@ -530,7 +568,7 @@ CLASS zcl_sat_base_search_provider IMPLEMENTATION.
 
     lt_texts = VALUE #( FOR entity IN mt_result
                         WHERE
-                        ( tadir_type IS NOT INITIAL AND object_name IS NOT INITIAL )
+                              ( tadir_type IS NOT INITIAL AND object_name IS NOT INITIAL )
                         ( object = entity-tadir_type obj_name = entity-object_name ) ).
     CALL FUNCTION 'RS_SHORTTEXT_GET'
       EXPORTING clear_buffer = abap_true
@@ -603,12 +641,11 @@ CLASS zcl_sat_base_search_provider IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD split_including_excluding.
-    et_excluding = VALUE #( FOR excluding IN it_values WHERE
-                            ( sign = zif_sat_c_options=>excluding OR sign2 = zif_sat_c_options=>excluding )
+    et_excluding = VALUE #( FOR excluding IN it_values
+                            WHERE ( sign = zif_sat_c_options=>excluding OR sign2 = zif_sat_c_options=>excluding )
                             ( excluding ) ).
-    et_including = VALUE #(
-        FOR including IN it_values WHERE
-        ( sign = zif_sat_c_options=>including AND ( sign2 = zif_sat_c_options=>including OR sign2 = space ) )
-        ( including ) ).
+    et_including = VALUE #( FOR including IN it_values
+                            WHERE ( sign = zif_sat_c_options=>including AND ( sign2 = zif_sat_c_options=>including OR sign2 = space ) )
+                            ( including ) ).
   ENDMETHOD.
 ENDCLASS.

@@ -13,11 +13,6 @@
    </VSEOCLASS>
    <DESCRIPTIONS>
     <SEOCOMPOTX>
-     <CMPNAME>CONVERT_TO_ADT_RESULT</CMPNAME>
-     <LANGU>E</LANGU>
-     <DESCRIPT>Convert entry to ADT result</DESCRIPT>
-    </SEOCOMPOTX>
-    <SEOCOMPOTX>
      <CMPNAME>CREATE_RESPONSE</CMPNAME>
      <LANGU>E</LANGU>
      <DESCRIPT>Create response</DESCRIPT>
@@ -41,11 +36,6 @@
      <CMPNAME>GET_SEARCH_PARAMETER</CMPNAME>
      <LANGU>E</LANGU>
      <DESCRIPT>Get search parameter value(s) from request</DESCRIPT>
-    </SEOCOMPOTX>
-    <SEOCOMPOTX>
-     <CMPNAME>POST_PROCESS_RESULT</CMPNAME>
-     <LANGU>E</LANGU>
-     <DESCRIPT>Post processing for search results</DESCRIPT>
     </SEOCOMPOTX>
    </DESCRIPTIONS>
   </asx:values>

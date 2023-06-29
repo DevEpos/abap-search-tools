@@ -71,7 +71,7 @@ CLASS zcl_sat_object_query_parser DEFINITION
     "!
     METHODS add_option_value
       IMPORTING
-        is_option  TYPE zif_sat_ty_object_search=>ty_s_option_setting
+        is_option  TYPE zif_sat_ty_object_search=>ty_s_query_filter
         iv_value   TYPE string
       CHANGING
         ct_options TYPE ty_t_search_option
@@ -209,9 +209,9 @@ CLASS zcl_sat_object_query_parser IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD add_option_value.
-    ASSIGN ct_options[ option = is_option-option ] TO FIELD-SYMBOL(<ls_option>).
+    ASSIGN ct_options[ option = is_option-name ] TO FIELD-SYMBOL(<ls_option>).
     IF sy-subrc <> 0.
-      INSERT VALUE #( option = is_option-option )
+      INSERT VALUE #( option = is_option-name )
       INTO TABLE ct_options ASSIGNING <ls_option>.
     ENDIF.
 
@@ -256,10 +256,10 @@ CLASS zcl_sat_object_query_parser IMPLEMENTATION.
     lv_value = replace( val = lv_value sub = '?' occ = 0  with = '+' ).
     lv_value2 = replace( val = lv_value2 sub = '?' occ = 0  with = '+' ).
 
-    mo_validator->validate_option( iv_option = is_option-option
+    mo_validator->validate_option( iv_option = is_option-name
                                    iv_value  = lv_value
                                    iv_value2 = lv_value2 ).
-    mo_converter->convert_value( EXPORTING iv_option = is_option-option
+    mo_converter->convert_value( EXPORTING iv_option = is_option-name
                                  CHANGING  cv_value  = lv_value
                                            cv_value2 = lv_value2 ).
     " Crop input if necessary
@@ -289,7 +289,7 @@ CLASS zcl_sat_object_query_parser IMPLEMENTATION.
     DATA lt_values     TYPE string_table.
 
     SPLIT iv_token AT c_option_separator INTO lv_option lv_value_list.
-    TRANSLATE lv_option TO UPPER CASE.
+    TRANSLATE lv_option TO LOWER CASE.
     mo_configuration->map_option( CHANGING cv_option = lv_option ).
 
     IF NOT mo_configuration->has_option( lv_option ).

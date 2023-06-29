@@ -15,7 +15,7 @@ CLASS zcl_sat_clif_meth_query_config DEFINITION
   PRIVATE SECTION.
     CONSTANTS c_option_target_method TYPE string VALUE 'meth'.
 
-    DATA mt_method_options        TYPE zif_sat_ty_object_search=>ty_t_option_setting.
+    DATA mt_method_options        TYPE zif_sat_ty_object_search=>ty_t_query_filter.
     DATA mv_option_prefix_pattern TYPE string.
 ENDCLASS.
 
@@ -24,13 +24,13 @@ CLASS zcl_sat_clif_meth_query_config IMPLEMENTATION.
   METHOD constructor.
     super->constructor( ).
 
-    DELETE mt_options WHERE    option = c_class_intf_search_option-attribute
-                            OR option = c_class_intf_search_option-method.
+    DELETE mt_options WHERE    name = c_class_intf_search_option-attribute
+                            OR name = c_class_intf_search_option-method.
 
     DATA(lr_object_filters) = REF #( ms_search_type-inputs[ name = c_object_filter_input_key ]-filters ).
 
-    DELETE lr_object_filters->* WHERE    option = c_class_intf_search_option-attribute
-                                      OR option = c_class_intf_search_option-method.
+    DELETE lr_object_filters->* WHERE    name = c_class_intf_search_option-attribute
+                                      OR name = c_class_intf_search_option-method.
 
     " TODO: add filters for method:
     " - param (any)
@@ -47,7 +47,7 @@ CLASS zcl_sat_clif_meth_query_config IMPLEMENTATION.
 
   METHOD zif_sat_object_search_config~get_option_config.
     IF iv_target = c_option_target_method.
-      rs_option = mt_method_options[ option = iv_option ].
+      rs_option = mt_method_options[ name = iv_option ].
     ELSE.
       rs_option = super->zif_sat_object_search_config~get_option_config( iv_option ).
     ENDIF.
