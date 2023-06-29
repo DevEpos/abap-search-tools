@@ -101,7 +101,7 @@ ENDCLASS.
 CLASS zcl_sat_os_cds_provider IMPLEMENTATION.
   METHOD constructor.
     super->constructor( ).
-    " .. Create sub queries for parameters where boolean operation AND is senseful
+    " Create sub queries for parameters where boolean operation AND is senseful
     mv_field_subquery = |SELECT DISTINCT entityid | && c_cr_lf &&
                         | FROM { zif_sat_c_select_source_id=>zsat_i_cdsviewfield } | && c_cr_lf &&
                         | WHERE |.
@@ -129,18 +129,24 @@ CLASS zcl_sat_os_cds_provider IMPLEMENTATION.
     set_base_select_table( iv_entity = zif_sat_c_select_source_id=>zsat_i_cdsentity
                            iv_alias  = c_base_alias ).
 
-    add_select_field( iv_fieldname = c_fields-entityid iv_fieldname_alias = 'object_name' iv_entity = c_base_alias ).
-    add_select_field( iv_fieldname = c_fields-source_type iv_fieldname_alias = 'custom_field_short1' iv_entity = c_base_alias ).
-    add_select_field( iv_fieldname = c_fields-ddlname  iv_fieldname_alias = 'alt_object_name' iv_entity = c_base_alias ).
-    add_select_field( iv_fieldname = c_fields-created_by iv_fieldname_alias = 'created_by' iv_entity = c_base_alias ).
-    add_select_field( iv_fieldname = c_fields-created_date iv_fieldname_alias = 'created_date' iv_entity = c_base_alias ).
-    add_select_field( iv_fieldname = c_fields-changed_by iv_fieldname_alias = 'changed_by' iv_entity = c_base_alias ).
-    add_select_field( iv_fieldname = c_fields-changed_date iv_fieldname_alias = 'changed_date' iv_entity = c_base_alias ).
-    add_select_field( iv_fieldname = c_fields-rawentity_id iv_fieldname_alias = 'raw_object_name' iv_entity = c_base_alias ).
+    add_select_field( iv_fieldname = c_fields-entityid iv_fieldname_alias = c_result_fields-object_name iv_entity = c_base_alias ).
+    add_select_field( iv_fieldname       = c_fields-source_type
+                      iv_fieldname_alias = c_result_fields-custom_field_short1
+                      iv_entity          = c_base_alias ).
+    add_select_field( iv_fieldname = c_fields-ddlname iv_fieldname_alias = c_result_fields-alt_object_name iv_entity = c_base_alias ).
+    add_select_field( iv_fieldname = c_fields-created_by iv_fieldname_alias = c_result_fields-created_by iv_entity = c_base_alias ).
+    add_select_field( iv_fieldname = c_fields-created_date iv_fieldname_alias = c_result_fields-created_date iv_entity = c_base_alias ).
+    add_select_field( iv_fieldname = c_fields-changed_by iv_fieldname_alias = c_result_fields-changed_by iv_entity = c_base_alias ).
+    add_select_field( iv_fieldname = c_fields-changed_date iv_fieldname_alias = c_result_fields-changed_date iv_entity = c_base_alias ).
+    add_select_field( iv_fieldname       = c_fields-rawentity_id
+                      iv_fieldname_alias = c_result_fields-raw_object_name
+                      iv_entity          = c_base_alias ).
     add_select_field( iv_fieldname = c_fields-description  iv_entity = c_base_alias ).
-    add_select_field( iv_fieldname = c_fields-development_package iv_fieldname_alias = 'devclass' iv_entity = c_base_alias ).
-    add_select_field( iv_fieldname = |'C'| iv_fieldname_alias = 'entity_type' ).
-    add_select_field( iv_fieldname = |'DDLS'| iv_fieldname_alias = 'tadir_type' ).
+    add_select_field( iv_fieldname       = c_fields-development_package
+                      iv_fieldname_alias = c_result_fields-devclass
+                      iv_entity          = c_base_alias ).
+    add_select_field( iv_fieldname = |'C'| iv_fieldname_alias = c_result_fields-entity_type ).
+    add_select_field( iv_fieldname = |'DDLS'| iv_fieldname_alias = c_result_fields-tadir_type ).
 
     add_order_by( iv_fieldname = c_fields-entityid iv_entity = c_base_alias  ).
 
@@ -152,41 +158,41 @@ CLASS zcl_sat_os_cds_provider IMPLEMENTATION.
     LOOP AT mo_search_query->mt_search_options ASSIGNING FIELD-SYMBOL(<ls_option>).
       CASE <ls_option>-option.
 
-        " .......... Find views which have a certain extension
+        " Find views which have a certain extension
         WHEN c_cds_search_params-extended_by.
           add_extensions_filter( it_values = <ls_option>-value_range ).
 
-        " .......... Find views via its description
+        " Find views via its description
         WHEN c_general_search_options-description.
           add_option_filter( iv_fieldname = mv_description_filter_field
                              it_values    = <ls_option>-value_range ).
 
-        " .......... Find views with a certain responsible person
+        " Find views with a certain responsible person
         WHEN c_general_search_options-user.
           add_option_filter( iv_fieldname = c_fields-created_by
                              it_values    = <ls_option>-value_range ).
 
-        " .......... Find views which exist in a certain development package
+        " Find views which exist in a certain development package
         WHEN c_general_search_options-package.
           add_option_filter( iv_fieldname = c_fields-development_package
                              it_values    = <ls_option>-value_range ).
 
-        " .......... Find views regarding the release status of the cds view
+        " Find views regarding the release status of the cds view
         WHEN c_general_search_options-release_state.
           add_api_option_filter( it_values          = <ls_option>-value_range
                                  iv_ref_field       = CONV #( c_fields-ddlname )
                                  iv_ref_table_alias = c_base_alias
                                  it_tadir_type      = VALUE #( ( 'DDLS' ) ) ).
 
-        " .......... Find views where the filter exists in the FROM part of the cds view
+        " Find views where the filter exists in the FROM part of the cds view
         WHEN c_cds_search_params-select_from.
           add_from_option_filter( <ls_option>-value_range ).
 
-        " .......... Find views which have a certain annotation
+        " Find views which have a certain annotation
         WHEN c_cds_search_params-annotation.
           add_anno_option_filter( it_values = <ls_option>-value_range ).
 
-        " .......... Find views that are parameterized
+        " Find views that are parameterized
         WHEN c_cds_search_params-params.
           CHECK <ls_option>-value_range IS NOT INITIAL.
           DATA(lf_views_with_parameters) = xsdbool( <ls_option>-value_range[ 1 ]-low = 'TRUE' ).
@@ -203,19 +209,19 @@ CLASS zcl_sat_os_cds_provider IMPLEMENTATION.
                                  iv_option    = zif_sat_c_options=>not_in_subquery ).
           ENDIF.
 
-        " .......... Find views that have a certain parameter
+        " Find views that have a certain parameter
         WHEN c_cds_search_params-param.
           add_param_option_filter( <ls_option>-value_range ).
 
-        " .......... Find views which have a certain field a component
+        " Find views which have a certain field a component
         WHEN c_cds_search_params-field.
           add_field_option_filter( <ls_option>-value_range ).
 
-        " .......... Find views where an entity is used as an association
+        " Find views where an entity is used as an association
         WHEN c_cds_search_params-association.
           add_association_option_filter( <ls_option>-value_range ).
 
-        " .......... Find views for a certain type e.g. function, hierarchy, view
+        " Find views for a certain type e.g. function, hierarchy, view
         WHEN c_general_search_options-type.
           add_option_filter( iv_fieldname = c_fields-source_type
                              it_values    = <ls_option>-value_range ).
@@ -234,7 +240,7 @@ CLASS zcl_sat_os_cds_provider IMPLEMENTATION.
   METHOD determine_grouping.
     CHECK ms_search_engine_params-use_and_cond_for_options = abap_true.
 
-    " .. Excluding would break the relational division logic and would lead to unreliable results
+    " Excluding would break the relational division logic and would lead to unreliable results
     " CHECK mf_excluding_found = abap_false.
     IF NOT (    mv_anno_filter_count  > 1
              OR mv_field_filter_count > 1
@@ -244,7 +250,7 @@ CLASS zcl_sat_os_cds_provider IMPLEMENTATION.
       RETURN.
     ENDIF.
 
-    " .. Create grouping clause
+    " Create grouping clause
     add_group_by_clause( |{ c_base_alias }~{ c_fields-entityid }| ).
     add_group_by_clause( |{ c_base_alias }~{ c_fields-rawentity_id }| ).
     add_group_by_clause( |{ c_base_alias }~{ c_fields-source_type }| ).
@@ -308,7 +314,7 @@ CLASS zcl_sat_os_cds_provider IMPLEMENTATION.
                                IMPORTING et_including = DATA(lt_including)
                                          et_excluding = DATA(lt_excluding) ).
 
-    " .. Create sub query for negated annotation key/value pairs
+    " Create sub query for negated annotation key/value pairs
     IF lt_excluding IS NOT INITIAL.
       LOOP AT lt_excluding ASSIGNING FIELD-SYMBOL(<ls_excluding>).
         DATA(lt_and_seltab) = VALUE zif_sat_ty_global=>ty_t_seltab_sql( ( sqlfieldname = c_fields-name
@@ -330,7 +336,7 @@ CLASS zcl_sat_os_cds_provider IMPLEMENTATION.
                                       iv_subquery  = mv_anno_subquery ).
     ENDIF.
 
-    " .. Add filters for including annotation key/value pairs
+    " Add filters for including annotation key/value pairs
     IF lt_including IS NOT INITIAL.
       add_join_table( iv_join_table = |{ zif_sat_c_select_source_id=>zsat_i_cdsannotation }|
                       iv_alias      = c_anno_alias
@@ -392,7 +398,7 @@ CLASS zcl_sat_os_cds_provider IMPLEMENTATION.
       add_option_filter( iv_fieldname = |{ c_used_in_association_alias }~strucobjn_t|
                          it_values    = it_values ).
       IF lf_only_local_assoc = abap_true.
-        " ...... Only the locally defined Associations are considered as a usage
+        " Only the locally defined Associations are considered as a usage
         add_option_filter(
             iv_fieldname = |{ c_used_in_association_alias }~strucobjn_s|
             it_values    = VALUE #( ( sign = zif_sat_c_options=>including option = zif_sat_c_options=>equals ) ) ).

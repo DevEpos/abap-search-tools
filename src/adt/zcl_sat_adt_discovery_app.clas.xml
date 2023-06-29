@@ -52,11 +52,6 @@
      <LANGU>E</LANGU>
      <DESCRIPT>Register value help providers</DESCRIPT>
     </SEOCOMPOTX>
-    <SEOCOMPOTX>
-     <CMPNAME>REG_OBJECT_SEARCH_TEMPLATE</CMPNAME>
-     <LANGU>E</LANGU>
-     <DESCRIPT>Registers template for Object search</DESCRIPT>
-    </SEOCOMPOTX>
    </DESCRIPTIONS>
   </asx:values>
  </asx:abap>

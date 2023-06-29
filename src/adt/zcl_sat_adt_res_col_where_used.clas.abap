@@ -120,7 +120,7 @@ CLASS zcl_sat_adt_res_col_where_used IMPLEMENTATION.
     SORT lt_where_used BY entityid fieldname.
 
     ms_field_info-name = mv_object_name.
-    ms_field_info-type = zif_sat_c_adt_utils=>c_adt_types-data_definition.
+    ms_field_info-type = zif_sat_c_object_types=>data_definition.
     DATA(lr_fields) = NEW zsat_adt_element_info_t( ).
     ms_field_info-children = lr_fields.
 
@@ -128,7 +128,7 @@ CLASS zcl_sat_adt_res_col_where_used IMPLEMENTATION.
       APPEND INITIAL LINE TO lr_fields->* ASSIGNING FIELD-SYMBOL(<ls_field>).
       <ls_field>-name = <ls_where_used>-ddlname.
       <ls_field>-raw_name = <ls_where_used>-entityid.
-      <ls_field>-type = zif_sat_c_adt_utils=>c_adt_types-data_definition.
+      <ls_field>-type = zif_sat_c_object_types=>data_definition.
       <ls_field>-properties = VALUE #(
         ( key = c_field_name  value = <ls_where_used>-fieldname )
         ( key = c_source_type  value = <ls_where_used>-sourcetype )
@@ -160,7 +160,7 @@ CLASS zcl_sat_adt_res_col_where_used IMPLEMENTATION.
 
     IF ms_field_info-children IS NOT BOUND.
       ms_field_info-name = mv_object_name.
-      ms_field_info-type = zif_sat_c_adt_utils=>c_adt_types-data_definition.
+      ms_field_info-type = zif_sat_c_object_types=>data_definition.
       lr_fields = NEW #( ).
       ms_field_info-children = lr_fields.
     ELSE.
@@ -171,7 +171,7 @@ CLASS zcl_sat_adt_res_col_where_used IMPLEMENTATION.
       APPEND INITIAL LINE TO lr_fields->* ASSIGNING FIELD-SYMBOL(<ls_field>).
       <ls_field>-name = <ls_where_used>-viewname.
       <ls_field>-raw_name = <ls_where_used>-viewname.
-      <ls_field>-type = zif_sat_c_adt_utils=>c_adt_types-view_definition.
+      <ls_field>-type = zif_sat_c_object_types=>view_definition.
       <ls_field>-properties = VALUE #(
         ( key = c_field_name  value = <ls_where_used>-viewfield )
       ).
