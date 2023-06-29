@@ -4,12 +4,19 @@ INTERFACE zif_sat_c_object_search
 
   CONSTANTS:
     BEGIN OF c_search_type,
-      cds_view        TYPE zif_sat_ty_object_search=>ty_search_type VALUE 'CDS',
-      db_tab_view     TYPE zif_sat_ty_object_search=>ty_search_type VALUE 'DBTABVIEW',
-      class_interface TYPE zif_sat_ty_object_search=>ty_search_type VALUE 'CLASSINTF',
-      method          TYPE zif_sat_ty_object_search=>ty_search_type VALUE 'METHOD',
-      field           TYPE zif_sat_ty_object_search=>ty_search_type VALUE 'FIELD',
+      cds_view        TYPE zif_sat_ty_object_search=>ty_search_type VALUE 'cds',
+      db_tab_view     TYPE zif_sat_ty_object_search=>ty_search_type VALUE 'dbtabview',
+      class_interface TYPE zif_sat_ty_object_search=>ty_search_type VALUE 'classintf',
+      method          TYPE zif_sat_ty_object_search=>ty_search_type VALUE 'method',
+      field           TYPE zif_sat_ty_object_search=>ty_search_type VALUE 'field',
     END OF c_search_type.
+
+  CONSTANTS:
+    BEGIN OF c_filter_data_type,
+      default TYPE string VALUE '',
+      date    TYPE string VALUE 'DATE',
+      boolean TYPE string VALUE 'BOOLEAN',
+    END OF c_filter_data_type.
 
   CONSTANTS:
     BEGIN OF c_filter_content_assist_type,
@@ -39,13 +46,13 @@ INTERFACE zif_sat_c_object_search
   CONSTANTS:
     "! <p class="shorttext synchronized" lang="en">Search options for class/interface object search</p>
     BEGIN OF c_class_intf_search_option,
-      attribute  TYPE string VALUE 'attribute',
-      method     TYPE string VALUE 'method',
-      super_type TYPE string VALUE 'superType',
-      interface  TYPE string VALUE 'interface',
+      attribute  TYPE string VALUE 'attr',
+      method     TYPE string VALUE 'meth',
+      super_type TYPE string VALUE 'super',
+      interface  TYPE string VALUE 'intf',
       "! Category of the class/interface (see data element SEOCATEGRY)
       "! --> check against current NW stack to get valid options
-      category   TYPE string VALUE 'category',
+      category   TYPE string VALUE 'cat',
       friend     TYPE string VALUE 'friend',
       "! Checks for the following criteria
       "! <ul>
@@ -106,15 +113,14 @@ INTERFACE zif_sat_c_object_search
   CONSTANTS:
     "! <p class="shorttext synchronized" lang="en">General search options</p>
     BEGIN OF c_general_search_params,
-      query                  TYPE string VALUE 'query',
       object_name            TYPE string VALUE 'objectName',
       object_type            TYPE string VALUE 'objectType',
-      max_rows               TYPE string VALUE 'maxRows',
-      user                   TYPE string VALUE 'userName',
-      release_state          TYPE string VALUE 'releaseState',
-      description            TYPE string VALUE 'description',
+      max_rows               TYPE string VALUE 'maxrows',
+      user                   TYPE string VALUE 'owner',
+      release_state          TYPE string VALUE 'api',
+      description            TYPE string VALUE 'desc',
       type                   TYPE string VALUE 'type',
-      package                TYPE string VALUE 'packageName',
+      package                TYPE string VALUE 'package',
       use_and_for_filters    TYPE string VALUE 'useAndForFilters',
       read_api_state         TYPE string VALUE 'withApiState',
       get_all_results        TYPE string VALUE 'getAllResults',
@@ -124,13 +130,13 @@ INTERFACE zif_sat_c_object_search
   CONSTANTS:
     "! <p class="shorttext synchronized" lang="en">Search options for CDS Search</p>
     BEGIN OF c_cds_search_params,
-      field             TYPE string VALUE 'fieldName',
-      select_from       TYPE string VALUE 'selectSourceIn',
-      association       TYPE string VALUE 'associatedIn',
-      annotation        TYPE string VALUE 'annotation',
+      field             TYPE string VALUE 'field',
+      select_from       TYPE string VALUE 'from',
+      association       TYPE string VALUE 'assoc',
+      annotation        TYPE string VALUE 'anno',
       param             TYPE string VALUE 'param',
-      params            TYPE string VALUE 'hasParams',
-      extended_by       TYPE string VALUE 'extendedBy',
+      params            TYPE string VALUE 'params',
+      extended_by       TYPE string VALUE 'extby',
     END OF c_cds_search_params.
 
   CONSTANTS:
@@ -143,8 +149,8 @@ INTERFACE zif_sat_c_object_search
   CONSTANTS:
     "! <p class="shorttext synchronized" lang="en">Search options DB search</p>
     BEGIN OF c_dbtab_search_params,
-      field          TYPE string VALUE 'fieldName',
-      delivery_class TYPE string VALUE 'deliveryClass',
+      field          TYPE string VALUE 'field',
+      delivery_class TYPE string VALUE 'dclass',
     END OF c_dbtab_search_params.
 
   CONSTANTS:
@@ -166,4 +172,27 @@ INTERFACE zif_sat_c_object_search
       table           TYPE string VALUE 'TABLE',
       extend          TYPE string VALUE 'EXTEND',
     END OF c_type_option_value.
+
+  CONSTANTS:
+    "! Constants for value help providers for search parameters in
+    "! search input fields
+    BEGIN OF c_content_assist,
+      category_scheme TYPE string VALUE 'http://www.devepos.com/adt/saat/v2/objectsearch',
+      BEGIN OF terms,
+        cds_field         TYPE string VALUE 'cdsfield',
+        table_field       TYPE string VALUE 'tablefield',
+        annotation        TYPE string VALUE 'annotation',
+        annotatio_value   TYPE string VALUE 'annotationvalue',
+        db_entity         TYPE string VALUE 'dbentity',
+        release_state     TYPE string VALUE 'releasestate',
+        cds_type          TYPE string VALUE 'cdstype',
+        cds_extension     TYPE string VALUE 'cdsextension',
+        table_type        TYPE string VALUE 'tabletype',
+        abap_language     TYPE string VALUE 'abaplanguage',
+        class_category    TYPE string VALUE 'classcategory',
+        class_flag        TYPE string VALUE 'classflag',
+        class_type        TYPE string VALUE 'classtype',
+        table_deliv_class TYPE string VALUE 'tabledeliveryclass',
+      END OF terms,
+    END OF c_content_assist.
 ENDINTERFACE.

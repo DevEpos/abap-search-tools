@@ -7,8 +7,7 @@ CLASS zcl_sat_dbtabview_query_config DEFINITION
   PUBLIC SECTION.
     METHODS constructor.
 
-    METHODS zif_sat_object_search_config~get_type   REDEFINITION.
-    METHODS zif_sat_object_search_config~map_option REDEFINITION.
+    METHODS zif_sat_object_search_config~get_type REDEFINITION.
 
   PROTECTED SECTION.
     ALIASES c_dbtab_options FOR zif_sat_c_object_search~c_dbtab_search_params.
@@ -20,29 +19,42 @@ ENDCLASS.
 CLASS zcl_sat_dbtabview_query_config IMPLEMENTATION.
   METHOD constructor.
     super->constructor( ).
-    mt_options = VALUE #(
-      ( option = c_general_options-package allowed_length = 30 )
-      ( option = c_general_options-user allowed_length = 12 )
-      ( option = c_dbtab_options-field  allowed_length = 30 )
-      ( option = c_general_options-type )
-      ( option = c_dbtab_options-delivery_class allowed_length = 1 )
-      ( option = c_general_options-description allowed_length = 40 no_uppercase = abap_true )
-      ( option = c_general_options-max_rows single = abap_true no_negation = abap_true )
-    ).
+    DATA(lt_object_filters) = VALUE zif_sat_ty_object_search=>ty_t_query_filter(
+        ( get_package_filt_conf( ) )
+        ( get_user_filt_conf( ) )
+        ( get_description_filt_conf( ) )
+        ( get_max_rows_filt_conf( ) )
+        ( name           = c_dbtab_options-field
+          allowed_length = 30
+          content_assist = VALUE #( assist_type     = zif_sat_c_object_search=>c_filter_content_assist_type-named_item
+                                    category_scheme = zif_sat_c_object_search=>c_content_assist-category_scheme
+                                    category_term   = zif_sat_c_object_search=>c_content_assist-terms-table_field ) )
+        ( name           = c_general_options-type
+          caching        = abap_true
+          content_assist = VALUE #( assist_type     = zif_sat_c_object_search=>c_filter_content_assist_type-named_item
+                                    category_scheme = zif_sat_c_object_search=>c_content_assist-category_scheme
+                                    category_term   = zif_sat_c_object_search=>c_content_assist-terms-table_type ) )
+        ( name           = c_dbtab_options-delivery_class
+          allowed_length = 1
+          caching        = abap_true
+          content_assist = VALUE #(
+              assist_type     = zif_sat_c_object_search=>c_filter_content_assist_type-named_item
+              category_scheme = zif_sat_c_object_search=>c_content_assist-category_scheme
+              category_term   = zif_sat_c_object_search=>c_content_assist-terms-table_deliv_class ) ) ).
+
+    ms_search_type = VALUE zif_sat_ty_object_search=>ty_s_search_type(
+                               label  = 'Database Table/View'
+                               name   = zif_sat_c_object_search=>c_search_type-db_tab_view
+                               inputs = VALUE #( ( name    = c_object_name_input_key
+                                                   label   = c_object_name_input_label )
+                                                 ( name    = c_object_filter_input_key
+                                                   label   = c_object_filter_input_label
+                                                   filters = lt_object_filters ) ) ).
+
+    mt_options = lt_object_filters.
   ENDMETHOD.
 
   METHOD zif_sat_object_search_config~get_type.
     rv_type = zif_sat_c_object_search=>c_search_type-db_tab_view.
-  ENDMETHOD.
-
-  METHOD zif_sat_object_search_config~map_option.
-    cv_option = SWITCH #( cv_option
-                          WHEN c_search_option-by_package     THEN c_general_options-package
-                          WHEN c_search_option-by_owner       THEN c_general_options-user
-                          WHEN c_search_option-by_field       THEN c_dbtab_options-field
-                          WHEN c_search_option-by_type        THEN c_general_options-type
-                          WHEN c_search_option-by_description THEN c_general_options-description
-                          WHEN c_search_option-max_rows       THEN c_general_options-max_rows
-                          ELSE                                     cv_option ).
   ENDMETHOD.
 ENDCLASS.

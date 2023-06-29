@@ -18,7 +18,7 @@
      <DESCRIPT>Type for the object search</DESCRIPT>
     </SEOCOMPOTX>
     <SEOCOMPOTX>
-     <CMPNAME>TY_S_OPTION_SETTING</CMPNAME>
+     <CMPNAME>TY_S_QUERY_FILTER</CMPNAME>
      <LANGU>E</LANGU>
      <DESCRIPT>Setting for search option</DESCRIPT>
     </SEOCOMPOTX>
@@ -41,7 +41,7 @@
      <DESCRIPT>Value range for search option value entry</DESCRIPT>
     </SEOCOMPOTX>
     <SEOCOMPOTX>
-     <CMPNAME>TY_T_OPTION_SETTING</CMPNAME>
+     <CMPNAME>TY_T_QUERY_FILTER</CMPNAME>
      <LANGU>E</LANGU>
      <DESCRIPT>List of option configurations</DESCRIPT>
     </SEOCOMPOTX>

@@ -12,7 +12,6 @@ CLASS zcl_sat_clsintf_query_config DEFINITION
     METHODS zif_sat_object_search_config~get_search_config REDEFINITION.
 
   PROTECTED SECTION.
-    DATA ms_search_type TYPE zif_sat_ty_object_search=>ty_s_search_type.
 
   PRIVATE SECTION.
 ENDCLASS.
@@ -22,29 +21,29 @@ CLASS zcl_sat_clsintf_query_config IMPLEMENTATION.
   METHOD constructor.
     super->constructor( ).
 
-    DATA(lt_object_filters) = VALUE zif_sat_ty_object_search=>ty_t_option_setting(
-        ( option         = c_general_options-user
-          allowed_length = 12
-          content_assist = VALUE #( assist_type = zif_sat_c_object_search=>c_filter_content_assist_type-user ) )
-        ( option         = c_general_options-package
-          allowed_length = 30
-          content_assist = VALUE #( assist_type     = zif_sat_c_object_search=>c_filter_content_assist_type-ris
-                                    adt_object_type = 'DEVC/K' ) )
-        ( option         = c_general_options-type
+    DATA(lt_object_filters) = VALUE zif_sat_ty_object_search=>ty_t_query_filter(
+        ( get_user_filt_conf( ) )
+        ( get_package_filt_conf( ) )
+        ( get_rel_state_filt_conf( ) )
+        ( get_description_filt_conf( ) )
+        ( get_max_rows_filt_conf( ) )
+        ( name           = c_general_options-type
+          caching        = abap_true
           content_assist = VALUE #( assist_type     = zif_sat_c_object_search=>c_filter_content_assist_type-named_item
-                                    category_scheme = c_vh_category_scheme
-                                    category_term   = 'classtype' ) )
-        ( option         = c_general_options-release_state
+                                    category_scheme = zif_sat_c_object_search=>c_content_assist-category_scheme
+                                    category_term   = zif_sat_c_object_search=>c_content_assist-terms-class_type ) )
+        ( name           = c_class_intf_search_option-flag
+          caching        = abap_true
           content_assist = VALUE #( assist_type     = zif_sat_c_object_search=>c_filter_content_assist_type-named_item
-                                    category_scheme = c_vh_category_scheme
-                                    category_term   = 'releasestate' ) )
-        ( option = c_general_options-description allowed_length = 40 )
-        ( option = c_general_options-max_rows single = abap_true no_negation = abap_true )
-        ( option         = c_class_intf_search_option-flag
+                                    category_scheme = zif_sat_c_object_search=>c_content_assist-category_scheme
+                                    category_term   = zif_sat_c_object_search=>c_content_assist-terms-class_flag ) )
+        ( name           = c_class_intf_search_option-category
+          caching        = abap_true
           content_assist = VALUE #( assist_type     = zif_sat_c_object_search=>c_filter_content_assist_type-named_item
-                                    category_scheme = c_vh_category_scheme
-                                    category_term   = 'classflag' ) )
-        ( option         = c_class_intf_search_option-category
+                                    category_scheme = zif_sat_c_object_search=>c_content_assist-category_scheme
+                                    category_term   = zif_sat_c_object_search=>c_content_assist-terms-class_category ) )
+        ( name           = c_class_intf_search_option-abap_lang
+          caching        = abap_true
           content_assist = VALUE #( assist_type     = zif_sat_c_object_search=>c_filter_content_assist_type-named_item
                                     category_scheme = c_vh_category_scheme
                                     category_term   = 'classcategory' ) )
@@ -55,7 +54,7 @@ CLASS zcl_sat_clsintf_query_config IMPLEMENTATION.
         ( option = c_class_intf_search_option-super_type allowed_length = 30 ) ).
 
     ms_search_type = VALUE #( label  = 'Class/Interface'
-                              name   = 'clif'
+                              name   = zif_sat_c_object_search=>c_search_type-class_interface
                               inputs = VALUE #( ( name    = c_object_name_input_key
                                                   label   = c_object_name_input_label )
                                                 ( name    = c_object_filter_input_key
@@ -67,9 +66,5 @@ CLASS zcl_sat_clsintf_query_config IMPLEMENTATION.
 
   METHOD zif_sat_object_search_config~get_type.
     rv_type = zif_sat_c_object_search=>c_search_type-class_interface.
-  ENDMETHOD.
-
-  METHOD zif_sat_object_search_config~get_search_config.
-    result = ms_search_type.
   ENDMETHOD.
 ENDCLASS.

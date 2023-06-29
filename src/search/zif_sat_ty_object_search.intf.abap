@@ -90,27 +90,30 @@ INTERFACE zif_sat_ty_object_search
     END OF ty_s_option_content_assist,
 
     "! <p class="shorttext synchronized">Setting for search option</p>
-    BEGIN OF ty_s_option_setting,
-      option           TYPE string,
+    BEGIN OF ty_s_query_filter,
+      name             TYPE string,
       data_type        TYPE string,
       allowed_length   TYPE i,
       no_uppercase     TYPE abap_bool,
       single           TYPE abap_bool,
+      patterns         TYPE abap_bool,
+      caching          TYPE abap_bool,
       key_value        TYPE abap_bool,
       no_negation      TYPE abap_bool,
       long_description TYPE string,
       img_key          TYPE string,
+      internal         TYPE abap_bool,
       content_assist   TYPE ty_s_option_content_assist,
-    END OF ty_s_option_setting,
+    END OF ty_s_query_filter,
 
     "! <p class="shorttext synchronized">List of option configurations</p>
-    ty_t_option_setting TYPE STANDARD TABLE OF ty_s_option_setting WITH KEY option,
+    ty_t_query_filter TYPE STANDARD TABLE OF ty_s_query_filter WITH KEY name,
 
     "! Input field for a search type
     BEGIN OF ty_s_input_field,
       name    TYPE string,
       label   TYPE string,
-      filters TYPE ty_t_option_setting,
+      filters TYPE ty_t_query_filter,
     END OF ty_s_input_field,
 
     ty_t_input_field TYPE STANDARD TABLE OF ty_s_input_field WITH KEY name,
