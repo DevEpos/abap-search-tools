@@ -61,7 +61,6 @@
      <DESCRIPT>Register value help providers</DESCRIPT>
     </SEOCOMPOTX>
     <SEOCOMPOTX>
-     <CLSNAME>ZCL_SAT_ADT_DISCOVERY_APP</CLSNAME>
      <CMPNAME>REG_OBJECT_SEARCH_TEMPLATE</CMPNAME>
      <LANGU>E</LANGU>
      <DESCRIPT>Registers template for Object search</DESCRIPT>

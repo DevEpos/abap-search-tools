@@ -107,7 +107,7 @@ CLASS zcl_sat_cds_field_hier_res IMPLEMENTATION.
     lo_root_field->view_name = ls_base_row-viewname.
     lo_root_field->view_raw_name = ls_base_row-entityname.
     lo_root_field->secondary_entity = ls_base_row-ddlname.
-    lo_root_field->adt_type = zif_sat_c_adt_utils=>c_adt_types-data_definition.
+    lo_root_field->adt_type = zif_sat_c_object_types=>data_definition.
     lo_root_field->uri = zcl_sat_adt_util=>create_adt_uri(
       iv_name2 = CONV #( ls_base_row-ddlname )
       iv_type  = zif_sat_c_entity_type=>cds_view

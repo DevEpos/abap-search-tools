@@ -13,11 +13,6 @@
    </VSEOCLASS>
    <DESCRIPTIONS>
     <SEOCOMPOTX>
-     <CMPNAME>CONVERT_TO_ADT_RESULT</CMPNAME>
-     <LANGU>E</LANGU>
-     <DESCRIPT>Convert entry to ADT result</DESCRIPT>
-    </SEOCOMPOTX>
-    <SEOCOMPOTX>
      <CLSNAME>ZCL_SAT_ADT_RES_OBJECT_SEARCH</CLSNAME>
      <CMPNAME>CREATE_RESPONSE</CMPNAME>
      <LANGU>E</LANGU>
@@ -53,25 +48,9 @@
      <DESCRIPT>Get search parameter value(s) from request</DESCRIPT>
     </SEOCOMPOTX>
     <SEOCOMPOTX>
-     <CLSNAME>ZCL_SAT_ADT_RES_OBJECT_SEARCH</CLSNAME>
      <CMPNAME>POST_PROCESS_RESULT</CMPNAME>
      <LANGU>E</LANGU>
      <DESCRIPT>Post processing for search results</DESCRIPT>
-    </SEOCOMPOTX>
-    <SEOCOMPOTX>
-     <CMPNAME>POST_PROCESS_RESULT_ENTRY</CMPNAME>
-     <LANGU>E</LANGU>
-     <DESCRIPT>Post processing for a search result entry</DESCRIPT>
-    </SEOCOMPOTX>
-    <SEOCOMPOTX>
-     <CMPNAME>READ_DDL_SOURCES</CMPNAME>
-     <LANGU>E</LANGU>
-     <DESCRIPT>Reads DDL Sources in for search result</DESCRIPT>
-    </SEOCOMPOTX>
-    <SEOCOMPOTX>
-     <CMPNAME>SET_DDL_POSITIONAL_URI</CMPNAME>
-     <LANGU>E</LANGU>
-     <DESCRIPT>Sets the positional URI for the given DDLS result</DESCRIPT>
     </SEOCOMPOTX>
    </DESCRIPTIONS>
   </asx:values>

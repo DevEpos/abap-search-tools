@@ -107,14 +107,26 @@ CLASS zcl_sat_os_classintf_provider IMPLEMENTATION.
                                   it_field_names  = VALUE #( ( |{ c_alias_names-base }~{ c_fields-classintf }| ) ) ).
     ENDIF.
 
-    add_select_field( iv_fieldname = c_fields-classintf  iv_fieldname_alias = 'object_name' iv_entity = c_alias_names-base ).
-    add_select_field( iv_fieldname = c_fields-classintf  iv_fieldname_alias = 'raw_object_name' iv_entity = c_alias_names-base ).
-    add_select_field( iv_fieldname = c_fields-author     iv_fieldname_alias = 'created_by' iv_entity = c_alias_names-base ).
-    add_select_field( iv_fieldname = c_fields-package    iv_fieldname_alias = 'devclass' iv_entity = c_alias_names-base ).
-    add_select_field( iv_fieldname = c_fields-tadir_type iv_fieldname_alias = 'tadir_type' iv_entity = c_alias_names-base ).
-    add_select_field( iv_fieldname = c_fields-created_on iv_fieldname_alias = 'created_date' iv_entity = c_alias_names-base ).
-    add_select_field( iv_fieldname = c_fields-changed_by iv_fieldname_alias = 'changed_by' iv_entity = c_alias_names-base ).
-    add_select_field( iv_fieldname = c_fields-changed_on iv_fieldname_alias = 'changed_date' iv_entity = c_alias_names-base ).
+    add_select_field( iv_fieldname       = c_fields-classintf
+                      iv_fieldname_alias = c_result_fields-object_name
+                      iv_entity          = c_alias_names-base ).
+    add_select_field( iv_fieldname       = c_fields-classintf
+                      iv_fieldname_alias = c_result_fields-raw_object_name
+                      iv_entity          = c_alias_names-base ).
+    add_select_field( iv_fieldname = c_fields-author iv_fieldname_alias = c_result_fields-created_by iv_entity = c_alias_names-base ).
+    add_select_field( iv_fieldname = c_fields-package iv_fieldname_alias = c_result_fields-devclass iv_entity = c_alias_names-base ).
+    add_select_field( iv_fieldname       = c_fields-tadir_type
+                      iv_fieldname_alias = c_result_fields-tadir_type
+                      iv_entity          = c_alias_names-base ).
+    add_select_field( iv_fieldname       = c_fields-created_on
+                      iv_fieldname_alias = c_result_fields-created_date
+                      iv_entity          = c_alias_names-base ).
+    add_select_field( iv_fieldname       = c_fields-changed_by
+                      iv_fieldname_alias = c_result_fields-changed_by
+                      iv_entity          = c_alias_names-base ).
+    add_select_field( iv_fieldname       = c_fields-changed_on
+                      iv_fieldname_alias = c_result_fields-changed_date
+                      iv_entity          = c_alias_names-base ).
 
     add_order_by( iv_fieldname = c_fields-classintf iv_entity = c_alias_names-base  ).
 
@@ -130,10 +142,10 @@ CLASS zcl_sat_os_classintf_provider IMPLEMENTATION.
                                                      ref_field       = c_fields-classintf
                                                      ref_table_alias = c_alias_names-base
                                                      type            = zif_sat_c_join_cond_type=>field  )
-                                                   ( field         = c_fields-language
-                                                     tabname_alias = c_alias_names-text
-                                                     value         = sy-langu
-                                                     type          = zif_sat_c_join_cond_type=>filter  ) ) ).
+                                                   ( field           = c_fields-language
+                                                     tabname_alias   = c_alias_names-text
+                                                     value           = sy-langu
+                                                     type            = zif_sat_c_join_cond_type=>filter  ) ) ).
           add_option_filter( iv_fieldname = |{ c_alias_names-text }~{ mv_description_filter_field }|
                              it_values    = <ls_option>-value_range ).
 

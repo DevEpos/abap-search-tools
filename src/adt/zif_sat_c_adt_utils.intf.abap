@@ -39,6 +39,7 @@ INTERFACE zif_sat_c_adt_utils
       "! Use to the following filter pattern: <key>:<value>
       filters     TYPE string VALUE 'filter',
     END OF c_ddic_repo_access_params.
+
   CONSTANTS:
     BEGIN OF c_db_fields_info_parameter,
       name               TYPE string VALUE 'name',
@@ -47,12 +48,4 @@ INTERFACE zif_sat_c_adt_utils
       search_db_views    TYPE string VALUE 'searchDbViewUsages',
       field              TYPE string VALUE 'field',
     END OF c_db_fields_info_parameter.
-
-  CONSTANTS:
-    BEGIN OF c_adt_types,
-      data_definition  TYPE string VALUE 'DDLS/DF',
-      package          TYPE string VALUE 'DEVC/K',
-      table_definition TYPE string VALUE 'TABL/DT',
-      view_definition  TYPE string VALUE 'VIEW/DV',
-    END OF c_adt_types.
 ENDINTERFACE.
