@@ -1,3 +1,4 @@
+"! <p class="shorttext synchronized">Constants for sources for sql select</p>
 INTERFACE zif_sat_c_select_source_id
   PUBLIC.
 
@@ -12,7 +13,7 @@ INTERFACE zif_sat_c_select_source_id
   CONSTANTS zsat_i_ddldependency          TYPE string VALUE 'ZSAT_I_DDLDEPENDENCY'.
   "! <p class="shorttext synchronized">Table for CDS Parameters</p>
   CONSTANTS dd10b                         TYPE string VALUE 'DD10B'.
-  " <p class="shorttext synchronized" lang="en">Table for CDS Association Header</p>
+  "! <p class="shorttext synchronized">Table for CDS Association Header</p>
   CONSTANTS dd08b                         TYPE string VALUE 'DD08B'.
   CONSTANTS zsat_i_associatedincds        TYPE string VALUE 'ZSAT_I_ASSOCIATEDINCDS'.
   CONSTANTS zsat_i_cdsfrompartentity      TYPE string VALUE 'ZSAT_I_CDSFROMPARTENTITY'.

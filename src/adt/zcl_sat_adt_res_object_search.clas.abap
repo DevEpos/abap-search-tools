@@ -27,8 +27,6 @@ CLASS zcl_sat_adt_res_object_search DEFINITION
     DATA mt_query_result           TYPE zif_sat_ty_object_search=>ty_t_search_result.
     DATA mf_with_package_hierarchy TYPE abap_bool.
     DATA mv_search_type            TYPE zif_sat_ty_object_search=>ty_search_type.
-    DATA mt_super_package_all      TYPE SORTED TABLE OF ty_s_package WITH UNIQUE KEY package.
-    DATA mt_ddls_source            TYPE HASHED TABLE OF ty_s_ddls_source WITH UNIQUE KEY ddlname.
     DATA mo_search_config          TYPE REF TO zif_sat_object_search_config.
 
     "! <p class="shorttext synchronized">Retrieve query parameters from request</p>
@@ -70,19 +68,7 @@ CLASS zcl_sat_adt_res_object_search DEFINITION
       RETURNING
         VALUE(rv_value) TYPE string.
 
-    "! <p class="shorttext synchronized">Post processing for search results</p>
-    METHODS post_process_result.
-
-    "! <p class="shorttext synchronized">Convert entry to ADT result</p>
-    METHODS convert_to_adt_result
-      IMPORTING
-        is_result_entry TYPE zif_sat_ty_object_search=>ty_s_search_result
-      CHANGING
-        cs_result       TYPE zif_sat_ty_adt_types=>ty_s_adt_obj_ref.
-
   PRIVATE SECTION.
-    DATA mo_devclass_util TYPE REF TO lcl_devclass_util.
-
     "! <p class="shorttext synchronized">Create response</p>
     METHODS create_response
       RETURNING
@@ -146,7 +132,7 @@ CLASS zcl_sat_adt_res_object_search IMPLEMENTATION.
 
     LOOP AT mo_search_config->get_options( ) ASSIGNING FIELD-SYMBOL(<ls_option>).
       get_search_parameter( EXPORTING io_request      = io_request
-                                      iv_param_name   = <ls_option>-option
+                                      iv_param_name   = <ls_option>-name
                                       if_single_value = <ls_option>-single
                             CHANGING  ct_option       = et_options ).
     ENDLOOP.
@@ -157,39 +143,10 @@ CLASS zcl_sat_adt_res_object_search IMPLEMENTATION.
       RETURN.
     ENDIF.
 
-    mo_devclass_util = NEW #( ).
-    mo_devclass_util->determine_package_hierarchy( mt_query_result ).
-    mo_devclass_util->add_packages_to_adt_result( CHANGING search_result = result ).
-
-    post_process_result( ).
-
-    LOOP AT mt_query_result ASSIGNING FIELD-SYMBOL(<ls_search_result>).
-      APPEND INITIAL LINE TO result-objects ASSIGNING FIELD-SYMBOL(<ls_object>).
-
-      convert_to_adt_result( EXPORTING is_result_entry = <ls_search_result>
-                             CHANGING  cs_result       = <ls_object> ).
-
-    ENDLOOP.
-  ENDMETHOD.
-
-  METHOD convert_to_adt_result.
-    DATA(ls_object_reference) = zcl_sat_adt_util=>create_adt_uri( iv_type       = is_result_entry-entity_type
-                                                                  iv_tadir_type = is_result_entry-tadir_type
-                                                                  iv_name       = is_result_entry-object_name
-                                                                  iv_name2      = is_result_entry-alt_object_name ).
-
-    cs_result = VALUE #( name        = is_result_entry-object_name
-                         alt_name    = is_result_entry-raw_object_name
-                         devclass    = is_result_entry-devclass
-                         type        = ls_object_reference-type
-                         uri         = ls_object_reference-uri
-                         parent_uri  = mo_devclass_util->get_package_uri( is_result_entry-devclass )
-                         description = is_result_entry-description
-                         owner       = is_result_entry-created_by
-                         created_on  = is_result_entry-created_date
-                         changed_by  = is_result_entry-changed_by
-                         changed_on  = is_result_entry-changed_date
-                         properties  = VALUE #( ( key = 'API_STATE' value = is_result_entry-api_state ) ) ).
+    DATA(lo_result_converter) = lcl_result_converter_factory=>create_result_converter(
+                                    iv_search_type  = mv_search_type
+                                    it_query_result = mt_query_result ).
+    result = lo_result_converter->convert( ).
   ENDMETHOD.
 
   METHOD get_request_param_value.
@@ -227,8 +184,5 @@ CLASS zcl_sat_adt_res_object_search IMPLEMENTATION.
                                value_range = VALUE #( FOR value IN lt_param_values ( low = value ) ) ) ).
       ENDIF.
     ENDIF.
-  ENDMETHOD.
-
-  METHOD post_process_result ##NEEDED.
   ENDMETHOD.
 ENDCLASS.
