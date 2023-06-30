@@ -20,7 +20,7 @@
       <tt:apply name="adtObjRefAttributes">
         <tt:with-root name="adt_obj_ref" ref="adt_obj_ref"/>
       </tt:apply>
-      <tt:cond check="not-initial(adt_obj_ref.properties)">
+      <tt:cond check="exist(adt_obj_ref.properties)">
         <tt:apply name="properties">
           <tt:with-root name="properties" ref="adt_obj_ref.properties"/>
         </tt:apply>

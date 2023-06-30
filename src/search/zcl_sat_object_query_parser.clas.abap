@@ -37,7 +37,7 @@ CLASS zcl_sat_object_query_parser DEFINITION
       IMPORTING
         iv_search_string      TYPE string
       RETURNING
-        VALUE(rt_search_term) TYPE zif_sat_ty_global=>ty_t_string_range.
+        VALUE(rt_search_term) TYPE zif_sat_ty_object_search=>ty_t_search_term.
 
     "! <p class="shorttext synchronized">Checks the given option and its values</p>
     METHODS parse_option
@@ -72,6 +72,7 @@ CLASS zcl_sat_object_query_parser DEFINITION
     METHODS add_option_value
       IMPORTING
         is_option  TYPE zif_sat_ty_object_search=>ty_s_query_filter
+        iv_target  TYPE string OPTIONAL
         iv_value   TYPE string
       CHANGING
         ct_options TYPE ty_t_search_option
@@ -82,6 +83,16 @@ CLASS zcl_sat_object_query_parser DEFINITION
     DATA mo_configuration TYPE REF TO zif_sat_object_search_config.
     DATA mo_validator     TYPE REF TO zif_sat_query_validator.
     DATA mo_converter     TYPE REF TO zif_sat_query_converter.
+
+    METHODS convert_term_to_selopt
+      IMPORTING
+        iv_term       TYPE string
+      RETURNING
+        VALUE(result) TYPE LINE OF zif_sat_ty_global=>ty_t_string_range.
+
+    METHODS convert_to_selopt_terms
+      CHANGING
+        ct_search_terms TYPE zif_sat_ty_object_search=>ty_t_search_term.
 ENDCLASS.
 
 
@@ -101,10 +112,6 @@ CLASS zcl_sat_object_query_parser IMPLEMENTATION.
       RAISE EXCEPTION TYPE zcx_sat_object_search
         EXPORTING textid = zcx_sat_object_search=>no_query_string.
     ENDIF.
-
-    " .. Get all possible options for the given search type
-    " TODO: variable is assigned but never used (ABAP cleaner)
-    DATA(lt_allowed_options) = mo_configuration->get_allowed_options( ).
 
     SPLIT iv_search_query AT space INTO TABLE lt_query_tokens.
 
@@ -143,73 +150,61 @@ CLASS zcl_sat_object_query_parser IMPLEMENTATION.
 
     enhance_options( CHANGING ct_options = lt_options ).
 
-    DATA(lt_search_terms) = get_search_terms( iv_search_terms ).
-    DATA(lt_sub_search_terms) = get_search_terms( iv_sub_obj_search_terms ).
+    DATA(lt_search_terms) = it_search_terms.
+    convert_to_selopt_terms( CHANGING ct_search_terms = lt_search_terms ).
 
-    IF     lt_search_terms     IS INITIAL
-       AND lt_sub_search_terms IS INITIAL
-       AND lt_options          IS INITIAL.
+    IF     lt_search_terms IS INITIAL
+       AND lt_options      IS INITIAL.
       RAISE EXCEPTION TYPE zcx_sat_object_search
         EXPORTING textid = zcx_sat_object_search=>empty_query.
     ENDIF.
 
-    ro_query = NEW zcl_sat_object_search_query( iv_type            = mo_configuration->get_type( )
-                                                it_search_term     = lt_search_terms
-                                                it_sub_search_term = lt_sub_search_terms
-                                                it_search_options  = lt_options ).
+    ro_query = NEW zcl_sat_object_search_query( iv_type           = mo_configuration->get_type( )
+                                                it_search_term    = lt_search_terms
+                                                it_search_options = lt_options ).
   ENDMETHOD.
 
   METHOD parse_option.
     DATA(lt_value_range) = is_option-value_range.
 
+    IF NOT mo_configuration->has_option( iv_option = is_option-option iv_target = is_option-target ).
+      RAISE EXCEPTION TYPE zcx_sat_object_search
+        EXPORTING textid = zcx_sat_object_search=>invalid_query_option
+                  msgv1  = |{ is_option-option }|.
+    ENDIF.
     DATA(ls_option_config) = mo_configuration->get_option_config( iv_option = is_option-option
                                                                   iv_target = is_option-target ).
 
     LOOP AT lt_value_range ASSIGNING FIELD-SYMBOL(<ls_value_range>).
       add_option_value( EXPORTING is_option  = ls_option_config
+                                  iv_target  = is_option-target
                                   iv_value   = <ls_value_range>-low
                         CHANGING  ct_options = ct_options ).
     ENDLOOP.
   ENDMETHOD.
 
   METHOD get_search_terms.
-    DATA lt_search_terms TYPE TABLE OF string.
+    DATA lt_word        TYPE TABLE OF string.
+    DATA ls_search_term TYPE zif_sat_ty_object_search=>ty_s_search_term.
 
     CHECK iv_search_string IS NOT INITIAL.
 
+    ls_search_term-target = zif_sat_c_object_search=>c_search_fields-object_name_input_key.
+
     DATA(lv_search_string) = iv_search_string.
     CONDENSE lv_search_string.
-    SPLIT lv_search_string AT space INTO TABLE lt_search_terms.
+    SPLIT lv_search_string AT space INTO TABLE lt_word.
 
-    LOOP AT lt_search_terms INTO DATA(lv_search_term).
-      lv_search_term = replace( val = lv_search_term sub = '?' occ = 0  with = '+' ).
-      DATA(lv_length) = strlen( lv_search_term ).
-      DATA(lv_last_char_offset) = lv_length - 1.
-
-      DATA(lv_option) = zif_sat_c_options=>contains_pattern.
-      DATA(lv_sign) = zif_sat_c_options=>including.
-
-      IF lv_search_term+lv_last_char_offset(1) = '<'.
-        lv_search_term = lv_search_term(lv_last_char_offset).
-        IF lv_search_term NA '+*'.
-          lv_option = zif_sat_c_options=>equals.
-        ENDIF.
-      ELSEIF lv_search_term+lv_last_char_offset(1) <> '*'.
-        lv_search_term = |{ lv_search_term }*|.
-      ENDIF.
-
-      " .... Check if string should be negated
-      IF lv_search_term(1) = c_negation_operator.
-        lv_sign = zif_sat_c_options=>excluding.
-        lv_search_term = lv_search_term+1.
-      ENDIF.
-
-      rt_search_term = VALUE #( BASE rt_search_term ( sign = lv_sign option = lv_option low = to_upper( lv_search_term ) ) ).
+    LOOP AT lt_word INTO DATA(lv_search_term).
+      ls_search_term-values = VALUE #( BASE ls_search_term-values
+                                       ( convert_term_to_selopt( lv_search_term ) ) ).
     ENDLOOP.
+
+    rt_search_term = VALUE #( ( ls_search_term ) ).
   ENDMETHOD.
 
   METHOD add_option_value.
-    ASSIGN ct_options[ option = is_option-name ] TO FIELD-SYMBOL(<ls_option>).
+    ASSIGN ct_options[ option = is_option-name target = iv_target ] TO FIELD-SYMBOL(<ls_option>).
     IF sy-subrc <> 0.
       INSERT VALUE #( option = is_option-name )
       INTO TABLE ct_options ASSIGNING <ls_option>.
@@ -371,6 +366,43 @@ CLASS zcl_sat_object_query_parser IMPLEMENTATION.
 
       <ls_option>-value_range = lt_package_range.
 
+    ENDLOOP.
+  ENDMETHOD.
+
+  METHOD convert_term_to_selopt.
+    DATA(lv_term) = iv_term.
+    lv_term = replace( val = lv_term sub = '?' occ = 0  with = '+' ).
+    DATA(lv_length) = strlen( lv_term ).
+    DATA(lv_last_char_offset) = lv_length - 1.
+
+    DATA(lv_option) = zif_sat_c_options=>contains_pattern.
+    DATA(lv_sign) = zif_sat_c_options=>including.
+
+    IF lv_term+lv_last_char_offset(1) = '<'.
+      lv_term = lv_term(lv_last_char_offset).
+      IF lv_term NA '+*'.
+        lv_option = zif_sat_c_options=>equals.
+      ENDIF.
+    ELSEIF lv_term+lv_last_char_offset(1) <> '*'.
+      lv_term = |{ lv_term }*|.
+    ENDIF.
+
+    " Check if string should be negated
+    IF lv_term(1) = c_negation_operator.
+      lv_sign = zif_sat_c_options=>excluding.
+      lv_term = lv_term+1.
+    ENDIF.
+
+    result = VALUE #( sign = lv_sign option = lv_option low = to_upper( lv_term ) ).
+  ENDMETHOD.
+
+  METHOD convert_to_selopt_terms.
+    LOOP AT ct_search_terms REFERENCE INTO DATA(lr_search_term).
+      LOOP AT lr_search_term->values REFERENCE INTO DATA(lr_term_value).
+        IF lr_term_value->sign IS INITIAL OR lr_term_value->option IS INITIAL.
+          lr_term_value->* = convert_term_to_selopt( lr_term_value->low ).
+        ENDIF.
+      ENDLOOP.
     ENDLOOP.
   ENDMETHOD.
 ENDCLASS.

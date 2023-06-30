@@ -27,12 +27,9 @@ CLASS lcl_devclass_util IMPLEMENTATION.
           packages_to_read = VALUE #( BASE packages_to_read ( devclass = <read_package>-parent_devclass ) ).
         ENDIF.
 
-        TRY.
-            <read_package>-uri = zcl_sat_adt_util=>map_tadir_obj_to_object_ref(
-                                     iv_name = CONV #( <read_package>-devclass )
-                                     is_type = VALUE #( objtype_tr = 'DEVC' subtype_wb = 'K' ) )-uri.
-          CATCH zcx_adcoset_static_error.
-        ENDTRY.
+        <read_package>-uri = zcl_sat_adt_util=>map_tadir_obj_to_object_ref(
+                                 iv_name = CONV #( <read_package>-devclass )
+                                 is_type = VALUE #( objtype_tr = 'DEVC' subtype_wb = 'K' ) )-uri.
 
         packages = VALUE #( BASE packages ( <read_package> ) ).
       ENDLOOP.
@@ -136,7 +133,7 @@ CLASS lcl_cds_result_converter IMPLEMENTATION.
 
   METHOD before_conversion.
     " Positional URI is no longer needed for where used starting with NW 7.54
-    CHECK sy-saprl < 754.
+    CHECK sy-saprl < '754'.
 
     " Read sources of all found DDLS search results to get row/column where the name of
     " the entity is starting
