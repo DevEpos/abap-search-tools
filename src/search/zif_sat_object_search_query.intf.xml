@@ -27,6 +27,11 @@
      <DESCRIPT>Returns true if query has search terms</DESCRIPT>
     </SEOCOMPOTX>
     <SEOCOMPOTX>
+     <CMPNAME>SET_MAX_ROWS</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Sets max rows to be retrieved by query</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
      <CMPNAME>SET_OPTION</CMPNAME>
      <LANGU>E</LANGU>
      <DESCRIPT>Add search option to query</DESCRIPT>

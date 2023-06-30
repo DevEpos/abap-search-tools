@@ -68,8 +68,16 @@ INTERFACE zif_sat_ty_object_search
       target      TYPE string,
       value_range TYPE ty_t_value_range,
     END OF ty_s_search_option,
+
     "! <p class="shorttext synchronized">Table of search options</p>
     ty_t_search_option TYPE STANDARD TABLE OF ty_s_search_option WITH KEY option,
+
+    BEGIN OF ty_s_search_term,
+      target TYPE string,
+      values TYPE RANGE OF string,
+    END OF ty_s_search_term,
+
+    ty_t_search_term TYPE STANDARD TABLE OF ty_s_search_term WITH EMPTY KEY,
 
     "! <p class="shorttext synchronized">Search engine parameters</p>
     BEGIN OF ty_s_search_engine_params,

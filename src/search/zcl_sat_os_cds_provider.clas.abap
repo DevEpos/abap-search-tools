@@ -150,10 +150,10 @@ CLASS zcl_sat_os_cds_provider IMPLEMENTATION.
 
     add_order_by( iv_fieldname = c_fields-entityid iv_entity = c_base_alias  ).
 
-    add_search_terms_to_search( it_search_terms = mo_search_query->mt_search_term
-                                it_field_names  = VALUE #( ( |{ c_base_alias }~{ c_fields-entityid }| )
-                                                           ( |{ c_base_alias }~{ c_fields-ddlname }| )
-                                                           ( |{ c_base_alias }~{ c_fields-viewname }| ) ) ).
+    add_search_terms_to_search( iv_target      = zif_sat_c_object_search=>c_search_fields-object_name_input_key
+                                it_field_names = VALUE #( ( |{ c_base_alias }~{ c_fields-entityid }| )
+                                                          ( |{ c_base_alias }~{ c_fields-ddlname }| )
+                                                          ( |{ c_base_alias }~{ c_fields-viewname }| ) ) ).
 
     LOOP AT mo_search_query->mt_search_options ASSIGNING FIELD-SYMBOL(<ls_option>).
       CASE <ls_option>-option.
