@@ -18,18 +18,16 @@ INTERFACE zif_sat_object_query_parser
 
   "! <p class="shorttext synchronized">Creates query from string and options</p>
   "!
-  "! @parameter iv_search_terms         | A string with search terms
-  "! @parameter iv_sub_obj_search_terms | Search terms for sub object search
-  "! @parameter it_options              | A table of search options
-  "! @parameter ro_query                | The created query instance
-  "! @raising   zcx_sat_object_search   | Query exception if errors occurred
+  "! @parameter it_search_terms       | A list of search terms by target
+  "! @parameter it_options            | A table of search options
+  "! @parameter ro_query              | The created query instance
+  "! @raising   zcx_sat_object_search | Query exception if errors occurred
   METHODS create_query
     IMPORTING
-      iv_search_terms         TYPE string                                       OPTIONAL
-      iv_sub_obj_search_terms TYPE string                                       OPTIONAL
-      it_options              TYPE zif_sat_ty_object_search=>ty_t_search_option OPTIONAL
+      it_search_terms TYPE zif_sat_ty_object_search=>ty_t_search_term   OPTIONAL
+      it_options      TYPE zif_sat_ty_object_search=>ty_t_search_option OPTIONAL
     RETURNING
-      VALUE(ro_query)         TYPE REF TO zif_sat_object_search_query
+      VALUE(ro_query) TYPE REF TO zif_sat_object_search_query
     RAISING
       zcx_sat_object_search.
 ENDINTERFACE.
