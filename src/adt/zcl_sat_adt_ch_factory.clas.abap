@@ -48,6 +48,10 @@ CLASS zcl_sat_adt_ch_factory DEFINITION
     CLASS-METHODS create_search_config_ch
       RETURNING
         VALUE(result) TYPE REF TO if_adt_rest_content_handler.
+
+    CLASS-METHODS create_query_input_ch
+      RETURNING
+        VALUE(result) TYPE REF TO if_adt_rest_content_handler.
 ENDCLASS.
 
 
@@ -95,5 +99,10 @@ CLASS zcl_sat_adt_ch_factory IMPLEMENTATION.
   METHOD create_search_config_ch.
     result = cl_adt_rest_st_handler=>create_instance( st_name   = 'ZSAT_SEARCH_CONFIG'
                                                       root_name = 'SEARCH_CONFIG' ).
+  ENDMETHOD.
+
+  METHOD create_query_input_ch.
+    result = cl_adt_rest_st_handler=>create_instance( st_name   = 'ZSAT_OBJECT_SEARCH_QUERY_INPUT'
+                                                      root_name = 'QUERY_INPUT' ).
   ENDMETHOD.
 ENDCLASS.

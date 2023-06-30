@@ -53,13 +53,14 @@ CLASS zcl_sat_clsintf_query_config IMPLEMENTATION.
         ( name = c_class_intf_search_option-friend allowed_length = 30 )
         ( name = c_class_intf_search_option-super_type allowed_length = 30 ) ).
 
-    ms_search_type = VALUE #( label  = 'Class/Interface'
-                              name   = zif_sat_c_object_search=>c_search_type-class_interface
-                              inputs = VALUE #( ( name    = c_object_name_input_key
-                                                  label   = c_object_name_input_label )
-                                                ( name    = c_object_filter_input_key
-                                                  label   = c_object_filter_input_label
-                                                  filters = lt_object_filters ) ) ).
+    ms_search_type = VALUE #(
+        label  = 'Class/Interface'
+        name   = zif_sat_c_object_search=>c_search_type-class_interface
+        inputs = VALUE #( ( name    = zif_sat_c_object_search=>c_search_fields-object_name_input_key
+                            label   = zif_sat_c_object_search=>c_search_fields-object_name_input_label )
+                          ( name    = zif_sat_c_object_search=>c_search_fields-object_filter_input_key
+                            label   = zif_sat_c_object_search=>c_search_fields-object_filter_input_label
+                            filters = lt_object_filters ) ) ).
 
     mt_options = lt_object_filters.
   ENDMETHOD.

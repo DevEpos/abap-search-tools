@@ -29,10 +29,12 @@ INTERFACE zif_sat_object_search_config
   "! <p class="shorttext synchronized">Checks if an option exists in this configuration</p>
   "!
   "! @parameter iv_option     | The name of a search option
+  "! @parameter iv_target     | Target of the search option
   "! @parameter rf_has_option | 'X' if the option exists
   METHODS has_option
     IMPORTING
       iv_option            TYPE string
+      iv_target            TYPE string OPTIONAL
     RETURNING
       VALUE(rf_has_option) TYPE abap_bool.
 
