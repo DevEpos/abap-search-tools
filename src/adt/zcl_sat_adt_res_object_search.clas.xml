@@ -10,32 +10,13 @@
     <CLSCCINCL>X</CLSCCINCL>
     <FIXPT>X</FIXPT>
     <UNICODE>X</UNICODE>
+    <WITH_UNIT_TESTS>X</WITH_UNIT_TESTS>
    </VSEOCLASS>
    <DESCRIPTIONS>
     <SEOCOMPOTX>
      <CMPNAME>CREATE_RESPONSE</CMPNAME>
      <LANGU>E</LANGU>
      <DESCRIPT>Create response</DESCRIPT>
-    </SEOCOMPOTX>
-    <SEOCOMPOTX>
-     <CMPNAME>GET_QUERY_PARAMETER</CMPNAME>
-     <LANGU>E</LANGU>
-     <DESCRIPT>Retrieve query parameters from request</DESCRIPT>
-    </SEOCOMPOTX>
-    <SEOCOMPOTX>
-     <CMPNAME>GET_REQUEST_PARAM_VALUE</CMPNAME>
-     <LANGU>E</LANGU>
-     <DESCRIPT>Retrieve value of request parameter</DESCRIPT>
-    </SEOCOMPOTX>
-    <SEOCOMPOTX>
-     <CMPNAME>GET_REQUEST_PARAM_VALUES</CMPNAME>
-     <LANGU>E</LANGU>
-     <DESCRIPT>Retrieve values of request parameter</DESCRIPT>
-    </SEOCOMPOTX>
-    <SEOCOMPOTX>
-     <CMPNAME>GET_SEARCH_PARAMETER</CMPNAME>
-     <LANGU>E</LANGU>
-     <DESCRIPT>Get search parameter value(s) from request</DESCRIPT>
     </SEOCOMPOTX>
    </DESCRIPTIONS>
   </asx:values>
