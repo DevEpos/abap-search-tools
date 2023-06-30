@@ -71,13 +71,13 @@ CLASS zcl_sat_cds_view_query_config IMPLEMENTATION.
     mt_options = lt_object_filters.
 
     ms_search_type = VALUE zif_sat_ty_object_search=>ty_s_search_type(
-                               label  = 'CDS View'
-                               name   = zif_sat_c_object_search=>c_search_type-cds_view
-                               inputs = VALUE #( ( name    = c_object_name_input_key
-                                                   label   = c_object_name_input_label )
-                                                 ( name    = c_object_filter_input_key
-                                                   label   = c_object_filter_input_label
-                                                   filters = lt_object_filters ) ) ).
+        label  = 'CDS View'
+        name   = zif_sat_c_object_search=>c_search_type-cds_view
+        inputs = VALUE #( ( name    = zif_sat_c_object_search=>c_search_fields-object_name_input_key
+                            label   = zif_sat_c_object_search=>c_search_fields-object_name_input_label )
+                          ( name    = zif_sat_c_object_search=>c_search_fields-object_filter_input_key
+                            label   = zif_sat_c_object_search=>c_search_fields-object_filter_input_label
+                            filters = lt_object_filters ) ) ).
 
     mt_options = lt_object_filters.
   ENDMETHOD.

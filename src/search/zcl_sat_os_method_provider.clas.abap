@@ -96,27 +96,45 @@ CLASS zcl_sat_os_method_provider IMPLEMENTATION.
                                                ref_field = c_method_fields-originalmethodname ) ) ).
 
     add_search_terms_to_search(
-        it_search_terms = mo_search_query->mt_search_term
-        it_field_names  = VALUE #( ( |{ c_alias_names-method }~{ c_method_fields-classname }| ) ) ).
+        iv_target      = zif_sat_c_object_search=>c_search_fields-object_name_input_key
+        it_field_names = VALUE #( ( |{ c_alias_names-method }~{ c_method_fields-classname }| ) ) ).
     add_search_terms_to_search(
-        it_search_terms = mo_search_query->mt_sub_search_term
-        it_field_names  = VALUE #( ( |{ c_alias_names-method }~{ c_method_fields-methodname }| ) ) ).
+        iv_target      = zif_sat_c_object_search=>c_search_fields-method_name_input_key
+        it_field_names = VALUE #( ( |{ c_alias_names-method }~{ c_method_fields-methodname }| ) ) ).
 
-    add_select_field( iv_fieldname = c_method_fields-classname  iv_fieldname_alias = 'object_name' iv_entity = c_alias_names-method ).
-    add_select_field( iv_fieldname = c_method_fields-classname iv_fieldname_alias = 'raw_object_name' iv_entity = c_alias_names-method ).
+    add_select_field( iv_fieldname       = c_method_fields-classname
+                      iv_fieldname_alias = c_result_fields-object_name
+                      iv_entity          = c_alias_names-method ).
+    add_select_field( iv_fieldname       = c_method_fields-classname
+                      iv_fieldname_alias = c_result_fields-raw_object_name
+                      iv_entity          = c_alias_names-method ).
     add_select_field( iv_fieldname       = c_method_fields-methodname
-                      iv_fieldname_alias = 'custom_field_long1'
+                      iv_fieldname_alias = c_result_fields-custom_field_long1
                       iv_entity          = c_alias_names-method ).
     add_select_Field( iv_fieldname       = c_method_fields-category
-                      iv_fieldname_alias = 'custom_field_short1'
+                      iv_fieldname_alias = c_result_fields-custom_field_short1
                       iv_entity          = c_alias_names-method ).
-    add_select_field( iv_fieldname = c_method_fields-createdby iv_fieldname_alias = 'created_by' iv_entity = c_alias_names-method ).
-    add_select_field( iv_fieldname = c_class_fields-package iv_fieldname_alias = 'devclass' iv_entity = c_alias_names-class ).
-    add_select_field( iv_fieldname = c_class_fields-tadir_type iv_fieldname_alias = 'tadir_type' iv_entity = c_alias_names-class ).
-    add_select_field( iv_fieldname = c_text_fields-description iv_fieldname_alias = 'description' iv_entity = c_alias_names-text ).
-    add_select_field( iv_fieldname = c_method_fields-createdon iv_fieldname_alias = 'created_date' iv_entity = c_alias_names-method ).
-    add_select_field( iv_fieldname = c_method_fields-changedby iv_fieldname_alias = 'changed_by' iv_entity = c_alias_names-method ).
-    add_select_field( iv_fieldname = c_method_fields-changedon iv_fieldname_alias = 'changed_date' iv_entity = c_alias_names-method ).
+    add_select_field( iv_fieldname       = c_method_fields-createdby
+                      iv_fieldname_alias = c_result_fields-created_by
+                      iv_entity          = c_alias_names-method ).
+    add_select_field( iv_fieldname       = c_class_fields-package
+                      iv_fieldname_alias = c_result_fields-devclass
+                      iv_entity          = c_alias_names-class ).
+    add_select_field( iv_fieldname       = c_class_fields-tadir_type
+                      iv_fieldname_alias = c_result_fields-tadir_type
+                      iv_entity          = c_alias_names-class ).
+    add_select_field( iv_fieldname       = c_text_fields-description
+                      iv_fieldname_alias = c_result_fields-description
+                      iv_entity          = c_alias_names-text ).
+    add_select_field( iv_fieldname       = c_method_fields-createdon
+                      iv_fieldname_alias = c_result_fields-created_date
+                      iv_entity          = c_alias_names-method ).
+    add_select_field( iv_fieldname       = c_method_fields-changedby
+                      iv_fieldname_alias = c_result_fields-changed_by
+                      iv_entity          = c_alias_names-method ).
+    add_select_field( iv_fieldname       = c_method_fields-changedon
+                      iv_fieldname_alias = c_result_fields-changed_date
+                      iv_entity          = c_alias_names-method ).
 
     add_order_by( iv_fieldname = c_method_fields-classname iv_entity = c_alias_names-method ).
     add_order_by( iv_fieldname = c_method_fields-methodname iv_entity = c_alias_names-method ).

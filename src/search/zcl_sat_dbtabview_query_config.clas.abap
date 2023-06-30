@@ -43,13 +43,13 @@ CLASS zcl_sat_dbtabview_query_config IMPLEMENTATION.
               category_term   = zif_sat_c_object_search=>c_content_assist-terms-table_deliv_class ) ) ).
 
     ms_search_type = VALUE zif_sat_ty_object_search=>ty_s_search_type(
-                               label  = 'Database Table/View'
-                               name   = zif_sat_c_object_search=>c_search_type-db_tab_view
-                               inputs = VALUE #( ( name    = c_object_name_input_key
-                                                   label   = c_object_name_input_label )
-                                                 ( name    = c_object_filter_input_key
-                                                   label   = c_object_filter_input_label
-                                                   filters = lt_object_filters ) ) ).
+        label  = 'Database Table/View'
+        name   = zif_sat_c_object_search=>c_search_type-db_tab_view
+        inputs = VALUE #( ( name    = zif_sat_c_object_search=>c_search_fields-object_name_input_key
+                            label   = zif_sat_c_object_search=>c_search_fields-object_name_input_label )
+                          ( name    = zif_sat_c_object_search=>c_search_fields-object_filter_input_key
+                            label   = zif_sat_c_object_search=>c_search_fields-object_filter_input_label
+                            filters = lt_object_filters ) ) ).
 
     mt_options = lt_object_filters.
   ENDMETHOD.

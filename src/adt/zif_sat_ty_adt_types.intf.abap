@@ -1,6 +1,6 @@
-"! <p class="shorttext synchronized" lang="en">Type definitions for ADT plugin</p>
+"! <p class="shorttext synchronized">Type definitions for ADT plugin</p>
 INTERFACE zif_sat_ty_adt_types
-  PUBLIC .
+  PUBLIC.
 
   TYPES:
     BEGIN OF ty_s_property,
@@ -40,7 +40,30 @@ INTERFACE zif_sat_ty_adt_types
       sourcetype    TYPE char1,
       apistate      TYPE string,
       is_calculated TYPE abap_bool,
-    END OF ty_s_field_usage.
+    END OF ty_s_field_usage,
 
-  TYPES: ty_t_field_usage TYPE STANDARD TABLE OF ty_s_field_usage WITH EMPTY KEY.
+    ty_t_field_usage TYPE STANDARD TABLE OF ty_s_field_usage WITH EMPTY KEY,
+
+    BEGIN OF ty_s_query_input_filter,
+      name   TYPE string,
+      values TYPE string_table,
+    END OF ty_s_query_input_filter,
+
+    ty_t_query_input_filter TYPE STANDARD TABLE OF ty_s_query_input_filter WITH EMPTY KEY,
+
+    BEGIN OF ty_s_query_input_field,
+      name    TYPE string,
+      values  TYPE string_table,
+      filters TYPE ty_t_query_input_filter,
+    END OF ty_s_query_input_field,
+
+    ty_t_query_input_field TYPE STANDARD TABLE OF ty_s_query_input_field WITH EMPTY KEY,
+
+    BEGIN OF ty_s_query_input,
+      type                     TYPE zif_sat_ty_object_search=>ty_search_type,
+      max_rows                 TYPE i,
+      combine_filters_with_and TYPE abap_bool,
+      with_api_state           TYPE abap_bool,
+      fields                   TYPE ty_t_query_input_field,
+    END OF ty_s_query_input.
 ENDINTERFACE.

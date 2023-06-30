@@ -8,8 +8,21 @@ INTERFACE zif_sat_c_object_search
       db_tab_view     TYPE zif_sat_ty_object_search=>ty_search_type VALUE 'dbtabview',
       class_interface TYPE zif_sat_ty_object_search=>ty_search_type VALUE 'classintf',
       method          TYPE zif_sat_ty_object_search=>ty_search_type VALUE 'method',
-      field           TYPE zif_sat_ty_object_search=>ty_search_type VALUE 'field',
+      db_field        TYPE zif_sat_ty_object_search=>ty_search_type VALUE 'dbfield',
+      cds_field       TYPE zif_sat_ty_object_search=>ty_search_type VALUE 'cdsfield',
     END OF c_search_type.
+
+  CONSTANTS:
+    BEGIN OF c_search_fields,
+      object_name_input_key     TYPE string VALUE 'objectName',
+      object_name_input_label   TYPE string VALUE 'Object Name',
+      object_filter_input_key   TYPE string VALUE 'objectFilter',
+      object_filter_input_label TYPE string VALUE 'Object Filters',
+      method_name_input_key     TYPE string VALUE 'methodName',
+      method_name_input_label   TYPE string VALUE 'Method Name',
+      method_filter_input_key   TYPE string VALUE 'methodFilter',
+      method_filter_input_label TYPE string VALUE 'Method Filter',
+    END OF c_search_fields.
 
   CONSTANTS:
     BEGIN OF c_filter_data_type,
