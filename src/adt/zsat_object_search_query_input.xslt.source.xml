@@ -17,6 +17,9 @@
       <tt:cond check="not-initial(query_input.with_api_state)">
         <tt:attribute name="saat:withApiState" option="format(boolean)" value-ref="query_input.with_api_state" />
       </tt:cond>
+      <tt:cond check="not-initial(query_input.no_row_limit)">
+        <tt:attribute name="saat:rowLimitDisabled" option="format(boolean)" value-ref="query_input.no_row_limit" />
+      </tt:cond>
       <tt:cond check="not-initial(query_input.type)">
         <tt:attribute name="saat:type" value-ref="query_input.type" />
       </tt:cond>
