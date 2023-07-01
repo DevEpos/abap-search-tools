@@ -12,6 +12,11 @@
    </VSEOINTERF>
    <DESCRIPTIONS>
     <SEOCOMPOTX>
+     <CMPNAME>ENABLE_ADDITIONAL_DATA</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Enables/Disables additional config data to be filled</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
      <CMPNAME>GET_ALLOWED_OPTIONS</CMPNAME>
      <LANGU>E</LANGU>
      <DESCRIPT>Returns a table of allowed search options</DESCRIPT>
