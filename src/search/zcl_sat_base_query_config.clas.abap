@@ -142,8 +142,8 @@ CLASS zcl_sat_base_query_config IMPLEMENTATION.
         img_encoded    = get_image( c_image_keys-package )
         allowed_length = 30
         patterns       = abap_true
-        content_assist = VALUE #( assist_type     = zif_sat_c_object_search=>c_filter_content_assist_type-ris
-                                  adt_object_type = zif_sat_c_object_types=>package ) ).
+        content_assist = VALUE #( assist_type      = zif_sat_c_object_search=>c_filter_content_assist_type-ris
+                                  adt_object_types = VALUE #( ( zif_sat_c_object_types=>package ) ) ) ).
   ENDMETHOD.
 
   METHOD get_user_filt_conf.

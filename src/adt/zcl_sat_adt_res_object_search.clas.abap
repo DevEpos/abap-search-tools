@@ -47,7 +47,8 @@ CLASS zcl_sat_adt_res_object_search IMPLEMENTATION.
                     it_options              = get_options( )
                     is_search_engine_params = VALUE #(
                         use_and_cond_for_options = ms_query_input-combine_filters_with_and
-                        with_api_state           = ms_query_input-with_api_state )
+                        with_api_state           = ms_query_input-with_api_state
+                        get_all                  = ms_query_input-no_row_limit )
           IMPORTING et_results              = mt_query_result ).
 
       CATCH zcx_sat_object_search INTO DATA(lx_search_error).
