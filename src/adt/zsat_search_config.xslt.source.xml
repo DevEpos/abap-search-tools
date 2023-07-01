@@ -44,6 +44,9 @@
     <saat:input tt:extensible="deep">
       <tt:attribute name="saat:name" value-ref="input.name"/>
       <tt:attribute name="saat:label" value-ref="input.label"/>
+      <tt:cond check="not-initial(input.mixed)">
+        <tt:attribute name="saat:mixed" value-ref="input.mixed"/>
+      </tt:cond>
 
       <tt:cond check="exist(input.filters)">
         <tt:loop ref="input.filters">
@@ -62,8 +65,12 @@
 
     <saat:filter tt:extensible="deep">
       <tt:attribute name="saat:name" value-ref="filter.name"/>
-      <tt:attribute name="saat:dataType" value-ref="filter.data_type"/>
-      <tt:attribute name="saat:maxLength" value-ref="filter.allowed_length"/>
+      <tt:cond check="not-initial(filter.data_type)">
+        <tt:attribute name="saat:dataType" value-ref="filter.data_type"/>
+      </tt:cond>
+      <tt:cond check="not-initial(filter.allowed_length)">
+        <tt:attribute name="saat:maxLength" value-ref="filter.allowed_length"/>
+      </tt:cond>
       <tt:cond check="initial(filter.single)">
         <tt:attribute map="xml('true')=val(''),xml('false')=val('X')" name="saat:multiple" value-ref="filter.single"/>
       </tt:cond>
@@ -77,7 +84,10 @@
         <tt:attribute name="saat:longDescription" value-ref="filter.long_description" />
       </tt:cond>
       <tt:cond check="not-initial(filter.img_key)">
-        <tt:attribute name="saat:imageKey" value-ref="filter.img_key" />
+        <tt:attribute name="saat:imageId" value-ref="filter.img_key" />
+      </tt:cond>
+      <tt:cond check="not-initial(filter.img_encoded)">
+        <tt:attribute name="saat:imageEncoded" value-ref="filter.img_encoded" />
       </tt:cond>
       <tt:cond check="not-initial(filter.internal)">
         <tt:attribute name="saat:internal" option="format(boolean)" value-ref="filter.internal" />
@@ -122,10 +132,34 @@
         <tt:attribute name="saat:categoryScheme" value-ref="content_assist.category_scheme"/>
       </tt:cond>
 
-      <tt:cond check="not-initial(content_assist.entry_img_key)">
-        <tt:attribute name="saat:entryImgKey" value-ref="content_assist.entry_img_key"/>
+      <tt:cond check="not-initial(content_assist.proposal_image_source)">
+        <tt:attribute name="saat:proposalImageSource" value-ref="content_assist.proposal_image_source" />
+      </tt:cond>
+
+      <tt:cond check="exist(content_assist.proposal_images)">
+        <tt:apply name="proposalImages">
+          <tt:with-root name="images" ref="content_assist.proposal_images" />
+        </tt:apply>
       </tt:cond>
     </saat:contentAssist>
+  </tt:template>
+
+  <tt:template name="proposalImages">
+    <tt:context>
+      <tt:root name="images" type="cl:ty_t_proposal_image" />
+    </tt:context>
+
+    <tt:loop ref="images">
+      <saat:proposalImage tt:extensible="deep">
+        <tt:cond check="not-initial($ref.img_key)">
+          <tt:attribute name="saat:id" value-ref="$ref.img_key"/>
+        </tt:cond>
+
+        <tt:cond check="not-initial($ref.img_encoded)">
+          <tt:attribute name="saat:imageEncoded" value-ref="$ref.img_encoded" />
+        </tt:cond>
+      </saat:proposalImage>
+    </tt:loop>
   </tt:template>
 
 </tt:transform>

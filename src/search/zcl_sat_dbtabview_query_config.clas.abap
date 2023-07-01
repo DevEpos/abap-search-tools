@@ -5,42 +5,62 @@ CLASS zcl_sat_dbtabview_query_config DEFINITION
   CREATE PUBLIC.
 
   PUBLIC SECTION.
-    METHODS constructor.
-
     METHODS zif_sat_object_search_config~get_type REDEFINITION.
 
   PROTECTED SECTION.
     ALIASES c_dbtab_options FOR zif_sat_c_object_search~c_dbtab_search_params.
 
+    METHODS build_config REDEFINITION.
+
   PRIVATE SECTION.
+    CONSTANTS:
+      BEGIN OF c_image_keys,
+        transport TYPE string VALUE 'ABAP:IMG_TRANSPORT',
+      END OF c_image_keys.
+
+    METHODS get_image
+      IMPORTING
+        iv_image_key  TYPE string
+      RETURNING
+        VALUE(result) TYPE string.
 ENDCLASS.
 
 
 CLASS zcl_sat_dbtabview_query_config IMPLEMENTATION.
-  METHOD constructor.
-    super->constructor( ).
+  METHOD build_config.
     DATA(lt_object_filters) = VALUE zif_sat_ty_object_search=>ty_t_query_filter(
         ( get_package_filt_conf( ) )
         ( get_user_filt_conf( ) )
         ( get_description_filt_conf( ) )
         ( get_max_rows_filt_conf( ) )
         ( name           = c_dbtab_options-field
+          img_key        = c_general_image_keys-column
+          img_encoded    = get_general_image( c_general_image_keys-column )
           allowed_length = 30
-          content_assist = VALUE #( assist_type     = zif_sat_c_object_search=>c_filter_content_assist_type-named_item
-                                    category_scheme = zif_sat_c_object_search=>c_content_assist-category_scheme
-                                    category_term   = zif_sat_c_object_search=>c_content_assist-terms-table_field ) )
+          content_assist = VALUE #(
+              assist_type           = zif_sat_c_object_search=>c_filter_content_assist_type-named_item
+              category_scheme       = zif_sat_c_object_search=>c_content_assist-category_scheme
+              category_term         = zif_sat_c_object_search=>c_content_assist-terms-table_field
+              proposal_image_source = zif_sat_c_object_search=>c_proposal_image_source-same_as_filter ) )
         ( name           = c_general_options-type
-          caching        = abap_true
-          content_assist = VALUE #( assist_type     = zif_sat_c_object_search=>c_filter_content_assist_type-named_item
-                                    category_scheme = zif_sat_c_object_search=>c_content_assist-category_scheme
-                                    category_term   = zif_sat_c_object_search=>c_content_assist-terms-table_type ) )
-        ( name           = c_dbtab_options-delivery_class
-          allowed_length = 1
+          img_key        = c_general_image_keys-type_folder
+          img_encoded    = get_general_image( c_general_image_keys-type_folder )
           caching        = abap_true
           content_assist = VALUE #(
               assist_type     = zif_sat_c_object_search=>c_filter_content_assist_type-named_item
               category_scheme = zif_sat_c_object_search=>c_content_assist-category_scheme
-              category_term   = zif_sat_c_object_search=>c_content_assist-terms-table_deliv_class ) ) ).
+              category_term   = zif_sat_c_object_search=>c_content_assist-terms-table_type
+              proposal_images = VALUE #( ( img_key     = c_general_image_keys-type_group
+                                           img_encoded = get_general_image( c_general_image_keys-type_group ) ) ) ) )
+        ( name           = c_dbtab_options-delivery_class
+          img_key        = c_image_keys-transport
+          allowed_length = 1
+          caching        = abap_true
+          content_assist = VALUE #(
+              assist_type           = zif_sat_c_object_search=>c_filter_content_assist_type-named_item
+              category_scheme       = zif_sat_c_object_search=>c_content_assist-category_scheme
+              category_term         = zif_sat_c_object_search=>c_content_assist-terms-table_deliv_class
+              proposal_image_source = zif_sat_c_object_search=>c_proposal_image_source-same_as_filter ) ) ).
 
     ms_search_type = VALUE zif_sat_ty_object_search=>ty_s_search_type(
         label  = 'Database Table/View'
@@ -56,5 +76,18 @@ CLASS zcl_sat_dbtabview_query_config IMPLEMENTATION.
 
   METHOD zif_sat_object_search_config~get_type.
     rv_type = zif_sat_c_object_search=>c_search_type-db_tab_view.
+  ENDMETHOD.
+
+  METHOD get_image.
+    CHECK mf_fill_add_data = abap_true.
+
+    CASE iv_image_key.
+
+      WHEN c_image_keys-transport.
+        result = `iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABXElEQVR4nKWRXUvCcBTG/WBdlSBEEQRCJERvBN3UTYRERGWElJpRWpRSggZtZS+uV4Vd1G2Us75Ca5pGb2tq9bT9w6lbLcIDP3ZxHn475/xNplqLPXTiLwwFpzEXLrLAuQCc/UCcmTUWxKLzJJiRg` &&
+                 `GxBD7PjNRbQlJ8IcnL4sahni/YZC8KRVSJ4kMPP73oiGytE0DVzjF7XCfo8cfR7ExhcZJuIIBBaJ4InWSB+6AmG1lTBZbZIYK7TiuB7Ml8gQgQv8t/yn3r8wXBZcF9QUQXuJQruZQqeKjar0K0wl8DAAmt8G21VCpRSBeZhChY7jcaRbTSPRtEytovW8T1YJ/fRNs` &&
+                 `XANn2ADucRfp1AESg7XZXI5JFMS0gKEjjhDdydCI4XkeJfkboto96gNIG5cwJ11iHy1U5g6XGQnqXbUfmM1TdQAnw6R4La/Y16ajXY7JwSqG+33/ynV3N9AVC53MX4NLXNAAAAAElFTkSuQmCC`.
+
+    ENDCASE.
   ENDMETHOD.
 ENDCLASS.
