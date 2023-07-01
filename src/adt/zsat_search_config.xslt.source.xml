@@ -116,8 +116,12 @@
     <saat:contentAssist tt:extensible="deep">
       <tt:attribute name="xsi:type" value-ref="content_assist.assist_type"/>
 
-      <tt:cond check="not-initial(content_assist.adt_object_type)">
-        <tt:attribute name="saat:adtObjectType" value-ref="content_assist.adt_object_type"/>
+      <tt:cond check="exist(content_assist.adt_object_types)">
+        <tt:loop ref="content_assist.adt_object_types">
+          <saat:objectType>
+            <tt:value ref="$ref" />
+          </saat:objectType>
+        </tt:loop>
       </tt:cond>
 
       <tt:cond check="not-initial(content_assist.category_term)">

@@ -62,6 +62,7 @@ INTERFACE zif_sat_ty_adt_types
     BEGIN OF ty_s_query_input,
       type                     TYPE zif_sat_ty_object_search=>ty_search_type,
       max_rows                 TYPE i,
+      no_row_limit             TYPE abap_bool,
       combine_filters_with_and TYPE abap_bool,
       with_api_state           TYPE abap_bool,
       fields                   TYPE ty_t_query_input_field,
