@@ -25,6 +25,12 @@ INTERFACE zif_sat_c_object_search
     END OF c_search_fields.
 
   CONSTANTS:
+    BEGIN OF c_proposal_image_source,
+      same_as_filter TYPE string VALUE 'SAME_AS_FILTER',
+      proposal       TYPE string VALUE 'PROPOSAL',
+    END OF c_proposal_image_source.
+
+  CONSTANTS:
     BEGIN OF c_filter_data_type,
       default TYPE string VALUE '',
       date    TYPE string VALUE 'DATE',

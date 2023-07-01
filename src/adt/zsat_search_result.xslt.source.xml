@@ -1,5 +1,9 @@
 <?sap.transform simple?>
-<tt:transform xmlns:tt="http://www.sap.com/transformation-templates" xmlns:saat="http://www.devepos.com/adt/saat" xmlns:adtbase="http://www.devepos.com/adt/base" xmlns:cl="http://www.sap.com/abapxml/types/class-pool/zif_sat_ty_adt_types">
+<tt:transform
+    xmlns:tt="http://www.sap.com/transformation-templates"
+    xmlns:saat="http://www.devepos.com/adt/objectsearch"
+    xmlns:adtbase="http://www.devepos.com/adt/base"
+    xmlns:cl="http://www.sap.com/abapxml/types/class-pool/zif_sat_ty_adt_types">
 
   <tt:root name="object_search_result" type="cl:ty_s_search_result"/>
 
@@ -19,6 +23,7 @@
     </tt:context>
 
     <saat:result tt:extensible="deep">
+      <tt:namespace name="adtbase" />
       <tt:apply name="resultObjects">
         <tt:with-root name="result_objects" ref="object_search_result.objects"/>
       </tt:apply>
