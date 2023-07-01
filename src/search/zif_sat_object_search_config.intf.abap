@@ -2,6 +2,11 @@
 INTERFACE zif_sat_object_search_config
   PUBLIC.
 
+  "! <p class="shorttext synchronized">Enables/Disables additional config data to be filled</p>
+  METHODS enable_additional_data
+    IMPORTING
+      if_enable TYPE abap_bool DEFAULT abap_true.
+
   "! <p class="shorttext synchronized">Retrieves configuration of search type</p>
   METHODS get_search_config DEFAULT IGNORE
     RETURNING
