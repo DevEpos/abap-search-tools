@@ -88,13 +88,21 @@ INTERFACE zif_sat_ty_object_search
 
     ty_t_options TYPE RANGE OF string,
 
+    BEGIN OF ty_s_proposal_image,
+      img_key     TYPE string,
+      img_encoded TYPE string,
+    END OF ty_s_proposal_image,
+
+    ty_t_proposal_image TYPE STANDARD TABLE OF ty_s_proposal_image WITH EMPTY KEY,
+
     BEGIN OF ty_s_option_content_assist,
       assist_type             TYPE string,
       adt_object_type         TYPE string,
       category_term           TYPE string,
       secondary_category_term TYPE string,
       category_scheme         TYPE string,
-      entry_img_key           TYPE string,
+      proposal_image_source   TYPE string,
+      proposal_images         TYPE ty_t_proposal_image,
     END OF ty_s_option_content_assist,
 
     "! <p class="shorttext synchronized">Setting for search option</p>
@@ -110,6 +118,7 @@ INTERFACE zif_sat_ty_object_search
       no_negation      TYPE abap_bool,
       long_description TYPE string,
       img_key          TYPE string,
+      img_encoded      TYPE string,
       internal         TYPE abap_bool,
       content_assist   TYPE ty_s_option_content_assist,
     END OF ty_s_query_filter,
@@ -121,6 +130,7 @@ INTERFACE zif_sat_ty_object_search
     BEGIN OF ty_s_input_field,
       name    TYPE string,
       label   TYPE string,
+      mixed   TYPE abap_bool,
       filters TYPE ty_t_query_filter,
     END OF ty_s_input_field,
 
