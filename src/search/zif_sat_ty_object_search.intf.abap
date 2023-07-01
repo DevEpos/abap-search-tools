@@ -97,7 +97,7 @@ INTERFACE zif_sat_ty_object_search
 
     BEGIN OF ty_s_option_content_assist,
       assist_type             TYPE string,
-      adt_object_type         TYPE string,
+      adt_object_types        TYPE string_table,
       category_term           TYPE string,
       secondary_category_term TYPE string,
       category_scheme         TYPE string,
