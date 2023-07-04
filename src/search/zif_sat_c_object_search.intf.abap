@@ -15,14 +15,19 @@ INTERFACE zif_sat_c_object_search
   CONSTANTS:
     BEGIN OF c_search_fields,
       object_name_input_key     TYPE string VALUE 'objectName',
-      object_name_input_label   TYPE string VALUE 'Object Name',
+      object_name_input_label   TYPE string VALUE 'Object &Name',
       object_filter_input_key   TYPE string VALUE 'objectFilter',
-      object_filter_input_label TYPE string VALUE 'Object Filters',
+      object_filter_input_label TYPE string VALUE 'Object &Filters',
       method_name_input_key     TYPE string VALUE 'methodName',
-      method_name_input_label   TYPE string VALUE 'Method Name',
+      method_name_input_label   TYPE string VALUE '&Method Name',
       method_filter_input_key   TYPE string VALUE 'methodFilter',
-      method_filter_input_label TYPE string VALUE 'Method Filter',
+      method_filter_input_label TYPE string VALUE 'M&ethod Filter',
     END OF c_search_fields.
+
+  CONSTANTS:
+    BEGIN OF c_image_registry_id,
+      adt_type TYPE string VALUE 'ADT_OBJECT_TYPE',
+    END OF c_image_registry_id.
 
   CONSTANTS:
     BEGIN OF c_proposal_image_source,
@@ -91,7 +96,7 @@ INTERFACE zif_sat_c_object_search
       exposure   TYPE string VALUE 'exposure',
       "! Restricts usage to certain abap language stack (see data element ABAPVRS)
       "! --> check against current NW stack to get valid options and correct description
-      abap_lang  TYPE string VALUE 'abapLanguage',
+      abap_lang  TYPE string VALUE 'lang',
       "! Holds the name of referenced cds view for behavior classes
       "! (necessary???)
       ref_object TYPE string VALUE 'refcls',
