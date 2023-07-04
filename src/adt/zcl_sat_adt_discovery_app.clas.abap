@@ -112,10 +112,10 @@ CLASS zcl_sat_adt_discovery_app IMPLEMENTATION.
                                                  category_scheme = |{ c_utils_root_scheme }{ c_object_search_uri }|
                                                  category_term   = 'objectSearch' ).
     io_registry->register_discoverable_resource(
-        url             = c_object_search_uri
+        url             = |{ c_object_search_uri }/config|
         handler_class   = 'ZCL_SAT_ADT_RES_SEARCH_CONFIG'
         description     = 'ABAP Object Search Config'
-        category_scheme = |{ c_utils_root_scheme }{ c_object_search_uri }/config|
+        category_scheme = |{ c_utils_root_scheme }{ c_object_search_uri }|
         category_term   = 'objectSearchConfig' ).
   ENDMETHOD.
 

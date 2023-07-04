@@ -88,21 +88,24 @@ INTERFACE zif_sat_ty_object_search
 
     ty_t_options TYPE RANGE OF string,
 
-    BEGIN OF ty_s_proposal_image,
-      img_key     TYPE string,
-      img_encoded TYPE string,
-    END OF ty_s_proposal_image,
+    BEGIN OF ty_s_image_info,
+      img_key      TYPE string,
+      img_registry TYPE string,
+      img_encoded  TYPE string,
+    END OF ty_s_image_info,
 
-    ty_t_proposal_image TYPE STANDARD TABLE OF ty_s_proposal_image WITH EMPTY KEY,
+    ty_t_image_info TYPE STANDARD TABLE OF ty_s_image_info WITH EMPTY KEY,
 
     BEGIN OF ty_s_option_content_assist,
       assist_type             TYPE string,
+      caching                 TYPE abap_bool,
       adt_object_types        TYPE string_table,
       category_term           TYPE string,
       secondary_category_term TYPE string,
       category_scheme         TYPE string,
       proposal_image_source   TYPE string,
-      proposal_images         TYPE ty_t_proposal_image,
+      proposal_image_registry TYPE string,
+      proposal_images         TYPE ty_t_image_info,
     END OF ty_s_option_content_assist,
 
     "! <p class="shorttext synchronized">Setting for search option</p>
@@ -113,13 +116,11 @@ INTERFACE zif_sat_ty_object_search
       no_uppercase     TYPE abap_bool,
       single           TYPE abap_bool,
       patterns         TYPE abap_bool,
-      caching          TYPE abap_bool,
       key_value        TYPE abap_bool,
       no_negation      TYPE abap_bool,
       long_description TYPE string,
-      img_key          TYPE string,
-      img_encoded      TYPE string,
       internal         TYPE abap_bool,
+      img_info         TYPE ty_s_image_info,
       content_assist   TYPE ty_s_option_content_assist,
     END OF ty_s_query_filter,
 
@@ -138,9 +139,10 @@ INTERFACE zif_sat_ty_object_search
 
     "! Settings for a given search types
     BEGIN OF ty_s_search_type,
-      name   TYPE string,
-      label  TYPE string,
-      inputs TYPE ty_t_input_field,
+      name     TYPE string,
+      label    TYPE string,
+      img_info TYPE ty_s_image_info,
+      inputs   TYPE ty_t_input_field,
     END OF ty_s_search_type,
 
     ty_t_search_type TYPE STANDARD TABLE OF ty_s_search_type WITH KEY name,
