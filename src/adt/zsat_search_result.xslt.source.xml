@@ -22,12 +22,12 @@
       <tt:root name="object_search_result"/>
     </tt:context>
 
-    <saat:result tt:extensible="deep">
+    <saat:searchResult tt:extensible="deep">
       <tt:namespace name="adtbase" />
       <tt:apply name="resultObjects">
         <tt:with-root name="result_objects" ref="object_search_result.objects"/>
       </tt:apply>
-    </saat:result>
+    </saat:searchResult>
 
   </tt:template>
 

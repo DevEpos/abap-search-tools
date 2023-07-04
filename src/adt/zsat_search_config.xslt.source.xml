@@ -28,6 +28,14 @@
       <tt:attribute name="saat:name" value-ref="search_type.name"/>
       <tt:attribute name="saat:label" value-ref="search_type.label"/>
 
+      <tt:cond check="exist(search_type.img_info)">
+        <saat:imageInfo tt:extensible="deep">
+          <tt:apply name="imageInfoAttributes">
+            <tt:with-root name="image_info" ref="search_type.img_info" />
+          </tt:apply>
+        </saat:imageInfo>
+      </tt:cond>
+
       <tt:loop ref="search_type.inputs">
         <tt:apply name="input">
           <tt:with-root name="input" ref="$ref"/>
@@ -83,20 +91,19 @@
       <tt:cond check="not-initial(filter.long_description)">
         <tt:attribute name="saat:longDescription" value-ref="filter.long_description" />
       </tt:cond>
-      <tt:cond check="not-initial(filter.img_key)">
-        <tt:attribute name="saat:imageId" value-ref="filter.img_key" />
-      </tt:cond>
-      <tt:cond check="not-initial(filter.img_encoded)">
-        <tt:attribute name="saat:imageEncoded" value-ref="filter.img_encoded" />
-      </tt:cond>
       <tt:cond check="not-initial(filter.internal)">
         <tt:attribute name="saat:internal" option="format(boolean)" value-ref="filter.internal" />
       </tt:cond>
       <tt:cond check="not-initial(filter.patterns)">
         <tt:attribute name="saat:patterns" option="format(boolean)" value-ref="filter.patterns" />
       </tt:cond>
-      <tt:cond check="not-initial(filter.caching)">
-        <tt:attribute name="saat:caching" option="format(boolean)" value-ref="filter.caching" />
+
+      <tt:cond check="exist(filter.img_info)">
+        <saat:imageInfo tt:extensible="deep">
+          <tt:apply name="imageInfoAttributes">
+            <tt:with-root name="image_info" ref="filter.img_info" />
+          </tt:apply>
+        </saat:imageInfo>
       </tt:cond>
 
       <tt:cond check="not-initial(filter.content_assist)">
@@ -124,6 +131,10 @@
         </tt:loop>
       </tt:cond>
 
+      <tt:cond check="not-initial(content_assist.caching)">
+        <tt:attribute name="saat:caching" option="format(boolean)" value-ref="content_assist.caching" />
+      </tt:cond>
+
       <tt:cond check="not-initial(content_assist.category_term)">
         <tt:attribute name="saat:categoryTerm" value-ref="content_assist.category_term"/>
       </tt:cond>
@@ -140,6 +151,10 @@
         <tt:attribute name="saat:proposalImageSource" value-ref="content_assist.proposal_image_source" />
       </tt:cond>
 
+      <tt:cond check="not-initial(content_assist.proposal_image_registry)">
+        <tt:attribute name="saat:proposalImageRegistryId" value-ref="content_assist.proposal_image_registry" />
+      </tt:cond>
+
       <tt:cond check="exist(content_assist.proposal_images)">
         <tt:apply name="proposalImages">
           <tt:with-root name="images" ref="content_assist.proposal_images" />
@@ -150,20 +165,34 @@
 
   <tt:template name="proposalImages">
     <tt:context>
-      <tt:root name="images" type="cl:ty_t_proposal_image" />
+      <tt:root name="images" type="cl:ty_t_image_info" />
     </tt:context>
 
     <tt:loop ref="images">
       <saat:proposalImage tt:extensible="deep">
-        <tt:cond check="not-initial($ref.img_key)">
-          <tt:attribute name="saat:id" value-ref="$ref.img_key"/>
-        </tt:cond>
-
-        <tt:cond check="not-initial($ref.img_encoded)">
-          <tt:attribute name="saat:imageEncoded" value-ref="$ref.img_encoded" />
-        </tt:cond>
+        <tt:apply name="imageInfoAttributes">
+          <tt:with-root name="image_info" ref="$ref" />
+        </tt:apply>
       </saat:proposalImage>
     </tt:loop>
+  </tt:template>
+
+  <tt:template name="imageInfoAttributes">
+    <tt:context>
+      <tt:root name="image_info" type="cl:ty_s_image_info" />
+    </tt:context>
+
+    <tt:cond check="not-initial(image_info.img_key)">
+      <tt:attribute name="saat:imageId" value-ref="image_info.img_key"/>
+    </tt:cond>
+
+    <tt:cond check="not-initial(image_info.img_encoded)">
+      <tt:attribute name="saat:imageEncoded" value-ref="image_info.img_encoded" />
+    </tt:cond>
+
+    <tt:cond check="not-initial(image_info.img_registry)">
+      <tt:attribute name="saat:imageRegistryId" value-ref="image_info.img_registry" />
+    </tt:cond>
   </tt:template>
 
 </tt:transform>
