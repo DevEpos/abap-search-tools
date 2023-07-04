@@ -6,6 +6,7 @@ CLASS zcl_sat_clif_meth_query_config DEFINITION
   CREATE PUBLIC.
 
   PUBLIC SECTION.
+    METHODS constructor.
     METHODS zif_sat_object_search_config~get_type          REDEFINITION.
     METHODS zif_sat_object_search_config~get_option_config REDEFINITION.
     METHODS zif_sat_object_search_config~has_option        REDEFINITION.
@@ -33,6 +34,11 @@ ENDCLASS.
 
 
 CLASS zcl_sat_clif_meth_query_config IMPLEMENTATION.
+  METHOD constructor.
+    super->constructor( ).
+    build_config( ).
+  ENDMETHOD.
+
   METHOD build_config.
     super->build_config( ).
 
@@ -48,14 +54,16 @@ CLASS zcl_sat_clif_meth_query_config IMPLEMENTATION.
 
     DATA(lt_method_filters) = VALUE zif_sat_ty_object_search=>ty_t_query_filter( ( get_description_filt_conf( ) ) ).
 
-    ms_search_type-label  = 'Method'.
-    ms_search_type-name   = zif_sat_c_object_search=>c_search_type-method.
-    ms_search_type-inputs = VALUE #( BASE ms_search_type-inputs
-                                     ( name    = zif_sat_c_object_search=>c_search_fields-method_name_input_key
-                                       label   = zif_sat_c_object_search=>c_search_fields-method_name_input_label )
-                                     ( name    = zif_sat_c_object_search=>c_search_fields-method_filter_input_key
-                                       label   = zif_sat_c_object_search=>c_search_fields-method_filter_input_label
-                                       filters = lt_method_filters ) ).
+    ms_search_type-label    = 'Method'.
+    ms_search_type-img_info = VALUE #( img_key     = c_clif_image_keys-method
+                                       img_encoded = get_clif_image( c_clif_image_keys-method ) ).
+    ms_search_type-name     = zif_sat_c_object_search=>c_search_type-method.
+    ms_search_type-inputs   = VALUE #( BASE ms_search_type-inputs
+                                       ( name    = zif_sat_c_object_search=>c_search_fields-method_name_input_key
+                                         label   = zif_sat_c_object_search=>c_search_fields-method_name_input_label )
+                                       ( name    = zif_sat_c_object_search=>c_search_fields-method_filter_input_key
+                                         label   = zif_sat_c_object_search=>c_search_fields-method_filter_input_label
+                                         filters = lt_method_filters ) ).
   ENDMETHOD.
 
   METHOD zif_sat_object_search_config~get_type.
@@ -89,7 +97,7 @@ CLASS zcl_sat_clif_meth_query_config IMPLEMENTATION.
 
   METHOD delete_invalid_obj_filters.
     DELETE mt_options WHERE    name = c_class_intf_search_option-attribute
-                              OR name = c_class_intf_search_option-method.
+                            OR name = c_class_intf_search_option-method.
 
     DATA(lr_object_filters) = REF #( ms_search_type-inputs[
                                          name = zif_sat_c_object_search=>c_search_fields-object_filter_input_key ]-filters ).

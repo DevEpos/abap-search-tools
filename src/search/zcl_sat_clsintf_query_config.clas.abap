@@ -7,10 +7,22 @@ CLASS zcl_sat_clsintf_query_config DEFINITION
   PUBLIC SECTION.
     ALIASES c_class_intf_search_option FOR zif_sat_c_object_search~c_class_intf_search_option.
 
-    METHODS zif_sat_object_search_config~get_type          REDEFINITION.
+    METHODS constructor.
+    METHODS zif_sat_object_search_config~get_type REDEFINITION.
 
   PROTECTED SECTION.
+    CONSTANTS:
+      BEGIN OF c_clif_image_keys,
+        method TYPE string VALUE 'ABAP:IMG_METHOD',
+      END OF c_clif_image_keys.
+
     METHODS build_config REDEFINITION.
+
+    METHODS get_clif_image
+      IMPORTING
+        iv_image_key  TYPE string
+      RETURNING
+        VALUE(result) TYPE string.
 
   PRIVATE SECTION.
     CONSTANTS:
@@ -20,7 +32,6 @@ CLASS zcl_sat_clsintf_query_config DEFINITION
         friend    TYPE string VALUE 'ABAP:IMG_FRIEND',
         interface TYPE string VALUE 'ABAP:IMG_INTERFACE',
         super     TYPE string VALUE 'ABAP:IMG_SUPER_TYPE',
-        method    TYPE string VALUE 'ABAP:IMG_METHOD',
         attribute TYPE string VALUE 'ABAP:IMG_ATTRIBUTE',
       END OF c_image_keys.
 
@@ -33,6 +44,11 @@ ENDCLASS.
 
 
 CLASS zcl_sat_clsintf_query_config IMPLEMENTATION.
+  METHOD constructor.
+    super->constructor( ).
+    build_config( ).
+  ENDMETHOD.
+
   METHOD build_config.
     DATA(lt_object_filters) = VALUE zif_sat_ty_object_search=>ty_t_query_filter(
         ( get_user_filt_conf( ) )
@@ -41,67 +57,74 @@ CLASS zcl_sat_clsintf_query_config IMPLEMENTATION.
         ( get_description_filt_conf( ) )
         ( get_max_rows_filt_conf( ) )
         ( name           = c_general_options-type
-          img_key        = c_general_image_keys-type_folder
-          img_encoded    = get_general_image( c_general_image_keys-type_folder )
-          caching        = abap_true
+          img_info       = VALUE #( img_key     = c_general_image_keys-type_folder
+                                    img_encoded = get_general_image( c_general_image_keys-type_folder ) )
           content_assist = VALUE #(
               assist_type     = zif_sat_c_object_search=>c_filter_content_assist_type-named_item
+              caching         = abap_true
               category_scheme = zif_sat_c_object_search=>c_content_assist-category_scheme
               category_term   = zif_sat_c_object_search=>c_content_assist-terms-class_type
               proposal_images = VALUE #( ( img_key     = c_general_image_keys-type_group
                                            img_encoded = get_general_image( c_general_image_keys-type_group ) ) ) ) )
         ( name           = c_class_intf_search_option-flag
-          img_key        = c_general_image_keys-checked_box
-          img_encoded    = get_general_image( c_general_image_keys-checked_box )
-          caching        = abap_true
+          img_info       = VALUE #( img_key     = c_general_image_keys-checked_box
+                                    img_encoded = get_general_image( c_general_image_keys-checked_box ) )
           content_assist = VALUE #( assist_type     = zif_sat_c_object_search=>c_filter_content_assist_type-named_item
+                                    caching         = abap_true
                                     category_scheme = zif_sat_c_object_search=>c_content_assist-category_scheme
                                     category_term   = zif_sat_c_object_search=>c_content_assist-terms-class_flag ) )
         ( name           = c_class_intf_search_option-category
-          img_key        = c_image_keys-folder
-          img_encoded    = get_image( c_image_keys-folder )
-          caching        = abap_true
+          img_info       = VALUE #( img_key     = c_image_keys-folder
+                                    img_encoded = get_image( c_image_keys-folder ) )
           content_assist = VALUE #(
               assist_type     = zif_sat_c_object_search=>c_filter_content_assist_type-named_item
+              caching         = abap_true
               category_scheme = zif_sat_c_object_search=>c_content_assist-category_scheme
               category_term   = zif_sat_c_object_search=>c_content_assist-terms-class_category
               proposal_images = VALUE #( ( img_key     = c_general_image_keys-type_group
                                            img_encoded = get_general_image( c_general_image_keys-type_group ) ) ) ) )
         ( name           = c_class_intf_search_option-method
-          img_key        = c_image_keys-method
-          img_encoded    = get_image( c_image_keys-method )
+          img_info       = VALUE #( img_key     = c_clif_image_keys-method
+                                    img_encoded = get_clif_image( c_clif_image_keys-method ) )
           allowed_length = 61
           patterns       = abap_true )
         ( name           = c_class_intf_search_option-interface
-          img_key        = c_image_keys-interface
-          img_encoded    = get_image( c_image_keys-interface )
+          img_info       = VALUE #( img_key      = zif_sat_c_object_types=>interface
+                                    img_registry = zif_sat_c_object_search=>c_image_registry_id-adt_type )
           allowed_length = 30
           patterns       = abap_true )
         ( name           = c_class_intf_search_option-attribute
-          img_key        = c_image_keys-attribute
-          img_encoded    = get_image( c_image_keys-attribute )
+          img_info       = VALUE #( img_key     = c_image_keys-attribute
+                                    img_encoded = get_image( c_image_keys-attribute ) )
           allowed_length = 30
           key_value      = abap_true
           patterns       = abap_true )
         ( name           = c_class_intf_search_option-friend
-          img_key        = c_image_keys-friend
-          img_encoded    = get_image( c_image_keys-friend )
+          img_info       = VALUE #( img_key     = c_image_keys-friend
+                                    img_encoded = get_image( c_image_keys-friend ) )
           allowed_length = 30
           patterns       = abap_true )
         ( name           = c_class_intf_search_option-super_type
-          img_key        = c_image_keys-super
-          img_encoded    = get_image( c_image_keys-super )
+          img_info       = VALUE #( img_key     = c_image_keys-super
+                                    img_encoded = get_image( c_image_keys-super ) )
           allowed_length = 30
           patterns       = abap_true ) ).
 
     ms_search_type = VALUE #(
-        label  = 'Class/Interface'
-        name   = zif_sat_c_object_search=>c_search_type-class_interface
-        inputs = VALUE #( ( name    = zif_sat_c_object_search=>c_search_fields-object_name_input_key
-                            label   = zif_sat_c_object_search=>c_search_fields-object_name_input_label )
-                          ( name    = zif_sat_c_object_search=>c_search_fields-object_filter_input_key
-                            label   = zif_sat_c_object_search=>c_search_fields-object_filter_input_label
-                            filters = lt_object_filters ) ) ).
+        label    = 'Class/Interface'
+        name     = zif_sat_c_object_search=>c_search_type-class_interface
+        img_info = VALUE #(
+            img_key     = c_type_image_key_prefix && to_upper( zif_sat_c_object_search=>c_search_type-class_interface )
+            img_encoded = `iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAJVSURBVDhPpVLPTxNBFH6z2112mrbUtIAVlKQoKBaDDYqQYACDHIyEiDQkJlr+BvSIBiXRizdJTIzBk` &&
+                          `wcaT4qebC8e0EMrVqKQGjgoUksJwrbd7f4YdyZKPHS9+CUzyfvme997+94iQgj8D5gBmuqDBoW0ebDjpheLFwEB2ilp85uyetuQ+cUfMwnbKg560eQal/j6StdhfyhwCokODKmvb4afLmR6sqh03pKkqK4SOHo5RX5yMFTvHwtfR0HfaTjobYOx8AQaaA343F` &&
+                          `icZEobsA5Enh+qczUjp1AN0/O32AMWMRRUFQkcusAIG7AOVM2A7M8CVAkYtmQDNnc1OFITho1tBRTNQExpA2ZQ1IznC18+kJVsBu6N3IXp4WnoDHbBjqKTkma+ZEobsC3U3TgbwqIj3rzf6w8dOIo8khverSbJp418viU9+KBGb+iUMN+ulPSkqugPY/HxFzS` &&
+                          `ZbfDPGusK5okqgZ8UeTSErDWWrconkxFB1LG740xjjyQJrOLy56yZW5cjc4nosz2DSoice9KKJUe6scnHXb7WDsfaaiHxKgOpt9/g4+J6US3px+fi0TU2Axu0ePZhTivrsLqyCYLIw9L777C9VYDqasmJONRERbYGCKGyvKNAPieDvKswjibTeNfiCRAn5WwN` &&
+                          `TGIul4q6bhgmdHQfYlx3fxBorKq6YX15mnK2M7A6gNG+2QnsFO7UBlyY5znQrP8ll7X6KepTscT4/X8OkRpQjPQ/HuAQN2v1XG9RS8REV2OJaJK+sVx6VTp/Y7R3Bl3qfYR/h3sghMAvaigRpe8kX2AAAAAASUVORK5CYII=` )
+        inputs   = VALUE #( ( name    = zif_sat_c_object_search=>c_search_fields-object_name_input_key
+                              label   = zif_sat_c_object_search=>c_search_fields-object_name_input_label )
+                            ( name    = zif_sat_c_object_search=>c_search_fields-object_filter_input_key
+                              label   = zif_sat_c_object_search=>c_search_fields-object_filter_input_label
+                              filters = lt_object_filters ) ) ).
 
     mt_options = lt_object_filters.
   ENDMETHOD.
@@ -144,18 +167,23 @@ CLASS zcl_sat_clsintf_query_config IMPLEMENTATION.
                  `/1ODloFxRcZGuAGbVlyCi4NwnPdiYGDOf47mhfkbotwXAv23GIyLk9fDDVi/7CJcHIQj3Rb8CXFasBzFgBDHef7AgPmV5L8UbMu7N1/hBnz98vP/qcMPwOJJfkuBzp//N8RlvgNmIgKaGuG28GdG6Mr/tblbUXBFxqb/aSEr/ocD00kYuu2ItDCVJ9xp/lFgePxJCl` &&
                  `j2Pyti1f9cYIiDAjcpYDnI33+Ati8BqcNqAAg4ODSwhDjPSw9zmX8DFDMgDNT0JcxlwZFQxwXeODXichEoY5GkaUAAAP0vdVygsaP9AAAAAElFTkSuQmCC`.
 
-      WHEN c_image_keys-method.
-        result = `iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAJbSURBVDhPxZNPSBRRHMe/772ZXWdczNRqKRdTtjKwP5bWEgpB0dHoUkR46hBCxz15Cgo8GHSLSi95KSm1Tn` &&
-                 `UpygzKhUKIwLCoiBRX/DM7szOzO/Neb2YH7eCtQ5/D/B5f5vt9M7/3e/hXSFTXqc92na5itN8XotPzRUKhxKaM5MouH8jfmnoevbbORsC1k0rKEXcJJRe69jRorcktdIuuwnQ9zM4bmPySt1zPm/AKrC9/+5UZucCiilSmaWh7Tfzi5e60vj/ZSFK1+7BV2406LYka` &&
-                 `3cPBlB77veKkHVFqNaZ+PI5slYDgs1WF3RjuzeptyQwM28H86gqWLUOui+hO9yC97RA4vqozv9aaYx2NH4rvfs4FXho84pT2H95VqzGoaNuZwfmjV/Dy8wwmZz+hqe4A2lPH0N54Qu6m4XhzfbUSp/2BLyAM8LjorNerqMr0UHw4PYYnV0fl7jbOHenB6PR4qC+sGU` &&
-                 `jEFHBfdISCJAzgQiTKPkfJE6E4NDmCB+/H8CL7FI9y42C00utlswi3zOFzoYWCJAwghJiLhiv/uRCKAcNvRnDq5lnceX0fQXjAiuVhqeBC5tmhIKkEANMLBZsb9vrpbErJ48ibrnSRXCRVAnyIgbwpWx8RY2q0qkBJNC6yzBdsi3tisCL8NUg7st33tLh6qaUhoSuU` &&
-                 `oVqtll1nUJiCNXcVJe7h21KhaLnu+OLg297ItjFI1pmWZ1WO35y3nL1xRVEI9QlnZZheEatOCXOLhpzE8oSw1L5i7nspsm1+FxQ5F4LzDBfQgoYRkI/y6K5vdhf+N8AfNmv0xpyFHKIAAAAASUVORK5CYII=`.
-
       WHEN c_image_keys-super.
         result = `iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABYElEQVR4nGNgoCcISEgQ8I2Kne/g4MBCsmaQJp+o2N1AA/6DDMFQcGy5x9sjS53/H1/p9QibAVGpOdOB+D8CZ5ejKABp/vf3/X8QnV/Wch+MS1s+wuQzCioU0vKrbdILqh6D2Cm5DTIoBqzvUvq2eY` &&
                  `Le+w3d6h8KKtoVQDi/rPkxshqQWG55x32sftzcoyayvl1BYX2/ggBMDOQKZDUZFf0KmRUTsBuALQwwDZiukFo5E7sB2MIgr6z5O7KahIr5CglVi7AbQEwYJFQsV4iuWkV+GDg07GeJLlsrg6kbB0A2QKjMQUa20nGKXKXjI5lyh26BAgcBfHoxDFCodFwRODX2d++O` &&
                  `2v8eE8N/ggwhwoDm37AAlSi1+1uyIvd/5er8/5mL0v9Ll9k/JWhAblmLBSxAZUod9uk3e/x36Q38r9Po9lu8xH4WQQOQgWihpYpUhf1OsRLbH5Ll9qtBYQISBwDP0MXt5h1aTgAAAABJRU5ErkJggg==`.
 
+    ENDCASE.
+  ENDMETHOD.
+
+  METHOD get_clif_image.
+    CASE iv_image_key.
+
+      WHEN c_clif_image_keys-method.
+        result = `iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAJbSURBVDhPxZNPSBRRHMe/772ZXWdczNRqKRdTtjKwP5bWEgpB0dHoUkR46hBCxz15Cgo8GHSLSi95KSm1Tn` &&
+                 `UpygzKhUKIwLCoiBRX/DM7szOzO/Neb2YH7eCtQ5/D/B5f5vt9M7/3e/hXSFTXqc92na5itN8XotPzRUKhxKaM5MouH8jfmnoevbbORsC1k0rKEXcJJRe69jRorcktdIuuwnQ9zM4bmPySt1zPm/AKrC9/+5UZucCiilSmaWh7Tfzi5e60vj/ZSFK1+7BV2406LYka` &&
+                 `3cPBlB77veKkHVFqNaZ+PI5slYDgs1WF3RjuzeptyQwM28H86gqWLUOui+hO9yC97RA4vqozv9aaYx2NH4rvfs4FXho84pT2H95VqzGoaNuZwfmjV/Dy8wwmZz+hqe4A2lPH0N54Qu6m4XhzfbUSp/2BLyAM8LjorNerqMr0UHw4PYYnV0fl7jbOHenB6PR4qC+sGU` &&
+                 `jEFHBfdISCJAzgQiTKPkfJE6E4NDmCB+/H8CL7FI9y42C00utlswi3zOFzoYWCJAwghJiLhiv/uRCKAcNvRnDq5lnceX0fQXjAiuVhqeBC5tmhIKkEANMLBZsb9vrpbErJ48ibrnSRXCRVAnyIgbwpWx8RY2q0qkBJNC6yzBdsi3tisCL8NUg7st33tLh6qaUhoSuU` &&
+                 `oVqtll1nUJiCNXcVJe7h21KhaLnu+OLg297ItjFI1pmWZ1WO35y3nL1xRVEI9QlnZZheEatOCXOLhpzE8oSw1L5i7nspsm1+FxQ5F4LzDBfQgoYRkI/y6K5vdhf+N8AfNmv0xpyFHKIAAAAASUVORK5CYII=`.
     ENDCASE.
   ENDMETHOD.
 ENDCLASS.

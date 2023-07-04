@@ -24,10 +24,11 @@ CLASS zcl_sat_base_query_config DEFINITION
         checked_box TYPE string VALUE 'ABAP:IMG_CHECKED_BOX',
       END OF c_general_image_keys.
 
+    CONSTANTS c_type_image_key_prefix TYPE string VALUE `ABAP:IMG_SEARCHTYPE_`.
+
     DATA mt_options         TYPE zif_sat_ty_object_search=>ty_t_query_filter.
     DATA mt_allowed_options TYPE zif_sat_ty_object_search=>ty_t_options.
     DATA ms_search_type     TYPE zif_sat_ty_object_search=>ty_s_search_type.
-    DATA mf_fill_add_data   TYPE abap_bool.
 
     "! Builds configuration
     "! NOTE: Must be overridden in sub classes
@@ -80,23 +81,10 @@ ENDCLASS.
 
 CLASS zcl_sat_base_query_config IMPLEMENTATION.
   METHOD constructor.
-    build_config( ).
   ENDMETHOD.
 
   METHOD build_config.
-    RETURN.
-  ENDMETHOD.
-
-  METHOD zif_sat_object_search_config~enable_additional_data.
-    IF if_enable = abap_true AND mf_fill_add_data <> if_enable.
-      CLEAR: mt_options,
-             ms_search_type.
-    ENDIF.
-    mf_fill_add_data = if_enable.
-
-    IF ms_search_type IS INITIAL.
-      build_config( ).
-    ENDIF.
+    RAISE EXCEPTION TYPE zcx_sat_nc_exception.
   ENDMETHOD.
 
   METHOD zif_sat_object_search_config~get_allowed_options.
@@ -128,8 +116,8 @@ CLASS zcl_sat_base_query_config IMPLEMENTATION.
                       allowed_length = 40
                       patterns       = abap_true
                       no_uppercase   = abap_true
-                      img_key        = c_image_keys-description
-                      img_encoded    = get_image( c_image_keys-description ) ).
+                      img_info       = VALUE #( img_key     = c_image_keys-description
+                                                img_encoded = get_image( c_image_keys-description ) ) ).
   ENDMETHOD.
 
   METHOD get_max_rows_filt_conf.
@@ -139,8 +127,8 @@ CLASS zcl_sat_base_query_config IMPLEMENTATION.
   METHOD get_package_filt_conf.
     result = VALUE #(
         name           = c_general_options-package
-        img_key        = c_image_keys-package
-        img_encoded    = get_image( c_image_keys-package )
+        img_info       = VALUE #( img_key     = c_image_keys-package
+                                  img_encoded = get_image( c_image_keys-package ) )
         allowed_length = 30
         patterns       = abap_true
         content_assist = VALUE #( assist_type      = zif_sat_c_object_search=>c_filter_content_assist_type-ris
@@ -149,8 +137,8 @@ CLASS zcl_sat_base_query_config IMPLEMENTATION.
 
   METHOD get_user_filt_conf.
     result = VALUE #( name           = c_general_options-user
-                      img_key        = c_image_keys-owner
-                      img_encoded    = get_image( c_image_keys-owner )
+                      img_info       = VALUE #( img_key     = c_image_keys-owner
+                                                img_encoded = get_image( c_image_keys-owner ) )
                       patterns       = abap_true
                       allowed_length = 12
                       content_assist = VALUE #(
@@ -161,10 +149,10 @@ CLASS zcl_sat_base_query_config IMPLEMENTATION.
 
   METHOD get_rel_state_filt_conf.
     result = VALUE #( name           = c_general_options-release_state
-                      img_key        = c_image_keys-api
-                      img_encoded    = get_image( c_image_keys-api )
-                      caching        = abap_true
+                      img_info       = VALUE #( img_key     = c_image_keys-api
+                                                img_encoded = get_image( c_image_keys-api ) )
                       content_assist = VALUE #(
+                          caching               = abap_true
                           assist_type           = zif_sat_c_object_search=>c_filter_content_assist_type-named_item
                           category_scheme       = zif_sat_c_object_search=>c_content_assist-category_scheme
                           category_term         = zif_sat_c_object_search=>c_content_assist-terms-release_state
@@ -172,8 +160,6 @@ CLASS zcl_sat_base_query_config IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD get_image.
-    CHECK mf_fill_add_data = abap_true.
-
     CASE iv_image_key.
 
       WHEN c_image_keys-owner.
@@ -210,8 +196,6 @@ CLASS zcl_sat_base_query_config IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD get_general_image.
-    CHECK mf_fill_add_data = abap_true.
-
     CASE iv_image_key.
 
       WHEN c_general_image_keys-column.
@@ -219,8 +203,9 @@ CLASS zcl_sat_base_query_config IMPLEMENTATION.
                  `Pfr7H8SHSuEEWL1ACsAwYM3++wz7T92H8ggDDANCHBUZHM0UoTzCYBB6AeR8irzw6QcEEwswDDh76T4cDwXAwAAAvGtEmZMujD0AAAAASUVORK5CYII=`.
 
       WHEN c_general_image_keys-type_folder.
-        result = `iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAAVFBMVEUAAAD48Mj46LDo0Ijw2JD44Jj44KD42Ij40HjgwHj42JD40IDYsHC8hTLDiza0fzKlbCStciu8fzLDhTatbCSeZietci+eXx2eXyCPUhn////46JgjdYhrAAAAAXRSTlMAQObYZgAAAFlJREFUeJyd` &&
-                 `z0kSgCAMRNEoKojiBMaB+9/TEFPo0vLtfu8a4JeBvDucJDztY6xU2/uEB1dkjoelzHYexoZgBjBba7EWioZJa9QiNWwGO8ENBxpxN8CafTt2AcOvBf0oDmf4AAAAAElFTkSuQmCC`.
+        result = `iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABkUlEQVR4nGNgGFTgxISI5iNd/r8Od/j8B+EjnX6/T0yMaCPagK0VJt++v737/+/312D88/3D/1vKjX8Spflot33vpYUh/z/fmfD/+52+/7/vdP//cKbp/8OtRf+Pdzn+P9RiBseH2yx+nuixb0QxYH+z2Y/P` &&
+                 `T7b8//FmL0H89fm2//uazX/+/8/ACDdgV53R3+/PNv3/8WIzGFcnh/4vifaH44qEYLgcCO+uNf7X0MDABDdgW7Xh3++PVvz/8WQlGBdH+v1/e2vR/6JI3//vbi0G0zA5EN5eZYRqwKYK/b/f7837/+PBfDDeOLMETIM1IvFheHO5AaoB60p0/36/NfX/jzvTUHBRpA+GGAiv` &&
+                 `L9ZDNWBVoc7f79e6//+40YOCwQagiYHw6gJdVAOW5Wn//X654f+PK01g/Oxw9f+CcO//WYEeYPrZ4Sq4HAgvz9VGNWBpjva3z6eK//+4UAHHn06V/X93vBRMI4t/OV3yf0m21q//DEjRuDhPp3t+uvrfeWnq/wljjX9L8nSmEpVCaQ4A586o1JIz7EQAAAAASUVORK5CYII=`.
 
       WHEN c_general_image_keys-type_group.
         result = `iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAACl0lEQVR4nIWSS08TURiGWbjwB7hwpwt/gr/ChSsTXGqihIWGXgBLh8JMmZm2c2Y6M4VeuNhSW0og2DsXESgEBLExYILBcEmUYCIqKmqRmLSvnZFAGgFPcpKTk+95znc5VVWnrID73lW/UrflVeocp8WcuPxy` &&
