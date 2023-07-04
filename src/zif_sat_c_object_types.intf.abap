@@ -9,4 +9,7 @@ INTERFACE zif_sat_c_object_types
   CONSTANTS package            TYPE string VALUE 'DEVC/K'.
   CONSTANTS table_definition   TYPE string VALUE 'TABL/DT'.
   CONSTANTS view_definition    TYPE string VALUE 'VIEW/DV'.
+  CONSTANTS structured_object  TYPE string VALUE 'STOB/DO'.
+  CONSTANTS interface          TYPE string VALUE 'INTF/OI'.
+  CONSTANTS class              TYPE string VALUE 'CLAS/OC'.
 ENDINTERFACE.
