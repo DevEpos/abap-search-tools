@@ -24,6 +24,7 @@
 
     <saat:searchResult tt:extensible="deep">
       <tt:namespace name="adtbase" />
+      <tt:attribute name="saat:resultCount" value-ref="object_search_result.count" />
       <tt:apply name="resultObjects">
         <tt:with-root name="result_objects" ref="object_search_result.objects"/>
       </tt:apply>
