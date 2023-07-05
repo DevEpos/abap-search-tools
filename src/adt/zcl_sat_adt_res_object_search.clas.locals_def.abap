@@ -23,6 +23,7 @@ CLASS lcl_devclass_util DEFINITION.
       BEGIN OF ty_package,
         devclass        TYPE devclass,
         parent_devclass TYPE devclass,
+        ctext           TYPE tdevct-ctext,
         uri             TYPE string,
       END OF ty_package.
 
