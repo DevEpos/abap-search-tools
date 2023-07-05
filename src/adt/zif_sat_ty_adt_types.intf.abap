@@ -28,6 +28,7 @@ INTERFACE zif_sat_ty_adt_types
     ty_t_adt_obj_ref TYPE STANDARD TABLE OF ty_s_adt_obj_ref WITH EMPTY KEY,
 
     BEGIN OF ty_s_search_result,
+      count   TYPE i,
       objects TYPE ty_t_adt_obj_ref,
     END OF ty_s_search_result,
 
