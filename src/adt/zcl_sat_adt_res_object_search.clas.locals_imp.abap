@@ -80,6 +80,8 @@ CLASS lcl_result_converter IMPLEMENTATION.
     ENDLOOP.
 
     after_conversion( ).
+
+    result-count = lines( mt_query_result ).
   ENDMETHOD.
 
   METHOD convert_result_entry.
