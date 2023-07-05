@@ -11,11 +11,15 @@ CLASS lcl_devclass_util IMPLEMENTATION.
     DELETE ADJACENT DUPLICATES FROM packages_to_read.
 
     WHILE packages_to_read IS NOT INITIAL.
-      SELECT devclass,
-             parentcl AS parent_devclass
-        FROM tdevc
+      SELECT p~devclass,
+             parentcl AS parent_devclass,
+             t~ctext
+        FROM tdevc AS p
+          LEFT OUTER JOIN tdevct AS t
+            ON p~devclass = t~devclass
+            AND t~spras = @sy-langu
         FOR ALL ENTRIES IN @packages_to_read
-        WHERE devclass = @packages_to_read-devclass
+        WHERE p~devclass = @packages_to_read-devclass
         INTO CORRESPONDING FIELDS OF TABLE @read_packages.
 
       CLEAR packages_to_read.
@@ -46,9 +50,10 @@ CLASS lcl_devclass_util IMPLEMENTATION.
   METHOD add_packages_to_adt_result.
     LOOP AT packages ASSIGNING FIELD-SYMBOL(<package>).
 
-      APPEND VALUE #( uri  = <package>-uri
-                      type = zif_sat_c_object_types=>package
-                      name = <package>-devclass )
+      APPEND VALUE #( uri         = <package>-uri
+                      type        = zif_sat_c_object_types=>package
+                      name        = <package>-devclass
+                      description = <package>-ctext )
              TO search_result-objects ASSIGNING FIELD-SYMBOL(<package_adt_result>).
 
       IF <package>-parent_devclass IS NOT INITIAL.
