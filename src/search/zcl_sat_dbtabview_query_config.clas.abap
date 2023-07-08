@@ -40,8 +40,8 @@ CLASS zcl_sat_dbtabview_query_config IMPLEMENTATION.
         ( get_description_filt_conf( ) )
         ( get_max_rows_filt_conf( ) )
         ( name           = c_dbtab_options-field
-          img_info       = VALUE #( img_key     = c_general_image_keys-column
-                                    img_encoded = get_general_image( c_general_image_keys-column ) )
+          img_info       = VALUE #( img_key      = zif_sat_c_object_types=>table_field
+                                    img_registry = zif_sat_c_object_search=>c_image_registry_id-adt_type )
           allowed_length = 30
           content_assist = VALUE #(
               assist_type           = zif_sat_c_object_search=>c_filter_content_assist_type-named_item

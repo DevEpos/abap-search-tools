@@ -53,6 +53,8 @@ CLASS zcl_sat_search_ioc IMPLEMENTATION.
                         iv_implementer = 'ZCL_SAT_DBTABVIEW_QV'
     )->add_implementer( iv_filter      = |{ c_search_type-class_interface }|
                         iv_implementer = 'ZCL_SAT_CLSINTF_QV'
+    )->add_implementer( iv_filter      = |{ c_search_type-method }|
+                        iv_implementer = 'ZCL_SAT_CLSINTF_QV'
     )->add_implementer( iv_implementer = 'ZCL_SAT_GENERAL_QV' ).
 
     add_contract( iv_contract = c_contracts-search_provider
@@ -67,6 +69,8 @@ CLASS zcl_sat_search_ioc IMPLEMENTATION.
 
     add_contract( iv_contract = c_contracts-query_converter
     )->add_implementer( iv_filter      = |{ c_search_type-class_interface }|
+                        iv_implementer = 'ZCL_SAT_CLSINTF_QC'
+    )->add_implementer( iv_filter      = |{ c_search_type-method }|
                         iv_implementer = 'ZCL_SAT_CLSINTF_QC'
     )->add_implementer( iv_filter      = |{ c_search_type-cds_view }|
                         iv_implementer = 'ZCL_SAT_CDS_VIEW_QC'

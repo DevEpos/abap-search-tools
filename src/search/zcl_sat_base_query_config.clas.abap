@@ -147,15 +147,18 @@ CLASS zcl_sat_base_query_config IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD get_rel_state_filt_conf.
-    result = VALUE #( name           = c_general_options-release_state
-                      img_info       = VALUE #( img_key     = c_image_keys-api
-                                                img_encoded = get_image( c_image_keys-api ) )
-                      content_assist = VALUE #(
-                          caching               = abap_true
-                          assist_type           = zif_sat_c_object_search=>c_filter_content_assist_type-named_item
-                          category_scheme       = zif_sat_c_object_search=>c_content_assist-category_scheme
-                          category_term         = zif_sat_c_object_search=>c_content_assist-terms-release_state
-                          proposal_image_source = zif_sat_c_object_search=>c_proposal_image_source-same_as_filter ) ).
+    result = VALUE #(
+        name             = c_general_options-release_state
+        img_info         = VALUE #( img_key     = c_image_keys-api
+                                    img_encoded = get_image( c_image_keys-api ) )
+        long_description = |Use '{ c_general_options-release_state }' to restrict the search query by specific API state.\n\n| &&
+                           |Example:\n|  && |   { c_general_options-release_state } : released|
+        content_assist   = VALUE #(
+            caching               = abap_true
+            assist_type           = zif_sat_c_object_search=>c_filter_content_assist_type-named_item
+            category_scheme       = zif_sat_c_object_search=>c_content_assist-category_scheme
+            category_term         = zif_sat_c_object_search=>c_content_assist-terms-release_state
+            proposal_image_source = zif_sat_c_object_search=>c_proposal_image_source-same_as_filter ) ).
   ENDMETHOD.
 
   METHOD get_image.
