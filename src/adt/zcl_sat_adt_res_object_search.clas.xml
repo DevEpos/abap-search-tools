@@ -18,6 +18,11 @@
      <LANGU>E</LANGU>
      <DESCRIPT>Create response</DESCRIPT>
     </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>CREATE_RESULT_CONVERTER</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Creates result converter for object search result</DESCRIPT>
+    </SEOCOMPOTX>
    </DESCRIPTIONS>
   </asx:values>
  </asx:abap>

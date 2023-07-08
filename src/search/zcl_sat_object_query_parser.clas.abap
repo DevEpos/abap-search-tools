@@ -206,7 +206,7 @@ CLASS zcl_sat_object_query_parser IMPLEMENTATION.
   METHOD add_option_value.
     ASSIGN ct_options[ option = is_option-name target = iv_target ] TO FIELD-SYMBOL(<ls_option>).
     IF sy-subrc <> 0.
-      INSERT VALUE #( option = is_option-name )
+      INSERT VALUE #( option = is_option-name target = iv_target )
       INTO TABLE ct_options ASSIGNING <ls_option>.
     ENDIF.
 
@@ -254,9 +254,16 @@ CLASS zcl_sat_object_query_parser IMPLEMENTATION.
     mo_validator->validate_option( iv_option = is_option-name
                                    iv_value  = lv_value
                                    iv_value2 = lv_value2 ).
-    mo_converter->convert_value( EXPORTING iv_option = is_option-name
-                                 CHANGING  cv_value  = lv_value
-                                           cv_value2 = lv_value2 ).
+
+    IF is_option-data_type = zif_sat_c_object_search=>c_filter_data_type-boolean.
+      lv_value = to_upper( lv_value ).
+      lv_value = xsdbool( lv_value = 'TRUE' OR lv_value = abap_true ).
+    ELSE.
+      mo_converter->convert_value( EXPORTING iv_option = is_option-name
+                                   CHANGING  cv_value  = lv_value
+                                             cv_value2 = lv_value2 ).
+    ENDIF.
+
     " Crop input if necessary
     IF     lv_value                 NA '*+'
        AND is_option-allowed_length  > 0
@@ -311,12 +318,14 @@ CLASS zcl_sat_object_query_parser IMPLEMENTATION.
       SPLIT lv_value_list AT c_value_separator INTO TABLE lt_values.
       LOOP AT lt_values ASSIGNING FIELD-SYMBOL(<lv_value>).
         add_option_value( EXPORTING is_option  = ls_option_info
+                                    iv_target  = zif_sat_c_object_search=>c_search_fields-object_filter_input_key
                                     iv_value   = <lv_value>
                           CHANGING  ct_options = ct_options ).
       ENDLOOP.
     ELSE.
       " Only a single value is included in the query
       add_option_value( EXPORTING is_option  = ls_option_info
+                                  iv_target  = zif_sat_c_object_search=>c_search_fields-object_filter_input_key
                                   iv_value   = lv_value_list
                         CHANGING  ct_options = ct_options ).
     ENDIF.

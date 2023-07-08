@@ -12,7 +12,8 @@ ENDCLASS.
 
 
 
-CLASS zcl_sat_adt_res_col_hierarchy IMPLEMENTATION.
+CLASS ZCL_SAT_ADT_RES_COL_HIERARCHY IMPLEMENTATION.
+
 
   METHOD internal_get.
     DATA(lo_hierarchy_resolver) = NEW zcl_sat_cds_field_hier_res( ).
@@ -21,5 +22,4 @@ CLASS zcl_sat_adt_res_col_hierarchy IMPLEMENTATION.
         iv_cds_view_field = mv_field
     ).
   ENDMETHOD.
-
 ENDCLASS.
