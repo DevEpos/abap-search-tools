@@ -15,6 +15,7 @@ CLASS zcl_sat_clif_meth_query_config DEFINITION
     METHODS build_config REDEFINITION.
 
   PRIVATE SECTION.
+    ALIASES c_method_options for zif_sat_c_object_search~c_method_search_option.
     CONSTANTS:
       BEGIN OF c_image_keys,
         param TYPE string VALUE 'ABAP:IMG_',
@@ -52,7 +53,13 @@ CLASS zcl_sat_clif_meth_query_config IMPLEMENTATION.
     " - level (static, instance)
     " - desc (description of method)
 
-    DATA(lt_method_filters) = VALUE zif_sat_ty_object_search=>ty_t_query_filter( ( get_description_filt_conf( ) ) ).
+    mt_method_options = VALUE zif_sat_ty_object_search=>ty_t_query_filter(
+                                  ( get_description_filt_conf( ) )
+                                  ( name     = c_method_options-param
+                                    no_negation = abap_true
+                                    img_info = VALUE #( img_key     = c_general_image_keys-param
+                                                        img_encoded = get_general_image( c_general_image_keys-param ) )
+                                    patterns = abap_true ) ).
 
     ms_search_type-label    = 'Method'.
     ms_search_type-img_info = VALUE #( img_key     = c_clif_image_keys-method
@@ -63,7 +70,7 @@ CLASS zcl_sat_clif_meth_query_config IMPLEMENTATION.
                                          label   = zif_sat_c_object_search=>c_search_fields-method_name_input_label )
                                        ( name    = zif_sat_c_object_search=>c_search_fields-method_filter_input_key
                                          label   = zif_sat_c_object_search=>c_search_fields-method_filter_input_label
-                                         filters = lt_method_filters ) ).
+                                         filters = mt_method_options ) ).
   ENDMETHOD.
 
   METHOD zif_sat_object_search_config~get_type.

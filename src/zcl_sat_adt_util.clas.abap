@@ -330,23 +330,21 @@ CLASS zcl_sat_adt_util IMPLEMENTATION.
 
   METHOD map_tadir_obj_to_object_ref.
     TRY.
-        cl_wb_object=>create_from_global_type(
-          EXPORTING
-            p_object_type             = is_type
-            p_object_key              = iv_name
-          RECEIVING
-            p_wb_object               = DATA(lo_wb_object)
-          EXCEPTIONS
-            objecttype_not_existing   = 1
-            input_data_not_sufficient = 2
-            OTHERS                    = 3
-        ).
-        CHECK sy-subrc = 0.
+        cl_wb_object=>create_from_global_type( EXPORTING  p_object_type             = is_type
+                                                          p_object_key              = iv_name
+                                               RECEIVING  p_wb_object               = DATA(lo_wb_object)
+                                               EXCEPTIONS objecttype_not_existing   = 1
+                                                          input_data_not_sufficient = 2
+                                                          OTHERS                    = 3 ).
+        IF sy-subrc <> 0.
+          RETURN.
+        ENDIF.
         DATA(lo_adt_tools_core_f) = cl_adt_tools_core_factory=>get_instance( ).
         DATA(lo_object_ref) = lo_adt_tools_core_f->get_uri_mapper( )->map_wb_object_to_objref(
-            wb_object          = lo_wb_object
-        ).
-        CHECK lo_object_ref IS BOUND.
+                                  wb_object = lo_wb_object ).
+        IF lo_object_ref IS NOT BOUND.
+          RETURN.
+        ENDIF.
         rs_object_ref = lo_object_ref->ref_data.
       CATCH cx_adt_uri_mapping.
     ENDTRY.

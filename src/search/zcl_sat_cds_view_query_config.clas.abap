@@ -89,8 +89,8 @@ CLASS zcl_sat_cds_view_query_config IMPLEMENTATION.
               secondary_category_term = zif_sat_c_object_search=>c_content_assist-terms-annotatio_value
               proposal_image_source   = zif_sat_c_object_search=>c_proposal_image_source-same_as_filter  ) )
         ( name           = c_cds_options-field
-          img_info       = VALUE #( img_key     = c_general_image_keys-column
-                                    img_encoded = get_general_image( c_general_image_keys-column ) )
+          img_info       = VALUE #( img_key      = zif_sat_c_object_types=>structured_object_field
+                                    img_registry = zif_sat_c_object_search=>c_image_registry_id-adt_type )
           allowed_length = 30
           patterns       = abap_true
           content_assist = VALUE #(

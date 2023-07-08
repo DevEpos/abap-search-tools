@@ -7,8 +7,6 @@ CLASS zcl_sat_os_cds_provider DEFINITION
   PUBLIC SECTION.
     INTERFACES zif_sat_ty_object_search.
 
-    ALIASES ty_t_value_range FOR zif_sat_ty_object_search~ty_t_value_range.
-
     "! <p class="shorttext synchronized">CONSTRUCTOR</p>
     METHODS constructor.
 
@@ -19,6 +17,7 @@ CLASS zcl_sat_os_cds_provider DEFINITION
 
   PRIVATE SECTION.
     ALIASES c_cds_search_params FOR zif_sat_c_object_search~c_cds_search_params.
+    ALIASES ty_t_value_range    FOR zif_sat_ty_object_search~ty_t_value_range.
 
     DATA mv_field_subquery            TYPE string.
     DATA mv_anno_subquery             TYPE string.
@@ -182,7 +181,7 @@ CLASS zcl_sat_os_cds_provider IMPLEMENTATION.
           add_api_option_filter( it_values          = <ls_option>-value_range
                                  iv_ref_field       = CONV #( c_fields-ddlname )
                                  iv_ref_table_alias = c_base_alias
-                                 it_tadir_type      = VALUE #( ( 'DDLS' ) ) ).
+                                 it_tadir_type      = VALUE #( ( zif_sat_c_tadir_types=>data_definition ) ) ).
 
         " Find views where the filter exists in the FROM part of the cds view
         WHEN c_cds_search_params-select_from.
@@ -195,7 +194,7 @@ CLASS zcl_sat_os_cds_provider IMPLEMENTATION.
         " Find views that are parameterized
         WHEN c_cds_search_params-params.
           CHECK <ls_option>-value_range IS NOT INITIAL.
-          DATA(lf_views_with_parameters) = xsdbool( <ls_option>-value_range[ 1 ]-low = 'TRUE' ).
+          DATA(lf_views_with_parameters) = xsdbool( <ls_option>-value_range[ 1 ]-low = abap_true ).
           IF lf_views_with_parameters = abap_true.
             add_join_table( iv_join_table = |{ zif_sat_c_select_source_id=>zsat_i_cdsviewwithparameter }|
                             iv_alias      = c_parameterized_view_alias
