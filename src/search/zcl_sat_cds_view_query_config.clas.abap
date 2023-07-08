@@ -83,8 +83,8 @@ CLASS zcl_sat_cds_view_query_config IMPLEMENTATION.
           key_value      = abap_true
           patterns       = abap_true )
         ( name           = c_cds_options-field
-          img_info       = VALUE #( img_key     = c_general_image_keys-column
-                                    img_encoded = get_general_image( c_general_image_keys-column ) )
+          img_info       = VALUE #( img_key      = zif_sat_c_object_types=>structured_object_field
+                                    img_registry = zif_sat_c_object_search=>c_image_registry_id-adt_type )
           allowed_length = 30
           patterns       = abap_true
           content_assist = VALUE #(

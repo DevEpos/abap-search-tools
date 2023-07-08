@@ -6,12 +6,20 @@ CLASS zcl_sat_adt_res_object_search DEFINITION
   PUBLIC SECTION.
     METHODS post REDEFINITION.
 
+    "! <p class="shorttext synchronized">Creates result converter for object search result</p>
+    CLASS-METHODS create_result_converter
+      IMPORTING
+        iv_search_type          TYPE zif_sat_ty_object_search=>ty_search_type
+        if_no_package_hierarchy TYPE abap_bool OPTIONAL
+        it_query_result         TYPE zif_sat_ty_object_search=>ty_t_search_result
+      RETURNING
+        VALUE(result)           TYPE REF TO zif_sat_adt_objs_res_converter.
+
   PROTECTED SECTION.
 
   PRIVATE SECTION.
     DATA mt_query_result           TYPE zif_sat_ty_object_search=>ty_t_search_result.
     DATA mf_with_package_hierarchy TYPE abap_bool.
-    DATA mo_search_config          TYPE REF TO zif_sat_object_search_config.
     DATA ms_query_input            TYPE zif_sat_ty_adt_types=>ty_s_query_input.
 
     "! <p class="shorttext synchronized">Create response</p>
@@ -30,12 +38,17 @@ ENDCLASS.
 
 
 CLASS zcl_sat_adt_res_object_search IMPLEMENTATION.
+  METHOD create_result_converter.
+    DATA(lo_result_converter) = lcl_result_converter_factory=>create_result_converter(
+                                    iv_search_type  = iv_search_type
+                                    it_query_result = it_query_result ).
+    lo_result_converter->set_no_package_hiearchy( if_no_package_hierarchy ).
+    result = CAST #( lo_result_converter ).
+  ENDMETHOD.
+
   METHOD post.
     request->get_body_data( EXPORTING content_handler = zcl_sat_adt_ch_factory=>create_query_input_ch( )
                             IMPORTING data            = ms_query_input ).
-
-    mo_search_config = CAST #( zcl_sat_ioc_lookup=>get_instance( iv_contract = 'zif_sat_object_search_config'
-                                                                 iv_filter   = |{ ms_query_input-type }| ) ).
 
     TRY.
         DATA(lo_search_engine) = CAST zif_sat_search_engine( zcl_sat_ioc_lookup=>get_instance(
@@ -68,7 +81,7 @@ CLASS zcl_sat_adt_res_object_search IMPLEMENTATION.
     DATA(lo_result_converter) = lcl_result_converter_factory=>create_result_converter(
                                     iv_search_type  = ms_query_input-type
                                     it_query_result = mt_query_result ).
-    result = lo_result_converter->convert( ).
+    result = lo_result_converter->zif_sat_adt_objs_res_converter~convert( ).
   ENDMETHOD.
 
   METHOD get_search_terms.
