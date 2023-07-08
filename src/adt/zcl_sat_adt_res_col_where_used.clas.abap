@@ -32,73 +32,8 @@ ENDCLASS.
 
 
 
-CLASS zcl_sat_adt_res_col_where_used IMPLEMENTATION.
-  METHOD internal_get.
-    DATA: lt_type_parts  TYPE string_table,
-          lv_source_type TYPE ddddlsrctype.
+CLASS ZCL_SAT_ADT_RES_COL_WHERE_USED IMPLEMENTATION.
 
-    FIELD-SYMBOLS: <lt_where_used> TYPE zsat_adt_element_info_t.
-
-    DATA(lv_base_table) = mv_object_name.
-
-    SELECT SINGLE type
-      FROM zsat_i_databaseentitywotext
-      WHERE entity = @lv_base_table
-    INTO @DATA(lv_entity_type).
-
-    IF lv_entity_type = zif_sat_c_entity_type=>cds_view.
-      SELECT SINGLE viewname, sourcetype
-        FROM zsat_p_cdsviewbase
-        WHERE entityid = @lv_base_table
-      INTO (@lv_base_table,@lv_source_type).
-      IF lv_source_type = zif_sat_c_cds_view_type=>table_function OR
-         lv_base_table IS INITIAL.
-        lv_base_table = mv_object_name.
-      ENDIF.
-    ENDIF.
-
-    CHECK lv_base_table IS NOT INITIAL.
-
-    fill_where_used_in_cds( iv_base_table  = lv_base_table
-                            iv_entity_type = lv_entity_type ).
-    IF mf_search_db_views = abap_true.
-      fill_where_used_in_view( iv_base_table  = lv_base_table
-                               iv_entity_type = lv_entity_type ).
-    ENDIF.
-
-    CHECK ms_field_info-children IS BOUND.
-
-    ASSIGN ms_field_info-children->* TO <lt_where_used>.
-    SORT <lt_where_used> BY name.
-
-    LOOP AT <lt_where_used> ASSIGNING FIELD-SYMBOL(<ls_where_used>).
-      CHECK <ls_where_used>-type IS NOT INITIAL.
-      SPLIT <ls_where_used>-type AT '/' INTO TABLE lt_type_parts.
-      CHECK lines( lt_type_parts ) = 2.
-      <ls_where_used>-uri = zcl_sat_adt_util=>get_adt_object_ref_uri(
-        iv_name = CONV #( <ls_where_used>-name )
-        is_type = VALUE #( objtype_tr = lt_type_parts[ 1 ] subtype_wb = lt_type_parts[ 2 ] )
-      ).
-    ENDLOOP.
-  ENDMETHOD.
-
-  METHOD get_parameters.
-    super->get_parameters( io_request ).
-    mv_object_name = to_upper( mv_object_name ).
-    mv_field = to_upper( mv_field ).
-
-*.. Retrieve additional parameters which are only relevant for the where used query
-    mf_search_db_views = zcl_sat_adt_res_util=>get_request_param_value(
-      iv_param_name    = zif_sat_c_adt_utils=>c_db_fields_info_parameter-search_db_views
-      iv_default_value = abap_false
-      io_request       = io_request
-    ).
-    mf_search_calc_fields = zcl_sat_adt_res_util=>get_request_param_value(
-      iv_param_name    = zif_sat_c_adt_utils=>c_db_fields_info_parameter-search_calc_fields
-      iv_default_value = abap_false
-      io_request       = io_request
-    ).
-  ENDMETHOD.
 
   METHOD fill_where_used_in_cds.
     DATA: lt_where_used TYPE zif_sat_ty_adt_types=>ty_t_field_usage.
@@ -178,4 +113,72 @@ CLASS zcl_sat_adt_res_col_where_used IMPLEMENTATION.
     ENDLOOP.
   ENDMETHOD.
 
+
+  METHOD get_parameters.
+    super->get_parameters( io_request ).
+    mv_object_name = to_upper( mv_object_name ).
+    mv_field = to_upper( mv_field ).
+
+*.. Retrieve additional parameters which are only relevant for the where used query
+    mf_search_db_views = zcl_sat_adt_res_util=>get_request_param_value(
+      iv_param_name    = zif_sat_c_adt_utils=>c_db_fields_info_parameter-search_db_views
+      iv_default_value = abap_false
+      io_request       = io_request
+    ).
+    mf_search_calc_fields = zcl_sat_adt_res_util=>get_request_param_value(
+      iv_param_name    = zif_sat_c_adt_utils=>c_db_fields_info_parameter-search_calc_fields
+      iv_default_value = abap_false
+      io_request       = io_request
+    ).
+  ENDMETHOD.
+
+
+  METHOD internal_get.
+    DATA: lt_type_parts  TYPE string_table,
+          lv_source_type TYPE ddddlsrctype.
+
+    FIELD-SYMBOLS: <lt_where_used> TYPE zsat_adt_element_info_t.
+
+    DATA(lv_base_table) = mv_object_name.
+
+    SELECT SINGLE type
+      FROM zsat_i_databaseentitywotext
+      WHERE entity = @lv_base_table
+    INTO @DATA(lv_entity_type).
+
+    IF lv_entity_type = zif_sat_c_entity_type=>cds_view.
+      SELECT SINGLE viewname, sourcetype
+        FROM zsat_p_cdsviewbase
+        WHERE entityid = @lv_base_table
+      INTO (@lv_base_table,@lv_source_type).
+      IF lv_source_type = zif_sat_c_cds_view_type=>table_function OR
+         lv_base_table IS INITIAL.
+        lv_base_table = mv_object_name.
+      ENDIF.
+    ENDIF.
+
+    CHECK lv_base_table IS NOT INITIAL.
+
+    fill_where_used_in_cds( iv_base_table  = lv_base_table
+                            iv_entity_type = lv_entity_type ).
+    IF mf_search_db_views = abap_true.
+      fill_where_used_in_view( iv_base_table  = lv_base_table
+                               iv_entity_type = lv_entity_type ).
+    ENDIF.
+
+    CHECK ms_field_info-children IS BOUND.
+
+    ASSIGN ms_field_info-children->* TO <lt_where_used>.
+    SORT <lt_where_used> BY name.
+
+    LOOP AT <lt_where_used> ASSIGNING FIELD-SYMBOL(<ls_where_used>).
+      CHECK <ls_where_used>-type IS NOT INITIAL.
+      SPLIT <ls_where_used>-type AT '/' INTO TABLE lt_type_parts.
+      CHECK lines( lt_type_parts ) = 2.
+      <ls_where_used>-uri = zcl_sat_adt_util=>get_adt_object_ref_uri(
+        iv_name = CONV #( <ls_where_used>-name )
+        is_type = VALUE #( objtype_tr = lt_type_parts[ 1 ] subtype_wb = lt_type_parts[ 2 ] )
+      ).
+    ENDLOOP.
+  ENDMETHOD.
 ENDCLASS.

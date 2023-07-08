@@ -87,13 +87,6 @@ INTERFACE zif_sat_c_object_search
       "!   <li>shared_memory</li>
       "! </ul>
       flag       TYPE string VALUE 'flag',
-      "! Exposure (for methods/attributes). Possible values are
-      "! <ul>
-      "!   <li>private</li>
-      "!   <li>protected</li>
-      "!   <li>public</li>
-      "! </ul>
-      exposure   TYPE string VALUE 'exposure',
       "! Restricts usage to certain abap language stack (see data element ABAPVRS)
       "! --> check against current NW stack to get valid options and correct description
       abap_lang  TYPE string VALUE 'lang',
@@ -101,6 +94,18 @@ INTERFACE zif_sat_c_object_search
       "! (necessary???)
       ref_object TYPE string VALUE 'refcls',
     END OF c_class_intf_search_option.
+
+  CONSTANTS:
+    BEGIN OF c_method_search_option,
+      param    TYPE string VALUE 'param',
+      "! Exposure (for methods/attributes). Possible values are
+      "! <ul>
+      "!   <li>private</li>
+      "!   <li>protected</li>
+      "!   <li>public</li>
+      "! </ul>
+      exposure TYPE string VALUE 'exposure',
+    END OF c_method_search_option.
 
   CONSTANTS:
     "! <p class="shorttext synchronized" lang="en">Flags for Class/Interface</p>

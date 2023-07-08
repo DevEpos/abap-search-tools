@@ -88,14 +88,18 @@
       <tt:cond check="not-initial(filter.key_value)">
         <tt:attribute name="saat:keyValuePair" option="format(boolean)" value-ref="filter.key_value" />
       </tt:cond>
-      <tt:cond check="not-initial(filter.long_description)">
-        <tt:attribute name="saat:longDescription" value-ref="filter.long_description" />
-      </tt:cond>
       <tt:cond check="not-initial(filter.internal)">
         <tt:attribute name="saat:internal" option="format(boolean)" value-ref="filter.internal" />
       </tt:cond>
       <tt:cond check="not-initial(filter.patterns)">
         <tt:attribute name="saat:patterns" option="format(boolean)" value-ref="filter.patterns" />
+      </tt:cond>
+
+      <tt:cond check="not-initial(filter.long_description)">
+        <!--<tt:attribute name="saat:longDescription" value-ref="filter.long_description" />-->
+        <saat:longDescription>
+          <tt:value ref="filter.long_description" />
+        </saat:longDescription>
       </tt:cond>
 
       <tt:cond check="exist(filter.img_info)">
