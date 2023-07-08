@@ -5,23 +5,29 @@ CLASS zcl_sat_adt_discovery_app DEFINITION
   CREATE PUBLIC.
 
   PUBLIC SECTION.
-    CONSTANTS c_utils_root_scheme          TYPE string VALUE 'http://www.devepos.com/adt/saat'.
-    CONSTANTS c_utils_rel_scheme           TYPE string VALUE 'http://www.devepos.com/adt/relations/saat'.
-    CONSTANTS c_object_search_uri          TYPE string VALUE '/v2/objectsearch'.
-    CONSTANTS c_sapaox_launcher_uri        TYPE string VALUE '/sapaox'.
-    CONSTANTS c_db_fields_info_uri         TYPE string VALUE '/dbfields/info'.
-    CONSTANTS c_ddic_repo_access_uri       TYPE string VALUE '/ddicaccess'.
-    CONSTANTS c_column_info_uri            TYPE string VALUE '/columninfo'.
-    CONSTANTS c_column_hierarchy_uri       TYPE string VALUE '/columninfo/hierarchy'.
-    CONSTANTS c_column_where_used_uri      TYPE string VALUE '/columninfo/whereUsed'.
-    CONSTANTS c_cds_analysis_uri           TYPE string VALUE '/cds/analysis'.
-    CONSTANTS c_cds_top_down_analysis_uri  TYPE string VALUE '/cds/analysis/topDown'.
-    CONSTANTS c_cds_used_entites_analy_uri TYPE string VALUE '/cds/analysis/usedEntities'.
-    CONSTANTS c_element_info_uri           TYPE string VALUE '/elementinfo'.
-    CONSTANTS c_element_info_by_uri_uri    TYPE string VALUE '/elementinfoByUri'.
-    CONSTANTS c_nav_targets_uri            TYPE string VALUE '/navigationtargets'.
-    CONSTANTS c_static_uri                 TYPE string VALUE '/devepos/adt/saat'.
-    CONSTANTS c_app_title                  TYPE string VALUE 'Discovery Provider for ABAP Search and Analysis Tools'.
+    CONSTANTS c_utils_root_scheme       TYPE string VALUE 'http://www.devepos.com/adt/saat'.
+    CONSTANTS c_utils_rel_scheme        TYPE string VALUE 'http://www.devepos.com/adt/relations/saat'.
+    CONSTANTS c_object_search_uri       TYPE string VALUE '/v2/objectsearch'.
+    CONSTANTS c_sapaox_launcher_uri     TYPE string VALUE '/sapaox'.
+    CONSTANTS c_db_fields_info_uri      TYPE string VALUE '/dbfields/info'.
+    CONSTANTS c_ddic_repo_access_uri    TYPE string VALUE '/ddicaccess'.
+    CONSTANTS c_element_info_uri        TYPE string VALUE '/elementinfo'.
+    CONSTANTS c_element_info_by_uri_uri TYPE string VALUE '/elementinfoByUri'.
+    CONSTANTS c_nav_targets_uri         TYPE string VALUE '/navigationtargets'.
+    CONSTANTS c_static_uri              TYPE string VALUE '/devepos/adt/saat'.
+    CONSTANTS c_app_title               TYPE string VALUE 'Discovery Provider for ABAP Search and Analysis Tools'.
+
+    CONSTANTS:
+      BEGIN OF c_cds_analysis_uri,
+        base                  TYPE string VALUE '/cds/analysis',
+        top_down_analysis     TYPE string VALUE '/cds/analysis/topDown',
+        where_used_base       TYPE string VALUE '/cds/analysis/whereUsedIn',
+        where_used_in_from    TYPE string VALUE '/from',
+        where_used_in_assoc   TYPE string VALUE '/associations',
+        used_entites_analysis TYPE string VALUE '/cds/analysis/usedEntities',
+        field_hierarchy       TYPE string VALUE '/cds/analysis/field/hierarchy',
+        field_where_used      TYPE string VALUE '/cds/analysis/field/whereUsed',
+      END OF c_cds_analysis_uri.
 
     METHODS if_adt_rest_rfc_application~get_static_uri_path REDEFINITION.
 
@@ -60,11 +66,6 @@ CLASS zcl_sat_adt_discovery_app DEFINITION
       IMPORTING
         io_registry TYPE REF TO if_adt_disc_rest_rc_registry.
 
-    "! <p class="shorttext synchronized">Registers Resources for DB Field accesses</p>
-    METHODS register_db_field_resources
-      IMPORTING
-        io_registry TYPE REF TO if_adt_disc_rest_rc_registry.
-
     "! <p class="shorttext synchronized">Registers resource for DDIC Repository Access</p>
     METHODS register_ddic_repo_access
       IMPORTING
@@ -89,7 +90,6 @@ CLASS zcl_sat_adt_discovery_app IMPLEMENTATION.
     register_sapaox_launcher( registry ).
     register_cds_analysis( registry ).
     register_navigation_targets( registry ).
-    register_db_field_resources( registry ).
     register_ddic_repo_access( io_registry = registry ).
   ENDMETHOD.
 
@@ -243,24 +243,61 @@ CLASS zcl_sat_adt_discovery_app IMPLEMENTATION.
 
   METHOD register_cds_analysis.
     DATA(lo_element_info_collection) = io_registry->register_discoverable_resource(
-                                           url             = c_cds_analysis_uri
+                                           url             = c_cds_analysis_uri-base
                                            handler_class   = 'ZCL_SAT_ADT_RES_CDS_ANALYSIS'
                                            description     = 'Resource for CDS Analysis'
-                                           category_scheme = c_utils_root_scheme && c_cds_analysis_uri
+                                           category_scheme = c_utils_root_scheme && c_cds_analysis_uri-base
                                            category_term   = 'cdsanalysis' ).
 
     " Register URI template for Top-Down Analysis
     lo_element_info_collection->register_disc_res_w_template(
-        template      = |{ c_cds_top_down_analysis_uri }\{?{ zif_sat_c_adt_utils=>c_cds_analysis_parameter-cds_name }\}| &&
+        template      = c_cds_analysis_uri-top_down_analysis &&
+                        |\{?{ zif_sat_c_adt_utils=>c_cds_analysis_parameter-cds_name }\}| &&
                         |\{&{ zif_sat_c_adt_utils=>c_cds_analysis_parameter-with_associations }*\}|
         handler_class = 'ZCL_SAT_ADT_RES_CDS_A_TOPDOWN'
-        relation      = c_utils_rel_scheme && c_cds_top_down_analysis_uri ).
+        relation      = c_utils_rel_scheme && c_cds_analysis_uri-base ).
+
+    " Register URI templates for Where-Used-Analysis
+    DATA(lv_where_used_in_template) = c_cds_analysis_uri-where_used_base &&
+        |\{?{ zif_sat_c_adt_utils=>c_cds_analysis_parameter-entity_name }\}| &&
+        |\{&{ zif_sat_c_adt_utils=>c_cds_analysis_parameter-source_origin }*\}| &&
+        |\{&{ zif_sat_c_adt_utils=>c_cds_analysis_parameter-only_local_assocs }*\}| &&
+        |\{&{ zif_sat_c_adt_utils=>c_cds_analysis_parameter-only_released_entities }*\}|.
+
+    lo_element_info_collection->register_disc_res_w_template(
+        template      = lv_where_used_in_template
+        handler_class = 'ZCL_SAT_ADT_RES_CDS_A_WUSL'
+        relation      = c_utils_rel_scheme && c_cds_analysis_uri-where_used_base && c_cds_analysis_uri-where_used_in_from ).
+
+    lo_element_info_collection->register_disc_res_w_template(
+        template      = lv_where_used_in_template
+        handler_class = 'ZCL_SAT_ADT_RES_CDS_A_WUSL'
+        relation      = c_utils_rel_scheme && c_cds_analysis_uri-where_used_base && c_cds_analysis_uri-where_used_in_assoc ).
 
     " Register URI template for Used Entities Analyis
     lo_element_info_collection->register_disc_res_w_template(
-        template      = |{ c_cds_used_entites_analy_uri }\{?{ zif_sat_c_adt_utils=>c_cds_analysis_parameter-cds_name }\}|
+        template      = c_cds_analysis_uri-used_entites_analysis &&
+                        |\{?{ zif_sat_c_adt_utils=>c_cds_analysis_parameter-cds_name }\}|
         handler_class = 'ZCL_SAT_ADT_RES_CDS_A_USED_ENT'
-        relation      = c_utils_rel_scheme && c_cds_used_entites_analy_uri ).
+        relation      = c_utils_rel_scheme && c_cds_analysis_uri-used_entites_analysis ).
+
+    " Register template for column where-used list
+    lo_element_info_collection->register_disc_res_w_template(
+        template      = c_cds_analysis_uri-field_where_used &&
+                        |\{?{ zif_sat_c_adt_utils=>c_db_fields_info_parameter-name }\}| &&
+                        |\{&{ zif_sat_c_adt_utils=>c_db_fields_info_parameter-field }\}| &&
+                        |\{&{ zif_sat_c_adt_utils=>c_db_fields_info_parameter-search_calc_fields }*\}| &&
+                        |\{&{ zif_sat_c_adt_utils=>c_db_fields_info_parameter-search_db_views }*\}|
+        handler_class = 'ZCL_SAT_ADT_RES_COL_WHERE_USED'
+        relation      = c_utils_rel_scheme && c_cds_analysis_uri-field_where_used ).
+
+    " Register template for column hierarchy
+    lo_element_info_collection->register_disc_res_w_template(
+        template      = c_cds_analysis_uri-field_hierarchy &&
+                        |\{?{ zif_sat_c_adt_utils=>c_db_fields_info_parameter-name }\}| &&
+                        |\{&{ zif_sat_c_adt_utils=>c_db_fields_info_parameter-field }\}|
+        handler_class = 'ZCL_SAT_ADT_RES_COL_HIERARCHY'
+        relation      = c_utils_rel_scheme && c_cds_analysis_uri-field_hierarchy ).
   ENDMETHOD.
 
   METHOD register_navigation_targets.
@@ -278,32 +315,6 @@ CLASS zcl_sat_adt_discovery_app IMPLEMENTATION.
                         |\{&{ zif_sat_c_adt_utils=>c_element_info_parameter-object_type }\}|
         handler_class = lc_handler
         relation      = c_utils_rel_scheme && c_nav_targets_uri ).
-  ENDMETHOD.
-
-  METHOD register_db_field_resources.
-    " Register resource for reading the hierarchy or where-used list of Table / View / CDS Field
-    DATA(lo_element_info_collection) = io_registry->register_discoverable_resource(
-        url             = c_column_info_uri
-        handler_class   = 'ZCL_SAT_ADT_RES_COLUMN_INFO'
-        description     = 'Resource for reading information about a column of an entity'
-        category_scheme = c_utils_root_scheme && c_column_info_uri
-        category_term   = 'column-information' ).
-
-    " Register template for column where-used list
-    lo_element_info_collection->register_disc_res_w_template(
-        template      = |{ c_column_where_used_uri }\{?{ zif_sat_c_adt_utils=>c_db_fields_info_parameter-name }\}| &&
-                        |\{&{ zif_sat_c_adt_utils=>c_db_fields_info_parameter-field }\}| &&
-                        |\{&{ zif_sat_c_adt_utils=>c_db_fields_info_parameter-search_calc_fields }*\}| &&
-                        |\{&{ zif_sat_c_adt_utils=>c_db_fields_info_parameter-search_db_views }*\}|
-        handler_class = 'ZCL_SAT_ADT_RES_COL_WHERE_USED'
-        relation      = c_utils_rel_scheme && c_column_where_used_uri ).
-
-    " Register template for column hierarchy
-    lo_element_info_collection->register_disc_res_w_template(
-        template      = |{ c_column_hierarchy_uri }\{?{ zif_sat_c_adt_utils=>c_db_fields_info_parameter-name }\}| &&
-                        |\{&{ zif_sat_c_adt_utils=>c_db_fields_info_parameter-field }\}|
-        handler_class = 'ZCL_SAT_ADT_RES_COL_HIERARCHY'
-        relation      = c_utils_rel_scheme && c_column_hierarchy_uri ).
   ENDMETHOD.
 
   METHOD register_ddic_repo_access.

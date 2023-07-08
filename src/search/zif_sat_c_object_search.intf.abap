@@ -99,6 +99,18 @@ INTERFACE zif_sat_c_object_search
     END OF c_class_intf_search_option.
 
   CONSTANTS:
+    BEGIN OF c_method_search_option,
+      param    TYPE string VALUE 'param',
+      "! Exposure (for methods/attributes). Possible values are
+      "! <ul>
+      "!   <li>private</li>
+      "!   <li>protected</li>
+      "!   <li>public</li>
+      "! </ul>
+      exposure TYPE string VALUE 'exposure',
+    END OF c_method_search_option.
+
+  CONSTANTS:
     "! <p class="shorttext synchronized" lang="en">Flags for Class/Interface</p>
     BEGIN OF c_class_intf_flags,
       is_abstract        TYPE string VALUE 'ABSTRACT',

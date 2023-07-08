@@ -19,7 +19,6 @@
      <DESCRIPT>Registers Resources for CDS Analysis Tools</DESCRIPT>
     </SEOCOMPOTX>
     <SEOCOMPOTX>
-     <CLSNAME>ZCL_SAT_ADT_DISCOVERY_APP</CLSNAME>
      <CMPNAME>REGISTER_DB_FIELD_RESOURCES</CMPNAME>
      <LANGU>E</LANGU>
      <DESCRIPT>Registers Resources for DB Field accesses</DESCRIPT>

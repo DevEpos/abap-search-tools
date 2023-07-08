@@ -3,23 +3,15 @@
  <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
   <asx:values>
    <VSEOCLASS>
-    <CLSNAME>ZCL_SAT_ADT_RES_OBJECT_SEARCH</CLSNAME>
+    <CLSNAME>ZCL_SAT_ADT_RES_CDS_A_WUSL</CLSNAME>
     <LANGU>E</LANGU>
-    <DESCRIPT>Resource Controller for ADT DB Browser Utils</DESCRIPT>
+    <DESCRIPT>Where-Used-Analysis for Table/View/CDS in CDS Views</DESCRIPT>
     <STATE>1</STATE>
     <CLSCCINCL>X</CLSCCINCL>
     <FIXPT>X</FIXPT>
     <UNICODE>X</UNICODE>
     <WITH_UNIT_TESTS>X</WITH_UNIT_TESTS>
    </VSEOCLASS>
-   <DESCRIPTIONS>
-    <SEOCOMPOTX>
-     <CLSNAME>ZCL_SAT_ADT_RES_OBJECT_SEARCH</CLSNAME>
-     <CMPNAME>CREATE_RESPONSE</CMPNAME>
-     <LANGU>E</LANGU>
-     <DESCRIPT>Create response</DESCRIPT>
-    </SEOCOMPOTX>
-   </DESCRIPTIONS>
   </asx:values>
  </asx:abap>
 </abapGit>
