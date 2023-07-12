@@ -112,12 +112,15 @@ CLASS zcl_sat_base_query_config IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD get_description_filt_conf.
-    result = VALUE #( name           = c_general_options-description
-                      allowed_length = 40
-                      patterns       = abap_true
-                      no_uppercase   = abap_true
-                      img_info       = VALUE #( img_key     = c_image_keys-description
-                                                img_encoded = get_image( c_image_keys-description ) ) ).
+    result = VALUE #(
+        name             = c_general_options-description
+        long_description = |Use '{ c_general_options-description }' to restrict the search query by a given Description. | &&
+                           |Starting from NetWeaver 7.51 the input must no longer be case sensitive.\n\nExample:\n   { c_general_options-description } : some+descr|
+        allowed_length   = 40
+        patterns         = abap_true
+        no_uppercase     = abap_true
+        img_info         = VALUE #( img_key     = c_image_keys-description
+                                    img_encoded = get_image( c_image_keys-description ) ) ).
   ENDMETHOD.
 
   METHOD get_max_rows_filt_conf.
@@ -126,25 +129,30 @@ CLASS zcl_sat_base_query_config IMPLEMENTATION.
 
   METHOD get_package_filt_conf.
     result = VALUE #(
-        name           = c_general_options-package
-        img_info       = VALUE #( img_key     = c_image_keys-package
-                                  img_encoded = get_image( c_image_keys-package ) )
-        allowed_length = 30
-        patterns       = abap_true
-        content_assist = VALUE #( assist_type      = zif_sat_c_object_search=>c_filter_content_assist_type-ris
-                                  adt_object_types = VALUE #( ( zif_sat_c_object_types=>package ) ) ) ).
+        name             = c_general_options-package
+        long_description = |Use '{ c_general_options-package }' to restrict the search query by specific packages.\n\nExample:\n   | &&
+                           |{ c_general_options-package } : test\n\nObjects of sub packages will be reflected in the result list as well|
+        img_info         = VALUE #( img_key     = c_image_keys-package
+                                    img_encoded = get_image( c_image_keys-package ) )
+        allowed_length   = 30
+        patterns         = abap_true
+        content_assist   = VALUE #( assist_type      = zif_sat_c_object_search=>c_filter_content_assist_type-ris
+                                    adt_object_types = VALUE #( ( zif_sat_c_object_types=>package ) ) ) ).
   ENDMETHOD.
 
   METHOD get_user_filt_conf.
-    result = VALUE #( name           = c_general_options-user
-                      img_info       = VALUE #( img_key     = c_image_keys-owner
-                                                img_encoded = get_image( c_image_keys-owner ) )
-                      patterns       = abap_true
-                      allowed_length = 12
-                      content_assist = VALUE #(
-                          assist_type     = zif_sat_c_object_search=>c_filter_content_assist_type-user
-                          proposal_images = VALUE #( ( img_key     = c_image_keys-owner_entry
-                                                       img_encoded = get_image( c_image_keys-owner_entry ) ) ) ) ).
+    result = VALUE #(
+        name             = c_general_options-user
+        long_description = |Use '{ c_general_options-user }' to restrict the search query by specific users.| &&
+                           |\n\nExample:\n   { c_general_options-user } : musterm|
+        img_info         = VALUE #( img_key     = c_image_keys-owner
+                                    img_encoded = get_image( c_image_keys-owner ) )
+        patterns         = abap_true
+        allowed_length   = 12
+        content_assist   = VALUE #(
+            assist_type     = zif_sat_c_object_search=>c_filter_content_assist_type-user
+            proposal_images = VALUE #( ( img_key     = c_image_keys-owner_entry
+                                         img_encoded = get_image( c_image_keys-owner_entry ) ) ) ) ).
   ENDMETHOD.
 
   METHOD get_rel_state_filt_conf.
