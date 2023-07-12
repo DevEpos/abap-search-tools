@@ -1,0 +1,49 @@
+<?sap.transform simple?>
+<tt:transform
+    xmlns:tt="http://www.sap.com/transformation-templates"
+    xmlns:cdsanalysis="http://www.devepos.com/adt/cdsanalysis"
+    xmlns:adtbase="http://www.devepos.com/adt/base"
+    xmlns:cl="http://www.sap.com/abapxml/types/class-pool/zif_sat_ty_adt_types">
+
+  <tt:root name="top_down_entry" type="cl:ty_cds_top_down_entry"/>
+
+  <tt:include name="zsat_adt_obj_ref" template="adtObjRef"/>
+
+  <tt:template>
+    <tt:apply name="topDownEntry">
+      <tt:with-root name="top_down_entry" ref="top_down_entry" />
+    </tt:apply>
+  </tt:template>
+
+  <tt:template name="topDownEntry">
+    <tt:context>
+      <tt:root name="top_down_entry" />
+    </tt:context>
+
+    <cdsanalysis:resultEntry tt:extensible="deep">
+      <tt:cond check="not-initial(top_down_entry.alias)">
+        <tt:attribute name="alias" value-ref="top_down_entry.alias" />
+      </tt:cond>
+      <tt:cond check="not-initial(top_down_entry.sql_relation)">
+        <tt:attribute name="sqlRelation" value-ref="top_down_entry.sql_relation" />
+      </tt:cond>
+      <tt:cond check="not-initial(top_down_entry.ddl_source_type)">
+        <tt:attribute name="ddlSourceType" value-ref="top_down_entry.ddl_source_type" />
+      </tt:cond>
+      <tt:cond check="not-initial(top_down_entry.entry_type)">
+        <tt:attribute name="entryType" value-ref="top_down_entry.entry_type" />
+      </tt:cond>
+      <tt:cond check="not-initial(top_down_entry.entity_ref)">
+        <tt:apply name="adtObjRef">
+          <tt:with-root name="adt_obj_ref" ref="top_down_entry.entity_ref" />
+        </tt:apply>
+      </tt:cond>
+      <!-- Serialize children -->
+      <tt:call-method class="zcl_sat_adt_cdstd_res_xml_h" d-name="read_ext_attributes" reader="io_reader" s-name="serialize_ext_attributes" writer="io_writer">
+        <tt:with-parameter name="top_down_entry" ref="top_down_entry"/>
+        <tt:with-parameter name="transformation_name" val="C('ZSAT_TOPDOWN_ANALYSIS_ENTRY')"/>
+      </tt:call-method>
+    </cdsanalysis:resultEntry>
+  </tt:template>
+
+</tt:transform>
