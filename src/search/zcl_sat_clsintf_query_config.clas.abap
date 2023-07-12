@@ -40,6 +40,42 @@ CLASS zcl_sat_clsintf_query_config DEFINITION
         iv_image_key  TYPE string
       RETURNING
         VALUE(result) TYPE string.
+
+    METHODS get_clif_type_filt_conf
+      RETURNING
+        VALUE(result) TYPE zif_sat_ty_object_search=>ty_s_query_filter.
+
+    METHODS get_flag_filter
+      RETURNING
+        VALUE(result) TYPE zif_sat_ty_object_search=>ty_s_query_filter.
+
+    METHODS get_category_filter
+      RETURNING
+        VALUE(result) TYPE zif_sat_ty_object_search=>ty_s_query_filter.
+
+    METHODS get_abap_language_filter
+      RETURNING
+        VALUE(result) TYPE zif_sat_ty_object_search=>ty_s_query_filter.
+
+    METHODS get_method_filter
+      RETURNING
+        VALUE(result) TYPE zif_sat_ty_object_search=>ty_s_query_filter.
+
+    METHODS get_interface_filter
+      RETURNING
+        VALUE(result) TYPE zif_sat_ty_object_search=>ty_s_query_filter.
+
+    METHODS get_attribute_filter
+      RETURNING
+        VALUE(result) TYPE zif_sat_ty_object_search=>ty_s_query_filter.
+
+    METHODS get_friend_filter
+      RETURNING
+        VALUE(result) TYPE zif_sat_ty_object_search=>ty_s_query_filter.
+
+    METHODS get_super_type_filter
+      RETURNING
+        VALUE(result) TYPE zif_sat_ty_object_search=>ty_s_query_filter.
 ENDCLASS.
 
 
@@ -50,92 +86,20 @@ CLASS zcl_sat_clsintf_query_config IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD build_config.
-    DATA(lt_object_filters) = VALUE zif_sat_ty_object_search=>ty_t_query_filter(
-        ( get_user_filt_conf( ) )
-        ( get_package_filt_conf( ) )
-        ( get_rel_state_filt_conf( ) )
-        ( get_description_filt_conf( ) )
-        ( get_max_rows_filt_conf( ) )
-        ( name             = c_general_options-type
-          long_description = |Use '{ c_general_options-type }' to restrict the search query to Classes and/or Interfaces|
-          img_info         = VALUE #( img_key     = c_general_image_keys-type_folder
-                                      img_encoded = get_general_image( c_general_image_keys-type_folder ) )
-          content_assist   = VALUE #(
-              assist_type     = zif_sat_c_object_search=>c_filter_content_assist_type-named_item
-              caching         = abap_true
-              category_scheme = zif_sat_c_object_search=>c_content_assist-category_scheme
-              category_term   = zif_sat_c_object_search=>c_content_assist-terms-class_type
-              proposal_images = VALUE #( ( img_key     = c_general_image_keys-type_group
-                                           img_encoded = get_general_image( c_general_image_keys-type_group ) ) ) ) )
-        ( name             = c_class_intf_search_option-flag
-          long_description = |Use '{ c_class_intf_search_option-flag }' to search for Classes/Interfaces that have certain criteria.\n\n| &&
-                             |Example:\n   { c_class_intf_search_option-flag } : abstract|
-          img_info         = VALUE #( img_key     = c_general_image_keys-checked_box
-                                      img_encoded = get_general_image( c_general_image_keys-checked_box ) )
-          content_assist   = VALUE #( assist_type     = zif_sat_c_object_search=>c_filter_content_assist_type-named_item
-                                      caching         = abap_true
-                                      category_scheme = zif_sat_c_object_search=>c_content_assist-category_scheme
-                                      category_term   = zif_sat_c_object_search=>c_content_assist-terms-class_flag ) )
-        ( name             = c_class_intf_search_option-category
-          long_description = |Use '{ c_class_intf_search_option-category }' to restrict search result to Classes/Interfaces that have a certain category.\n\n| &&
-                             |Example:\n   { c_class_intf_search_option-category } : exception|
-          img_info         = VALUE #( img_key     = c_image_keys-folder
-                                      img_encoded = get_image( c_image_keys-folder ) )
-          content_assist   = VALUE #(
-              assist_type     = zif_sat_c_object_search=>c_filter_content_assist_type-named_item
-              caching         = abap_true
-              category_scheme = zif_sat_c_object_search=>c_content_assist-category_scheme
-              category_term   = zif_sat_c_object_search=>c_content_assist-terms-class_category
-              proposal_images = VALUE #( ( img_key     = c_general_image_keys-type_group
-                                           img_encoded = get_general_image( c_general_image_keys-type_group ) ) ) ) )
-        ( name             = c_class_intf_search_option-abap_lang
-          long_description = |Use '{ c_class_intf_search_option-abap_lang }' to show only Classes/Interfaces that use a certain ABAP Language version.\n\n| &&
-                             |Example:\n   { c_class_intf_search_option-abap_lang } : unicode|
-          img_info         = VALUE #( img_key     = c_image_keys-abap_lang
-                                      img_encoded = get_image( c_image_keys-abap_lang ) )
-          content_assist   = VALUE #(
-              assist_type           = zif_sat_c_object_search=>c_filter_content_assist_type-named_item
-              caching               = abap_true
-              category_scheme       = zif_sat_c_object_search=>c_content_assist-category_scheme
-              category_term         = zif_sat_c_object_search=>c_content_assist-terms-abap_language
-              proposal_image_source = zif_sat_c_object_search=>c_proposal_image_source-same_as_filter ) )
-        ( name             = c_class_intf_search_option-method
-          long_description = |Use '{ c_class_intf_search_option-method }' to search for Classes/Interfaces that have certain methods.\n\n| &&
-                             |Example:\n   { c_class_intf_search_option-method } : set_value|
-          img_info         = VALUE #( img_key     = c_clif_image_keys-method
-                                      img_encoded = get_clif_image( c_clif_image_keys-method ) )
-          allowed_length   = 61
-          patterns         = abap_true )
-        ( name             = c_class_intf_search_option-interface
-          long_description = |Use '{ c_class_intf_search_option-interface }' to search for Classes/Interfaces that implement or extend certain interfaces.\n\n| &&
-                             |Example:\n   { c_class_intf_search_option-interface } : if_salv_adapter|
-          img_info         = VALUE #( img_key      = zif_sat_c_object_types=>interface
-                                      img_registry = zif_sat_c_object_search=>c_image_registry_id-adt_type )
-          allowed_length   = 30
-          patterns         = abap_true )
-        ( name             = c_class_intf_search_option-attribute
-          long_description = |Use '{ c_class_intf_search_option-attribute }' to search for Classes/Interfaces that have certain attributes.\n| &&
-                             |This parameter also allows the input with Key/Value pattern.\n\nExample:\n   { c_class_intf_search_option-attribute } : mv_plant\n\n| &&
-                             |Example with Key/Value:\n   { c_class_intf_search_option-attribute } : c_*=*constant|
-          img_info         = VALUE #( img_key     = c_image_keys-attribute
-                                      img_encoded = get_image( c_image_keys-attribute ) )
-          allowed_length   = 30
-          key_value        = abap_true
-          patterns         = abap_true )
-        ( name             = c_class_intf_search_option-friend
-          long_description = |Use '{ c_class_intf_search_option-friend }' to search for classes that have certain Global Friends.\n\n| &&
-                             |Example:\n   { c_class_intf_search_option-friend } : if_alv_rm_grid_friend|
-          img_info         = VALUE #( img_key     = c_image_keys-friend
-                                      img_encoded = get_image( c_image_keys-friend ) )
-          allowed_length   = 30
-          patterns         = abap_true )
-        ( name             = c_class_intf_search_option-super_type
-          long_description = |Use '{ c_class_intf_search_option-super_type }' to search for Classes with a certain Super Class.\n\n| &&
-                             |Example:\n   { c_class_intf_search_option-super_type } : cl_gui_object|
-          img_info         = VALUE #( img_key     = c_image_keys-super
-                                      img_encoded = get_image( c_image_keys-super ) )
-          allowed_length   = 30
-          patterns         = abap_true ) ).
+    DATA(lt_object_filters) = VALUE zif_sat_ty_object_search=>ty_t_query_filter( ( get_user_filt_conf( ) )
+                                                                                 ( get_package_filt_conf( ) )
+                                                                                 ( get_rel_state_filt_conf( ) )
+                                                                                 ( get_description_filt_conf( ) )
+                                                                                 ( get_max_rows_filt_conf( ) )
+                                                                                 ( get_clif_type_filt_conf( ) )
+                                                                                 ( get_flag_filter( ) )
+                                                                                 ( get_category_filter( ) )
+                                                                                 ( get_abap_language_filter( ) )
+                                                                                 ( get_method_filter( ) )
+                                                                                 ( get_interface_filter( ) )
+                                                                                 ( get_attribute_filter( ) )
+                                                                                 ( get_friend_filter( ) )
+                                                                                 ( get_super_type_filter( ) ) ).
 
     ms_search_type = VALUE #(
         label    = 'Class/Interface'
@@ -158,6 +122,122 @@ CLASS zcl_sat_clsintf_query_config IMPLEMENTATION.
 
   METHOD zif_sat_object_search_config~get_type.
     rv_type = zif_sat_c_object_search=>c_search_type-class_interface.
+  ENDMETHOD.
+
+  METHOD get_clif_type_filt_conf.
+    result = VALUE #(
+        name             = c_general_options-type
+        long_description = |Use '{ c_general_options-type }' to restrict the search query to Classes and/or Interfaces|
+        img_info         = VALUE #( img_key     = c_general_image_keys-type_folder
+                                    img_encoded = get_general_image( c_general_image_keys-type_folder ) )
+        content_assist   = VALUE #(
+            assist_type     = zif_sat_c_object_search=>c_filter_content_assist_type-named_item
+            caching         = abap_true
+            category_scheme = zif_sat_c_object_search=>c_content_assist-category_scheme
+            category_term   = zif_sat_c_object_search=>c_content_assist-terms-class_type
+            proposal_images = VALUE #( ( img_key     = c_general_image_keys-type_group
+                                         img_encoded = get_general_image( c_general_image_keys-type_group ) ) ) ) ).
+  ENDMETHOD.
+
+  METHOD get_flag_filter.
+    result = VALUE #(
+        name             = c_class_intf_search_option-flag
+        long_description = |Use '{ c_class_intf_search_option-flag }' to search for Classes/Interfaces that have certain criteria.\n\n| &&
+                           |Example:\n   { c_class_intf_search_option-flag } : abstract|
+        img_info         = VALUE #( img_key     = c_general_image_keys-checked_box
+                                    img_encoded = get_general_image( c_general_image_keys-checked_box ) )
+        content_assist   = VALUE #( assist_type     = zif_sat_c_object_search=>c_filter_content_assist_type-named_item
+                                    caching         = abap_true
+                                    category_scheme = zif_sat_c_object_search=>c_content_assist-category_scheme
+                                    category_term   = zif_sat_c_object_search=>c_content_assist-terms-class_flag ) ).
+  ENDMETHOD.
+
+  METHOD get_category_filter.
+    result = VALUE #(
+        name             = c_class_intf_search_option-category
+        long_description = |Use '{ c_class_intf_search_option-category }' to restrict search result to Classes/Interfaces that have a certain category.\n\n| &&
+                           |Example:\n   { c_class_intf_search_option-category } : exception|
+        img_info         = VALUE #( img_key     = c_image_keys-folder
+                                    img_encoded = get_image( c_image_keys-folder ) )
+        content_assist   = VALUE #(
+            assist_type     = zif_sat_c_object_search=>c_filter_content_assist_type-named_item
+            caching         = abap_true
+            category_scheme = zif_sat_c_object_search=>c_content_assist-category_scheme
+            category_term   = zif_sat_c_object_search=>c_content_assist-terms-class_category
+            proposal_images = VALUE #( ( img_key     = c_general_image_keys-type_group
+                                         img_encoded = get_general_image( c_general_image_keys-type_group ) ) ) ) ).
+  ENDMETHOD.
+
+  METHOD get_abap_language_filter.
+    result = VALUE #(
+        name             = c_class_intf_search_option-abap_lang
+        long_description = |Use '{ c_class_intf_search_option-abap_lang }' to show only Classes/Interfaces that use a certain ABAP Language version.\n\n| &&
+                           |Example:\n   { c_class_intf_search_option-abap_lang } : unicode|
+        img_info         = VALUE #( img_key     = c_image_keys-abap_lang
+                                    img_encoded = get_image( c_image_keys-abap_lang ) )
+        content_assist   = VALUE #(
+            assist_type           = zif_sat_c_object_search=>c_filter_content_assist_type-named_item
+            caching               = abap_true
+            category_scheme       = zif_sat_c_object_search=>c_content_assist-category_scheme
+            category_term         = zif_sat_c_object_search=>c_content_assist-terms-abap_language
+            proposal_image_source = zif_sat_c_object_search=>c_proposal_image_source-same_as_filter ) ).
+  ENDMETHOD.
+
+  METHOD get_method_filter.
+    result = VALUE #(
+        name             = c_class_intf_search_option-method
+        long_description = |Use '{ c_class_intf_search_option-method }' to search for Classes/Interfaces that have certain methods.\n\n| &&
+                           |Example:\n   { c_class_intf_search_option-method } : set_value|
+        img_info         = VALUE #( img_key     = c_clif_image_keys-method
+                                    img_encoded = get_clif_image( c_clif_image_keys-method ) )
+        allowed_length   = 61
+        patterns         = abap_true ).
+  ENDMETHOD.
+
+  METHOD get_interface_filter.
+    result = VALUE #(
+        name             = c_class_intf_search_option-interface
+        long_description = |Use '{ c_class_intf_search_option-interface }' to search for Classes/Interfaces that implement or extend certain interfaces.\n\n| &&
+                           |Example:\n   { c_class_intf_search_option-interface } : if_salv_adapter|
+        img_info         = VALUE #( img_key      = zif_sat_c_object_types=>interface
+                                    img_registry = zif_sat_c_object_search=>c_image_registry_id-adt_type )
+        allowed_length   = 30
+        patterns         = abap_true ).
+  ENDMETHOD.
+
+  METHOD get_attribute_filter.
+    result = VALUE #(
+        name             = c_class_intf_search_option-attribute
+        long_description = |Use '{ c_class_intf_search_option-attribute }' to search for Classes/Interfaces that have certain attributes.\n| &&
+                           |This parameter also allows the input with Key/Value pattern.\n\nExample:\n   { c_class_intf_search_option-attribute } : mv_plant\n\n| &&
+                           |Example with Key/Value:\n   { c_class_intf_search_option-attribute } : c_*=*constant|
+        img_info         = VALUE #( img_key     = c_image_keys-attribute
+                                    img_encoded = get_image( c_image_keys-attribute ) )
+        allowed_length   = 30
+        key_value        = abap_true
+        patterns         = abap_true ).
+  ENDMETHOD.
+
+  METHOD get_friend_filter.
+    result = VALUE #(
+        name             = c_class_intf_search_option-friend
+        long_description = |Use '{ c_class_intf_search_option-friend }' to search for classes that have certain Global Friends.\n\n| &&
+                           |Example:\n   { c_class_intf_search_option-friend } : if_alv_rm_grid_friend|
+        img_info         = VALUE #( img_key     = c_image_keys-friend
+                                    img_encoded = get_image( c_image_keys-friend ) )
+        allowed_length   = 30
+        patterns         = abap_true ).
+  ENDMETHOD.
+
+  METHOD get_super_type_filter.
+    result = VALUE #(
+        name             = c_class_intf_search_option-super_type
+        long_description = |Use '{ c_class_intf_search_option-super_type }' to search for Classes with a certain Super Class.\n\n| &&
+                           |Example:\n   { c_class_intf_search_option-super_type } : cl_gui_object|
+        img_info         = VALUE #( img_key     = c_image_keys-super
+                                    img_encoded = get_image( c_image_keys-super ) )
+        allowed_length   = 30
+        patterns         = abap_true ).
   ENDMETHOD.
 
   METHOD get_image.
