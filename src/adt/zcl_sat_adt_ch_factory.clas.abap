@@ -45,11 +45,23 @@ CLASS zcl_sat_adt_ch_factory DEFINITION
       RETURNING
         VALUE(result) TYPE REF TO if_adt_rest_content_handler.
 
+    "! Creates content handler for Object Search Config
     CLASS-METHODS create_search_config_ch
       RETURNING
         VALUE(result) TYPE REF TO if_adt_rest_content_handler.
 
+    "! Creates content handler for Object Search Query Input
     CLASS-METHODS create_query_input_ch
+      RETURNING
+        VALUE(result) TYPE REF TO if_adt_rest_content_handler.
+
+    "! Creates content handler for CDS Top-Down Result
+    CLASS-METHODS create_top_down_res_handler
+      RETURNING
+        VALUE(result) TYPE REF TO if_adt_rest_content_handler.
+
+    "! Creates content handler for CDS Used Entities result
+    CLASS-METHODS create_used_ent_res_handler
       RETURNING
         VALUE(result) TYPE REF TO if_adt_rest_content_handler.
 ENDCLASS.
@@ -104,5 +116,15 @@ CLASS zcl_sat_adt_ch_factory IMPLEMENTATION.
   METHOD create_query_input_ch.
     result = cl_adt_rest_st_handler=>create_instance( st_name   = 'ZSAT_OBJECT_SEARCH_QUERY_INPUT'
                                                       root_name = 'QUERY_INPUT' ).
+  ENDMETHOD.
+
+  METHOD create_top_down_res_handler.
+    result = cl_adt_rest_st_handler=>create_instance( st_name   = 'ZSAT_TOPDOWN_ANALYSIS_RESULT'
+                                                      root_name = 'TOP_DOWN_RESULT' ).
+  ENDMETHOD.
+
+  METHOD create_used_ent_res_handler.
+    result = cl_adt_rest_st_handler=>create_instance( st_name   = 'ZSAT_CDS_USED_ENT_ANAL_RES'
+                                                      root_name = 'USED_ENTITIES_RESULT' ).
   ENDMETHOD.
 ENDCLASS.

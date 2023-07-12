@@ -3,9 +3,9 @@
  <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
   <asx:values>
    <VSEOCLASS>
-    <CLSNAME>ZCL_SAT_ADT_RES_CDS_ANALYSIS</CLSNAME>
+    <CLSNAME>ZCL_SAT_ADT_CDSTD_RES_XML_H</CLSNAME>
     <LANGU>E</LANGU>
-    <DESCRIPT>CDS Analysis for ADT</DESCRIPT>
+    <DESCRIPT>XML Serializer for CDS Top Down child entries</DESCRIPT>
     <STATE>1</STATE>
     <CLSCCINCL>X</CLSCCINCL>
     <FIXPT>X</FIXPT>
@@ -13,15 +13,14 @@
    </VSEOCLASS>
    <DESCRIPTIONS>
     <SEOCOMPOTX>
-     <CMPNAME>GET_INTERNAL</CMPNAME>
+     <CMPNAME>READ_EXT_ATTRIBUTES</CMPNAME>
      <LANGU>E</LANGU>
-     <DESCRIPT>Executes the GET request</DESCRIPT>
+     <DESCRIPT>Reads externala attributes</DESCRIPT>
     </SEOCOMPOTX>
     <SEOCOMPOTX>
-     <CLSNAME>ZCL_SAT_ADT_RES_CDS_ANALYSIS</CLSNAME>
-     <CMPNAME>GET_PARAMETERS</CMPNAME>
+     <CMPNAME>SERIALIZE_EXT_ATTRIBUTES</CMPNAME>
      <LANGU>E</LANGU>
-     <DESCRIPT>Retrieve parameters from ADT REST request</DESCRIPT>
+     <DESCRIPT>Serializes the given element information</DESCRIPT>
     </SEOCOMPOTX>
    </DESCRIPTIONS>
   </asx:values>
