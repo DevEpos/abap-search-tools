@@ -67,5 +67,40 @@ INTERFACE zif_sat_ty_adt_types
       combine_filters_with_and TYPE abap_bool,
       with_api_state           TYPE abap_bool,
       fields                   TYPE ty_t_query_input_field,
-    END OF ty_s_query_input.
+    END OF ty_s_query_input,
+
+    BEGIN OF ty_cds_top_down_entry,
+      entry_type      TYPE string,
+      ddl_source_type TYPE string,
+      sql_relation    TYPE string,
+      alias           TYPE string,
+      children        TYPE REF TO data,
+      entity_ref      TYPE ty_s_adt_obj_ref,
+    END OF ty_cds_top_down_entry,
+
+    ty_cds_top_down_entries TYPE STANDARD TABLE OF ty_cds_top_down_entry WITH EMPTY KEY,
+
+    BEGIN OF ty_cds_top_down_result,
+      source_entity TYPE ty_s_adt_obj_ref,
+      entries       TYPE ty_cds_top_down_entries,
+    END OF ty_cds_top_down_result,
+
+    BEGIN OF ty_cds_ent_usage_info,
+      occurrence   TYPE i,
+      entity_count TYPE i,
+      join_count   TYPE i,
+      union_count  TYPE i,
+    END OF ty_cds_ent_usage_info,
+
+    BEGIN OF ty_cds_used_entity,
+      entity_ref TYPE ty_s_adt_obj_ref,
+      usage_info TYPE ty_cds_ent_usage_info,
+    END OF ty_cds_used_entity,
+
+    ty_cds_used_entities TYPE STANDARD TABLE OF ty_cds_used_entity WITH EMPTY KEY,
+
+    BEGIN OF ty_cds_used_entities_result,
+      source_entity TYPE ty_s_adt_obj_ref,
+      used_entities TYPE ty_cds_used_entities,
+    END OF ty_cds_used_entities_result.
 ENDINTERFACE.
