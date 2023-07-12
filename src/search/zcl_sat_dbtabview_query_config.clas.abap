@@ -24,6 +24,18 @@ CLASS zcl_sat_dbtabview_query_config DEFINITION
         iv_image_key  TYPE string
       RETURNING
         VALUE(result) TYPE string.
+
+    METHODS get_field_filter
+      RETURNING
+        VALUE(result) TYPE zif_sat_ty_object_search=>ty_s_query_filter.
+
+    METHODS get_deliv_class_filter
+      RETURNING
+        VALUE(result) TYPE zif_sat_ty_object_search=>ty_s_query_filter.
+
+    METHODS get_table_type_filter
+      RETURNING
+        VALUE(result) TYPE zif_sat_ty_object_search=>ty_s_query_filter.
 ENDCLASS.
 
 
@@ -34,44 +46,13 @@ CLASS zcl_sat_dbtabview_query_config IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD build_config.
-    DATA(lt_object_filters) = VALUE zif_sat_ty_object_search=>ty_t_query_filter(
-        ( get_package_filt_conf( ) )
-        ( get_user_filt_conf( ) )
-        ( get_description_filt_conf( ) )
-        ( get_max_rows_filt_conf( ) )
-        ( name             = c_dbtab_options-field
-          img_info         = VALUE #( img_key      = zif_sat_c_object_types=>table_field
-                                      img_registry = zif_sat_c_object_search=>c_image_registry_id-adt_type )
-          allowed_length   = 30
-          content_assist   = VALUE #(
-              assist_type           = zif_sat_c_object_search=>c_filter_content_assist_type-named_item
-              category_scheme       = zif_sat_c_object_search=>c_content_assist-category_scheme
-              category_term         = zif_sat_c_object_search=>c_content_assist-terms-table_field
-              proposal_image_source = zif_sat_c_object_search=>c_proposal_image_source-same_as_filter ) )
-        ( name             = c_general_options-type
-          long_description = |Use '{ c_general_options-type }' to restrict the search query to certain Types of tables.\n\n| &&
-                             |Example:\n   { c_general_options-type } : table|
-          img_info         = VALUE #( img_key     = c_general_image_keys-type_folder
-                                      img_encoded = get_general_image( c_general_image_keys-type_folder ) )
-          content_assist   = VALUE #(
-              assist_type     = zif_sat_c_object_search=>c_filter_content_assist_type-named_item
-              caching         = abap_true
-              category_scheme = zif_sat_c_object_search=>c_content_assist-category_scheme
-              category_term   = zif_sat_c_object_search=>c_content_assist-terms-table_type
-              proposal_images = VALUE #( ( img_key     = c_general_image_keys-type_group
-                                           img_encoded = get_general_image( c_general_image_keys-type_group ) ) ) ) )
-        ( name             = c_dbtab_options-delivery_class
-          long_description = |Use '{ c_dbtab_options-delivery_class }' to search for Tables with specific delivery classes.\n\n| &&
-                             |Example:\n   { c_dbtab_options-delivery_class } : A|
-          img_info         = VALUE #( img_key     = c_image_keys-transport
-                                      img_encoded = get_image( c_image_keys-transport ) )
-          allowed_length   = 1
-          content_assist   = VALUE #(
-              assist_type           = zif_sat_c_object_search=>c_filter_content_assist_type-named_item
-              caching               = abap_true
-              category_scheme       = zif_sat_c_object_search=>c_content_assist-category_scheme
-              category_term         = zif_sat_c_object_search=>c_content_assist-terms-table_deliv_class
-              proposal_image_source = zif_sat_c_object_search=>c_proposal_image_source-same_as_filter ) ) ).
+    DATA(lt_object_filters) = VALUE zif_sat_ty_object_search=>ty_t_query_filter( ( get_package_filt_conf( ) )
+                                                                                 ( get_user_filt_conf( ) )
+                                                                                 ( get_description_filt_conf( ) )
+                                                                                 ( get_max_rows_filt_conf( ) )
+                                                                                 ( get_field_filter( ) )
+                                                                                 ( get_table_type_filter( ) )
+                                                                                 ( get_deliv_class_filter( ) ) ).
 
     ms_search_type = VALUE zif_sat_ty_object_search=>ty_s_search_type(
         label    = 'Database Table/View'
@@ -89,6 +70,50 @@ CLASS zcl_sat_dbtabview_query_config IMPLEMENTATION.
 
   METHOD zif_sat_object_search_config~get_type.
     rv_type = zif_sat_c_object_search=>c_search_type-db_tab_view.
+  ENDMETHOD.
+
+  METHOD get_deliv_class_filter.
+    result = VALUE #(
+        name             = c_dbtab_options-delivery_class
+        long_description = |Use '{ c_dbtab_options-delivery_class }' to search for Tables with specific delivery classes.\n\n| &&
+                           |Example:\n   { c_dbtab_options-delivery_class } : A|
+        img_info         = VALUE #( img_key     = c_image_keys-transport
+                                    img_encoded = get_image( c_image_keys-transport ) )
+        allowed_length   = 1
+        content_assist   = VALUE #(
+            assist_type           = zif_sat_c_object_search=>c_filter_content_assist_type-named_item
+            caching               = abap_true
+            category_scheme       = zif_sat_c_object_search=>c_content_assist-category_scheme
+            category_term         = zif_sat_c_object_search=>c_content_assist-terms-table_deliv_class
+            proposal_image_source = zif_sat_c_object_search=>c_proposal_image_source-same_as_filter ) ).
+  ENDMETHOD.
+
+  METHOD get_field_filter.
+    result = VALUE #( name           = c_dbtab_options-field
+                      img_info       = VALUE #( img_key      = zif_sat_c_object_types=>table_field
+                                                img_registry = zif_sat_c_object_search=>c_image_registry_id-adt_type )
+                      allowed_length = 30
+                      content_assist = VALUE #(
+                          assist_type           = zif_sat_c_object_search=>c_filter_content_assist_type-named_item
+                          category_scheme       = zif_sat_c_object_search=>c_content_assist-category_scheme
+                          category_term         = zif_sat_c_object_search=>c_content_assist-terms-table_field
+                          proposal_image_source = zif_sat_c_object_search=>c_proposal_image_source-same_as_filter ) ).
+  ENDMETHOD.
+
+  METHOD get_table_type_filter.
+    result = VALUE #(
+        name             = c_general_options-type
+        long_description = |Use '{ c_general_options-type }' to restrict the search query to certain Types of tables.\n\n| &&
+                           |Example:\n   { c_general_options-type } : table|
+        img_info         = VALUE #( img_key     = c_general_image_keys-type_folder
+                                    img_encoded = get_general_image( c_general_image_keys-type_folder ) )
+        content_assist   = VALUE #(
+            assist_type     = zif_sat_c_object_search=>c_filter_content_assist_type-named_item
+            caching         = abap_true
+            category_scheme = zif_sat_c_object_search=>c_content_assist-category_scheme
+            category_term   = zif_sat_c_object_search=>c_content_assist-terms-table_type
+            proposal_images = VALUE #( ( img_key     = c_general_image_keys-type_group
+                                         img_encoded = get_general_image( c_general_image_keys-type_group ) ) ) ) ).
   ENDMETHOD.
 
   METHOD get_image.
