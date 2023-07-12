@@ -45,85 +45,102 @@ CLASS zcl_sat_cds_view_query_config IMPLEMENTATION.
         ( get_rel_state_filt_conf( ) )
         ( get_description_filt_conf( ) )
         ( get_max_rows_filt_conf( ) )
-        ( name           = c_cds_options-params
-          img_info       = VALUE #( img_key     = c_general_image_keys-param
-                                    img_encoded = get_general_image( c_general_image_keys-param ) )
-          single         = abap_true
-          no_negation    = abap_true
-          data_type      = zif_sat_c_object_search=>c_filter_data_type-boolean )
-        ( name           = c_cds_options-param
-          img_info       = VALUE #( img_key     = c_general_image_keys-param
-                                    img_encoded = get_general_image( c_general_image_keys-param ) )
-          patterns       = abap_true )
-        ( name           = c_cds_options-select_from
-          img_info       = VALUE #( img_key     = c_image_keys-from
-                                    img_encoded = get_image( c_image_keys-from ) )
-          allowed_length = 30
-          patterns       = abap_true
-          content_assist = VALUE #(
+        ( name             = c_cds_options-params
+          long_description = |Use '{ c_cds_options-params }' to restrict the search query to CDS views which have (not) parameters.\n\n| &&
+                             |Example:\n   { c_cds_options-params } : true|
+          img_info         = VALUE #( img_key     = c_general_image_keys-param
+                                      img_encoded = get_general_image( c_general_image_keys-param ) )
+          single           = abap_true
+          no_negation      = abap_true
+          data_type        = zif_sat_c_object_search=>c_filter_data_type-boolean )
+        ( name             = c_cds_options-param
+          long_description = |Use '{ c_cds_options-param }' to restrict the search query to CDS views which have a certain parameter.\n\n| &&
+                             |Example:\n   { c_cds_options-param } : p_test|
+          img_info         = VALUE #( img_key     = c_general_image_keys-param
+                                      img_encoded = get_general_image( c_general_image_keys-param ) )
+          patterns         = abap_true )
+        ( name             = c_cds_options-select_from
+          long_description = |Use '{ c_cds_options-select_from }' to restrict the search query to CDS views which use | &&
+                             |a certain Table/View/CDS View in their SELECT clause.\n\nExample:\n   { c_cds_options-select_from } : mara|
+          img_info         = VALUE #( img_key     = c_image_keys-from
+                                      img_encoded = get_image( c_image_keys-from ) )
+          allowed_length   = 30
+          patterns         = abap_true
+          content_assist   = VALUE #(
               assist_type             = zif_sat_c_object_search=>c_filter_content_assist_type-named_item
               category_scheme         = zif_sat_c_object_search=>c_content_assist-category_scheme
               category_term           = zif_sat_c_object_search=>c_content_assist-terms-db_entity
               proposal_image_source   = zif_sat_c_object_search=>c_proposal_image_source-proposal
               proposal_image_registry = zif_sat_c_object_search=>c_image_registry_id-adt_type ) )
-        ( name           = c_cds_options-association
-          img_info       = VALUE #( img_key     = c_image_keys-association
-                                    img_encoded = get_image( c_image_keys-association ) )
-          allowed_length = 30
-          patterns       = abap_true
-          content_assist = VALUE #(
+        ( name             = c_cds_options-association
+          long_description = |Use '{ c_cds_options-association }' to restrict the search query to CDS views which use | &&
+                             |a certain Table/View/CDS view as an Association.\n\nExample:\n   { c_cds_options-association } : i_product|
+          img_info         = VALUE #( img_key     = c_image_keys-association
+                                      img_encoded = get_image( c_image_keys-association ) )
+          allowed_length   = 30
+          patterns         = abap_true
+          content_assist   = VALUE #(
               assist_type             = zif_sat_c_object_search=>c_filter_content_assist_type-named_item
               category_scheme         = zif_sat_c_object_search=>c_content_assist-category_scheme
               category_term           = zif_sat_c_object_search=>c_content_assist-terms-db_entity
               proposal_image_source   = zif_sat_c_object_search=>c_proposal_image_source-proposal
               proposal_image_registry = zif_sat_c_object_search=>c_image_registry_id-adt_type ) )
-        ( name           = c_cds_options-annotation
-          img_info       = VALUE #( img_key     = c_image_keys-anno
-                                    img_encoded = get_image( c_image_keys-anno ) )
-          key_value      = abap_true
-          patterns       = abap_true
-          content_assist = VALUE #(
+        ( name             = c_cds_options-annotation
+          long_description = |Use '{ c_cds_options-annotation }' to restrict the search query by certain Annotations.\n| &&
+                             |This parameter also allows the input with Key/Value pattern.\n\nExample:\n   { c_cds_options-annotation } : analytics.query\n\n| &&
+                             |Example with Key/Value:\n   { c_cds_options-annotation } : searchable=true|
+          img_info         = VALUE #( img_key     = c_image_keys-anno
+                                      img_encoded = get_image( c_image_keys-anno ) )
+          key_value        = abap_true
+          patterns         = abap_true
+          content_assist   = VALUE #(
               assist_type             = zif_sat_c_object_search=>c_filter_content_assist_type-named_item
               category_scheme         = zif_sat_c_object_search=>c_content_assist-category_scheme
               category_term           = zif_sat_c_object_search=>c_content_assist-terms-annotation
               secondary_category_term = zif_sat_c_object_search=>c_content_assist-terms-annotatio_value
               proposal_image_source   = zif_sat_c_object_search=>c_proposal_image_source-same_as_filter  ) )
-        ( name           = c_cds_options-field
-          img_info       = VALUE #( img_key      = zif_sat_c_object_types=>structured_object_field
-                                    img_registry = zif_sat_c_object_search=>c_image_registry_id-adt_type )
-          allowed_length = 30
-          patterns       = abap_true
-          content_assist = VALUE #(
+        ( name             = c_cds_options-field
+          long_description = |Use '{ c_cds_options-field }' to restrict the search query by certain Fields.\n\n| &&
+                             |Example:\n   { c_cds_options-field } : material|
+          img_info         = VALUE #( img_key      = zif_sat_c_object_types=>structured_object_field
+                                      img_registry = zif_sat_c_object_search=>c_image_registry_id-adt_type )
+          allowed_length   = 30
+          patterns         = abap_true
+          content_assist   = VALUE #(
               assist_type           = zif_sat_c_object_search=>c_filter_content_assist_type-named_item
               category_scheme       = zif_sat_c_object_search=>c_content_assist-category_scheme
               category_term         = zif_sat_c_object_search=>c_content_assist-terms-cds_field
               proposal_image_source = zif_sat_c_object_search=>c_proposal_image_source-same_as_filter ) )
-        ( name           = c_general_options-type
-          img_info       = VALUE #( img_key     = c_general_image_keys-type_folder
-                                    img_encoded = get_general_image( c_general_image_keys-type_folder ) )
-          content_assist = VALUE #(
+        ( name             = c_general_options-type
+          long_description = |Use '{ c_general_options-type }' to restrict the search query to CDS views which are of a certain type.\n\n| &&
+                             |Example:\n   { c_general_options-type } : function|
+          img_info         = VALUE #( img_key     = c_general_image_keys-type_folder
+                                      img_encoded = get_general_image( c_general_image_keys-type_folder ) )
+          content_assist   = VALUE #(
               assist_type     = zif_sat_c_object_search=>c_filter_content_assist_type-named_item
               caching         = abap_true
               category_scheme = zif_sat_c_object_search=>c_content_assist-category_scheme
               category_term   = zif_sat_c_object_search=>c_content_assist-terms-cds_type
               proposal_images = VALUE #( ( img_key     = c_general_image_keys-type_group
                                            img_encoded = get_general_image( c_general_image_keys-type_group ) ) ) ) )
-        ( name           = c_cds_options-extended_by
-          img_info       = VALUE #( img_key     = c_image_keys-extended_by
-                                    img_encoded = get_image( c_image_keys-extended_by ) )
-          allowed_length = 30
-          patterns       = abap_true
-          no_negation    = abap_true
-          content_assist = VALUE #(
+        ( name             = c_cds_options-extended_by
+          long_description = |Use '{ c_cds_options-extended_by }' to restrict the search query to CDS views which are | &&
+                             |extended by certain Extension views.\n\nExample:\n   { c_cds_options-extended_by } : i_material|
+          img_info         = VALUE #( img_key     = c_image_keys-extended_by
+                                      img_encoded = get_image( c_image_keys-extended_by ) )
+          allowed_length   = 30
+          patterns         = abap_true
+          no_negation      = abap_true
+          content_assist   = VALUE #(
               assist_type     = zif_sat_c_object_search=>c_filter_content_assist_type-named_item
               category_scheme = zif_sat_c_object_search=>c_content_assist-category_scheme
               category_term   = zif_sat_c_object_search=>c_content_assist-terms-cds_extension
               proposal_images = VALUE #( ( img_registry = zif_sat_c_object_search=>c_image_registry_id-adt_type
                                            img_key      = zif_sat_c_object_types=>structured_object  ) ) ) )
-        ( name           = c_cds_options-only_local_assocs
-          single         = abap_true
-          data_type      = zif_sat_c_object_search=>c_filter_data_type-boolean
-          internal       = abap_true ) ).
+        ( name             = c_cds_options-only_local_assocs
+          single           = abap_true
+          data_type        = zif_sat_c_object_search=>c_filter_data_type-boolean
+          internal         = abap_true ) ).
 
     mt_options = lt_object_filters.
 
