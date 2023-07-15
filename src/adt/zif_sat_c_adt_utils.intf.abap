@@ -13,6 +13,10 @@ INTERFACE zif_sat_c_adt_utils
       basic_info  TYPE string VALUE 'basicInfoOnly',
     END OF c_element_info_parameter.
   CONSTANTS:
+    BEGIN OF c_property_type,
+      bool TYPE string VALUE 'bool',
+    END OF c_property_type.
+  CONSTANTS:
     BEGIN OF c_cds_analysis_parameter,
       cds_name               TYPE string VALUE 'cdsViewName',
       with_associations      TYPE string VALUE 'withAssociations',
