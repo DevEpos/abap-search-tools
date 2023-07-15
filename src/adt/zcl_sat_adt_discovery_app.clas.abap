@@ -105,12 +105,11 @@ CLASS zcl_sat_adt_discovery_app IMPLEMENTATION.
                                                  description     = 'ABAP Object Search'
                                                  category_scheme = |{ c_utils_root_scheme }{ c_object_search_uri }|
                                                  category_term   = 'objectSearch' ).
-    io_registry->register_discoverable_resource(
-        url             = |{ c_object_search_uri }/config|
-        handler_class   = 'ZCL_SAT_ADT_RES_SEARCH_CONFIG'
-        description     = 'ABAP Object Search Config'
-        category_scheme = |{ c_utils_root_scheme }{ c_object_search_uri }|
-        category_term   = 'objectSearchConfig' ).
+    io_registry->register_discoverable_resource( url             = |{ c_object_search_uri }/config|
+                                                 handler_class   = 'ZCL_SAT_ADT_RES_SEARCH_CONFIG'
+                                                 description     = 'ABAP Object Search Config'
+                                                 category_scheme = |{ c_utils_root_scheme }{ c_object_search_uri }|
+                                                 category_term   = 'objectSearchConfig' ).
   ENDMETHOD.
 
   METHOD register_element_info.
@@ -127,25 +126,16 @@ CLASS zcl_sat_adt_discovery_app IMPLEMENTATION.
     lo_element_info_collection->register_disc_res_w_template(
         template      = |{ c_element_info_uri }\{?{ zif_sat_c_adt_utils=>c_element_info_parameter-name },| &&
                         |{ zif_sat_c_adt_utils=>c_element_info_parameter-object_type }\}| &&
-                        |\{&{ zif_sat_c_adt_utils=>c_cds_elem_info_parameter-show_association_name }*\}| &&
-                        |\{&{ zif_sat_c_adt_utils=>c_element_info_parameter-basic_info }*\}|
+                        |\{&{ zif_sat_c_adt_utils=>c_cds_elem_info_parameter-show_association_name }*\}|
         handler_class = lc_eleminfo_handler
         relation      = 'http://www.devepos.com/adt/relations/saat/elementinfo' ).
 
     " Register resource template for element info by uri
     lo_element_info_collection->register_disc_res_w_template(
         template      = |{ c_element_info_by_uri_uri }\{?{ zif_sat_c_adt_utils=>c_element_info_parameter-uri }\}| &&
-                        |\{&{ zif_sat_c_adt_utils=>c_cds_elem_info_parameter-show_association_name }*\}| &&
-                        |\{&{ zif_sat_c_adt_utils=>c_element_info_parameter-basic_info }*\}|
+                        |\{&{ zif_sat_c_adt_utils=>c_cds_elem_info_parameter-show_association_name }*\}|
         handler_class = 'ZCL_SAT_ADT_RES_ELEMINFO_BYURI'
         relation      = 'http://www.devepos.com/adt/relations/saat/elementinfo/byUri' ).
-
-    " Register special URI template for CDS secondary element information retrieval
-    lo_element_info_collection->register_disc_res_w_template(
-        template      = '/elementinfo/cds/secondary' &&
-                        |\{?{ zif_sat_c_adt_utils=>c_element_info_parameter-name }\}|
-        handler_class = 'ZCL_SAT_ADT_RES_CDS_SECELINFO'
-        relation      = 'http://www.devepos.com/adt/relations/saat/elementinfo/cds/secondary' ).
   ENDMETHOD.
 
   METHOD register_value_help_providers.
@@ -282,7 +272,7 @@ CLASS zcl_sat_adt_discovery_app IMPLEMENTATION.
                         |\{?{ zif_sat_c_adt_utils=>c_cds_analysis_parameter-cds_name }\}| &&
                         |\{&{ zif_sat_c_adt_utils=>c_cds_analysis_parameter-with_associations }*\}|
         handler_class = 'ZCL_SAT_ADT_RES_CDS_A_TOPDOWN'
-        relation      = c_utils_rel_scheme && c_cds_analysis_uri-base ).
+        relation      = c_utils_rel_scheme && c_cds_analysis_uri-top_down_analysis ).
 
     " Register URI templates for Where-Used-Analysis
     DATA(lv_where_used_in_template) = c_cds_analysis_uri-where_used_base &&
