@@ -22,16 +22,16 @@
 
     <cdsanalysis:resultEntry tt:extensible="deep">
       <tt:cond check="not-initial(top_down_entry.alias)">
-        <tt:attribute name="alias" value-ref="top_down_entry.alias" />
+        <tt:attribute name="cdsanalysis:alias" value-ref="top_down_entry.alias" />
       </tt:cond>
       <tt:cond check="not-initial(top_down_entry.sql_relation)">
-        <tt:attribute name="sqlRelation" value-ref="top_down_entry.sql_relation" />
+        <tt:attribute name="cdsanalysis:sqlRelation" value-ref="top_down_entry.sql_relation" />
       </tt:cond>
       <tt:cond check="not-initial(top_down_entry.ddl_source_type)">
-        <tt:attribute name="ddlSourceType" value-ref="top_down_entry.ddl_source_type" />
+        <tt:attribute name="cdsanalysis:ddlSourceType" value-ref="top_down_entry.ddl_source_type" />
       </tt:cond>
       <tt:cond check="not-initial(top_down_entry.entry_type)">
-        <tt:attribute name="entryType" value-ref="top_down_entry.entry_type" />
+        <tt:attribute name="cdsanalysis:entryType" value-ref="top_down_entry.entry_type" />
       </tt:cond>
       <tt:cond check="not-initial(top_down_entry.entity_ref)">
         <tt:apply name="adtObjRef">
@@ -41,7 +41,6 @@
       <!-- Serialize children -->
       <tt:call-method class="zcl_sat_adt_cdstd_res_xml_h" d-name="read_ext_attributes" reader="io_reader" s-name="serialize_ext_attributes" writer="io_writer">
         <tt:with-parameter name="top_down_entry" ref="top_down_entry"/>
-        <tt:with-parameter name="transformation_name" val="C('ZSAT_TOPDOWN_ANALYSIS_ENTRY')"/>
       </tt:call-method>
     </cdsanalysis:resultEntry>
   </tt:template>

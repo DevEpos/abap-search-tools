@@ -51,21 +51,23 @@
       <tt:root name="usage_info" type="cl:ty_cds_ent_usage_info"/>
     </tt:context>
 
-    <tt:cond check="not-initial(usage_info.occurrence)">
-      <tt:attribute name="occurrence" value-ref="usage_info.occurrence"/>
-    </tt:cond>
+    <cdsanalysis:usageInformation tt:extensible="deep">
+      <tt:cond check="not-initial(usage_info.occurrence)">
+        <tt:attribute name="cdsanalysis:occurrence" value-ref="usage_info.occurrence"/>
+      </tt:cond>
 
-    <tt:cond check="not-initial(usage_info.entity_count)">
-      <tt:attribute name="entityCount" value-ref="usage_info.entity_count"/>
-    </tt:cond>
+      <tt:cond check="not-initial(usage_info.entity_count)">
+        <tt:attribute name="cdsanalysis:entityCount" value-ref="usage_info.entity_count"/>
+      </tt:cond>
 
-    <tt:cond check="not-initial(usage_info.join_count)">
-      <tt:attribute name="joinCount" value-ref="usage_info.join_count"/>
-    </tt:cond>
+      <tt:cond check="not-initial(usage_info.join_count)">
+        <tt:attribute name="cdsanalysis:joinCount" value-ref="usage_info.join_count"/>
+      </tt:cond>
 
-    <tt:cond check="not-initial(usage_info.union_count)">
-      <tt:attribute name="unionCount" value-ref="usage_info.union_count"/>
-    </tt:cond>
+      <tt:cond check="not-initial(usage_info.union_count)">
+        <tt:attribute name="cdsanalysis:unionCount" value-ref="usage_info.union_count"/>
+      </tt:cond>
+    </cdsanalysis:usageInformation>
   </tt:template>
 
 </tt:transform>

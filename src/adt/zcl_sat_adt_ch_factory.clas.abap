@@ -64,6 +64,19 @@ CLASS zcl_sat_adt_ch_factory DEFINITION
     CLASS-METHODS create_used_ent_res_handler
       RETURNING
         VALUE(result) TYPE REF TO if_adt_rest_content_handler.
+
+    "! Creates content handler for ADT Object Reference
+    CLASS-METHODS create_adt_obj_ref_res_handler
+      RETURNING
+        VALUE(result) TYPE REF TO if_adt_rest_content_handler.
+
+    CLASS-METHODS create_adtobjrefs_res_handler
+      RETURNING
+        VALUE(result) TYPE REF TO if_adt_rest_content_handler.
+
+    CLASS-METHODS create_field_entity_res_handlr
+      RETURNING
+        VALUE(result) TYPE REF TO if_adt_rest_content_handler.
 ENDCLASS.
 
 
@@ -126,5 +139,20 @@ CLASS zcl_sat_adt_ch_factory IMPLEMENTATION.
   METHOD create_used_ent_res_handler.
     result = cl_adt_rest_st_handler=>create_instance( st_name   = 'ZSAT_CDS_USED_ENT_ANAL_RES'
                                                       root_name = 'USED_ENTITIES_RESULT' ).
+  ENDMETHOD.
+
+  METHOD create_adt_obj_ref_res_handler.
+    result = cl_adt_rest_st_handler=>create_instance( st_name   = 'ZSAT_ADT_OBJ_REF'
+                                                      root_name = 'ADT_OBJ_REF' ).
+  ENDMETHOD.
+
+  METHOD create_adtobjrefs_res_handler.
+    result = cl_adt_rest_st_handler=>create_instance( st_name   = 'ZSAT_ADT_OBJ_REFS'
+                                                      root_name = 'ADT_OBJ_REFS' ).
+  ENDMETHOD.
+
+  METHOD create_field_entity_res_handlr.
+    result = cl_adt_rest_st_handler=>create_instance( st_name   = 'ZSAT_ADT_ENTITY_FIELD_INFOS'
+                                                      root_name = 'FIELD_INFO_RESULT' ).
   ENDMETHOD.
 ENDCLASS.
