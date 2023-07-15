@@ -58,7 +58,8 @@ CLASS zcl_sat_adt_res_cds_a_used_ent IMPLEMENTATION.
                                                              alt_name    = lr_dependency->raw_name
                                                              devclass    = lr_dependency->package
                                                              type        = lr_dependency->adt_type
-                                                             description = lr_dependency->description )
+                                                             description = lr_dependency->description
+                                                             uri         = lr_dependency->uri )
                                        usage_info = VALUE #( occurrence   = lr_dependency->occurrence
                                                              join_count   = lr_dependency->used_join_count
                                                              entity_count = lr_dependency->used_entities_count
