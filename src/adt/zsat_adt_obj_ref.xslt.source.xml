@@ -87,10 +87,18 @@
     </tt:context>
 
     <tt:loop ref="properties">
-      <adtbase:property tt:extensible="deep">
-        <tt:attribute name="adtbase:key" value-ref="$ref.key"/>
-        <tt:attribute name="adtbase:value" value-ref="$ref.value"/>
-      </adtbase:property>
+      <tt:cond check="not-initial($ref.value)">
+        <adtbase:property tt:extensible="deep">
+          <tt:attribute name="adtbase:key" value-ref="$ref.key"/>
+
+          <tt:cond check="$ref.type='bool'">
+            <tt:attribute map="xml('true')=val('X'),xml('false')=val('')" name="adtbase:value" value-ref="$ref.value"/>
+          </tt:cond>
+          <tt:cond check="$ref.type!='bool'">
+            <tt:attribute name="adtbase:value" value-ref="$ref.value"/>
+          </tt:cond>
+        </adtbase:property>
+      </tt:cond>
     </tt:loop>
   </tt:template>
 

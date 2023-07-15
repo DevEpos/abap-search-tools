@@ -5,6 +5,7 @@ INTERFACE zif_sat_ty_adt_types
   TYPES:
     BEGIN OF ty_s_property,
       key   TYPE string,
+      type  TYPE string,
       value TYPE string,
     END OF ty_s_property,
 
@@ -102,5 +103,26 @@ INTERFACE zif_sat_ty_adt_types
     BEGIN OF ty_cds_used_entities_result,
       source_entity TYPE ty_s_adt_obj_ref,
       used_entities TYPE ty_cds_used_entities,
-    END OF ty_cds_used_entities_result.
+    END OF ty_cds_used_entities_result,
+
+    BEGIN OF ty_entity_field_info,
+      field           TYPE string,
+      entity_name     TYPE string,
+      alt_entity_name TYPE string,
+      type            TYPE string,
+      uri             TYPE string,
+      description     TYPE string,
+      source_type     TYPE string,
+      api_state       TYPE string,
+      is_key          TYPE abap_bool,
+      is_calculated   TYPE abap_bool,
+      children        TYPE REF TO data,
+    END OF ty_entity_field_info,
+
+    ty_entity_field_infos TYPE STANDARD TABLE OF ty_entity_field_info WITH EMPTY KEY,
+
+    BEGIN OF ty_entity_field_info_result,
+      source_field TYPE ty_entity_field_info,
+      field_infos  TYPE ty_entity_field_infos,
+    END OF ty_entity_field_info_result.
 ENDINTERFACE.
