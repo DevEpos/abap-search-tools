@@ -19,12 +19,6 @@ CLASS zcl_sat_dbtabview_query_config DEFINITION
         transport TYPE string VALUE 'ABAP:IMG_TRANSPORT',
       END OF c_image_keys.
 
-    METHODS get_image
-      IMPORTING
-        iv_image_key  TYPE string
-      RETURNING
-        VALUE(result) TYPE string.
-
     METHODS get_field_filter
       RETURNING
         VALUE(result) TYPE zif_sat_ty_object_search=>ty_s_query_filter.
@@ -77,8 +71,12 @@ CLASS zcl_sat_dbtabview_query_config IMPLEMENTATION.
         name             = c_dbtab_options-delivery_class
         long_description = |Use '{ c_dbtab_options-delivery_class }' to search for Tables with specific delivery classes.\n\n| &&
                            |Example:\n   { c_dbtab_options-delivery_class } : A|
-        img_info         = VALUE #( img_key     = c_image_keys-transport
-                                    img_encoded = get_image( c_image_keys-transport ) )
+        img_info         = VALUE #(
+            img_key     = c_image_keys-transport
+            img_encoded = `iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABXElEQVR4nKWRXUvCcBTG/WBdlSBEEQRCJERvBN3UTYRERGWElJpRWpRSggZtZS+uV4Vd1G2Us75Ca5pGb2tq9bT9w6lbLcIDP3ZxHn47` &&
+                          `5/xNplqLPXTiLwwFpzEXLrLAuQCc/UCcmTUWxKLzJJiRgGxBD7PjNRbQlJ8IcnL4sahni/YZC8KRVSJ4kMPP73oiGytE0DVzjF7XCfo8cfR7ExhcZJuIIBBaJ4InWSB+6AmG1lTBZbZIYK7TiuB7Ml8g` &&
+                          `QgQv8t/yn3r8wXBZcF9QUQXuJQruZQqeKjar0K0wl8DAAmt8G21VCpRSBeZhChY7jcaRbTSPRtEytovW8T1YJ/fRNsXANn2ADucRfp1AESg7XZXI5JFMS0gKEjjhDdydCI4XkeJfkboto96gNIG5cwJ1` &&
+                          `1iHy1U5g6XGQnqXbUfmM1TdQAnw6R4La/Y16ajXY7JwSqG+33/ynV3N9AVC53MX4NLXNAAAAAElFTkSuQmCC` )
         allowed_length   = 1
         content_assist   = VALUE #(
             assist_type           = zif_sat_c_object_search=>c_filter_content_assist_type-named_item
@@ -89,15 +87,19 @@ CLASS zcl_sat_dbtabview_query_config IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD get_field_filter.
-    result = VALUE #( name           = c_dbtab_options-field
-                      img_info       = VALUE #( img_key      = zif_sat_c_object_types=>table_field
-                                                img_registry = zif_sat_c_object_search=>c_image_registry_id-adt_type )
-                      allowed_length = 30
-                      content_assist = VALUE #(
-                          assist_type           = zif_sat_c_object_search=>c_filter_content_assist_type-named_item
-                          category_scheme       = zif_sat_c_object_search=>c_content_assist-category_scheme
-                          category_term         = zif_sat_c_object_search=>c_content_assist-terms-table_field
-                          proposal_image_source = zif_sat_c_object_search=>c_proposal_image_source-same_as_filter ) ).
+    result = VALUE #(
+        name             = c_dbtab_options-field
+        long_description = |Use '{ c_dbtab_options-field }' to restrict the search query by certain Fields.\n\n| &&
+             |Example:\n   { c_dbtab_options-field } : devclass|
+        img_info         = VALUE #( img_key      = zif_sat_c_object_types=>table_field
+                                    img_registry = zif_sat_c_object_search=>c_image_registry_id-adt_type )
+
+        allowed_length   = 30
+        content_assist   = VALUE #(
+            assist_type           = zif_sat_c_object_search=>c_filter_content_assist_type-named_item
+            category_scheme       = zif_sat_c_object_search=>c_content_assist-category_scheme
+            category_term         = zif_sat_c_object_search=>c_content_assist-terms-table_field
+            proposal_image_source = zif_sat_c_object_search=>c_proposal_image_source-same_as_filter ) ).
   ENDMETHOD.
 
   METHOD get_table_type_filter.
@@ -114,16 +116,5 @@ CLASS zcl_sat_dbtabview_query_config IMPLEMENTATION.
             category_term   = zif_sat_c_object_search=>c_content_assist-terms-table_type
             proposal_images = VALUE #( ( img_key     = c_general_image_keys-type_group
                                          img_encoded = get_general_image( c_general_image_keys-type_group ) ) ) ) ).
-  ENDMETHOD.
-
-  METHOD get_image.
-    CASE iv_image_key.
-
-      WHEN c_image_keys-transport.
-        result = `iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABXElEQVR4nKWRXUvCcBTG/WBdlSBEEQRCJERvBN3UTYRERGWElJpRWpRSggZtZS+uV4Vd1G2Us75Ca5pGb2tq9bT9w6lbLcIDP3ZxHn475/xNplqLPXTiLwwFpzEXLrLAuQCc/UCcmTUWxKLzJJiRg` &&
-                 `GxBD7PjNRbQlJ8IcnL4sahni/YZC8KRVSJ4kMPP73oiGytE0DVzjF7XCfo8cfR7ExhcZJuIIBBaJ4InWSB+6AmG1lTBZbZIYK7TiuB7Ml8gQgQv8t/yn3r8wXBZcF9QUQXuJQruZQqeKjar0K0wl8DAAmt8G21VCpRSBeZhChY7jcaRbTSPRtEytovW8T1YJ/fRNs` &&
-                 `XANn2ADucRfp1AESg7XZXI5JFMS0gKEjjhDdydCI4XkeJfkboto96gNIG5cwJ11iHy1U5g6XGQnqXbUfmM1TdQAnw6R4La/Y16ajXY7JwSqG+33/ynV3N9AVC53MX4NLXNAAAAAElFTkSuQmCC`.
-
-    ENDCASE.
   ENDMETHOD.
 ENDCLASS.

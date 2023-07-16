@@ -46,7 +46,6 @@ CLASS zcl_sat_clif_meth_query_config IMPLEMENTATION.
     delete_invalid_obj_filters( ).
 
     " TODO: add filters for method:
-    " - param (any)
     " - type (constructor,handler,...)
     " - flag (optional,abstract,final,class_exceptions)
     " - exposure (private,protected,public)
