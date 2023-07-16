@@ -22,10 +22,6 @@ CLASS zcl_sat_adt_res_ddic_rep_acc DEFINITION
         no_client_columns TYPE string VALUE 'noClientCols',
       END OF c_filter_keys.
 
-    CONSTANTS c_prop_key_entity    TYPE zsat_property-key VALUE 'entity' ##NO_TEXT.
-    CONSTANTS c_prop_key_key_flag  TYPE zsat_property-key VALUE 'ddicIsKey' ##NO_TEXT.
-    CONSTANTS c_prop_key_data_type TYPE zsat_property-key VALUE 'ddicDataType' ##NO_TEXT.
-
     DATA ms_result            TYPE zif_sat_ty_adt_types=>ty_entity_field_info_result.
     DATA mf_no_client_columns TYPE abap_bool.
     DATA mt_paths             TYPE string_table.
@@ -161,11 +157,11 @@ CLASS zcl_sat_adt_res_ddic_rep_acc IMPLEMENTATION.
         ).
         LOOP AT lt_result ASSIGNING FIELD-SYMBOL(<ls_result>).
           ms_result-field_infos = VALUE #( BASE ms_result-field_infos
-                               ( field        = <ls_result>-name
-                                 entity_name = <ls_result>-path
-                                 description = <ls_result>-description
-                                 type        = <ls_result>-type
-                                 uri         = <ls_result>-uri ) ).
+                                           ( field       = <ls_result>-name
+                                             entity_name = <ls_result>-path
+                                             description = <ls_result>-description
+                                             type        = <ls_result>-type
+                                             uri         = <ls_result>-uri ) ).
         ENDLOOP.
       CATCH cx_ris_exception.
       CATCH cx_adt_uri_mapping.
