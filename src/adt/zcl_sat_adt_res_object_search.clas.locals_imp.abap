@@ -219,6 +219,7 @@ CLASS lcl_method_result_converter IMPLEMENTATION.
 
       cs_result-objects = VALUE #( BASE cs_result-objects ( ls_result_entry ) ).
 
+      " 2) create method entries
       LOOP AT GROUP <ls_query_result> ASSIGNING FIELD-SYMBOL(<ls_method>).
         DATA(lv_method_name) = <ls_method>-custom_field_long1.
 
@@ -246,7 +247,7 @@ CLASS lcl_method_result_converter IMPLEMENTATION.
           cs_result-objects = VALUE #( BASE cs_result-objects
                                        ( name        = lv_method_name
                                          type        = ls_obj_type-objtype_tr && '/' && ls_obj_type-subtype_wb
-                                         description = <ls_method>-description
+                                         description = <ls_method>-custom_field_long2
                                          parent_uri  = ls_object_reference-uri
                                          uri         = lv_uri ) ).
           cs_result-count   = cs_result-count + 1.
