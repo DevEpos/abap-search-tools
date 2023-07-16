@@ -23,12 +23,6 @@ CLASS zcl_sat_cds_view_query_config DEFINITION
         db_entity   TYPE string VALUE 'ABAP:IMG_DB_ENTITY',
       END OF c_image_keys.
 
-    METHODS get_image
-      IMPORTING
-        iv_image_key  TYPE string
-      RETURNING
-        VALUE(result) TYPE string.
-
     METHODS get_param_filter
       RETURNING
         VALUE(result) TYPE zif_sat_ty_object_search=>ty_s_query_filter.
@@ -113,8 +107,14 @@ CLASS zcl_sat_cds_view_query_config IMPLEMENTATION.
         long_description = |Use '{ c_cds_options-annotation }' to restrict the search query by certain Annotations.\n| &&
                            |This parameter also allows the input with Key/Value pattern.\n\nExample:\n   { c_cds_options-annotation } : analytics.query\n\n| &&
                            |Example with Key/Value:\n   { c_cds_options-annotation } : searchable=true|
-        img_info         = VALUE #( img_key     = c_image_keys-anno
-                                    img_encoded = get_image( c_image_keys-anno ) )
+        img_info         = VALUE #(
+            img_key     = c_image_keys-anno
+            img_encoded = `iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAACXUlEQVR4nGNgwAJcWjbbuLVt6Xdt3XIZiO8D8XWX1q3rgXSMQ8N+Dmx6wMCtdYsOUNF5IH4MMWBrgkvzFhe3tq0+QEObQeIgA11atllg` &&
+                          `aPbu3qnj1bn9tVfX9nagLTzYLADZ7tOxvdm7c/t3n/btDiiSAd07Twf07uyH8/t3GQT27cgI6t3ZENSzKyWoc5sMTC6oZ3dzYO/O5wH9+wXAAuH9e1PCJuz5HtmzXwSmKGzinudhk/asD5+wZ37YxL2X` &&
+                          `wyfueR8+abcF1CUsQPnHERP3loAVB/ft2h/cv2s+rrABaQjq3XUZiOFqAnt3LQbi42COb9f2575d20rQNXl373AByiWA/OvTuX25T9f2/TB5IL8BGBb3IaHftvU/KMRhku7tO1TcWrdeB+L7rm1b9gNj` &&
+                          `5zYQ/wexYWrcWjc3gGIEYlvjps8OTRtzELZv6geK3XZo2AwPE/uGTfPtmzbtR/A3LwfyN4M5VrUbrlvWbpgOk7SqXTfbqm79aYSB8zmA/MOWtevBBljWb1SxrFn/2bJmnQ9YgUnVmunGlWvvg/wN4htX` &&
+                          `rgkwqVz736Ry9Wogu9u4Ys11MC5f896kYnUDkH3fpHw1PMoZdIvXaOiVrvquV7oSHpA6JasddEtWTQZhEFs7axWPbvHqGt3iVfP1SlZHwCyDA/XC5RkaBcv/qxcsK8CQJBYo5i4JUcxZ+l4xZ8luxdzF` &&
+                          `OUpZy2wUCpYrgLBy3iIdheylEUD5yQq5SxNwGiKVtkxEOnNRjVTmou3S6YveS2cs+g/E34H4MZC/XypjUbt06nwDslyIDQAAQgkg3iT77dwAAAAASUVORK5CYII=` )
         key_value        = abap_true
         patterns         = abap_true
         content_assist   = VALUE #(
@@ -130,8 +130,11 @@ CLASS zcl_sat_cds_view_query_config IMPLEMENTATION.
         name             = c_cds_options-association
         long_description = |Use '{ c_cds_options-association }' to restrict the search query to CDS views which use | &&
                            |a certain Table/View/CDS view as an Association.\n\nExample:\n   { c_cds_options-association } : i_product|
-        img_info         = VALUE #( img_key     = c_image_keys-association
-                                    img_encoded = get_image( c_image_keys-association ) )
+        img_info         = VALUE #(
+            img_key     = c_image_keys-association
+            img_encoded = `iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABBElEQVR4nGNgoAYQaD+vINJ69qBI65l3oq2nj4L4JBkg1n72RPbWh397jz3/n7D+3l+x1tPHSDOg7cxH+wXX//suv/Xfbv71/6Itp74z` &&
+                          `hM78jxOjA/GOs6cNZl75bzr76n8QLdZ+5jhO27AZAPKzaNvZ06JtZz6Jt509gzcMsBlAEiDbgNCZk1HCIWTWdNIMcGhgAWrcDjFg1n6GhPkcZLhiKg9D6IzNDJEzRUjWCwpYyc5zV5R6z/+Q7Dhzg5zE` &&
+                          `djlry/3/fcdBie3uf9H2sxdIMgAYzV8s513777To+n8QDeR/INUFJwxmXv1jAk5sV/+ItZGY3OEZru3MO1BeITkMcAEAZhGbMbBbTB8AAAAASUVORK5CYII=` )
         allowed_length   = 30
         patterns         = abap_true
         content_assist   = VALUE #(
@@ -163,8 +166,12 @@ CLASS zcl_sat_cds_view_query_config IMPLEMENTATION.
         name             = c_cds_options-extended_by
         long_description = |Use '{ c_cds_options-extended_by }' to restrict the search query to CDS views which are | &&
                            |extended by certain Extension views.\n\nExample:\n   { c_cds_options-extended_by } : i_material|
-        img_info         = VALUE #( img_key     = c_image_keys-extended_by
-                                    img_encoded = get_image( c_image_keys-extended_by ) )
+        img_info         = VALUE #(
+            img_key     = c_image_keys-extended_by
+            img_encoded = `iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABKklEQVR4nM2SIVMCURSFCQYjwbDBsIFgIBAIBgKBYCAYDAaCP8BAIBic2TdDIBA2EIgGAtFo2EAwGglGAsFgIBgIBDxn5nPGebMMzXFn` &&
+                          `vnm897jnnnN3K5V/94QQGuJJrMRefIkX0RUnx4ofxEaMRN0FIsmy7FbrG0JnpcX6070u11prWlORi0LMdXZDg6lYlHU+d2eKbfVDDLVvsl9YSJzaic57sYAtT8QFxV6vxVj0ieK53HFexAJL0cJ2oPOG` &&
+                          `mbzajWgTqerBxgI77HlIVzgacBfIXieK3exjgS0CBZkf3Z07d08QynH3HgskKI+J0SBCn9+OsubtWDA/9B2kDLFF4TPzmRHh5w2lpQKIdOjuYdZ+OXSsT51dHiyOnEyx7c95xT45WvznzzfhJAGIuot7` &&
+                          `RgAAAABJRU5ErkJggg==` )
         allowed_length   = 30
         patterns         = abap_true
         no_negation      = abap_true
@@ -197,8 +204,12 @@ CLASS zcl_sat_cds_view_query_config IMPLEMENTATION.
         name             = c_cds_options-select_from
         long_description = |Use '{ c_cds_options-select_from }' to restrict the search query to CDS views which use | &&
                            |a certain Table/View/CDS View in their SELECT clause.\n\nExample:\n   { c_cds_options-select_from } : mara|
-        img_info         = VALUE #( img_key     = c_image_keys-from
-                                    img_encoded = get_image( c_image_keys-from ) )
+        img_info         = VALUE #(
+            img_key     = c_image_keys-from
+            img_encoded = `iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABQklEQVR4nK3Su0oDQRTG8TyCoK3EKpdFSVC8ZCEWUVDQyifwAXwGGxUbUXTWXEw2BhMt0lnYimijGEz2kt1EMSgqbqGtiKt8zskDHBAc` &&
+                          `GIY5f+ZXTSDw3ytVuAmqxeaFqjufiaIDVW46E7rzJWfX1FlAPvaTJQczlTaWTh4gLj0sVO8we9jGZMmFRH5YYEJ3MFV2MX90i+XTJ6SvPCwed7r36YMWqLPAeKEJRTOQ3HcRz1oICwOxjImxvI2onFNn` &&
+                          `gdF8E71rNcyVW6ha77BfP7B+/tIFaU6dBUb2bBagzgLDOR6gzgLxLA9QZ4FYxmIB6iwwlOYB6iwwuGuyAHUWUDQeoM4CYWF2gpv175R8UGm8dYGVs2ckCg76N+p+RJgeCwxs1XvC29aq/I33ijB8+olR` &&
+                          `0fAjmvkYEuZOKFfrY4G/rl+7wFtBvoD5FwAAAABJRU5ErkJggg==` )
         allowed_length   = 30
         patterns         = abap_true
         content_assist   = VALUE #(
@@ -229,32 +240,5 @@ CLASS zcl_sat_cds_view_query_config IMPLEMENTATION.
         img_info         = VALUE #( img_key     = c_general_image_keys-param
                                     img_encoded = get_general_image( c_general_image_keys-param ) )
         patterns         = abap_true ).
-  ENDMETHOD.
-
-  METHOD get_image.
-    CASE iv_image_key.
-
-      WHEN c_image_keys-anno.
-        result = `iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAACXUlEQVR4nGNgwAJcWjbbuLVt6Xdt3XIZiO8D8XWX1q3rgXSMQ8N+Dmx6wMCtdYsOUNF5IH4MMWBrgkvzFhe3tq0+QEObQeIgA11atllgaPbu3qnj1bn9tVfX9nagLTzYLADZ7tOxvdm7c/t3n/b` &&
-                 `tDiiSAd07Twf07uyH8/t3GQT27cgI6t3ZENSzKyWoc5sMTC6oZ3dzYO/O5wH9+wXAAuH9e1PCJuz5HtmzXwSmKGzinudhk/asD5+wZ37YxL2XwyfueR8+abcF1CUsQPnHERP3loAVB/ft2h/cv2s+rrABaQjq3XUZiOFqAnt3LQbi42COb9f2575d20rQNXl373` &&
-                 `AByiWA/OvTuX25T9f2/TB5IL8BGBb3IaHftvU/KMRhku7tO1TcWrdeB+L7rm1b9gNj5zYQ/wexYWrcWjc3gGIEYlvjps8OTRtzELZv6geK3XZo2AwPE/uGTfPtmzbtR/A3LwfyN4M5VrUbrlvWbpgOk7SqXTfbqm79aYSB8zmA/MOWtevBBljWb1SxrFn/2bJmn` &&
-                 `Q9YgUnVmunGlWvvg/wN4htXrgkwqVz736Ry9Wogu9u4Ys11MC5f896kYnUDkH3fpHw1PMoZdIvXaOiVrvquV7oSHpA6JasddEtWTQZhEFs7axWPbvHqGt3iVfP1SlZHwCyDA/XC5RkaBcv/qxcsK8CQJBYo5i4JUcxZ+l4xZ8luxdzFOUpZy2wUCpYrgLBy3iId` &&
-                 `heylEUD5yQq5SxNwGiKVtkxEOnNRjVTmou3S6YveS2cs+g/E34H4MZC/XypjUbt06nwDslyIDQAAQgkg3iT77dwAAAAASUVORK5CYII=`.
-
-      WHEN c_image_keys-association.
-        result = `iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABBElEQVR4nGNgoAYQaD+vINJ69qBI65l3oq2nj4L4JBkg1n72RPbWh397jz3/n7D+3l+x1tPHSDOg7cxH+wXX//suv/Xfbv71/6Itp74zhM78jxOjA/GOs6cNZl75bzr76n8QLdZ+5jhO27AZAPKz` &&
-                 `aNvZ06JtZz6Jt509gzcMsBlAEiDbgNCZk1HCIWTWdNIMcGhgAWrcDjFg1n6GhPkcZLhiKg9D6IzNDJEzRUjWCwpYyc5zV5R6z/+Q7Dhzg5zEdjlry/3/fcdBie3uf9H2sxdIMgAYzV8s513777To+n8QDeR/INUFJwxmXv1jAk5sV/+ItZGY3OEZru3MO1BeITkM` &&
-                 `cAEAZhGbMbBbTB8AAAAASUVORK5CYII=`.
-
-      WHEN c_image_keys-extended_by.
-        result = `iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABKklEQVR4nM2SIVMCURSFCQYjwbDBsIFgIBAIBgKBYCAYDAaCP8BAIBic2TdDIBA2EIgGAtFo2EAwGglGAsFgIBgIBDxn5nPGebMMzXFnvnm897jnnnN3K5V/94QQGuJJrMRefIkX0RUnx4ofxEaM` &&
-                 `RN0FIsmy7FbrG0JnpcX6070u11prWlORi0LMdXZDg6lYlHU+d2eKbfVDDLVvsl9YSJzaic57sYAtT8QFxV6vxVj0ieK53HFexAJL0cJ2oPOGmbzajWgTqerBxgI77HlIVzgacBfIXieK3exjgS0CBZkf3Z07d08QynH3HgskKI+J0SBCn9+OsubtWDA/9B2kDLFF` &&
-                 `4TPzmRHh5w2lpQKIdOjuYdZ+OXSsT51dHiyOnEyx7c95xT45WvznzzfhJAGIuot7RgAAAABJRU5ErkJggg==`.
-
-      WHEN c_image_keys-from.
-        result = `iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABQklEQVR4nK3Su0oDQRTG8TyCoK3EKpdFSVC8ZCEWUVDQyifwAXwGGxUbUXTWXEw2BhMt0lnYimijGEz2kt1EMSgqbqGtiKt8zskDHBAcGIY5f+ZXTSDw3ytVuAmqxeaFqjufiaIDVW46E7rzJWfX` &&
-                 `1FlAPvaTJQczlTaWTh4gLj0sVO8we9jGZMmFRH5YYEJ3MFV2MX90i+XTJ6SvPCwed7r36YMWqLPAeKEJRTOQ3HcRz1oICwOxjImxvI2onFNngdF8E71rNcyVW6ha77BfP7B+/tIFaU6dBUb2bBagzgLDOR6gzgLxLA9QZ4FYxmIB6iwwlOYB6iwwuGuyAHUWUDQ` &&
-                 `eoM4CYWF2gpv175R8UGm8dYGVs2ckCg76N+p+RJgeCwxs1XvC29aq/I33ijB8+olR0fAjmvkYEuZOKFfrY4G/rl+7wFtBvoD5FwAAAABJRU5ErkJggg==`.
-    ENDCASE.
   ENDMETHOD.
 ENDCLASS.
