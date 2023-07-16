@@ -144,7 +144,9 @@ CLASS zcl_sat_os_method_provider IMPLEMENTATION.
                       iv_fieldname_alias = c_result_fields-tadir_type
                       iv_entity          = c_clif_alias ).
     add_select_field( iv_fieldname       = c_text_fields-description
-                      iv_fieldname_alias = c_result_fields-description
+                      " HINT: Method description is written not to 'description' field as default logic
+                      "       fills the class/interface description into this field after the sql query has been executed
+                      iv_fieldname_alias = c_result_fields-custom_field_long2
                       iv_entity          = c_alias_names-method_text ).
     add_select_field( iv_fieldname       = c_method_fields-createdon
                       iv_fieldname_alias = c_result_fields-created_date
