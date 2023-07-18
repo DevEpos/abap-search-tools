@@ -54,7 +54,7 @@ CLASS zcl_sat_search_ioc IMPLEMENTATION.
     )->add_implementer( iv_filter      = |{ c_search_type-class_interface }|
                         iv_implementer = 'ZCL_SAT_CLSINTF_QV'
     )->add_implementer( iv_filter      = |{ c_search_type-method }|
-                        iv_implementer = 'ZCL_SAT_CLSINTF_QV'
+                        iv_implementer = 'ZCL_SAT_CLIF_METHOD_QV'
     )->add_implementer( iv_implementer = 'ZCL_SAT_GENERAL_QV' ).
 
     add_contract( iv_contract = c_contracts-search_provider
