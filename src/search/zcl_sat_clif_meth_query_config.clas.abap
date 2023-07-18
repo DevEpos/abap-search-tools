@@ -15,13 +15,17 @@ CLASS zcl_sat_clif_meth_query_config DEFINITION
     METHODS build_config REDEFINITION.
 
   PRIVATE SECTION.
-    ALIASES c_method_options for zif_sat_c_object_search~c_method_search_option.
+    ALIASES c_method_options FOR zif_sat_c_object_search~c_method_search_option.
+
     CONSTANTS:
       BEGIN OF c_image_keys,
-        param TYPE string VALUE 'ABAP:IMG_',
+        param      TYPE string VALUE 'ABAP:IMG_',
+        visibility TYPE string VALUE 'ABAP:IMG_VISIBILITY',
+        level      TYPE string VALUE 'ABAP:IMG_METHOD_LEVEL',
+        status     TYPE string VALUE 'ABAP:IMG_METHOD_STATUS',
       END OF c_image_keys.
 
-    DATA mt_method_options        TYPE zif_sat_ty_object_search=>ty_t_query_filter.
+    DATA mt_method_options        TYPE zif_sat_ty_object_search=>ty_query_filters.
     DATA mv_option_prefix_pattern TYPE string.
 
     METHODS get_image
@@ -31,6 +35,30 @@ CLASS zcl_sat_clif_meth_query_config DEFINITION
         VALUE(result) TYPE string.
 
     METHODS delete_invalid_obj_filters.
+
+    METHODS get_flag_filter
+      RETURNING
+        VALUE(result) TYPE zif_sat_ty_object_search=>ty_query_filter.
+
+    METHODS get_param_filter
+      RETURNING
+        VALUE(result) TYPE zif_sat_ty_object_search=>ty_query_filter.
+
+    METHODS get_visibility_filter
+      RETURNING
+        VALUE(result) TYPE zif_sat_ty_object_search=>ty_query_filter.
+
+    METHODS get_status_filter
+      RETURNING
+        VALUE(result) TYPE zif_sat_ty_object_search=>ty_query_filter.
+
+    METHODS get_level_filter
+      RETURNING
+        VALUE(result) TYPE zif_sat_ty_object_search=>ty_query_filter.
+
+    METHODS get_type_filter
+      RETURNING
+        VALUE(result) TYPE zif_sat_ty_object_search=>ty_query_filter.
 ENDCLASS.
 
 
@@ -48,17 +76,15 @@ CLASS zcl_sat_clif_meth_query_config IMPLEMENTATION.
     " TODO: add filters for method:
     " - type (constructor,handler,...)
     " - flag (optional,abstract,final,class_exceptions)
-    " - exposure (private,protected,public)
     " - level (static, instance)
-    " - desc (description of method)
 
-    mt_method_options = VALUE zif_sat_ty_object_search=>ty_t_query_filter(
-                                  ( get_description_filt_conf( ) )
-                                  ( name     = c_method_options-param
-                                    no_negation = abap_true
-                                    img_info = VALUE #( img_key     = c_general_image_keys-param
-                                                        img_encoded = get_general_image( c_general_image_keys-param ) )
-                                    patterns = abap_true ) ).
+    mt_method_options = VALUE zif_sat_ty_object_search=>ty_query_filters( ( get_description_filt_conf( ) )
+                                                                          ( get_type_filter( ) )
+                                                                          ( get_flag_filter( ) )
+                                                                          ( get_param_filter( ) )
+                                                                          ( get_level_filter( ) )
+                                                                          ( get_status_filter( ) )
+                                                                          ( get_visibility_filter( ) ) ).
 
     ms_search_type-label    = 'Method'.
     ms_search_type-img_info = VALUE #( img_key     = c_clif_image_keys-method
@@ -111,4 +137,108 @@ CLASS zcl_sat_clif_meth_query_config IMPLEMENTATION.
     DELETE lr_object_filters->* WHERE    name = c_class_intf_search_option-attribute
                                       OR name = c_class_intf_search_option-method.
   ENDMETHOD.
+
+  METHOD get_flag_filter.
+    result = VALUE #(
+        name             = c_method_options-flag
+        long_description = |Use '{ c_method_options-flag }' to restrict the result to methods with specific features.\n\n| &&
+                           |Exmaple:\n   { c_method_options-flag } : abstract|
+        img_info         = VALUE #( img_key     = c_general_image_keys-checked_box
+                                    img_encoded = get_general_image( c_general_image_keys-checked_box ) )
+        content_assist   = VALUE #(
+            assist_type     = zif_sat_c_object_search=>c_filter_content_assist_type-fixed_named_item
+            proposal_values = VALUE #( ( name = 'OPTIONAL'         description = 'Implementation is Optional' )
+                                       ( name = 'ABSTRACT'         description = 'Abstract' )
+                                       ( name = 'FINAL'            description = 'Final' )
+                                       ( name = 'CLASS_EXCEPTIONS' description = 'Class Based Exceptions are used' ) ) ) ).
+  ENDMETHOD.
+
+  METHOD get_param_filter.
+    result = VALUE #(
+        name             = c_method_options-param
+        long_description = |Use '{ c_method_options-param }' to restrict the result to methods with specific parameters.\n\n| &&
+                           |Example:\n   { c_method_options-param } : iv_user_name|
+        no_negation      = abap_true
+        img_info         = VALUE #( img_key     = c_general_image_keys-param
+                                    img_encoded = get_general_image( c_general_image_keys-param ) )
+        patterns         = abap_true ).
+  ENDMETHOD.
+
+  METHOD get_visibility_filter.
+    result = VALUE #(
+        name             = c_method_options-visibility
+        long_description = |Use '{ c_method_options-visibility }' to limit query result to methods with a certain exposure.\n\n| &&
+                           |Example:\n   { c_method_options-visibility } : public|
+        img_info         = VALUE #(
+            img_key     = c_image_keys-visibility
+            img_encoded = `iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAI6SURBVDhPpZJLaBNRFIb/mTuPPGisIC0SkyYp` &&
+                          `tVoflIJFiwiNVGnRLnUjiAvb0pW40l26LG7EhQtBRBGJ6EYEjVJThZYKuvGxUFPaCiXYaBv7yDwyc+91kg5RqjGCH/wM98z5f7jnXAH/gJzoa/fI4mXOeTvlUGQivtdNOmyNPHpdM6Bklggm+2NNUk8o` &&
+                          `pBBBwPh8FvemZ3TbZnHi9lXF37Pj/rFoOHQ8ElEkUUQpoHlTACohZHpluUN0+6rCGN0T86hKJreAXxVWiWgx1lbzCr2XDmkdAZ93BlvcyjqUczzILel/vcKz661DXQGhP6YYQtHU8NFUYNh2WRnNwDKl` &&
+                          `76oGjF1rO0+IOtp55KISbo2Dzabhl0Xk/Y3IWhQf1nSd2jj5x4DU1ZYhIqqj+/sueH1eGZJoIxjtgvbpCeaWFu2xNfmNs4ET1sjjl+UZvNp7gJedDmbMgHHYRufRQdT5nHxWXP8hyDCpgsnUFb1oaAO9` &&
+                          `56Zvl8qVLewaPo3dg6cQjB8Ec2IlagCFr45y69JyEMxVcMZBqWtyqAQIzmBYNouGhQC25qOYeHoTepGAO82cMpi2iomxGwVTM5L+1W1J1/YzgH1bBfvyvazIXAiNK9sxnroDjQRR9DTjRTqpFTT9lm8t` &&
+                          `ONCdeG67NlRmsDMeB539XC6WINEmTOUeQm8vGiKRuGWZd+uNzNnuBCrmEpL7hbFZBeqa3RNgSRLq034stuTPCOBSgzCf3Ggu8dsWNrLv7VTN1/ofAD8A89fyZNDp99AAAAAASUVORK5CYII=` )
+        content_assist   = VALUE #(
+            assist_type     = zif_sat_c_object_search=>c_filter_content_assist_type-fixed_named_item
+            proposal_values = VALUE #( ( name = 'PUBLIC'    description = 'Public' )
+                                       ( name = 'PROTECTED' description = 'Protected' )
+                                       ( name = 'PRIVATE'   description = 'Private' ) ) ) ).
+  ENDMETHOD.
+
+  METHOD get_level_filter.
+    result = VALUE #(
+        name             = c_method_options-level
+        long_description = |Use '{ c_method_options-level }' to limit result to methods defined at a certain level.\n\n| &&
+                           |Example:\n   { c_method_options-level } : instance|
+        img_info         = VALUE #(
+            img_key     = c_image_keys-level
+            img_encoded = `iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABFklEQVR4nL2Qz07CQBDGK159E+2b9OibIIdSEho0teIfmgrssksNV6CtTdRSuHColPgAPXngKQiC2YwLIcaDh21NnGQyc5jvN/ONJP1X` &&
+                          `zA/k0bwgwz4r2QFcOJWOj7bJ+8/cgMzCb8BPC4cncW7Q3gJkv6Agr/4KON9Cdha4nV+HCCEK6T6khDofvL5TSk+FNyBElDairBeMmT99g+FzBKhD1y2MxSB2E6dB8MSSJIHX2QziOAbXewTLRgshgHl7` &&
+                          `v3wJQxhPJjCKIgh57/sBmDf2RghwYVopdXrM9TwYDF3o9weAOw7UjIbYBRW9rmh6nVl2m2HShTurBZp+vVarV+KPLKmGUtIu07OyuSmWjUVRNcTFeeML2CKeQ/aP3GQAAAAASUVORK5CYII=` )
+        content_assist   = VALUE #(
+            assist_type     = zif_sat_c_object_search=>c_filter_content_assist_type-fixed_named_item
+            proposal_values = VALUE #( ( name = 'INSTANCE' description = 'Instance Method' )
+                                       ( name = 'STATIC'   description = 'Class Method' ) ) ) ).
+  ENDMETHOD.
+
+  METHOD get_status_filter.
+    result = VALUE #(
+        name             = c_method_options-status
+        long_description = |Use '{ c_method_options-status }' to limit results to methods by status.\n\n| &&
+                           |Example:\n   { c_method_options-status } : implemented|
+*        img_info         = VALUE #( img_key     = c_general_image_keys-generic_filter
+*        img_encoded      = get_general_image( c_general_image_keys-generic_filter ) )
+        img_info         = VALUE #(
+            img_key     = c_image_keys-status
+            img_encoded = `iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAAOwAAADsAEnxA+tAAAAGXRFWHRTb2Z0d2FyZQB3d3cuaW5rc2NhcGUub3Jnm+48GgAAAK1JREFUOI3V0T1qgkEQh/Ff/ABb` &&
+                          `A5Ib2KqX8C4B09pZWAZs7CwFS/EGnkFvIESw8AYiwlpki2V5lQUrBwb+zMczs7O8vX0k+hv9wr49Fjnghnoh4IYm1JJg2nzCJuqAawZoVFFD4mN8xUkzDLN8qJp6wTb6Ei30MMEfjujiM9ZP81Xaif7F` &&
+                          `GT/oYB3BT2+Ur3jwf+RVRS6UAALm8WkPAS9/Y3qDEQaFgF1h3TvYHfH+NAnKJEY1AAAAAElFTkSuQmCC` )
+        content_assist   = VALUE #(
+            assist_type     = zif_sat_c_object_search=>c_filter_content_assist_type-fixed_named_item
+            proposal_values = VALUE #( ( name = 'STANDARD'    description = 'Defined in Class/Interface' )
+                                       ( name = 'IMPLEMENTED' description = 'Implemented from Interface' )
+                                       ( name = 'REDEFINED'   description = 'Redefined from Super Class' ) ) ) ).
+  ENDMETHOD.
+
+  METHOD get_type_filter.
+    result = VALUE #(
+        name             = c_general_options-type
+        long_description = |Use '{ c_general_options-type }' to find methods of a concrete type.\n\n| &&
+                           |Example:\n   { c_general_options-type } : event_handler|
+        img_info         = VALUE #( img_key     = c_general_image_keys-type_folder
+                                    img_encoded = get_general_image( c_general_image_keys-type_folder ) )
+        content_assist   = VALUE #(
+            assist_type     = zif_sat_c_object_search=>c_filter_content_assist_type-fixed_named_item
+            proposal_values = VALUE #(
+                ( name = zif_sat_c_object_search=>c_method_types-general            description = 'General Method' )
+                ( name = zif_sat_c_object_search=>c_method_types-constructor        description = 'Constructor' )
+                ( name = zif_sat_c_object_search=>c_method_types-event_handler      description = 'Event Handler Method' )
+                ( name = zif_sat_c_object_search=>c_method_types-virtual_getter     description = 'Get Method of a virtual attribute' )
+                ( name = zif_sat_c_object_search=>c_method_types-virtual_setter     description = 'Set Method of a virtual attribute' )
+                ( name = zif_sat_c_object_search=>c_method_types-test               description = 'Test method for ABAP Unit' )
+                ( name = zif_sat_c_object_search=>c_method_types-cds_table_function description = 'CDS table function' )
+                ( name = zif_sat_c_object_search=>c_method_types-amdp_ddl_object    description = 'AMDP DDL object' ) )
+            proposal_images = VALUE #( ( img_key     = c_general_image_keys-type_group
+                                         img_encoded = get_general_image( c_general_image_keys-type_group ) ) ) ) ).
+  ENDMETHOD.
+
 ENDCLASS.

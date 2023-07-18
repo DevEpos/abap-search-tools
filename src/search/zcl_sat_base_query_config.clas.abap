@@ -22,13 +22,14 @@ CLASS zcl_sat_base_query_config DEFINITION
         column      TYPE string VALUE 'ABAP:IMG_COLUMN',
         param       TYPE string VALUE 'ABAP:IMG_PARAM',
         checked_box TYPE string VALUE 'ABAP:IMG_CHECKED_BOX',
+        generic_filter type string value 'ABAP:IMG_GENERIC_FILTER',
       END OF c_general_image_keys.
 
     CONSTANTS c_type_image_key_prefix TYPE string VALUE `ABAP:IMG_SEARCHTYPE_`.
 
-    DATA mt_options         TYPE zif_sat_ty_object_search=>ty_t_query_filter.
+    DATA mt_options         TYPE zif_sat_ty_object_search=>ty_query_filters.
     DATA mt_allowed_options TYPE zif_sat_ty_object_search=>ty_t_options.
-    DATA ms_search_type     TYPE zif_sat_ty_object_search=>ty_s_search_type.
+    DATA ms_search_type     TYPE zif_sat_ty_object_search=>ty_search_type_config.
 
     "! Builds configuration
     "! NOTE: Must be overridden in sub classes
@@ -36,23 +37,23 @@ CLASS zcl_sat_base_query_config DEFINITION
 
     METHODS get_user_filt_conf
       RETURNING
-        VALUE(result) TYPE zif_sat_ty_object_search=>ty_s_query_filter.
+        VALUE(result) TYPE zif_sat_ty_object_search=>ty_query_filter.
 
     METHODS get_package_filt_conf
       RETURNING
-        VALUE(result) TYPE zif_sat_ty_object_search=>ty_s_query_filter.
+        VALUE(result) TYPE zif_sat_ty_object_search=>ty_query_filter.
 
     METHODS get_description_filt_conf
       RETURNING
-        VALUE(result) TYPE zif_sat_ty_object_search=>ty_s_query_filter.
+        VALUE(result) TYPE zif_sat_ty_object_search=>ty_query_filter.
 
     METHODS get_max_rows_filt_conf
       RETURNING
-        VALUE(result) TYPE zif_sat_ty_object_search=>ty_s_query_filter.
+        VALUE(result) TYPE zif_sat_ty_object_search=>ty_query_filter.
 
     METHODS get_rel_state_filt_conf
       RETURNING
-        VALUE(result) TYPE zif_sat_ty_object_search=>ty_s_query_filter.
+        VALUE(result) TYPE zif_sat_ty_object_search=>ty_query_filter.
 
     METHODS get_general_image
       IMPORTING
@@ -222,6 +223,12 @@ CLASS zcl_sat_base_query_config IMPLEMENTATION.
                  `/iNikGajf3ywfS7n/8e4zVg65nb/z8BNcFwO1QziAbxP+AzoHf9SbDiBRsO/P/y5///jtkQzSAaxAfhT/gMOPjs7/+c1nlgTcmVk8F0J1Dz17//4fjzbwJeuPfp7//i9nlwzd+BmpDxV0IGPPr2//+333//r99z8v` &&
                  `/Pf/8x8Pc/RBjw6x9u/AOfARQl5QEDAMqA2SocOZJBAAAAAElFTkSuQmCC`.
 
+      WHEN c_general_image_keys-generic_filter.
+        result = `iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAAdgAAAHYBTnsmCAAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAFxSURBVDiNnZHfK` &&
+                 `0NhGMc/79k5mVrmV2SRMMulH61oF+411Ir/QK78CyPlguWCG67VSvnRipQLEqUYWQo3rBRuXMimtjo7Xhfa5uhkZz5Xb0/P9/M+7/MKABltawVlDEQ9dhDco2ajYvwpI+R6uw9DxIEqW+EicT6qAwqGmPhHGMCP62` &&
+                 `1QARrzlf1rlbmYk9tnh02H0qTmj5vnGmNLLgDmd5zcRlI0136WVBQEhzdaoZjOClqm3NZ3CjgOpwn4cmbBULfO6kEFUkKdS3KzkKLRXcYEwR6d05kUF0mV4V7dVtgkAOj3GvR7DcvGvYRG4tFByK/T5Sn2qJbdv9g` &&
+                 `40xhfLi74LvKOp0aaBbPblUxvOUvKUhlBPKky2qebBeFQhnAoYxnavdIYWXQVFjzQmSvvCcEenZNwmsSjg+FenYYq+VMgXkD+Ef8m4MsV/r6IfFLAWAFe7UxiQnCE9nAsAORaRwMKowhZay+tJPlwx8Tkpf4FIgty` &&
+                 `FKzK1qcAAAAASUVORK5CYII=`.
     ENDCASE.
   ENDMETHOD.
 ENDCLASS.

@@ -71,7 +71,7 @@ CLASS zcl_sat_object_query_parser DEFINITION
     "!
     METHODS add_option_value
       IMPORTING
-        is_option  TYPE zif_sat_ty_object_search=>ty_s_query_filter
+        is_option  TYPE zif_sat_ty_object_search=>ty_query_filter
         iv_target  TYPE string OPTIONAL
         iv_value   TYPE string
       CHANGING
@@ -251,9 +251,11 @@ CLASS zcl_sat_object_query_parser IMPLEMENTATION.
     lv_value = replace( val = lv_value sub = '?' occ = 0  with = '+' ).
     lv_value2 = replace( val = lv_value2 sub = '?' occ = 0  with = '+' ).
 
-    mo_validator->validate_option( iv_option = is_option-name
-                                   iv_value  = lv_value
-                                   iv_value2 = lv_value2 ).
+    mo_validator->validate_option( iv_option         = is_option-name
+                                   is_content_assist = is_option-content_assist
+                                   iv_target         = iv_target
+                                   iv_value          = lv_value
+                                   iv_value2         = lv_value2 ).
 
     IF is_option-data_type = zif_sat_c_object_search=>c_filter_data_type-boolean.
       lv_value = to_upper( lv_value ).

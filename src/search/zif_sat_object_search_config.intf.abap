@@ -5,7 +5,7 @@ INTERFACE zif_sat_object_search_config
   "! <p class="shorttext synchronized">Retrieves configuration of search type</p>
   METHODS get_search_config DEFAULT IGNORE
     RETURNING
-      VALUE(result) TYPE zif_sat_ty_object_search=>ty_s_search_type.
+      VALUE(result) TYPE zif_sat_ty_object_search=>ty_search_type_config.
 
   "! <p class="shorttext synchronized">Returns a table of allowed search options</p>
   "!
@@ -24,7 +24,7 @@ INTERFACE zif_sat_object_search_config
       iv_option        TYPE string
       iv_target        TYPE string OPTIONAL
     RETURNING
-      VALUE(rs_option) TYPE zif_sat_ty_object_search=>ty_s_query_filter.
+      VALUE(rs_option) TYPE zif_sat_ty_object_search=>ty_query_filter.
 
   "! <p class="shorttext synchronized">Checks if an option exists in this configuration</p>
   "!
@@ -57,5 +57,5 @@ INTERFACE zif_sat_object_search_config
   "! @parameter rt_options | List of of search option configurations
   METHODS get_options
     RETURNING
-      VALUE(rt_options) TYPE zif_sat_ty_object_search=>ty_t_query_filter.
+      VALUE(rt_options) TYPE zif_sat_ty_object_search=>ty_query_filters.
 ENDINTERFACE.
