@@ -1,18 +1,17 @@
 <?sap.transform simple?>
-<tt:transform
-    xmlns:tt="http://www.sap.com/transformation-templates"
-    xmlns:saat="http://www.devepos.com/adt/objectsearch"
-    xmlns:cl="http://www.sap.com/abapxml/types/class-pool/zif_sat_ty_object_search"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<tt:transform xmlns:tt="http://www.sap.com/transformation-templates"
+              xmlns:saat="http://www.devepos.com/adt/objectsearch"
+              xmlns:cl="http://www.sap.com/abapxml/types/class-pool/zif_sat_ty_object_search"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
-  <tt:root name="search_config" type="cl:ty_s_search_config"/>
+  <tt:root name="search_config" type="cl:ty_search_config"/>
 
   <tt:template>
     <saat:searchConfig tt:extensible="deep">
-      <tt:namespace name="xsi" />
+      <tt:namespace name="xsi"/>
       <tt:loop ref="search_config.search_types">
         <tt:apply name="searchType">
-           <tt:with-root name="search_type" ref="$ref"/>
+          <tt:with-root name="search_type" ref="$ref"/>
         </tt:apply>
       </tt:loop>
     </saat:searchConfig>
@@ -21,7 +20,7 @@
 
   <tt:template name="searchType">
     <tt:context>
-      <tt:root name="search_type" type="cl:ty_s_search_type"/>
+      <tt:root name="search_type" type="cl:ty_search_type_config"/>
     </tt:context>
 
     <saat:searchType>
@@ -31,7 +30,7 @@
       <tt:cond check="exist(search_type.img_info)">
         <saat:imageInfo tt:extensible="deep">
           <tt:apply name="imageInfoAttributes">
-            <tt:with-root name="image_info" ref="search_type.img_info" />
+            <tt:with-root name="image_info" ref="search_type.img_info"/>
           </tt:apply>
         </saat:imageInfo>
       </tt:cond>
@@ -46,7 +45,7 @@
 
   <tt:template name="input">
     <tt:context>
-      <tt:root name="input" type="cl:ty_s_input_field"/>
+      <tt:root name="input" type="cl:ty_input_field"/>
     </tt:context>
 
     <saat:input tt:extensible="deep">
@@ -68,7 +67,7 @@
 
   <tt:template name="filter">
     <tt:context>
-      <tt:root name="filter" type="cl:ty_s_query_filter"/>
+      <tt:root name="filter" type="cl:ty_query_filter"/>
     </tt:context>
 
     <saat:filter tt:extensible="deep">
@@ -83,29 +82,28 @@
         <tt:attribute map="xml('true')=val(''),xml('false')=val('X')" name="saat:multiple" value-ref="filter.single"/>
       </tt:cond>
       <tt:cond check="initial(filter.no_negation)">
-         <tt:attribute map="xml('true')=val(''),xml('false')=val('X')" name="saat:negatable" value-ref="filter.no_negation"/>
+        <tt:attribute map="xml('true')=val(''),xml('false')=val('X')" name="saat:negatable" value-ref="filter.no_negation"/>
       </tt:cond>
       <tt:cond check="not-initial(filter.key_value)">
-        <tt:attribute name="saat:keyValuePair" option="format(boolean)" value-ref="filter.key_value" />
+        <tt:attribute name="saat:keyValuePair" option="format(boolean)" value-ref="filter.key_value"/>
       </tt:cond>
       <tt:cond check="not-initial(filter.internal)">
-        <tt:attribute name="saat:internal" option="format(boolean)" value-ref="filter.internal" />
+        <tt:attribute name="saat:internal" option="format(boolean)" value-ref="filter.internal"/>
       </tt:cond>
       <tt:cond check="not-initial(filter.patterns)">
-        <tt:attribute name="saat:patterns" option="format(boolean)" value-ref="filter.patterns" />
+        <tt:attribute name="saat:patterns" option="format(boolean)" value-ref="filter.patterns"/>
       </tt:cond>
 
       <tt:cond check="not-initial(filter.long_description)">
-        <!--<tt:attribute name="saat:longDescription" value-ref="filter.long_description" />-->
         <saat:longDescription>
-          <tt:value ref="filter.long_description" />
+          <tt:value ref="filter.long_description"/>
         </saat:longDescription>
       </tt:cond>
 
       <tt:cond check="exist(filter.img_info)">
         <saat:imageInfo tt:extensible="deep">
           <tt:apply name="imageInfoAttributes">
-            <tt:with-root name="image_info" ref="filter.img_info" />
+            <tt:with-root name="image_info" ref="filter.img_info"/>
           </tt:apply>
         </saat:imageInfo>
       </tt:cond>
@@ -121,22 +119,14 @@
 
   <tt:template name="contentAssist">
     <tt:context>
-      <tt:root name="content_assist" type="cl:ty_s_option_content_assist"/>
+      <tt:root name="content_assist" type="cl:ty_option_content_assist"/>
     </tt:context>
 
     <saat:contentAssist tt:extensible="deep">
       <tt:attribute name="xsi:type" value-ref="content_assist.assist_type"/>
 
-      <tt:cond check="exist(content_assist.adt_object_types)">
-        <tt:loop ref="content_assist.adt_object_types">
-          <saat:objectType>
-            <tt:value ref="$ref" />
-          </saat:objectType>
-        </tt:loop>
-      </tt:cond>
-
       <tt:cond check="not-initial(content_assist.caching)">
-        <tt:attribute name="saat:caching" option="format(boolean)" value-ref="content_assist.caching" />
+        <tt:attribute name="saat:caching" option="format(boolean)" value-ref="content_assist.caching"/>
       </tt:cond>
 
       <tt:cond check="not-initial(content_assist.category_term)">
@@ -152,16 +142,37 @@
       </tt:cond>
 
       <tt:cond check="not-initial(content_assist.proposal_image_source)">
-        <tt:attribute name="saat:proposalImageSource" value-ref="content_assist.proposal_image_source" />
+        <tt:attribute name="saat:proposalImageSource" value-ref="content_assist.proposal_image_source"/>
       </tt:cond>
 
       <tt:cond check="not-initial(content_assist.proposal_image_registry)">
-        <tt:attribute name="saat:proposalImageRegistryId" value-ref="content_assist.proposal_image_registry" />
+        <tt:attribute name="saat:proposalImageRegistryId" value-ref="content_assist.proposal_image_registry"/>
+      </tt:cond>
+
+      <!-- Serialize object types for RIS Quick Search Filter -->
+      <tt:cond check="exist(content_assist.adt_object_types)">
+        <tt:loop ref="content_assist.adt_object_types">
+          <saat:objectType>
+            <tt:value ref="$ref"/>
+          </saat:objectType>
+        </tt:loop>
+      </tt:cond>
+
+      <!-- Serialize fixed proposal values -->
+      <tt:cond check="not-initial(content_assist.proposal_values)">
+        <tt:loop ref="content_assist.proposal_values">
+          <saat:proposal tt:extensible="deep">
+            <tt:attribute name="saat:name" value-ref="$ref.name"/>
+            <tt:cond check="not-initial($ref.description)">
+              <tt:attribute name="saat:description" value-ref="$ref.description"/>
+            </tt:cond>
+          </saat:proposal>
+        </tt:loop>
       </tt:cond>
 
       <tt:cond check="exist(content_assist.proposal_images)">
         <tt:apply name="proposalImages">
-          <tt:with-root name="images" ref="content_assist.proposal_images" />
+          <tt:with-root name="images" ref="content_assist.proposal_images"/>
         </tt:apply>
       </tt:cond>
     </saat:contentAssist>
@@ -169,13 +180,13 @@
 
   <tt:template name="proposalImages">
     <tt:context>
-      <tt:root name="images" type="cl:ty_t_image_info" />
+      <tt:root name="images" type="cl:ty_image_infos"/>
     </tt:context>
 
     <tt:loop ref="images">
       <saat:proposalImage tt:extensible="deep">
         <tt:apply name="imageInfoAttributes">
-          <tt:with-root name="image_info" ref="$ref" />
+          <tt:with-root name="image_info" ref="$ref"/>
         </tt:apply>
       </saat:proposalImage>
     </tt:loop>
@@ -183,7 +194,7 @@
 
   <tt:template name="imageInfoAttributes">
     <tt:context>
-      <tt:root name="image_info" type="cl:ty_s_image_info" />
+      <tt:root name="image_info" type="cl:ty_image_info"/>
     </tt:context>
 
     <tt:cond check="not-initial(image_info.img_key)">
@@ -191,11 +202,11 @@
     </tt:cond>
 
     <tt:cond check="not-initial(image_info.img_encoded)">
-      <tt:attribute name="saat:imageEncoded" value-ref="image_info.img_encoded" />
+      <tt:attribute name="saat:imageEncoded" value-ref="image_info.img_encoded"/>
     </tt:cond>
 
     <tt:cond check="not-initial(image_info.img_registry)">
-      <tt:attribute name="saat:imageRegistryId" value-ref="image_info.img_registry" />
+      <tt:attribute name="saat:imageRegistryId" value-ref="image_info.img_registry"/>
     </tt:cond>
   </tt:template>
 
