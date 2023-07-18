@@ -25,35 +25,35 @@ CLASS zcl_sat_cds_view_query_config DEFINITION
 
     METHODS get_param_filter
       RETURNING
-        VALUE(result) TYPE zif_sat_ty_object_search=>ty_s_query_filter.
+        VALUE(result) TYPE zif_sat_ty_object_search=>ty_query_filter.
 
     METHODS get_params_filter
       RETURNING
-        VALUE(result) TYPE zif_sat_ty_object_search=>ty_s_query_filter.
+        VALUE(result) TYPE zif_sat_ty_object_search=>ty_query_filter.
 
     METHODS get_from_filter
       RETURNING
-        VALUE(result) TYPE zif_sat_ty_object_search=>ty_s_query_filter.
+        VALUE(result) TYPE zif_sat_ty_object_search=>ty_query_filter.
 
     METHODS get_association_filter
       RETURNING
-        VALUE(result) TYPE zif_sat_ty_object_search=>ty_s_query_filter.
+        VALUE(result) TYPE zif_sat_ty_object_search=>ty_query_filter.
 
     METHODS get_annotation_filter
       RETURNING
-        VALUE(result) TYPE zif_sat_ty_object_search=>ty_s_query_filter.
+        VALUE(result) TYPE zif_sat_ty_object_search=>ty_query_filter.
 
     METHODS get_field_filter
       RETURNING
-        VALUE(result) TYPE zif_sat_ty_object_search=>ty_s_query_filter.
+        VALUE(result) TYPE zif_sat_ty_object_search=>ty_query_filter.
 
     METHODS get_cds_type_filter
       RETURNING
-        VALUE(result) TYPE zif_sat_ty_object_search=>ty_s_query_filter.
+        VALUE(result) TYPE zif_sat_ty_object_search=>ty_query_filter.
 
     METHODS get_ext_by_filter
       RETURNING
-        VALUE(result) TYPE zif_sat_ty_object_search=>ty_s_query_filter.
+        VALUE(result) TYPE zif_sat_ty_object_search=>ty_query_filter.
 ENDCLASS.
 
 
@@ -64,7 +64,7 @@ CLASS zcl_sat_cds_view_query_config IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD build_config.
-    DATA(lt_object_filters) = VALUE zif_sat_ty_object_search=>ty_t_query_filter(
+    DATA(lt_object_filters) = VALUE zif_sat_ty_object_search=>ty_query_filters(
                                         ( get_package_filt_conf( ) )
                                         ( get_user_filt_conf( ) )
                                         ( get_rel_state_filt_conf( ) )
@@ -81,7 +81,7 @@ CLASS zcl_sat_cds_view_query_config IMPLEMENTATION.
 
     mt_options = lt_object_filters.
 
-    ms_search_type = VALUE zif_sat_ty_object_search=>ty_s_search_type(
+    ms_search_type = VALUE zif_sat_ty_object_search=>ty_search_type_config(
         label    = 'CDS View'
         name     = zif_sat_c_object_search=>c_search_type-cds_view
         img_info = VALUE #( img_registry = zif_sat_c_object_search=>c_image_registry_id-adt_type

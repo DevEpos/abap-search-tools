@@ -24,6 +24,56 @@
      <DESCRIPT>Validates the given option</DESCRIPT>
     </SEOCOMPOTX>
    </DESCRIPTIONS>
+   <DESCRIPTIONS_SUB>
+    <SEOSUBCOTX>
+     <CMPNAME>CHECK_OPTION_INTEGRITY</CMPNAME>
+     <SCONAME>CT_OPTIONS</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>A table of search options</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>CHECK_OPTION_INTEGRITY</CMPNAME>
+     <SCONAME>ZCX_SAT_OBJECT_SEARCH</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Error during checks occurred</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>VALIDATE_OPTION</CMPNAME>
+     <SCONAME>IS_CONTENT_ASSIST</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Content Assist configuration of the filter option</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>VALIDATE_OPTION</CMPNAME>
+     <SCONAME>IV_OPTION</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Name of a query option</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>VALIDATE_OPTION</CMPNAME>
+     <SCONAME>IV_TARGET</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Target of option (object/sub object)</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>VALIDATE_OPTION</CMPNAME>
+     <SCONAME>IV_VALUE</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Value for the given option</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>VALIDATE_OPTION</CMPNAME>
+     <SCONAME>IV_VALUE2</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Additional value for key/value options</DESCRIPT>
+    </SEOSUBCOTX>
+    <SEOSUBCOTX>
+     <CMPNAME>VALIDATE_OPTION</CMPNAME>
+     <SCONAME>ZCX_SAT_OBJECT_SEARCH</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Error if validation failed</DESCRIPT>
+    </SEOSUBCOTX>
+   </DESCRIPTIONS_SUB>
   </asx:values>
  </asx:abap>
 </abapGit>

@@ -88,15 +88,22 @@ INTERFACE zif_sat_ty_object_search
 
     ty_t_options TYPE RANGE OF string,
 
-    BEGIN OF ty_s_image_info,
+    BEGIN OF ty_image_info,
       img_key      TYPE string,
       img_registry TYPE string,
       img_encoded  TYPE string,
-    END OF ty_s_image_info,
+    END OF ty_image_info,
 
-    ty_t_image_info TYPE STANDARD TABLE OF ty_s_image_info WITH EMPTY KEY,
+    ty_image_infos TYPE STANDARD TABLE OF ty_image_info WITH EMPTY KEY,
 
-    BEGIN OF ty_s_option_content_assist,
+    BEGIN OF ty_content_proposal,
+      name        TYPE string,
+      description TYPE string,
+    END OF ty_content_proposal,
+
+    ty_content_proposals TYPE STANDARD TABLE OF ty_content_proposal WITH EMPTY KEY,
+
+    BEGIN OF ty_option_content_assist,
       assist_type             TYPE string,
       caching                 TYPE abap_bool,
       adt_object_types        TYPE string_table,
@@ -105,11 +112,12 @@ INTERFACE zif_sat_ty_object_search
       category_scheme         TYPE string,
       proposal_image_source   TYPE string,
       proposal_image_registry TYPE string,
-      proposal_images         TYPE ty_t_image_info,
-    END OF ty_s_option_content_assist,
+      proposal_values         TYPE ty_content_proposals,
+      proposal_images         TYPE ty_image_infos,
+    END OF ty_option_content_assist,
 
     "! <p class="shorttext synchronized">Setting for search option</p>
-    BEGIN OF ty_s_query_filter,
+    BEGIN OF ty_query_filter,
       name             TYPE string,
       data_type        TYPE string,
       allowed_length   TYPE i,
@@ -120,36 +128,36 @@ INTERFACE zif_sat_ty_object_search
       no_negation      TYPE abap_bool,
       long_description TYPE string,
       internal         TYPE abap_bool,
-      img_info         TYPE ty_s_image_info,
-      content_assist   TYPE ty_s_option_content_assist,
-    END OF ty_s_query_filter,
+      img_info         TYPE ty_image_info,
+      content_assist   TYPE ty_option_content_assist,
+    END OF ty_query_filter,
 
     "! <p class="shorttext synchronized">List of option configurations</p>
-    ty_t_query_filter TYPE STANDARD TABLE OF ty_s_query_filter WITH KEY name,
+    ty_query_filters TYPE STANDARD TABLE OF ty_query_filter WITH KEY name,
 
     "! Input field for a search type
-    BEGIN OF ty_s_input_field,
+    BEGIN OF ty_input_field,
       name    TYPE string,
       label   TYPE string,
       mixed   TYPE abap_bool,
-      filters TYPE ty_t_query_filter,
-    END OF ty_s_input_field,
+      filters TYPE ty_query_filters,
+    END OF ty_input_field,
 
-    ty_t_input_field TYPE STANDARD TABLE OF ty_s_input_field WITH KEY name,
+    ty_input_fields TYPE STANDARD TABLE OF ty_input_field WITH KEY name,
 
     "! Settings for a given search types
-    BEGIN OF ty_s_search_type,
+    BEGIN OF ty_search_type_config,
       name     TYPE string,
       label    TYPE string,
-      img_info TYPE ty_s_image_info,
-      inputs   TYPE ty_t_input_field,
-    END OF ty_s_search_type,
+      img_info TYPE ty_image_info,
+      inputs   TYPE ty_input_fields,
+    END OF ty_search_type_config,
 
-    ty_t_search_type TYPE STANDARD TABLE OF ty_s_search_type WITH KEY name,
+    ty_search_type_configs TYPE STANDARD TABLE OF ty_search_type_config WITH KEY name,
 
     "! Configuration for all available search types
-    BEGIN OF ty_s_search_config,
-      search_types TYPE ty_t_search_type,
-    END OF ty_s_search_config.
+    BEGIN OF ty_search_config,
+      search_types TYPE ty_search_type_configs,
+    END OF ty_search_config.
 
 ENDINTERFACE.

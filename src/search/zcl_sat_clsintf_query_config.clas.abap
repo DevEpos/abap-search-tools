@@ -36,35 +36,35 @@ CLASS zcl_sat_clsintf_query_config DEFINITION
 
     METHODS get_clif_type_filt_conf
       RETURNING
-        VALUE(result) TYPE zif_sat_ty_object_search=>ty_s_query_filter.
+        VALUE(result) TYPE zif_sat_ty_object_search=>ty_query_filter.
 
     METHODS get_flag_filter
       RETURNING
-        VALUE(result) TYPE zif_sat_ty_object_search=>ty_s_query_filter.
+        VALUE(result) TYPE zif_sat_ty_object_search=>ty_query_filter.
 
     METHODS get_category_filter
       RETURNING
-        VALUE(result) TYPE zif_sat_ty_object_search=>ty_s_query_filter.
+        VALUE(result) TYPE zif_sat_ty_object_search=>ty_query_filter.
 
     METHODS get_method_filter
       RETURNING
-        VALUE(result) TYPE zif_sat_ty_object_search=>ty_s_query_filter.
+        VALUE(result) TYPE zif_sat_ty_object_search=>ty_query_filter.
 
     METHODS get_interface_filter
       RETURNING
-        VALUE(result) TYPE zif_sat_ty_object_search=>ty_s_query_filter.
+        VALUE(result) TYPE zif_sat_ty_object_search=>ty_query_filter.
 
     METHODS get_attribute_filter
       RETURNING
-        VALUE(result) TYPE zif_sat_ty_object_search=>ty_s_query_filter.
+        VALUE(result) TYPE zif_sat_ty_object_search=>ty_query_filter.
 
     METHODS get_friend_filter
       RETURNING
-        VALUE(result) TYPE zif_sat_ty_object_search=>ty_s_query_filter.
+        VALUE(result) TYPE zif_sat_ty_object_search=>ty_query_filter.
 
     METHODS get_super_type_filter
       RETURNING
-        VALUE(result) TYPE zif_sat_ty_object_search=>ty_s_query_filter.
+        VALUE(result) TYPE zif_sat_ty_object_search=>ty_query_filter.
 ENDCLASS.
 
 
