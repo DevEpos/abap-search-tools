@@ -17,12 +17,12 @@ CLASS zcl_sat_base_query_config DEFINITION
 
     CONSTANTS:
       BEGIN OF c_general_image_keys,
-        type_group  TYPE string VALUE 'ABAP:IMG_TYPE_GROUP',
-        type_folder TYPE string VALUE 'ABAP:IMG_TYPE_FOLDER',
-        column      TYPE string VALUE 'ABAP:IMG_COLUMN',
-        param       TYPE string VALUE 'ABAP:IMG_PARAM',
-        checked_box TYPE string VALUE 'ABAP:IMG_CHECKED_BOX',
-        generic_filter type string value 'ABAP:IMG_GENERIC_FILTER',
+        type_group     TYPE string VALUE 'ABAP:IMG_TYPE_GROUP',
+        type_folder    TYPE string VALUE 'ABAP:IMG_TYPE_FOLDER',
+        column         TYPE string VALUE 'ABAP:IMG_COLUMN',
+        param          TYPE string VALUE 'ABAP:IMG_PARAM',
+        checked_box    TYPE string VALUE 'ABAP:IMG_CHECKED_BOX',
+        generic_filter TYPE string VALUE 'ABAP:IMG_GENERIC_FILTER',
       END OF c_general_image_keys.
 
     CONSTANTS c_type_image_key_prefix TYPE string VALUE `ABAP:IMG_SEARCHTYPE_`.
