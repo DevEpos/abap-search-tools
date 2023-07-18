@@ -235,6 +235,9 @@ CLASS lcl_method_result_converter IMPLEMENTATION.
           ENDIF.
         ENDIF.
 
+        " TODO: Check the handling of Alias methods
+        "       -> URI for Interface Alias methods can not be determined !!!
+        "       -> Class methods still need to be checked
         DATA(lv_uri) = CONV string( map_method_to_uri( iv_clif_name   = <ls_query_result>-object_name
                                                        iv_type        = ls_obj_type
                                                        iv_method_name = lv_method_name ) ).
