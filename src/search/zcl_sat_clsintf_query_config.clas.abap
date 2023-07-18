@@ -37,39 +37,39 @@ CLASS zcl_sat_clsintf_query_config DEFINITION
 
     METHODS get_clif_type_filt_conf
       RETURNING
-        VALUE(result) TYPE zif_sat_ty_object_search=>ty_s_query_filter.
+        VALUE(result) TYPE zif_sat_ty_object_search=>ty_query_filter.
 
     METHODS get_flag_filter
       RETURNING
-        VALUE(result) TYPE zif_sat_ty_object_search=>ty_s_query_filter.
+        VALUE(result) TYPE zif_sat_ty_object_search=>ty_query_filter.
 
     METHODS get_category_filter
       RETURNING
-        VALUE(result) TYPE zif_sat_ty_object_search=>ty_s_query_filter.
+        VALUE(result) TYPE zif_sat_ty_object_search=>ty_query_filter.
 
     METHODS get_abap_language_filter
       RETURNING
-        VALUE(result) TYPE zif_sat_ty_object_search=>ty_s_query_filter.
+        VALUE(result) TYPE zif_sat_ty_object_search=>ty_query_filter.
 
     METHODS get_method_filter
       RETURNING
-        VALUE(result) TYPE zif_sat_ty_object_search=>ty_s_query_filter.
+        VALUE(result) TYPE zif_sat_ty_object_search=>ty_query_filter.
 
     METHODS get_interface_filter
       RETURNING
-        VALUE(result) TYPE zif_sat_ty_object_search=>ty_s_query_filter.
+        VALUE(result) TYPE zif_sat_ty_object_search=>ty_query_filter.
 
     METHODS get_attribute_filter
       RETURNING
-        VALUE(result) TYPE zif_sat_ty_object_search=>ty_s_query_filter.
+        VALUE(result) TYPE zif_sat_ty_object_search=>ty_query_filter.
 
     METHODS get_friend_filter
       RETURNING
-        VALUE(result) TYPE zif_sat_ty_object_search=>ty_s_query_filter.
+        VALUE(result) TYPE zif_sat_ty_object_search=>ty_query_filter.
 
     METHODS get_super_type_filter
       RETURNING
-        VALUE(result) TYPE zif_sat_ty_object_search=>ty_s_query_filter.
+        VALUE(result) TYPE zif_sat_ty_object_search=>ty_query_filter.
 ENDCLASS.
 
 
@@ -80,20 +80,20 @@ CLASS zcl_sat_clsintf_query_config IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD build_config.
-    DATA(lt_object_filters) = VALUE zif_sat_ty_object_search=>ty_t_query_filter( ( get_user_filt_conf( ) )
-                                                                                 ( get_package_filt_conf( ) )
-                                                                                 ( get_rel_state_filt_conf( ) )
-                                                                                 ( get_description_filt_conf( ) )
-                                                                                 ( get_max_rows_filt_conf( ) )
-                                                                                 ( get_clif_type_filt_conf( ) )
-                                                                                 ( get_flag_filter( ) )
-                                                                                 ( get_category_filter( ) )
-                                                                                 ( get_abap_language_filter( ) )
-                                                                                 ( get_method_filter( ) )
-                                                                                 ( get_interface_filter( ) )
-                                                                                 ( get_attribute_filter( ) )
-                                                                                 ( get_friend_filter( ) )
-                                                                                 ( get_super_type_filter( ) ) ).
+    DATA(lt_object_filters) = VALUE zif_sat_ty_object_search=>ty_query_filters( ( get_user_filt_conf( ) )
+                                                                                ( get_package_filt_conf( ) )
+                                                                                ( get_rel_state_filt_conf( ) )
+                                                                                ( get_description_filt_conf( ) )
+                                                                                ( get_max_rows_filt_conf( ) )
+                                                                                ( get_clif_type_filt_conf( ) )
+                                                                                ( get_flag_filter( ) )
+                                                                                ( get_category_filter( ) )
+                                                                                ( get_abap_language_filter( ) )
+                                                                                ( get_method_filter( ) )
+                                                                                ( get_interface_filter( ) )
+                                                                                ( get_attribute_filter( ) )
+                                                                                ( get_friend_filter( ) )
+                                                                                ( get_super_type_filter( ) ) ).
 
     ms_search_type = VALUE #(
         label    = 'Class/Interface'

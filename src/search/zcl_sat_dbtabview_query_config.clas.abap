@@ -21,15 +21,15 @@ CLASS zcl_sat_dbtabview_query_config DEFINITION
 
     METHODS get_field_filter
       RETURNING
-        VALUE(result) TYPE zif_sat_ty_object_search=>ty_s_query_filter.
+        VALUE(result) TYPE zif_sat_ty_object_search=>ty_query_filter.
 
     METHODS get_deliv_class_filter
       RETURNING
-        VALUE(result) TYPE zif_sat_ty_object_search=>ty_s_query_filter.
+        VALUE(result) TYPE zif_sat_ty_object_search=>ty_query_filter.
 
     METHODS get_table_type_filter
       RETURNING
-        VALUE(result) TYPE zif_sat_ty_object_search=>ty_s_query_filter.
+        VALUE(result) TYPE zif_sat_ty_object_search=>ty_query_filter.
 ENDCLASS.
 
 
@@ -40,15 +40,15 @@ CLASS zcl_sat_dbtabview_query_config IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD build_config.
-    DATA(lt_object_filters) = VALUE zif_sat_ty_object_search=>ty_t_query_filter( ( get_package_filt_conf( ) )
-                                                                                 ( get_user_filt_conf( ) )
-                                                                                 ( get_description_filt_conf( ) )
-                                                                                 ( get_max_rows_filt_conf( ) )
-                                                                                 ( get_field_filter( ) )
-                                                                                 ( get_table_type_filter( ) )
-                                                                                 ( get_deliv_class_filter( ) ) ).
+    DATA(lt_object_filters) = VALUE zif_sat_ty_object_search=>ty_query_filters( ( get_package_filt_conf( ) )
+                                                                                ( get_user_filt_conf( ) )
+                                                                                ( get_description_filt_conf( ) )
+                                                                                ( get_max_rows_filt_conf( ) )
+                                                                                ( get_field_filter( ) )
+                                                                                ( get_table_type_filter( ) )
+                                                                                ( get_deliv_class_filter( ) ) ).
 
-    ms_search_type = VALUE zif_sat_ty_object_search=>ty_s_search_type(
+    ms_search_type = VALUE zif_sat_ty_object_search=>ty_search_type_config(
         label    = 'Database Table/View'
         name     = zif_sat_c_object_search=>c_search_type-db_tab_view
         img_info = VALUE #( img_key      = zif_sat_c_object_types=>table_definition

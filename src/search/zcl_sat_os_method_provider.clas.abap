@@ -27,9 +27,9 @@ CLASS zcl_sat_os_method_provider DEFINITION
 
     CONSTANTS:
       BEGIN OF c_class_fields,
-        classname       TYPE string VALUE 'classname',
-        package         TYPE string VALUE 'developmentpackage',
-        tadir_type      TYPE string VALUE 'tadirtype',
+        classname  TYPE string VALUE 'classname',
+        package    TYPE string VALUE 'developmentpackage',
+        tadir_type TYPE string VALUE 'tadirtype',
       END OF c_class_fields,
       BEGIN OF c_method_fields,
         classname            TYPE string VALUE 'classname',
@@ -67,6 +67,32 @@ CLASS zcl_sat_os_method_provider DEFINITION
         it_values TYPE zif_sat_ty_object_search=>ty_t_value_range.
 
     METHODS configure_search_term_filters.
+
+    METHODS add_flag_filter
+      IMPORTING
+        it_values TYPE zif_sat_ty_object_search=>ty_t_value_range.
+
+    METHODS add_level_filter
+      IMPORTING
+        it_values TYPE zif_sat_ty_object_search=>ty_t_value_range.
+
+    METHODS add_visibility_filter
+      IMPORTING
+        it_values TYPE zif_sat_ty_object_search=>ty_t_value_range.
+
+    METHODS add_status_filter
+      IMPORTING
+        it_values TYPE zif_sat_ty_object_search=>ty_t_value_range.
+
+    METHODS add_type_filter
+      IMPORTING
+        it_values TYPE zif_sat_ty_object_search=>ty_t_value_range.
+
+    METHODS map_flag_opt_to_field
+      IMPORTING
+        iv_option     TYPE string
+      RETURNING
+        VALUE(result) TYPE string.
 ENDCLASS.
 
 
@@ -98,13 +124,19 @@ CLASS zcl_sat_os_method_provider IMPLEMENTATION.
     add_join_table( iv_join_table = |{ zif_sat_c_select_source_id=>zsat_i_classinterfacecomptext }|
                     iv_alias      = c_alias_names-method_text
                     iv_join_type  = zif_sat_c_join_types=>left_outer_join
-                    it_conditions = VALUE #( type            = zif_sat_c_join_cond_type=>field
-                                             and_or          = zif_sat_c_selection_condition=>and
+                    it_conditions = VALUE #( and_or          = zif_sat_c_selection_condition=>and
                                              ref_table_alias = c_alias_names-method
-                                             ( field     = c_class_fields-classname
-                                               ref_field = c_method_fields-originalclifname )
-                                             ( field     = c_text_fields-method
-                                               ref_field = c_method_fields-originalmethodname ) ) ).
+                                             ( field         = c_class_fields-classname
+                                               type          = zif_sat_c_join_cond_type=>field
+                                               ref_field     = c_method_fields-originalclifname )
+                                             ( field         = c_text_fields-method
+                                               type          = zif_sat_c_join_cond_type=>field
+                                               ref_field     = c_method_fields-originalmethodname )
+                                             ( field         = c_text_fields-language
+                                               type          = zif_sat_c_join_cond_type=>filter
+                                               operator      = zif_sat_c_operator=>equals
+                                               tabname_alias = c_alias_names-method_text
+                                               value         = sy-langu ) ) ).
 
     add_select_fields( ).
 
@@ -179,6 +211,21 @@ CLASS zcl_sat_os_method_provider IMPLEMENTATION.
 
         WHEN c_method_option-param.
           add_param_filter( <ls_option>-value_range ).
+
+        WHEN c_method_option-flag.
+          add_flag_filter( <ls_option>-value_range ).
+
+        WHEN c_method_option-level.
+          add_level_filter( <ls_option>-value_range ).
+
+        WHEN c_method_option-visibility.
+          add_visibility_filter( <ls_option>-value_range ).
+
+        WHEN c_method_option-status.
+          add_status_filter( <ls_option>-value_range ).
+
+        WHEN c_general_search_options-type.
+          add_type_filter( <ls_option>-value_range ).
       ENDCASE.
 
     ENDLOOP.
@@ -228,12 +275,110 @@ CLASS zcl_sat_os_method_provider IMPLEMENTATION.
                       it_conditions = VALUE #( ref_table_alias = c_alias_names-method
                                                type            = zif_sat_c_join_cond_type=>field
                                                ( field     = c_method_fields-classname
-                                                 ref_field = c_method_fields-classname )
+                                                 ref_field = c_method_fields-originalclifname )
                                                ( field     = 'component'
-                                                 ref_field = c_method_fields-methodname ) ) ).
+                                                 ref_field = c_method_fields-originalmethodname ) ) ).
       add_option_filter( iv_fieldname = |{ c_alias_names-param }~{ 'subcomponentname' }|
                          it_values    = lt_including ).
       mv_param_filter_count = lines( lt_including ).
     ENDIF.
+  ENDMETHOD.
+
+  METHOD add_flag_filter.
+    DATA ls_value TYPE zif_sat_ty_object_search=>ty_s_value_range.
+
+    split_including_excluding( EXPORTING it_values    = it_values
+                               IMPORTING et_including = DATA(lt_including)
+                                         et_excluding = DATA(lt_excluding) ).
+
+    LOOP AT lt_excluding INTO ls_value.
+      add_option_filter( iv_fieldname = map_flag_opt_to_field( ls_value-low )
+                         it_values    = VALUE #( ( sign = 'I' option = 'EQ' low = abap_false ) ) ).
+    ENDLOOP.
+
+    IF lt_including IS INITIAL.
+      RETURN.
+    ENDIF.
+
+    IF ms_search_engine_params-use_and_cond_for_options = abap_true.
+      LOOP AT lt_including INTO ls_value.
+        add_option_filter( iv_fieldname = map_flag_opt_to_field( ls_value-low )
+                           it_values    = VALUE #( ( sign = 'I' option = 'EQ' low = abap_true ) ) ).
+      ENDLOOP.
+    ELSE.
+      new_and_cond_list( ).
+
+      LOOP AT lt_including INTO ls_value.
+        add_option_filter( iv_fieldname = map_flag_opt_to_field( ls_value-low )
+                           it_values    = VALUE #( ( sign = 'I' option = 'EQ' low = abap_true ) ) ).
+        new_or_cond_list( ).
+      ENDLOOP.
+
+      new_and_cond_list( ).
+    ENDIF.
+  ENDMETHOD.
+
+  METHOD add_level_filter.
+    LOOP AT it_values INTO DATA(ls_value).
+      add_filter( VALUE #( sqlfieldname = |{ c_alias_names-method }~methodlevel|
+                           sign         = ls_value-sign
+                           option       = ls_value-option
+                           low          = SWITCH #( ls_value-low
+                                                    WHEN 'INSTANCE' THEN '0'
+                                                    WHEN 'STATIC'   THEN '1' )  ) ).
+    ENDLOOP.
+  ENDMETHOD.
+
+  METHOD add_visibility_filter.
+    LOOP AT it_values INTO DATA(ls_value).
+      add_filter( VALUE #( sqlfieldname = |{ c_alias_names-method }~exposure|
+                           sign         = ls_value-sign
+                           option       = ls_value-option
+                           low          = SWITCH #( ls_value-low
+                                                    WHEN 'PRIVATE'   THEN '0'
+                                                    WHEN 'PROTECTED' THEN '1'
+                                                    WHEN 'PUBLIC'    THEN '2' )  ) ).
+    ENDLOOP.
+  ENDMETHOD.
+
+  METHOD add_status_filter.
+    LOOP AT it_values INTO DATA(ls_value).
+      add_filter( VALUE #( sqlfieldname = |{ c_alias_names-method }~category|
+                           sign         = ls_value-sign
+                           option       = ls_value-option
+                           low          = SWITCH #( ls_value-low
+                                                    WHEN 'STANDARD'    THEN '1'
+                                                    WHEN 'IMPLEMENTED' THEN '2'
+                                                    WHEN 'REDEFINED'   THEN '3' )  ) ).
+    ENDLOOP.
+  ENDMETHOD.
+
+  METHOD add_type_filter.
+    LOOP AT it_values INTO DATA(ls_value).
+      add_filter(
+          VALUE #(
+              sqlfieldname = |{ c_alias_names-method }~methodtype|
+              sign         = ls_value-sign
+              option       = ls_value-option
+              low          = SWITCH #( ls_value-low
+                                       WHEN zif_sat_c_object_search=>c_method_types-general            THEN '0'
+                                       WHEN zif_sat_c_object_search=>c_method_types-event_handler      THEN '1'
+                                       WHEN zif_sat_c_object_search=>c_method_types-constructor        THEN '2'
+                                       WHEN zif_sat_c_object_search=>c_method_types-virtual_getter     THEN '4'
+                                       WHEN zif_sat_c_object_search=>c_method_types-virtual_setter     THEN '5'
+                                       WHEN zif_sat_c_object_search=>c_method_types-test               THEN '6'
+                                       WHEN zif_sat_c_object_search=>c_method_types-cds_table_function THEN '7'
+                                       " Not match found in this system, check others and remove if nothing exists
+                                       WHEN zif_sat_c_object_search=>c_method_types-amdp_ddl_object    THEN '8' )  ) ).
+    ENDLOOP.
+  ENDMETHOD.
+
+  METHOD map_flag_opt_to_field.
+    result = |{ c_alias_names-method }~| &&
+             SWITCH string( iv_option
+                            WHEN 'ABSTRACT'         THEN 'isabstract'
+                            WHEN 'OPTIONAL'         THEN 'isoptional'
+                            WHEN 'FINAL'            THEN 'isfinal'
+                            WHEN 'CLASS_EXCEPTIONS' THEN 'isusingnewexceptions' ).
   ENDMETHOD.
 ENDCLASS.
