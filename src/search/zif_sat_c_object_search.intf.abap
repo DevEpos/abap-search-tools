@@ -44,9 +44,10 @@ INTERFACE zif_sat_c_object_search
 
   CONSTANTS:
     BEGIN OF c_filter_content_assist_type,
-      named_item TYPE string VALUE 'saat:NamedItemContentAssist',
-      ris        TYPE string VALUE 'saat:RisContentAssist',
-      user       TYPE string VALUE 'saat:UserContentAssist',
+      named_item       TYPE string VALUE 'saat:NamedItemContentAssist',
+      fixed_named_item TYPE string VALUE 'saat:FixedValuesContentAssist',
+      ris              TYPE string VALUE 'saat:RisContentAssist',
+      user             TYPE string VALUE 'saat:UserContentAssist',
     END OF c_filter_content_assist_type.
 
   CONSTANTS:
@@ -100,14 +101,26 @@ INTERFACE zif_sat_c_object_search
 
   CONSTANTS:
     BEGIN OF c_method_search_option,
-      param    TYPE string VALUE 'param',
+      param      TYPE string VALUE 'param',
       "! Exposure (for methods/attributes). Possible values are
       "! <ul>
       "!   <li>private</li>
       "!   <li>protected</li>
       "!   <li>public</li>
       "! </ul>
-      exposure TYPE string VALUE 'exposure',
+      visibility TYPE string VALUE 'visibility',
+      "! <ul>
+      "!    <li>instance</li>
+      "!    <li>static</li>
+      "! </ul>
+      level      TYPE string VALUE 'level',
+      "! <ul>
+      "!    <li>implemented</li>
+      "!    <li>redefined</li>
+      "!    <li>defined</li>
+      "! </ul>
+      status     TYPE string VALUE 'status',
+      flag       TYPE string VALUE 'flag',
     END OF c_method_search_option.
 
   CONSTANTS:
@@ -145,6 +158,18 @@ INTERFACE zif_sat_c_object_search
       cloud_platform          TYPE string VALUE 'CLOUD_PLATFORM',
       non_unicode             TYPE string VALUE 'NON_UNICODE',
     END OF c_abap_lang_versions.
+
+  CONSTANTS:
+    BEGIN OF c_method_types,
+      general            TYPE string VALUE 'GENERAL',
+      constructor        TYPE string VALUE 'CONSTRUCTOR',
+      event_handler      TYPE string VALUE 'EVENT_HANDLER',
+      virtual_getter     TYPE string VALUE 'VIRTUAL_GETTER',
+      virtual_setter     TYPE string VALUE 'VIRTUAL_SETTER',
+      test               TYPE string VALUE 'TEST',
+      cds_table_function TYPE string VALUE 'CDS_TABLE_FUNCTION',
+      amdp_ddl_object    TYPE string VALUE 'AMDP_DDL_OBJECT',
+    END OF c_method_types.
 
   CONSTANTS:
     "! <p class="shorttext synchronized" lang="en">General search options</p>
