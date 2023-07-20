@@ -320,36 +320,39 @@ CLASS zcl_sat_os_method_provider IMPLEMENTATION.
 
   METHOD add_level_filter.
     LOOP AT it_values INTO DATA(ls_value).
-      add_filter( VALUE #( sqlfieldname = |{ c_alias_names-method }~methodlevel|
-                           sign         = ls_value-sign
-                           option       = ls_value-option
-                           low          = SWITCH #( ls_value-low
-                                                    WHEN 'INSTANCE' THEN '0'
-                                                    WHEN 'STATIC'   THEN '1' )  ) ).
+      add_filter( VALUE #(
+                      sqlfieldname = |{ c_alias_names-method }~methodlevel|
+                      sign         = ls_value-sign
+                      option       = ls_value-option
+                      low          = SWITCH #( ls_value-low
+                                               WHEN zif_sat_c_object_search=>c_method_level-instance THEN '0'
+                                               WHEN zif_sat_c_object_search=>c_method_level-static   THEN '1' )  ) ).
     ENDLOOP.
   ENDMETHOD.
 
   METHOD add_visibility_filter.
     LOOP AT it_values INTO DATA(ls_value).
-      add_filter( VALUE #( sqlfieldname = |{ c_alias_names-method }~exposure|
-                           sign         = ls_value-sign
-                           option       = ls_value-option
-                           low          = SWITCH #( ls_value-low
-                                                    WHEN 'PRIVATE'   THEN '0'
-                                                    WHEN 'PROTECTED' THEN '1'
-                                                    WHEN 'PUBLIC'    THEN '2' )  ) ).
+      add_filter( VALUE #(
+                      sqlfieldname = |{ c_alias_names-method }~exposure|
+                      sign         = ls_value-sign
+                      option       = ls_value-option
+                      low          = SWITCH #( ls_value-low
+                                               WHEN zif_sat_c_object_search=>c_visibility-private   THEN '0'
+                                               WHEN zif_sat_c_object_search=>c_visibility-protected THEN '1'
+                                               WHEN zif_sat_c_object_search=>c_visibility-public    THEN '2' )  ) ).
     ENDLOOP.
   ENDMETHOD.
 
   METHOD add_status_filter.
     LOOP AT it_values INTO DATA(ls_value).
-      add_filter( VALUE #( sqlfieldname = |{ c_alias_names-method }~category|
-                           sign         = ls_value-sign
-                           option       = ls_value-option
-                           low          = SWITCH #( ls_value-low
-                                                    WHEN 'STANDARD'    THEN '1'
-                                                    WHEN 'IMPLEMENTED' THEN '2'
-                                                    WHEN 'REDEFINED'   THEN '3' )  ) ).
+      add_filter(
+          VALUE #( sqlfieldname = |{ c_alias_names-method }~category|
+                   sign         = ls_value-sign
+                   option       = ls_value-option
+                   low          = SWITCH #( ls_value-low
+                                            WHEN zif_sat_c_object_search=>c_method_status-standard    THEN '1'
+                                            WHEN zif_sat_c_object_search=>c_method_status-implemented THEN '2'
+                                            WHEN zif_sat_c_object_search=>c_method_status-redefined   THEN '3' )  ) ).
     ENDLOOP.
   ENDMETHOD.
 
@@ -368,7 +371,6 @@ CLASS zcl_sat_os_method_provider IMPLEMENTATION.
                                        WHEN zif_sat_c_object_search=>c_method_types-virtual_setter     THEN '5'
                                        WHEN zif_sat_c_object_search=>c_method_types-test               THEN '6'
                                        WHEN zif_sat_c_object_search=>c_method_types-cds_table_function THEN '7'
-                                       " Not match found in this system, check others and remove if nothing exists
                                        WHEN zif_sat_c_object_search=>c_method_types-amdp_ddl_object    THEN '8' )  ) ).
     ENDLOOP.
   ENDMETHOD.
@@ -376,9 +378,9 @@ CLASS zcl_sat_os_method_provider IMPLEMENTATION.
   METHOD map_flag_opt_to_field.
     result = |{ c_alias_names-method }~| &&
              SWITCH string( iv_option
-                            WHEN 'ABSTRACT'         THEN 'isabstract'
-                            WHEN 'OPTIONAL'         THEN 'isoptional'
-                            WHEN 'FINAL'            THEN 'isfinal'
-                            WHEN 'CLASS_EXCEPTIONS' THEN 'isusingnewexceptions' ).
+                            WHEN zif_sat_c_object_search=>c_method_flags-abstract         THEN 'isabstract'
+                            WHEN zif_sat_c_object_search=>c_method_flags-optional         THEN 'isoptional'
+                            WHEN zif_sat_c_object_search=>c_method_flags-final            THEN 'isfinal'
+                            WHEN zif_sat_c_object_search=>c_method_flags-class_exceptions THEN 'isusingnewexceptions' ).
   ENDMETHOD.
 ENDCLASS.

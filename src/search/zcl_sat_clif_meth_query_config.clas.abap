@@ -19,7 +19,6 @@ CLASS zcl_sat_clif_meth_query_config DEFINITION
 
     CONSTANTS:
       BEGIN OF c_image_keys,
-        param      TYPE string VALUE 'ABAP:IMG_',
         visibility TYPE string VALUE 'ABAP:IMG_VISIBILITY',
         level      TYPE string VALUE 'ABAP:IMG_METHOD_LEVEL',
         status     TYPE string VALUE 'ABAP:IMG_METHOD_STATUS',
@@ -73,11 +72,6 @@ CLASS zcl_sat_clif_meth_query_config IMPLEMENTATION.
 
     delete_invalid_obj_filters( ).
 
-    " TODO: add filters for method:
-    " - type (constructor,handler,...)
-    " - flag (optional,abstract,final,class_exceptions)
-    " - level (static, instance)
-
     mt_method_options = VALUE zif_sat_ty_object_search=>ty_query_filters( ( get_description_filt_conf( ) )
                                                                           ( get_type_filter( ) )
                                                                           ( get_flag_filter( ) )
@@ -121,9 +115,7 @@ CLASS zcl_sat_clif_meth_query_config IMPLEMENTATION.
   METHOD get_image.
     CASE iv_image_key.
 
-      WHEN c_image_keys-param.
-        result = ``.
-
+      WHEN OTHERS.
     ENDCASE.
   ENDMETHOD.
 
@@ -147,10 +139,11 @@ CLASS zcl_sat_clif_meth_query_config IMPLEMENTATION.
                                     img_encoded = get_general_image( c_general_image_keys-checked_box ) )
         content_assist   = VALUE #(
             assist_type     = zif_sat_c_object_search=>c_filter_content_assist_type-fixed_named_item
-            proposal_values = VALUE #( ( name = 'OPTIONAL'         description = 'Implementation is Optional' )
-                                       ( name = 'ABSTRACT'         description = 'Abstract' )
-                                       ( name = 'FINAL'            description = 'Final' )
-                                       ( name = 'CLASS_EXCEPTIONS' description = 'Class Based Exceptions are used' ) ) ) ).
+            proposal_values = VALUE #(
+                ( name = zif_sat_c_object_search=>c_method_flags-optional         description = 'Implementation is Optional' )
+                ( name = zif_sat_c_object_search=>c_method_flags-abstract         description = 'Abstract' )
+                ( name = zif_sat_c_object_search=>c_method_flags-final            description = 'Final' )
+                ( name = zif_sat_c_object_search=>c_method_flags-class_exceptions description = 'Class Based Exceptions are used' ) ) ) ).
   ENDMETHOD.
 
   METHOD get_param_filter.
@@ -179,9 +172,10 @@ CLASS zcl_sat_clif_meth_query_config IMPLEMENTATION.
                           `ONCdeG67NlRmsDMeB539XC6WINEmTOUeQm8vGiKRuGWZd+uNzNnuBCrmEpL7hbFZBeqa3RNgSRLq034stuTPCOBSgzCf3Ggu8dsWNrLv7VTN1/ofAD8A89fyZNDp99AAAAAASUVORK5CYII=` )
         content_assist   = VALUE #(
             assist_type     = zif_sat_c_object_search=>c_filter_content_assist_type-fixed_named_item
-            proposal_values = VALUE #( ( name = 'PUBLIC'    description = 'Public' )
-                                       ( name = 'PROTECTED' description = 'Protected' )
-                                       ( name = 'PRIVATE'   description = 'Private' ) ) ) ).
+            proposal_values = VALUE #(
+                ( name = zif_sat_c_object_search=>c_visibility-public    description = 'Public' )
+                ( name = zif_sat_c_object_search=>c_visibility-protected description = 'Protected' )
+                ( name = zif_sat_c_object_search=>c_visibility-private   description = 'Private' ) ) ) ).
   ENDMETHOD.
 
   METHOD get_level_filter.
@@ -196,8 +190,9 @@ CLASS zcl_sat_clif_meth_query_config IMPLEMENTATION.
                           `v3wJQxhPJjCKIgh57/sBmDf2RghwYVopdXrM9TwYDF3o9weAOw7UjIbYBRW9rmh6nVl2m2HShTurBZp+vVarV+KPLKmGUtIu07OyuSmWjUVRNcTFeeML2CKeQ/aP3GQAAAAASUVORK5CYII=` )
         content_assist   = VALUE #(
             assist_type     = zif_sat_c_object_search=>c_filter_content_assist_type-fixed_named_item
-            proposal_values = VALUE #( ( name = 'INSTANCE' description = 'Instance Method' )
-                                       ( name = 'STATIC'   description = 'Class Method' ) ) ) ).
+            proposal_values = VALUE #(
+                ( name = zif_sat_c_object_search=>c_method_level-instance description = 'Instance Method' )
+                ( name = zif_sat_c_object_search=>c_method_level-static   description = 'Class Method' ) ) ) ).
   ENDMETHOD.
 
   METHOD get_status_filter.
@@ -214,9 +209,10 @@ CLASS zcl_sat_clif_meth_query_config IMPLEMENTATION.
                           `GT/oYB3BT2+Ur3jwf+RVRS6UAALm8WkPAS9/Y3qDEQaFgF1h3TvYHfH+NAnKJEY1AAAAAElFTkSuQmCC` )
         content_assist   = VALUE #(
             assist_type     = zif_sat_c_object_search=>c_filter_content_assist_type-fixed_named_item
-            proposal_values = VALUE #( ( name = 'STANDARD'    description = 'Defined in Class/Interface' )
-                                       ( name = 'IMPLEMENTED' description = 'Implemented from Interface' )
-                                       ( name = 'REDEFINED'   description = 'Redefined from Super Class' ) ) ) ).
+            proposal_values = VALUE #(
+                ( name = zif_sat_c_object_search=>c_method_status-standard    description = 'Defined in Class/Interface' )
+                ( name = zif_sat_c_object_search=>c_method_status-implemented description = 'Implemented from Interface' )
+                ( name = zif_sat_c_object_search=>c_method_status-redefined   description = 'Redefined from Super Class' ) ) ) ).
   ENDMETHOD.
 
   METHOD get_type_filter.
@@ -240,5 +236,4 @@ CLASS zcl_sat_clif_meth_query_config IMPLEMENTATION.
             proposal_images = VALUE #( ( img_key     = c_general_image_keys-type_group
                                          img_encoded = get_general_image( c_general_image_keys-type_group ) ) ) ) ).
   ENDMETHOD.
-
 ENDCLASS.
