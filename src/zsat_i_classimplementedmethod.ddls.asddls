@@ -17,10 +17,9 @@ define view ZSAT_I_ClassImplementedMethod
 {
   key Meta.clsname                                         as ClassName,
   key concat( Method.clsname, concat('~', Method.cmpname)) as MethodName,
-      cast(
-        case when MethodDef.mtdoptnl = 'I' then 'X'
-                                           else ''
-        end as xfeld )                                     as IsOptional,
+      case when MethodDef.mtdoptnl = 'I' then 'X'
+                                         else ''
+      end                                                  as IsOptional,
       MethodDef.alias                                      as IsAliasComponent,
       RedefinedMethod.mtdfinal                             as IsFinal,
       MethodDef.mtdnewexc                                  as IsUsingNewExceptions,
