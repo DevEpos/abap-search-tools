@@ -10,28 +10,27 @@ define view ZSAT_I_ClassInterfaceMethod
     inner join   seocompodf as MethodDef on  Method.clsname = MethodDef.clsname
                                          and Method.cmpname = MethodDef.cmpname
 {
-  key Method.clsname                       as ClassName,
-  key cast( Method.cmpname as seocpdname ) as MethodName,
+  key Method.clsname                          as ClassName,
+  key cast( Method.cmpname as abap.char(61) ) as MethodName,
       //      cast('' as seoclsname)               as ParentClass,
-      mtdtype                              as MethodType,
-      MethodDef.alias                      as IsAliasComponent,
-      MethodDef.mtdabstrct                 as IsAbstract,
-      cast(
-        case when MethodDef.mtdoptnl = 'I' then 'X'
-                                           else ''
-        end as xfeld )                     as IsOptional,
-      MethodDef.mtdfinal                   as IsFinal,
-      MethodDef.exposure                   as Exposure,
-      MethodDef.mtdnewexc                  as IsUsingNewExceptions,
-      MethodDef.mtddecltyp                 as MethodLevel,
-      Method.clsname                       as OriginalClifName,
-      cast( Method.cmpname as seocpdname ) as OriginalMethodName,
-      MethodDef.author                     as CreatedBy,
-      MethodDef.createdon                  as CreatedOn,
-      MethodDef.changedby                  as ChangedBy,
-      MethodDef.changedon                  as ChangedOn,
+      mtdtype                                 as MethodType,
+      MethodDef.alias                         as IsAliasComponent,
+      MethodDef.mtdabstrct                    as IsAbstract,
+      case when MethodDef.mtdoptnl = 'I' then 'X'
+                                         else ''
+      end                                     as IsOptional,
+      MethodDef.mtdfinal                      as IsFinal,
+      MethodDef.exposure                      as Exposure,
+      MethodDef.mtdnewexc                     as IsUsingNewExceptions,
+      MethodDef.mtddecltyp                    as MethodLevel,
+      Method.clsname                          as OriginalClifName,
+      cast( Method.cmpname as abap.char(61) ) as OriginalMethodName,
+      MethodDef.author                        as CreatedBy,
+      MethodDef.createdon                     as CreatedOn,
+      MethodDef.changedby                     as ChangedBy,
+      MethodDef.changedon                     as ChangedOn,
       // Normal method
-      cast( '1' as abap.char(3) )          as Category
+      cast( '1' as abap.char(3) )             as Category
 }
 where
       version = '1' // Active
@@ -45,7 +44,7 @@ union select from ZSAT_I_ClassImplementedMethod
       //      ClassName           as ParentClass,
       '0'                         as MethodType,
       IsAliasComponent,
-      cast( '' as xfeld )         as IsAbstract,
+      ''                          as IsAbstract,
       IsOptional,
       IsFinal,
       '2'                         as Exposure,
@@ -68,8 +67,8 @@ union select from ZSAT_I_RedefinedMethod
       //      ParentClass,
       '0'                         as MethodType,
       IsAliasComponent,
-      cast( '' as xfeld )         as IsAbstract,
-      cast( '' as xfeld )         as IsOptional,
+      ''                          as IsAbstract,
+      ''                          as IsOptional,
       IsFinal,
       Exposure,
       IsUsingNewExceptions,
