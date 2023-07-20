@@ -172,6 +172,34 @@ INTERFACE zif_sat_c_object_search
     END OF c_method_types.
 
   CONSTANTS:
+    BEGIN OF c_visibility,
+      private   TYPE string VALUE 'PRIVATE',
+      protected TYPE string VALUE 'PROTECTED',
+      public    TYPE string VALUE 'PUBLIC',
+    END OF c_visibility.
+
+  CONSTANTS:
+    BEGIN OF c_method_status,
+      standard    TYPE string VALUE 'STANDARD',
+      implemented TYPE string VALUE 'IMPLEMENTED',
+      redefined   TYPE string VALUE 'REDEFINED',
+    END OF c_method_status.
+
+  CONSTANTS:
+    BEGIN OF c_method_flags,
+      optional         TYPE string VALUE 'OPTIONAL',
+      abstract         TYPE string VALUE 'ABSTRACT',
+      final            TYPE string VALUE 'FINAL',
+      class_exceptions TYPE string VALUE 'CLASS_EXCEPTIONS',
+    END OF c_method_flags.
+
+  CONSTANTS:
+    BEGIN OF c_method_level,
+      instance TYPE string VALUE 'INSTANCE',
+      static   TYPE string VALUE 'STATIC',
+    END OF c_method_level.
+
+  CONSTANTS:
     "! <p class="shorttext synchronized" lang="en">General search options</p>
     BEGIN OF c_general_search_params,
       object_name            TYPE string VALUE 'objectName',
