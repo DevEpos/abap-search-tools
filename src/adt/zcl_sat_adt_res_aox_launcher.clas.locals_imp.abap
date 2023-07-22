@@ -10,7 +10,7 @@ CLASS lcl_dummy_content_handler IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD if_adt_rest_content_handler~get_supported_content_type.
-    result = if_rest_media_type=>gc_appl_xml.
+    result = if_rest_media_type=>gc_text_plain.
   ENDMETHOD.
 
   METHOD if_adt_rest_content_handler~serialize.

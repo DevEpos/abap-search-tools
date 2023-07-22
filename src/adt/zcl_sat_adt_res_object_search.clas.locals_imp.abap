@@ -1,0 +1,302 @@
+*"* use this source file for the definition and implementation of
+*"* local helper classes, interface definitions and type
+*"* declarations
+CLASS lcl_devclass_util IMPLEMENTATION.
+  METHOD determine_package_hierarchy.
+    DATA packages_to_read TYPE STANDARD TABLE OF ty_package.
+    DATA read_packages    TYPE STANDARD TABLE OF ty_package.
+
+    packages_to_read = CORRESPONDING #( search_results ).
+    SORT packages_to_read.
+    DELETE ADJACENT DUPLICATES FROM packages_to_read.
+
+    WHILE packages_to_read IS NOT INITIAL.
+      SELECT p~devclass,
+             parentcl AS parent_devclass,
+             t~ctext
+        FROM tdevc AS p
+          LEFT OUTER JOIN tdevct AS t
+            ON p~devclass = t~devclass
+            AND t~spras = @sy-langu
+        FOR ALL ENTRIES IN @packages_to_read
+        WHERE p~devclass = @packages_to_read-devclass
+        INTO CORRESPONDING FIELDS OF TABLE @read_packages.
+
+      CLEAR packages_to_read.
+
+      LOOP AT read_packages ASSIGNING FIELD-SYMBOL(<read_package>).
+        CHECK NOT line_exists( packages[ devclass = <read_package>-devclass ] ).
+
+        IF <read_package>-parent_devclass IS NOT INITIAL.
+          packages_to_read = VALUE #( BASE packages_to_read ( devclass = <read_package>-parent_devclass ) ).
+        ENDIF.
+
+        TRY.
+            <read_package>-uri = zcl_sat_adt_util=>map_tadir_obj_to_object_ref(
+                                     iv_name = CONV #( <read_package>-devclass )
+                                     is_type = VALUE #( objtype_tr = 'DEVC' subtype_wb = 'K' ) )-uri.
+          CATCH zcx_adcoset_static_error.
+        ENDTRY.
+
+        packages = VALUE #( BASE packages ( <read_package> ) ).
+      ENDLOOP.
+
+    ENDWHILE.
+  ENDMETHOD.
+
+  METHOD get_package_uri.
+    CHECK packages IS NOT INITIAL.
+
+    result = VALUE #( packages[ devclass = package_name ]-uri OPTIONAL ).
+  ENDMETHOD.
+
+  METHOD add_packages_to_adt_result.
+    LOOP AT packages ASSIGNING FIELD-SYMBOL(<package>).
+
+      APPEND VALUE #( uri         = <package>-uri
+                      type        = zif_sat_c_object_types=>package
+                      name        = <package>-devclass
+                      description = <package>-ctext )
+             TO search_result-objects ASSIGNING FIELD-SYMBOL(<package_adt_result>).
+
+      IF <package>-parent_devclass IS NOT INITIAL.
+        <package_adt_result>-parent_uri = get_package_uri( <package>-parent_devclass ).
+      ENDIF.
+    ENDLOOP.
+  ENDMETHOD.
+ENDCLASS.
+
+
+CLASS lcl_result_converter IMPLEMENTATION.
+  METHOD constructor.
+    mt_query_result = it_query_result.
+  ENDMETHOD.
+
+  METHOD convert_entries.
+    LOOP AT mt_query_result ASSIGNING FIELD-SYMBOL(<ls_search_result>).
+      APPEND INITIAL LINE TO cs_result-objects ASSIGNING FIELD-SYMBOL(<ls_object>).
+
+      convert_result_entry( EXPORTING is_result_entry = <ls_search_result>
+                            CHANGING  cs_result       = <ls_object> ).
+
+      cs_result-count = cs_result-count + 1.
+    ENDLOOP.
+  ENDMETHOD.
+
+  METHOD zif_sat_adt_objs_res_converter~convert.
+    IF mf_no_package_hierarchy = abap_false.
+      mo_devclass_util = NEW lcl_devclass_util( ).
+      mo_devclass_util->determine_package_hierarchy( mt_query_result ).
+      mo_devclass_util->add_packages_to_adt_result( CHANGING search_result = result ).
+    ENDIF.
+
+    before_conversion( ).
+    convert_entries( CHANGING cs_result = result ).
+    after_conversion( CHANGING cs_result = result ).
+  ENDMETHOD.
+
+  METHOD convert_result_entry.
+    DATA(ls_object_reference) = zcl_sat_adt_util=>create_adt_uri( iv_type       = is_result_entry-entity_type
+                                                                  iv_tadir_type = is_result_entry-tadir_type
+                                                                  iv_name       = is_result_entry-object_name
+                                                                  iv_name2      = is_result_entry-alt_object_name ).
+
+    cs_result = VALUE #(
+        name        = is_result_entry-object_name
+        alt_name    = is_result_entry-raw_object_name
+        devclass    = is_result_entry-devclass
+        type        = ls_object_reference-type
+        uri         = ls_object_reference-uri
+        parent_uri  = COND #( WHEN mo_devclass_util IS BOUND
+                              THEN mo_devclass_util->get_package_uri( is_result_entry-devclass ) )
+        description = is_result_entry-description
+        owner       = is_result_entry-created_by
+        created_on  = is_result_entry-created_date
+        changed_by  = is_result_entry-changed_by
+        changed_on  = is_result_entry-changed_date
+        properties  = VALUE #( ( key = 'API_STATE' value = is_result_entry-api_state ) ) ).
+  ENDMETHOD.
+
+  METHOD before_conversion.
+  ENDMETHOD.
+
+  METHOD after_conversion.
+  ENDMETHOD.
+
+  METHOD set_no_package_hiearchy.
+    mf_no_package_hierarchy = if_value.
+  ENDMETHOD.
+ENDCLASS.
+
+
+CLASS lcl_result_converter_factory IMPLEMENTATION.
+  METHOD create_result_converter.
+    result = SWITCH #( iv_search_type
+                       WHEN zif_sat_c_object_search=>c_search_type-cds_view THEN
+                         NEW lcl_cds_result_converter( it_query_result )
+                       WHEN zif_sat_c_object_search=>c_search_type-method THEN
+                         NEW lcl_method_result_converter( it_query_result )
+                       ELSE
+                         NEW lcl_result_converter( it_query_result ) ).
+  ENDMETHOD.
+ENDCLASS.
+
+
+CLASS lcl_cds_result_converter IMPLEMENTATION.
+  METHOD convert_result_entry.
+    super->convert_result_entry( EXPORTING is_result_entry = is_result_entry
+                                 CHANGING  cs_result       = cs_result ).
+
+    cs_result-properties = VALUE #( BASE cs_result-properties
+                                    ( key = 'SOURCE_TYPE' value = is_result_entry-custom_field_short1 ) ).
+    set_ddl_positional_uri( EXPORTING is_result_entity = is_result_entry
+                            CHANGING  cs_result        = cs_result ).
+  ENDMETHOD.
+
+  METHOD before_conversion.
+    " Positional URI is no longer needed for where used starting with NW 7.54
+    CHECK sy-saprl < 754.
+
+    " Read sources of all found DDLS search results to get row/column where the name of
+    " the entity is starting
+    read_ddl_sources( ).
+  ENDMETHOD.
+
+  METHOD read_ddl_sources.
+    DATA lt_ddlname TYPE ty_lt_ddlname.
+
+    lt_ddlname = VALUE #( FOR res IN mt_query_result
+                          WHERE
+                                ( tadir_type = 'DDLS' )
+                          ( sign = 'I' option = 'EQ' low = res-alt_object_name ) ).
+
+    SELECT
+       FROM ddddlsrc
+       FIELDS ddlname,
+              source
+       WHERE as4local = 'A'
+         AND ddlname  IN @lt_ddlname
+    INTO CORRESPONDING FIELDS OF TABLE @mt_ddls_source.
+  ENDMETHOD.
+
+  METHOD set_ddl_positional_uri.
+    ASSIGN mt_ddls_source[ ddlname = is_result_entity-alt_object_name ] TO FIELD-SYMBOL(<ls_source>).
+    IF sy-subrc <> 0.
+      RETURN.
+    ENDIF.
+
+    zcl_sat_cds_view_factory=>get_entityname_pos_in_ddlsrc( EXPORTING iv_entity_id = is_result_entity-object_name
+                                                                      iv_source    = <ls_source>-source
+                                                            IMPORTING ev_column    = DATA(lv_col)
+                                                                      ev_row       = DATA(lv_row) ).
+    IF lv_col <> -1 AND lv_row <> -1.
+      " Adjust ADT URI
+      cs_result-uri = |{ cs_result-uri }{ zif_sat_c_adt_utils=>c_ddl_pos_uri_segment }{ lv_row },{ lv_col }|.
+    ENDIF.
+  ENDMETHOD.
+ENDCLASS.
+
+
+CLASS lcl_method_result_converter IMPLEMENTATION.
+  METHOD convert_entries.
+    LOOP AT mt_query_result ASSIGNING FIELD-SYMBOL(<ls_query_result>)
+         GROUP BY <ls_query_result>-object_name.
+
+      " 1) create ADT URI for Class/Interface
+      DATA(ls_object_reference) = zcl_sat_adt_util=>create_adt_uri( iv_type       = <ls_query_result>-entity_type
+                                                                    iv_tadir_type = <ls_query_result>-tadir_type
+                                                                    iv_name       = <ls_query_result>-object_name
+                                                                    iv_name2      = <ls_query_result>-alt_object_name ).
+      DATA(ls_result_entry) = VALUE zif_sat_ty_adt_types=>ty_s_adt_obj_ref(
+                                        name        = <ls_query_result>-object_name
+                                        alt_name    = <ls_query_result>-raw_object_name
+                                        devclass    = <ls_query_result>-devclass
+                                        type        = ls_object_reference-type
+                                        uri         = ls_object_reference-uri
+                                        parent_uri  = mo_devclass_util->get_package_uri( <ls_query_result>-devclass )
+                                        description = <ls_query_result>-description
+                                        owner       = <ls_query_result>-created_by
+                                        created_on  = <ls_query_result>-created_date
+                                        changed_by  = <ls_query_result>-changed_by
+                                        changed_on  = <ls_query_result>-changed_date ).
+
+      cs_result-objects = VALUE #( BASE cs_result-objects ( ls_result_entry ) ).
+
+      " 2) create method entries
+      LOOP AT GROUP <ls_query_result> ASSIGNING FIELD-SYMBOL(<ls_method>).
+        DATA(lv_method_name) = <ls_method>-custom_field_long1.
+
+        DATA(ls_obj_type) = VALUE wbobjtype(
+                                      objtype_tr = <ls_method>-tadir_type
+                                      subtype_wb = COND #( WHEN <ls_method>-tadir_type = zif_sat_c_tadir_types=>class
+                                                           THEN c_sub_obj_type-class_method_impl
+                                                           ELSE c_sub_obj_type-intf_method ) ).
+
+        IF <ls_method>-tadir_type = zif_sat_c_tadir_types=>class.
+          IF <ls_method>-custom_field_short2 = abap_true. " abstract
+            ls_obj_type-subtype_wb = c_sub_obj_type-class_method_def.
+          ENDIF.
+        ENDIF.
+
+        " TODO: Check the handling of Alias methods
+        "       -> URI for Interface Alias methods can not be determined !!!
+        "       -> Class methods still need to be checked
+        DATA(lv_uri) = CONV string( map_method_to_uri( iv_clif_name   = <ls_query_result>-object_name
+                                                       iv_type        = ls_obj_type
+                                                       iv_method_name = lv_method_name ) ).
+
+        IF lv_uri IS NOT INITIAL.
+          " reset the sub type to OM if necessary, so ADT produces the correct icon
+          IF ls_obj_type-subtype_wb = c_sub_obj_type-class_method_def.
+            ls_obj_type-subtype_wb = c_sub_obj_type-class_method_impl.
+          ENDIF.
+          cs_result-objects = VALUE #( BASE cs_result-objects
+                                       ( name        = lv_method_name
+                                         type        = ls_obj_type-objtype_tr && '/' && ls_obj_type-subtype_wb
+                                         description = <ls_method>-custom_field_long2
+                                         parent_uri  = ls_object_reference-uri
+                                         uri         = lv_uri ) ).
+          cs_result-count   = cs_result-count + 1.
+        ENDIF.
+      ENDLOOP.
+    ENDLOOP.
+  ENDMETHOD.
+
+  METHOD convert_result_entry.
+  ENDMETHOD.
+
+  METHOD map_method_to_uri.
+    DATA lo_wb_request  TYPE REF TO cl_wb_request.
+    DATA lv_object_name TYPE seu_objkey.
+
+    lv_object_name(30) = iv_clif_name.
+    lv_object_name+30 = iv_method_name.
+    CREATE OBJECT lo_wb_request
+      EXPORTING  p_global_type                = iv_type
+                 p_object_name                = lv_object_name
+                 p_operation                  = swbm_c_op_disp_or_edit
+      EXCEPTIONS illegal_object_type          = 1
+                 illegal_operation            = 2
+                 illegal_new_window_parameter = 3
+                 OTHERS                       = 4.
+    IF sy-subrc <> 0.
+*      ex = cx_adt_uri_mapping=>create( textid = cx_adt_uri_mapping=>invalid_uri ).
+*      ex->uri = uri.
+*      RAISE EXCEPTION ex.
+      RETURN.
+    ENDIF.
+
+    DATA(lo_src_map_opts) = cl_adt_tools_core_factory=>get_instance( )->create_source_mapping_options( ).
+    lo_src_map_opts->set_use_source_based_position( use_source_based_position = abap_true ).
+    lo_src_map_opts->set_use_source_main( abap_true ).
+
+    TRY.
+        result = cl_adt_tools_core_factory=>get_instance( )->get_uri_mapper( )->map_wb_request_to_objref(
+                     wb_request      = lo_wb_request
+                     mapping_options = lo_src_map_opts )->ref_data-uri.
+      CATCH cx_adt_uri_mapping INTO DATA(lx_error). " TODO: variable is assigned but never used (ABAP cleaner)
+        IF 1 = 2.
+        ENDIF.
+    ENDTRY.
+  ENDMETHOD.
+ENDCLASS.

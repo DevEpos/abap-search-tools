@@ -3,13 +3,14 @@
  <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
   <asx:values>
    <VSEOCLASS>
-    <CLSNAME>ZCL_SAT_ADT_RES_OBJS_CDS</CLSNAME>
+    <CLSNAME>ZCL_SAT_ADT_RES_CDS_A_WUSL</CLSNAME>
     <LANGU>E</LANGU>
-    <DESCRIPT>Object Search Resource for CDS Search</DESCRIPT>
+    <DESCRIPT>Where-Used-Analysis for Table/View/CDS in CDS Views</DESCRIPT>
     <STATE>1</STATE>
     <CLSCCINCL>X</CLSCCINCL>
     <FIXPT>X</FIXPT>
     <UNICODE>X</UNICODE>
+    <WITH_UNIT_TESTS>X</WITH_UNIT_TESTS>
    </VSEOCLASS>
   </asx:values>
  </asx:abap>
