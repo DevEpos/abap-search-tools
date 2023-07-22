@@ -44,10 +44,10 @@ INTERFACE zif_sat_c_object_search
 
   CONSTANTS:
     BEGIN OF c_filter_content_assist_type,
-      named_item       TYPE string VALUE 'saat:NamedItemContentAssist',
-      fixed_named_item TYPE string VALUE 'saat:FixedValuesContentAssist',
-      ris              TYPE string VALUE 'saat:RisContentAssist',
-      user             TYPE string VALUE 'saat:UserContentAssist',
+      named_item       TYPE string VALUE 'objectsearch:NamedItemContentAssist',
+      fixed_named_item TYPE string VALUE 'objectsearch:FixedValuesContentAssist',
+      ris              TYPE string VALUE 'objectsearch:RisContentAssist',
+      user             TYPE string VALUE 'objectsearch:UserContentAssist',
     END OF c_filter_content_assist_type.
 
   CONSTANTS:
