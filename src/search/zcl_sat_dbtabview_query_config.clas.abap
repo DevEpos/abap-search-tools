@@ -39,6 +39,10 @@ CLASS zcl_sat_dbtabview_query_config IMPLEMENTATION.
     build_config( ).
   ENDMETHOD.
 
+  METHOD zif_sat_object_search_config~get_type.
+    rv_type = zif_sat_c_object_search=>c_search_type-db_tab_view.
+  ENDMETHOD.
+
   METHOD build_config.
     DATA(lt_object_filters) = VALUE zif_sat_ty_object_search=>ty_query_filters( ( get_package_filt_conf( ) )
                                                                                 ( get_user_filt_conf( ) )
@@ -60,10 +64,6 @@ CLASS zcl_sat_dbtabview_query_config IMPLEMENTATION.
                               filters = lt_object_filters ) ) ).
 
     mt_options = lt_object_filters.
-  ENDMETHOD.
-
-  METHOD zif_sat_object_search_config~get_type.
-    rv_type = zif_sat_c_object_search=>c_search_type-db_tab_view.
   ENDMETHOD.
 
   METHOD get_deliv_class_filter.
