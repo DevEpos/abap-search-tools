@@ -30,6 +30,11 @@
      <DESCRIPT>Retrieves configuration for search option</DESCRIPT>
     </SEOCOMPOTX>
     <SEOCOMPOTX>
+     <CMPNAME>GET_OUTPUT_CONFIG</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Retrieves result output configuration</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
      <CMPNAME>GET_SEARCH_CONFIG</CMPNAME>
      <LANGU>E</LANGU>
      <DESCRIPT>Retrieves configuration of search type</DESCRIPT>

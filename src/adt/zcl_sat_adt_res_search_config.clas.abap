@@ -24,7 +24,9 @@ CLASS zcl_sat_adt_res_search_config IMPLEMENTATION.
     DATA ls_search_config TYPE zif_sat_ty_object_search=>ty_search_config.
 
     LOOP AT get_config_providers( ) INTO DATA(lo_provider).
-      ls_search_config-search_types = VALUE #( BASE ls_search_config-search_types ( lo_provider->get_search_config( ) ) ).
+      DATA(ls_search_type_config) = lo_provider->get_search_config( ).
+      ls_search_type_config-output_config = lo_provider->get_output_config( ).
+      ls_search_config-search_types = VALUE #( BASE ls_search_config-search_types ( ls_search_type_config ) ).
     ENDLOOP.
 
     response->set_body_data( content_handler = zcl_sat_adt_ch_factory=>create_search_config_ch( )
