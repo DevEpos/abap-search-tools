@@ -16,6 +16,7 @@ CLASS zcl_sat_base_query_config DEFINITION
     ALIASES c_general_options FOR zif_sat_c_object_search~c_general_search_params.
 
     CONSTANTS:
+      c_type_image_key_prefix TYPE string VALUE `ABAP:IMG_SEARCHTYPE_`,
       BEGIN OF c_general_image_keys,
         type_group     TYPE string VALUE 'ABAP:IMG_TYPE_GROUP',
         type_folder    TYPE string VALUE 'ABAP:IMG_TYPE_FOLDER',
@@ -23,9 +24,16 @@ CLASS zcl_sat_base_query_config DEFINITION
         param          TYPE string VALUE 'ABAP:IMG_PARAM',
         checked_box    TYPE string VALUE 'ABAP:IMG_CHECKED_BOX',
         generic_filter TYPE string VALUE 'ABAP:IMG_GENERIC_FILTER',
-      END OF c_general_image_keys.
+      END OF c_general_image_keys,
 
-    CONSTANTS c_type_image_key_prefix TYPE string VALUE `ABAP:IMG_SEARCHTYPE_`.
+      BEGIN OF c_output_option,
+        tree TYPE string VALUE 'TREE',
+        list TYPE string VALUE 'LIST',
+      END OF c_output_option,
+
+      BEGIN OF c_output_grouping_level,
+        package TYPE string VALUE 'PACKAGE',
+      END OF c_output_grouping_level.
 
     DATA mt_options         TYPE zif_sat_ty_object_search=>ty_query_filters.
     DATA mt_allowed_options TYPE zif_sat_ty_object_search=>ty_t_options.
@@ -70,7 +78,6 @@ CLASS zcl_sat_base_query_config DEFINITION
         api         TYPE string VALUE 'ABAP:IMG_API',
         description TYPE string VALUE 'ABAP:IMG_DESCRIPTION',
       END OF c_image_keys.
-
 ENDCLASS.
 
 
@@ -104,6 +111,10 @@ CLASS zcl_sat_base_query_config IMPLEMENTATION.
 
   METHOD zif_sat_object_search_config~get_options.
     rt_options = mt_options.
+  ENDMETHOD.
+
+  METHOD zif_sat_object_search_config~get_output_config.
+    result = VALUE #( groupings = VALUE #( ( c_output_grouping_level-package ) ) ).
   ENDMETHOD.
 
   METHOD get_description_filt_conf.
