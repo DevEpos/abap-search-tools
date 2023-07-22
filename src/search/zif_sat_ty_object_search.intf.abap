@@ -145,12 +145,21 @@ INTERFACE zif_sat_ty_object_search
 
     ty_input_fields TYPE STANDARD TABLE OF ty_input_field WITH KEY name,
 
+    BEGIN OF ty_result_output_config,
+      types_for_list           TYPE string_table,
+      is_list_output_supported TYPE abap_bool,
+      groupings                TYPE string_table,
+    END OF ty_result_output_config,
+
+    ty_result_output_configs TYPE STANDARD TABLE OF ty_result_output_config WITH EMPTY KEY,
+
     "! Settings for a given search types
     BEGIN OF ty_search_type_config,
-      name     TYPE string,
-      label    TYPE string,
-      img_info TYPE ty_image_info,
-      inputs   TYPE ty_input_fields,
+      name          TYPE string,
+      label         TYPE string,
+      img_info      TYPE ty_image_info,
+      inputs        TYPE ty_input_fields,
+      output_config TYPE ty_result_output_config,
     END OF ty_search_type_config,
 
     ty_search_type_configs TYPE STANDARD TABLE OF ty_search_type_config WITH KEY name,

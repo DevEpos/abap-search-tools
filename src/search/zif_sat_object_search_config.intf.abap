@@ -7,6 +7,11 @@ INTERFACE zif_sat_object_search_config
     RETURNING
       VALUE(result) TYPE zif_sat_ty_object_search=>ty_search_type_config.
 
+  "! <p class="shorttext synchronized">Retrieves result output configuration</p>
+  METHODS get_output_config DEFAULT IGNORE
+    RETURNING
+      VALUE(result) TYPE zif_sat_ty_object_search=>ty_result_output_config.
+
   "! <p class="shorttext synchronized">Returns a table of allowed search options</p>
   "!
   "! @parameter rt_options | Range of allowed options
