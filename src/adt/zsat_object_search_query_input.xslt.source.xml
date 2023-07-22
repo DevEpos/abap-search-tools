@@ -1,27 +1,27 @@
 <?sap.transform simple?>
 <tt:transform
     xmlns:tt="http://www.sap.com/transformation-templates"
-    xmlns:saat="http://www.devepos.com/adt/objectsearch"
+    xmlns:objectsearch="http://www.devepos.com/adt/objectsearch"
     xmlns:cl="http://www.sap.com/abapxml/types/class-pool/zif_sat_ty_adt_types">
 
   <tt:root name="query_input" type="cl:ty_s_query_input"/>
 
   <tt:template>
-    <saat:queryInput tt:extensible="deep">
+    <objectsearch:queryInput tt:extensible="deep">
       <tt:cond check="not-initial(query_input.max_rows)">
-        <tt:attribute name="saat:maxRows" value-ref="query_input.max_rows" />
+        <tt:attribute name="objectsearch:maxRows" value-ref="query_input.max_rows" />
       </tt:cond>
       <tt:cond check="not-initial(query_input.combine_filters_with_and)">
-        <tt:attribute name="saat:combineFiltersWithAnd" option="format(boolean)" value-ref="query_input.combine_filters_with_and" />
+        <tt:attribute name="objectsearch:combineFiltersWithAnd" option="format(boolean)" value-ref="query_input.combine_filters_with_and" />
       </tt:cond>
       <tt:cond check="not-initial(query_input.with_api_state)">
-        <tt:attribute name="saat:withApiState" option="format(boolean)" value-ref="query_input.with_api_state" />
+        <tt:attribute name="objectsearch:withApiState" option="format(boolean)" value-ref="query_input.with_api_state" />
       </tt:cond>
       <tt:cond check="not-initial(query_input.no_row_limit)">
-        <tt:attribute name="saat:rowLimitDisabled" option="format(boolean)" value-ref="query_input.no_row_limit" />
+        <tt:attribute name="objectsearch:rowLimitDisabled" option="format(boolean)" value-ref="query_input.no_row_limit" />
       </tt:cond>
       <tt:cond check="not-initial(query_input.type)">
-        <tt:attribute name="saat:type" value-ref="query_input.type" />
+        <tt:attribute name="objectsearch:type" value-ref="query_input.type" />
       </tt:cond>
 
       <tt:loop ref="query_input.fields">
@@ -29,7 +29,7 @@
           <tt:with-root name="field" ref="$ref"/>
         </tt:apply>
       </tt:loop>
-    </saat:queryInput>
+    </objectsearch:queryInput>
    </tt:template>
 
    <tt:template name="field">
@@ -37,11 +37,11 @@
         <tt:root name="field" type="cl:ty_s_query_input_field" />
      </tt:context>
 
-     <saat:field tt:extensible="deep">
-       <tt:attribute name="saat:name" value-ref="field.name" />
+     <objectsearch:field tt:extensible="deep">
+       <tt:attribute name="objectsearch:name" value-ref="field.name" />
        <tt:cond check="exist(field.values)">
          <tt:loop ref="field.values">
-           <saat:value><tt:value ref="$ref" /></saat:value>
+           <objectsearch:value><tt:value ref="$ref" /></objectsearch:value>
          </tt:loop>
        </tt:cond>
        <tt:cond check="exist(field.filters)">
@@ -51,7 +51,7 @@
            </tt:apply>
          </tt:loop>
        </tt:cond>
-     </saat:field>
+     </objectsearch:field>
    </tt:template>
 
    <tt:template name="filter">
@@ -59,11 +59,11 @@
        <tt:root name="filter" type="cl:ty_s_query_input_filter" />
      </tt:context>
 
-     <saat:filter tt:extensible="deep">
-       <tt:attribute name="saat:name" value-ref="filter.name" />
+     <objectsearch:filter tt:extensible="deep">
+       <tt:attribute name="objectsearch:name" value-ref="filter.name" />
        <tt:loop ref="filter.values">
-         <saat:value><tt:value ref="$ref" /></saat:value>
+         <objectsearch:value><tt:value ref="$ref" /></objectsearch:value>
        </tt:loop>
-     </saat:filter>
+     </objectsearch:filter>
    </tt:template>
 </tt:transform>
