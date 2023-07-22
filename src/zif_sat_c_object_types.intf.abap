@@ -14,4 +14,6 @@ INTERFACE zif_sat_c_object_types
   CONSTANTS structured_object_field TYPE string VALUE 'STOB/DOF'.
   CONSTANTS interface               TYPE string VALUE 'INTF/OI'.
   CONSTANTS class                   TYPE string VALUE 'CLAS/OC'.
+  CONSTANTS class_method_impl       TYPE string VALUE 'CLAS/OM'.
+  CONSTANTS interface_method        TYPE string VALUE 'INTF/IO'.
 ENDINTERFACE.
