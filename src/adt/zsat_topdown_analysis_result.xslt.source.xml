@@ -1,0 +1,32 @@
+<?sap.transform simple?>
+<tt:transform
+    xmlns:tt="http://www.sap.com/transformation-templates"
+    xmlns:cdsanalysis="http://www.devepos.com/adt/cdsanalysis"
+    xmlns:adtbase="http://www.devepos.com/adt/base"
+    xmlns:cl="http://www.sap.com/abapxml/types/class-pool/zif_sat_ty_adt_types">
+
+  <tt:root name="top_down_result" type="cl:ty_cds_top_down_result"/>
+
+  <tt:include name="zsat_adt_obj_ref" template="adtObjRef"/>
+  <tt:include name="zsat_topdown_analysis_entry" template="topDownEntry"/>
+
+  <tt:template>
+    <cdsanalysis:topDownResult tt:extensible="deep">
+      <tt:namespace name="adtbase" />
+      <tt:cond check="not-initial(top_down_result.source_entity)">
+        <tt:apply name="adtObjRef">
+          <tt:with-root name="adt_obj_ref" ref="top_down_result.source_entity" />
+        </tt:apply>
+      </tt:cond>
+
+      <tt:cond check="not-initial(top_down_result.entries)">
+        <tt:loop ref="top_down_result.entries">
+          <tt:apply name="topDownEntry">
+            <tt:with-root name="top_down_entry" ref="$ref" />
+          </tt:apply>
+        </tt:loop>
+      </tt:cond>
+    </cdsanalysis:topDownResult>
+  </tt:template>
+
+</tt:transform>

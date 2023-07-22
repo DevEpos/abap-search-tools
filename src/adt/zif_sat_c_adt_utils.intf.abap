@@ -1,8 +1,8 @@
-"! <p class="shorttext synchronized" lang="en">Constants for ADT Tools of DB Browser</p>
+"! <p class="shorttext synchronized">Constants for ADT Tools of DB Browser</p>
 INTERFACE zif_sat_c_adt_utils
-  PUBLIC .
+  PUBLIC.
 
-  "! <p class="shorttext synchronized" lang="en">URI segment for positional DDLS URI</p>
+  "! <p class="shorttext synchronized">URI segment for positional DDLS URI</p>
   CONSTANTS c_ddl_pos_uri_segment TYPE string VALUE '/source/main#start='.
 
   CONSTANTS:
@@ -13,10 +13,18 @@ INTERFACE zif_sat_c_adt_utils
       basic_info  TYPE string VALUE 'basicInfoOnly',
     END OF c_element_info_parameter.
   CONSTANTS:
+    BEGIN OF c_property_type,
+      bool TYPE string VALUE 'bool',
+    END OF c_property_type.
+  CONSTANTS:
     BEGIN OF c_cds_analysis_parameter,
-      cds_name          TYPE string VALUE 'cdsViewName',
-      with_associations TYPE string VALUE 'withAssociations',
-      usage_analysis    TYPE string VALUE 'usageAnalysis',
+      cds_name               TYPE string VALUE 'cdsViewName',
+      with_associations      TYPE string VALUE 'withAssociations',
+      usage_analysis         TYPE string VALUE 'usageAnalysis',
+      source_origin          TYPE string VALUE 'sourceOrigin',
+      entity_name            TYPE string VALUE 'entityName',
+      only_released_entities TYPE string VALUE 'releasedEntitiesOnly',
+      only_local_assocs      TYPE string VALUE 'localDeclaredAssocOnly',
     END OF c_cds_analysis_parameter.
   CONSTANTS:
     BEGIN OF c_cds_elem_info_parameter,
@@ -39,6 +47,7 @@ INTERFACE zif_sat_c_adt_utils
       "! Use to the following filter pattern: <key>:<value>
       filters     TYPE string VALUE 'filter',
     END OF c_ddic_repo_access_params.
+
   CONSTANTS:
     BEGIN OF c_db_fields_info_parameter,
       name               TYPE string VALUE 'name',
@@ -47,11 +56,4 @@ INTERFACE zif_sat_c_adt_utils
       search_db_views    TYPE string VALUE 'searchDbViewUsages',
       field              TYPE string VALUE 'field',
     END OF c_db_fields_info_parameter.
-
-  CONSTANTS:
-    BEGIN OF c_adt_types,
-      data_definition  TYPE string VALUE 'DDLS/DF',
-      table_definition TYPE string VALUE 'TABL/DT',
-      view_definition  TYPE string VALUE 'VIEW/DV',
-    END OF c_adt_types.
 ENDINTERFACE.

@@ -1,0 +1,76 @@
+<?sap.transform simple?>
+<tt:transform xmlns:tt="http://www.sap.com/transformation-templates"
+              xmlns:cdsanalysis="http://www.devepos.com/adt/cdsanalysis"
+              xmlns:cl="http://www.sap.com/abapxml/types/class-pool/zif_sat_ty_adt_types">
+
+  <tt:root name="field_info" type="cl:ty_entity_field_info"/>
+
+  <tt:template>
+    <tt:apply name="fieldInfo">
+      <tt:with-root name="field_info" ref="field_info"/>
+    </tt:apply>
+  </tt:template>
+
+  <tt:template name="fieldInfo">
+    <tt:context>
+      <tt:root name="field_info" type="cl:ty_entity_field_info"/>
+    </tt:context>
+
+    <cdsanalysis:entityFieldInfo tt:extensible="deep">
+      <tt:apply name="fieldInfoProperties">
+        <tt:with-root name="field_info" ref="field_info"/>
+      </tt:apply>
+    </cdsanalysis:entityFieldInfo>
+
+  </tt:template>
+
+  <tt:template name="fieldInfoProperties">
+    <tt:context>
+      <tt:root name="field_info" type="cl:ty_entity_field_info"/>
+    </tt:context>
+
+    <tt:attribute name="cdsanalysis:fieldName" value-ref="field_info.field"/>
+    <tt:cond check="not-initial(field_info.entity_name)">
+      <tt:attribute name="cdsanalysis:entityName" value-ref="field_info.entity_name"/>
+    </tt:cond>
+    <tt:cond check="not-initial(field_info.alt_entity_name)">
+      <tt:attribute name="cdsanalysis:altEntityName" value-ref="field_info.alt_entity_name"/>
+    </tt:cond>
+
+    <tt:cond check="not-initial(field_info.uri)">
+      <tt:attribute name="cdsanalysis:uri" value-ref="field_info.uri"/>
+    </tt:cond>
+
+    <tt:cond check="not-initial(field_info.type)">
+      <tt:attribute name="cdsanalysis:type" value-ref="field_info.type"/>
+    </tt:cond>
+
+    <tt:cond check="not-initial(field_info.source_type)">
+      <tt:attribute name="cdsanalysis:sourceType" value-ref="field_info.source_type"/>
+    </tt:cond>
+
+    <tt:cond check="not-initial(field_info.api_state)">
+      <tt:attribute name="cdsanalysis:apiState" value-ref="field_info.api_state"/>
+    </tt:cond>
+
+    <tt:cond check="not-initial(field_info.description)">
+      <tt:attribute name="cdsanalysis:description" value-ref="field_info.description"/>
+    </tt:cond>
+
+    <tt:cond check="not-initial(field_info.is_key)">
+      <tt:attribute name="cdsanalysis:isKey" option="format(boolean)" value-ref="field_info.is_key"/>
+    </tt:cond>
+
+    <tt:cond check="not-initial(field_info.is_calculated)">
+      <tt:attribute name="cdsanalysis:isCalculated" option="format(boolean)" value-ref="field_info.is_calculated"/>
+    </tt:cond>
+
+    <tt:cond check="not-initial(field_info.children)">
+      <!-- Serialize children -->
+      <tt:call-method class="zcl_sat_adt_entfieldinfo_xml_h" d-name="read_ext_attributes" reader="io_reader" s-name="serialize_ext_attributes" writer="io_writer">
+        <tt:with-parameter name="field_info" ref="field_info"/>
+      </tt:call-method>
+    </tt:cond>
+  </tt:template>
+
+</tt:transform>

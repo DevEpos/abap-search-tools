@@ -13,11 +13,6 @@
    </VSEOCLASS>
    <DESCRIPTIONS>
     <SEOCOMPOTX>
-     <CMPNAME>GET_INTERNAL</CMPNAME>
-     <LANGU>E</LANGU>
-     <DESCRIPT>Executes the GET request</DESCRIPT>
-    </SEOCOMPOTX>
-    <SEOCOMPOTX>
      <CMPNAME>GET_PARAMETERS</CMPNAME>
      <LANGU>E</LANGU>
      <DESCRIPT>Retrieve parameters from ADT REST request</DESCRIPT>
