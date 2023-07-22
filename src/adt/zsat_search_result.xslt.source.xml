@@ -1,7 +1,7 @@
 <?sap.transform simple?>
 <tt:transform
     xmlns:tt="http://www.sap.com/transformation-templates"
-    xmlns:saat="http://www.devepos.com/adt/objectsearch"
+    xmlns:objectsearch="http://www.devepos.com/adt/objectsearch"
     xmlns:adtbase="http://www.devepos.com/adt/base"
     xmlns:cl="http://www.sap.com/abapxml/types/class-pool/zif_sat_ty_adt_types">
 
@@ -22,13 +22,13 @@
       <tt:root name="object_search_result"/>
     </tt:context>
 
-    <saat:searchResult tt:extensible="deep">
+    <objectsearch:searchResult tt:extensible="deep">
       <tt:namespace name="adtbase" />
-      <tt:attribute name="saat:resultCount" value-ref="object_search_result.count" />
+      <tt:attribute name="objectsearch:resultCount" value-ref="object_search_result.count" />
       <tt:apply name="resultObjects">
         <tt:with-root name="result_objects" ref="object_search_result.objects"/>
       </tt:apply>
-    </saat:searchResult>
+    </objectsearch:searchResult>
 
   </tt:template>
 

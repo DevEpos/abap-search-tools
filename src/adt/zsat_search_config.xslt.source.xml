@@ -1,20 +1,20 @@
 <?sap.transform simple?>
 <tt:transform xmlns:tt="http://www.sap.com/transformation-templates"
-              xmlns:saat="http://www.devepos.com/adt/objectsearch"
+              xmlns:objectsearch="http://www.devepos.com/adt/objectsearch"
               xmlns:cl="http://www.sap.com/abapxml/types/class-pool/zif_sat_ty_object_search"
               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
   <tt:root name="search_config" type="cl:ty_search_config"/>
 
   <tt:template>
-    <saat:searchConfig tt:extensible="deep">
+    <objectsearch:searchConfig tt:extensible="deep">
       <tt:namespace name="xsi"/>
       <tt:loop ref="search_config.search_types">
         <tt:apply name="searchType">
           <tt:with-root name="search_type" ref="$ref"/>
         </tt:apply>
       </tt:loop>
-    </saat:searchConfig>
+    </objectsearch:searchConfig>
 
   </tt:template>
 
@@ -23,16 +23,22 @@
       <tt:root name="search_type" type="cl:ty_search_type_config"/>
     </tt:context>
 
-    <saat:searchType>
-      <tt:attribute name="saat:name" value-ref="search_type.name"/>
-      <tt:attribute name="saat:label" value-ref="search_type.label"/>
+    <objectsearch:searchType>
+      <tt:attribute name="objectsearch:name" value-ref="search_type.name"/>
+      <tt:attribute name="objectsearch:label" value-ref="search_type.label"/>
 
       <tt:cond check="exist(search_type.img_info)">
-        <saat:imageInfo tt:extensible="deep">
+        <objectsearch:imageInfo tt:extensible="deep">
           <tt:apply name="imageInfoAttributes">
             <tt:with-root name="image_info" ref="search_type.img_info"/>
           </tt:apply>
-        </saat:imageInfo>
+        </objectsearch:imageInfo>
+      </tt:cond>
+
+      <tt:cond check="exist(search_type.output_config)">
+        <tt:apply name="outputConfig">
+          <tt:with-root name="out_config" ref="search_type.output_config"/>
+        </tt:apply>
       </tt:cond>
 
       <tt:loop ref="search_type.inputs">
@@ -40,7 +46,7 @@
           <tt:with-root name="input" ref="$ref"/>
         </tt:apply>
       </tt:loop>
-    </saat:searchType>
+    </objectsearch:searchType>
   </tt:template>
 
   <tt:template name="input">
@@ -48,11 +54,11 @@
       <tt:root name="input" type="cl:ty_input_field"/>
     </tt:context>
 
-    <saat:input tt:extensible="deep">
-      <tt:attribute name="saat:name" value-ref="input.name"/>
-      <tt:attribute name="saat:label" value-ref="input.label"/>
+    <objectsearch:input tt:extensible="deep">
+      <tt:attribute name="objectsearch:name" value-ref="input.name"/>
+      <tt:attribute name="objectsearch:label" value-ref="input.label"/>
       <tt:cond check="not-initial(input.mixed)">
-        <tt:attribute name="saat:mixed" value-ref="input.mixed"/>
+        <tt:attribute name="objectsearch:mixed" value-ref="input.mixed"/>
       </tt:cond>
 
       <tt:cond check="exist(input.filters)">
@@ -62,7 +68,7 @@
           </tt:apply>
         </tt:loop>
       </tt:cond>
-    </saat:input>
+    </objectsearch:input>
   </tt:template>
 
   <tt:template name="filter">
@@ -70,42 +76,42 @@
       <tt:root name="filter" type="cl:ty_query_filter"/>
     </tt:context>
 
-    <saat:filter tt:extensible="deep">
-      <tt:attribute name="saat:name" value-ref="filter.name"/>
+    <objectsearch:filter tt:extensible="deep">
+      <tt:attribute name="objectsearch:name" value-ref="filter.name"/>
       <tt:cond check="not-initial(filter.data_type)">
-        <tt:attribute name="saat:dataType" value-ref="filter.data_type"/>
+        <tt:attribute name="objectsearch:dataType" value-ref="filter.data_type"/>
       </tt:cond>
       <tt:cond check="not-initial(filter.allowed_length)">
-        <tt:attribute name="saat:maxLength" value-ref="filter.allowed_length"/>
+        <tt:attribute name="objectsearch:maxLength" value-ref="filter.allowed_length"/>
       </tt:cond>
       <tt:cond check="initial(filter.single)">
-        <tt:attribute map="xml('true')=val(''),xml('false')=val('X')" name="saat:multiple" value-ref="filter.single"/>
+        <tt:attribute map="xml('true')=val(''),xml('false')=val('X')" name="objectsearch:multiple" value-ref="filter.single"/>
       </tt:cond>
       <tt:cond check="initial(filter.no_negation)">
-        <tt:attribute map="xml('true')=val(''),xml('false')=val('X')" name="saat:negatable" value-ref="filter.no_negation"/>
+        <tt:attribute map="xml('true')=val(''),xml('false')=val('X')" name="objectsearch:negatable" value-ref="filter.no_negation"/>
       </tt:cond>
       <tt:cond check="not-initial(filter.key_value)">
-        <tt:attribute name="saat:keyValuePair" option="format(boolean)" value-ref="filter.key_value"/>
+        <tt:attribute name="objectsearch:keyValuePair" option="format(boolean)" value-ref="filter.key_value"/>
       </tt:cond>
       <tt:cond check="not-initial(filter.internal)">
-        <tt:attribute name="saat:internal" option="format(boolean)" value-ref="filter.internal"/>
+        <tt:attribute name="objectsearch:internal" option="format(boolean)" value-ref="filter.internal"/>
       </tt:cond>
       <tt:cond check="not-initial(filter.patterns)">
-        <tt:attribute name="saat:patterns" option="format(boolean)" value-ref="filter.patterns"/>
+        <tt:attribute name="objectsearch:patterns" option="format(boolean)" value-ref="filter.patterns"/>
       </tt:cond>
 
       <tt:cond check="not-initial(filter.long_description)">
-        <saat:longDescription>
+        <objectsearch:longDescription>
           <tt:value ref="filter.long_description"/>
-        </saat:longDescription>
+        </objectsearch:longDescription>
       </tt:cond>
 
       <tt:cond check="exist(filter.img_info)">
-        <saat:imageInfo tt:extensible="deep">
+        <objectsearch:imageInfo tt:extensible="deep">
           <tt:apply name="imageInfoAttributes">
             <tt:with-root name="image_info" ref="filter.img_info"/>
           </tt:apply>
-        </saat:imageInfo>
+        </objectsearch:imageInfo>
       </tt:cond>
 
       <tt:cond check="not-initial(filter.content_assist)">
@@ -114,7 +120,7 @@
         </tt:apply>
       </tt:cond>
 
-    </saat:filter>
+    </objectsearch:filter>
   </tt:template>
 
   <tt:template name="contentAssist">
@@ -122,51 +128,51 @@
       <tt:root name="content_assist" type="cl:ty_option_content_assist"/>
     </tt:context>
 
-    <saat:contentAssist tt:extensible="deep">
+    <objectsearch:contentAssist tt:extensible="deep">
       <tt:attribute name="xsi:type" value-ref="content_assist.assist_type"/>
 
       <tt:cond check="not-initial(content_assist.caching)">
-        <tt:attribute name="saat:caching" option="format(boolean)" value-ref="content_assist.caching"/>
+        <tt:attribute name="objectsearch:caching" option="format(boolean)" value-ref="content_assist.caching"/>
       </tt:cond>
 
       <tt:cond check="not-initial(content_assist.category_term)">
-        <tt:attribute name="saat:categoryTerm" value-ref="content_assist.category_term"/>
+        <tt:attribute name="objectsearch:categoryTerm" value-ref="content_assist.category_term"/>
       </tt:cond>
 
       <tt:cond check="not-initial(content_assist.secondary_category_term)">
-        <tt:attribute name="saat:secondaryCategoryTerm" value-ref="content_assist.secondary_category_term"/>
+        <tt:attribute name="objectsearch:secondaryCategoryTerm" value-ref="content_assist.secondary_category_term"/>
       </tt:cond>
 
       <tt:cond check="not-initial(content_assist.category_scheme)">
-        <tt:attribute name="saat:categoryScheme" value-ref="content_assist.category_scheme"/>
+        <tt:attribute name="objectsearch:categoryScheme" value-ref="content_assist.category_scheme"/>
       </tt:cond>
 
       <tt:cond check="not-initial(content_assist.proposal_image_source)">
-        <tt:attribute name="saat:proposalImageSource" value-ref="content_assist.proposal_image_source"/>
+        <tt:attribute name="objectsearch:proposalImageSource" value-ref="content_assist.proposal_image_source"/>
       </tt:cond>
 
       <tt:cond check="not-initial(content_assist.proposal_image_registry)">
-        <tt:attribute name="saat:proposalImageRegistryId" value-ref="content_assist.proposal_image_registry"/>
+        <tt:attribute name="objectsearch:proposalImageRegistryId" value-ref="content_assist.proposal_image_registry"/>
       </tt:cond>
 
       <!-- Serialize object types for RIS Quick Search Filter -->
       <tt:cond check="exist(content_assist.adt_object_types)">
         <tt:loop ref="content_assist.adt_object_types">
-          <saat:objectType>
+          <objectsearch:objectType>
             <tt:value ref="$ref"/>
-          </saat:objectType>
+          </objectsearch:objectType>
         </tt:loop>
       </tt:cond>
 
       <!-- Serialize fixed proposal values -->
       <tt:cond check="not-initial(content_assist.proposal_values)">
         <tt:loop ref="content_assist.proposal_values">
-          <saat:proposal tt:extensible="deep">
-            <tt:attribute name="saat:name" value-ref="$ref.name"/>
+          <objectsearch:proposal tt:extensible="deep">
+            <tt:attribute name="objectsearch:name" value-ref="$ref.name"/>
             <tt:cond check="not-initial($ref.description)">
-              <tt:attribute name="saat:description" value-ref="$ref.description"/>
+              <tt:attribute name="objectsearch:description" value-ref="$ref.description"/>
             </tt:cond>
-          </saat:proposal>
+          </objectsearch:proposal>
         </tt:loop>
       </tt:cond>
 
@@ -175,7 +181,7 @@
           <tt:with-root name="images" ref="content_assist.proposal_images"/>
         </tt:apply>
       </tt:cond>
-    </saat:contentAssist>
+    </objectsearch:contentAssist>
   </tt:template>
 
   <tt:template name="proposalImages">
@@ -184,11 +190,11 @@
     </tt:context>
 
     <tt:loop ref="images">
-      <saat:proposalImage tt:extensible="deep">
+      <objectsearch:proposalImage tt:extensible="deep">
         <tt:apply name="imageInfoAttributes">
           <tt:with-root name="image_info" ref="$ref"/>
         </tt:apply>
-      </saat:proposalImage>
+      </objectsearch:proposalImage>
     </tt:loop>
   </tt:template>
 
@@ -198,16 +204,44 @@
     </tt:context>
 
     <tt:cond check="not-initial(image_info.img_key)">
-      <tt:attribute name="saat:imageId" value-ref="image_info.img_key"/>
+      <tt:attribute name="objectsearch:imageId" value-ref="image_info.img_key"/>
     </tt:cond>
 
     <tt:cond check="not-initial(image_info.img_encoded)">
-      <tt:attribute name="saat:imageEncoded" value-ref="image_info.img_encoded"/>
+      <tt:attribute name="objectsearch:imageEncoded" value-ref="image_info.img_encoded"/>
     </tt:cond>
 
     <tt:cond check="not-initial(image_info.img_registry)">
-      <tt:attribute name="saat:imageRegistryId" value-ref="image_info.img_registry"/>
+      <tt:attribute name="objectsearch:imageRegistryId" value-ref="image_info.img_registry"/>
     </tt:cond>
+  </tt:template>
+
+  <tt:template name="outputConfig">
+    <tt:context>
+      <tt:root name="out_config" type="cl:ty_result_output_config"/>
+    </tt:context>
+
+    <objectsearch:resultOutputConfig tt:extensible="deep">
+      <tt:cond check="not-initial(out_config.is_list_output_supported)">
+        <tt:attribute name="objectsearch:listOutputSupported" option="format(boolean)" value-ref="out_config.is_list_output_supported"/>
+      </tt:cond>
+      <tt:cond check="exist(out_config.types_for_list)">
+        <tt:loop ref="out_config.types_for_list">
+          <objectsearch:typeForList>
+            <tt:value ref="$ref"/>
+          </objectsearch:typeForList>
+        </tt:loop>
+      </tt:cond>
+
+      <tt:cond check="exist(out_config.groupings)">
+        <tt:loop ref="out_config.groupings">
+          <objectsearch:groupingLevel tt:extensible="deep">
+            <tt:value ref="$ref"/>
+          </objectsearch:groupingLevel>
+        </tt:loop>
+      </tt:cond>
+    </objectsearch:resultOutputConfig>
+
   </tt:template>
 
 </tt:transform>
