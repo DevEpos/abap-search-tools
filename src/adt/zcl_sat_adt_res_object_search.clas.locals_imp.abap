@@ -170,10 +170,9 @@ CLASS lcl_cds_result_converter IMPLEMENTATION.
                                 ( tadir_type = 'DDLS' )
                           ( sign = 'I' option = 'EQ' low = res-alt_object_name ) ).
 
-    SELECT
+    SELECT ddlname,
+           source
        FROM ddddlsrc
-       FIELDS ddlname,
-              source
        WHERE as4local = 'A'
          AND ddlname  IN @lt_ddlname
     INTO CORRESPONDING FIELDS OF TABLE @mt_ddls_source.
