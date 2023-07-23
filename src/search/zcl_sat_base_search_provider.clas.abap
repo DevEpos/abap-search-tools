@@ -426,7 +426,10 @@ CLASS zcl_sat_base_search_provider IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD add_search_terms_to_search.
-    CHECK it_search_terms IS NOT INITIAL.
+    DATA(lt_search_terms) = VALUE #( mo_search_query->mt_search_term[ target = iv_target ]-values OPTIONAL ).
+    IF lt_search_terms IS INITIAL.
+      RETURN.
+    ENDIF.
 
     DEFINE _add_filter.
       add_filter( VALUE #( sqlfieldname = &1
@@ -445,13 +448,13 @@ CLASS zcl_sat_base_search_provider IMPLEMENTATION.
 
     " .. If at least one search term with 'E'(Excluding) sign exists all search terms are connected
     " .... via AND in the SQL Clause
-    IF line_exists( it_search_terms[ sign = zif_sat_c_options=>excluding ] ).
+    IF line_exists( lt_search_terms[ sign = zif_sat_c_options=>excluding ] ).
       DATA(lf_use_and_between_terms) = abap_true.
     ENDIF.
 
     new_and_cond_list( ).
 
-    LOOP AT it_search_terms ASSIGNING FIELD-SYMBOL(<ls_term>).
+    LOOP AT lt_search_terms ASSIGNING FIELD-SYMBOL(<ls_term>).
       DATA(lv_tabix) = sy-tabix.
       DATA(lf_and) = xsdbool( <ls_term>-sign = zif_sat_c_options=>excluding ).
 

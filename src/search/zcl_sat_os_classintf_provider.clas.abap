@@ -148,7 +148,7 @@ CLASS zcl_sat_os_classintf_provider IMPLEMENTATION.
       RETURN.
     ENDIF.
 
-    " .. Create grouping clause
+    " Create grouping clause
     add_group_by_clause( |{ c_clif_alias }~{ c_fields-classintf }| ).
     add_group_by_clause( |{ c_clif_alias }~{ c_fields-author }| ).
     add_group_by_clause( |{ c_clif_alias }~{ c_fields-package }| ).
@@ -280,48 +280,6 @@ CLASS zcl_sat_os_classintf_provider IMPLEMENTATION.
                              it_values    = <ls_option>-value_range ).
       ENDCASE.
     ENDLOOP.
-
-    new_and_cond_list( ).
-  ENDMETHOD.
-
-  METHOD determine_grouping.
-    CHECK ms_search_engine_params-use_and_cond_for_options = abap_true.
-
-    " Excluding would break the relational division logic and would lead to unreliable results
-    IF NOT (    mv_flag_filter_count   > 1
-             OR mv_attr_filter_count   > 1
-             OR mv_meth_filter_count   > 1
-             OR mv_friend_filter_count > 1
-             OR mv_intf_filter_count   > 1 ).
-      RETURN.
-    ENDIF.
-
-    " Create grouping clause
-    add_group_by_clause( |{ c_alias_names-base }~{ c_fields-classintf }| ).
-    add_group_by_clause( |{ c_alias_names-base }~{ c_fields-author }| ).
-    add_group_by_clause( |{ c_alias_names-base }~{ c_fields-package }| ).
-    add_group_by_clause( |{ c_alias_names-base }~{ c_fields-tadir_type }| ).
-    add_group_by_clause( |{ c_alias_names-base }~{ c_fields-created_on }| ).
-    add_group_by_clause( |{ c_alias_names-base }~{ c_fields-changed_by }| ).
-    add_group_by_clause( |{ c_alias_names-base }~{ c_fields-changed_on }| ).
-
-    IF mv_flag_filter_count > 1.
-      add_having_clause( iv_field = |{ c_alias_names-flags }~{ c_fields-flag }| iv_counter_compare = mv_flag_filter_count ).
-    ENDIF.
-    IF mv_attr_filter_count > 1.
-      add_having_clause( iv_field = |{ c_alias_names-attribute }~{ c_fields-attribute }| iv_counter_compare = mv_attr_filter_count ).
-    ENDIF.
-    IF mv_meth_filter_count > 1.
-      add_having_clause( iv_field           = |{ c_alias_names-method }~{ c_fields-method }|
-                         iv_counter_compare = mv_meth_filter_count ).
-    ENDIF.
-    IF mv_intf_filter_count > 1.
-      add_having_clause( iv_field           = |{ c_alias_names-interface }~{ c_fields-using_interface }|
-                         iv_counter_compare = mv_intf_filter_count ).
-    ENDIF.
-    IF mv_friend_filter_count > 1.
-      add_having_clause( iv_field = |{ c_alias_names-friend }~{ c_fields-friend }| iv_counter_compare = mv_friend_filter_count ).
-    ENDIF.
   ENDMETHOD.
 
   METHOD do_after_search.
