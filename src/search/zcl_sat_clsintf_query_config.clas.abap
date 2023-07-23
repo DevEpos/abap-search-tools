@@ -47,10 +47,6 @@ CLASS zcl_sat_clsintf_query_config DEFINITION
       RETURNING
         VALUE(result) TYPE zif_sat_ty_object_search=>ty_query_filter.
 
-    METHODS get_abap_language_filter
-      RETURNING
-        VALUE(result) TYPE zif_sat_ty_object_search=>ty_query_filter.
-
     METHODS get_method_filter
       RETURNING
         VALUE(result) TYPE zif_sat_ty_object_search=>ty_query_filter.
@@ -87,7 +83,6 @@ CLASS zcl_sat_clsintf_query_config IMPLEMENTATION.
                                                                                 ( get_clif_type_filt_conf( ) )
                                                                                 ( get_flag_filter( ) )
                                                                                 ( get_category_filter( ) )
-                                                                                ( get_abap_language_filter( ) )
                                                                                 ( get_method_filter( ) )
                                                                                 ( get_interface_filter( ) )
                                                                                 ( get_attribute_filter( ) )
@@ -164,30 +159,6 @@ CLASS zcl_sat_clsintf_query_config IMPLEMENTATION.
             category_term   = zif_sat_c_object_search=>c_content_assist-terms-class_category
             proposal_images = VALUE #( ( img_key     = c_general_image_keys-type_group
                                          img_encoded = get_general_image( c_general_image_keys-type_group ) ) ) ) ).
-  ENDMETHOD.
-
-  METHOD get_abap_language_filter.
-    result = VALUE #(
-        name             = c_class_intf_search_option-abap_lang
-        long_description = |Use '{ c_class_intf_search_option-abap_lang }' to show only Classes/Interfaces that use a certain ABAP Language version.\n\n| &&
-                           |Example:\n   { c_class_intf_search_option-abap_lang } : unicode|
-        img_info         = VALUE #(
-            img_key     = c_image_keys-abap_lang
-            img_encoded = `R0lGODlhEAAQAPf/ABcyXXt0T311ToF3TYZ5S4p8S2d9qY9+SWqAq5WBR22DrZqDRZqERZ+GQ6CGRHOJsnSKs6SIQqWJQqqLQHqPt66MP66NP7GPPrSQPYCVu4GWu4ecwIqewpGetY2ixJGlx9SyaNSy` &&
-                          `adWyaa+3ydq9fODIj8jO3d7o997o+ODq+OLs9+Xt+efv+Orw+ezy+u/z+vL1+/P2+/T2+/T2/PT3+/X3/Pb4+/b4/Pf5/Pj5+/j5/Pj6/Pn6/P///////////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA` &&
-                          `AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA` &&
-                          `AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA` &&
-                          `AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA` &&
-                          `AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA` &&
-                          `AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAEAAD8ALAAAAAAQABAA` &&
-                          `AAirAH/8wECwYEGBCAVi4MGwIY8QGBIKvKBDB44cOXbgICHigkQLNz5wyAABgY0SJEBUSDghBo2XM2jIqPFyQsIIMD542KCBwgMFBmBISNjghdGjSB0kZOCiqdOnCxImaNEBgIkWLUYA6NAiQcIDLExY` &&
-                          `ZcHCKgAWBxIWWCHWxIoVZlcUSEhARVsVKsyqIJBwQIq2AFJU7ZBiQEIBJxIrVoxCQMIAkCNLhiyxsuWAADs=` )
-        content_assist   = VALUE #(
-            assist_type           = zif_sat_c_object_search=>c_filter_content_assist_type-named_item
-            caching               = abap_true
-            category_scheme       = zif_sat_c_object_search=>c_content_assist-category_scheme
-            category_term         = zif_sat_c_object_search=>c_content_assist-terms-abap_language
-            proposal_image_source = zif_sat_c_object_search=>c_proposal_image_source-same_as_filter ) ).
   ENDMETHOD.
 
   METHOD get_method_filter.

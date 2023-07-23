@@ -40,7 +40,7 @@ CLASS zcl_sat_adt_oo_trans_util IMPLEMENTATION.
     ENDIF.
 
     SELECT SINGLE viewname
-      FROM zsat_i_cdsentity
+      FROM zsat_p_cdsviewbase
       WHERE ddlname = @lv_entity_id
          OR entityid = @lv_entity_id
       INTO @DATA(lv_ddic_view).

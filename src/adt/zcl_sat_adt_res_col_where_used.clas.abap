@@ -93,29 +93,20 @@ CLASS zcl_sat_adt_res_col_where_used IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD internal_get.
-    DATA lt_type_parts  TYPE string_table.
-    DATA lv_source_type TYPE ddddlsrctype.
+    DATA lt_type_parts TYPE string_table.
 
     DATA(lv_base_table) = mv_object_name.
 
     SELECT SINGLE type
       FROM zsat_i_databaseentitywotext
       WHERE entity = @lv_base_table
-      INTO @DATA(lv_entity_type).
+    INTO @DATA(lv_entity_type).
 
     IF lv_entity_type = zif_sat_c_entity_type=>cds_view.
-      SELECT SINGLE viewname, sourcetype
+      SELECT SINGLE viewname
         FROM zsat_p_cdsviewbase
         WHERE entityid = @lv_base_table
-        INTO (@lv_base_table,@lv_source_type).
-      IF    lv_source_type  = zif_sat_c_cds_view_type=>table_function
-         OR lv_base_table  IS INITIAL.
-        lv_base_table = mv_object_name.
-      ENDIF.
-    ENDIF.
-
-    IF lv_base_table IS INITIAL.
-      RETURN.
+      INTO @lv_base_table.
     ENDIF.
 
     fill_where_used_in_cds( iv_base_table  = lv_base_table
