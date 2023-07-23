@@ -41,7 +41,7 @@ CLASS ltcl_abap_unit IMPLEMENTATION.
                                     filters = VALUE #( ( name = 'field' values = VALUE #( ( `ddlname` ) ) ) ) ) ) ).
 
     DATA(ls_request) = VALUE sadt_rest_request(
-                                 request_line  = VALUE #( method = 'POST' uri = '/devepos/adt/saat/v2/objectsearch' )
+                                 request_line  = VALUE #( method = 'POST' uri = '/devepos/adt/saat/objectsearch' )
                                  header_fields = VALUE #( ( name = 'Content-Type' value = 'application/xml' ) )
                                  message_body  = convert_request_body( ls_input ) ).
 
@@ -85,6 +85,8 @@ CLASS ltcl_abap_unit IMPLEMENTATION.
           SOURCE XML lv_xml
          RESULT object_search_result = result.
       CATCH cx_root INTO DATA(lx_error). " TODO: variable is assigned but never used (ABAP cleaner)
+        IF 1 = 2.
+        ENDIF.
     ENDTRY.
   ENDMETHOD.
 ENDCLASS.
