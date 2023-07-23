@@ -8,8 +8,7 @@ CLASS lcl_query DEFINITION.
 
     METHODS constructor
       IMPORTING
-        it_search_term    TYPE ty_search_term                               OPTIONAL
-        it_sub_search_term TYPE ty_search_term                               OPTIONAL
+        it_search_term    TYPE zif_sat_ty_object_search=>ty_t_search_term   OPTIONAL
         iv_type           TYPE zif_sat_ty_object_search=>ty_search_type     OPTIONAL
         iv_max_rows       TYPE sy-tabix                                     DEFAULT 50
         it_search_options TYPE zif_sat_ty_object_search=>ty_t_search_option OPTIONAL.
@@ -22,7 +21,6 @@ CLASS lcl_query IMPLEMENTATION.
     zif_sat_object_search_query~mv_type = iv_type.
     zif_sat_object_search_query~mv_max_rows = iv_max_rows.
     zif_sat_object_search_query~mt_search_options = it_search_options.
-    zif_sat_object_search_query~mt_sub_search_term = it_sub_search_term.
   ENDMETHOD.
 
   METHOD zif_sat_object_search_query~get_option.
@@ -59,9 +57,12 @@ CLASS ltcl_abap_unit IMPLEMENTATION.
     mr_cut = NEW #( ).
 
     DATA(lo_query) = NEW lcl_query(
-        it_search_term     = VALUE #( ( sign = 'I' option = 'EQ' low = `ZCL_SAT_OS_CLASSINTF_PROVIDER` ) )
-        it_sub_search_term = VALUE #( ( sign = 'I' option = 'CP' low = 'PR*' ) )
-        iv_type            = zif_sat_c_object_search=>c_search_type-method ).
+        it_search_term = VALUE #(
+            ( target = zif_sat_c_object_search=>c_search_fields-object_name_input_key
+              values = VALUE #( ( sign = 'I' option = 'EQ' low = `ZCL_SAT_OS_CLASSINTF_PROVIDER` ) ) )
+            ( target = zif_sat_c_object_search=>c_search_fields-method_name_input_key
+              values = VALUE #( ( sign = 'I' option = 'CP' low = 'PR*' ) ) ) )
+        iv_type        = zif_sat_c_object_search=>c_search_type-method ).
     TRY.
         mr_cut->zif_sat_object_search_provider~search( EXPORTING io_query  = lo_query
                                                        IMPORTING et_result = DATA(lt_result) ).

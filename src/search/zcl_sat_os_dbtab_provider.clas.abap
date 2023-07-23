@@ -116,8 +116,8 @@ CLASS zcl_sat_os_dbtab_provider IMPLEMENTATION.
       ENDCASE.
     ENDLOOP.
 
-    add_search_terms_to_search( it_search_terms = mo_search_query->mt_search_term
-                                it_field_names  = VALUE #( ( |{ c_base_table }~{ mv_entity_fieldname }| ) ) ).
+    add_search_terms_to_search( iv_target      = zif_sat_c_object_search=>c_search_fields-object_name_input_key
+                                it_field_names = VALUE #( ( |{ c_base_table }~{ mv_entity_fieldname }| ) ) ).
 
     add_select_field( iv_fieldname = mv_entity_fieldname iv_fieldname_alias = c_result_fields-object_name iv_entity = c_base_table ).
     add_select_field( iv_fieldname       = mv_raw_entity_fieldname
@@ -185,7 +185,6 @@ CLASS zcl_sat_os_dbtab_provider IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD get_base_table_and_field.
-    DATA lf_set_default_table TYPE abap_bool.
     DATA lf_set_default_table TYPE abap_bool.
 
     IF mo_search_query->has_options( ).

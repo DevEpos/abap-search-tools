@@ -23,7 +23,7 @@ CLASS zcl_sat_adt_res_aox_launcher IMPLEMENTATION.
 
     " Retrieve DDIC SQL View for data definition
     SELECT SINGLE viewname
-      FROM zsat_i_cdsentity
+      FROM zsat_p_cdsviewbase
       WHERE ddlname = @lv_entity_id
          OR entityid = @lv_entity_id
       INTO @DATA(lv_ddlview).

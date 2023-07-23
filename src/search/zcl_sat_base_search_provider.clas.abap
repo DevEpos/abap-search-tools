@@ -85,7 +85,8 @@ CLASS zcl_sat_base_search_provider DEFINITION
     METHODS search
       RAISING
         zcx_sat_object_search.
-    "! <p class="shorttext synchronized" lang="en">Get SQL name for CDS view</p>
+
+    "! <p class="shorttext synchronized">Get SQL name for CDS view</p>
     "! Depending on the current release the internal ddic sql views are taken
     "! instead of the cds view name
     METHODS get_cds_sql_name
@@ -203,8 +204,8 @@ CLASS zcl_sat_base_search_provider DEFINITION
     "! <p class="shorttext synchronized">Add search terms of query to search filter</p>
     METHODS add_search_terms_to_search
       IMPORTING
-        it_search_terms TYPE ty_search_term
-        it_field_names  TYPE string_table.
+        iv_target      TYPE string OPTIONAL
+        it_field_names TYPE string_table.
 
     "! <p class="shorttext synchronized">Performs task after the Search</p>
     METHODS do_after_search
@@ -244,10 +245,7 @@ CLASS zcl_sat_base_search_provider DEFINITION
 ENDCLASS.
 
 
-
-CLASS ZCL_SAT_BASE_SEARCH_PROVIDER IMPLEMENTATION.
-
-
+CLASS zcl_sat_base_search_provider IMPLEMENTATION.
   METHOD add_api_option_filter.
     CONSTANTS c_api_alias TYPE string VALUE 'api' ##NO_TEXT.
 
@@ -305,7 +303,6 @@ CLASS ZCL_SAT_BASE_SEARCH_PROVIDER IMPLEMENTATION.
     ENDIF.
   ENDMETHOD.
 
-
   METHOD add_filter.
     mt_criteria = VALUE #( BASE mt_criteria
                            ( is_filter ) ).
@@ -314,7 +311,6 @@ CLASS ZCL_SAT_BASE_SEARCH_PROVIDER IMPLEMENTATION.
       mf_excluding_found = abap_true.
     ENDIF.
   ENDMETHOD.
-
 
   METHOD add_group_by_clause.
     IF mt_group_by IS NOT INITIAL.
@@ -325,14 +321,12 @@ CLASS ZCL_SAT_BASE_SEARCH_PROVIDER IMPLEMENTATION.
     mt_group_by = VALUE #( BASE mt_group_by ( iv_field ) ).
   ENDMETHOD.
 
-
   METHOD add_having_clause.
     DATA(lv_and_operator) = COND #( WHEN mt_having IS NOT INITIAL THEN |AND | ELSE |    | ).
 
     mt_having = VALUE #( BASE mt_having
                          ( |{ lv_and_operator }COUNT( DISTINCT { iv_field } ) >= { iv_counter_compare }| ) ).
   ENDMETHOD.
-
 
   METHOD add_join_table.
     ms_join_def-tables = VALUE #(
@@ -343,7 +337,6 @@ CLASS ZCL_SAT_BASE_SEARCH_PROVIDER IMPLEMENTATION.
           conditions      = it_conditions
           parameters      = it_parameters ) ).
   ENDMETHOD.
-
 
   METHOD add_option_filter.
     mt_criteria = VALUE #( BASE mt_criteria
@@ -363,13 +356,11 @@ CLASS ZCL_SAT_BASE_SEARCH_PROVIDER IMPLEMENTATION.
     ENDIF.
   ENDMETHOD.
 
-
   METHOD add_order_by.
     mt_order_by = VALUE #(
         BASE mt_order_by
         ( |{ iv_entity }~{ iv_fieldname } { COND #( WHEN if_descending = abap_true THEN 'DESCENDING' ELSE 'ASCENDING' ) }| ) ).
   ENDMETHOD.
-
 
   METHOD add_search_terms_to_search.
     DATA(lt_search_terms) = VALUE #( mo_search_query->mt_search_term[ target = iv_target ]-values OPTIONAL ).
@@ -419,14 +410,12 @@ CLASS ZCL_SAT_BASE_SEARCH_PROVIDER IMPLEMENTATION.
     new_and_cond_list( ).
   ENDMETHOD.
 
-
   METHOD add_select_field.
     mt_select = VALUE #( BASE mt_select
                          ( COND #( WHEN iv_entity IS NOT INITIAL THEN |{ iv_entity }~| ) &&
                            |{ iv_fieldname }| &&
                            COND #( WHEN iv_fieldname_alias IS NOT INITIAL THEN | AS { iv_fieldname_alias }| ) ) ).
   ENDMETHOD.
-
 
   METHOD add_select_part.
     FIELD-SYMBOLS <lv_part> TYPE any.
@@ -439,7 +428,6 @@ CLASS ZCL_SAT_BASE_SEARCH_PROVIDER IMPLEMENTATION.
     ENDLOOP.
   ENDMETHOD.
 
-
   METHOD add_subquery_filter.
     mt_criteria = VALUE #( BASE mt_criteria
                            ( sqlfieldname = iv_fieldname
@@ -448,16 +436,13 @@ CLASS ZCL_SAT_BASE_SEARCH_PROVIDER IMPLEMENTATION.
                              subquery     = iv_subquery ) ).
   ENDMETHOD.
 
-
   METHOD constructor.
     mv_description_filter_field = COND #( WHEN sy-saprl >= 751 THEN 'descriptionupper' ELSE 'description' ).
   ENDMETHOD.
 
-
   METHOD create_from_clause.
     mt_from = zcl_sat_join_helper=>build_from_clause_for_join_def( is_join_def = ms_join_def ).
   ENDMETHOD.
-
 
   METHOD create_not_in_filter.
     CHECK it_excluding IS NOT INITIAL.
@@ -476,7 +461,6 @@ CLASS ZCL_SAT_BASE_SEARCH_PROVIDER IMPLEMENTATION.
                          iv_option    = zif_sat_c_options=>not_in_subquery ).
   ENDMETHOD.
 
-
   METHOD create_not_in_filter_for_where.
     DATA(lv_excluding_subquery) = iv_subquery.
     LOOP AT it_where ASSIGNING FIELD-SYMBOL(<ls_where_excl>).
@@ -487,7 +471,6 @@ CLASS ZCL_SAT_BASE_SEARCH_PROVIDER IMPLEMENTATION.
                          iv_subquery  = lv_excluding_subquery
                          iv_option    = zif_sat_c_options=>not_in_subquery ).
   ENDMETHOD.
-
 
   METHOD create_order_by_clause.
     CHECK: mt_order_by IS NOT INITIAL,
@@ -500,7 +483,6 @@ CLASS ZCL_SAT_BASE_SEARCH_PROVIDER IMPLEMENTATION.
       ENDIF.
     ENDLOOP.
   ENDMETHOD.
-
 
   METHOD create_or_where_condition.
     DATA(lt_options) = VALUE zif_sat_ty_global=>ty_t_seltab_sql(
@@ -516,7 +498,6 @@ CLASS ZCL_SAT_BASE_SEARCH_PROVIDER IMPLEMENTATION.
     rt_where = zcl_sat_where_clause_builder=>create_or_condition( lt_or_seltab ).
   ENDMETHOD.
 
-
   METHOD create_select_clause.
     CHECK: mt_select IS NOT INITIAL,
            lines( mt_select ) > 1.
@@ -529,23 +510,19 @@ CLASS ZCL_SAT_BASE_SEARCH_PROVIDER IMPLEMENTATION.
     ENDLOOP.
   ENDMETHOD.
 
-
   METHOD create_where_clause.
     CHECK mt_criteria_and IS NOT INITIAL.
 
     mt_where = zcl_sat_where_clause_builder=>create_and_condition( it_and_seltab = mt_criteria_and ).
   ENDMETHOD.
 
-
   METHOD determine_grouping.
     RETURN.
   ENDMETHOD.
 
-
   METHOD do_after_search.
     RETURN.
   ENDMETHOD.
-
 
   METHOD fill_descriptions.
     DATA lt_texts TYPE STANDARD TABLE OF seu_objtxt.
@@ -557,8 +534,7 @@ CLASS ZCL_SAT_BASE_SEARCH_PROVIDER IMPLEMENTATION.
                               ( tadir_type IS NOT INITIAL AND object_name IS NOT INITIAL )
                         ( object = entity-tadir_type obj_name = entity-object_name ) ).
     CALL FUNCTION 'RS_SHORTTEXT_GET'
-      EXPORTING clear_buffer = abap_true
-      TABLES    obj_tab      = lt_texts.
+      TABLES obj_tab = lt_texts.
 
     LOOP AT mt_result ASSIGNING FIELD-SYMBOL(<ls_entity>).
       ASSIGN lt_texts[ obj_name = <ls_entity>-object_name ] TO FIELD-SYMBOL(<ls_text>).
@@ -568,11 +544,9 @@ CLASS ZCL_SAT_BASE_SEARCH_PROVIDER IMPLEMENTATION.
     ENDLOOP.
   ENDMETHOD.
 
-
   METHOD get_cds_sql_name.
     rv_ddic_view = zcl_sat_cds_view_factory=>read_ddl_ddic_view( iv_ddl_name = |{ iv_entity_id }| ).
   ENDMETHOD.
-
 
   METHOD get_select_string.
     add_select_part( EXPORTING iv_part_name = 'SELECT DISTINCT'
@@ -595,7 +569,6 @@ CLASS ZCL_SAT_BASE_SEARCH_PROVIDER IMPLEMENTATION.
                      CHANGING  cv_select    = rv_result ).
   ENDMETHOD.
 
-
   METHOD new_and_cond_list.
     IF mt_criteria_or IS NOT INITIAL.
       IF mt_criteria IS NOT INITIAL.
@@ -609,14 +582,12 @@ CLASS ZCL_SAT_BASE_SEARCH_PROVIDER IMPLEMENTATION.
     ENDIF.
   ENDMETHOD.
 
-
   METHOD new_or_cond_list.
     IF mt_criteria IS NOT INITIAL.
       mt_criteria_or = VALUE #( BASE mt_criteria_or ( values = mt_criteria ) ).
       CLEAR mt_criteria.
     ENDIF.
   ENDMETHOD.
-
 
   METHOD search.
     create_select_clause( ).
@@ -655,13 +626,11 @@ CLASS ZCL_SAT_BASE_SEARCH_PROVIDER IMPLEMENTATION.
     ENDTRY.
   ENDMETHOD.
 
-
   METHOD set_base_select_table.
     ms_join_def-primary_table       = iv_entity.
     ms_join_def-primary_table_alias = COND #( WHEN iv_alias IS NOT INITIAL THEN iv_alias ELSE iv_entity ).
     ms_join_def-parameters          = it_parameters.
   ENDMETHOD.
-
 
   METHOD split_including_excluding.
     et_excluding = VALUE #( FOR excluding IN it_values
@@ -671,7 +640,6 @@ CLASS ZCL_SAT_BASE_SEARCH_PROVIDER IMPLEMENTATION.
                             WHERE ( sign = zif_sat_c_options=>including AND ( sign2 = zif_sat_c_options=>including OR sign2 = space ) )
                             ( including ) ).
   ENDMETHOD.
-
 
   METHOD zif_sat_object_search_provider~search.
     mo_search_query = io_query.

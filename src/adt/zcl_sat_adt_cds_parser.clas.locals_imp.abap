@@ -232,20 +232,16 @@ CLASS lcl_ddl_view_stmnt_intrpt IMPLEMENTATION.
       WHEN cl_qlast_constants=>datasource_table.
         DATA(lo_table_datasource) = CAST cl_qlast_table_datasource( io_datasource ).
 
-        mo_node_helper->add_child(
-            io_parent_node = io_parent_node
-            iv_name        = lo_table_datasource->get_name( )
-            iv_entity_name = lo_table_datasource->get_name( )
-            iv_relation    = mo_node_helper->get_relation( io_parent_node     = io_parent_node
-                                                           iv_datasource_type = iv_parent_type )
-            iv_entity_type = SWITCH #( lo_table_datasource->get_tabletype( )
-                                       WHEN cl_qlast_constants=>tabtype_entity THEN
-                                         zif_sat_c_entity_type=>cds_view
-                                       WHEN cl_qlast_constants=>tabtype_transparent THEN
-                                         zif_sat_c_entity_type=>table
-                                       WHEN cl_qlast_constants=>tabtype_view THEN
-                                         zif_sat_c_entity_type=>view )
-            iv_alias       = lo_table_datasource->get_alias( upper_case = abap_false ) ).
+        mo_node_helper->add_child( io_parent_node = io_parent_node
+                                   iv_name        = lo_table_datasource->get_name( )
+                                   iv_entity_name = lo_table_datasource->get_name( )
+                                   iv_relation    = mo_node_helper->get_relation( io_parent_node     = io_parent_node
+                                                                                  iv_datasource_type = iv_parent_type )
+                                   iv_entity_type = SWITCH #( lo_table_datasource->get_tabletype( )
+                                                              WHEN 'B' THEN zif_sat_c_entity_type=>cds_view
+                                                              WHEN 'T' THEN zif_sat_c_entity_type=>table
+                                                              WHEN 'J' THEN zif_sat_c_entity_type=>view )
+                                   iv_alias       = lo_table_datasource->get_alias( upper_case = abap_false ) ).
 
       WHEN cl_qlast_constants=>datasource_inner OR
            cl_qlast_constants=>datasource_left OR
@@ -272,20 +268,18 @@ CLASS lcl_ddl_view_stmnt_intrpt IMPLEMENTATION.
     LOOP AT lo_associations->get_entries( ) INTO DATA(lo_association).
       DATA(lo_target) = lo_association->get_target( ).
 
-      DATA(lo_node) = mo_node_helper->add_child(
-                          io_parent_node = lo_associations_node
-                          iv_name        = lo_target->get_name( )
-                          iv_entity_name = lo_target->get_name( )
-                          iv_relation    = zcl_sat_adt_cds_parser=>c_sql_relation-association
-                          iv_entity_type = SWITCH #( lo_target->get_tabletype( )
-                                                     WHEN cl_qlast_constants=>tabtype_entity THEN
-                                                       zif_sat_c_entity_type=>cds_view
-                                                     WHEN cl_qlast_constants=>tabtype_transparent THEN
-                                                       zif_sat_c_entity_type=>table
-                                                     WHEN cl_qlast_constants=>tabtype_view THEN
-                                                       zif_sat_c_entity_type=>view ) ).
+      DATA(lo_node) = mo_node_helper->add_child( io_parent_node = lo_associations_node
+                                                 iv_name        = lo_target->get_name( )
+                                                 iv_entity_name = lo_target->get_name( )
+                                                 iv_relation    = zcl_sat_adt_cds_parser=>c_sql_relation-association
+                                                 iv_entity_type = SWITCH #( lo_target->get_tabletype( )
+                                                                            WHEN 'B' THEN
+                                                                              zif_sat_c_entity_type=>cds_view
+                                                                            WHEN 'T' THEN
+                                                                              zif_sat_c_entity_type=>table
+                                                                            WHEN 'J' THEN
+                                                                              zif_sat_c_entity_type=>view ) ).
       lo_node->name2 = lo_association->get_name( upper_case = abap_false ).
     ENDLOOP.
   ENDMETHOD.
-
 ENDCLASS.

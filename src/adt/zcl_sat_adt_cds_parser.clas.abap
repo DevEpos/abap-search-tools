@@ -90,7 +90,7 @@ CLASS zcl_sat_adt_cds_parser DEFINITION
     "! <p class="shorttext synchronized">Fill view descriptions</p>
     METHODS fill_view_info
       IMPORTING
-        io_node_helper TYPE REF TO lcl_node_helper .
+        io_node_helper TYPE REF TO lcl_node_helper.
 
 ENDCLASS.
 
@@ -115,9 +115,8 @@ CLASS zcl_sat_adt_cds_parser IMPLEMENTATION.
     IF sy-subrc <> 0.
       RETURN.
     ENDIF.
-    SELECT SINGLE
+    SELECT SINGLE *
       FROM ddddlsrc
-      FIELDS *
       WHERE ddlname = @lv_ddlname
       INTO @DATA(ls_cds).
 
@@ -126,20 +125,10 @@ CLASS zcl_sat_adt_cds_parser IMPLEMENTATION.
     ENDIF.
 
     DATA(lo_parser) = NEW cl_ddl_parser( ).
-    try.
-    data(lo_stmnt) = lo_parser->parse_ddl(
-      EXPORTING
-        source                  = ls_cds-source
-*        bitset                  = 0
-*        version                 = 0
-*        trace                   = ABAP_FALSE
-*      IMPORTING
-*        tracestr                =
-*        xmlstr                  =
-*        errors                  =
-    ).
-      CATCH cx_ddl_parser_exception.    "
-      ENDTRY.
+    TRY.
+        DATA(lo_stmnt) = lo_parser->parse_ddl( source = ls_cds-source ).
+      CATCH cx_ddl_parser_exception.
+    ENDTRY.
 
     DATA(lo_node_helper) = NEW lcl_node_helper( iv_name        = |{ lv_entity }|
                                                 iv_entity_name = |{ lv_entity }| ).
@@ -243,11 +232,11 @@ CLASS zcl_sat_adt_cds_parser IMPLEMENTATION.
       <ls_node>-node->entity_name     = <ls_entity_info>-entityid.
       <ls_node>-node->name            = <ls_entity_info>-entityid.
       <ls_node>-node->raw_entity_name = <ls_entity_info>-rawentityid.
-      <ls_node>-node->ddls_name = <ls_entity_info>-ddlname.
-      <ls_node>-node->source_type = <ls_entity_info>-source_type.
-      <ls_node>-node->description = <ls_entity_info>-description.
-      <ls_node>-node->owner = <ls_entity_info>-createdby.
-      <ls_node>-node->package = <ls_entity_info>-developmentpackage.
+      <ls_node>-node->ddls_name       = <ls_entity_info>-ddlname.
+      <ls_node>-node->source_type     = <ls_entity_info>-source_type.
+      <ls_node>-node->description     = <ls_entity_info>-description.
+      <ls_node>-node->owner           = <ls_entity_info>-createdby.
+      <ls_node>-node->package         = <ls_entity_info>-developmentpackage.
     ENDLOOP.
   ENDMETHOD.
 
@@ -307,13 +296,13 @@ CLASS zcl_sat_adt_cds_parser IMPLEMENTATION.
       <ls_node>-node->entity_name     = <ls_entity_info>-entityid.
       <ls_node>-node->name            = <ls_entity_info>-entityid.
       <ls_node>-node->raw_entity_name = <ls_entity_info>-rawentityid.
-      <ls_node>-node->entity_type = zif_sat_c_entity_type=>cds_view.
-      <ls_node>-node->ddls_name = <ls_entity_info>-ddlname.
-      <ls_node>-node->source_type = <ls_entity_info>-source_type.
-      <ls_node>-node->description = <ls_entity_info>-description.
-      <ls_node>-node->owner = <ls_entity_info>-createdby.
-      <ls_node>-node->package = <ls_entity_info>-developmentpackage.
-*.... move the node to the CDS view tables
+      <ls_node>-node->entity_type     = zif_sat_c_entity_type=>cds_view.
+      <ls_node>-node->ddls_name       = <ls_entity_info>-ddlname.
+      <ls_node>-node->source_type     = <ls_entity_info>-source_type.
+      <ls_node>-node->description     = <ls_entity_info>-description.
+      <ls_node>-node->owner           = <ls_entity_info>-createdby.
+      <ls_node>-node->package         = <ls_entity_info>-developmentpackage.
+      " .... move the node to the CDS view tables
       io_node_helper->mt_cds_views = VALUE #( BASE io_node_helper->mt_cds_views
                                               ( name = <ls_entity_info>-entityid node = <ls_node>-node ) ).
       DELETE io_node_helper->mt_views.
@@ -348,5 +337,4 @@ CLASS zcl_sat_adt_cds_parser IMPLEMENTATION.
       <ls_node>-node->package         = <ls_entity_info>-developmentpackage.
     ENDLOOP.
   ENDMETHOD.
-
 ENDCLASS.
