@@ -121,7 +121,7 @@ CLASS zcl_sat_os_cds_provider IMPLEMENTATION.
 
     add_select_field( iv_fieldname = c_fields-entityid iv_fieldname_alias = c_result_fields-object_name iv_entity = c_base_alias ).
     add_select_field( iv_fieldname       = c_fields-source_type
-                      iv_fieldname_alias = c_result_fields-custom_field_short1
+                      iv_fieldname_alias = c_result_fields-cds_source_type
                       iv_entity          = c_base_alias ).
     add_select_field( iv_fieldname = c_fields-ddlname iv_fieldname_alias = c_result_fields-alt_object_name iv_entity = c_base_alias ).
     add_select_field( iv_fieldname = c_fields-created_by iv_fieldname_alias = c_result_fields-created_by iv_entity = c_base_alias ).
