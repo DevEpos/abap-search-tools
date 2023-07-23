@@ -19,15 +19,6 @@ CLASS zcl_sat_adt_res_object_search DEFINITION
       RETURNING
         VALUE(result)           TYPE REF TO zif_sat_adt_objs_res_converter.
 
-    "! <p class="shorttext synchronized">Creates result converter for object search result</p>
-    CLASS-METHODS create_result_converter
-      IMPORTING
-        iv_search_type          TYPE zif_sat_ty_object_search=>ty_search_type
-        if_no_package_hierarchy TYPE abap_bool OPTIONAL
-        it_query_result         TYPE zif_sat_ty_object_search=>ty_t_search_result
-      RETURNING
-        VALUE(result)           TYPE REF TO zif_sat_adt_objs_res_converter.
-
   PROTECTED SECTION.
     TYPES:
       BEGIN OF ty_s_package,
