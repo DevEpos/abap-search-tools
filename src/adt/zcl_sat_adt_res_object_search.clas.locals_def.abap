@@ -112,7 +112,7 @@ INHERITING FROM lcl_result_converter.
       IMPORTING
         iv_clif_name   TYPE zsat_entity_id
         iv_type        TYPE wbobjtype
-        iv_method_name TYPE zif_sat_ty_object_search=>ty_custom_field_long
+        iv_method_name TYPE seocpdname
       RETURNING
         VALUE(result)  TYPE string.
 
