@@ -42,24 +42,24 @@ INTERFACE zif_sat_ty_adt_types
       sourcetype    TYPE char1,
       apistate      TYPE string,
       is_calculated TYPE abap_bool,
-    END OF ty_s_field_usage.
+    END OF ty_s_field_usage,
 
-  ty_t_field_usage type standard table of ty_s_field_usage with empty key,
+    ty_t_field_usage TYPE STANDARD TABLE OF ty_s_field_usage WITH EMPTY KEY,
 
-  begin of ty_s_query_input_filter,
-    name   type string,
-    values type string_table,
-  end of ty_s_query_input_filter,
+    BEGIN OF ty_s_query_input_filter,
+      name   TYPE string,
+      values TYPE string_table,
+    END OF ty_s_query_input_filter,
 
-  ty_t_query_input_filter type standard table of ty_s_query_input_filter with empty key,
+    ty_t_query_input_filter TYPE STANDARD TABLE OF ty_s_query_input_filter WITH EMPTY KEY,
 
-  begin of ty_s_query_input_field,
-    name    type string,
-    values  type string_table,
-    filters type ty_t_query_input_filter,
-  end of ty_s_query_input_field,
+    BEGIN OF ty_s_query_input_field,
+      name    TYPE string,
+      values  TYPE string_table,
+      filters TYPE ty_t_query_input_filter,
+    END OF ty_s_query_input_field,
 
-  ty_t_query_input_field type standard table of ty_s_query_input_field with empty key,
+    ty_t_query_input_field TYPE STANDARD TABLE OF ty_s_query_input_field WITH EMPTY KEY,
 
     BEGIN OF ty_s_query_input,
       type                     TYPE zif_sat_ty_object_search=>ty_search_type,
