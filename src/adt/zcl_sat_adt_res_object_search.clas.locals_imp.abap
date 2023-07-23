@@ -101,20 +101,19 @@ CLASS lcl_result_converter IMPLEMENTATION.
                                                                   iv_name       = is_result_entry-object_name
                                                                   iv_name2      = is_result_entry-alt_object_name ).
 
-    cs_result = VALUE #(
-        name        = is_result_entry-object_name
-        alt_name    = is_result_entry-raw_object_name
-        devclass    = is_result_entry-devclass
-        type        = ls_object_reference-type
-        uri         = ls_object_reference-uri
-        parent_uri  = COND #( WHEN mo_devclass_util IS BOUND
-                              THEN mo_devclass_util->get_package_uri( is_result_entry-devclass ) )
-        description = is_result_entry-description
-        owner       = is_result_entry-created_by
-        created_on  = is_result_entry-created_date
-        changed_by  = is_result_entry-changed_by
-        changed_on  = is_result_entry-changed_date
-        properties  = VALUE #( ( key = 'API_STATE' value = is_result_entry-api_state ) ) ).
+    cs_result = VALUE #( name        = is_result_entry-object_name
+                         alt_name    = is_result_entry-raw_object_name
+                         devclass    = is_result_entry-devclass
+                         type        = ls_object_reference-type
+                         uri         = ls_object_reference-uri
+                         parent_uri  = COND #( WHEN mo_devclass_util IS BOUND
+                                               THEN mo_devclass_util->get_package_uri( is_result_entry-devclass ) )
+                         description = is_result_entry-description
+                         owner       = is_result_entry-created_by
+                         created_on  = is_result_entry-created_date
+                         changed_by  = is_result_entry-changed_by
+                         changed_on  = is_result_entry-changed_date
+                         properties  = VALUE #( ( key = 'API_STATE' value = is_result_entry-api_state ) ) ).
   ENDMETHOD.
 
   METHOD before_conversion.
@@ -148,7 +147,7 @@ CLASS lcl_cds_result_converter IMPLEMENTATION.
                                  CHANGING  cs_result       = cs_result ).
 
     cs_result-properties = VALUE #( BASE cs_result-properties
-                                    ( key = 'SOURCE_TYPE' value = is_result_entry-custom_field_short1 ) ).
+                                    ( key = 'SOURCE_TYPE' value = is_result_entry-cds_source_type ) ).
     set_ddl_positional_uri( EXPORTING is_result_entity = is_result_entry
                             CHANGING  cs_result        = cs_result ).
   ENDMETHOD.
@@ -223,8 +222,6 @@ CLASS lcl_method_result_converter IMPLEMENTATION.
 
       " 2) create method entries
       LOOP AT GROUP <ls_query_result> ASSIGNING FIELD-SYMBOL(<ls_method>).
-        DATA(lv_method_name) = <ls_method>-custom_field_long1.
-
         DATA(ls_obj_type) = VALUE wbobjtype(
                                       objtype_tr = <ls_method>-tadir_type
                                       subtype_wb = COND #( WHEN <ls_method>-tadir_type = zif_sat_c_tadir_types=>class
@@ -232,7 +229,7 @@ CLASS lcl_method_result_converter IMPLEMENTATION.
                                                            ELSE c_sub_obj_type-intf_method ) ).
 
         IF <ls_method>-tadir_type = zif_sat_c_tadir_types=>class.
-          IF <ls_method>-custom_field_short2 = abap_true. " abstract
+          IF <ls_method>-method_is_abstract = abap_true. " abstract
             ls_obj_type-subtype_wb = c_sub_obj_type-class_method_def.
           ENDIF.
         ENDIF.
@@ -242,7 +239,7 @@ CLASS lcl_method_result_converter IMPLEMENTATION.
         "       -> Class methods still need to be checked
         DATA(lv_uri) = CONV string( map_method_to_uri( iv_clif_name   = <ls_query_result>-object_name
                                                        iv_type        = ls_obj_type
-                                                       iv_method_name = lv_method_name ) ).
+                                                       iv_method_name = <ls_method>-method_name ) ).
 
         IF lv_uri IS NOT INITIAL.
           " reset the sub type to OM if necessary, so ADT produces the correct icon
@@ -250,9 +247,9 @@ CLASS lcl_method_result_converter IMPLEMENTATION.
             ls_obj_type-subtype_wb = c_sub_obj_type-class_method_impl.
           ENDIF.
           cs_result-objects = VALUE #( BASE cs_result-objects
-                                       ( name        = lv_method_name
+                                       ( name        = <ls_method>-method_name
                                          type        = ls_obj_type-objtype_tr && '/' && ls_obj_type-subtype_wb
-                                         description = <ls_method>-custom_field_long2
+                                         description = <ls_method>-method_descr
                                          parent_uri  = ls_object_reference-uri
                                          uri         = lv_uri ) ).
           cs_result-count   = cs_result-count + 1.

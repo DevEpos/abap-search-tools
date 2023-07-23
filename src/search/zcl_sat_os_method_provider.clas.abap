@@ -158,13 +158,13 @@ CLASS zcl_sat_os_method_provider IMPLEMENTATION.
                       iv_fieldname_alias = c_result_fields-raw_object_name
                       iv_entity          = c_alias_names-method ).
     add_select_field( iv_fieldname       = c_method_fields-methodname
-                      iv_fieldname_alias = 'custom_field_long1'
+                      iv_fieldname_alias = c_result_fields-method_name
                       iv_entity          = c_alias_names-method ).
     add_select_field( iv_fieldname       = c_method_fields-category
-                      iv_fieldname_alias = c_result_fields-custom_field_short1
+                      iv_fieldname_alias = c_result_fields-method_status
                       iv_entity          = c_alias_names-method ).
     add_select_field( iv_fieldname       = c_method_fields-isabstract
-                      iv_fieldname_alias = c_result_fields-custom_field_short2
+                      iv_fieldname_alias = c_result_fields-method_is_abstract
                       iv_entity          = c_alias_names-method ).
     add_select_field( iv_fieldname       = c_method_fields-createdby
                       iv_fieldname_alias = c_result_fields-created_by
@@ -178,7 +178,7 @@ CLASS zcl_sat_os_method_provider IMPLEMENTATION.
     add_select_field( iv_fieldname       = c_text_fields-description
                       " HINT: Method description is written not to 'description' field as default logic
                       "       fills the class/interface description into this field after the sql query has been executed
-                      iv_fieldname_alias = c_result_fields-custom_field_long2
+                      iv_fieldname_alias = c_result_fields-method_descr
                       iv_entity          = c_alias_names-method_text ).
     add_select_field( iv_fieldname       = c_method_fields-createdon
                       iv_fieldname_alias = c_result_fields-created_date
