@@ -244,70 +244,9 @@ CLASS zcl_sat_base_search_provider DEFINITION
 ENDCLASS.
 
 
-CLASS zcl_sat_base_search_provider IMPLEMENTATION.
-  METHOD constructor.
-    mv_description_filter_field = COND #( WHEN sy-saprl >= 751 THEN 'descriptionupper' ELSE 'description' ).
-  ENDMETHOD.
 
-  METHOD zif_sat_object_search_provider~search.
-    mo_search_query = io_query.
-    ms_search_engine_params = is_search_engine_params.
+CLASS ZCL_SAT_BASE_SEARCH_PROVIDER IMPLEMENTATION.
 
-    CLEAR: mt_result,
-           mt_criteria,
-           mt_criteria_or,
-           mt_criteria_and,
-           mt_where,
-           mt_select,
-           mt_order_by,
-           mt_group_by,
-           mt_having,
-           mt_from,
-           ms_join_def,
-           mf_excluding_found.
-    " .. Prepare projection fields, filters, order by, etc.
-    prepare_search( ).
-    search( ).
-    do_after_search( ).
-    et_result = mt_result.
-  ENDMETHOD.
-
-  METHOD search.
-    create_select_clause( ).
-    create_from_clause( ).
-    create_where_clause( ).
-    create_order_by_clause( ).
-    determine_grouping( ).
-
-    DATA(lv_max_rows) = COND #( WHEN ms_search_engine_params-get_all = abap_true
-                                THEN 0
-                                ELSE mo_search_query->mv_max_rows + 1 ).
-
-    TRY.
-        IF mt_group_by IS NOT INITIAL.
-          SELECT DISTINCT (mt_select)
-            FROM (mt_from)
-            WHERE (mt_where)
-            GROUP BY (mt_group_by)
-            HAVING (mt_having)
-            ORDER BY (mt_order_by)
-          INTO CORRESPONDING FIELDS OF TABLE @mt_result
-            UP TO @lv_max_rows ROWS.
-        ELSE.
-          SELECT DISTINCT (mt_select)
-            FROM (mt_from)
-            WHERE (mt_where)
-            ORDER BY (mt_order_by)
-          INTO CORRESPONDING FIELDS OF TABLE @mt_result
-            UP TO @lv_max_rows ROWS.
-        ENDIF.
-        " TODO: variable is assigned but never used (ABAP cleaner)
-        DATA(lv_sql) = get_select_string( ).
-      CATCH cx_sy_open_sql_error INTO DATA(lx_sql_error).
-        RAISE EXCEPTION TYPE zcx_sat_object_search
-          EXPORTING previous = lx_sql_error.
-    ENDTRY.
-  ENDMETHOD.
 
   METHOD add_api_option_filter.
     CONSTANTS c_api_alias TYPE string VALUE 'api' ##NO_TEXT.
@@ -366,6 +305,7 @@ CLASS zcl_sat_base_search_provider IMPLEMENTATION.
     ENDIF.
   ENDMETHOD.
 
+
   METHOD add_filter.
     mt_criteria = VALUE #( BASE mt_criteria
                            ( is_filter ) ).
@@ -374,6 +314,7 @@ CLASS zcl_sat_base_search_provider IMPLEMENTATION.
       mf_excluding_found = abap_true.
     ENDIF.
   ENDMETHOD.
+
 
   METHOD add_group_by_clause.
     IF mt_group_by IS NOT INITIAL.
@@ -384,12 +325,14 @@ CLASS zcl_sat_base_search_provider IMPLEMENTATION.
     mt_group_by = VALUE #( BASE mt_group_by ( iv_field ) ).
   ENDMETHOD.
 
+
   METHOD add_having_clause.
     DATA(lv_and_operator) = COND #( WHEN mt_having IS NOT INITIAL THEN |AND | ELSE |    | ).
 
     mt_having = VALUE #( BASE mt_having
                          ( |{ lv_and_operator }COUNT( DISTINCT { iv_field } ) >= { iv_counter_compare }| ) ).
   ENDMETHOD.
+
 
   METHOD add_join_table.
     ms_join_def-tables = VALUE #(
@@ -400,6 +343,7 @@ CLASS zcl_sat_base_search_provider IMPLEMENTATION.
           conditions      = it_conditions
           parameters      = it_parameters ) ).
   ENDMETHOD.
+
 
   METHOD add_option_filter.
     mt_criteria = VALUE #( BASE mt_criteria
@@ -419,11 +363,13 @@ CLASS zcl_sat_base_search_provider IMPLEMENTATION.
     ENDIF.
   ENDMETHOD.
 
+
   METHOD add_order_by.
     mt_order_by = VALUE #(
         BASE mt_order_by
         ( |{ iv_entity }~{ iv_fieldname } { COND #( WHEN if_descending = abap_true THEN 'DESCENDING' ELSE 'ASCENDING' ) }| ) ).
   ENDMETHOD.
+
 
   METHOD add_search_terms_to_search.
     DATA(lt_search_terms) = VALUE #( mo_search_query->mt_search_term[ target = iv_target ]-values OPTIONAL ).
@@ -473,12 +419,26 @@ CLASS zcl_sat_base_search_provider IMPLEMENTATION.
     new_and_cond_list( ).
   ENDMETHOD.
 
+
   METHOD add_select_field.
     mt_select = VALUE #( BASE mt_select
                          ( COND #( WHEN iv_entity IS NOT INITIAL THEN |{ iv_entity }~| ) &&
                            |{ iv_fieldname }| &&
                            COND #( WHEN iv_fieldname_alias IS NOT INITIAL THEN | AS { iv_fieldname_alias }| ) ) ).
   ENDMETHOD.
+
+
+  METHOD add_select_part.
+    FIELD-SYMBOLS <lv_part> TYPE any.
+
+    CHECK it_part IS NOT INITIAL.
+
+    cv_select = |{ cv_select }{ c_cr_lf }{ iv_part_name } |.
+    LOOP AT it_part ASSIGNING <lv_part>.
+      cv_select = |{ cv_select }{ c_cr_lf }    { <lv_part> }|.
+    ENDLOOP.
+  ENDMETHOD.
+
 
   METHOD add_subquery_filter.
     mt_criteria = VALUE #( BASE mt_criteria
@@ -488,9 +448,16 @@ CLASS zcl_sat_base_search_provider IMPLEMENTATION.
                              subquery     = iv_subquery ) ).
   ENDMETHOD.
 
+
+  METHOD constructor.
+    mv_description_filter_field = COND #( WHEN sy-saprl >= 751 THEN 'descriptionupper' ELSE 'description' ).
+  ENDMETHOD.
+
+
   METHOD create_from_clause.
     mt_from = zcl_sat_join_helper=>build_from_clause_for_join_def( is_join_def = ms_join_def ).
   ENDMETHOD.
+
 
   METHOD create_not_in_filter.
     CHECK it_excluding IS NOT INITIAL.
@@ -509,6 +476,7 @@ CLASS zcl_sat_base_search_provider IMPLEMENTATION.
                          iv_option    = zif_sat_c_options=>not_in_subquery ).
   ENDMETHOD.
 
+
   METHOD create_not_in_filter_for_where.
     DATA(lv_excluding_subquery) = iv_subquery.
     LOOP AT it_where ASSIGNING FIELD-SYMBOL(<ls_where_excl>).
@@ -519,6 +487,7 @@ CLASS zcl_sat_base_search_provider IMPLEMENTATION.
                          iv_subquery  = lv_excluding_subquery
                          iv_option    = zif_sat_c_options=>not_in_subquery ).
   ENDMETHOD.
+
 
   METHOD create_order_by_clause.
     CHECK: mt_order_by IS NOT INITIAL,
@@ -531,6 +500,7 @@ CLASS zcl_sat_base_search_provider IMPLEMENTATION.
       ENDIF.
     ENDLOOP.
   ENDMETHOD.
+
 
   METHOD create_or_where_condition.
     DATA(lt_options) = VALUE zif_sat_ty_global=>ty_t_seltab_sql(
@@ -546,6 +516,7 @@ CLASS zcl_sat_base_search_provider IMPLEMENTATION.
     rt_where = zcl_sat_where_clause_builder=>create_or_condition( lt_or_seltab ).
   ENDMETHOD.
 
+
   METHOD create_select_clause.
     CHECK: mt_select IS NOT INITIAL,
            lines( mt_select ) > 1.
@@ -558,19 +529,23 @@ CLASS zcl_sat_base_search_provider IMPLEMENTATION.
     ENDLOOP.
   ENDMETHOD.
 
+
   METHOD create_where_clause.
     CHECK mt_criteria_and IS NOT INITIAL.
 
     mt_where = zcl_sat_where_clause_builder=>create_and_condition( it_and_seltab = mt_criteria_and ).
   ENDMETHOD.
 
+
   METHOD determine_grouping.
     RETURN.
   ENDMETHOD.
 
+
   METHOD do_after_search.
     RETURN.
   ENDMETHOD.
+
 
   METHOD fill_descriptions.
     DATA lt_texts TYPE STANDARD TABLE OF seu_objtxt.
@@ -593,6 +568,12 @@ CLASS zcl_sat_base_search_provider IMPLEMENTATION.
     ENDLOOP.
   ENDMETHOD.
 
+
+  METHOD get_cds_sql_name.
+    rv_ddic_view = zcl_sat_cds_view_factory=>read_ddl_ddic_view( iv_ddl_name = |{ iv_entity_id }| ).
+  ENDMETHOD.
+
+
   METHOD get_select_string.
     add_select_part( EXPORTING iv_part_name = 'SELECT DISTINCT'
                                it_part      = mt_select
@@ -614,16 +595,6 @@ CLASS zcl_sat_base_search_provider IMPLEMENTATION.
                      CHANGING  cv_select    = rv_result ).
   ENDMETHOD.
 
-  METHOD add_select_part.
-    FIELD-SYMBOLS <lv_part> TYPE any.
-
-    CHECK it_part IS NOT INITIAL.
-
-    cv_select = |{ cv_select }{ c_cr_lf }{ iv_part_name } |.
-    LOOP AT it_part ASSIGNING <lv_part>.
-      cv_select = |{ cv_select }{ c_cr_lf }    { <lv_part> }|.
-    ENDLOOP.
-  ENDMETHOD.
 
   METHOD new_and_cond_list.
     IF mt_criteria_or IS NOT INITIAL.
@@ -638,6 +609,7 @@ CLASS zcl_sat_base_search_provider IMPLEMENTATION.
     ENDIF.
   ENDMETHOD.
 
+
   METHOD new_or_cond_list.
     IF mt_criteria IS NOT INITIAL.
       mt_criteria_or = VALUE #( BASE mt_criteria_or ( values = mt_criteria ) ).
@@ -645,11 +617,51 @@ CLASS zcl_sat_base_search_provider IMPLEMENTATION.
     ENDIF.
   ENDMETHOD.
 
+
+  METHOD search.
+    create_select_clause( ).
+    create_from_clause( ).
+    create_where_clause( ).
+    create_order_by_clause( ).
+    determine_grouping( ).
+
+    DATA(lv_max_rows) = COND #( WHEN ms_search_engine_params-get_all = abap_true
+                                THEN 0
+                                ELSE mo_search_query->mv_max_rows + 1 ).
+
+    TRY.
+        IF mt_group_by IS NOT INITIAL.
+          SELECT DISTINCT (mt_select)
+            FROM (mt_from)
+            WHERE (mt_where)
+            GROUP BY (mt_group_by)
+            HAVING (mt_having)
+            ORDER BY (mt_order_by)
+          INTO CORRESPONDING FIELDS OF TABLE @mt_result
+            UP TO @lv_max_rows ROWS.
+        ELSE.
+          SELECT DISTINCT (mt_select)
+            FROM (mt_from)
+            WHERE (mt_where)
+            ORDER BY (mt_order_by)
+          INTO CORRESPONDING FIELDS OF TABLE @mt_result
+            UP TO @lv_max_rows ROWS.
+        ENDIF.
+        " TODO: variable is assigned but never used (ABAP cleaner)
+        DATA(lv_sql) = get_select_string( ).
+      CATCH cx_sy_open_sql_error INTO DATA(lx_sql_error).
+        RAISE EXCEPTION TYPE zcx_sat_object_search
+          EXPORTING previous = lx_sql_error.
+    ENDTRY.
+  ENDMETHOD.
+
+
   METHOD set_base_select_table.
     ms_join_def-primary_table       = iv_entity.
     ms_join_def-primary_table_alias = COND #( WHEN iv_alias IS NOT INITIAL THEN iv_alias ELSE iv_entity ).
     ms_join_def-parameters          = it_parameters.
   ENDMETHOD.
+
 
   METHOD split_including_excluding.
     et_excluding = VALUE #( FOR excluding IN it_values
@@ -658,5 +670,29 @@ CLASS zcl_sat_base_search_provider IMPLEMENTATION.
     et_including = VALUE #( FOR including IN it_values
                             WHERE ( sign = zif_sat_c_options=>including AND ( sign2 = zif_sat_c_options=>including OR sign2 = space ) )
                             ( including ) ).
+  ENDMETHOD.
+
+
+  METHOD zif_sat_object_search_provider~search.
+    mo_search_query = io_query.
+    ms_search_engine_params = is_search_engine_params.
+
+    CLEAR: mt_result,
+           mt_criteria,
+           mt_criteria_or,
+           mt_criteria_and,
+           mt_where,
+           mt_select,
+           mt_order_by,
+           mt_group_by,
+           mt_having,
+           mt_from,
+           ms_join_def,
+           mf_excluding_found.
+    " .. Prepare projection fields, filters, order by, etc.
+    prepare_search( ).
+    search( ).
+    do_after_search( ).
+    et_result = mt_result.
   ENDMETHOD.
 ENDCLASS.

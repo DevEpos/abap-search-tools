@@ -80,6 +80,13 @@ INTERFACE zif_sat_ty_object_search
 
     ty_t_options TYPE RANGE OF string,
 
+    BEGIN OF ty_s_search_term,
+      target TYPE string,
+      values TYPE RANGE OF string,
+    END OF ty_s_search_term,
+
+    ty_t_search_term TYPE STANDARD TABLE OF ty_s_search_term WITH EMPTY KEY,
+
     BEGIN OF ty_image_info,
       img_key      TYPE string,
       img_registry TYPE string,

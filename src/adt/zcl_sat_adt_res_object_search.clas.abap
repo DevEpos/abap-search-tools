@@ -4,11 +4,7 @@ CLASS zcl_sat_adt_res_object_search DEFINITION
   CREATE PUBLIC.
 
   PUBLIC SECTION.
-    METHODS get REDEFINITION.
-
-    METHODS constructor
-      IMPORTING
-        iv_search_type TYPE zif_sat_ty_object_search=>ty_search_type.
+    METHODS post REDEFINITION.
 
     "! <p class="shorttext synchronized">Creates result converter for object search result</p>
     CLASS-METHODS create_result_converter
@@ -20,28 +16,24 @@ CLASS zcl_sat_adt_res_object_search DEFINITION
         VALUE(result)           TYPE REF TO zif_sat_adt_objs_res_converter.
 
   PROTECTED SECTION.
-    TYPES:
-      BEGIN OF ty_s_package,
-        package      TYPE devclass,
-        createdby    TYPE username,
-        superpackage TYPE devclass,
-        description  TYPE ddtext,
-      END OF ty_s_package,
-      BEGIN OF ty_s_ddls_source,
-        ddlname TYPE ddlname,
-        source  TYPE string,
-      END OF ty_s_ddls_source,
-      ty_lt_ddlname TYPE RANGE OF ddlname.
 
+  PRIVATE SECTION.
     DATA mt_query_result           TYPE zif_sat_ty_object_search=>ty_t_search_result.
     DATA mf_with_package_hierarchy TYPE abap_bool.
     DATA ms_query_input            TYPE zif_sat_ty_adt_types=>ty_s_query_input.
 
-  PRIVATE SECTION.
     "! <p class="shorttext synchronized">Create response</p>
     METHODS create_response
       RETURNING
         VALUE(result) TYPE zif_sat_ty_adt_types=>ty_s_search_result.
+
+    METHODS get_search_terms
+      RETURNING
+        VALUE(result) TYPE zif_sat_ty_object_search=>ty_t_search_term.
+
+    METHODS get_options
+      RETURNING
+        VALUE(result) TYPE zif_sat_ty_object_search=>ty_t_search_option.
 ENDCLASS.
 
 
@@ -59,7 +51,6 @@ CLASS zcl_sat_adt_res_object_search IMPLEMENTATION.
                             IMPORTING data            = ms_query_input ).
 
     TRY.
-
         DATA(lo_search_engine) = CAST zif_sat_search_engine( zcl_sat_ioc_lookup=>get_instance(
                                                                  iv_contract = 'zif_sat_search_engine' ) ).
         lo_search_engine->search_objects(
@@ -82,77 +73,34 @@ CLASS zcl_sat_adt_res_object_search IMPLEMENTATION.
                              data            = create_response( ) ).
   ENDMETHOD.
 
-  METHOD get_query_parameter.
-    ev_query = zcl_sat_adt_res_util=>get_request_param_value(
-                   iv_param_name = zif_sat_c_object_search=>c_general_search_params-object_name
-                   io_request    = io_request ).
-    es_search_engine_params = VALUE #(
-        use_and_cond_for_options = zcl_sat_adt_res_util=>get_request_param_value(
-            iv_param_name    = zif_sat_c_object_search=>c_general_search_params-use_and_for_filters
-            iv_default_value = abap_false
-            io_request       = io_request )
-        with_api_state           = zcl_sat_adt_res_util=>get_request_param_value(
-            iv_param_name    = zif_sat_c_object_search=>c_general_search_params-read_api_state
-            iv_default_value = abap_false
-            io_request       = io_request )
-        get_all                  = zcl_sat_adt_res_util=>get_request_param_value(
-            iv_param_name    = zif_sat_c_object_search=>c_general_search_params-get_all_results
-            iv_default_value = abap_false
-            io_request       = io_request ) ).
-
-    LOOP AT mo_search_config->get_options( ) ASSIGNING FIELD-SYMBOL(<ls_option>).
-      get_search_parameter( EXPORTING io_request      = io_request
-                                      iv_param_name   = <ls_option>-name
-                                      if_single_value = <ls_option>-single
-                            CHANGING  ct_option       = et_options ).
-    ENDLOOP.
-  ENDMETHOD.
-
   METHOD create_response.
     IF mt_query_result IS INITIAL.
       RETURN.
     ENDIF.
 
     DATA(lo_result_converter) = lcl_result_converter_factory=>create_result_converter(
-                                    iv_search_type  = mv_search_type
+                                    iv_search_type  = ms_query_input-type
                                     it_query_result = mt_query_result ).
     result = lo_result_converter->zif_sat_adt_objs_res_converter~convert( ).
   ENDMETHOD.
 
-  METHOD get_request_param_value.
-    TRY.
-        io_request->get_uri_query_parameter( EXPORTING name  = iv_param_name
-                                             IMPORTING value = rv_value ).
-      CATCH cx_adt_rest.
-    ENDTRY.
+  METHOD get_search_terms.
+    LOOP AT ms_query_input-fields REFERENCE INTO DATA(lr_field) WHERE values IS NOT INITIAL.
+      result = VALUE #( BASE result
+                        ( target = lr_field->name
+                          values = VALUE #( FOR val IN lr_field->values ( low = val ) ) ) ) ##OPERATOR[SIGN].
+    ENDLOOP.
   ENDMETHOD.
 
-  METHOD get_request_param_values.
-    TRY.
-        io_request->get_uri_query_parameter_values( EXPORTING name   = iv_param_name
-                                                    IMPORTING values = rt_values ).
-      CATCH cx_adt_rest.
-    ENDTRY.
-  ENDMETHOD.
+  METHOD get_options.
+    LOOP AT ms_query_input-fields REFERENCE INTO DATA(lr_field) WHERE filters IS NOT INITIAL.
 
-  METHOD get_search_parameter.
-    DATA(lv_option_name) = COND #( WHEN iv_option_name IS NOT INITIAL THEN iv_option_name ELSE iv_param_name ).
-    IF if_single_value = abap_true.
-      DATA(lv_param_value) = get_request_param_value( iv_param_name = iv_param_name
-                                                      io_request    = io_request ).
-      IF lv_param_value IS NOT INITIAL.
-        ct_option = VALUE #( BASE ct_option
-                             ( option      = lv_option_name
-                               value_range = VALUE #( ( low = lv_param_value ) ) ) ).
-      ENDIF.
-    ELSE.
-      DATA(lt_param_values) = get_request_param_values( iv_param_name = iv_param_name
-                                                        io_request    = io_request ).
-      IF lt_param_values IS NOT INITIAL.
-        ct_option = VALUE #( BASE ct_option
-                             ( option      = lv_option_name
-                               value_range = VALUE #( FOR value IN lt_param_values ( low = value ) ) ) ).
-      ENDIF.
-    ENDIF.
+      LOOP AT lr_field->filters REFERENCE INTO DATA(lr_filter) WHERE values IS NOT INITIAL.
+        result = VALUE #( BASE result
+                          ( target      = lr_field->name
+                            option      = lr_filter->name
+                            value_range = VALUE #( FOR filt IN lr_filter->values ( low = filt ) ) ) ) ##OPERATOR[SIGN].
+      ENDLOOP.
+    ENDLOOP.
   ENDMETHOD.
 ENDCLASS.
