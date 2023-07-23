@@ -10,6 +10,5 @@ define view ZSAT_I_ClassInterfaceCompText
   key clsname         as ClassName,
   key cmpname         as Component,
   key langu           as Language,
-      descript        as Description,
-      upper(descript) as DescriptionUpper
+      descript        as Description
 }
