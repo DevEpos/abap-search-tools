@@ -175,11 +175,20 @@ INTERFACE zif_sat_c_object_search
     END OF c_visibility.
 
   CONSTANTS:
+    "! External method status for ADT UI
     BEGIN OF c_method_status,
       standard    TYPE string VALUE 'STANDARD',
       implemented TYPE string VALUE 'IMPLEMENTED',
       redefined   TYPE string VALUE 'REDEFINED',
     END OF c_method_status.
+
+  CONSTANTS:
+    "! Internal method status
+    BEGIN OF c_method_status_int,
+      standard    TYPE c LENGTH 1 VALUE '1',
+      implemented TYPE c LENGTH 1 VALUE '2',
+      redefined   TYPE c LENGTH 1 VALUE '3',
+    END OF c_method_status_int.
 
   CONSTANTS:
     BEGIN OF c_method_flags,
