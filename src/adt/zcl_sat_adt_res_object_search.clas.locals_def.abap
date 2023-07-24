@@ -44,9 +44,9 @@ CLASS lcl_result_converter DEFINITION.
         if_value TYPE abap_bool DEFAULT abap_true.
 
   PROTECTED SECTION.
-    DATA mt_query_result  TYPE zif_sat_ty_object_search=>ty_t_search_result.
-    DATA mo_devclass_util TYPE REF TO lcl_devclass_util.
-    data mf_no_package_hierarchy type abap_bool.
+    DATA mt_query_result         TYPE zif_sat_ty_object_search=>ty_t_search_result.
+    DATA mo_devclass_util        TYPE REF TO lcl_devclass_util.
+    DATA mf_no_package_hierarchy TYPE abap_bool.
 
     METHODS before_conversion.
 
@@ -115,6 +115,12 @@ INHERITING FROM lcl_result_converter.
         iv_method_name TYPE seocpdname
       RETURNING
         VALUE(result)  TYPE string.
+
+    METHODS fill_method_properties
+      IMPORTING
+        is_method     TYPE zif_sat_ty_object_search=>ty_s_search_result
+      RETURNING
+        VALUE(result) TYPE zif_sat_ty_adt_types=>ty_s_adt_obj_ref-properties.
 
 ENDCLASS.
 
