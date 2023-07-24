@@ -94,7 +94,7 @@
           <tt:s-cond check="$ref.type='bool'">
             <tt:attribute map="xml('true')=val('X'),xml('false')=val('')" name="adtbase:value" value-ref="$ref.value"/>
           </tt:s-cond>
-          <tt:s-cond d-check="$ref.type!='bool'">
+          <tt:s-cond check="$ref.type!='bool'">
             <tt:attribute name="adtbase:value" value-ref="$ref.value"/>
           </tt:s-cond>
 
