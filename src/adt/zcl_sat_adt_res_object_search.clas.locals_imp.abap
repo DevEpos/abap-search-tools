@@ -248,7 +248,8 @@ CLASS lcl_method_result_converter IMPLEMENTATION.
                                          type        = ls_obj_type-objtype_tr && '/' && ls_obj_type-subtype_wb
                                          description = <ls_method>-method_descr
                                          parent_uri  = ls_object_reference-uri
-                                         uri         = lv_uri ) ).
+                                         uri         = lv_uri
+                                         properties  = fill_method_properties( <ls_method> ) ) ).
           cs_result-count   = cs_result-count + 1.
         ENDIF.
       ENDLOOP.
@@ -291,5 +292,37 @@ CLASS lcl_method_result_converter IMPLEMENTATION.
         IF 1 = 2.
         ENDIF.
     ENDTRY.
+  ENDMETHOD.
+
+  METHOD fill_method_properties.
+    IF is_method-method_is_abstract = abap_true.
+      result = VALUE #( ( key = 'isAbstract' value = abap_true type = zif_sat_c_adt_utils=>c_property_type-bool ) ).
+    ENDIF.
+
+    IF is_method-method_is_final = abap_true.
+      result = VALUE #( BASE result ( key = 'isFinal' value = abap_true type = zif_sat_c_adt_utils=>c_property_type-bool ) ).
+    ENDIF.
+
+    IF is_method-method_level = seoo_mtddecltyp_class_method.
+      result = VALUE #( BASE result ( key = 'isStatic' value = abap_true type = zif_sat_c_adt_utils=>c_property_type-bool ) ).
+    ENDIF.
+
+    IF is_method-method_status = zif_sat_c_object_search=>c_method_status-redefined.
+      result = VALUE #( BASE result ( key = 'isRedefined' value = abap_true type = zif_sat_c_adt_utils=>c_property_type-bool ) ).
+    ENDIF.
+
+    IF is_method-method_type = seoo_mtdtype_constructor.
+      result = VALUE #( BASE result ( key = 'isConstructor' value = abap_true type = zif_sat_c_adt_utils=>c_property_type-bool ) ).
+    ELSEIF is_method-method_type = seoo_mtdtype_eventhandler.
+      result = VALUE #( BASE result ( key = 'isEventHandler' value = abap_true type = zif_sat_c_adt_utils=>c_property_type-bool ) ).
+    ENDIF.
+
+    result = VALUE #(
+        BASE result
+        ( key   = 'visibility'
+          value = SWITCH string( is_method-method_exposure
+                                 WHEN seoc_exposure_public    THEN zif_sat_c_object_search=>c_visibility-public
+                                 WHEN seoc_exposure_protected THEN zif_sat_c_object_search=>c_visibility-protected
+                                 WHEN seoc_exposure_private   THEN zif_sat_c_object_search=>c_visibility-private ) ) ).
   ENDMETHOD.
 ENDCLASS.
