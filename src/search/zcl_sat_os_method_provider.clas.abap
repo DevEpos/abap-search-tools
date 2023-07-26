@@ -141,6 +141,8 @@ CLASS zcl_sat_os_method_provider IMPLEMENTATION.
     add_select_fields( ).
 
     add_order_by( iv_fieldname = c_method_fields-classname iv_entity = c_alias_names-method ).
+    add_order_by( iv_fieldname = c_method_fields-methodlevel iv_entity = c_alias_names-method ).
+    add_order_by( iv_fieldname = c_method_fields-exposure iv_entity = c_alias_names-method if_descending = abap_true ).
     add_order_by( iv_fieldname = c_method_fields-methodname iv_entity = c_alias_names-method ).
 
     configure_search_term_filters( ).
@@ -257,6 +259,10 @@ CLASS zcl_sat_os_method_provider IMPLEMENTATION.
     add_group_by_clause( |{ c_alias_names-method }~{ c_method_fields-methodname }| ).
     add_group_by_clause( |{ c_alias_names-method }~{ c_method_fields-category }| ).
     add_group_by_clause( |{ c_alias_names-method }~{ c_method_fields-isabstract }| ).
+    add_group_by_clause( |{ c_alias_names-method }~{ c_method_fields-isfinal }| ).
+    add_group_by_clause( |{ c_alias_names-method }~{ c_method_fields-exposure }| ).
+    add_group_by_clause( |{ c_alias_names-method }~{ c_method_fields-methodlevel }| ).
+    add_group_by_clause( |{ c_alias_names-method }~{ c_method_fields-methodtype }| ).
     add_group_by_clause( |{ c_alias_names-method }~{ c_method_fields-createdby }| ).
     add_group_by_clause( |{ c_clif_alias }~{ c_class_fields-package }| ).
     add_group_by_clause( |{ c_clif_alias }~{ c_class_fields-tadir_type }| ).
