@@ -19,6 +19,11 @@
      <DESCRIPT>Create filter for API option</DESCRIPT>
     </SEOCOMPOTX>
     <SEOCOMPOTX>
+     <CMPNAME>ADD_APPL_COMP_FILTER</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Creates filter for application component</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
      <CLSNAME>ZCL_SAT_BASE_SEARCH_PROVIDER</CLSNAME>
      <CMPNAME>ADD_FILTER</CMPNAME>
      <LANGU>E</LANGU>

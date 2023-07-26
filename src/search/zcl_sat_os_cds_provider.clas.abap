@@ -176,6 +176,11 @@ CLASS zcl_sat_os_cds_provider IMPLEMENTATION.
           add_option_filter( iv_fieldname = c_fields-development_package
                              it_values    = <ls_option>-value_range ).
 
+        WHEN c_general_search_options-application_component.
+          add_appl_comp_filter( it_values          = <ls_option>-value_range
+                                iv_ref_field       = CONV #( c_fields-development_package )
+                                iv_ref_table_alias = c_base_alias ).
+
         " Find views regarding the release status of the cds view
         WHEN c_general_search_options-release_state.
           add_api_option_filter( it_values          = <ls_option>-value_range
