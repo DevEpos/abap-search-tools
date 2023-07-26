@@ -21,6 +21,7 @@ INTERFACE zif_sat_c_select_source_id
   CONSTANTS zsat_i_databaseentity         TYPE string VALUE 'ZSAT_I_DATABASEENTITY'.
   CONSTANTS zsat_i_databasetablesandviews TYPE string VALUE 'ZSAT_I_DATABASETABLESANDVIEWS'.
   CONSTANTS zsat_i_databaseentityaggr     TYPE string VALUE 'ZSAT_I_DATABASEENTITYAGGR'.
+  CONSTANTS zsat_i_developmentpackage     TYPE string VALUE 'ZSAT_I_DEVELOPMENTPACKAGE'.
   CONSTANTS zsat_p_cdsviewbase            TYPE string VALUE 'ZSAT_P_CDSVIEWBASE'.
   CONSTANTS zsat_i_cdsentity              TYPE string VALUE 'ZSAT_I_CDSENTITY'.
   CONSTANTS zsat_i_cdsextensionviews      TYPE string VALUE 'ZSAT_I_CDSEXTENSIONVIEWS'.
