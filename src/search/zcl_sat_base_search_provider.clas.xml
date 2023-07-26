@@ -18,6 +18,11 @@
      <DESCRIPT>Create filter for API option</DESCRIPT>
     </SEOCOMPOTX>
     <SEOCOMPOTX>
+     <CMPNAME>ADD_APPL_COMP_FILTER</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Creates filter for application component</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
      <CMPNAME>ADD_FILTER</CMPNAME>
      <LANGU>E</LANGU>
      <DESCRIPT>Add filter to the search</DESCRIPT>

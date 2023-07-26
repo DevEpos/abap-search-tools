@@ -145,6 +145,13 @@ CLASS zcl_sat_adt_discovery_app IMPLEMENTATION.
 
   METHOD register_value_help_providers.
     io_registry->register_discoverable_resource(
+        url             = '/applcomp'
+        handler_class   = 'ZCL_SAT_ADT_RES_APPLC_VH'
+        description     = 'Search for Application Component'
+        category_scheme = zif_sat_c_object_search=>c_content_assist-category_scheme
+        category_term   = zif_sat_c_object_search=>c_content_assist-terms-appl_comp ).
+
+    io_registry->register_discoverable_resource(
         url             = '/cdsfield'
         handler_class   = 'ZCL_SAT_ADT_RES_CDSFIELD_VH'
         description     = 'Search for CDS View field.'
