@@ -100,7 +100,10 @@ CLASS zcl_sat_clif_meth_query_config IMPLEMENTATION.
 
     delete_invalid_obj_filters( ).
 
-    mt_method_options = VALUE zif_sat_ty_object_search=>ty_query_filters( ( get_description_filt_conf( ) )
+    mt_method_options = VALUE zif_sat_ty_object_search=>ty_query_filters( ( get_user_filt_conf( ) )
+                                                                          ( get_created_on_filt_conf( ) )
+                                                                          ( get_changed_on_filt_conf( ) )
+                                                                          ( get_description_filt_conf( ) )
                                                                           ( get_type_filter( ) )
                                                                           ( get_flag_filter( ) )
                                                                           ( get_param_filter( ) )

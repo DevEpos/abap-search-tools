@@ -67,6 +67,14 @@ CLASS zcl_sat_base_query_config DEFINITION
       RETURNING
         VALUE(result) TYPE zif_sat_ty_object_search=>ty_query_filter.
 
+    METHODS get_created_on_filt_conf
+      RETURNING
+        VALUE(result) TYPE zif_sat_ty_object_search=>ty_query_filter.
+
+    METHODS get_changed_on_filt_conf
+      RETURNING
+        VALUE(result) TYPE zif_sat_ty_object_search=>ty_query_filter.
+
     METHODS get_general_image
       IMPORTING
         iv_image_key  TYPE string
@@ -82,7 +90,9 @@ CLASS zcl_sat_base_query_config DEFINITION
         api         TYPE string VALUE 'ABAP:IMG_API',
         description TYPE string VALUE 'ABAP:IMG_DESCRIPTION',
         appl_comp   TYPE string VALUE 'ABAP:IMG_APPL_COMP',
+        changed_on  TYPE string VALUE 'ABAP:IMG_CHANGED_ON',
       END OF c_image_keys.
+
 ENDCLASS.
 
 
@@ -227,6 +237,25 @@ CLASS zcl_sat_base_query_config IMPLEMENTATION.
             category_scheme       = zif_sat_c_object_search=>c_content_assist-category_scheme
             category_term         = zif_sat_c_object_search=>c_content_assist-terms-appl_comp
             proposal_image_source = zif_sat_c_object_search=>c_proposal_image_source-same_as_filter ) ).
+  ENDMETHOD.
+
+  METHOD get_created_on_filt_conf.
+    result = VALUE #( name             = c_general_options-created_on
+                      long_description = |Use '{ c_general_options-created_on }' to restrict results by the creation date of an object.|
+                      data_type        = zif_sat_c_object_search=>c_filter_data_type-date ).
+  ENDMETHOD.
+
+  METHOD get_changed_on_filt_conf.
+    result = VALUE #(
+        name             = c_general_options-changed_on
+        long_description = |Use '{ c_general_options-changed_on }' to restrict results by the last changed date of an object.|
+        data_type        = zif_sat_c_object_search=>c_filter_data_type-date
+        img_info         = VALUE #(
+            img_key     = c_image_keys-changed_on
+            img_encoded = `iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABbklEQVR4nGP4//8/AyWYIs0YBnQ7Mv7vcmAgiBu0GXhwGvBhsfn/z0stcGKQmkmeDHw4Dfi4xPz/1+WWODFITQMuA4hxPtgLuAzocWb5` &&
+                          `/fv71/////3DieusBP40OChwYDfAifnXl/ev/q9qzf9f7aTw/+e3r/9XNGX/L7MW/7++t+I/CFSYif5OUGDAbkA30AX3zh35v6Ai/n+JufD/758//d85q+P/+V1r/7cFGYENKDKRwu+C3z++AV3673+R` &&
+                          `qcD/H1+//P/39+//uUUR/zdNqAEbkGsgB3QBDgPaHdh///75HawJZsDWqY3/p2f5/weJg0CajjLQBQ7YDWiy4fn1C+QCJANqnBX/17oo/a/3UAMbkKqj+genC2qtBH//+gGxCRdI01b9nYArDEpNRH4U` &&
+                          `Gor9y9OX+pelI/svXVvxX7KG0r9kTeV/KZrK/8FsDaX/OF3Q0MDAFMrAwBwaCsKhzGA2Ayp7FZBN1dwIAMayoL3i4x8iAAAAAElFTkSuQmCC` ) ).
   ENDMETHOD.
 
   METHOD get_general_image.
