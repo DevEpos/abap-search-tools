@@ -229,6 +229,14 @@ CLASS zcl_sat_os_cds_provider IMPLEMENTATION.
         WHEN c_general_search_options-type.
           add_option_filter( iv_fieldname = c_fields-source_type
                              it_values    = <ls_option>-value_range ).
+
+        WHEN c_general_search_options-created_on.
+          add_date_filter( iv_fieldname = c_fields-created_date
+                           it_values    = <ls_option>-value_range ).
+
+        WHEN c_general_search_options-changed_on.
+          add_date_filter( iv_fieldname = c_fields-changed_date
+                           it_values    = <ls_option>-value_range ).
       ENDCASE.
     ENDLOOP.
 
