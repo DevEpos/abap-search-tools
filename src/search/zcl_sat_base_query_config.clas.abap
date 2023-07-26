@@ -63,6 +63,10 @@ CLASS zcl_sat_base_query_config DEFINITION
       RETURNING
         VALUE(result) TYPE zif_sat_ty_object_search=>ty_query_filter.
 
+    METHODS get_appl_comp_filt_conf
+      RETURNING
+        VALUE(result) TYPE zif_sat_ty_object_search=>ty_query_filter.
+
     METHODS get_general_image
       IMPORTING
         iv_image_key  TYPE string
@@ -77,6 +81,7 @@ CLASS zcl_sat_base_query_config DEFINITION
         package     TYPE string VALUE 'ABAP:IMG_PACKAGE',
         api         TYPE string VALUE 'ABAP:IMG_API',
         description TYPE string VALUE 'ABAP:IMG_DESCRIPTION',
+        appl_comp   TYPE string VALUE 'ABAP:IMG_APPL_COMP',
       END OF c_image_keys.
 ENDCLASS.
 
@@ -202,6 +207,26 @@ CLASS zcl_sat_base_query_config IMPLEMENTATION.
             assist_type           = zif_sat_c_object_search=>c_filter_content_assist_type-named_item
             category_scheme       = zif_sat_c_object_search=>c_content_assist-category_scheme
             category_term         = zif_sat_c_object_search=>c_content_assist-terms-release_state
+            proposal_image_source = zif_sat_c_object_search=>c_proposal_image_source-same_as_filter ) ).
+  ENDMETHOD.
+
+  METHOD get_appl_comp_filt_conf.
+    result = VALUE #(
+        name             = c_general_options-application_component
+        img_info         = VALUE #(
+            img_key     = c_image_keys-appl_comp
+            img_encoded = `iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABoElEQVR4nM3Suy9DURwHcI94m8UihEQMUiw3hIGi1O3To9XWvV6ptogQCdVabEIMRjEQGxYRiYVJgtjwBwhpKq1nUaQeX7/byUlzm9ic` &&
+                          `5LOcnO/3PHISEv7dmBYH8ZtXdMEjuDDV5YTb5sCkdQATFjviFuBlV8Y28LyJcXOffIGXdosNblFwnawBT8sY7ehhCpJsjTrICQdW8RVaoeASWQRCcxhpE5mCDGkhXhZiSPPnx9N4D85TcJbMAI8eDBlt` &&
+                          `TEFWvBMc7bkQvvZQ0E3GgAcXnHoLU5BGioiS8Pqaeuxs9BIB+9sCLs4GEAkOU9BBeoF7K+xaE1OQbFa2QM79RTc+bwQKmokBuFOjn29nCjKlhQg5Y0jzpwcqvPk1FFQBt7WkCj3qVqYgO94JTvY4vPpq` &&
+                          `KMgBN2WkBEKTnilIJQWkWnoHvrIW+1scqcDhrgK+cwU+rkspWAwE80kuPa6WKUgkKdJVpNNI7c+XHClH+KoEEX8hvgN5FMwBAulRnUpe/id2NxshNhkgqPToUumiu1kbNLDU89ErmerUUbIFfx0/1b2N` &&
+                          `zNSGKzEAAAAASUVORK5CYII=` )
+        long_description = |Use '{ c_general_options-application_component }' to restrict the search query by Application Component.\n\n| &&
+                           |Example:\n|  && |   { c_general_options-application_component } : ap|
+        patterns         = abap_true
+        content_assist   = VALUE #(
+            assist_type           = zif_sat_c_object_search=>c_filter_content_assist_type-named_item
+            category_scheme       = zif_sat_c_object_search=>c_content_assist-category_scheme
+            category_term         = zif_sat_c_object_search=>c_content_assist-terms-appl_comp
             proposal_image_source = zif_sat_c_object_search=>c_proposal_image_source-same_as_filter ) ).
   ENDMETHOD.
 

@@ -65,6 +65,7 @@ CLASS zcl_sat_cds_view_query_config IMPLEMENTATION.
 
   METHOD build_config.
     DATA(lt_object_filters) = VALUE zif_sat_ty_object_search=>ty_query_filters(
+                                        ( get_appl_comp_filt_conf( ) )
                                         ( get_package_filt_conf( ) )
                                         ( get_user_filt_conf( ) )
                                         ( get_rel_state_filt_conf( ) )

@@ -207,6 +207,11 @@ CLASS zcl_sat_os_classintf_provider IMPLEMENTATION.
           add_option_filter( iv_fieldname = |{ c_clif_alias }~{ c_fields-package }|
                              it_values    = <ls_option>-value_range ).
 
+        WHEN c_general_search_options-application_component.
+          add_appl_comp_filter( it_values          = <ls_option>-value_range
+                                iv_ref_field       = CONV #( c_fields-package )
+                                iv_ref_table_alias = c_clif_alias ).
+
         " Find only objects with a certain type
         WHEN c_general_search_options-type.
           add_option_filter( iv_fieldname = |{ c_clif_alias }~{ c_fields-tadir_type }|
