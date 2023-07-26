@@ -219,6 +219,10 @@ CLASS zcl_sat_os_method_provider IMPLEMENTATION.
         WHERE target = zif_sat_c_object_search=>c_search_fields-method_filter_input_key.
 
       CASE <ls_option>-option.
+        WHEN c_general_search_options-user.
+          add_option_filter( iv_fieldname = |{ c_alias_names-method }~{ c_method_fields-createdby }|
+                             it_values    = <ls_option>-value_range ).
+
         WHEN c_general_search_options-description.
           add_option_filter( iv_fieldname = |{ c_alias_names-method_text }~{ mv_description_filter_field }|
                              it_values    = <ls_option>-value_range ).
@@ -240,6 +244,14 @@ CLASS zcl_sat_os_method_provider IMPLEMENTATION.
 
         WHEN c_general_search_options-type.
           add_type_filter( <ls_option>-value_range ).
+
+        WHEN c_general_search_options-created_on.
+          add_date_filter( iv_fieldname = |{ c_alias_names-method }~{ c_method_fields-createdon }|
+                           it_values    = <ls_option>-value_range ).
+
+        WHEN c_general_search_options-changed_on.
+          add_date_filter( iv_fieldname = |{ c_alias_names-method }~{ c_method_fields-changedon }|
+                           it_values    = <ls_option>-value_range ).
       ENDCASE.
 
     ENDLOOP.

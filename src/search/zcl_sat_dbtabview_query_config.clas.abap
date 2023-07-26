@@ -44,9 +44,11 @@ CLASS zcl_sat_dbtabview_query_config IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD build_config.
-    DATA(lt_object_filters) = VALUE zif_sat_ty_object_search=>ty_query_filters( ( get_package_filt_conf( ) )
+    DATA(lt_object_filters) = VALUE zif_sat_ty_object_search=>ty_query_filters( ( get_user_filt_conf( ) )
+                                                                                ( get_created_on_filt_conf( ) )
+                                                                                ( get_changed_on_filt_conf( ) )
+                                                                                ( get_package_filt_conf( ) )
                                                                                 ( get_appl_comp_filt_conf( ) )
-                                                                                ( get_user_filt_conf( ) )
                                                                                 ( get_description_filt_conf( ) )
                                                                                 ( get_max_rows_filt_conf( ) )
                                                                                 ( get_field_filter( ) )
