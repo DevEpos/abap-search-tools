@@ -220,6 +220,13 @@ CLASS zcl_sat_base_search_provider DEFINITION
         iv_ref_table_alias TYPE string
         it_tadir_type      TYPE trobjtype_tab.
 
+    "! <p class="shorttext synchronized">Creates filter for application component</p>
+    METHODS add_appl_comp_filter
+      IMPORTING
+        it_values          TYPE zif_sat_ty_object_search=>ty_t_value_range
+        iv_ref_field       TYPE fieldname
+        iv_ref_table_alias TYPE string.
+
   PRIVATE SECTION.
     METHODS get_select_string
       RETURNING
@@ -290,6 +297,21 @@ CLASS zcl_sat_base_search_provider IMPLEMENTATION.
       add_option_filter( iv_fieldname = |{ c_api_alias }~apistate|
                          it_values    = lt_state_filters ).
     ENDIF.
+  ENDMETHOD.
+
+  METHOD add_appl_comp_filter.
+    CONSTANTS c_table_alias TYPE string VALUE 'applcomp' ##NO_TEXT.
+
+    CHECK it_values IS NOT INITIAL.
+
+    add_join_table( iv_join_table = |{ zif_sat_c_select_source_id=>zsat_i_developmentpackage }|
+                    iv_alias      = c_table_alias
+                    it_conditions = VALUE #( ( field           = 'developmentpackage'
+                                               ref_field       = iv_ref_field
+                                               ref_table_alias = iv_ref_table_alias
+                                               type            = zif_sat_c_join_cond_type=>field ) ) ).
+    add_option_filter( iv_fieldname = |{ c_table_alias }~applicationcomponent|
+                       it_values    = it_values ).
   ENDMETHOD.
 
   METHOD add_filter.
