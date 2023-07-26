@@ -122,6 +122,11 @@ CLASS zcl_sat_base_search_provider DEFINITION
     "! <p class="shorttext synchronized">Creates SELECT clause for SQL</p>
     METHODS create_select_clause.
 
+    METHODS add_date_filter
+      IMPORTING
+        iv_fieldname TYPE string
+        it_values    TYPE zif_sat_ty_object_search=>ty_t_value_range.
+
     "! <p class="shorttext synchronized">Add filter(s) for search option</p>
     METHODS add_option_filter
       IMPORTING
@@ -402,6 +407,21 @@ CLASS zcl_sat_base_search_provider IMPLEMENTATION.
           join_type       = iv_join_type
           conditions      = it_conditions
           parameters      = it_parameters ) ).
+  ENDMETHOD.
+
+  METHOD add_date_filter.
+    TYPES ty_date_range TYPE RANGE OF dats.
+    DATA ls_date_range TYPE LINE OF ty_date_range.
+
+    LOOP AT it_values INTO DATA(ls_value).
+      ls_date_range = ls_value-low.
+      mt_criteria = VALUE #( BASE mt_criteria
+                             ( sqlfieldname = iv_fieldname
+                               sign         = ls_date_range-sign
+                               option       = ls_date_range-option
+                               low          = ls_date_range-low
+                               high         = ls_date_range-high  ) ).
+    ENDLOOP.
   ENDMETHOD.
 
   METHOD add_option_filter.

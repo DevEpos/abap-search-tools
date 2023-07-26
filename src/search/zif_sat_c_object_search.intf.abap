@@ -216,6 +216,8 @@ INTERFACE zif_sat_c_object_search
       description            TYPE string VALUE 'desc',
       type                   TYPE string VALUE 'type',
       package                TYPE string VALUE 'package',
+      created_on             TYPE string VALUE 'created',
+      changed_on             TYPE string VALUE 'changed',
       use_and_for_filters    TYPE string VALUE 'useAndForFilters',
       read_api_state         TYPE string VALUE 'withApiState',
       get_all_results        TYPE string VALUE 'getAllResults',
