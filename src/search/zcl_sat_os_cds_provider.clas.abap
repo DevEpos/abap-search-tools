@@ -102,7 +102,7 @@ CLASS zcl_sat_os_cds_provider IMPLEMENTATION.
                        | FROM { get_cds_sql_name( CONV #( zif_sat_c_select_source_id=>zsat_i_cdsannotation ) ) } | && c_cr_lf &&
                        | WHERE |.
     mv_assoc_subquery = |SELECT DISTINCT strucobjn | && c_cr_lf &&
-                        | FROM { get_cds_sql_name( CONV #( zif_sat_c_select_source_id=>dd08b ) ) } | && c_cr_lf &&
+                        | FROM { zif_sat_c_select_source_id=>dd08b } | && c_cr_lf &&
                         | WHERE |.
     mv_select_from_subquery = |SELECT DISTINCT ddlviewname | && c_cr_lf &&
                               | FROM { get_cds_sql_name( CONV #( zif_sat_c_select_source_id=>zsat_i_cdsfrompartentity ) ) } | && c_cr_lf &&
@@ -369,12 +369,12 @@ CLASS zcl_sat_os_cds_provider IMPLEMENTATION.
 
     IF lt_including IS NOT INITIAL.
       add_join_table(
-          iv_join_table = get_cds_sql_name( |{ zif_sat_c_select_source_id=>dd08b }| )
+          iv_join_table = |{ zif_sat_c_select_source_id=>dd08b }|
           iv_alias      = c_used_in_association_alias
           it_conditions = VALUE #(
               ( field = 'strucobjn' ref_field = c_fields-ddlname ref_table_alias = c_base_alias type = zif_sat_c_join_cond_type=>field ) ) ).
 
-      add_option_filter( iv_fieldname = |{ c_used_in_association_alias }~strucobj_t|
+      add_option_filter( iv_fieldname = |{ c_used_in_association_alias }~strucobjn_t|
                          it_values    = it_values ).
       mv_assoc_filter_count = lines( lt_including ).
     ENDIF.
