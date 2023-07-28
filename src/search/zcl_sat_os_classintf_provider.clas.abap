@@ -91,7 +91,7 @@ CLASS zcl_sat_os_classintf_provider IMPLEMENTATION.
                             | FROM { zif_sat_c_select_source_id=>zsat_i_classattribute } | && c_cr_lf &&
                             | WHERE |.
     mv_meth_subquery = |SELECT DISTINCT { c_fields-classintf } | && c_cr_lf &&
-                       | FROM { zif_sat_c_select_source_id=>zsat_i_classinterfacemethod } | && c_cr_lf &&
+                       | FROM { zif_sat_c_select_source_id=>zsat_i_simpleclifmethod } | && c_cr_lf &&
                        | WHERE |.
     mv_friend_subquery = |SELECT DISTINCT { c_fields-classintf } | && c_cr_lf &&
                          | FROM { zif_sat_c_select_source_id=>zsat_i_globalfriend } | && c_cr_lf &&
@@ -237,7 +237,7 @@ CLASS zcl_sat_os_classintf_provider IMPLEMENTATION.
         WHEN c_class_intf_search_option-method.
           add_multi_value_filter(
             EXPORTING it_values                 = <ls_option>-value_range
-                      iv_join_table             = |{ zif_sat_c_select_source_id=>zsat_i_classinterfacemethod }|
+                      iv_join_table             = |{ zif_sat_c_select_source_id=>zsat_i_simpleclifmethod }|
                       iv_join_table_alias       = c_alias_names-method
                       iv_filter_field           = c_fields-method
                       iv_subquery               = mv_meth_subquery
