@@ -33,6 +33,7 @@ INTERFACE zif_sat_c_select_source_id
   CONSTANTS zsat_i_cdsviewwithparameter   TYPE string VALUE 'ZSAT_I_CDSVIEWWITHPARAMETER'.
   CONSTANTS zsat_i_cdsannotation          TYPE string VALUE 'ZSAT_I_CDSANNOTATION'.
   CONSTANTS zsat_i_tablefield             TYPE string VALUE 'ZSAT_I_TABLEFIELD'.
+  CONSTANTS zsat_i_simpleclifmethod       TYPE string VALUE 'ZSAT_I_SIMPLECLIFMETHOD'.
   CONSTANTS zsat_i_classinterface         TYPE string VALUE 'ZSAT_I_CLASSINTERFACE'.
   CONSTANTS zsat_i_classinterfacet        TYPE string VALUE 'ZSAT_I_CLASSINTERFACET'.
   CONSTANTS zsat_i_classflags             TYPE string VALUE 'ZSAT_I_CLASSFLAGS'.
