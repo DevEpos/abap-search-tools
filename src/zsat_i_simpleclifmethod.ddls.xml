@@ -3,9 +3,9 @@
  <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
   <asx:values>
    <DDLS>
-    <DDLNAME>ZSAT_I_CLASSREDEFINEDMETHOD</DDLNAME>
+    <DDLNAME>ZSAT_I_SIMPLECLIFMETHOD</DDLNAME>
     <DDLANGUAGE>E</DDLANGUAGE>
-    <DDTEXT>Redefined method from interface/superclass</DDTEXT>
+    <DDTEXT>Class/Interface method - for Class Search</DDTEXT>
    </DDLS>
   </asx:values>
  </asx:abap>
