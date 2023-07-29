@@ -223,6 +223,10 @@ CLASS zcl_sat_os_method_provider IMPLEMENTATION.
           add_option_filter( iv_fieldname = |{ c_alias_names-method }~{ c_method_fields-createdby }|
                              it_values    = <ls_option>-value_range ).
 
+        WHEN c_general_search_options-changed_by.
+          add_option_filter( iv_fieldname = |{ c_alias_names-method }~{ c_method_fields-changedby }|
+                             it_values    = <ls_option>-value_range ).
+
         WHEN c_general_search_options-description.
           add_option_filter( iv_fieldname = |{ c_alias_names-method_text }~{ mv_description_filter_field }|
                              it_values    = <ls_option>-value_range ).
