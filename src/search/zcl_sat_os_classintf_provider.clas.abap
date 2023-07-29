@@ -203,6 +203,10 @@ CLASS zcl_sat_os_classintf_provider IMPLEMENTATION.
           add_option_filter( iv_fieldname = |{ c_clif_alias }~{ c_fields-author }|
                              it_values    = <ls_option>-value_range ).
 
+        WHEN c_general_search_options-changed_by.
+          add_option_filter( iv_fieldname = |{ c_clif_alias }~{ c_fields-changed_by }|
+                             it_values    = <ls_option>-value_range ).
+
         " Find objects which exist in a certain development package
         WHEN c_general_search_options-package.
           add_option_filter( iv_fieldname = |{ c_clif_alias }~{ c_fields-package }|
