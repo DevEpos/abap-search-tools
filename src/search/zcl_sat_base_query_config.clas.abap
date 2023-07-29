@@ -47,6 +47,10 @@ CLASS zcl_sat_base_query_config DEFINITION
       RETURNING
         VALUE(result) TYPE zif_sat_ty_object_search=>ty_query_filter.
 
+    METHODS get_changed_by_filt_conf
+      RETURNING
+        VALUE(result) TYPE zif_sat_ty_object_search=>ty_query_filter.
+
     METHODS get_package_filt_conf
       RETURNING
         VALUE(result) TYPE zif_sat_ty_object_search=>ty_query_filter.
@@ -178,24 +182,26 @@ CLASS zcl_sat_base_query_config IMPLEMENTATION.
         name             = c_general_options-user
         long_description = |Use '{ c_general_options-user }' to restrict the search query by specific users.| &&
                            |\n\nExample:\n   { c_general_options-user } : musterm|
-        img_info         = VALUE #(
-            img_key     = c_image_keys-owner
-            img_encoded = `iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAACGElEQVR4nGNgAIKGhk6Z1q4JG5vaez+AcHNn/0aQGAMxAKSwsb3nw4HDx35//vzl/7PnL/5v2rrzd0Nb9weQXE1jx/GKhs7/BbU9/zOq` &&
-                          `+g7EVPVLohjQ2j1x08Ejx37/B4KPnz79f/zk6f8r1278X7xi9W+gwZvKOzr4CxraFTKrJugllE88GVk0qR/FgMaO3vefPn3+//Hjp/+PoJqPnjj9f+OWnf/rWrreI6uNLp5UHFw4ZT+GAU+fPkfRvH3X` &&
-                          `3v9Llq/5X9vcCTcgt6qzJ7aw67VfZtd3h8TOHQwM/xnBEi1d/Zs2bdvx+/LV60DNp8CaV6zZ8L9n4tTfQBdsghmQUtapGZrb+dctpfOfdlhXJEog1gEDbNGy1b83btnxf8mKNf+7J0z7Xd3c8QE9Jvwy` &&
-                          `OpfYJXReAmpiwoiJhraejUAbPwCdDcJYo9ExqVNdN7zDH3+8YgF6KbNlzDMWbDRJnf/BGIhN0xZsBIkRrRmkKblz5+/Ghaf/V8058T+sYctvo5R5H4gyxCx9wabkrp2/O1dc+N+46Mz/yjkn/xdOO/rf` &&
-                          `r3rDb5O0+ZsIGgB09vsGoM3ImrMmHvof2777v1HyvPcEDQA6/33l7OMompO69/0Pa9z+35AYA0zT528Ka9zyG1lzVOuu/45Fq0HhQNgLoIACBZhf1cbfcUBnhwNtdipc/dsweS5xgQg3JHXeRqCTP0Ax` &&
-                          `PBoB1JlikXfjC/kAAAAASUVORK5CYII=` )
         patterns         = abap_true
         allowed_length   = 12
-        content_assist   = VALUE #(
-            assist_type     = zif_sat_c_object_search=>c_filter_content_assist_type-user
-            proposal_images = VALUE #(
-                ( img_key     = c_image_keys-owner_entry
-                  img_encoded = `iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABL0lEQVR4nGNgoAfYmCXjsTKK++OKCI7PK2OZfUk2AKT55Ysl/x/f7P+/PJTpM4aC5NTk/ylpKf+3btr6f+HChf+XLFnyf8XyFf` &&
-                                `/XrF7zf8O6Df9hBjy82o7bgNT0VLAB79++///65ev/z589/3/v/r3/G9asBRrA2b00kOE/CC8LYVo4P4GBA6cBfy+X/v8jK/tf9o8s2IA1lR7/N2RLfzm5MOLvkWnO/9cksH1ZEc68imgXLA/n` &&
-                                `+P/y1fL/779v/f/4VsP/0wvl/y8PYfxGtAEgZ4M0g/DDq+X/zy1TBIthGJCWnkbQAJBmsgwAG/JtM1wzdgMysBsAikaQhrcfV2G3nVgDXr9ZSJwB2BISSNPL5zNxGwACxaXF/7FhkBxI0/PHE/` &&
-                                `AbgA/AAg5rAFIKAIUslAwZrqbdAAAAAElFTkSuQmCC` ) ) ) ).
+        content_assist   = VALUE #( assist_type = zif_sat_c_object_search=>c_filter_content_assist_type-user ) ).
+  ENDMETHOD.
+
+  METHOD get_changed_by_filt_conf.
+    result = VALUE #(
+        name             = c_general_options-changed_by
+        long_description = |Use '{ c_general_options-changed_by }' to restrict the search query by users who were the last to change an object.| &&
+                           |\n\nExample:\n   { c_general_options-changed_by } : musterm|
+        img_info         = VALUE #(
+            img_key     = c_image_keys-owner
+            img_encoded = `iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAB0UlEQVR4nGP4//8/Azbc4SFoMzlQ9OyUYNHzbZ6C1rjUYRUE4SlBYhc/L7P4D8LTQ8XvAoUYSTJgeojYja/LLf+D8OxIyccvFulxk2TA` &&
+                          `RD+RiIWxUk8Wxkg925Kj2PS/gYGJOAMYGBjnhAqbzYkQu7AqVfbV2gzZNwtiJS5P9hMxweYNVM1AW840qGksSZB+83aB6f8vQP9/BeKXc0z+AwP01eUOA6szMxlYcRpwe5In+4Zs2ewzzZo/viy3APv/` &&
+                          `6zJIOJxo0Pi1s0ip4f9ca15kl6C6YKYx65JEmcarPbr/QDbDAhGE708x/L8mXX7Z/yXmfLgN2O/AMitabMb9yYb/vyFpBuG3883+r8qQ2/1hqY1gA1KAYoTBpADRlXcm6v//tNQcxYDPSy3+L4mXOvYf` &&
+                          `aMD/hgbcBiyNlzReHCd1eKK/yGeY5j4fkS9TQ8XO7ihSCv6/DegFnC4AYwbGZzONuSYHij2AGTAlSPTJu0XGcv8btNnQoxJ7QgKGBdAr92EGTA4Sffxlmbn4//8NGIkJuwGrQpknYjUAMzXiSMoMjJ2e` &&
+                          `gudnhku8nhUh8RZo2OXPi6zE/q9iYCY6L/yf78Dxc42lxtfFFkafV5jo4MpMACcZjCscxZIqAAAAAElFTkSuQmCC` )
+        patterns         = abap_true
+        allowed_length   = 12
+        content_assist   = VALUE #( assist_type = zif_sat_c_object_search=>c_filter_content_assist_type-user ) ).
   ENDMETHOD.
 
   METHOD get_rel_state_filt_conf.
