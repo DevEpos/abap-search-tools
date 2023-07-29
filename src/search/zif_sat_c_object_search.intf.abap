@@ -211,6 +211,7 @@ INTERFACE zif_sat_c_object_search
       object_type            TYPE string VALUE 'objectType',
       max_rows               TYPE string VALUE 'maxrows',
       user                   TYPE string VALUE 'owner',
+      changed_by             TYPE string VALUE 'changedby',
       application_component  TYPE string VALUE 'appl',
       release_state          TYPE string VALUE 'api',
       description            TYPE string VALUE 'desc',
