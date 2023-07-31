@@ -23,6 +23,7 @@ CLASS zcl_sat_clif_meth_query_config DEFINITION
         visibility TYPE string VALUE 'ABAP:IMG_VISIBILITY',
         level      TYPE string VALUE 'ABAP:IMG_METHOD_LEVEL',
         status     TYPE string VALUE 'ABAP:IMG_METHOD_STATUS',
+        exception  TYPE string VALUE 'ABAP:IMG_METH_EXCEPTION',
       END OF c_image_keys.
 
     DATA mt_method_options        TYPE zif_sat_ty_object_search=>ty_query_filters.
@@ -41,6 +42,10 @@ CLASS zcl_sat_clif_meth_query_config DEFINITION
         VALUE(result) TYPE zif_sat_ty_object_search=>ty_query_filter.
 
     METHODS get_param_filter
+      RETURNING
+        VALUE(result) TYPE zif_sat_ty_object_search=>ty_query_filter.
+
+    METHODS get_exception_filter
       RETURNING
         VALUE(result) TYPE zif_sat_ty_object_search=>ty_query_filter.
 
@@ -108,6 +113,7 @@ CLASS zcl_sat_clif_meth_query_config IMPLEMENTATION.
                                                                           ( get_type_filter( ) )
                                                                           ( get_flag_filter( ) )
                                                                           ( get_param_filter( ) )
+                                                                          ( get_exception_filter( ) )
                                                                           ( get_level_filter( ) )
                                                                           ( get_status_filter( ) )
                                                                           ( get_visibility_filter( ) ) ).
@@ -158,12 +164,24 @@ CLASS zcl_sat_clif_meth_query_config IMPLEMENTATION.
                 ( name = zif_sat_c_object_search=>c_method_flags-class_exceptions description = 'Class Based Exceptions are used' ) ) ) ).
   ENDMETHOD.
 
+  METHOD get_exception_filter.
+    result = VALUE #(
+        name             = c_method_options-exception
+        long_description = |Use '{ c_method_options-exception }' to restrict the result to methods with specific exceptions.\n\n| &&
+                           |Example:\n   { c_method_options-exception } : cx_static_check|
+        img_info         = VALUE #(
+            img_key     = c_image_keys-exception
+            img_encoded = `iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAA90lEQVR4nGNgGLTg4DyN+IPzdT4dmK/188AC/TqSDdg7S/3/j4et/3896fy/b5bmb5IN2D1D/f/f553//7/s+b97htp/kg3YOU3t/7d7` &&
+                          `Nf9/PKj/D2KTbMCuaRrv3l3J/f/+at5/EJt0A2ZoXXl6Iu7/y7PJ/3dN17xEsgE7p2rsu7c/+D8Ib5+ktpZkA7ZPUZ99Y4fX/6tb3H5t7lNqJ9mATV1KPlsnqH8F4i8bu5Q9SDZgf4MDy/pOhYKNnYo5` &&
+                          `+xsUOMhwgfKVg3P0P4Hwxm6l6yQbsKZV/v+3a1FgDGKTbkCLQt7qZvm/q5vl/q9uk68i2QBiAQCtj4Cw8dSVmwAAAABJRU5ErkJggg==` )
+        patterns         = abap_true ).
+  ENDMETHOD.
+
   METHOD get_param_filter.
     result = VALUE #(
         name             = c_method_options-param
         long_description = |Use '{ c_method_options-param }' to restrict the result to methods with specific parameters.\n\n| &&
                            |Example:\n   { c_method_options-param } : iv_user_name|
-        no_negation      = abap_true
         img_info         = VALUE #( img_key     = c_general_image_keys-param
                                     img_encoded = get_general_image( c_general_image_keys-param ) )
         patterns         = abap_true ).
