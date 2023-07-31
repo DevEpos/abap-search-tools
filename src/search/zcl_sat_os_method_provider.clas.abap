@@ -23,6 +23,7 @@ CLASS zcl_sat_os_method_provider DEFINITION
         method_text TYPE string VALUE 'meth_text',
         method      TYPE string VALUE 'method',
         param       TYPE string VALUE 'param',
+        exception   TYPE string VALUE 'exc',
       END OF c_alias_names.
 
     CONSTANTS:
@@ -56,13 +57,19 @@ CLASS zcl_sat_os_method_provider DEFINITION
       END OF c_text_fields.
 
     DATA mv_param_subquery     TYPE string.
+    DATA mv_exc_subquery       TYPE string.
 
     DATA mv_param_filter_count TYPE i.
+    DATA mv_exc_filter_count   TYPE i.
 
     METHODS add_select_fields.
     METHODS configure_method_filters.
 
     METHODS add_param_filter
+      IMPORTING
+        it_values TYPE zif_sat_ty_object_search=>ty_t_value_range.
+
+    METHODS add_exception_filter
       IMPORTING
         it_values TYPE zif_sat_ty_object_search=>ty_t_value_range.
 
@@ -100,10 +107,16 @@ CLASS zcl_sat_os_method_provider IMPLEMENTATION.
   METHOD constructor.
     super->constructor( ).
 
-    mv_param_subquery = |SELECT DISTINCT Component | && c_cr_lf &&
-                        | FROM { zif_sat_c_select_source_id=>zsat_i_classinterfacesubcomp } | && c_cr_lf &&
+    mv_param_subquery = |SELECT DISTINCT methodname | && c_cr_lf &&
+                        | FROM { zif_sat_c_select_source_id=>zsat_i_clifmethodparam } | && c_cr_lf &&
                         | WHERE classname = { c_alias_names-method }~{ c_method_fields-classname } | && c_cr_lf &&
-                        |   AND component = { c_alias_names-method }~{ c_method_fields-methodname } | && c_cr_lf &&
+                        |   AND methodname = { c_alias_names-method }~{ c_method_fields-methodname } | && c_cr_lf &&
+                        |   AND |.
+
+    mv_exc_subquery = |SELECT DISTINCT methodname | && c_cr_lf &&
+                        | FROM { zif_sat_c_select_source_id=>zsat_i_clifmethodexception } | && c_cr_lf &&
+                        | WHERE classname = { c_alias_names-method }~{ c_method_fields-classname } | && c_cr_lf &&
+                        |   AND methodname = { c_alias_names-method }~{ c_method_fields-methodname } | && c_cr_lf &&
                         |   AND |.
   ENDMETHOD.
 
@@ -234,6 +247,9 @@ CLASS zcl_sat_os_method_provider IMPLEMENTATION.
         WHEN c_method_option-param.
           add_param_filter( <ls_option>-value_range ).
 
+        WHEN c_method_option-exception.
+          add_exception_filter( <ls_option>-value_range ).
+
         WHEN c_method_option-flag.
           add_flag_filter( <ls_option>-value_range ).
 
@@ -265,7 +281,7 @@ CLASS zcl_sat_os_method_provider IMPLEMENTATION.
     CHECK ms_search_engine_params-use_and_cond_for_options = abap_true.
 
     " Excluding would break the relational division logic and would lead to unreliable results
-    IF NOT ( mv_param_filter_count > 1 ).
+    IF NOT ( mv_param_filter_count > 1 OR mv_exc_filter_count > 1 ).
       RETURN.
     ENDIF.
 
@@ -288,7 +304,10 @@ CLASS zcl_sat_os_method_provider IMPLEMENTATION.
     add_group_by_clause( |{ c_alias_names-method }~{ c_method_fields-changedon }| ).
 
     IF mv_param_filter_count > 1.
-      add_having_clause( iv_field = |{ c_alias_names-param }~subcomponentname| iv_counter_compare = mv_param_filter_count ).
+      add_having_clause( iv_field = |{ c_alias_names-param }~parametername| iv_counter_compare = mv_param_filter_count ).
+    ENDIF.
+    IF mv_exc_filter_count > 1.
+      add_having_clause( iv_field = |{ c_alias_names-exception }~exceptionname| iv_counter_compare = mv_exc_filter_count ).
     ENDIF.
   ENDMETHOD.
 
@@ -297,24 +316,50 @@ CLASS zcl_sat_os_method_provider IMPLEMENTATION.
                                IMPORTING et_including = DATA(lt_including)
                                          et_excluding = DATA(lt_excluding) ).
     IF lt_excluding IS NOT INITIAL.
-      create_not_in_filter( iv_subquery_fieldname = 'subcomponentname'
+      create_not_in_filter( iv_subquery_fieldname = 'parametername'
                             iv_fieldname          = |{ c_alias_names-method }~{ c_method_fields-methodname }|
                             it_excluding          = lt_excluding
                             iv_subquery           = mv_param_subquery ).
     ENDIF.
 
     IF lt_including IS NOT INITIAL.
-      add_join_table( iv_join_table = |{ zif_sat_c_select_source_id=>zsat_i_classinterfacesubcomp }|
+      add_join_table( iv_join_table = |{ zif_sat_c_select_source_id=>zsat_i_clifmethodparam }|
                       iv_alias      = c_alias_names-param
                       it_conditions = VALUE #( ref_table_alias = c_alias_names-method
                                                type            = zif_sat_c_join_cond_type=>field
                                                ( field     = c_method_fields-classname
                                                  ref_field = c_method_fields-originalclifname )
-                                               ( field     = 'component'
+                                               ( field     = 'methodname'
                                                  ref_field = c_method_fields-originalmethodname ) ) ).
-      add_option_filter( iv_fieldname = |{ c_alias_names-param }~{ 'subcomponentname' }|
+      add_option_filter( iv_fieldname = |{ c_alias_names-param }~{ 'parametername' }|
                          it_values    = lt_including ).
       mv_param_filter_count = lines( lt_including ).
+    ENDIF.
+  ENDMETHOD.
+
+  METHOD add_exception_filter.
+    split_including_excluding( EXPORTING it_values    = it_values
+                               IMPORTING et_including = DATA(lt_including)
+                                         et_excluding = DATA(lt_excluding) ).
+    IF lt_excluding IS NOT INITIAL.
+      create_not_in_filter( iv_subquery_fieldname = 'exceptionname'
+                            iv_fieldname          = |{ c_alias_names-method }~{ c_method_fields-methodname }|
+                            it_excluding          = lt_excluding
+                            iv_subquery           = mv_param_subquery ).
+    ENDIF.
+
+    IF lt_including IS NOT INITIAL.
+      add_join_table( iv_join_table = |{ zif_sat_c_select_source_id=>zsat_i_clifmethodexception }|
+                      iv_alias      = c_alias_names-exception
+                      it_conditions = VALUE #( ref_table_alias = c_alias_names-method
+                                               type            = zif_sat_c_join_cond_type=>field
+                                               ( field     = c_method_fields-classname
+                                                 ref_field = c_method_fields-originalclifname )
+                                               ( field     = 'methodname'
+                                                 ref_field = c_method_fields-originalmethodname ) ) ).
+      add_option_filter( iv_fieldname = |{ c_alias_names-exception }~{ 'exceptionname' }|
+                         it_values    = lt_including ).
+      mv_exc_filter_count = lines( lt_including ).
     ENDIF.
   ENDMETHOD.
 
