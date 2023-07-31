@@ -40,7 +40,8 @@ INTERFACE zif_sat_c_select_source_id
   CONSTANTS zsat_i_classattribute         TYPE string VALUE 'ZSAT_I_CLASSATTRIBUTE'.
   CONSTANTS zsat_i_classinterfacemethod   TYPE string VALUE 'ZSAT_I_CLASSINTERFACEMETHOD'.
   CONSTANTS zsat_i_classinterfacecomptext TYPE string VALUE 'ZSAT_I_CLASSINTERFACECOMPTEXT'.
-  CONSTANTS zsat_i_classinterfacesubcomp  TYPE string VALUE 'ZSAT_I_CLASSINTERFACESUBCOMP'.
+  CONSTANTS zsat_i_clifmethodexception    TYPE string VALUE 'ZSAT_I_CLIFMETHODEXCEPTION'.
+  CONSTANTS zsat_i_clifmethodparam        TYPE string VALUE 'ZSAT_I_CLIFMETHODPARAM'.
   CONSTANTS zsat_i_interfaceusage         TYPE string VALUE 'ZSAT_I_INTERFACEUSAGE'.
   CONSTANTS zsat_i_superclass             TYPE string VALUE 'ZSAT_I_SUPERCLASS'.
   CONSTANTS zsat_i_globalfriend           TYPE string VALUE 'ZSAT_I_GLOBALFRIEND'.
