@@ -101,6 +101,7 @@ INTERFACE zif_sat_c_object_search
 
   CONSTANTS:
     BEGIN OF c_method_search_option,
+      exception  TYPE string VALUE 'exc',
       param      TYPE string VALUE 'param',
       "! Exposure (for methods/attributes). Possible values are
       "! <ul>
