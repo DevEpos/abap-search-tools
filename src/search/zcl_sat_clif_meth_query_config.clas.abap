@@ -102,6 +102,7 @@ CLASS zcl_sat_clif_meth_query_config IMPLEMENTATION.
 
     mt_method_options = VALUE zif_sat_ty_object_search=>ty_query_filters( ( get_user_filt_conf( ) )
                                                                           ( get_created_on_filt_conf( ) )
+                                                                          ( get_changed_by_filt_conf( ) )
                                                                           ( get_changed_on_filt_conf( ) )
                                                                           ( get_description_filt_conf( ) )
                                                                           ( get_type_filter( ) )
