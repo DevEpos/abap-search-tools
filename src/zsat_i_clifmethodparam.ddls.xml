@@ -3,9 +3,9 @@
  <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
   <asx:values>
    <DDLS>
-    <DDLNAME>ZSAT_I_CLASSINTERFACESUBCOMP</DDLNAME>
+    <DDLNAME>ZSAT_I_CLIFMETHODPARAM</DDLNAME>
     <DDLANGUAGE>E</DDLANGUAGE>
-    <DDTEXT>Sub Component of Class/Interface</DDTEXT>
+    <DDTEXT>Parameter of Method</DDTEXT>
     <SOURCE_TYPE>V</SOURCE_TYPE>
    </DDLS>
   </asx:values>
