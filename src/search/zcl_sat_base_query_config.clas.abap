@@ -267,9 +267,10 @@ CLASS zcl_sat_base_query_config IMPLEMENTATION.
                           `m96/uaj0L8mBCMJfd7f8/7qr+T9ZsYCOsRrgb6gZl+xs/Drby/IJIRxqrv0GwwByMQCvW0gIlfqiygAAAABJRU5ErkJggg==` )
         long_description = |Use '{ c_general_options-software_component }' to restrict the search query by Software Component.\n\n| &&
                            |Example:\n|  && |   { c_general_options-software_component } : sap_aba|
-        patterns         = abap_true
+        patterns         = abap_false
         content_assist   = VALUE #(
             assist_type           = zif_sat_c_object_search=>c_filter_content_assist_type-named_item
+            caching               = abap_true
             category_scheme       = zif_sat_c_object_search=>c_content_assist-category_scheme
             category_term         = zif_sat_c_object_search=>c_content_assist-terms-software_comp
             proposal_image_source = zif_sat_c_object_search=>c_proposal_image_source-same_as_filter ) ).
