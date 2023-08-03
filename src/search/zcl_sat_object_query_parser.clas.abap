@@ -262,6 +262,7 @@ CLASS zcl_sat_object_query_parser IMPLEMENTATION.
       lv_value = xsdbool( lv_value = 'TRUE' OR lv_value = abap_true ).
     ELSE.
       mo_converter->convert_value( EXPORTING iv_option = is_option-name
+                                             iv_target = iv_target
                                    CHANGING  cv_value  = lv_value
                                              cv_value2 = lv_value2 ).
     ENDIF.

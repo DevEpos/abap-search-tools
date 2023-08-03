@@ -23,6 +23,13 @@ CLASS zcl_sat_base_search_provider DEFINITION
     CONSTANTS c_cr_lf TYPE string VALUE cl_abap_char_utilities=>cr_lf ##NO_TEXT.
 
     CONSTANTS:
+      BEGIN OF c_general_fields,
+        created_by TYPE string VALUE 'createdby',
+        created_on TYPE string VALUE 'createdon',
+        changed_on TYPE string VALUE 'changedon',
+        changed_by TYPE string VALUE 'changedby',
+      END OF c_general_fields,
+
       BEGIN OF c_result_fields,
         object_name        TYPE string VALUE 'OBJECT_NAME',
         raw_object_name    TYPE string VALUE 'RAW_OBJECT_NAME',
@@ -71,7 +78,7 @@ CLASS zcl_sat_base_search_provider DEFINITION
     METHODS new_and_cond_list.
 
     "! <p class="shorttext synchronized">Starts the object search</p>
-    METHODS search
+    METHODS execute_sql_query
       RAISING
         zcx_sat_object_search.
 
@@ -223,7 +230,19 @@ CLASS zcl_sat_base_search_provider DEFINITION
         iv_ref_field       TYPE fieldname
         iv_ref_table_alias TYPE string.
 
+    METHODS add_softw_comp_filter
+      IMPORTING
+        it_values          TYPE zif_sat_ty_object_search=>ty_t_value_range
+        iv_ref_field       TYPE fieldname
+        iv_ref_table_alias TYPE string.
+
+    METHODS reset.
+
   PRIVATE SECTION.
+    CONSTANTS c_devc_tab_alias TYPE string VALUE 'devclass'.
+
+    DATA mf_devclass_join_added TYPE abap_bool.
+
     METHODS get_select_string
       RETURNING
         VALUE(rv_result) TYPE string.
@@ -234,6 +253,15 @@ CLASS zcl_sat_base_search_provider DEFINITION
         it_part      TYPE ANY TABLE
       CHANGING
         cv_select    TYPE string.
+
+    METHODS search_possible
+      RETURNING
+        VALUE(result) TYPE abap_bool.
+
+    METHODS add_devclass_join
+      IMPORTING
+        iv_ref_table_alias TYPE string
+        iv_ref_field       TYPE fieldname.
 ENDCLASS.
 
 
@@ -246,26 +274,18 @@ CLASS zcl_sat_base_search_provider IMPLEMENTATION.
     mo_search_query = io_query.
     ms_search_engine_params = is_search_engine_params.
 
-    CLEAR: mt_result,
-           mt_criteria,
-           mt_criteria_or,
-           mt_criteria_and,
-           mt_where,
-           mt_select,
-           mt_order_by,
-           mt_group_by,
-           mt_having,
-           mt_from,
-           ms_join_def,
-           mf_excluding_found.
-    " .. Prepare projection fields, filters, order by, etc.
+    reset( ).
+
     prepare_search( ).
-    search( ).
-    do_after_search( ).
-    et_result = mt_result.
+
+    IF search_possible( ).
+      execute_sql_query( ).
+      do_after_search( ).
+      et_result = mt_result.
+    ENDIF.
   ENDMETHOD.
 
-  METHOD search.
+  METHOD execute_sql_query.
     create_select_clause( ).
     create_from_clause( ).
     create_where_clause( ).
@@ -360,17 +380,22 @@ CLASS zcl_sat_base_search_provider IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD add_appl_comp_filter.
-    CONSTANTS c_table_alias TYPE string VALUE 'applcomp' ##NO_TEXT.
-
     CHECK it_values IS NOT INITIAL.
 
-    add_join_table( iv_join_table = |{ zif_sat_c_select_source_id=>zsat_i_developmentpackage }|
-                    iv_alias      = c_table_alias
-                    it_conditions = VALUE #( ( field           = 'developmentpackage'
-                                               ref_field       = iv_ref_field
-                                               ref_table_alias = iv_ref_table_alias
-                                               type            = zif_sat_c_join_cond_type=>field ) ) ).
-    add_option_filter( iv_fieldname = |{ c_table_alias }~applicationcomponent|
+    add_devclass_join( iv_ref_table_alias = iv_ref_table_alias
+                       iv_ref_field       = iv_ref_field ).
+
+    add_option_filter( iv_fieldname = |{ c_devc_tab_alias }~applicationcomponent|
+                       it_values    = it_values ).
+  ENDMETHOD.
+
+  METHOD add_softw_comp_filter.
+    CHECK it_values IS NOT INITIAL.
+
+    add_devclass_join( iv_ref_table_alias = iv_ref_table_alias
+                       iv_ref_field       = iv_ref_field ).
+
+    add_option_filter( iv_fieldname = |{ c_devc_tab_alias }~softwarecomponent|
                        it_values    = it_values ).
   ENDMETHOD.
 
@@ -604,6 +629,11 @@ CLASS zcl_sat_base_search_provider IMPLEMENTATION.
                         WHERE
                               ( tadir_type IS NOT INITIAL AND object_name IS NOT INITIAL )
                         ( object = entity-tadir_type obj_name = entity-object_name ) ).
+
+    SORT lt_texts BY obj_name
+                     object.
+    DELETE ADJACENT DUPLICATES FROM lt_texts COMPARING obj_name object.
+
     CALL FUNCTION 'RS_SHORTTEXT_GET'
       EXPORTING clear_buffer = abap_true
       TABLES    obj_tab      = lt_texts.
@@ -613,38 +643,6 @@ CLASS zcl_sat_base_search_provider IMPLEMENTATION.
       IF sy-subrc = 0.
         <ls_entity>-description = <ls_text>-stext.
       ENDIF.
-    ENDLOOP.
-  ENDMETHOD.
-
-  METHOD get_select_string.
-    add_select_part( EXPORTING iv_part_name = 'SELECT DISTINCT'
-                               it_part      = mt_select
-                     CHANGING  cv_select    = rv_result ).
-    add_select_part( EXPORTING iv_part_name = 'FROM'
-                               it_part      = mt_from
-                     CHANGING  cv_select    = rv_result ).
-    add_select_part( EXPORTING iv_part_name = 'WHERE'
-                               it_part      = mt_where
-                     CHANGING  cv_select    = rv_result ).
-    add_select_part( EXPORTING iv_part_name = 'GROUP BY'
-                               it_part      = mt_group_by
-                     CHANGING  cv_select    = rv_result ).
-    add_select_part( EXPORTING iv_part_name = 'HAVING'
-                               it_part      = mt_having
-                     CHANGING  cv_select    = rv_result ).
-    add_select_part( EXPORTING iv_part_name = 'ORDER BY'
-                               it_part      = mt_order_by
-                     CHANGING  cv_select    = rv_result ).
-  ENDMETHOD.
-
-  METHOD add_select_part.
-    FIELD-SYMBOLS <lv_part> TYPE any.
-
-    CHECK it_part IS NOT INITIAL.
-
-    cv_select = |{ cv_select }{ c_cr_lf }{ iv_part_name } |.
-    LOOP AT it_part ASSIGNING <lv_part>.
-      cv_select = |{ cv_select }{ c_cr_lf }    { <lv_part> }|.
     ENDLOOP.
   ENDMETHOD.
 
@@ -681,5 +679,78 @@ CLASS zcl_sat_base_search_provider IMPLEMENTATION.
     et_including = VALUE #( FOR including IN it_values
                             WHERE ( sign = zif_sat_c_options=>including AND ( sign2 = zif_sat_c_options=>including OR sign2 = space ) )
                             ( including ) ).
+  ENDMETHOD.
+
+  METHOD reset.
+    CLEAR: mt_result,
+           mt_criteria,
+           mt_criteria_or,
+           mt_criteria_and,
+           mt_where,
+           mt_select,
+           mt_order_by,
+           mt_group_by,
+           mt_having,
+           mt_from,
+           ms_join_def,
+           mf_excluding_found,
+           mf_devclass_join_added.
+  ENDMETHOD.
+
+  METHOD get_select_string.
+    add_select_part( EXPORTING iv_part_name = 'SELECT DISTINCT'
+                               it_part      = mt_select
+                     CHANGING  cv_select    = rv_result ).
+    add_select_part( EXPORTING iv_part_name = 'FROM'
+                               it_part      = mt_from
+                     CHANGING  cv_select    = rv_result ).
+    add_select_part( EXPORTING iv_part_name = 'WHERE'
+                               it_part      = mt_where
+                     CHANGING  cv_select    = rv_result ).
+    add_select_part( EXPORTING iv_part_name = 'GROUP BY'
+                               it_part      = mt_group_by
+                     CHANGING  cv_select    = rv_result ).
+    add_select_part( EXPORTING iv_part_name = 'HAVING'
+                               it_part      = mt_having
+                     CHANGING  cv_select    = rv_result ).
+    add_select_part( EXPORTING iv_part_name = 'ORDER BY'
+                               it_part      = mt_order_by
+                     CHANGING  cv_select    = rv_result ).
+  ENDMETHOD.
+
+  METHOD add_select_part.
+    FIELD-SYMBOLS <lv_part> TYPE any.
+
+    CHECK it_part IS NOT INITIAL.
+
+    cv_select = |{ cv_select }{ c_cr_lf }{ iv_part_name } |.
+    LOOP AT it_part ASSIGNING <lv_part>.
+      cv_select = |{ cv_select }{ c_cr_lf }    { <lv_part> }|.
+    ENDLOOP.
+  ENDMETHOD.
+
+  METHOD search_possible.
+    result = abap_true.
+    IF ms_join_def-primary_table IS INITIAL.
+      result = abap_false.
+      RETURN.
+    ENDIF.
+
+    IF mt_select IS INITIAL.
+      result = abap_false.
+      RETURN.
+    ENDIF.
+  ENDMETHOD.
+
+  METHOD add_devclass_join.
+    IF mf_devclass_join_added = abap_false.
+      add_join_table( iv_join_table = |{ zif_sat_c_select_source_id=>zsat_i_developmentpackage }|
+                      iv_alias      = c_devc_tab_alias
+                      it_conditions = VALUE #( ( field           = 'developmentpackage'
+                                                 ref_field       = iv_ref_field
+                                                 ref_table_alias = iv_ref_table_alias
+                                                 type            = zif_sat_c_join_cond_type=>field ) ) ).
+      mf_devclass_join_added = abap_true.
+    ENDIF.
   ENDMETHOD.
 ENDCLASS.
