@@ -71,7 +71,7 @@ CLASS zcl_sat_search_ioc IMPLEMENTATION.
     )->add_implementer( iv_filter      = |{ c_search_type-class_interface }|
                         iv_implementer = 'ZCL_SAT_CLSINTF_QC'
     )->add_implementer( iv_filter      = |{ c_search_type-method }|
-                        iv_implementer = 'ZCL_SAT_CLSINTF_QC'
+                        iv_implementer = 'ZCL_SAT_CLIF_METHOD_QC'
     )->add_implementer( iv_filter      = |{ c_search_type-cds_view }|
                         iv_implementer = 'ZCL_SAT_CDS_VIEW_QC'
     )->add_implementer( iv_implementer = 'ZCL_SAT_GENERAL_QC' ).

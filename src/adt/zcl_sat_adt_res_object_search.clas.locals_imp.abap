@@ -274,9 +274,6 @@ CLASS lcl_method_result_converter IMPLEMENTATION.
                  illegal_new_window_parameter = 3
                  OTHERS                       = 4.
     IF sy-subrc <> 0.
-*      ex = cx_adt_uri_mapping=>create( textid = cx_adt_uri_mapping=>invalid_uri ).
-*      ex->uri = uri.
-*      RAISE EXCEPTION ex.
       RETURN.
     ENDIF.
 
@@ -288,9 +285,7 @@ CLASS lcl_method_result_converter IMPLEMENTATION.
         result = cl_adt_tools_core_factory=>get_instance( )->get_uri_mapper( )->map_wb_request_to_objref(
                      wb_request      = lo_wb_request
                      mapping_options = lo_src_map_opts )->ref_data-uri.
-      CATCH cx_adt_uri_mapping INTO DATA(lx_error). " TODO: variable is assigned but never used (ABAP cleaner)
-        IF 1 = 2.
-        ENDIF.
+      CATCH cx_adt_uri_mapping.
     ENDTRY.
   ENDMETHOD.
 
