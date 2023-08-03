@@ -9,5 +9,6 @@ define view ZSAT_I_DevelopmentPackage
     inner join   df14l as ApplComp on Package.component = ApplComp.fctr_id
 {
   key Package.devclass  as DevelopmentPackage,
+      Package.dlvunit   as SoftwareComponent,
       ApplComp.ps_posid as ApplicationComponent
 }

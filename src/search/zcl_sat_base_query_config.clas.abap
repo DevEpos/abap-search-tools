@@ -76,6 +76,10 @@ CLASS zcl_sat_base_query_config DEFINITION
       RETURNING
         VALUE(result) TYPE zif_sat_ty_object_search=>ty_query_filter.
 
+    METHODS get_softw_comp_filt_conf
+      RETURNING
+        VALUE(result) TYPE zif_sat_ty_object_search=>ty_query_filter.
+
     METHODS get_created_on_filt_conf
       RETURNING
         VALUE(result) TYPE zif_sat_ty_object_search=>ty_query_filter.
@@ -99,6 +103,7 @@ CLASS zcl_sat_base_query_config DEFINITION
         api         TYPE string VALUE 'ABAP:IMG_API',
         description TYPE string VALUE 'ABAP:IMG_DESCRIPTION',
         appl_comp   TYPE string VALUE 'ABAP:IMG_APPL_COMP',
+        soft_comp   TYPE string VALUE 'ABAP:IMG_SOFT_COMP',
         changed_on  TYPE string VALUE 'ABAP:IMG_CHANGED_ON',
       END OF c_image_keys.
 
@@ -251,10 +256,30 @@ CLASS zcl_sat_base_query_config IMPLEMENTATION.
             proposal_image_source = zif_sat_c_object_search=>c_proposal_image_source-same_as_filter ) ).
   ENDMETHOD.
 
+  METHOD get_softw_comp_filt_conf.
+    result = VALUE #(
+        name             = c_general_options-software_component
+        img_info         = VALUE #(
+            img_key     = c_image_keys-soft_comp
+            img_encoded = `iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABY0lEQVR4nGM4fvw4Azbsbqwp6W2o5uKjp+HrY6imz8DAwIhNHVbNSc7GE8tD7J8vrYz4vKom6mtvmtfLRAfjy256etxEGZDibHLz9ab6` &&
+                          `/7/3t4Pxr31t/5tjXN+AXEKUAX4mWoZprmZP3myGGNKf5v0m3s6wGa8XAo21bdJdTbbAcJy94a07y8rABuR5Wz1DlTNY3cDAwIRiQLCpdtr6xtj/T9ZUgfGrTXVwL3ze0QwXB+EsD4uXoaEMzBgG7OtN` &&
+                          `g2tCx+dm5v67MCf/L4id72v1jCQDjk/N/h1jY7gp3t5w09LKyE+ZpLqgKcbleYCBhgIoLSQ4GtYm2htXYgQiPgNKAm2fhmpr8+CNBXwGTEjzeeWnr2LoYqzEn+hofDzByeggLGUSZcCDlRX/Ex2NHiQ7` &&
+                          `m96/uaj0L8mBCMJfd7f8/7qr+T9ZsYCOsRrgb6gZl+xs/Drby/IJIRxqrv0GwwByMQCvW0gIlfqiygAAAABJRU5ErkJggg==` )
+        long_description = |Use '{ c_general_options-software_component }' to restrict the search query by Software Component.\n\n| &&
+                           |Example:\n|  && |   { c_general_options-software_component } : sap_aba|
+        patterns         = abap_true
+        content_assist   = VALUE #(
+            assist_type           = zif_sat_c_object_search=>c_filter_content_assist_type-named_item
+            category_scheme       = zif_sat_c_object_search=>c_content_assist-category_scheme
+            category_term         = zif_sat_c_object_search=>c_content_assist-terms-software_comp
+            proposal_image_source = zif_sat_c_object_search=>c_proposal_image_source-same_as_filter ) ).
+  ENDMETHOD.
+
   METHOD get_created_on_filt_conf.
-    result = VALUE #( name             = c_general_options-created_on
-                      long_description = |Use '{ c_general_options-created_on }' to restrict results by the creation date of an object.|
-                      data_type        = zif_sat_c_object_search=>c_filter_data_type-date ).
+    result = VALUE #(
+        name             = c_general_options-created_on
+        long_description = |Use '{ c_general_options-created_on }' to restrict results by the creation date of an object.|
+        data_type        = zif_sat_c_object_search=>c_filter_data_type-date ).
   ENDMETHOD.
 
   METHOD get_changed_on_filt_conf.
