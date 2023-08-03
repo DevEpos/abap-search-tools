@@ -69,6 +69,7 @@ CLASS zcl_sat_cds_view_query_config IMPLEMENTATION.
                                                                                 ( get_changed_by_filt_conf( ) )
                                                                                 ( get_changed_on_filt_conf( ) )
                                                                                 ( get_package_filt_conf( ) )
+                                                                                ( get_softw_comp_filt_conf( ) )
                                                                                 ( get_appl_comp_filt_conf( ) )
                                                                                 ( get_description_filt_conf( ) )
                                                                                 ( get_max_rows_filt_conf( ) )

@@ -100,6 +100,11 @@ CLASS zcl_sat_os_dbtab_provider IMPLEMENTATION.
           add_option_filter( iv_fieldname = c_fields-development_package
                              it_values    = <ls_option>-value_range ).
 
+        WHEN c_general_search_options-software_component.
+          add_softw_comp_filter( it_values          = <ls_option>-value_range
+                                 iv_ref_field       = CONV #( c_fields-development_package )
+                                 iv_ref_table_alias = c_base_table ).
+
         WHEN c_general_search_options-application_component.
           add_appl_comp_filter( it_values          = <ls_option>-value_range
                                 iv_ref_field       = CONV #( c_fields-development_package )
