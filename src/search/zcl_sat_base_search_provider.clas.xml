@@ -132,6 +132,11 @@
      <DESCRIPT>Performs task after the Search</DESCRIPT>
     </SEOCOMPOTX>
     <SEOCOMPOTX>
+     <CMPNAME>EXECUTE_SQL_QUERY</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Starts the object search</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
      <CLSNAME>ZCL_SAT_BASE_SEARCH_PROVIDER</CLSNAME>
      <CMPNAME>FILL_DESCRIPTIONS</CMPNAME>
      <LANGU>E</LANGU>
@@ -156,7 +161,6 @@
      <DESCRIPT>Preparation tasks before actual search</DESCRIPT>
     </SEOCOMPOTX>
     <SEOCOMPOTX>
-     <CLSNAME>ZCL_SAT_BASE_SEARCH_PROVIDER</CLSNAME>
      <CMPNAME>SEARCH</CMPNAME>
      <LANGU>E</LANGU>
      <DESCRIPT>Starts the object search</DESCRIPT>
