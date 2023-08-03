@@ -2,7 +2,6 @@
 CLASS zcl_sat_os_method_provider DEFINITION
   PUBLIC
   INHERITING FROM zcl_sat_os_classintf_provider
-  FINAL
   CREATE PUBLIC.
 
   PUBLIC SECTION.
@@ -76,22 +75,6 @@ CLASS zcl_sat_os_method_provider DEFINITION
     METHODS configure_search_term_filters.
 
     METHODS add_flag_filter
-      IMPORTING
-        it_values TYPE zif_sat_ty_object_search=>ty_t_value_range.
-
-    METHODS add_level_filter
-      IMPORTING
-        it_values TYPE zif_sat_ty_object_search=>ty_t_value_range.
-
-    METHODS add_visibility_filter
-      IMPORTING
-        it_values TYPE zif_sat_ty_object_search=>ty_t_value_range.
-
-    METHODS add_status_filter
-      IMPORTING
-        it_values TYPE zif_sat_ty_object_search=>ty_t_value_range.
-
-    METHODS add_type_filter
       IMPORTING
         it_values TYPE zif_sat_ty_object_search=>ty_t_value_range.
 
@@ -254,16 +237,20 @@ CLASS zcl_sat_os_method_provider IMPLEMENTATION.
           add_flag_filter( <ls_option>-value_range ).
 
         WHEN c_method_option-level.
-          add_level_filter( <ls_option>-value_range ).
+          add_option_filter( iv_fieldname = |{ c_alias_names-method }~methodlevel|
+                             it_values    = <ls_option>-value_range ).
 
         WHEN c_method_option-visibility.
-          add_visibility_filter( <ls_option>-value_range ).
+          add_option_filter( iv_fieldname = |{ c_alias_names-method }~exposure|
+                             it_values    = <ls_option>-value_range ).
 
         WHEN c_method_option-status.
-          add_status_filter( <ls_option>-value_range ).
+          add_option_filter( iv_fieldname = |{ c_alias_names-method }~category|
+                             it_values    = <ls_option>-value_range ).
 
         WHEN c_general_search_options-type.
-          add_type_filter( <ls_option>-value_range ).
+          add_option_filter( iv_fieldname = |{ c_alias_names-method }~methodtype|
+                             it_values    = <ls_option>-value_range ).
 
         WHEN c_general_search_options-created_on.
           add_date_filter( iv_fieldname = |{ c_alias_names-method }~{ c_method_fields-createdon }|
@@ -395,63 +382,6 @@ CLASS zcl_sat_os_method_provider IMPLEMENTATION.
 
       new_and_cond_list( ).
     ENDIF.
-  ENDMETHOD.
-
-  METHOD add_level_filter.
-    LOOP AT it_values INTO DATA(ls_value).
-      add_filter( VALUE #(
-                      sqlfieldname = |{ c_alias_names-method }~methodlevel|
-                      sign         = ls_value-sign
-                      option       = ls_value-option
-                      low          = SWITCH #( ls_value-low
-                                               WHEN zif_sat_c_object_search=>c_method_level-instance THEN '0'
-                                               WHEN zif_sat_c_object_search=>c_method_level-static   THEN '1' )  ) ).
-    ENDLOOP.
-  ENDMETHOD.
-
-  METHOD add_visibility_filter.
-    LOOP AT it_values INTO DATA(ls_value).
-      add_filter( VALUE #(
-                      sqlfieldname = |{ c_alias_names-method }~exposure|
-                      sign         = ls_value-sign
-                      option       = ls_value-option
-                      low          = SWITCH #( ls_value-low
-                                               WHEN zif_sat_c_object_search=>c_visibility-private   THEN '0'
-                                               WHEN zif_sat_c_object_search=>c_visibility-protected THEN '1'
-                                               WHEN zif_sat_c_object_search=>c_visibility-public    THEN '2' )  ) ).
-    ENDLOOP.
-  ENDMETHOD.
-
-  METHOD add_status_filter.
-    LOOP AT it_values INTO DATA(ls_value).
-      add_filter(
-          VALUE #( sqlfieldname = |{ c_alias_names-method }~category|
-                   sign         = ls_value-sign
-                   option       = ls_value-option
-                   low          = SWITCH #( ls_value-low
-                                            WHEN zif_sat_c_object_search=>c_method_status-standard    THEN '1'
-                                            WHEN zif_sat_c_object_search=>c_method_status-implemented THEN '2'
-                                            WHEN zif_sat_c_object_search=>c_method_status-redefined   THEN '3' )  ) ).
-    ENDLOOP.
-  ENDMETHOD.
-
-  METHOD add_type_filter.
-    LOOP AT it_values INTO DATA(ls_value).
-      add_filter(
-          VALUE #(
-              sqlfieldname = |{ c_alias_names-method }~methodtype|
-              sign         = ls_value-sign
-              option       = ls_value-option
-              low          = SWITCH #( ls_value-low
-                                       WHEN zif_sat_c_object_search=>c_method_types-general            THEN '0'
-                                       WHEN zif_sat_c_object_search=>c_method_types-event_handler      THEN '1'
-                                       WHEN zif_sat_c_object_search=>c_method_types-constructor        THEN '2'
-                                       WHEN zif_sat_c_object_search=>c_method_types-virtual_getter     THEN '4'
-                                       WHEN zif_sat_c_object_search=>c_method_types-virtual_setter     THEN '5'
-                                       WHEN zif_sat_c_object_search=>c_method_types-test               THEN '6'
-                                       WHEN zif_sat_c_object_search=>c_method_types-cds_table_function THEN '7'
-                                       WHEN zif_sat_c_object_search=>c_method_types-amdp_ddl_object    THEN '8' )  ) ).
-    ENDLOOP.
   ENDMETHOD.
 
   METHOD map_flag_opt_to_field.
