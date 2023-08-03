@@ -230,8 +230,6 @@ CLASS zcl_sat_clif_meth_query_config IMPLEMENTATION.
         name             = c_method_options-status
         long_description = |Use '{ c_method_options-status }' to limit results to methods by status.\n\n| &&
                            |Example:\n   { c_method_options-status } : implemented|
-*        img_info         = VALUE #( img_key     = c_general_image_keys-generic_filter
-*        img_encoded      = get_general_image( c_general_image_keys-generic_filter ) )
         img_info         = VALUE #(
             img_key     = c_image_keys-status
             img_encoded = `iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAAOwAAADsAEnxA+tAAAAGXRFWHRTb2Z0d2FyZQB3d3cuaW5rc2NhcGUub3Jnm+48GgAAAK1JREFUOI3V0T1qgkEQh/Ff/ABb` &&
