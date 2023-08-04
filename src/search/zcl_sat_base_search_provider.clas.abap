@@ -714,43 +714,6 @@ CLASS zcl_sat_base_search_provider IMPLEMENTATION.
     ENDIF.
   ENDMETHOD.
 
-  METHOD search.
-    create_select_clause( ).
-    create_from_clause( ).
-    create_where_clause( ).
-    create_order_by_clause( ).
-    determine_grouping( ).
-
-    DATA(lv_max_rows) = COND #( WHEN ms_search_engine_params-get_all = abap_true
-                                THEN 0
-                                ELSE mo_search_query->mv_max_rows + 1 ).
-
-    TRY.
-        IF mt_group_by IS NOT INITIAL.
-          SELECT DISTINCT (mt_select)
-            FROM (mt_from)
-            WHERE (mt_where)
-            GROUP BY (mt_group_by)
-            HAVING (mt_having)
-            ORDER BY (mt_order_by)
-          INTO CORRESPONDING FIELDS OF TABLE @mt_result
-            UP TO @lv_max_rows ROWS.
-        ELSE.
-          SELECT DISTINCT (mt_select)
-            FROM (mt_from)
-            WHERE (mt_where)
-            ORDER BY (mt_order_by)
-          INTO CORRESPONDING FIELDS OF TABLE @mt_result
-            UP TO @lv_max_rows ROWS.
-        ENDIF.
-        " TODO: variable is assigned but never used (ABAP cleaner)
-        DATA(lv_sql) = get_select_string( ).
-      CATCH cx_sy_open_sql_error INTO DATA(lx_sql_error).
-        RAISE EXCEPTION TYPE zcx_sat_object_search
-          EXPORTING previous = lx_sql_error.
-    ENDTRY.
-  ENDMETHOD.
-
   METHOD set_base_select_table.
     ms_join_def-primary_table       = iv_entity.
     ms_join_def-primary_table_alias = COND #( WHEN iv_alias IS NOT INITIAL THEN iv_alias ELSE iv_entity ).
