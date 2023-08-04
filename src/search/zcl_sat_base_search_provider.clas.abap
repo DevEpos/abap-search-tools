@@ -537,17 +537,6 @@ CLASS zcl_sat_base_search_provider IMPLEMENTATION.
                            COND #( WHEN iv_fieldname_alias IS NOT INITIAL THEN | AS { iv_fieldname_alias }| ) ) ).
   ENDMETHOD.
 
-  METHOD add_select_part.
-    FIELD-SYMBOLS <lv_part> TYPE any.
-
-    CHECK it_part IS NOT INITIAL.
-
-    cv_select = |{ cv_select }{ c_cr_lf }{ iv_part_name } |.
-    LOOP AT it_part ASSIGNING <lv_part>.
-      cv_select = |{ cv_select }{ c_cr_lf }    { <lv_part> }|.
-    ENDLOOP.
-  ENDMETHOD.
-
   METHOD add_subquery_filter.
     mt_criteria = VALUE #( BASE mt_criteria
                            ( sqlfieldname = iv_fieldname
