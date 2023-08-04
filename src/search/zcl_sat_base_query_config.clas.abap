@@ -68,10 +68,6 @@ CLASS zcl_sat_base_query_config DEFINITION
       RETURNING
         VALUE(result) TYPE zif_sat_ty_object_search=>ty_query_filter.
 
-    METHODS get_rel_state_filt_conf
-      RETURNING
-        VALUE(result) TYPE zif_sat_ty_object_search=>ty_query_filter.
-
     METHODS get_appl_comp_filt_conf
       RETURNING
         VALUE(result) TYPE zif_sat_ty_object_search=>ty_query_filter.
@@ -216,29 +212,6 @@ CLASS zcl_sat_base_query_config IMPLEMENTATION.
         patterns         = abap_true
         allowed_length   = 12
         content_assist   = VALUE #( assist_type = zif_sat_c_object_search=>c_filter_content_assist_type-user ) ).
-  ENDMETHOD.
-
-  METHOD get_rel_state_filt_conf.
-    result = VALUE #(
-        name             = c_general_options-release_state
-        description      = 'API State'
-        long_description = |Use '{ c_general_options-release_state }' to restrict the search query by specific API state.\n\n| &&
-                           |Example:\n|  && |   { c_general_options-release_state } : released|
-        img_info         = VALUE #(
-            img_key     = c_image_keys-api
-            img_encoded = `iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAACi0lEQVR4nGNgoBXYP/OMyOE5F/6D8P7ZF2WI0zTrrA9QowaIfXjORQ+YAYdmXwwBiU3KXaA8qWBeJpDJiKl5xlmPAzPPfgbi3zumHpu8` &&
-                          `tf/Atp2Tj73bOeno+029+w4srFs3b0v3wffbe4/878ufWYhhyP7p5xVABuyddubvrsnHf+2ecuI/CO+adPz/jv6j/7d2Hfm7uXP/D5AB0S4JUUAtTBiuANo8AaZ5S++hr5ML526elDdn07rG3e83Ne//` &&
-                          `v75+79+JebN2ApUqo7hgUf06sbmVq/xWtWzfvbP/2P/NHQe+Ohm6RkIVynubBXmvLNvyfk3Frv/T0hedaw7vTe+Ona0I08+2tevwfxDe0Lb305b2g//7s2ZvAopLAzEL1Kn8ExLnrFhRsPX/wqx1n1cU` &&
-                          `bvsPwiBxkAGcMAPW1O/8vKF+7/8J6bPWAcW5kHzHNjl+3sLFGRv/z01a+QXJAHGQJLuplqVzZkBhzeSMBWfXlO/8v6xoy5dMt2JjqO2Mlf5tWvMS17yZn7D2f0fQlCtJTtn91uoO0TAXMEEZ4j3xM5Ys` &&
-                          `y9/8e2nO5v+L0td9nhq7aM7U6EWzZseufD03evX/GaFL/1a6tIACURaIBYCYGe7G9qhpSkvzN39elL3h14LkdX9Bts2LXfN/TtSq/zNDl4M1Tw1e9HV2xIo/iZa59ugxyNQZNTl5ecHWPyC/NQT37Gv2` &&
-                          `6Ds7OXjhFxBu8ZpwucKpaeesiOV/Z0es/F/sWN+InpBAHIF878o6d32fDCDbLNkip3B25Mr/IJxgltkBFNOxU3KOzrAp6gSylTASETQsQP4SA8VMoH64GswAKyVHb6h/QWElAooVbAagA04gNgViSyBW` &&
-                          `wKUIAC0NTrBGCkkHAAAAAElFTkSuQmCC` )
-        content_assist   = VALUE #(
-            caching               = abap_true
-            assist_type           = zif_sat_c_object_search=>c_filter_content_assist_type-named_item
-            category_scheme       = zif_sat_c_object_search=>c_content_assist-category_scheme
-            category_term         = zif_sat_c_object_search=>c_content_assist-terms-release_state
-            proposal_image_source = zif_sat_c_object_search=>c_proposal_image_source-same_as_filter ) ).
   ENDMETHOD.
 
   METHOD get_appl_comp_filt_conf.
