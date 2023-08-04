@@ -100,6 +100,10 @@
         <tt:attribute name="objectsearch:patterns" option="format(boolean)" value-ref="filter.patterns"/>
       </tt:cond>
 
+      <tt:cond check="not-initial(filter.description)">
+        <tt:attribute name="objectsearch:description" value-ref="filter.description"/>
+      </tt:cond>
+
       <tt:cond check="not-initial(filter.long_description)">
         <objectsearch:longDescription>
           <tt:value ref="filter.long_description"/>

@@ -151,6 +151,7 @@ CLASS zcl_sat_clif_meth_query_config IMPLEMENTATION.
   METHOD get_flag_filter.
     result = VALUE #(
         name             = c_method_options-flag
+        description      = 'Flag'
         long_description = |Use '{ c_method_options-flag }' to restrict the result to methods with specific features.\n\n| &&
                            |Exmaple:\n   { c_method_options-flag } : abstract|
         img_info         = VALUE #( img_key     = c_general_image_keys-checked_box
@@ -167,6 +168,7 @@ CLASS zcl_sat_clif_meth_query_config IMPLEMENTATION.
   METHOD get_exception_filter.
     result = VALUE #(
         name             = c_method_options-exception
+        description      = 'Exception'
         long_description = |Use '{ c_method_options-exception }' to restrict the result to methods with specific exceptions.\n\n| &&
                            |Example:\n   { c_method_options-exception } : cx_static_check|
         img_info         = VALUE #(
@@ -180,6 +182,7 @@ CLASS zcl_sat_clif_meth_query_config IMPLEMENTATION.
   METHOD get_param_filter.
     result = VALUE #(
         name             = c_method_options-param
+        description      = 'Parameter'
         long_description = |Use '{ c_method_options-param }' to restrict the result to methods with specific parameters.\n\n| &&
                            |Example:\n   { c_method_options-param } : iv_user_name|
         img_info         = VALUE #( img_key     = c_general_image_keys-param
@@ -190,6 +193,7 @@ CLASS zcl_sat_clif_meth_query_config IMPLEMENTATION.
   METHOD get_visibility_filter.
     result = VALUE #(
         name             = c_method_options-visibility
+        description      = 'Visibility'
         long_description = |Use '{ c_method_options-visibility }' to limit query result to methods with a certain exposure.\n\n| &&
                            |Example:\n   { c_method_options-visibility } : public|
         img_info         = VALUE #(
@@ -211,6 +215,7 @@ CLASS zcl_sat_clif_meth_query_config IMPLEMENTATION.
   METHOD get_level_filter.
     result = VALUE #(
         name             = c_method_options-level
+        description      = 'Declaration Level'
         long_description = |Use '{ c_method_options-level }' to limit result to methods defined at a certain level.\n\n| &&
                            |Example:\n   { c_method_options-level } : instance|
         img_info         = VALUE #(
@@ -228,6 +233,7 @@ CLASS zcl_sat_clif_meth_query_config IMPLEMENTATION.
   METHOD get_status_filter.
     result = VALUE #(
         name             = c_method_options-status
+        description      = 'Method Status'
         long_description = |Use '{ c_method_options-status }' to limit results to methods by status.\n\n| &&
                            |Example:\n   { c_method_options-status } : implemented|
         img_info         = VALUE #(
@@ -246,6 +252,7 @@ CLASS zcl_sat_clif_meth_query_config IMPLEMENTATION.
   METHOD get_type_filter.
     result = VALUE #(
         name             = c_general_options-type
+        description      = 'Method Type'
         long_description = |Use '{ c_general_options-type }' to find methods of a concrete type.\n\n| &&
                            |Example:\n   { c_general_options-type } : event_handler|
         img_info         = VALUE #( img_key     = c_general_image_keys-type_folder

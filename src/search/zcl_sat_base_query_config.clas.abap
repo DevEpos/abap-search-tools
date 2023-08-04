@@ -144,6 +144,7 @@ CLASS zcl_sat_base_query_config IMPLEMENTATION.
   METHOD get_description_filt_conf.
     result = VALUE #(
         name             = c_general_options-description
+        description      = 'Description'
         long_description = |Use '{ c_general_options-description }' to restrict the search query by a given Description. | &&
                            |Starting from NetWeaver 7.51 the input must no longer be case sensitive.\n\nExample:\n   { c_general_options-description } : some+descr|
         allowed_length   = 40
@@ -166,6 +167,7 @@ CLASS zcl_sat_base_query_config IMPLEMENTATION.
   METHOD get_package_filt_conf.
     result = VALUE #(
         name             = c_general_options-package
+        description      = 'Development Package'
         long_description = |Use '{ c_general_options-package }' to restrict the search query by specific packages.\n\nExample:\n   | &&
                            |{ c_general_options-package } : test\n\nObjects of sub packages will be reflected in the result list as well|
         img_info         = VALUE #(
@@ -184,6 +186,7 @@ CLASS zcl_sat_base_query_config IMPLEMENTATION.
   METHOD get_user_filt_conf.
     result = VALUE #(
         name             = c_general_options-user
+        description      = 'Owner'
         long_description = |Use '{ c_general_options-user }' to restrict the search query by specific users.| &&
                            |\n\nExample:\n   { c_general_options-user } : musterm|
         patterns         = abap_true
@@ -194,6 +197,7 @@ CLASS zcl_sat_base_query_config IMPLEMENTATION.
   METHOD get_changed_by_filt_conf.
     result = VALUE #(
         name             = c_general_options-changed_by
+        description      = 'Last Changed By'
         long_description = |Use '{ c_general_options-changed_by }' to restrict the search query by users who were the last to change an object.| &&
                            |\n\nExample:\n   { c_general_options-changed_by } : musterm|
         img_info         = VALUE #(
@@ -211,6 +215,9 @@ CLASS zcl_sat_base_query_config IMPLEMENTATION.
   METHOD get_rel_state_filt_conf.
     result = VALUE #(
         name             = c_general_options-release_state
+        description      = 'API State'
+        long_description = |Use '{ c_general_options-release_state }' to restrict the search query by specific API state.\n\n| &&
+                           |Example:\n|  && |   { c_general_options-release_state } : released|
         img_info         = VALUE #(
             img_key     = c_image_keys-api
             img_encoded = `iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAACi0lEQVR4nGNgoBXYP/OMyOE5F/6D8P7ZF2WI0zTrrA9QowaIfXjORQ+YAYdmXwwBiU3KXaA8qWBeJpDJiKl5xlmPAzPPfgbi3zumHpu8` &&
@@ -220,8 +227,6 @@ CLASS zcl_sat_base_query_config IMPLEMENTATION.
                           `y9/8e2nO5v+L0td9nhq7aM7U6EWzZseufD03evX/GaFL/1a6tIACURaIBYCYGe7G9qhpSkvzN39elL3h14LkdX9Bts2LXfN/TtSq/zNDl4M1Tw1e9HV2xIo/iZa59ugxyNQZNTl5ecHWPyC/NQT37Gv2` &&
                           `6Ds7OXjhFxBu8ZpwucKpaeesiOV/Z0es/F/sWN+InpBAHIF878o6d32fDCDbLNkip3B25Mr/IJxgltkBFNOxU3KOzrAp6gSylTASETQsQP4SA8VMoH64GswAKyVHb6h/QWElAooVbAagA04gNgViSyBW` &&
                           `wKUIAC0NTrBGCkkHAAAAAElFTkSuQmCC` )
-        long_description = |Use '{ c_general_options-release_state }' to restrict the search query by specific API state.\n\n| &&
-                           |Example:\n|  && |   { c_general_options-release_state } : released|
         content_assist   = VALUE #(
             caching               = abap_true
             assist_type           = zif_sat_c_object_search=>c_filter_content_assist_type-named_item
@@ -233,6 +238,9 @@ CLASS zcl_sat_base_query_config IMPLEMENTATION.
   METHOD get_appl_comp_filt_conf.
     result = VALUE #(
         name             = c_general_options-application_component
+        description = 'Application Component'
+        long_description = |Use '{ c_general_options-application_component }' to restrict the search query by Application Component.\n\n| &&
+                           |Example:\n|  && |   { c_general_options-application_component } : ap|
         img_info         = VALUE #(
             img_key     = c_image_keys-appl_comp
             img_encoded = `iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABoElEQVR4nM3Suy9DURwHcI94m8UihEQMUiw3hIGi1O3To9XWvV6ptogQCdVabEIMRjEQGxYRiYVJgtjwBwhpKq1nUaQeX7/byUlzm9ic` &&
@@ -240,8 +248,6 @@ CLASS zcl_sat_base_query_config IMPLEMENTATION.
                           `TEFWvBMc7bkQvvZQ0E3GgAcXnHoLU5BGioiS8Pqaeuxs9BIB+9sCLs4GEAkOU9BBeoF7K+xaE1OQbFa2QM79RTc+bwQKmokBuFOjn29nCjKlhQg5Y0jzpwcqvPk1FFQBt7WkCj3qVqYgO94JTvY4vPpq` &&
                           `KMgBN2WkBEKTnilIJQWkWnoHvrIW+1scqcDhrgK+cwU+rkspWAwE80kuPa6WKUgkKdJVpNNI7c+XHClH+KoEEX8hvgN5FMwBAulRnUpe/id2NxshNhkgqPToUumiu1kbNLDU89ErmerUUbIFfx0/1b2N` &&
                           `zNSGKzEAAAAASUVORK5CYII=` )
-        long_description = |Use '{ c_general_options-application_component }' to restrict the search query by Application Component.\n\n| &&
-                           |Example:\n|  && |   { c_general_options-application_component } : ap|
         patterns         = abap_true
         content_assist   = VALUE #(
             assist_type           = zif_sat_c_object_search=>c_filter_content_assist_type-named_item
@@ -253,14 +259,15 @@ CLASS zcl_sat_base_query_config IMPLEMENTATION.
   METHOD get_softw_comp_filt_conf.
     result = VALUE #(
         name             = c_general_options-software_component
+        description      = 'Software Component'
+        long_description = |Use '{ c_general_options-software_component }' to restrict the search query by Software Component.\n\n| &&
+                           |Example:\n|  && |   { c_general_options-software_component } : sap_aba|
         img_info         = VALUE #(
             img_key     = c_image_keys-soft_comp
             img_encoded = `iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABY0lEQVR4nGM4fvw4Azbsbqwp6W2o5uKjp+HrY6imz8DAwIhNHVbNSc7GE8tD7J8vrYz4vKom6mtvmtfLRAfjy256etxEGZDibHLz9ab6` &&
                           `/7/3t4Pxr31t/5tjXN+AXEKUAX4mWoZprmZP3myGGNKf5v0m3s6wGa8XAo21bdJdTbbAcJy94a07y8rABuR5Wz1DlTNY3cDAwIRiQLCpdtr6xtj/T9ZUgfGrTXVwL3ze0QwXB+EsD4uXoaEMzBgG7OtN` &&
                           `g2tCx+dm5v67MCf/L4id72v1jCQDjk/N/h1jY7gp3t5w09LKyE+ZpLqgKcbleYCBhgIoLSQ4GtYm2htXYgQiPgNKAm2fhmpr8+CNBXwGTEjzeeWnr2LoYqzEn+hofDzByeggLGUSZcCDlRX/Ex2NHiQ7` &&
                           `m96/uaj0L8mBCMJfd7f8/7qr+T9ZsYCOsRrgb6gZl+xs/Drby/IJIRxqrv0GwwByMQCvW0gIlfqiygAAAABJRU5ErkJggg==` )
-        long_description = |Use '{ c_general_options-software_component }' to restrict the search query by Software Component.\n\n| &&
-                           |Example:\n|  && |   { c_general_options-software_component } : sap_aba|
         patterns         = abap_false
         content_assist   = VALUE #(
             assist_type           = zif_sat_c_object_search=>c_filter_content_assist_type-named_item
@@ -273,6 +280,7 @@ CLASS zcl_sat_base_query_config IMPLEMENTATION.
   METHOD get_created_on_filt_conf.
     result = VALUE #(
         name             = c_general_options-created_on
+        description      = 'Created On'
         long_description = |Use '{ c_general_options-created_on }' to restrict results by the creation date of an object.|
         data_type        = zif_sat_c_object_search=>c_filter_data_type-date ).
   ENDMETHOD.
@@ -280,6 +288,7 @@ CLASS zcl_sat_base_query_config IMPLEMENTATION.
   METHOD get_changed_on_filt_conf.
     result = VALUE #(
         name             = c_general_options-changed_on
+        description      = 'Changed On'
         long_description = |Use '{ c_general_options-changed_on }' to restrict results by the last changed date of an object.|
         data_type        = zif_sat_c_object_search=>c_filter_data_type-date
         img_info         = VALUE #(
