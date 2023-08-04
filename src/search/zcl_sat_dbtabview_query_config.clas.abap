@@ -74,6 +74,7 @@ CLASS zcl_sat_dbtabview_query_config IMPLEMENTATION.
   METHOD get_deliv_class_filter.
     result = VALUE #(
         name             = c_dbtab_options-delivery_class
+        description      = 'Delivery Class'
         long_description = |Use '{ c_dbtab_options-delivery_class }' to search for Tables with specific delivery classes.\n\n| &&
                            |Example:\n   { c_dbtab_options-delivery_class } : A|
         img_info         = VALUE #(
@@ -94,6 +95,7 @@ CLASS zcl_sat_dbtabview_query_config IMPLEMENTATION.
   METHOD get_field_filter.
     result = VALUE #(
         name             = c_dbtab_options-field
+        description      = 'Table Field'
         long_description = |Use '{ c_dbtab_options-field }' to restrict the search query by certain Fields.\n\n| &&
              |Example:\n   { c_dbtab_options-field } : devclass|
         img_info         = VALUE #( img_key      = zif_sat_c_object_types=>table_field
@@ -110,6 +112,7 @@ CLASS zcl_sat_dbtabview_query_config IMPLEMENTATION.
   METHOD get_table_type_filter.
     result = VALUE #(
         name             = c_general_options-type
+        description      = 'Object Type'
         long_description = |Use '{ c_general_options-type }' to restrict the search query to certain Types of tables.\n\n| &&
                            |Example:\n   { c_general_options-type } : table|
         img_info         = VALUE #( img_key     = c_general_image_keys-type_folder

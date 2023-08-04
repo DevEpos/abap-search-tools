@@ -115,6 +115,7 @@ INTERFACE zif_sat_ty_object_search
       patterns         TYPE abap_bool,
       key_value        TYPE abap_bool,
       no_negation      TYPE abap_bool,
+      description      TYPE string,
       long_description TYPE string,
       internal         TYPE abap_bool,
       img_info         TYPE ty_image_info,
