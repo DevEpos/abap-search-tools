@@ -669,27 +669,6 @@ CLASS zcl_sat_base_search_provider IMPLEMENTATION.
     rv_ddic_view = zcl_sat_cds_view_factory=>read_ddl_ddic_view( iv_ddl_name = |{ iv_entity_id }| ).
   ENDMETHOD.
 
-  METHOD get_select_string.
-    add_select_part( EXPORTING iv_part_name = 'SELECT DISTINCT'
-                               it_part      = mt_select
-                     CHANGING  cv_select    = rv_result ).
-    add_select_part( EXPORTING iv_part_name = 'FROM'
-                               it_part      = mt_from
-                     CHANGING  cv_select    = rv_result ).
-    add_select_part( EXPORTING iv_part_name = 'WHERE'
-                               it_part      = mt_where
-                     CHANGING  cv_select    = rv_result ).
-    add_select_part( EXPORTING iv_part_name = 'GROUP BY'
-                               it_part      = mt_group_by
-                     CHANGING  cv_select    = rv_result ).
-    add_select_part( EXPORTING iv_part_name = 'HAVING'
-                               it_part      = mt_having
-                     CHANGING  cv_select    = rv_result ).
-    add_select_part( EXPORTING iv_part_name = 'ORDER BY'
-                               it_part      = mt_order_by
-                     CHANGING  cv_select    = rv_result ).
-  ENDMETHOD.
-
   METHOD new_and_cond_list.
     IF mt_criteria_or IS NOT INITIAL.
       IF mt_criteria IS NOT INITIAL.
