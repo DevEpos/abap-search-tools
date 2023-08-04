@@ -276,7 +276,7 @@ ENDCLASS.
 
 CLASS zcl_sat_base_search_provider IMPLEMENTATION.
   METHOD constructor.
-    mv_description_filter_field = 'descriptionupper'.
+    mv_description_filter_field = 'description'.
   ENDMETHOD.
 
   METHOD zif_sat_object_search_provider~search.
@@ -554,10 +554,6 @@ CLASS zcl_sat_base_search_provider IMPLEMENTATION.
                              sign         = iv_sign
                              option       = iv_option
                              subquery     = iv_subquery ) ).
-  ENDMETHOD.
-
-  METHOD constructor.
-    mv_description_filter_field = COND #( WHEN sy-saprl >= 751 THEN 'descriptionupper' ELSE 'description' ).
   ENDMETHOD.
 
   METHOD create_from_clause.
