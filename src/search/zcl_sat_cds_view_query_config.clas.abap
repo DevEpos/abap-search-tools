@@ -105,6 +105,7 @@ CLASS zcl_sat_cds_view_query_config IMPLEMENTATION.
   METHOD get_annotation_filter.
     result = VALUE #(
         name             = c_cds_options-annotation
+        description      = 'Annotation'
         long_description = |Use '{ c_cds_options-annotation }' to restrict the search query by certain Annotations.\n| &&
                            |This parameter also allows the input with Key/Value pattern.\n\nExample:\n   { c_cds_options-annotation } : analytics.query\n\n| &&
                            |Example with Key/Value:\n   { c_cds_options-annotation } : searchable=true|
@@ -123,6 +124,7 @@ CLASS zcl_sat_cds_view_query_config IMPLEMENTATION.
   METHOD get_association_filter.
     result = VALUE #(
         name             = c_cds_options-association
+        description      = 'Association'
         long_description = |Use '{ c_cds_options-association }' to restrict the search query to CDS views which use | &&
                            |a certain Table/View/CDS view as an Association.\n\nExample:\n   { c_cds_options-association } : i_product|
         img_info         = VALUE #(
@@ -143,6 +145,7 @@ CLASS zcl_sat_cds_view_query_config IMPLEMENTATION.
   METHOD get_cds_type_filter.
     result = VALUE #(
         name             = c_general_options-type
+        description      = 'Source Type'
         long_description = |Use '{ c_general_options-type }' to restrict the search query to CDS views which are of a certain type.\n\n| &&
                            |Example:\n   { c_general_options-type } : function|
         img_info         = VALUE #( img_key     = c_general_image_keys-type_folder
@@ -159,6 +162,7 @@ CLASS zcl_sat_cds_view_query_config IMPLEMENTATION.
   METHOD get_ext_by_filter.
     result = VALUE #(
         name             = c_cds_options-extended_by
+        description      = 'Extended By'
         long_description = |Use '{ c_cds_options-extended_by }' to restrict the search query to CDS views which are | &&
                            |extended by certain Extension views.\n\nExample:\n   { c_cds_options-extended_by } : i_material|
         img_info         = VALUE #(
@@ -181,6 +185,7 @@ CLASS zcl_sat_cds_view_query_config IMPLEMENTATION.
   METHOD get_field_filter.
     result = VALUE #(
         name             = c_cds_options-field
+        description      = 'CDS Field'
         long_description = |Use '{ c_cds_options-field }' to restrict the search query by certain Fields.\n\n| &&
                            |Example:\n   { c_cds_options-field } : material|
         img_info         = VALUE #( img_key      = zif_sat_c_object_types=>structured_object_field
@@ -197,6 +202,7 @@ CLASS zcl_sat_cds_view_query_config IMPLEMENTATION.
   METHOD get_from_filter.
     result = VALUE #(
         name             = c_cds_options-select_from
+        description      = 'Select From'
         long_description = |Use '{ c_cds_options-select_from }' to restrict the search query to CDS views which use | &&
                            |a certain Table/View/CDS View in their SELECT clause.\n\nExample:\n   { c_cds_options-select_from } : mara|
         img_info         = VALUE #(
@@ -218,6 +224,7 @@ CLASS zcl_sat_cds_view_query_config IMPLEMENTATION.
   METHOD get_params_filter.
     result = VALUE #(
         name             = c_cds_options-params
+        description      = 'Parameters Check'
         long_description = |Use '{ c_cds_options-params }' to restrict the search query to CDS views which have (not) parameters.\n\n| &&
                            |Example:\n   { c_cds_options-params } : true|
         img_info         = VALUE #( img_key     = c_general_image_keys-param
@@ -230,6 +237,7 @@ CLASS zcl_sat_cds_view_query_config IMPLEMENTATION.
   METHOD get_param_filter.
     result = VALUE #(
         name             = c_cds_options-param
+        description      = 'CDS Parameter'
         long_description = |Use '{ c_cds_options-param }' to restrict the search query to CDS views which have a certain parameter.\n\n| &&
                            |Example:\n   { c_cds_options-param } : p_test|
         img_info         = VALUE #( img_key     = c_general_image_keys-param
