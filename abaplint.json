@@ -1,0 +1,29 @@
+{
+  "global": {
+    "files": "/src/**/*.*"
+  },
+  "syntax": {
+    "version": "v740sp08",
+    "errorNamespace": "^(Z|Y|LCL_|TY_|LIF_)"
+  },
+  "dependencies": [
+    {
+      "files": "/src/**",
+      "folder": "/deps"
+    }
+  ],
+  "rules": {
+    "begin_end_names": true,
+    "check_ddic": true,
+    "check_include": true,
+    "check_syntax": true,
+    "global_class": true,
+    "implement_methods": true,
+    "cds_parser_error": true,
+    "method_implemented_twice": true,
+    "parser_error": true,
+    "superclass_final": false,
+    "unknown_types": false,
+    "xml_consistency": true
+  }
+}
