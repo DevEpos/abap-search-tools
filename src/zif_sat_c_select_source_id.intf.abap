@@ -45,4 +45,5 @@ INTERFACE zif_sat_c_select_source_id
   CONSTANTS zsat_i_interfaceusage         TYPE string VALUE 'ZSAT_I_INTERFACEUSAGE'.
   CONSTANTS zsat_i_superclass             TYPE string VALUE 'ZSAT_I_SUPERCLASS'.
   CONSTANTS zsat_i_globalfriend           TYPE string VALUE 'ZSAT_I_GLOBALFRIEND'.
+  CONSTANTS zsat_i_reposource             TYPE string VALUE 'ZSAT_I_REPOSOURCE'.
 ENDINTERFACE.

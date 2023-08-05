@@ -5,6 +5,7 @@ INTERFACE zif_sat_ty_object_search
     ty_custom_field_short  TYPE c LENGTH 5,
     ty_custom_field_medium TYPE c LENGTH 30,
     ty_custom_field_long   TYPE c LENGTH 100,
+    ty_class_subcomp_range TYPE RANGE OF seosconame,
 
     "! Row Object Search Result
     BEGIN OF ty_s_search_result,
@@ -23,6 +24,10 @@ INTERFACE zif_sat_ty_object_search
       "! Category (1=Standard,2=Implemented,3=Redefined)
       method_status      TYPE c LENGTH 1,
       method_name        TYPE seocpdname,
+      "! Declaring Class/Interface Name of method
+      method_decl_clif   TYPE classname,
+      "! Method name in original Class/Interface
+      method_decl_method TYPE seocmpname,
       method_is_abstract TYPE abap_bool,
       method_is_final    TYPE abap_bool,
       method_exposure    TYPE seoexpose,
@@ -74,6 +79,7 @@ INTERFACE zif_sat_ty_object_search
       use_and_cond_for_options TYPE abap_bool,
       with_api_state           TYPE abap_bool,
       get_all                  TYPE abap_bool,
+      custom_options           TYPE zif_sat_ty_adt_types=>ty_t_property,
     END OF ty_s_search_engine_params,
 
     ty_t_options TYPE RANGE OF string,
@@ -136,6 +142,23 @@ INTERFACE zif_sat_ty_object_search
 
     ty_input_fields TYPE STANDARD TABLE OF ty_input_field WITH KEY name,
 
+    BEGIN OF ty_custom_option_value,
+      key   TYPE string,
+      value TYPE string,
+    END OF ty_custom_option_value,
+
+    ty_custom_option_values TYPE STANDARD TABLE OF ty_custom_option_value WITH EMPTY KEY,
+
+    BEGIN OF ty_custom_option,
+      key         TYPE string,
+      type        TYPE string,
+      label       TYPE string,
+      description TYPE string,
+      values      TYPE ty_custom_option_values,
+    END OF ty_custom_option,
+
+    ty_custom_options TYPE STANDARD TABLE OF ty_custom_option WITH EMPTY KEY,
+
     BEGIN OF ty_result_output_config,
       types_for_list           TYPE string_table,
       is_list_output_supported TYPE abap_bool,
@@ -146,11 +169,12 @@ INTERFACE zif_sat_ty_object_search
 
     "! Settings for a given search types
     BEGIN OF ty_search_type_config,
-      name          TYPE string,
-      label         TYPE string,
-      img_info      TYPE ty_image_info,
-      inputs        TYPE ty_input_fields,
-      output_config TYPE ty_result_output_config,
+      name           TYPE string,
+      label          TYPE string,
+      img_info       TYPE ty_image_info,
+      inputs         TYPE ty_input_fields,
+      custom_options TYPE ty_custom_options,
+      output_config  TYPE ty_result_output_config,
     END OF ty_search_type_config,
 
     ty_search_type_configs TYPE STANDARD TABLE OF ty_search_type_config WITH KEY name,
