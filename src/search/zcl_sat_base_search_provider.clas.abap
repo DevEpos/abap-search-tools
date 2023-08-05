@@ -756,7 +756,7 @@ CLASS zcl_sat_base_search_provider IMPLEMENTATION.
 
   METHOD add_devclass_join.
     IF mf_devclass_join_added = abap_false.
-      add_join_table( iv_join_table = |{ zif_sat_c_select_source_id=>zsat_i_developmentpackage }|
+      add_join_table( iv_join_table = get_cds_sql_name( |{ zif_sat_c_select_source_id=>zsat_i_developmentpackage }| )
                       iv_alias      = c_devc_tab_alias
                       it_conditions = VALUE #( ( field           = 'developmentpackage'
                                                  ref_field       = iv_ref_field
