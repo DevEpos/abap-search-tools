@@ -18,6 +18,7 @@
 
   </tt:template>
 
+  <!-- Template for Search Type configuration -->
   <tt:template name="searchType">
     <tt:context>
       <tt:root name="search_type" type="cl:ty_search_type_config"/>
@@ -35,6 +36,12 @@
         </objectsearch:imageInfo>
       </tt:cond>
 
+      <tt:cond check="exist(search_type.custom_options)">
+        <tt:apply name="customOptions">
+          <tt:with-root name="options" ref="search_type.custom_options"/>
+        </tt:apply>
+      </tt:cond>
+
       <tt:cond check="exist(search_type.output_config)">
         <tt:apply name="outputConfig">
           <tt:with-root name="out_config" ref="search_type.output_config"/>
@@ -49,6 +56,7 @@
     </objectsearch:searchType>
   </tt:template>
 
+  <!-- Template for input field -->
   <tt:template name="input">
     <tt:context>
       <tt:root name="input" type="cl:ty_input_field"/>
@@ -71,6 +79,7 @@
     </objectsearch:input>
   </tt:template>
 
+  <!-- Template for filter inside an input field -->
   <tt:template name="filter">
     <tt:context>
       <tt:root name="filter" type="cl:ty_query_filter"/>
@@ -127,6 +136,7 @@
     </objectsearch:filter>
   </tt:template>
 
+  <!-- Template for Content Assist Configuration -->
   <tt:template name="contentAssist">
     <tt:context>
       <tt:root name="content_assist" type="cl:ty_option_content_assist"/>
@@ -188,6 +198,7 @@
     </objectsearch:contentAssist>
   </tt:template>
 
+  <!-- Template for proposal images -->
   <tt:template name="proposalImages">
     <tt:context>
       <tt:root name="images" type="cl:ty_image_infos"/>
@@ -202,6 +213,7 @@
     </tt:loop>
   </tt:template>
 
+  <!-- Template for attributes of image -->
   <tt:template name="imageInfoAttributes">
     <tt:context>
       <tt:root name="image_info" type="cl:ty_image_info"/>
@@ -220,6 +232,7 @@
     </tt:cond>
   </tt:template>
 
+  <!-- Template for Output configuration -->
   <tt:template name="outputConfig">
     <tt:context>
       <tt:root name="out_config" type="cl:ty_result_output_config"/>
@@ -246,6 +259,35 @@
       </tt:cond>
     </objectsearch:resultOutputConfig>
 
+  </tt:template>
+
+  <!-- Template for custom options -->
+  <tt:template name="customOptions">
+    <tt:context>
+      <tt:root name="options" type="cl:ty_custom_options"/>
+    </tt:context>
+
+    <tt:loop ref="options">
+      <objectsearch:customOption tt:extensible="deep">
+        <tt:attribute name="objectsearch:key" value-ref="$ref.key"/>
+        <tt:attribute name="objectsearch:type" value-ref="$ref.type"/>
+        <tt:attribute name="objectsearch:label" value-ref="$ref.label"/>
+        <tt:cond check="not-initial($ref.description)">
+          <objectsearch:description tt:extensible="deep">
+            <tt:value ref="$ref.description"/>
+          </objectsearch:description>
+        </tt:cond>
+
+        <tt:cond check="exist($ref.values)">
+          <tt:loop ref="$ref.values">
+            <objectsearch:optionValue tt:extensible="deep">
+              <tt:attribute name="objectsearch:key" value-ref="$ref.key"/>
+              <tt:attribute name="objectsearch:value" value-ref="$ref.value"/>
+            </objectsearch:optionValue>
+          </tt:loop>
+        </tt:cond>
+      </objectsearch:customOption>
+    </tt:loop>
   </tt:template>
 
 </tt:transform>
