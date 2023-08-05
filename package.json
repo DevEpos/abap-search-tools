@@ -1,0 +1,23 @@
+{
+  "name": "abap-search-tools",
+  "version": "2.0.0",
+  "description": "ABAP Search and Analysis Tools",
+  "scripts": {
+    "lint": "abaplint -f summary",
+    "lint:file": "abaplint -f summary > lint-issues.txt"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DevEpos/abap-search-tools.git"
+  },
+  "keywords": [
+    "ABAP",
+    "ADT"
+  ],
+  "author": "Ludwig Stockbauer-Muhr",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/DevEpos/abap-search-tools/issues"
+  },
+  "homepage": "https://github.com/DevEpos/abap-search-tools#readme"
+}
