@@ -3,6 +3,7 @@ INTERFACE zif_sat_ty_adt_types
   PUBLIC.
 
   TYPES:
+    " TODO: move to interface ty_global or ty_object_search
     BEGIN OF ty_s_property,
       key   TYPE string,
       type  TYPE string,
@@ -68,6 +69,7 @@ INTERFACE zif_sat_ty_adt_types
       combine_filters_with_and TYPE abap_bool,
       with_api_state           TYPE abap_bool,
       fields                   TYPE ty_t_query_input_field,
+      custom_options           TYPE ty_t_property,
     END OF ty_s_query_input,
 
     BEGIN OF ty_cds_top_down_entry,

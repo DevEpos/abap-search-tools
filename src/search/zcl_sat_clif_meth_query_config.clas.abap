@@ -118,16 +118,24 @@ CLASS zcl_sat_clif_meth_query_config IMPLEMENTATION.
                                                                           ( get_status_filter( ) )
                                                                           ( get_visibility_filter( ) ) ).
 
-    ms_search_type-label    = 'Method'.
-    ms_search_type-img_info = VALUE #( img_key     = c_clif_image_keys-method
-                                       img_encoded = get_clif_image( c_clif_image_keys-method ) ).
-    ms_search_type-name     = zif_sat_c_object_search=>c_search_type-method.
-    ms_search_type-inputs   = VALUE #( BASE ms_search_type-inputs
-                                       ( name    = zif_sat_c_object_search=>c_search_fields-method_name_input_key
-                                         label   = zif_sat_c_object_search=>c_search_fields-method_name_input_label )
-                                       ( name    = zif_sat_c_object_search=>c_search_fields-method_filter_input_key
-                                         label   = zif_sat_c_object_search=>c_search_fields-method_filter_input_label
-                                         filters = mt_method_options ) ).
+    ms_search_type-label          = 'Method'.
+    ms_search_type-img_info       = VALUE #( img_key     = c_clif_image_keys-method
+                                             img_encoded = get_clif_image( c_clif_image_keys-method ) ).
+    ms_search_type-name           = zif_sat_c_object_search=>c_search_type-method.
+    ms_search_type-inputs         = VALUE #(
+        BASE ms_search_type-inputs
+        ( name    = zif_sat_c_object_search=>c_search_fields-method_name_input_key
+          label   = zif_sat_c_object_search=>c_search_fields-method_name_input_label )
+        ( name    = zif_sat_c_object_search=>c_search_fields-method_filter_input_key
+          label   = zif_sat_c_object_search=>c_search_fields-method_filter_input_label
+          filters = mt_method_options ) ).
+
+    ms_search_type-custom_options = VALUE #(
+        ( key         = zif_sat_c_object_search=>c_custom_options-method-target_incl_for_admin_data
+          type = zif_sat_c_object_search=>c_custom_option_data_type-boolean
+          label       = 'Set Focus of Admin-Data Filters to Method Include'
+          description = |If admin data filters like 'changed' or 'changedby' are used the\n| &&
+                        |SELECT Target will be switched to the Method-Include instead of the Method-Definition|  ) ).
   ENDMETHOD.
 
   METHOD get_image.
