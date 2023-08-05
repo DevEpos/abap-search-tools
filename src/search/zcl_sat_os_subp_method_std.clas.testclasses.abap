@@ -37,6 +37,9 @@ CLASS lcl_query IMPLEMENTATION.
 
   METHOD zif_sat_object_search_query~set_option ##NEEDED.
   ENDMETHOD.
+
+  METHOD zif_sat_object_search_query~set_max_rows ##NEEDED.
+  ENDMETHOD.
 ENDCLASS.
 
 
@@ -46,7 +49,7 @@ CLASS ltcl_abap_unit DEFINITION FINAL FOR TESTING
   RISK LEVEL HARMLESS.
 
   PRIVATE SECTION.
-    DATA mr_cut TYPE REF TO zcl_sat_os_method_provider.
+    DATA mr_cut TYPE REF TO zcl_sat_os_subp_method_std.
 
     METHODS search_with_terms_only FOR TESTING.
 ENDCLASS.
