@@ -31,12 +31,9 @@ CLASS lcl_devclass_util IMPLEMENTATION.
           packages_to_read = VALUE #( BASE packages_to_read ( devclass = <read_package>-parent_devclass ) ).
         ENDIF.
 
-        TRY.
-            <read_package>-uri = zcl_sat_adt_util=>map_tadir_obj_to_object_ref(
-                                     iv_name = CONV #( <read_package>-devclass )
-                                     is_type = VALUE #( objtype_tr = 'DEVC' subtype_wb = 'K' ) )-uri.
-          CATCH zcx_adcoset_static_error.
-        ENDTRY.
+        <read_package>-uri = zcl_sat_adt_util=>map_tadir_obj_to_object_ref(
+                                 iv_name = CONV #( <read_package>-devclass )
+                                 is_type = VALUE #( objtype_tr = 'DEVC' subtype_wb = 'K' ) )-uri.
 
         packages = VALUE #( BASE packages ( <read_package> ) ).
       ENDLOOP.
