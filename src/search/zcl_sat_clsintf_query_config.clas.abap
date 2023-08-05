@@ -122,6 +122,7 @@ CLASS zcl_sat_clsintf_query_config IMPLEMENTATION.
   METHOD get_clif_type_filt_conf.
     result = VALUE #(
         name             = c_general_options-type
+        description      = 'Object Type'
         long_description = |Use '{ c_general_options-type }' to restrict the search query to Classes and/or Interfaces|
         img_info         = VALUE #( img_key     = c_general_image_keys-type_folder
                                     img_encoded = get_general_image( c_general_image_keys-type_folder ) )
@@ -137,6 +138,7 @@ CLASS zcl_sat_clsintf_query_config IMPLEMENTATION.
   METHOD get_flag_filter.
     result = VALUE #(
         name             = c_class_intf_search_option-flag
+        description      = 'Flag'
         long_description = |Use '{ c_class_intf_search_option-flag }' to search for Classes/Interfaces that have certain criteria.\n\n| &&
                            |Example:\n   { c_class_intf_search_option-flag } : abstract|
         img_info         = VALUE #( img_key     = c_general_image_keys-checked_box
@@ -150,6 +152,7 @@ CLASS zcl_sat_clsintf_query_config IMPLEMENTATION.
   METHOD get_category_filter.
     result = VALUE #(
         name             = c_class_intf_search_option-category
+        description      = 'Class Category'
         long_description = |Use '{ c_class_intf_search_option-category }' to restrict search result to Classes/Interfaces that have a certain category.\n\n| &&
                            |Example:\n   { c_class_intf_search_option-category } : exception|
         img_info         = VALUE #(
@@ -169,6 +172,7 @@ CLASS zcl_sat_clsintf_query_config IMPLEMENTATION.
   METHOD get_method_filter.
     result = VALUE #(
         name             = c_class_intf_search_option-method
+        description      = 'Method'
         long_description = |Use '{ c_class_intf_search_option-method }' to search for Classes/Interfaces that have certain methods.\n\n| &&
                            |Example:\n   { c_class_intf_search_option-method } : set_value|
         img_info         = VALUE #( img_key     = c_clif_image_keys-method
@@ -180,6 +184,7 @@ CLASS zcl_sat_clsintf_query_config IMPLEMENTATION.
   METHOD get_interface_filter.
     result = VALUE #(
         name             = c_class_intf_search_option-interface
+        description      = 'Interface Usage'
         long_description = |Use '{ c_class_intf_search_option-interface }' to search for Classes/Interfaces that implement or extend certain interfaces.\n\n| &&
                            |Example:\n   { c_class_intf_search_option-interface } : if_salv_adapter|
         img_info         = VALUE #( img_key      = zif_sat_c_object_types=>interface
@@ -193,6 +198,7 @@ CLASS zcl_sat_clsintf_query_config IMPLEMENTATION.
   METHOD get_attribute_filter.
     result = VALUE #(
         name             = c_class_intf_search_option-attribute
+        description      = 'Attribute'
         long_description = |Use '{ c_class_intf_search_option-attribute }' to search for Classes/Interfaces that have certain attributes.\n| &&
                            |This parameter also allows the input with Key/Value pattern.\n\nExample:\n   { c_class_intf_search_option-attribute } : mv_plant\n\n| &&
                            |Example with Key/Value:\n   { c_class_intf_search_option-attribute } : c_*=*constant|
@@ -210,6 +216,7 @@ CLASS zcl_sat_clsintf_query_config IMPLEMENTATION.
   METHOD get_friend_filter.
     result = VALUE #(
         name             = c_class_intf_search_option-friend
+        description      = 'Global Friend'
         long_description = |Use '{ c_class_intf_search_option-friend }' to search for classes that have certain Global Friends.\n\n| &&
                            |Example:\n   { c_class_intf_search_option-friend } : if_alv_rm_grid_friend|
         img_info         = VALUE #(
@@ -227,6 +234,7 @@ CLASS zcl_sat_clsintf_query_config IMPLEMENTATION.
   METHOD get_super_type_filter.
     result = VALUE #(
         name             = c_class_intf_search_option-super_type
+        description      = 'Super Type'
         long_description = |Use '{ c_class_intf_search_option-super_type }' to search for Classes with a certain Super Class.\n\n| &&
                            |Example:\n   { c_class_intf_search_option-super_type } : cl_gui_object|
         img_info         = VALUE #(
