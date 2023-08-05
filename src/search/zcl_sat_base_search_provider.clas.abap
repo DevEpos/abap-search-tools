@@ -45,6 +45,10 @@ CLASS zcl_sat_base_search_provider DEFINITION
         method_type        TYPE string VALUE 'METHOD_TYPE',
         method_status      TYPE string VALUE 'METHOD_STATUS',
         method_name        TYPE string VALUE 'METHOD_NAME',
+        "! Declaring Class/Interface Name of method
+        method_decl_clif   TYPE string VALUE 'METHOD_DECL_CLIF',
+        "! Method name in original Class/Interface
+        method_decl_method TYPE string VALUE 'METHOD_DECL_METHOD',
         method_is_abstract TYPE string VALUE 'METHOD_IS_ABSTRACT',
         method_is_final    TYPE string VALUE 'METHOD_IS_FINAL',
         method_exposure    TYPE string VALUE 'METHOD_EXPOSURE',

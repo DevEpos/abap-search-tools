@@ -43,6 +43,12 @@ INTERFACE zif_sat_c_object_search
     END OF c_filter_data_type.
 
   CONSTANTS:
+    BEGIN OF c_custom_option_data_type,
+      string  TYPE string VALUE 'STRING',
+      boolean TYPE string VALUE 'BOOLEAN',
+    END OF c_custom_option_data_type.
+
+  CONSTANTS:
     BEGIN OF c_filter_content_assist_type,
       named_item       TYPE string VALUE 'objectsearch:NamedItemContentAssist',
       fixed_named_item TYPE string VALUE 'objectsearch:FixedValuesContentAssist',
@@ -208,6 +214,13 @@ INTERFACE zif_sat_c_object_search
       instance TYPE string VALUE 'INSTANCE',
       static   TYPE string VALUE 'STATIC',
     END OF c_method_level.
+
+  CONSTANTS:
+    BEGIN OF c_custom_options,
+      BEGIN OF method,
+        target_incl_for_admin_data TYPE string VALUE 'targetIncludesForAdminData',
+      END OF method,
+    END OF c_custom_options.
 
   CONSTANTS:
     "! <p class="shorttext synchronized" lang="en">General search options</p>
