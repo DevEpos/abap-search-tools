@@ -172,14 +172,16 @@ CLASS zcl_sat_os_cds_provider IMPLEMENTATION.
                              it_values    = <ls_option>-value_range ).
 
         WHEN c_general_search_options-application_component.
-          add_appl_comp_filter( it_values          = <ls_option>-value_range
-                                iv_ref_field       = CONV #( c_fields-development_package )
-                                iv_ref_table_alias = c_base_alias ).
+          add_appl_comp_filter( if_use_ddic_sql_view = abap_true
+                                it_values            = <ls_option>-value_range
+                                iv_ref_field         = CONV #( c_fields-development_package )
+                                iv_ref_table_alias   = c_base_alias ).
 
         WHEN c_general_search_options-software_component.
-          add_softw_comp_filter( it_values          = <ls_option>-value_range
-                                 iv_ref_field       = CONV #( c_fields-development_package )
-                                 iv_ref_table_alias = c_base_alias ).
+          add_softw_comp_filter( if_use_ddic_sql_view = abap_true
+                                 it_values            = <ls_option>-value_range
+                                 iv_ref_field         = CONV #( c_fields-development_package )
+                                 iv_ref_table_alias   = c_base_alias ).
 
         " Find views where the filter exists in the FROM part of the cds view
         WHEN c_cds_search_params-select_from.
