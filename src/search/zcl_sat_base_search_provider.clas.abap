@@ -235,15 +235,17 @@ CLASS zcl_sat_base_search_provider DEFINITION
     "! <p class="shorttext synchronized">Creates filter for application component</p>
     METHODS add_appl_comp_filter
       IMPORTING
-        it_values          TYPE zif_sat_ty_object_search=>ty_t_value_range
-        iv_ref_field       TYPE fieldname
-        iv_ref_table_alias TYPE string.
+        if_use_ddic_sql_view TYPE abap_bool OPTIONAL
+        it_values            TYPE zif_sat_ty_object_search=>ty_t_value_range
+        iv_ref_field         TYPE fieldname
+        iv_ref_table_alias   TYPE string.
 
     METHODS add_softw_comp_filter
       IMPORTING
-        it_values          TYPE zif_sat_ty_object_search=>ty_t_value_range
-        iv_ref_field       TYPE fieldname
-        iv_ref_table_alias TYPE string.
+        if_use_ddic_sql_view TYPE abap_bool OPTIONAL
+        it_values            TYPE zif_sat_ty_object_search=>ty_t_value_range
+        iv_ref_field         TYPE fieldname
+        iv_ref_table_alias   TYPE string.
 
     METHODS reset.
 
@@ -269,8 +271,9 @@ CLASS zcl_sat_base_search_provider DEFINITION
 
     METHODS add_devclass_join
       IMPORTING
-        iv_ref_table_alias TYPE string
-        iv_ref_field       TYPE fieldname.
+        if_use_ddic_sql_view TYPE abap_bool OPTIONAL
+        iv_ref_table_alias   TYPE string
+        iv_ref_field         TYPE fieldname.
 ENDCLASS.
 
 
@@ -391,8 +394,9 @@ CLASS zcl_sat_base_search_provider IMPLEMENTATION.
   METHOD add_appl_comp_filter.
     CHECK it_values IS NOT INITIAL.
 
-    add_devclass_join( iv_ref_table_alias = iv_ref_table_alias
-                       iv_ref_field       = iv_ref_field ).
+    add_devclass_join( if_use_ddic_sql_view = if_use_ddic_sql_view
+                       iv_ref_table_alias   = iv_ref_table_alias
+                       iv_ref_field         = iv_ref_field ).
 
     add_option_filter( iv_fieldname = |{ c_devc_tab_alias }~applicationcomponent|
                        it_values    = it_values ).
@@ -401,8 +405,9 @@ CLASS zcl_sat_base_search_provider IMPLEMENTATION.
   METHOD add_softw_comp_filter.
     CHECK it_values IS NOT INITIAL.
 
-    add_devclass_join( iv_ref_table_alias = iv_ref_table_alias
-                       iv_ref_field       = iv_ref_field ).
+    add_devclass_join( if_use_ddic_sql_view = if_use_ddic_sql_view
+                       iv_ref_table_alias   = iv_ref_table_alias
+                       iv_ref_field         = iv_ref_field ).
 
     add_option_filter( iv_fieldname = |{ c_devc_tab_alias }~softwarecomponent|
                        it_values    = it_values ).
@@ -756,7 +761,10 @@ CLASS zcl_sat_base_search_provider IMPLEMENTATION.
 
   METHOD add_devclass_join.
     IF mf_devclass_join_added = abap_false.
-      add_join_table( iv_join_table = get_cds_sql_name( |{ zif_sat_c_select_source_id=>zsat_i_developmentpackage }| )
+      DATA(lv_devclass_entity) = COND #( WHEN if_use_ddic_sql_view = abap_true
+                                         THEN get_cds_sql_name( |{ zif_sat_c_select_source_id=>zsat_i_developmentpackage }| )
+                                         ELSE |{ zif_sat_c_select_source_id=>zsat_i_developmentpackage }| ).
+      add_join_table( iv_join_table = lv_devclass_entity
                       iv_alias      = c_devc_tab_alias
                       it_conditions = VALUE #( ( field           = 'developmentpackage'
                                                  ref_field       = iv_ref_field
