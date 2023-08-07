@@ -83,6 +83,8 @@ CLASS zcl_sat_os_subp_meth_impl DEFINITION
     METHODS add_admin_data_filters.
 
     METHODS select_includes.
+
+    METHODS set_type_filter_to_class.
 ENDCLASS.
 
 
@@ -156,6 +158,7 @@ CLASS zcl_sat_os_subp_meth_impl IMPLEMENTATION.
 
     add_search_terms_to_search( iv_target      = zif_sat_c_object_search=>c_search_fields-object_name_input_key
                                 it_field_names = VALUE #( ( |{ c_clif_alias }~{ c_fields-classintf }| ) ) ).
+    set_type_filter_to_class( ).
     configure_class_filters( ).
 
     IF sy-dbsys = 'HDB'.
@@ -171,7 +174,7 @@ CLASS zcl_sat_os_subp_meth_impl IMPLEMENTATION.
     " get class descriptions
     fill_descriptions( ).
 
-    if sy-dbsys <> 'HDB'.
+    IF sy-dbsys <> 'HDB'.
       select_includes( ).
     ENDIF.
 
@@ -333,8 +336,14 @@ CLASS zcl_sat_os_subp_meth_impl IMPLEMENTATION.
     DATA lt_method_includes TYPE SORTED TABLE OF ty_method_include WITH NON-UNIQUE KEY clsname.
 
     LOOP AT mt_result REFERENCE INTO DATA(lr_cls_result).
-      DATA(lt_all_method_includes) = cl_oo_classname_service=>get_all_method_includes(
-                                         clsname = lr_cls_result->object_name ).
+      cl_oo_classname_service=>get_all_method_includes( EXPORTING  clsname = lr_cls_result->object_name
+                                                        RECEIVING  result  = DATA(lt_all_method_includes)
+                                                        EXCEPTIONS OTHERS  = 1 ).
+      IF sy-subrc <> 0.
+        DELETE mt_result.
+        CONTINUE.
+      ENDIF.
+
       lt_progname_filter = VALUE #( BASE lt_progname_filter
                                     FOR incl IN lt_all_method_includes
                                     ( incl-incname ) ).
@@ -410,4 +419,10 @@ CLASS zcl_sat_os_subp_meth_impl IMPLEMENTATION.
     ENDLOOP.
   ENDMETHOD.
 
+  METHOD set_type_filter_to_class.
+    mo_search_query->set_option(
+        VALUE #( target      = zif_sat_c_object_search=>c_search_fields-object_filter_input_key
+                 option      = c_general_search_options-type
+                 value_range = VALUE #( ( sign = 'I' option = 'EQ' low = zif_sat_c_tadir_types=>class ) ) ) ).
+  ENDMETHOD.
 ENDCLASS.
