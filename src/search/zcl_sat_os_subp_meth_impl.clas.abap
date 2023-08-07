@@ -77,6 +77,7 @@ CLASS zcl_sat_os_subp_meth_impl DEFINITION
       RETURNING
         VALUE(result)  TYPE abap_bool.
 
+    METHODS set_type_filter_to_class.
 ENDCLASS.
 
 
@@ -145,6 +146,7 @@ CLASS zcl_sat_os_subp_meth_impl IMPLEMENTATION.
 
     add_search_terms_to_search( iv_target      = zif_sat_c_object_search=>c_search_fields-object_name_input_key
                                 it_field_names = VALUE #( ( |{ c_clif_alias }~{ c_fields-classintf }| ) ) ).
+    set_type_filter_to_class( ).
     configure_class_filters( ).
     configure_incl_filters( ).
 
@@ -302,5 +304,12 @@ CLASS zcl_sat_os_subp_meth_impl IMPLEMENTATION.
        AND is_method_info-mtdnewexc  IN mt_meth_cls_exc_filter.
       result = abap_true.
     ENDIF.
+  ENDMETHOD.
+
+  METHOD set_type_filter_to_class.
+    mo_search_query->set_option(
+        VALUE #( target      = zif_sat_c_object_search=>c_search_fields-object_filter_input_key
+                 option      = c_general_search_options-type
+                 value_range = VALUE #( ( sign = 'I' option = 'EQ' low = zif_sat_c_tadir_types=>class ) ) ) ).
   ENDMETHOD.
 ENDCLASS.
