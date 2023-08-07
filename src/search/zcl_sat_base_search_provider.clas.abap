@@ -757,6 +757,13 @@ CLASS zcl_sat_base_search_provider IMPLEMENTATION.
       RETURN.
     ENDIF.
 
+    IF     mt_criteria     IS INITIAL
+       AND mt_criteria_and IS INITIAL
+       AND mt_criteria_or  IS INITIAL.
+      result = abap_false.
+      RETURN.
+    ENDIF.
+
     IF mt_select IS INITIAL.
       result = abap_false.
       RETURN.
