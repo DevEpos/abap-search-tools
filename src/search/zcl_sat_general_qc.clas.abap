@@ -12,9 +12,9 @@ ENDCLASS.
 
 
 CLASS zcl_sat_general_qc IMPLEMENTATION.
-
   METHOD zif_sat_query_converter~convert_value.
-    IF iv_option = zif_sat_c_object_search=>c_general_search_params-user.
+    IF    iv_option = zif_sat_c_object_search=>c_general_search_params-user
+       OR iv_option = zif_sat_c_object_search=>c_general_search_params-changed_by.
       IF cv_value = 'ME'.
         cv_value = sy-uname.
       ENDIF.
