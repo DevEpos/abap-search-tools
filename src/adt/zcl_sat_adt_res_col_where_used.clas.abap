@@ -70,8 +70,8 @@ CLASS zcl_sat_adt_res_col_where_used IMPLEMENTATION.
     LOOP AT lt_where_used ASSIGNING FIELD-SYMBOL(<ls_where_used>).
       ms_field_info-field_infos = VALUE #( BASE ms_field_info-field_infos
                                            ( field           = <ls_where_used>-viewfield
-                                             entity_name     = <ls_where_used>-viewfield
-                                             alt_entity_name = <ls_where_used>-viewfield
+                                             entity_name     = <ls_where_used>-viewname
+                                             alt_entity_name = <ls_where_used>-viewname
                                              type            = zif_sat_c_object_types=>view_definition ) ).
     ENDLOOP.
   ENDMETHOD.
