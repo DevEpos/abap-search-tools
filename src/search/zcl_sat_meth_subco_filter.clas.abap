@@ -189,11 +189,16 @@ CLASS zcl_sat_meth_subco_filter IMPLEMENTATION.
     DATA(lt_exc_filters) = conv_excl_filter_to_incl( mt_meth_exc_filter ).
     DATA(lt_param_filters) = conv_excl_filter_to_incl( mt_meth_param_filter ).
 
+    IF lt_exc_filters IS INITIAL AND lt_param_filters IS INITIAL.
+      RETURN.
+    ENDIF.
+
     LOOP AT mt_sub_components REFERENCE INTO DATA(lr_sub_comp).
       IF    (     lr_sub_comp->scotype  = seos_scotype_exception
               AND lt_exc_filters       IS NOT INITIAL
               AND lr_sub_comp->sconame IN lt_exc_filters )
          OR (     lr_sub_comp->scotype  = seos_scotype_parameter
+              AND lt_param_filters     IS NOT INITIAL
               AND lr_sub_comp->sconame IN lt_param_filters ).
         DELETE mr_method_result->* WHERE     method_decl_clif   = lr_sub_comp->clsname
                                          AND method_decl_method = lr_sub_comp->cmpname.
