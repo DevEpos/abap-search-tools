@@ -200,8 +200,9 @@ CLASS zcl_sat_base_search_provider DEFINITION
     "! <p class="shorttext synchronized">Add search terms of query to search filter</p>
     METHODS add_search_terms_to_search
       IMPORTING
-        iv_target      TYPE string OPTIONAL
-        it_field_names TYPE string_table.
+        iv_target       TYPE string                                     OPTIONAL
+        it_search_terms TYPE zif_sat_ty_global=>ty_t_string_range OPTIONAL
+        it_field_names  TYPE string_table.
 
     "! <p class="shorttext synchronized">Performs task after the Search</p>
     METHODS do_after_search
@@ -478,28 +479,20 @@ CLASS zcl_sat_base_search_provider IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD add_search_terms_to_search.
-    DATA(lt_search_terms) = VALUE #( mo_search_query->mt_search_term[ target = iv_target ]-values OPTIONAL ).
+    DATA lt_search_terms TYPE zif_sat_ty_global=>ty_t_string_range.
+
+    IF it_search_terms IS NOT INITIAL.
+      lt_search_terms = it_search_terms.
+    ELSE.
+      lt_search_terms = VALUE #( mo_search_query->mt_search_term[ target = iv_target ]-values OPTIONAL ).
+    ENDIF.
+
     IF lt_search_terms IS INITIAL.
       RETURN.
     ENDIF.
 
-    DEFINE _add_filter.
-      add_filter( VALUE #( sqlfieldname = &1
-                           option       = &2-option
-                           sign         = &2-sign
-                           low          = &2-low ) ).
-    END-OF-DEFINITION.
-
-    DEFINE _new_cond_list.
-      IF &1 = abap_true.
-        new_and_cond_list( ).
-      ELSE.
-        new_or_cond_list( ).
-      ENDIF.
-    END-OF-DEFINITION.
-
-    " .. If at least one search term with 'E'(Excluding) sign exists all search terms are connected
-    " .... via AND in the SQL Clause
+    " If at least one search term with 'E'(Excluding) sign exists all search terms are connected
+    " via AND in the SQL Clause
     IF line_exists( lt_search_terms[ sign = zif_sat_c_options=>excluding ] ).
       DATA(lf_use_and_between_terms) = abap_true.
     ENDIF.
@@ -511,14 +504,25 @@ CLASS zcl_sat_base_search_provider IMPLEMENTATION.
       DATA(lf_and) = xsdbool( <ls_term>-sign = zif_sat_c_options=>excluding ).
 
       LOOP AT it_field_names INTO DATA(lv_fieldname).
-        _add_filter lv_fieldname <ls_term>.
+        add_filter( VALUE #( sqlfieldname = lv_fieldname
+                             option       = <ls_term>-option
+                             sign         = <ls_term>-sign
+                             low          = <ls_term>-low  ) ).
 
         CHECK sy-tabix <> lines( it_field_names ).
-        _new_cond_list lf_and.
+        IF lf_and = abap_true.
+          new_and_cond_list( ).
+        ELSE.
+          new_or_cond_list( ).
+        ENDIF.
       ENDLOOP.
 
       IF lv_tabix <> lines( mo_search_query->mt_search_term ).
-        _new_cond_list lf_use_and_between_terms.
+        IF lf_use_and_between_terms = abap_true.
+          new_and_cond_list( ).
+        ELSE.
+          new_or_cond_list( ).
+        ENDIF.
       ENDIF.
     ENDLOOP.
 

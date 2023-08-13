@@ -59,26 +59,3 @@ union select from ZSAT_I_ClassImplementedMethod
       // Implemented interface method
       cast( '2' as abap.char(3) ) as Category
 }
-// Redefined methods in classes
-union select from ZSAT_I_RedefinedMethod
-{
-  key ClassName,
-  key MethodName,
-      //      ParentClass,
-      '0'                         as MethodType,
-      IsAliasComponent,
-      ''                          as IsAbstract,
-      ''                          as IsOptional,
-      IsFinal,
-      Exposure,
-      IsUsingNewExceptions,
-      MethodLevel,
-      OriginalClifName,
-      OriginalMethodName,
-      CreatedBy,
-      CreatedOn,
-      ChangedBy,
-      ChangedOn,
-      // Redefined class/interface method
-      cast( '3' as abap.char(3) ) as Category
-}
