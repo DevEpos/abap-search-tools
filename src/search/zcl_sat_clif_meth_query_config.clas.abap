@@ -132,7 +132,7 @@ CLASS zcl_sat_clif_meth_query_config IMPLEMENTATION.
 
     ms_search_type-custom_options = VALUE #(
         ( key         = zif_sat_c_object_search=>c_custom_options-method-target_incl_for_admin_data
-          type = zif_sat_c_object_search=>c_custom_option_data_type-boolean
+          type        = zif_sat_c_object_search=>c_custom_option_data_type-boolean
           label       = 'Set Focus of Admin-Data Filters to Method Include'
           description = |If admin data filters like 'changed' or 'changedby' are used the\n| &&
                         |SELECT Target will be switched to the Method-Include instead of the Method-Definition|  ) ).

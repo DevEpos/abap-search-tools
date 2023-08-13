@@ -47,6 +47,11 @@
      <LANGU>E</LANGU>
      <DESCRIPT>Table for dependent objects of database views</DESCRIPT>
     </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>SEOREDEF</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Table for Redefined Methods</DESCRIPT>
+    </SEOCOMPOTX>
    </DESCRIPTIONS>
   </asx:values>
  </asx:abap>
