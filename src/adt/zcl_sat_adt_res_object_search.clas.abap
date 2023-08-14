@@ -98,7 +98,10 @@ CLASS zcl_sat_adt_res_object_search IMPLEMENTATION.
 
       CATCH zcx_sat_object_search INTO DATA(lx_search_error).
         RAISE EXCEPTION TYPE zcx_sat_adt_object_search
-          EXPORTING textid = cx_adt_rest=>create_textid_from_exc_text( exception = lx_search_error ).
+          EXPORTING textid = cx_adt_rest=>create_textid_from_exc_text(
+                                 exception = COND #( WHEN lx_search_error->previous IS BOUND
+                                                     THEN lx_search_error->previous
+                                                     ELSE lx_search_error ) ).
     ENDTRY.
 
     response->set_body_data( content_handler = zcl_sat_adt_ch_factory=>create_search_result_ch( )
