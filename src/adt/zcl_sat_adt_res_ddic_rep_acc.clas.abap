@@ -213,7 +213,7 @@ CLASS zcl_sat_adt_res_ddic_rep_acc IMPLEMENTATION.
         CHECK mf_no_client_columns = abap_false.
       ENDIF.
 
-      DATA(ls_field) = VALUE zif_sat_ty_adt_types=>ty_entity_field_info( field       = to_lower( <ls_field>-fieldname )
+      DATA(ls_field) = VALUE zif_sat_ty_adt_types=>ty_entity_field_info( field       = <ls_field>-fieldname
                                                                          description = <ls_field>-fieldtext
                                                                          entity_name = mv_object_name
                                                                          is_key      = <ls_field>-keyflag  ).
