@@ -49,6 +49,7 @@ CLASS zcl_sat_os_subp_meth_base DEFINITION
 
     METHODS method_matches_filter
       IMPORTING
+        iv_method_name type seocmpname
         is_method      TYPE zif_sat_ty_object_search=>ty_s_search_result
         is_method_info TYPE vseomethod
       RETURNING
@@ -121,7 +122,9 @@ CLASS zcl_sat_os_subp_meth_base IMPLEMENTATION.
         ELSE
           zif_sat_c_object_search=>c_method_status_int-standard ).
 
-      IF NOT method_matches_filter( is_method = lr_class_method->* is_method_info = ls_method_info ).
+      IF NOT method_matches_filter( iv_method_name = ls_method_info-cmpname
+                                    is_method      = lr_class_method->*
+                                    is_method_info = ls_method_info ).
         DELETE mt_result.
         CONTINUE.
       ENDIF.
@@ -174,7 +177,7 @@ CLASS zcl_sat_os_subp_meth_base IMPLEMENTATION.
     IF     is_method-method_exposure IN mt_meth_exposure_filter
        AND is_method-method_level    IN mt_meth_level_filter
        AND is_method-method_is_final IN mt_meth_final_filter
-       AND is_method-method_name     IN mt_meth_name_filter
+       AND iv_method_name            IN mt_meth_name_filter
        AND is_method-method_type     IN mt_meth_type_filter
        AND is_method-method_status   IN mt_meth_status_filter
        AND is_method_info-mtdnewexc  IN mt_meth_cls_exc_filter.
