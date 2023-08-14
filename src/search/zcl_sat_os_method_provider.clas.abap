@@ -93,8 +93,8 @@ CLASS zcl_sat_os_method_provider IMPLEMENTATION.
 
   METHOD sort_result.
     SORT mt_result_all BY object_name
-                          method_level
-                          method_exposure
+                          method_level DESCENDING
+                          method_exposure DESCENDING
                           method_name.
     DELETE ADJACENT DUPLICATES FROM mt_result_all COMPARING object_name method_name.
   ENDMETHOD.

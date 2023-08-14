@@ -194,6 +194,8 @@ ENDCLASS.
 
 CLASS lcl_method_result_converter IMPLEMENTATION.
   METHOD convert_entries.
+    DATA lt_method_entries TYPE zif_sat_ty_adt_types=>ty_t_adt_obj_ref.
+
     LOOP AT mt_query_result ASSIGNING FIELD-SYMBOL(<ls_query_result>)
          GROUP BY <ls_query_result>-object_name.
 
@@ -215,7 +217,7 @@ CLASS lcl_method_result_converter IMPLEMENTATION.
                                         changed_by  = <ls_query_result>-changed_by
                                         changed_on  = <ls_query_result>-changed_date ).
 
-      cs_result-objects = VALUE #( BASE cs_result-objects ( ls_result_entry ) ).
+      CLEAR lt_method_entries.
 
       " 2) create method entries
       LOOP AT GROUP <ls_query_result> ASSIGNING FIELD-SYMBOL(<ls_method>).
@@ -231,9 +233,6 @@ CLASS lcl_method_result_converter IMPLEMENTATION.
           ENDIF.
         ENDIF.
 
-        " TODO: Check the handling of Alias methods
-        "       -> URI for Interface Alias methods can not be determined !!!
-        "       -> Class methods still need to be checked
         DATA(lv_uri) = CONV string( map_method_to_uri( iv_clif_name   = <ls_query_result>-object_name
                                                        iv_type        = ls_obj_type
                                                        iv_method_name = <ls_method>-method_name ) ).
@@ -243,7 +242,7 @@ CLASS lcl_method_result_converter IMPLEMENTATION.
           IF ls_obj_type-subtype_wb = c_sub_obj_type-class_method_def.
             ls_obj_type-subtype_wb = c_sub_obj_type-class_method_impl.
           ENDIF.
-          cs_result-objects = VALUE #( BASE cs_result-objects
+          lt_method_entries = VALUE #( BASE lt_method_entries
                                        ( name        = <ls_method>-method_name
                                          type        = ls_obj_type-objtype_tr && '/' && ls_obj_type-subtype_wb
                                          description = <ls_method>-method_descr
@@ -253,6 +252,10 @@ CLASS lcl_method_result_converter IMPLEMENTATION.
           cs_result-count   = cs_result-count + 1.
         ENDIF.
       ENDLOOP.
+
+      IF lt_method_entries IS NOT INITIAL.
+        cs_result-objects = VALUE #( BASE cs_result-objects ( ls_result_entry ) ( LINES OF lt_method_entries ) ).
+      ENDIF.
     ENDLOOP.
   ENDMETHOD.
 
