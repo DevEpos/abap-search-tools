@@ -7,8 +7,9 @@
 define view ZSAT_I_ClassInterfaceMethod
   // Normal methods in interfaces and classes
   as select from seocompo   as Method
-    inner join   seocompodf as MethodDef on  Method.clsname = MethodDef.clsname
-                                         and Method.cmpname = MethodDef.cmpname
+    inner join   seocompodf as MethodDef on  Method.clsname  = MethodDef.clsname
+                                         and Method.cmpname  = MethodDef.cmpname
+                                         and MethodDef.alias = ''
 {
   key Method.clsname                          as ClassName,
   key cast( Method.cmpname as abap.char(61) ) as MethodName,
