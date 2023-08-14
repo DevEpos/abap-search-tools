@@ -9,8 +9,9 @@ define view ZSAT_I_ClassImplementedMethod
     inner join      seocompo   as Method          on  Meta.refclsname = Method.clsname
                                                   and Meta.reltype    = '1'
                                                   and Method.cmptype  = '1'
-    inner join      seocompodf as MethodDef       on  Method.clsname = MethodDef.clsname
-                                                  and Method.cmpname = MethodDef.cmpname
+    inner join      seocompodf as MethodDef       on  Method.clsname  = MethodDef.clsname
+                                                  and Method.cmpname  = MethodDef.cmpname
+                                                  and MethodDef.alias = ''
     left outer join seoredef   as RedefinedMethod on  Meta.clsname    = RedefinedMethod.clsname
                                                   and Meta.refclsname = RedefinedMethod.refclsname
                                                   and Method.cmpname  = RedefinedMethod.mtdname
