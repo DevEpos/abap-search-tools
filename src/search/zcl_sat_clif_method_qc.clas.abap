@@ -42,21 +42,17 @@ CLASS zcl_sat_clif_method_qc IMPLEMENTATION.
         WHEN zif_sat_c_object_search=>c_general_search_params-type.
           cv_value = SWITCH #( cv_value
                                WHEN zif_sat_c_object_search=>c_method_types-general THEN
-                                 seoo_mtdtype_method " '0'
+                                 seoo_mtdtype_method
                                WHEN zif_sat_c_object_search=>c_method_types-event_handler THEN
-                                 seoo_mtdtype_eventhandler "'1'
+                                 seoo_mtdtype_eventhandler
                                WHEN zif_sat_c_object_search=>c_method_types-constructor THEN
-                                 seoo_mtdtype_constructor " '2'
+                                 seoo_mtdtype_constructor
                                WHEN zif_sat_c_object_search=>c_method_types-virtual_getter THEN
-                                 seoo_mtdtype_get_method " '4'
+                                 seoo_mtdtype_get_method
                                WHEN zif_sat_c_object_search=>c_method_types-virtual_setter THEN
-                                 seoo_mtdtype_set_method " '5'
+                                 seoo_mtdtype_set_method
                                WHEN zif_sat_c_object_search=>c_method_types-test THEN
-                                 seoo_mtdtype_test_method " '6'
-                               WHEN zif_sat_c_object_search=>c_method_types-cds_table_function THEN
-                                 seoo_mtdtype_cds_table_func " '7'
-                               WHEN zif_sat_c_object_search=>c_method_types-amdp_ddl_object THEN
-                                 seoo_mtdtype_amdp_ddl_object ). " '8'
+                                 seoo_mtdtype_test_method ).
 
         WHEN zif_sat_c_object_search=>c_method_search_option-status.
           cv_value = SWITCH #( cv_value

@@ -161,14 +161,12 @@ INTERFACE zif_sat_c_object_search
 
   CONSTANTS:
     BEGIN OF c_method_types,
-      general            TYPE string VALUE 'GENERAL',
-      constructor        TYPE string VALUE 'CONSTRUCTOR',
-      event_handler      TYPE string VALUE 'EVENT_HANDLER',
-      virtual_getter     TYPE string VALUE 'VIRTUAL_GETTER',
-      virtual_setter     TYPE string VALUE 'VIRTUAL_SETTER',
-      test               TYPE string VALUE 'TEST',
-      cds_table_function TYPE string VALUE 'CDS_TABLE_FUNCTION',
-      amdp_ddl_object    TYPE string VALUE 'AMDP_DDL_OBJECT',
+      general        TYPE string VALUE 'GENERAL',
+      constructor    TYPE string VALUE 'CONSTRUCTOR',
+      event_handler  TYPE string VALUE 'EVENT_HANDLER',
+      virtual_getter TYPE string VALUE 'VIRTUAL_GETTER',
+      virtual_setter TYPE string VALUE 'VIRTUAL_SETTER',
+      test           TYPE string VALUE 'TEST',
     END OF c_method_types.
 
   CONSTANTS:
