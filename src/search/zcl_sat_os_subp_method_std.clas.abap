@@ -139,7 +139,7 @@ CLASS zcl_sat_os_subp_method_std IMPLEMENTATION.
     add_select_fields( ).
 
     add_order_by( iv_fieldname = c_method_fields-classname iv_entity = c_alias_names-method ).
-    add_order_by( iv_fieldname = c_method_fields-methodlevel iv_entity = c_alias_names-method ).
+    add_order_by( iv_fieldname = c_method_fields-methodlevel iv_entity = c_alias_names-method if_descending = abap_true ).
     add_order_by( iv_fieldname = c_method_fields-exposure iv_entity = c_alias_names-method if_descending = abap_true ).
     add_order_by( iv_fieldname = c_method_fields-methodname iv_entity = c_alias_names-method ).
 
