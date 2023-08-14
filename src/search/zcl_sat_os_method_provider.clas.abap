@@ -60,9 +60,7 @@ CLASS zcl_sat_os_method_provider IMPLEMENTATION.
       mt_result_all = VALUE #( BASE mt_result_all ( LINES OF lt_result ) ).
     ENDLOOP.
 
-    IF lines( lt_search_providers ) = 1.
-      et_result = mt_result_all.
-    ELSE.
+    IF lines( lt_search_providers ) > 1.
       sort_result( ).
       limit_result( ).
     ENDIF.
