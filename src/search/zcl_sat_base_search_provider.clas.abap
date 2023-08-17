@@ -35,13 +35,13 @@ CLASS zcl_sat_base_search_provider DEFINITION
         raw_object_name    TYPE string VALUE 'RAW_OBJECT_NAME',
         alt_object_name    TYPE string VALUE 'ALT_OBJECT_NAME',
         entity_type        TYPE string VALUE 'ENTITY_TYPE',
-        sub_object_name    TYPE string VALUE 'SUB_OBJECT_NAME',
-        sub_object_type    TYPE string VALUE 'SUB_OBJECT_TYPE',
         tadir_type         TYPE string VALUE 'TADIR_TYPE',
         description        TYPE string VALUE 'DESCRIPTION',
         devclass           TYPE string VALUE 'DEVCLASS',
         api_state          TYPE string VALUE 'API_STATE',
         cds_source_type    TYPE string VALUE 'CDS_SOURCE_TYPE',
+        message_number     TYPE string VALUE 'MESSAGE_NUMBER',
+        message_short_text TYPE string VALUE 'MESSAGE_SHORT_TEXT',
         method_type        TYPE string VALUE 'METHOD_TYPE',
         method_status      TYPE string VALUE 'METHOD_STATUS',
         method_name        TYPE string VALUE 'METHOD_NAME',
@@ -209,7 +209,7 @@ CLASS zcl_sat_base_search_provider DEFINITION
     "! <p class="shorttext synchronized">Add search terms of query to search filter</p>
     METHODS add_search_terms_to_search
       IMPORTING
-        iv_target       TYPE string                                     OPTIONAL
+        iv_target       TYPE string                               OPTIONAL
         it_search_terms TYPE zif_sat_ty_global=>ty_t_string_range OPTIONAL
         it_field_names  TYPE string_table.
 
