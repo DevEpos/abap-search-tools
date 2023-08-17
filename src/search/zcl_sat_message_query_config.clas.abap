@@ -15,7 +15,7 @@ CLASS zcl_sat_message_query_config DEFINITION
     METHODS build_config REDEFINITION.
 
   PRIVATE SECTION.
-  data mt_message_options  TYPE zif_sat_ty_object_search=>ty_query_filters.
+    DATA mt_message_options TYPE zif_sat_ty_object_search=>ty_query_filters.
 ENDCLASS.
 
 
@@ -40,7 +40,7 @@ CLASS zcl_sat_message_query_config IMPLEMENTATION.
                             `dIT0AAAAAElFTkSuQmCC` ) ) ).
   ENDMETHOD.
 
-    METHOD zif_sat_object_search_config~get_option_config.
+  METHOD zif_sat_object_search_config~get_option_config.
     IF iv_target = zif_sat_c_object_search=>c_search_fields-message_filter_input_key.
       rs_option = mt_message_options[ name = iv_option ].
     ELSE.
@@ -57,7 +57,7 @@ CLASS zcl_sat_message_query_config IMPLEMENTATION.
                                                                                 ( get_softw_comp_filt_conf( ) )
                                                                                 ( get_appl_comp_filt_conf( ) )
                                                                                 ( get_description_filt_conf( ) )
-                                                                                ( get_max_rows_filt_conf( )  ) ).
+                                                                                ( get_max_rows_filt_conf( ) ) ).
 
     mt_message_options = VALUE #( ( get_changed_by_filt_conf( ) )
                                   ( get_changed_on_filt_conf( ) ) ).
@@ -67,16 +67,17 @@ CLASS zcl_sat_message_query_config IMPLEMENTATION.
         name     = zif_sat_c_object_search=>c_search_type-message
         img_info = VALUE #( img_key      = zif_sat_c_object_types=>message_class
                             img_registry = zif_sat_c_object_search=>c_image_registry_id-adt_type )
-        inputs   = VALUE #( ( name    = zif_sat_c_object_search=>c_search_fields-object_name_input_key
-                              label   = zif_sat_c_object_search=>c_search_fields-object_name_input_label )
-                            ( name    = zif_sat_c_object_search=>c_search_fields-object_filter_input_key
-                              label   = zif_sat_c_object_search=>c_search_fields-object_filter_input_label
-                              filters = lt_object_filters )
-                            ( name    = zif_sat_c_object_search=>c_search_fields-message_text_input_key
-                              label   = zif_sat_c_object_search=>c_search_fields-message_text_input_label )
-                            ( name    = zif_sat_c_object_search=>c_search_fields-message_filter_input_key
-                              label   = zif_sat_c_object_search=>c_search_fields-message_filter_input_label
-                              filters = mt_message_options ) ) ).
+        inputs   = VALUE #( ( name           = zif_sat_c_object_search=>c_search_fields-object_name_input_key
+                              label          = zif_sat_c_object_search=>c_search_fields-object_name_input_label )
+                            ( name           = zif_sat_c_object_search=>c_search_fields-object_filter_input_key
+                              label          = zif_sat_c_object_search=>c_search_fields-object_filter_input_label
+                              filters        = lt_object_filters )
+                            ( name           = zif_sat_c_object_search=>c_search_fields-message_text_input_key
+                              case_sensitive = abap_true
+                              label          = zif_sat_c_object_search=>c_search_fields-message_text_input_label )
+                            ( name           = zif_sat_c_object_search=>c_search_fields-message_filter_input_key
+                              label          = zif_sat_c_object_search=>c_search_fields-message_filter_input_label
+                              filters        = mt_message_options ) ) ).
 
     mt_options = lt_object_filters.
   ENDMETHOD.
