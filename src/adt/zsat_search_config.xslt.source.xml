@@ -257,6 +257,12 @@
           </objectsearch:groupingLevel>
         </tt:loop>
       </tt:cond>
+
+      <tt:cond check="exist(out_config.adt_type_img_map_entries)">
+        <tt:apply name="adtTypeImgMapEntries">
+          <tt:with-root name="type_map" ref="out_config.adt_type_img_map_entries"/>
+        </tt:apply>
+      </tt:cond>
     </objectsearch:resultOutputConfig>
 
   </tt:template>
@@ -288,6 +294,25 @@
         </tt:cond>
       </objectsearch:customOption>
     </tt:loop>
+  </tt:template>
+
+  <!-- Template for ADT Type image map entries -->
+  <tt:template name="adtTypeImgMapEntries">
+    <tt:context>
+      <tt:root name="type_map" type="cl:ty_adt_type_img_map_entries"/>
+    </tt:context>
+
+    <tt:loop ref="type_map">
+      <objectsearch:adtAltTypeImage tt:extensible="deep">
+        <tt:attribute name="objectsearch:type" value-ref="$ref.adt_type"/>
+        <objectsearch:imgInfo tt:extensible="deep">
+          <tt:apply name="imageInfoAttributes">
+            <tt:with-root name="image_info" ref="$ref.image_info"/>
+          </tt:apply>
+        </objectsearch:imgInfo>
+      </objectsearch:adtAltTypeImage>
+    </tt:loop>
+
   </tt:template>
 
 </tt:transform>
