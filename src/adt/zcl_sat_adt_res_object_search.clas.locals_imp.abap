@@ -132,6 +132,8 @@ CLASS lcl_result_converter_factory IMPLEMENTATION.
                          NEW lcl_cds_result_converter( it_query_result )
                        WHEN zif_sat_c_object_search=>c_search_type-method THEN
                          NEW lcl_method_result_converter( it_query_result )
+                       WHEN zif_sat_c_object_search=>c_search_type-message THEN
+                         NEW lcl_message_result_converter( it_query_result )
                        ELSE
                          NEW lcl_result_converter( it_query_result ) ).
   ENDMETHOD.
@@ -259,9 +261,6 @@ CLASS lcl_method_result_converter IMPLEMENTATION.
     ENDLOOP.
   ENDMETHOD.
 
-  METHOD convert_result_entry.
-  ENDMETHOD.
-
   METHOD map_method_to_uri.
     DATA lo_wb_request  TYPE REF TO cl_wb_request.
     DATA lv_object_name TYPE seu_objkey.
@@ -322,5 +321,45 @@ CLASS lcl_method_result_converter IMPLEMENTATION.
                                  WHEN seoc_exposure_public    THEN zif_sat_c_object_search=>c_visibility-public
                                  WHEN seoc_exposure_protected THEN zif_sat_c_object_search=>c_visibility-protected
                                  WHEN seoc_exposure_private   THEN zif_sat_c_object_search=>c_visibility-private ) ) ).
+  ENDMETHOD.
+ENDCLASS.
+
+
+CLASS lcl_message_result_converter IMPLEMENTATION.
+  METHOD convert_entries.
+    LOOP AT mt_query_result ASSIGNING FIELD-SYMBOL(<ls_query_result>)
+         GROUP BY <ls_query_result>-object_name.
+
+      " 1) create ADT URI for Message Class
+      DATA(ls_object_reference) = zcl_sat_adt_util=>create_adt_uri( iv_tadir_type = <ls_query_result>-tadir_type
+                                                                    iv_name       = <ls_query_result>-object_name ).
+      DATA(ls_result_entry) = VALUE zif_sat_ty_adt_types=>ty_s_adt_obj_ref(
+                                        name        = <ls_query_result>-object_name
+                                        alt_name    = <ls_query_result>-raw_object_name
+                                        devclass    = <ls_query_result>-devclass
+                                        type        = ls_object_reference-type
+                                        uri         = ls_object_reference-uri
+                                        parent_uri  = mo_devclass_util->get_package_uri( <ls_query_result>-devclass )
+                                        description = <ls_query_result>-description ).
+
+      cs_result-objects = VALUE #( BASE cs_result-objects ( ls_result_entry ) ).
+
+      " 2) create message entries
+      LOOP AT GROUP <ls_query_result> ASSIGNING FIELD-SYMBOL(<ls_message>).
+        DATA(lv_uri) = `/sap/bc/adt/messageclass/` &&
+                       to_lower( cl_http_utility=>escape_url( unescaped = |{ <ls_message>-object_name }| ) ) &&
+                       |/messages/{ <ls_message>-message_number }|.
+
+        cs_result-objects = VALUE #(
+            BASE cs_result-objects
+            ( name       = |[{ <ls_message>-message_number }] { <ls_message>-message_short_text }|
+              type       = zif_sat_c_object_types=>message
+              parent_uri = ls_object_reference-uri
+              changed_by = <ls_message>-changed_by
+              changed_on = <ls_message>-changed_date
+              uri        = lv_uri ) ).
+        cs_result-count   = cs_result-count + 1.
+      ENDLOOP.
+    ENDLOOP.
   ENDMETHOD.
 ENDCLASS.
