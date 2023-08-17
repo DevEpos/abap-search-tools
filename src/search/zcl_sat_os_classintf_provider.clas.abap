@@ -85,7 +85,7 @@ CLASS zcl_sat_os_classintf_provider IMPLEMENTATION.
     super->constructor( ).
     " Create sub queries for parameters where boolean operation AND is senseful
     mv_flag_subquery = |SELECT DISTINCT { c_fields-classintf } | && c_cr_lf &&
-                       | FROM { zif_sat_c_select_source_id=>zsat_i_classflags } | && c_cr_lf &&
+                       | FROM { get_cds_sql_name( |{ zif_sat_c_select_source_id=>zsat_i_classflags }| ) } | && c_cr_lf &&
                        | WHERE |.
     mv_attribute_subquery = |SELECT DISTINCT { c_fields-classintf } | && c_cr_lf &&
                             | FROM { zif_sat_c_select_source_id=>zsat_i_classattribute } | && c_cr_lf &&
@@ -183,7 +183,7 @@ CLASS zcl_sat_os_classintf_provider IMPLEMENTATION.
 
         " Find objects via its description
         WHEN c_general_search_options-description.
-          add_join_table( iv_join_table = |{ zif_sat_c_select_source_id=>zsat_i_classinterfacet }|
+          add_join_table( iv_join_table = get_cds_sql_name( |{ zif_sat_c_select_source_id=>zsat_i_classinterfacet }| )
                           iv_alias      = c_alias_names-text
                           it_conditions = VALUE #( ( field           = c_fields-classintf
                                                      ref_field       = c_fields-classintf
@@ -246,7 +246,7 @@ CLASS zcl_sat_os_classintf_provider IMPLEMENTATION.
         WHEN c_class_intf_search_option-method.
           add_multi_value_filter(
             EXPORTING it_values                 = <ls_option>-value_range
-                      iv_join_table             = |{ zif_sat_c_select_source_id=>zsat_i_simpleclifmethod }|
+                      iv_join_table             = get_cds_sql_name( |{ zif_sat_c_select_source_id=>zsat_i_simpleclifmethod }| )
                       iv_join_table_alias       = c_alias_names-method
                       iv_filter_field           = c_fields-method
                       iv_subquery               = mv_meth_subquery
@@ -256,7 +256,7 @@ CLASS zcl_sat_os_classintf_provider IMPLEMENTATION.
         WHEN c_class_intf_search_option-flag.
           add_multi_value_filter(
             EXPORTING it_values                 = <ls_option>-value_range
-                      iv_join_table             = |{ zif_sat_c_select_source_id=>zsat_i_classflags }|
+                      iv_join_table             = get_cds_sql_name( |{ zif_sat_c_select_source_id=>zsat_i_classflags }| )
                       iv_join_table_alias       = c_alias_names-flags
                       iv_filter_field           = c_fields-flag
                       iv_subquery               = mv_flag_subquery
@@ -266,7 +266,7 @@ CLASS zcl_sat_os_classintf_provider IMPLEMENTATION.
         WHEN c_class_intf_search_option-friend.
           add_multi_value_filter(
             EXPORTING it_values                 = <ls_option>-value_range
-                      iv_join_table             = |{ zif_sat_c_select_source_id=>zsat_i_globalfriend }|
+                      iv_join_table             = get_cds_sql_name( |{ zif_sat_c_select_source_id=>zsat_i_globalfriend }| )
                       iv_join_table_alias       = c_alias_names-friend
                       iv_filter_field           = c_fields-friend
                       iv_subquery               = mv_friend_subquery
@@ -276,7 +276,7 @@ CLASS zcl_sat_os_classintf_provider IMPLEMENTATION.
         WHEN c_class_intf_search_option-interface.
           add_multi_value_filter(
             EXPORTING it_values                 = <ls_option>-value_range
-                      iv_join_table             = |{ zif_sat_c_select_source_id=>zsat_i_interfaceusage }|
+                      iv_join_table             = get_cds_sql_name( |{ zif_sat_c_select_source_id=>zsat_i_interfaceusage }| )
                       iv_join_table_alias       = c_alias_names-interface
                       iv_filter_field           = c_fields-using_interface
                       iv_subquery               = mv_intf_subquery
@@ -284,7 +284,7 @@ CLASS zcl_sat_os_classintf_provider IMPLEMENTATION.
 
         " Find clases/interfaces with certain super classes
         WHEN c_class_intf_search_option-super_type.
-          add_join_table( iv_join_table = |{ zif_sat_c_select_source_id=>zsat_i_superclass }|
+          add_join_table( iv_join_table = get_cds_sql_name( |{ zif_sat_c_select_source_id=>zsat_i_superclass }| )
                           iv_alias      = c_alias_names-super
                           it_conditions = VALUE #( ( field           = c_fields-classintf
                                                      ref_field       = c_fields-classintf

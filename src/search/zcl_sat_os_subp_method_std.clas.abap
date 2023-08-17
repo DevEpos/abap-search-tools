@@ -106,11 +106,11 @@ CLASS zcl_sat_os_subp_method_std IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD prepare_search.
-    set_base_select_table( iv_entity = zif_sat_c_select_source_id=>zsat_i_classinterfacemethod
+    set_base_select_table( iv_entity = get_cds_sql_name( |{ zif_sat_c_select_source_id=>zsat_i_classinterfacemethod }| )
                            iv_alias  = c_alias_names-method ).
 
     " join to class/interface always necessary because of devclass/tadir type
-    add_join_table( iv_join_table = |{ zif_sat_c_select_source_id=>zsat_i_classinterface }|
+    add_join_table( iv_join_table = get_cds_sql_name( |{ zif_sat_c_select_source_id=>zsat_i_classinterface }| )
                     iv_alias      = c_clif_alias
                     it_conditions = VALUE #( ( field           = c_class_fields-classname
                                                ref_field       = c_method_fields-classname
@@ -119,7 +119,7 @@ CLASS zcl_sat_os_subp_method_std IMPLEMENTATION.
                                                and_or          = zif_sat_c_selection_condition=>and ) ) ).
 
     " Method Descriptions can not be read via RS_SHORTTEXT_GET
-    add_join_table( iv_join_table = |{ zif_sat_c_select_source_id=>zsat_i_classinterfacecomptext }|
+    add_join_table( iv_join_table = get_cds_sql_name( |{ zif_sat_c_select_source_id=>zsat_i_classinterfacecomptext }| )
                     iv_alias      = c_alias_names-method_text
                     iv_join_type  = zif_sat_c_join_types=>left_outer_join
                     it_conditions = VALUE #( and_or          = zif_sat_c_selection_condition=>and
