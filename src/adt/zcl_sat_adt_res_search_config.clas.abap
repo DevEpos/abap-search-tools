@@ -37,6 +37,7 @@ CLASS zcl_sat_adt_res_search_config IMPLEMENTATION.
     result = VALUE #( ( NEW zcl_sat_dbtabview_query_config( ) )
                       ( NEW zcl_sat_cds_view_query_config( ) )
                       ( NEW zcl_sat_clsintf_query_config( ) )
-                      ( NEW zcl_sat_clif_meth_query_config( ) ) ).
+                      ( NEW zcl_sat_clif_meth_query_config( ) )
+                      ( NEW zcl_sat_message_query_config( ) ) ).
   ENDMETHOD.
 ENDCLASS.

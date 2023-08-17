@@ -16,4 +16,6 @@ INTERFACE zif_sat_c_object_types
   CONSTANTS class                   TYPE string VALUE 'CLAS/OC'.
   CONSTANTS class_method_impl       TYPE string VALUE 'CLAS/OM'.
   CONSTANTS interface_method        TYPE string VALUE 'INTF/IO'.
+  CONSTANTS message_class           TYPE string VALUE 'MSAG/N'.
+  CONSTANTS message                 TYPE string VALUE 'MSAG/NN'.
 ENDINTERFACE.
