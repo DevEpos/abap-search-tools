@@ -86,9 +86,10 @@ CLASS zcl_sat_object_query_parser DEFINITION
 
     METHODS convert_term_to_selopt
       IMPORTING
-        iv_term       TYPE string
+        iv_term           TYPE string
+        if_case_sensitive TYPE abap_bool OPTIONAL
       RETURNING
-        VALUE(result) TYPE LINE OF zif_sat_ty_global=>ty_t_string_range.
+        VALUE(result)     TYPE LINE OF zif_sat_ty_global=>ty_t_string_range.
 
     METHODS convert_to_selopt_terms
       CHANGING
@@ -197,7 +198,7 @@ CLASS zcl_sat_object_query_parser IMPLEMENTATION.
 
     LOOP AT lt_word INTO DATA(lv_search_term).
       ls_search_term-values = VALUE #( BASE ls_search_term-values
-                                       ( convert_term_to_selopt( lv_search_term ) ) ).
+                                       ( convert_term_to_selopt( iv_term = lv_search_term ) ) ).
     ENDLOOP.
 
     rt_search_term = VALUE #( ( ls_search_term ) ).
@@ -405,17 +406,25 @@ CLASS zcl_sat_object_query_parser IMPLEMENTATION.
       lv_term = lv_term+1.
     ENDIF.
 
-    result = VALUE #( sign = lv_sign option = lv_option low = to_upper( lv_term ) ).
+    result = VALUE #( sign   = lv_sign
+                      option = lv_option
+                      low    = COND #( WHEN if_case_sensitive = abap_true THEN lv_term ELSE to_upper( lv_term ) ) ).
   ENDMETHOD.
 
   METHOD convert_to_selopt_terms.
+    DATA(lt_fields) = mo_configuration->get_search_config( )-inputs.
+
     LOOP AT ct_search_terms REFERENCE INTO DATA(lr_search_term).
+      " find field configuration to determine if 'to_upper' should be performed
+      DATA(lf_field_case_sensitive) = VALUE #( lt_fields[ name = lr_search_term->target ]-case_sensitive OPTIONAL ).
+
       LOOP AT lr_search_term->values REFERENCE INTO DATA(lr_term_value).
         IF lr_term_value->sign IS INITIAL OR lr_term_value->option IS INITIAL.
-          lr_term_value->* = convert_term_to_selopt( lr_term_value->low ).
+          lr_term_value->* = convert_term_to_selopt( iv_term = lr_term_value->low if_case_sensitive = lf_field_case_sensitive ).
         ENDIF.
       ENDLOOP.
     ENDLOOP.
   ENDMETHOD.
+
 ENDCLASS.
 

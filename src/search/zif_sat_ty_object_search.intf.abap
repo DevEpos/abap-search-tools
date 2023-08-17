@@ -77,8 +77,9 @@ INTERFACE zif_sat_ty_object_search
     ty_t_options TYPE RANGE OF string,
 
     BEGIN OF ty_s_search_term,
-      target TYPE string,
-      values TYPE RANGE OF string,
+      target         TYPE string,
+      case_sensitive TYPE string,
+      values         TYPE RANGE OF string,
     END OF ty_s_search_term,
 
     ty_t_search_term TYPE STANDARD TABLE OF ty_s_search_term WITH EMPTY KEY,
@@ -133,10 +134,11 @@ INTERFACE zif_sat_ty_object_search
 
     "! Input field for a search type
     BEGIN OF ty_input_field,
-      name    TYPE string,
-      label   TYPE string,
-      mixed   TYPE abap_bool,
-      filters TYPE ty_query_filters,
+      name           TYPE string,
+      label          TYPE string,
+      mixed          TYPE abap_bool,
+      case_sensitive TYPE abap_bool,
+      filters        TYPE ty_query_filters,
     END OF ty_input_field,
 
     ty_input_fields TYPE STANDARD TABLE OF ty_input_field WITH KEY name,
