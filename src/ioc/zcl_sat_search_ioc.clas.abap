@@ -44,7 +44,9 @@ CLASS zcl_sat_search_ioc IMPLEMENTATION.
     )->add_implementer( iv_filter      = |{ c_search_type-class_interface }|
                         iv_implementer = 'ZCL_SAT_CLSINTF_QUERY_CONFIG'
     )->add_implementer( iv_filter      = |{ c_search_type-method }|
-                        iv_implementer = 'ZCL_SAT_CLIF_METH_QUERY_CONFIG' ).
+                        iv_implementer = 'ZCL_SAT_CLIF_METH_QUERY_CONFIG'
+    )->add_implementer( iv_filter      = |{ c_search_type-message }|
+                        iv_implementer = 'ZCL_SAT_MESSAGE_QUERY_CONFIG' ).
 
     add_contract( iv_contract = c_contracts-query_validator
     )->add_implementer( iv_filter      = |{ c_search_type-cds_view }|
@@ -65,7 +67,9 @@ CLASS zcl_sat_search_ioc IMPLEMENTATION.
     )->add_implementer( iv_filter      = |{ c_search_type-class_interface }|
                         iv_implementer = 'ZCL_SAT_OS_CLASSINTF_PROVIDER'
     )->add_implementer( iv_filter      = |{ c_search_type-method }|
-                        iv_implementer = 'ZCL_SAT_OS_METHOD_PROVIDER' ).
+                        iv_implementer = 'ZCL_SAT_OS_METHOD_PROVIDER'
+    )->add_implementer( iv_filter      = |{ c_search_type-message }|
+                        iv_implementer = 'ZCL_SAT_OS_MESSAGE_PROVIDER' ).
 
     add_contract( iv_contract = c_contracts-query_converter
     )->add_implementer( iv_filter      = |{ c_search_type-class_interface }|
@@ -102,6 +106,13 @@ CLASS zcl_sat_search_ioc IMPLEMENTATION.
                         iv_implementer  = c_implementer-query_parser
                         it_dependencies = VALUE #(
                             filter = c_search_type-method
+                            ( parameter = 'IO_CONFIGURATION' contract = c_contracts-query_config )
+                            ( parameter = 'IO_VALIDATOR'     contract = c_contracts-query_validator )
+                            ( parameter = 'IO_CONVERTER'     contract = c_contracts-query_converter ) )
+    )->add_implementer( iv_filter       = |{ c_search_type-message }|
+                        iv_implementer  = c_implementer-query_parser
+                        it_dependencies = VALUE #(
+                            filter = c_search_type-message
                             ( parameter = 'IO_CONFIGURATION' contract = c_contracts-query_config )
                             ( parameter = 'IO_VALIDATOR'     contract = c_contracts-query_validator )
                             ( parameter = 'IO_CONVERTER'     contract = c_contracts-query_converter ) ) ).
