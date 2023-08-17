@@ -13,13 +13,13 @@ INTERFACE zif_sat_ty_object_search
       raw_object_name    TYPE zsat_entity_id_raw,
       alt_object_name    TYPE zsat_entity_id,
       entity_type        TYPE zsat_entity_type,
-      sub_object_name    TYPE c LENGTH 100,
-      sub_object_type    TYPE swo_objtyp,
       tadir_type         TYPE trobjtype,
       description        TYPE ddtext,
       devclass           TYPE devclass,
       api_state          TYPE c LENGTH 30,
       cds_source_type    TYPE c LENGTH 1,
+      message_number     TYPE t100-msgnr,
+      message_short_text TYPE t100-text,
       method_type        TYPE seomtdtype,
       "! Category (1=Standard,2=Implemented,3=Redefined)
       method_status      TYPE c LENGTH 1,
@@ -159,10 +159,18 @@ INTERFACE zif_sat_ty_object_search
 
     ty_custom_options TYPE STANDARD TABLE OF ty_custom_option WITH EMPTY KEY,
 
+    BEGIN OF ty_adt_type_img_map,
+      adt_type   TYPE string,
+      image_info TYPE ty_image_info,
+    END OF ty_adt_type_img_map,
+
+    ty_adt_type_img_map_entries TYPE STANDARD TABLE OF ty_adt_type_img_map WITH EMPTY KEY,
+
     BEGIN OF ty_result_output_config,
       types_for_list           TYPE string_table,
       is_list_output_supported TYPE abap_bool,
       groupings                TYPE string_table,
+      adt_type_img_map_entries TYPE ty_adt_type_img_map_entries,
     END OF ty_result_output_config,
 
     ty_result_output_configs TYPE STANDARD TABLE OF ty_result_output_config WITH EMPTY KEY,
