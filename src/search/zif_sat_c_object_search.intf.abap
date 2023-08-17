@@ -10,18 +10,23 @@ INTERFACE zif_sat_c_object_search
       method          TYPE zif_sat_ty_object_search=>ty_search_type VALUE 'method',
       db_field        TYPE zif_sat_ty_object_search=>ty_search_type VALUE 'dbfield',
       cds_field       TYPE zif_sat_ty_object_search=>ty_search_type VALUE 'cdsfield',
+      message         TYPE zif_sat_ty_object_search=>ty_search_type VALUE 'message',
     END OF c_search_type.
 
   CONSTANTS:
     BEGIN OF c_search_fields,
-      object_name_input_key     TYPE string VALUE 'objectName',
-      object_name_input_label   TYPE string VALUE 'Object &Name',
-      object_filter_input_key   TYPE string VALUE 'objectFilter',
-      object_filter_input_label TYPE string VALUE 'Object &Filters',
-      method_name_input_key     TYPE string VALUE 'methodName',
-      method_name_input_label   TYPE string VALUE '&Method Name',
-      method_filter_input_key   TYPE string VALUE 'methodFilter',
-      method_filter_input_label TYPE string VALUE 'M&ethod Filter',
+      object_name_input_key      TYPE string VALUE 'objectName',
+      object_name_input_label    TYPE string VALUE 'Object &Name',
+      object_filter_input_key    TYPE string VALUE 'objectFilter',
+      object_filter_input_label  TYPE string VALUE 'Object &Filters',
+      method_name_input_key      TYPE string VALUE 'methodName',
+      method_name_input_label    TYPE string VALUE '&Method Name',
+      method_filter_input_key    TYPE string VALUE 'methodFilter',
+      method_filter_input_label  TYPE string VALUE 'M&ethod Filter',
+      message_text_input_key     TYPE string VALUE 'messageText',
+      message_text_input_label   TYPE string VALUE 'Message Short Text',
+      message_filter_input_key   TYPE string VALUE 'messageFilter',
+      message_filter_input_label TYPE string VALUE 'Message Filter',
     END OF c_search_fields.
 
   CONSTANTS:

@@ -98,7 +98,6 @@ INHERITING FROM lcl_result_converter.
 
   PROTECTED SECTION.
     METHODS convert_entries      REDEFINITION.
-    METHODS convert_result_entry REDEFINITION.
 
   PRIVATE SECTION.
     CONSTANTS:
@@ -121,7 +120,15 @@ INHERITING FROM lcl_result_converter.
         is_method     TYPE zif_sat_ty_object_search=>ty_s_search_result
       RETURNING
         VALUE(result) TYPE zif_sat_ty_adt_types=>ty_s_adt_obj_ref-properties.
+ENDCLASS.
 
+CLASS lcl_message_result_converter DEFINITION
+INHERITING FROM lcl_result_converter.
+
+  PROTECTED SECTION.
+    METHODS convert_entries      REDEFINITION.
+
+  PRIVATE SECTION.
 ENDCLASS.
 
 
