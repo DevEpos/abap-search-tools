@@ -85,7 +85,7 @@ CLASS zcl_sat_os_classintf_provider IMPLEMENTATION.
     super->constructor( ).
     " Create sub queries for parameters where boolean operation AND is senseful
     mv_flag_subquery = |SELECT DISTINCT { c_fields-classintf } | && c_cr_lf &&
-                       | FROM { get_cds_sql_name( |{ zif_sat_c_select_source_id=>zsat_i_classflags }| ) } | && c_cr_lf &&
+                       | FROM { zif_sat_c_select_source_id=>zsat_i_classflags } | && c_cr_lf &&
                        | WHERE |.
     mv_attribute_subquery = |SELECT DISTINCT { c_fields-classintf } | && c_cr_lf &&
                             | FROM { zif_sat_c_select_source_id=>zsat_i_classattribute } | && c_cr_lf &&
@@ -211,12 +211,14 @@ CLASS zcl_sat_os_classintf_provider IMPLEMENTATION.
                              it_values    = <ls_option>-value_range ).
 
         WHEN c_general_search_options-application_component.
-          add_appl_comp_filter( it_values          = <ls_option>-value_range
-                                iv_ref_field       = CONV #( c_fields-package )
-                                iv_ref_table_alias = c_clif_alias ).
+          add_appl_comp_filter( if_use_ddic_sql_view = abap_true
+                                it_values            = <ls_option>-value_range
+                                iv_ref_field         = CONV #( c_fields-package )
+                                iv_ref_table_alias   = c_clif_alias ).
 
         WHEN c_general_search_options-software_component.
-          add_softw_comp_filter( it_values          = <ls_option>-value_range
+          add_softw_comp_filter( if_use_ddic_sql_view = abap_true
+                                 it_values          = <ls_option>-value_range
                                  iv_ref_field       = CONV #( c_fields-package )
                                  iv_ref_table_alias = c_clif_alias ).
 
