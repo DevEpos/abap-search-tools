@@ -15,6 +15,8 @@ INTERFACE zif_sat_c_select_source_id
   CONSTANTS dd10b                         TYPE string VALUE 'DD10B'.
   "! <p class="shorttext synchronized">Table for CDS Association Header</p>
   CONSTANTS dd08b                         TYPE string VALUE 'DD08B'.
+  CONSTANTS zsat_i_messageclass           TYPE string VALUE 'ZSAT_I_MESSAGECLASS'.
+  CONSTANTS zsat_i_message                TYPE string VALUE 'ZSAT_I_MESSAGE'.
   " <p class="shorttext synchronized">Table for Redefined Methods</p>
   CONSTANTS seoredef                      TYPE string VALUE 'SEOREDEF'.
   CONSTANTS zsat_i_associatedincds        TYPE string VALUE 'ZSAT_I_ASSOCIATEDINCDS'.
