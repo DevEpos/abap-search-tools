@@ -218,9 +218,9 @@ CLASS zcl_sat_os_classintf_provider IMPLEMENTATION.
 
         WHEN c_general_search_options-software_component.
           add_softw_comp_filter( if_use_ddic_sql_view = abap_true
-                                 it_values          = <ls_option>-value_range
-                                 iv_ref_field       = CONV #( c_fields-package )
-                                 iv_ref_table_alias = c_clif_alias ).
+                                 it_values            = <ls_option>-value_range
+                                 iv_ref_field         = CONV #( c_fields-package )
+                                 iv_ref_table_alias   = c_clif_alias ).
 
         " Find only objects with a certain type
         WHEN c_general_search_options-type.
@@ -247,42 +247,50 @@ CLASS zcl_sat_os_classintf_provider IMPLEMENTATION.
         " Find classes/interfaces with certain Methods
         WHEN c_class_intf_search_option-method.
           add_multi_value_filter(
-            EXPORTING it_values                 = <ls_option>-value_range
-                      iv_join_table             = get_cds_sql_name( |{ zif_sat_c_select_source_id=>zsat_i_simpleclifmethod }| )
-                      iv_join_table_alias       = c_alias_names-method
-                      iv_filter_field           = c_fields-method
-                      iv_subquery               = mv_meth_subquery
-            CHANGING  cv_including_filter_count = mv_meth_filter_count ).
+            EXPORTING
+              it_values                 = <ls_option>-value_range
+              iv_join_table             = get_cds_sql_name( |{ zif_sat_c_select_source_id=>zsat_i_simpleclifmethod }| )
+              iv_join_table_alias       = c_alias_names-method
+              iv_filter_field           = c_fields-method
+              iv_subquery               = mv_meth_subquery
+            CHANGING
+              cv_including_filter_count = mv_meth_filter_count ).
 
         " Find classes/interfaces with certain flag options, e.g. 'Is Abstract'
         WHEN c_class_intf_search_option-flag.
           add_multi_value_filter(
-            EXPORTING it_values                 = <ls_option>-value_range
-                      iv_join_table             = get_cds_sql_name( |{ zif_sat_c_select_source_id=>zsat_i_classflags }| )
-                      iv_join_table_alias       = c_alias_names-flags
-                      iv_filter_field           = c_fields-flag
-                      iv_subquery               = mv_flag_subquery
-            CHANGING  cv_including_filter_count = mv_flag_filter_count ).
+            EXPORTING
+              it_values                 = <ls_option>-value_range
+              iv_join_table             = get_cds_sql_name( |{ zif_sat_c_select_source_id=>zsat_i_classflags }| )
+              iv_join_table_alias       = c_alias_names-flags
+              iv_filter_field           = c_fields-flag
+              iv_subquery               = mv_flag_subquery
+            CHANGING
+              cv_including_filter_count = mv_flag_filter_count ).
 
         " Find classes/interfaces with certain global friend releationships
         WHEN c_class_intf_search_option-friend.
           add_multi_value_filter(
-            EXPORTING it_values                 = <ls_option>-value_range
-                      iv_join_table             = get_cds_sql_name( |{ zif_sat_c_select_source_id=>zsat_i_globalfriend }| )
-                      iv_join_table_alias       = c_alias_names-friend
-                      iv_filter_field           = c_fields-friend
-                      iv_subquery               = mv_friend_subquery
-            CHANGING  cv_including_filter_count = mv_friend_filter_count ).
+            EXPORTING
+              it_values                 = <ls_option>-value_range
+              iv_join_table             = get_cds_sql_name( |{ zif_sat_c_select_source_id=>zsat_i_globalfriend }| )
+              iv_join_table_alias       = c_alias_names-friend
+              iv_filter_field           = c_fields-friend
+              iv_subquery               = mv_friend_subquery
+            CHANGING
+              cv_including_filter_count = mv_friend_filter_count ).
 
         " Find classes/interfaces that use certain interfaces
         WHEN c_class_intf_search_option-interface.
           add_multi_value_filter(
-            EXPORTING it_values                 = <ls_option>-value_range
-                      iv_join_table             = get_cds_sql_name( |{ zif_sat_c_select_source_id=>zsat_i_interfaceusage }| )
-                      iv_join_table_alias       = c_alias_names-interface
-                      iv_filter_field           = c_fields-using_interface
-                      iv_subquery               = mv_intf_subquery
-            CHANGING  cv_including_filter_count = mv_intf_filter_count ).
+            EXPORTING
+              it_values                 = <ls_option>-value_range
+              iv_join_table             = get_cds_sql_name( |{ zif_sat_c_select_source_id=>zsat_i_interfaceusage }| )
+              iv_join_table_alias       = c_alias_names-interface
+              iv_filter_field           = c_fields-using_interface
+              iv_subquery               = mv_intf_subquery
+            CHANGING
+              cv_including_filter_count = mv_intf_filter_count ).
 
         " Find clases/interfaces with certain super classes
         WHEN c_class_intf_search_option-super_type.
