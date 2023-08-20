@@ -39,8 +39,10 @@ CLASS zcl_sat_search_ioc IMPLEMENTATION.
     add_contract( iv_contract = c_contracts-query_config
     )->add_implementer( iv_filter      = |{ c_search_type-cds_view }|
                         iv_implementer = 'ZCL_SAT_CDS_VIEW_QUERY_CONFIG'
-    )->add_implementer( iv_filter      = |{ c_search_type-db_tab_view }|
-                        iv_implementer = 'ZCL_SAT_DBTABVIEW_QUERY_CONFIG'
+    )->add_implementer( iv_filter      = |{ c_search_type-db_tab }|
+                        iv_implementer = 'ZCL_SAT_DBTAB_QUERY_CONFIG'
+    )->add_implementer( iv_filter      = |{ c_search_type-ddic_view }|
+                        iv_implementer = 'ZCL_SAT_DDICVIEW_QUERY_CONFIG'
     )->add_implementer( iv_filter      = |{ c_search_type-class_interface }|
                         iv_implementer = 'ZCL_SAT_CLSINTF_QUERY_CONFIG'
     )->add_implementer( iv_filter      = |{ c_search_type-method }|
@@ -51,8 +53,8 @@ CLASS zcl_sat_search_ioc IMPLEMENTATION.
     add_contract( iv_contract = c_contracts-query_validator
     )->add_implementer( iv_filter      = |{ c_search_type-cds_view }|
                         iv_implementer = 'ZCL_SAT_CDS_VIEW_QV'
-    )->add_implementer( iv_filter      = |{ c_search_type-db_tab_view }|
-                        iv_implementer = 'ZCL_SAT_DBTABVIEW_QV'
+    )->add_implementer( iv_filter      = |{ c_search_type-db_tab }|
+                        iv_implementer = 'ZCL_SAT_DBTAB_QV'
     )->add_implementer( iv_filter      = |{ c_search_type-class_interface }|
                         iv_implementer = 'ZCL_SAT_CLSINTF_QV'
     )->add_implementer( iv_filter      = |{ c_search_type-method }|
@@ -62,8 +64,10 @@ CLASS zcl_sat_search_ioc IMPLEMENTATION.
     add_contract( iv_contract = c_contracts-search_provider
     )->add_implementer( iv_filter      = |{ c_search_type-cds_view }|
                         iv_implementer = 'ZCL_SAT_OS_CDS_PROVIDER'
-    )->add_implementer( iv_filter      = |{ c_search_type-db_tab_view }|
+    )->add_implementer( iv_filter      = |{ c_search_type-db_tab }|
                         iv_implementer = 'ZCL_SAT_OS_DBTAB_PROVIDER'
+    )->add_implementer( iv_filter      = |{ c_search_type-ddic_view }|
+                        iv_implementer = 'ZCL_SAT_OS_DDICVIEW_PROVIDER'
     )->add_implementer( iv_filter      = |{ c_search_type-class_interface }|
                         iv_implementer = 'ZCL_SAT_OS_CLASSINTF_PROVIDER'
     )->add_implementer( iv_filter      = |{ c_search_type-method }|
@@ -78,6 +82,10 @@ CLASS zcl_sat_search_ioc IMPLEMENTATION.
                         iv_implementer = 'ZCL_SAT_CLIF_METHOD_QC'
     )->add_implementer( iv_filter      = |{ c_search_type-cds_view }|
                         iv_implementer = 'ZCL_SAT_CDS_VIEW_QC'
+    )->add_implementer( iv_filter      = |{ c_search_type-db_tab }|
+                        iv_implementer = 'ZCL_SAT_DBTAB_QC'
+    )->add_implementer( iv_filter      = |{ c_search_type-ddic_view }|
+                        iv_implementer = 'ZCL_SAT_DDICVIEW_QC'
     )->add_implementer( iv_implementer = 'ZCL_SAT_GENERAL_QC' ).
 
     add_contract( iv_contract = c_contracts-query_parser
@@ -88,13 +96,20 @@ CLASS zcl_sat_search_ioc IMPLEMENTATION.
                             ( parameter = 'IO_CONFIGURATION' contract = c_contracts-query_config )
                             ( parameter = 'IO_VALIDATOR'     contract = c_contracts-query_validator )
                             ( parameter = 'IO_CONVERTER'     contract = c_contracts-query_converter ) )
-    )->add_implementer(
-        iv_filter       = |{ c_search_type-db_tab_view }|
-        iv_implementer  = c_implementer-query_parser
-        it_dependencies = VALUE #(
-            ( parameter = 'IO_CONFIGURATION' contract = c_contracts-query_config    filter = c_search_type-db_tab_view )
-            ( parameter = 'IO_VALIDATOR'     contract = c_contracts-query_validator filter = c_search_type-db_tab_view )
-            ( parameter = 'IO_CONVERTER'     contract = c_contracts-query_converter ) )
+    )->add_implementer( iv_filter       = |{ c_search_type-db_tab }|
+                        iv_implementer  = c_implementer-query_parser
+                        it_dependencies = VALUE #(
+                            filter = c_search_type-db_tab
+                            ( parameter = 'IO_CONFIGURATION' contract = c_contracts-query_config    )
+                            ( parameter = 'IO_VALIDATOR'     contract = c_contracts-query_validator )
+                            ( parameter = 'IO_CONVERTER'     contract = c_contracts-query_converter ) )
+    )->add_implementer( iv_filter       = |{ c_search_type-ddic_view }|
+                        iv_implementer  = c_implementer-query_parser
+                        it_dependencies = VALUE #(
+                            filter = c_search_type-ddic_view
+                            ( parameter = 'IO_CONFIGURATION' contract = c_contracts-query_config    )
+                            ( parameter = 'IO_VALIDATOR'     contract = c_contracts-query_validator )
+                            ( parameter = 'IO_CONVERTER'     contract = c_contracts-query_converter ) )
     )->add_implementer( iv_filter       = |{ c_search_type-class_interface }|
                         iv_implementer  = c_implementer-query_parser
                         it_dependencies = VALUE #(

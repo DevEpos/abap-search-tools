@@ -14,7 +14,6 @@ define view ZSAT_I_DatabaseView
                                                         and FallBackText.ddlanguage = DbView.OriginalLanguage
 {
   DbView.ViewName,
-  ''                     as DeliveryClass,
   $parameters.p_language as Language,
   case
     when Text.ddtext is not null then Text.ddtext
