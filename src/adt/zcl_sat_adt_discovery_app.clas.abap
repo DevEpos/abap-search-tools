@@ -223,11 +223,18 @@ CLASS zcl_sat_adt_discovery_app IMPLEMENTATION.
         category_term   = zif_sat_c_object_search=>c_content_assist-terms-class_type ).
 
     io_registry->register_discoverable_resource(
-        url             = '/dclass'
+        url             = '/dbdelivclass'
         handler_class   = 'ZCL_SAT_ADT_RES_DB_DLVCLASS_VH'
         description     = 'Resource for Delivery Classes'
         category_scheme = zif_sat_c_object_search=>c_content_assist-category_scheme
         category_term   = zif_sat_c_object_search=>c_content_assist-terms-table_deliv_class ).
+
+    io_registry->register_discoverable_resource(
+        url             = '/dbdataclass'
+        handler_class   = 'ZCL_SAT_ADT_RES_DB_DATACLS_VH'
+        description     = 'Resource for Table Data Class'
+        category_scheme = zif_sat_c_object_search=>c_content_assist-category_scheme
+        category_term   = zif_sat_c_object_search=>c_content_assist-terms-table_data_class ).
   ENDMETHOD.
 
   METHOD register_sapaox_launcher.

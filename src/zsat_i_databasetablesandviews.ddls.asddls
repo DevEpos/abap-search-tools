@@ -21,9 +21,9 @@ define view ZSAT_I_DatabaseTablesAndViews
 }
 union select from ZSAT_I_DatabaseView
 {
-  ViewName as Entity,
-  ViewName as EntityRaw,
-  DeliveryClass,
+  ViewName               as Entity,
+  ViewName               as EntityRaw,
+  cast( '' as contflag ) as DeliveryClass,
   Description,
   Language,
   DevelopmentPackage,
