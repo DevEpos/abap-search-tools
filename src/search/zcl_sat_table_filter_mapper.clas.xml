@@ -3,9 +3,9 @@
  <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
   <asx:values>
    <VSEOCLASS>
-    <CLSNAME>ZCL_SAT_ADT_RES_TABLE_TYPE_VH</CLSNAME>
+    <CLSNAME>ZCL_SAT_TABLE_FILTER_MAPPER</CLSNAME>
     <LANGU>E</LANGU>
-    <DESCRIPT>Resource for getting the table types</DESCRIPT>
+    <DESCRIPT>Mapper of filter values</DESCRIPT>
     <STATE>1</STATE>
     <CLSCCINCL>X</CLSCCINCL>
     <FIXPT>X</FIXPT>

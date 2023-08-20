@@ -5,7 +5,10 @@ INTERFACE zif_sat_c_object_search
   CONSTANTS:
     BEGIN OF c_search_type,
       cds_view        TYPE zif_sat_ty_object_search=>ty_search_type VALUE 'cds',
+      "! DEPRECATED: use concrete
       db_tab_view     TYPE zif_sat_ty_object_search=>ty_search_type VALUE 'dbtabview',
+      db_tab          TYPE zif_sat_ty_object_search=>ty_search_type VALUE 'dbtab',
+      ddic_view       TYPE zif_sat_ty_object_search=>ty_search_type VALUE 'ddicview',
       class_interface TYPE zif_sat_ty_object_search=>ty_search_type VALUE 'classintf',
       method          TYPE zif_sat_ty_object_search=>ty_search_type VALUE 'method',
       db_field        TYPE zif_sat_ty_object_search=>ty_search_type VALUE 'dbfield',
@@ -24,9 +27,9 @@ INTERFACE zif_sat_c_object_search
       method_filter_input_key    TYPE string VALUE 'methodFilter',
       method_filter_input_label  TYPE string VALUE 'M&ethod Filter',
       message_text_input_key     TYPE string VALUE 'messageText',
-      message_text_input_label   TYPE string VALUE 'Message Short Text',
+      message_text_input_label   TYPE string VALUE '&Message Short Text',
       message_filter_input_key   TYPE string VALUE 'messageFilter',
-      message_filter_input_label TYPE string VALUE 'Message Filter',
+      message_filter_input_label TYPE string VALUE 'M&essage Filter',
     END OF c_search_fields.
 
   CONSTANTS:
@@ -239,6 +242,7 @@ INTERFACE zif_sat_c_object_search
       package                TYPE string VALUE 'package',
       created_on             TYPE string VALUE 'created',
       changed_on             TYPE string VALUE 'changed',
+      maintenance            TYPE string VALUE 'maintflag',
       use_and_for_filters    TYPE string VALUE 'useAndForFilters',
       read_api_state         TYPE string VALUE 'withApiState',
       get_all_results        TYPE string VALUE 'getAllResults',
@@ -266,11 +270,112 @@ INTERFACE zif_sat_c_object_search
     END OF c_class_types.
 
   CONSTANTS:
-    "! <p class="shorttext synchronized" lang="en">Search options DB search</p>
+    "! <p class="shorttext synchronized" lang="en">Search options DB Table search</p>
     BEGIN OF c_dbtab_search_params,
-      field          TYPE string VALUE 'field',
-      delivery_class TYPE string VALUE 'dclass',
+      field                TYPE string VALUE 'field',
+      delivery_class       TYPE string VALUE 'dlvclass',
+      flag                 TYPE string VALUE 'flag',
+      size_category        TYPE string VALUE 'sizecat',
+      buffering            TYPE string VALUE 'buffering',
+      buffering_type       TYPE string VALUE 'buffertype',
+      data_class           TYPE string VALUE 'dataclass',
+      enhancement_category TYPE string VALUE 'enhcat',
     END OF c_dbtab_search_params.
+
+  CONSTANTS:
+    "! <p class="shorttext synchronized" lang="en">Search options View search</p>
+    BEGIN OF c_ddicview_search_params,
+      field          TYPE string VALUE 'field',
+      delivery_class TYPE string VALUE 'dlvclass',
+      flag           TYPE string VALUE 'flag',
+      primary_table  TYPE string VALUE 'primtab',
+    END OF c_ddicview_search_params.
+
+  CONSTANTS:
+    BEGIN OF c_tab_enh_categories,
+      BEGIN OF int,
+        not_classified        TYPE dd02l-exclass VALUE '0',
+        not_extendable        TYPE dd02l-exclass VALUE '1',
+        char_like             TYPE dd02l-exclass VALUE '2',
+        char_like_and_numeric TYPE dd02l-exclass VALUE '3',
+        any                   TYPE dd02l-exclass VALUE '4',
+      END OF int,
+      BEGIN OF ext,
+        not_classified        TYPE string VALUE 'NOT_CLASSIFIED',
+        not_extendable        TYPE string VALUE 'NOT_EXTENDABLE',
+        char_like             TYPE string VALUE 'CHARACTER_LIKE',
+        char_like_and_numeric TYPE string VALUE 'CHARACTER_LIKE_AND_NUMERIC',
+        any                   TYPE string VALUE 'ANY',
+      END OF ext,
+    END OF c_tab_enh_categories.
+
+  CONSTANTS:
+    BEGIN OF c_db_flags,
+      client_dep        TYPE string VALUE 'CLIENT_DEP',
+      used_in_shlp      TYPE string VALUE 'USED_IN_SHLP',
+      is_gtt            TYPE string VALUE 'IS_GTT',
+      change_log_active TYPE string VALUE 'CHANGE_LOG_ACTIVE',
+    END OF c_db_flags.
+
+  CONSTANTS:
+    BEGIN OF c_db_buffer_status,
+      BEGIN OF int,
+        off             TYPE dd09l-bufallow VALUE 'N',
+        allowed_but_off TYPE dd09l-bufallow VALUE 'A',
+        on              TYPE dd09l-bufallow VALUE 'X',
+      END OF int,
+      BEGIN OF ext,
+        off             TYPE string VALUE 'OFF',
+        allowed_but_off TYPE string VALUE 'ALLOWED_BUT_OFF',
+        on              TYPE string VALUE 'ON',
+      END OF ext,
+    END OF c_db_buffer_status.
+
+  CONSTANTS:
+    BEGIN OF c_table_maintenance,
+      BEGIN OF int,
+        allowed_with_restr TYPE maintflag VALUE '',
+        not_allowed        TYPE maintflag VALUE 'N',
+        allowed            TYPE maintflag VALUE 'X',
+      END OF int,
+      BEGIN OF ext,
+        allowed_with_restr TYPE string VALUE 'ALLOWED_WITH_RESTR',
+        not_allowed        TYPE string VALUE 'NOT_ALLOWED',
+        allowed            TYPE string VALUE 'ALLOWED',
+      END OF ext,
+    END OF c_table_maintenance.
+
+  CONSTANTS:
+    BEGIN OF c_db_buffer_type,
+      BEGIN OF int,
+        no_buffering      TYPE dd09l-pufferung VALUE '',
+        single_entries    TYPE dd09l-pufferung VALUE 'P',
+        full_with_gen_key TYPE dd09l-pufferung VALUE 'G',
+        full_table        TYPE dd09l-pufferung VALUE 'X',
+      END OF int,
+      BEGIN OF ext,
+        no_buffering      TYPE string VALUE 'NO_BUFFERING',
+        single_entries    TYPE string VALUE 'SINGLE_ENTRIES',
+        full_with_gen_key TYPE string VALUE 'FULL_WITH_GEN_KEY',
+        full_table        TYPE string VALUE 'FULL_TABLE',
+      END OF ext,
+    END OF c_db_buffer_type.
+
+  CONSTANTS:
+    BEGIN OF c_view_class,
+      BEGIN OF int,
+        database    TYPE viewclass VALUE 'D',
+        help        TYPE viewclass VALUE 'H',
+        projection  TYPE viewclass VALUE 'P',
+        maintenance TYPE viewclass VALUE 'C',
+      END OF int,
+      BEGIN OF ext,
+        database    TYPE string VALUE 'DATABASE',
+        help        TYPE string VALUE 'HELP',
+        projection  TYPE string VALUE 'PROJECTION',
+        maintenance TYPE string VALUE 'MAINTENANCE',
+      END OF ext,
+    END OF c_view_class.
 
   CONSTANTS:
     "! Values for API option
@@ -309,12 +414,12 @@ INTERFACE zif_sat_c_object_search
         release_state     TYPE string VALUE 'releasestate',
         cds_type          TYPE string VALUE 'cdstype',
         cds_extension     TYPE string VALUE 'cdsextension',
-        table_type        TYPE string VALUE 'tabletype',
         abap_language     TYPE string VALUE 'abaplanguage',
         class_category    TYPE string VALUE 'classcategory',
         class_flag        TYPE string VALUE 'classflag',
         class_type        TYPE string VALUE 'classtype',
         table_deliv_class TYPE string VALUE 'tabledeliveryclass',
+        table_data_class  TYPE string VALUE 'tabledataclass',
       END OF terms,
     END OF c_content_assist.
 ENDINTERFACE.

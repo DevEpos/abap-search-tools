@@ -34,7 +34,8 @@ CLASS zcl_sat_adt_res_search_config IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD get_config_providers.
-    result = VALUE #( ( NEW zcl_sat_dbtabview_query_config( ) )
+    result = VALUE #( ( NEW zcl_sat_dbtab_query_config( ) )
+                      ( NEW zcl_sat_ddicview_query_config( ) )
                       ( NEW zcl_sat_cds_view_query_config( ) )
                       ( NEW zcl_sat_clsintf_query_config( ) )
                       ( NEW zcl_sat_clif_meth_query_config( ) )
