@@ -18,6 +18,11 @@
      <DESCRIPT>Table for CDS Association Header</DESCRIPT>
     </SEOCOMPOTX>
     <SEOCOMPOTX>
+     <CMPNAME>DD09L</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Technical Settings of Table</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
      <CLSNAME>ZIF_SAT_C_SELECT_SOURCE_ID</CLSNAME>
      <CMPNAME>DD10B</CMPNAME>
      <LANGU>E</LANGU>
