@@ -16,10 +16,8 @@ CLASS zcl_sat_cds_view_query_config DEFINITION
 
     CONSTANTS:
       BEGIN OF c_image_keys,
-        from        TYPE string VALUE 'ABAP:IMG_FROM_PART',
         association TYPE string VALUE 'ABAP:IMG_ASSOC',
         anno        TYPE string VALUE 'ABAP:IMG_ANNO',
-        extended_by TYPE string VALUE 'ABAP:IMG_EXT_BY',
         db_entity   TYPE string VALUE 'ABAP:IMG_DB_ENTITY',
       END OF c_image_keys.
 
@@ -170,12 +168,8 @@ CLASS zcl_sat_cds_view_query_config IMPLEMENTATION.
         description      = 'Extended By'
         long_description = |Use '{ c_cds_options-extended_by }' to restrict the search query to CDS views which are | &&
                            |extended by certain Extension views.\n\nExample:\n   { c_cds_options-extended_by } : i_material|
-        img_info         = VALUE #(
-            img_key     = c_image_keys-extended_by
-            img_encoded = `iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABKklEQVR4nM2SIVMCURSFCQYjwbDBsIFgIBAIBgKBYCAYDAaCP8BAIBic2TdDIBA2EIgGAtFo2EAwGglGAsFgIBgIBDxn5nPGebMMzXFn` &&
-                          `vnm897jnnnN3K5V/94QQGuJJrMRefIkX0RUnx4ofxEaMRN0FIsmy7FbrG0JnpcX6070u11prWlORi0LMdXZDg6lYlHU+d2eKbfVDDLVvsl9YSJzaic57sYAtT8QFxV6vxVj0ieK53HFexAJL0cJ2oPOG` &&
-                          `mbzajWgTqerBxgI77HlIVzgacBfIXieK3exjgS0CBZkf3Z07d08QynH3HgskKI+J0SBCn9+OsubtWDA/9B2kDLFF4TPzmRHh5w2lpQKIdOjuYdZ+OXSsT51dHiyOnEyx7c95xT45WvznzzfhJAGIuot7` &&
-                          `RgAAAABJRU5ErkJggg==` )
+        img_info         = VALUE #( img_key     = c_general_image_keys-extension
+                                    img_encoded = get_general_image( c_general_image_keys-extension ) )
         allowed_length   = 30
         patterns         = abap_true
         no_negation      = abap_true
@@ -210,12 +204,8 @@ CLASS zcl_sat_cds_view_query_config IMPLEMENTATION.
         description      = 'Select From'
         long_description = |Use '{ c_cds_options-select_from }' to restrict the search query to CDS views which use | &&
                            |a certain Table/View/CDS View in their SELECT clause.\n\nExample:\n   { c_cds_options-select_from } : mara|
-        img_info         = VALUE #(
-            img_key     = c_image_keys-from
-            img_encoded = `iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABQklEQVR4nK3Su0oDQRTG8TyCoK3EKpdFSVC8ZCEWUVDQyifwAXwGGxUbUXTWXEw2BhMt0lnYimijGEz2kt1EMSgqbqGtiKt8zskDHBAc` &&
-                          `GIY5f+ZXTSDw3ytVuAmqxeaFqjufiaIDVW46E7rzJWfX1FlAPvaTJQczlTaWTh4gLj0sVO8we9jGZMmFRH5YYEJ3MFV2MX90i+XTJ6SvPCwed7r36YMWqLPAeKEJRTOQ3HcRz1oICwOxjImxvI2onFNn` &&
-                          `gdF8E71rNcyVW6ha77BfP7B+/tIFaU6dBUb2bBagzgLDOR6gzgLxLA9QZ4FYxmIB6iwwlOYB6iwwuGuyAHUWUDQeoM4CYWF2gpv175R8UGm8dYGVs2ckCg76N+p+RJgeCwxs1XvC29aq/I33ijB8+olR` &&
-                          `0fAjmvkYEuZOKFfrY4G/rl+7wFtBvoD5FwAAAABJRU5ErkJggg==` )
+        img_info         = VALUE #( img_key     = c_general_image_keys-table_source
+                                    img_encoded = get_general_image( c_general_image_keys-table_source ) )
         allowed_length   = 30
         patterns         = abap_true
         content_assist   = VALUE #(

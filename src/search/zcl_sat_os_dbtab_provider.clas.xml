@@ -27,11 +27,6 @@
      <LANGU>E</LANGU>
      <DESCRIPT>CONSTRUCTOR</DESCRIPT>
     </SEOCOMPOTX>
-    <SEOCOMPOTX>
-     <CMPNAME>GET_BASE_TABLE_AND_FIELD</CMPNAME>
-     <LANGU>E</LANGU>
-     <DESCRIPT>Fills the names of base table and field</DESCRIPT>
-    </SEOCOMPOTX>
    </DESCRIPTIONS>
   </asx:values>
  </asx:abap>

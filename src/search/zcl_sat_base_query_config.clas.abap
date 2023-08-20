@@ -29,6 +29,9 @@ CLASS zcl_sat_base_query_config DEFINITION
         param          TYPE string VALUE 'ABAP:IMG_PARAM',
         checked_box    TYPE string VALUE 'ABAP:IMG_CHECKED_BOX',
         generic_filter TYPE string VALUE 'ABAP:IMG_GENERIC_FILTER',
+        extension      TYPE string VALUE 'ABAP:IMG_EXTENSION',
+        maintenance    TYPE string VALUE 'ABAP:IMG_MAINTENANCE',
+        table_source type string value 'ABAP:IMG_TABLE_DATA_SOURCE',
       END OF c_general_image_keys,
 
       BEGIN OF c_output_option,
@@ -314,6 +317,24 @@ CLASS zcl_sat_base_query_config IMPLEMENTATION.
                  `1QARrzlf1rlbmYk9tnh02H0qTmj5vnGmNLLgDmd5zcRlI0136WVBQEhzdaoZjOClqm3NZ3CjgOpwn4cmbBULfO6kEFUkKdS3KzkKLRXcYEwR6d05kUF0mV4V7dVtgkAOj3GvR7DcvGvYRG4tFByK/T5Sn2qJbdv9g` &&
                  `40xhfLi74LvKOp0aaBbPblUxvOUvKUhlBPKky2qebBeFQhnAoYxnavdIYWXQVFjzQmSvvCcEenZNwmsSjg+FenYYq+VMgXkD+Ef8m4MsV/r6IfFLAWAFe7UxiQnCE9nAsAORaRwMKowhZay+tJPlwx8Tkpf4FIgty` &&
                  `FKzK1qcAAAAASUVORK5CYII=`.
+
+      WHEN c_general_image_keys-extension.
+        result = `iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABKklEQVR4nM2SIVMCURSFCQYjwbDBsIFgIBAIBgKBYCAYDAaCP8BAIBic2TdDIBA2EIgGAtFo2EAwGglGAsFgIBgIBDxn5nPGebMMzXFn` &&
+                 `vnm897jnnnN3K5V/94QQGuJJrMRefIkX0RUnx4ofxEaMRN0FIsmy7FbrG0JnpcX6070u11prWlORi0LMdXZDg6lYlHU+d2eKbfVDDLVvsl9YSJzaic57sYAtT8QFxV6vxVj0ieK53HFexAJL0cJ2oPOG` &&
+                 `mbzajWgTqerBxgI77HlIVzgacBfIXieK3exjgS0CBZkf3Z07d08QynH3HgskKI+J0SBCn9+OsubtWDA/9B2kDLFF4TPzmRHh5w2lpQKIdOjuYdZ+OXSsT51dHiyOnEyx7c95xT45WvznzzfhJAGIuot7` &&
+                 `RgAAAABJRU5ErkJggg==`.
+
+      WHEN c_general_image_keys-maintenance.
+        result = `iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABXElEQVR4nJXTz0vCYBzHcf+yOniqDgURUVIdMiUPdQisFUUpCRlhUIhp0CXIS4RSiTpyllCQMcJf2aBZrQxxiZiIDf201Y6m2wNfHnjg9b48fDUaF` &&
+                 `QeAtdEQkuLNiKNVYyXsyDMJUFujuD60oV6tCOKbThW+cU4A91ZUH3wg7eP4rlVrqnGTi3wJMQK1kAnU9jSU4+QGmm/RXyyQRhSDZgTMXf8H2mE+OI8Q0Y3SK9M6IGGeYzti8cy2xKX8C27d+j/MUepx3GOQ8UVFiM` &&
+                 `4pxjoJp30LqCc21WE5kAm7CHD0LgpZb5N/PEGOsuMzTCjC/QU2C9q/ho/MEYpsEKnLPdwdL3XGcoAm91fBxA/A50JIXbkR9S7jfKVXEdZKXzYzNgCjQY90zIMzxxQCtkmU39n2WA6ET50WDA8NwmIaQcS1iOKTtHC` &&
+                 `gxelri+VAYsfYA9KzjnL+WYIRNav6A7llxO2+1g0dAAAAAElFTkSuQmCC`.
+
+      WHEN c_general_image_keys-table_source.
+        result = `iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABQklEQVR4nK3Su0oDQRTG8TyCoK3EKpdFSVC8ZCEWUVDQyifwAXwGGxUbUXTWXEw2BhMt0lnYimijGEz2kt1EMSgqbqGtiKt8zskDHBAc` &&
+                 `GIY5f+ZXTSDw3ytVuAmqxeaFqjufiaIDVW46E7rzJWfX1FlAPvaTJQczlTaWTh4gLj0sVO8we9jGZMmFRH5YYEJ3MFV2MX90i+XTJ6SvPCwed7r36YMWqLPAeKEJRTOQ3HcRz1oICwOxjImxvI2onFNn` &&
+                 `gdF8E71rNcyVW6ha77BfP7B+/tIFaU6dBUb2bBagzgLDOR6gzgLxLA9QZ4FYxmIB6iwwlOYB6iwwuGuyAHUWUDQeoM4CYWF2gpv175R8UGm8dYGVs2ckCg76N+p+RJgeCwxs1XvC29aq/I33ijB8+olR` &&
+                 `0fAjmvkYEuZOKFfrY4G/rl+7wFtBvoD5FwAAAABJRU5ErkJggg==`.
     ENDCASE.
   ENDMETHOD.
 ENDCLASS.

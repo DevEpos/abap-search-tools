@@ -23,9 +23,9 @@ define view ZSAT_I_DatabaseTablesAndViews
 }
 union select from ZSAT_I_DatabaseView(p_language : $parameters.p_language)
 {
-  ViewName as Entity,
-  ViewName as EntityRaw,
-  DeliveryClass,
+  ViewName                   as Entity,
+  ViewName                   as EntityRaw,
+  cast( '' as abap.char(1) ) as DeliveryClass,
   Description,
   Language,
   DevelopmentPackage,
