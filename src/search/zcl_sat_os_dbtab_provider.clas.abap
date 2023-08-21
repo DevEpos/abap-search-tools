@@ -247,7 +247,7 @@ CLASS zcl_sat_os_dbtab_provider IMPLEMENTATION.
     ENDIF.
 
     IF lt_including IS NOT INITIAL.
-      add_join_table( iv_join_table = |{ zif_sat_c_select_source_id=>zsat_i_tablefield }|
+      add_join_table( iv_join_table = get_cds_sql_name( |{ zif_sat_c_select_source_id=>zsat_i_tablefield }| )
                       iv_alias      = |{ c_field_table }|
                       it_conditions = VALUE #( ( field           = c_fields-tablename
                                                  ref_field       = c_fields-tablename
