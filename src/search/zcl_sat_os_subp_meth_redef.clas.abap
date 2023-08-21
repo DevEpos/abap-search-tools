@@ -7,9 +7,11 @@ CLASS zcl_sat_os_subp_meth_redef DEFINITION
   PUBLIC SECTION.
 
   PROTECTED SECTION.
-    METHODS prepare_search  REDEFINITION.
-    METHODS do_after_search REDEFINITION.
-    METHODS get_method_key REDEFINITION.
+    METHODS prepare_search        REDEFINITION.
+    METHODS do_after_search       REDEFINITION.
+    METHODS get_method_key        REDEFINITION.
+    METHODS set_method_filters    REDEFINITION.
+    METHODS method_matches_filter REDEFINITION.
 
   PRIVATE SECTION.
     CONSTANTS:
@@ -23,7 +25,18 @@ CLASS zcl_sat_os_subp_meth_redef DEFINITION
         tadir_type TYPE string VALUE 'tadirtype',
       END OF c_fields.
 
+    DATA mt_changed_on_filter TYPE RANGE OF dats.
+    DATA mt_created_on_filter TYPE RANGE OF dats.
+    DATA mt_created_by_filter TYPE RANGE OF responsibl.
+    DATA mt_changed_by_filter TYPE RANGE OF username.
+
     METHODS add_method_name_filter.
+
+    METHODS get_date_filter
+      IMPORTING
+        it_values     TYPE zif_sat_ty_object_search=>ty_t_value_range
+      RETURNING
+        VALUE(result) LIKE mt_changed_on_filter.
 ENDCLASS.
 
 
@@ -107,5 +120,54 @@ CLASS zcl_sat_os_subp_meth_redef IMPLEMENTATION.
     add_search_terms_to_search(
         it_search_terms = VALUE #( BASE lr_method_names->* ( LINES OF lt_temp_method_name_terms ) )
         it_field_names  = VALUE #( ( |{ c_alias_names-method }~mtdname| ) ) ).
+  ENDMETHOD.
+
+  METHOD set_method_filters.
+    super->set_method_filters( ).
+
+    LOOP AT mo_search_query->mt_search_options REFERENCE INTO DATA(lr_filter)
+          WHERE target = zif_sat_c_object_search=>c_search_fields-method_filter_input_key.
+
+      CASE lr_filter->option.
+        WHEN c_general_search_options-changed_by.
+          mt_changed_by_filter = CORRESPONDING #( lr_filter->value_range ).
+        WHEN c_general_search_options-changed_on.
+          mt_changed_on_filter = get_date_filter( lr_filter->value_range ).
+        WHEN c_general_search_options-user.
+          mt_created_by_filter = CORRESPONDING #( lr_filter->value_range ).
+        WHEN c_general_search_options-created_on.
+          mt_created_on_filter = get_date_filter( lr_filter->value_range ).
+      ENDCASE.
+
+    ENDLOOP.
+  ENDMETHOD.
+
+  METHOD method_matches_filter.
+    result = super->method_matches_filter( iv_method_name = iv_method_name
+                                           is_method      = is_method
+                                           is_method_info = is_method_info ).
+    IF result = abap_false.
+      RETURN.
+    ENDIF.
+
+    " Method only matches if admin data filters match
+    CLEAR result.
+
+    IF     is_method_info-changedby IN mt_changed_by_filter
+       AND is_method_info-changedon IN mt_changed_on_filter
+       AND is_method_info-author    IN mt_created_by_filter
+       AND is_method_info-createdon IN mt_created_on_filter.
+      result = abap_true.
+    ENDIF.
+  ENDMETHOD.
+
+  METHOD get_date_filter.
+    TYPES ty_date_range TYPE RANGE OF dats.
+    DATA ls_date_range TYPE LINE OF ty_date_range.
+
+    LOOP AT it_values INTO DATA(ls_value).
+      ls_date_range = ls_value-low.
+      result = VALUE #( BASE result ( ls_date_range ) ).
+    ENDLOOP.
   ENDMETHOD.
 ENDCLASS.
