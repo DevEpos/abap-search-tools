@@ -27,6 +27,11 @@
      <DESCRIPT>Table for CDS Parameters</DESCRIPT>
     </SEOCOMPOTX>
     <SEOCOMPOTX>
+     <CMPNAME>DD26S</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Base tables of dictionary views</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
      <CMPNAME>DDDDLSCR02BT</CMPNAME>
      <LANGU>E</LANGU>
      <DESCRIPT>Table for Enduser texts of DDL Sources</DESCRIPT>

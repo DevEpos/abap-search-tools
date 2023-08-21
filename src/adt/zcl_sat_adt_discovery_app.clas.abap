@@ -220,6 +220,27 @@ CLASS zcl_sat_adt_discovery_app IMPLEMENTATION.
         description     = 'Resource for Table Data Class'
         category_scheme = zif_sat_c_object_search=>c_content_assist-category_scheme
         category_term   = zif_sat_c_object_search=>c_content_assist-terms-table_data_class ).
+
+    io_registry->register_discoverable_resource(
+        url             = '/viewfield'
+        handler_class   = 'ZCL_SAT_ADT_RES_VIEWFIELD_VH'
+        description     = 'Resource for View Field'
+        category_scheme = zif_sat_c_object_search=>c_content_assist-category_scheme
+        category_term   = zif_sat_c_object_search=>c_content_assist-terms-view_field ).
+
+    io_registry->register_discoverable_resource(
+        url             = '/viewroottable'
+        handler_class   = 'ZCL_SAT_ADT_RES_VIEWROOT_VH'
+        description     = 'Resource for root tables of dictionary views'
+        category_scheme = zif_sat_c_object_search=>c_content_assist-category_scheme
+        category_term   = zif_sat_c_object_search=>c_content_assist-terms-view_root_tab ).
+
+    io_registry->register_discoverable_resource(
+        url             = '/viewbasetable'
+        handler_class   = 'ZCL_SAT_ADT_RES_VIEWBASET_VH'
+        description     = 'Resource for base tables of dictionary views'
+        category_scheme = zif_sat_c_object_search=>c_content_assist-category_scheme
+        category_term   = zif_sat_c_object_search=>c_content_assist-terms-view_base_tab ).
   ENDMETHOD.
 
   METHOD register_sapaox_launcher.

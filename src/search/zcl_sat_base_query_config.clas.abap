@@ -31,7 +31,7 @@ CLASS zcl_sat_base_query_config DEFINITION
         generic_filter TYPE string VALUE 'ABAP:IMG_GENERIC_FILTER',
         extension      TYPE string VALUE 'ABAP:IMG_EXTENSION',
         maintenance    TYPE string VALUE 'ABAP:IMG_MAINTENANCE',
-        table_source type string value 'ABAP:IMG_TABLE_DATA_SOURCE',
+        table_source   TYPE string VALUE 'ABAP:IMG_TABLE_DATA_SOURCE',
       END OF c_general_image_keys,
 
       BEGIN OF c_output_option,
