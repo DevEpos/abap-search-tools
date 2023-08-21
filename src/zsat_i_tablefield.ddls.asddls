@@ -5,23 +5,12 @@
 @EndUserText.label: 'Field in table'
 
 define view ZSAT_I_TableField
-  as select from dd03l as Field
-    inner join   dd02l as Table on  Field.tabname    = Table.tabname
-                                and Table.as4local   = 'A'
-                                and (
-                                   Table.tabclass    = 'TRANSP'
-                                   or Table.tabclass = 'VIEW'
-                                 )
-    inner join   tadir as Repo  on  Repo.obj_name = Table.tabname
-                                and Repo.genflag  = ''
-                                and (
-                                   Repo.object    = 'TABL'
-                                   or Repo.object = 'VIEW'
-                                 )
+  as select distinct from dd03l as Field
 {
   key Field.tabname   as TableName,
   key Field.fieldname as FieldName,
-      Field.rollname  as RollName
+      Field.rollname  as RollName,
+      Field.domname   as DomainName
 }
 where
   Field.as4local = 'A'
