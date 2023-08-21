@@ -246,7 +246,6 @@ CLASS zcl_sat_dbtab_query_config IMPLEMENTATION.
             proposal_values       = VALUE #(
                 ( name = zif_sat_c_object_search=>c_db_flags-client_dep        description = 'Client Dependent' )
                 ( name = zif_sat_c_object_search=>c_db_flags-used_in_shlp      description = 'Used in Search Help' )
-                ( name = zif_sat_c_object_search=>c_db_flags-is_gtt            description = 'Is Global Temporary Table' )
                 ( name = zif_sat_c_object_search=>c_db_flags-change_log_active description = 'Changes to table entries are logged' ) ) ) ).
   ENDMETHOD.
 

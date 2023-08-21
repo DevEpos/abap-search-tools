@@ -35,7 +35,6 @@ CLASS zcl_sat_os_dbtab_provider DEFINITION
         maintenance_flag           TYPE string VALUE 'maintenanceflag',
         search_help_binding_exists TYPE string VALUE 'searchhelpbindingexists',
         client_dependent           TYPE string VALUE 'clientdependent',
-        is_gtt                     TYPE string VALUE 'isgtt',
         change_log_active          TYPE string VALUE 'protokoll',
       END OF c_fields.
 
@@ -306,8 +305,6 @@ CLASS zcl_sat_os_dbtab_provider IMPLEMENTATION.
                               |{ c_base_table }~{ c_fields-client_dependent }|
                             WHEN zif_sat_c_object_search=>c_db_flags-used_in_shlp THEN
                               |{ c_base_table }~{ c_fields-search_help_binding_exists }|
-                            WHEN zif_sat_c_object_search=>c_db_flags-is_gtt THEN
-                              |{ c_base_table }~{ c_fields-is_gtt }|
                             WHEN zif_sat_c_object_search=>c_db_flags-change_log_active THEN
                               |{ c_tech_settings_table }~{ c_fields-change_log_active }| ).
   ENDMETHOD.

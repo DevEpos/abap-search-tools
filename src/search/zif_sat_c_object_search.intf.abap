@@ -309,7 +309,6 @@ INTERFACE zif_sat_c_object_search
     BEGIN OF c_db_flags,
       client_dep        TYPE string VALUE 'CLIENT_DEP',
       used_in_shlp      TYPE string VALUE 'USED_IN_SHLP',
-      is_gtt            TYPE string VALUE 'IS_GTT',
       change_log_active TYPE string VALUE 'CHANGE_LOG_ACTIVE',
     END OF c_db_flags.
 
