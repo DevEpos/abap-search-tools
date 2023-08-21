@@ -1,5 +1,5 @@
 "! <p class="shorttext synchronized">Resource for 'field' parameter in Database table/view search</p>
-CLASS zcl_sat_adt_res_tabfield_vh DEFINITION
+CLASS zcl_sat_adt_res_viewfield_vh DEFINITION
   PUBLIC
   INHERITING FROM cl_adt_res_named_items
   FINAL
@@ -14,7 +14,7 @@ CLASS zcl_sat_adt_res_tabfield_vh DEFINITION
 ENDCLASS.
 
 
-CLASS zcl_sat_adt_res_tabfield_vh IMPLEMENTATION.
+CLASS zcl_sat_adt_res_viewfield_vh IMPLEMENTATION.
   METHOD get_named_items.
     DATA lt_field_range TYPE RANGE OF fieldname.
 
@@ -22,13 +22,11 @@ CLASS zcl_sat_adt_res_tabfield_vh IMPLEMENTATION.
       lt_field_range = VALUE #( ( sign = 'I' option = 'CP' low = to_upper( p_filter_name ) ) ).
     ENDIF.
 
-    SELECT
+    SELECT DISTINCT
+           fieldname AS name
       FROM zsat_i_tablefieldvh AS field
-      FIELDS DISTINCT
-             fieldname AS name
       WHERE fieldname IN @lt_field_range
-        AND fieldname NOT LIKE '.%'
-        AND tableclass = 'TRANSP'
+        AND tableclass = @zif_sat_c_tadir_types=>view
       ORDER BY fieldname
       INTO CORRESPONDING FIELDS OF TABLE @p_named_item_list-items
       UP TO @p_filter_max_item_count ROWS.
