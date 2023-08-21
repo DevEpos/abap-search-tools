@@ -43,6 +43,8 @@ INTERFACE zif_sat_c_object_search
       proposal       TYPE string VALUE 'PROPOSAL',
     END OF c_proposal_image_source.
 
+  CONSTANTS c_image_id_prefix TYPE string VALUE 'imageId='.
+
   CONSTANTS:
     BEGIN OF c_filter_data_type,
       default TYPE string VALUE '',
@@ -292,6 +294,7 @@ INTERFACE zif_sat_c_object_search
       delivery_class TYPE string VALUE 'dlvclass',
       flag           TYPE string VALUE 'flag',
       primary_table  TYPE string VALUE 'primtab',
+      base_table     TYPE string VALUE 'basetab',
     END OF c_ddicview_search_params.
 
   CONSTANTS:
@@ -422,6 +425,9 @@ INTERFACE zif_sat_c_object_search
         class_type        TYPE string VALUE 'classtype',
         table_deliv_class TYPE string VALUE 'tabledeliveryclass',
         table_data_class  TYPE string VALUE 'tabledataclass',
+        view_field        TYPE string VALUE 'viewfield',
+        view_root_tab     TYPE string VALUE 'viewroottable',
+        view_base_tab     TYPE string VALUE 'viewbasetable',
       END OF terms,
     END OF c_content_assist.
 ENDINTERFACE.
