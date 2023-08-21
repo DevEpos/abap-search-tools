@@ -6,4 +6,6 @@ INTERFACE zif_sat_c_tadir_types
   CONSTANTS interface       TYPE trobjtype VALUE 'INTF'.
   CONSTANTS data_definition TYPE trobjtype VALUE 'DDLS'.
   CONSTANTS message_class   TYPE trobjtype VALUE 'MSAG'.
+  CONSTANTS view            TYPE trobjtype VALUE 'VIEW'.
+  CONSTANTS table           TYPE trobjtype VALUE 'TABL'.
 ENDINTERFACE.
