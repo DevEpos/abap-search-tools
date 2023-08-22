@@ -17,6 +17,7 @@ define view ZSAT_I_DatabaseTable
       DbTable.mainflag         as MaintenanceFlag,
       DbTable.shlpexi          as SearchHelpBindingExists,
       DbTable.clidep           as ClientDependent,
+      DbTable.exclass          as ExtensionClass,
       DbTable.is_gtt           as IsGTT,
       $session.system_language as Language,
       case
