@@ -5,8 +5,6 @@ INTERFACE zif_sat_c_object_search
   CONSTANTS:
     BEGIN OF c_search_type,
       cds_view        TYPE zif_sat_ty_object_search=>ty_search_type VALUE 'cds',
-      "! DEPRECATED: use concrete
-      db_tab_view     TYPE zif_sat_ty_object_search=>ty_search_type VALUE 'dbtabview',
       db_tab          TYPE zif_sat_ty_object_search=>ty_search_type VALUE 'dbtab',
       ddic_view       TYPE zif_sat_ty_object_search=>ty_search_type VALUE 'ddicview',
       class_interface TYPE zif_sat_ty_object_search=>ty_search_type VALUE 'classintf',
