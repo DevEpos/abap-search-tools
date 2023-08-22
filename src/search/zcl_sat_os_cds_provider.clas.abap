@@ -171,9 +171,9 @@ CLASS zcl_sat_os_cds_provider IMPLEMENTATION.
           add_option_filter( iv_fieldname = c_fields-created_by
                              it_values    = <ls_option>-value_range ).
 
-        WHEN c_general_search_options-changed_by.
-          add_option_filter( iv_fieldname = c_fields-changed_by
-                             it_values    = <ls_option>-value_range ).
+        WHEN c_general_search_options-created_on.
+          add_date_filter( iv_fieldname = c_fields-created_date
+                           it_values    = <ls_option>-value_range ).
 
         " Find views which exist in a certain development package
         WHEN c_general_search_options-package.
@@ -239,9 +239,9 @@ CLASS zcl_sat_os_cds_provider IMPLEMENTATION.
           add_option_filter( iv_fieldname = c_fields-source_type
                              it_values    = <ls_option>-value_range ).
 
-        WHEN c_general_search_options-created_on.
-          add_date_filter( iv_fieldname = c_fields-created_date
-                           it_values    = <ls_option>-value_range ).
+        WHEN c_general_search_options-changed_by.
+          add_option_filter( iv_fieldname = c_fields-changed_by
+                             it_values    = <ls_option>-value_range ).
 
         WHEN c_general_search_options-changed_on.
           add_date_filter( iv_fieldname = c_fields-changed_date
