@@ -61,6 +61,9 @@ CLASS zcl_sat_os_ddicview_provider IMPLEMENTATION.
     mv_field_subquery = |SELECT DISTINCT tablename | && c_cr_lf &&
                         | FROM { zif_sat_c_select_source_id=>zsat_i_tablefield } | && c_cr_lf &&
                         | WHERE |.
+    mv_basetab_subquery = |SELECT DISTINCT viewname | && c_cr_lf &&
+                          | FROM { zif_sat_c_select_source_id=>dd26s } | && c_cr_lf &&
+                          | WHERE |.
   ENDMETHOD.
 
   METHOD prepare_search.
