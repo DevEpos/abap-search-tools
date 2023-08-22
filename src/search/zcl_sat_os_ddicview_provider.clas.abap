@@ -10,6 +10,7 @@ CLASS zcl_sat_os_ddicview_provider DEFINITION
   PROTECTED SECTION.
     METHODS prepare_search     REDEFINITION.
     METHODS determine_grouping REDEFINITION.
+    methods do_after_search REDEFINITION.
 
   PRIVATE SECTION.
     ALIASES c_search_params FOR zif_sat_c_object_search~c_ddicview_search_params.
@@ -80,6 +81,7 @@ CLASS zcl_sat_os_ddicview_provider IMPLEMENTATION.
                       iv_entity          = c_base_table ).
     add_select_field( iv_fieldname       = |'{ zif_sat_c_entity_type=>view }'|
                       iv_fieldname_alias = c_result_fields-entity_type ).
+    add_select_field( iv_fieldname       = |'{ zif_sat_c_tadir_types=>view }'| iv_fieldname_alias = c_result_fields-tadir_type ).
 
     add_order_by( iv_fieldname = c_fields-viewname iv_entity = c_base_table  ).
 
@@ -89,6 +91,10 @@ CLASS zcl_sat_os_ddicview_provider IMPLEMENTATION.
     configure_filters( ).
 
     new_and_cond_list( ).
+  ENDMETHOD.
+
+  METHOD do_after_search.
+    fill_descriptions( ).
   ENDMETHOD.
 
   METHOD determine_grouping.
