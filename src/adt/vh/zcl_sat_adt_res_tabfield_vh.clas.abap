@@ -24,7 +24,7 @@ CLASS zcl_sat_adt_res_tabfield_vh IMPLEMENTATION.
 
     SELECT DISTINCT
            fieldname AS name
-      FROM zsat_i_tablefield AS field
+      FROM zsat_i_tablefieldvh AS field
       WHERE fieldname IN @lt_field_range
         AND fieldname NOT LIKE '.%'
         AND tableclass = 'TRANSP'
