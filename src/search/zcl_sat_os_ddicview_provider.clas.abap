@@ -77,7 +77,6 @@ CLASS zcl_sat_os_ddicview_provider IMPLEMENTATION.
     add_select_field( iv_fieldname       = c_fields-viewname
                       iv_fieldname_alias = c_result_fields-raw_object_name
                       iv_entity          = c_base_table ).
-    add_select_field( iv_fieldname = c_fields-description iv_entity = c_base_table ).
     add_select_field( iv_fieldname = c_fields-created_by iv_fieldname_alias = c_result_fields-created_by iv_entity = c_base_table ).
     add_select_field( iv_fieldname = c_fields-created_date iv_fieldname_alias = c_result_fields-created_date iv_entity = c_base_table ).
     add_select_field( iv_fieldname = c_fields-changed_by iv_fieldname_alias = c_result_fields-changed_by iv_entity = c_base_table ).
@@ -112,7 +111,6 @@ CLASS zcl_sat_os_ddicview_provider IMPLEMENTATION.
 
     add_group_by_clause( |{ c_base_table }~{ c_fields-viewname }| ).
     add_group_by_clause( |{ c_base_table }~{ c_fields-viewname }| ).
-    add_group_by_clause( |{ c_base_table }~{ c_fields-description }| ).
     add_group_by_clause( |{ c_base_table }~{ c_fields-created_by }| ).
     add_group_by_clause( |{ c_base_table }~{ c_fields-created_date }| ).
     add_group_by_clause( |{ c_base_table }~{ c_fields-changed_by }| ).
