@@ -10,6 +10,7 @@ CLASS zcl_sat_os_ddicview_provider DEFINITION
   PROTECTED SECTION.
     METHODS prepare_search     REDEFINITION.
     METHODS determine_grouping REDEFINITION.
+    methods do_after_search REDEFINITION.
 
   PRIVATE SECTION.
     ALIASES c_search_params FOR zif_sat_c_object_search~c_ddicview_search_params.
@@ -67,7 +68,7 @@ CLASS zcl_sat_os_ddicview_provider IMPLEMENTATION.
 
   METHOD prepare_search.
     set_base_select_table(
-        iv_entity     = zif_sat_c_select_source_id=>zsat_i_ddicview
+        iv_entity     = get_cds_sql_name( |{ zif_sat_c_select_source_id=>zsat_i_ddicview }| )
         iv_alias      = c_base_table
         it_parameters = VALUE #(
             ( param_name = 'p_language' param_value = zcl_sat_system_helper=>get_system_language( ) ) ) ).
@@ -86,6 +87,7 @@ CLASS zcl_sat_os_ddicview_provider IMPLEMENTATION.
                       iv_entity          = c_base_table ).
     add_select_field( iv_fieldname       = |'{ zif_sat_c_entity_type=>view }'|
                       iv_fieldname_alias = c_result_fields-entity_type ).
+    add_select_field( iv_fieldname       = |'{ zif_sat_c_tadir_types=>view }'| iv_fieldname_alias = c_result_fields-tadir_type ).
 
     add_order_by( iv_fieldname = c_fields-viewname iv_entity = c_base_table  ).
 
@@ -95,6 +97,10 @@ CLASS zcl_sat_os_ddicview_provider IMPLEMENTATION.
     configure_filters( ).
 
     new_and_cond_list( ).
+  ENDMETHOD.
+
+  METHOD do_after_search.
+    fill_descriptions( ).
   ENDMETHOD.
 
   METHOD determine_grouping.
@@ -224,7 +230,7 @@ CLASS zcl_sat_os_ddicview_provider IMPLEMENTATION.
     ENDIF.
 
     IF lt_including IS NOT INITIAL.
-      add_join_table( iv_join_table = get_cds_sql_name( |{ zif_sat_c_select_source_id=>dd26s }| )
+      add_join_table( iv_join_table = |{ zif_sat_c_select_source_id=>dd26s }|
                       iv_alias      = c_base_tab_table
                       it_conditions = VALUE #( ( field           = c_fields-viewname
                                                  ref_field       = c_fields-viewname

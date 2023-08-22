@@ -190,7 +190,7 @@ CLASS zcl_sat_ddicview_query_config IMPLEMENTATION.
   METHOD get_maintenance_filter.
     result = VALUE #(
         name             = c_general_options-maintenance
-        description      = 'Maintenance'
+        description      = 'Maintenance with Standard Tools'
         long_description = |Use '{ c_general_options-maintenance }' to restrict the query by the view maintenance setting.\n\n| &&
                            |Example:\n   { c_general_options-maintenance } : not_allowed|
         img_info         = VALUE #( img_key     = c_general_image_keys-maintenance

@@ -11,6 +11,7 @@ CLASS zcl_sat_os_dbtab_provider DEFINITION
   PROTECTED SECTION.
     METHODS determine_grouping REDEFINITION.
     METHODS prepare_search     REDEFINITION.
+    METHODS do_after_search    REDEFINITION.
 
   PRIVATE SECTION.
     ALIASES c_dbtab_search_params FOR zif_sat_c_object_search~c_dbtab_search_params.
@@ -32,6 +33,7 @@ CLASS zcl_sat_os_dbtab_provider DEFINITION
         created_date               TYPE string VALUE 'createddate',
         changed_by                 TYPE string VALUE 'changedby',
         changed_date               TYPE string VALUE 'changeddate',
+        extension_class            TYPE string VALUE 'extensionclass',
         maintenance_flag           TYPE string VALUE 'maintenanceflag',
         search_help_binding_exists TYPE string VALUE 'searchhelpbindingexists',
         client_dependent           TYPE string VALUE 'clientdependent',
@@ -97,6 +99,7 @@ CLASS zcl_sat_os_dbtab_provider IMPLEMENTATION.
                       iv_fieldname_alias = c_result_fields-devclass
                       iv_entity          = c_base_table ).
     add_select_field( iv_fieldname = c_fields-type iv_fieldname_alias = c_result_fields-entity_type iv_entity = c_base_table ).
+    add_select_field( iv_fieldname       = |'{ zif_sat_c_tadir_types=>table }'| iv_fieldname_alias = c_result_fields-tadir_type ).
 
     add_order_by( iv_fieldname = c_fields-tablename iv_entity = c_base_table  ).
 
@@ -110,6 +113,10 @@ CLASS zcl_sat_os_dbtab_provider IMPLEMENTATION.
     ENDIF.
 
     new_and_cond_list( ).
+  ENDMETHOD.
+
+  METHOD do_after_search.
+    fill_descriptions( ).
   ENDMETHOD.
 
   METHOD determine_grouping.
@@ -183,6 +190,10 @@ CLASS zcl_sat_os_dbtab_provider IMPLEMENTATION.
 
         WHEN c_dbtab_search_params-flag.
           add_flag_filter( <ls_option>-value_range ).
+
+        WHEN c_dbtab_search_params-enhancement_category.
+          add_option_filter( iv_fieldname = |{ c_base_table }~{ c_fields-extension_class }|
+                             it_values    = <ls_option>-value_range ).
 
         WHEN c_dbtab_search_params-buffering.
           mf_dd09l_join_needed = abap_true.

@@ -282,9 +282,9 @@ CLASS zcl_sat_dbtab_query_config IMPLEMENTATION.
   METHOD get_maintenance_filter.
     result = VALUE #(
         name             = c_general_options-maintenance
-        description      = 'Maintenance'
-        long_description = |Use '{ c_general_image_keys-maintenance }' to restrict the query by the maintenance setting.\n\n| &&
-                           |Example:\n   { c_general_image_keys-maintenance } : not_allowed|
+        description      = 'Maintenance with Standard Tools'
+        long_description = |Use '{ c_general_options-maintenance }' to restrict the query by the maintenance setting.\n\n| &&
+                           |Example:\n   { c_general_options-maintenance } : not_allowed|
         img_info         = VALUE #( img_key     = c_general_image_keys-maintenance
                                     img_encoded = get_general_image( c_general_image_keys-maintenance ) )
         content_assist   = VALUE #(
