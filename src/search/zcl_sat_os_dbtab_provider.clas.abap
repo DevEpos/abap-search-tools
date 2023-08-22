@@ -152,6 +152,9 @@ CLASS zcl_sat_os_dbtab_provider IMPLEMENTATION.
           add_option_filter( iv_fieldname = c_fields-created_by
                              it_values    = <ls_option>-value_range ).
 
+        WHEN c_general_search_options-created_on.
+          add_date_filter( iv_fieldname = c_fields-created_date
+                           it_values    = <ls_option>-value_range ).
         WHEN c_general_search_options-package.
           add_option_filter( iv_fieldname = c_fields-development_package
                              it_values    = <ls_option>-value_range ).
@@ -178,13 +181,13 @@ CLASS zcl_sat_os_dbtab_provider IMPLEMENTATION.
           add_option_filter( iv_fieldname = c_fields-delivery_class
                              it_values    = <ls_option>-value_range ).
 
-        WHEN c_general_search_options-created_on.
-          add_date_filter( iv_fieldname = c_fields-created_date
-                           it_values    = <ls_option>-value_range ).
-
         WHEN c_general_search_options-changed_on.
           add_date_filter( iv_fieldname = c_fields-changed_date
                            it_values    = <ls_option>-value_range ).
+
+        WHEN c_general_search_options-changed_by.
+          add_option_filter( iv_fieldname = c_fields-changed_by
+                             it_values    = <ls_option>-value_range ).
 
         WHEN c_dbtab_search_params-flag.
           add_flag_filter( <ls_option>-value_range ).
