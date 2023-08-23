@@ -5,7 +5,7 @@
    <VSEOCLASS>
     <CLSNAME>ZCL_SAT_ADT_RES_VIEWBASET_VH</CLSNAME>
     <LANGU>E</LANGU>
-    <DESCRIPT>Resource for &apos;field&apos; parameter in Database table/view search</DESCRIPT>
+    <DESCRIPT>Resource for base tables of ddic views</DESCRIPT>
     <STATE>1</STATE>
     <CLSCCINCL>X</CLSCCINCL>
     <FIXPT>X</FIXPT>
