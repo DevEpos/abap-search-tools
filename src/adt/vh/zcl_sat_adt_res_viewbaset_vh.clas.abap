@@ -1,4 +1,4 @@
-"! <p class="shorttext synchronized">Resource for 'field' parameter in Database table/view search</p>
+"! <p class="shorttext synchronized">Resource for base tables of ddic views</p>
 CLASS zcl_sat_adt_res_viewbaset_vh DEFINITION
   PUBLIC
   INHERITING FROM cl_adt_res_named_items
