@@ -19,6 +19,7 @@ CLASS zcl_sat_os_dbtab_provider DEFINITION
     CONSTANTS:
       c_base_table          TYPE string VALUE 'base',
       c_field_table         TYPE string VALUE 'field',
+      c_include_table       TYPE string VALUE 'incl_usage',
       c_tech_settings_table TYPE string VALUE 'tech',
       BEGIN OF c_fields,
         alias                      TYPE string VALUE 'field',
@@ -26,6 +27,7 @@ CLASS zcl_sat_os_dbtab_provider DEFINITION
         entityid                   TYPE string VALUE 'entityid',
         type                       TYPE string VALUE 'type',
         fieldname                  TYPE string VALUE 'fieldname',
+        include_name               TYPE string VALUE 'includename',
         description                TYPE string VALUE 'description',
         development_package        TYPE string VALUE 'developmentpackage',
         delivery_class             TYPE string VALUE 'deliveryclass',
@@ -37,11 +39,20 @@ CLASS zcl_sat_os_dbtab_provider DEFINITION
         maintenance_flag           TYPE string VALUE 'maintenanceflag',
         search_help_binding_exists TYPE string VALUE 'searchhelpbindingexists',
         client_dependent           TYPE string VALUE 'clientdependent',
-        change_log_active          TYPE string VALUE 'protokoll',
-      END OF c_fields.
+      END OF c_fields,
+
+      BEGIN OF c_tech_fields,
+        change_log_active TYPE string VALUE 'protokoll',
+        buffering_status  TYPE string VALUE 'bufallow',
+        buffering_type    TYPE string VALUE 'pufferung',
+        size_category     TYPE string VALUE 'tabkat',
+        data_class        TYPE string VALUE 'tabart',
+        storage_type      TYPE string VALUE 'roworcolst',
+      END OF c_tech_fields.
 
     DATA mv_field_subquery     TYPE string.
     DATA mv_field_filter_count TYPE i.
+    DATA mv_incl_filter_count  TYPE i.
     DATA mf_dd09l_join_needed  TYPE abap_bool.
 
     "! <p class="shorttext synchronized">Create filter for TYPE option</p>
@@ -52,6 +63,10 @@ CLASS zcl_sat_os_dbtab_provider DEFINITION
 
     "! <p class="shorttext synchronized">Create filter for FIELD option</p>
     METHODS add_field_filter
+      IMPORTING
+        it_values TYPE zif_sat_ty_object_search=>ty_t_value_range.
+
+    METHODS add_include_filter
       IMPORTING
         it_values TYPE zif_sat_ty_object_search=>ty_t_value_range.
 
@@ -121,7 +136,8 @@ CLASS zcl_sat_os_dbtab_provider IMPLEMENTATION.
   METHOD determine_grouping.
     CHECK ms_search_engine_params-use_and_cond_for_options = abap_true.
 
-    IF NOT ( mv_field_filter_count > 1 ).
+    IF NOT (    mv_field_filter_count > 1
+             OR mv_incl_filter_count  > 1 ).
       RETURN.
     ENDIF.
 
@@ -136,6 +152,10 @@ CLASS zcl_sat_os_dbtab_provider IMPLEMENTATION.
 
     IF mv_field_filter_count > 1.
       add_having_clause( iv_field = |{ c_field_table }~{ c_fields-fieldname }| iv_counter_compare = mv_field_filter_count ).
+    ENDIF.
+
+    IF mv_incl_filter_count > 1.
+      add_having_clause( iv_field = |{ c_include_table }~{ c_fields-include_name }| iv_counter_compare = mv_incl_filter_count ).
     ENDIF.
   ENDMETHOD.
 
@@ -198,27 +218,35 @@ CLASS zcl_sat_os_dbtab_provider IMPLEMENTATION.
 
         WHEN c_dbtab_search_params-buffering.
           mf_dd09l_join_needed = abap_true.
-          add_option_filter( iv_fieldname = |{ c_tech_settings_table }~bufallow|
+          add_option_filter( iv_fieldname = |{ c_tech_settings_table }~{ c_tech_fields-buffering_status }|
                              it_values    = <ls_option>-value_range ).
 
         WHEN c_dbtab_search_params-data_class.
           mf_dd09l_join_needed = abap_true.
-          add_option_filter( iv_fieldname = |{ c_tech_settings_table }~tabart|
+          add_option_filter( iv_fieldname = |{ c_tech_settings_table }~{ c_tech_fields-data_class }|
                              it_values    = <ls_option>-value_range ).
 
         WHEN c_dbtab_search_params-size_category.
           mf_dd09l_join_needed = abap_true.
-          add_option_filter( iv_fieldname = |{ c_tech_settings_table }~tabkat|
+          add_option_filter( iv_fieldname = |{ c_tech_settings_table }~{ c_tech_fields-size_category }|
                              it_values    = <ls_option>-value_range ).
 
         WHEN c_dbtab_search_params-buffering_type.
           mf_dd09l_join_needed = abap_true.
-          add_option_filter( iv_fieldname = |{ c_tech_settings_table }~pufferung|
+          add_option_filter( iv_fieldname = |{ c_tech_settings_table }~{ c_tech_fields-buffering_type }|
+                             it_values    = <ls_option>-value_range ).
+
+        WHEN c_dbtab_search_params-storage_type.
+          mf_dd09l_join_needed = abap_true.
+          add_option_filter( iv_fieldname = |{ c_tech_settings_table }~{ c_tech_fields-storage_type }|
                              it_values    = <ls_option>-value_range ).
 
         WHEN c_general_search_options-maintenance.
           add_option_filter( iv_fieldname = |{ c_base_table }~{ c_fields-maintenance_flag }|
                              it_values    = <ls_option>-value_range ).
+
+        WHEN c_dbtab_search_params-include_usage.
+          add_include_filter( it_values = <ls_option>-value_range  ).
       ENDCASE.
     ENDLOOP.
   ENDMETHOD.
@@ -273,6 +301,40 @@ CLASS zcl_sat_os_dbtab_provider IMPLEMENTATION.
     ENDIF.
   ENDMETHOD.
 
+  METHOD add_include_filter.
+    split_including_excluding( EXPORTING it_values    = it_values
+                               IMPORTING et_including = DATA(lt_including)
+                                         et_excluding = DATA(lt_excluding) ).
+
+    IF lt_excluding IS NOT INITIAL.
+      create_not_in_filter( iv_subquery_fieldname = c_fields-include_name
+                            iv_fieldname          = |{ c_base_table }~{ c_fields-tablename }|
+                            it_excluding          = lt_excluding
+                            iv_subquery           = mv_field_subquery ).
+    ENDIF.
+
+    IF lt_including IS INITIAL.
+      RETURN.
+    ENDIF.
+
+    add_join_table( iv_join_table = |{ zif_sat_c_select_source_id=>zsat_i_tablefield }|
+                    iv_alias      = |{ c_include_table }|
+                    it_conditions = VALUE #( and_or = zif_sat_c_selection_condition=>and
+                                             ( field           = c_fields-tablename
+                                               ref_field       = c_fields-tablename
+                                               ref_table_alias = c_base_table
+                                               type            = zif_sat_c_join_cond_type=>field )
+                                             ( field           = c_fields-fieldname
+                                               tabname_alias   = c_include_table
+                                               value           = '.INCLUDE'
+                                               type            = zif_sat_c_join_cond_type=>filter ) ) ).
+
+    add_option_filter( iv_fieldname = |{ c_include_table }~{ c_fields-include_name }|
+                       it_values    = lt_including ).
+
+    mv_incl_filter_count = lines( lt_including ).
+  ENDMETHOD.
+
   METHOD add_flag_filter.
     DATA ls_value TYPE zif_sat_ty_object_search=>ty_s_value_range.
 
@@ -318,7 +380,7 @@ CLASS zcl_sat_os_dbtab_provider IMPLEMENTATION.
                             WHEN zif_sat_c_object_search=>c_db_flags-used_in_shlp THEN
                               |{ c_base_table }~{ c_fields-search_help_binding_exists }|
                             WHEN zif_sat_c_object_search=>c_db_flags-change_log_active THEN
-                              |{ c_tech_settings_table }~{ c_fields-change_log_active }| ).
+                              |{ c_tech_settings_table }~{ c_tech_fields-change_log_active }| ).
   ENDMETHOD.
 
   METHOD add_tech_tab_join.
