@@ -21,6 +21,7 @@ CLASS zcl_sat_dbtab_query_config DEFINITION
         buffering_type TYPE string VALUE 'ABAP:IMG_BUFFERING_TYPE',
         data_class     TYPE string VALUE 'ABAP:IMG_DATA_CLASS',
         size_category  TYPE string VALUE 'ABAP:IMG_SIZE_CATEGORY',
+        storage_type   TYPE string VALUE 'ABAP:IMG_DB_STORAGE_TYPE',
       END OF c_image_keys.
 
     METHODS get_field_filter
@@ -58,6 +59,14 @@ CLASS zcl_sat_dbtab_query_config DEFINITION
     METHODS get_maintenance_filter
       RETURNING
         VALUE(result) TYPE zif_sat_ty_object_search=>ty_query_filter.
+
+    METHODS get_include_filter
+      RETURNING
+        VALUE(result) TYPE zif_sat_ty_object_search=>ty_query_filter.
+
+    METHODS get_storage_type_filter
+      RETURNING
+        VALUE(result) TYPE zif_sat_ty_object_search=>ty_query_filter.
 ENDCLASS.
 
 
@@ -82,9 +91,11 @@ CLASS zcl_sat_dbtab_query_config IMPLEMENTATION.
                                                                                 ( get_description_filt_conf( ) )
                                                                                 ( get_max_rows_filt_conf( ) )
                                                                                 ( get_field_filter( ) )
+                                                                                ( get_include_filter( ) )
                                                                                 ( get_deliv_class_filter( ) )
                                                                                 ( get_enhancement_cat_filter( ) )
                                                                                 ( get_maintenance_filter( ) )
+                                                                                ( get_storage_type_filter( ) )
                                                                                 ( get_flag_filter( ) )
                                                                                 ( get_buffering_filter( ) )
                                                                                 ( get_buffering_type_filter( ) )
@@ -291,5 +302,43 @@ CLASS zcl_sat_dbtab_query_config IMPLEMENTATION.
             assist_type           = zif_sat_c_object_search=>c_filter_content_assist_type-fixed_named_item
             proposal_image_source = zif_sat_c_object_search=>c_proposal_image_source-same_as_filter
             proposal_values       = zcl_sat_table_filter_values=>get_maintenance_filt_values( ) ) ).
+  ENDMETHOD.
+
+  METHOD get_include_filter.
+    result = VALUE #(
+        name             = c_dbtab_options-include_usage
+        description      = 'Usages of include structures'
+        long_description = |Use '{ c_dbtab_options-include_usage }' to restrict the query to tables that have specific includes.\n\n| &&
+                           |Example:\n   { c_dbtab_options-include_usage } : seochange|
+        patterns         = abap_true
+        img_info         = VALUE #( img_key      = zif_sat_c_object_types=>structure
+                                    img_registry = zif_sat_c_object_search=>c_image_registry_id-adt_type )
+        content_assist   = VALUE #(
+            assist_type           = zif_sat_c_object_search=>c_filter_content_assist_type-named_item
+            category_scheme       = zif_sat_c_object_search=>c_content_assist-category_scheme
+            category_term         = zif_sat_c_object_search=>c_content_assist-terms-db_tab_include
+            proposal_image_source = zif_sat_c_object_search=>c_proposal_image_source-same_as_filter ) ).
+  ENDMETHOD.
+
+  METHOD get_storage_type_filter.
+    result = VALUE #(
+        name             = c_dbtab_options-storage_type
+        description      = 'Storage Type'
+        long_description = |Use '{ c_dbtab_options-storage_type }' to restrict the query by table storage type.\n\n| &&
+                           |Example:\n   { c_dbtab_options-storage_type } : column|
+        img_info         = VALUE #(
+            img_key     = c_image_keys-storage_type
+            img_encoded = `iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAADISURBVDhPYxhwwAilCQL16LVsNyJm/YRy4YAJ` &&
+                          `ShMD/oCIJzY74BgESDEArvbM098MB+5/B7NJ8QIX0AtfoVw4IMUFYPDJZQfDfcsdDBcNSfTCzaXB36BMFEC0F0Dg/2b3/1AmeQBkwMfv///fe/P//4Un//+D+GAX+BSuJ8rkzU4zwGHwFhiUn34wMOif` &&
+                          `94BIgAwAmQgyHcQG0djYIBvRMdZABNkAwuhsEAC5AISxxsL9txAa5DwQRmeDAEgNTB0IkBwGVAYMDACHn4kfDzoqygAAAABJRU5ErkJggg==` )
+        content_assist   = VALUE #(
+            assist_type           = zif_sat_c_object_search=>c_filter_content_assist_type-fixed_named_item
+            proposal_image_source = zif_sat_c_object_search=>c_proposal_image_source-same_as_filter
+            proposal_values       = VALUE #( ( name        = zif_sat_c_object_search=>c_table_storage_type-ext-column
+                                               description = 'Column Store'  )
+                                             ( name        = zif_sat_c_object_search=>c_table_storage_type-ext-row
+                                               description = 'Row Store' )
+                                             ( name        = zif_sat_c_object_search=>c_table_storage_type-ext-undefined
+                                               description = 'Undefined' ) ) ) ).
   ENDMETHOD.
 ENDCLASS.
