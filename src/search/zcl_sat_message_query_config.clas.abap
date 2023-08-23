@@ -10,12 +10,19 @@ CLASS zcl_sat_message_query_config DEFINITION
     METHODS zif_sat_object_search_config~get_type          REDEFINITION.
     METHODS zif_sat_object_search_config~get_output_config REDEFINITION.
     METHODS zif_sat_object_search_config~get_option_config REDEFINITION.
+    METHODS zif_sat_object_search_config~has_option        REDEFINITION.
 
   PROTECTED SECTION.
     METHODS build_config REDEFINITION.
 
   PRIVATE SECTION.
-  data mt_message_options  TYPE zif_sat_ty_object_search=>ty_query_filters.
+    ALIASES c_msg_search_params FOR zif_sat_c_object_search~c_message_search_params.
+
+    DATA mt_message_options TYPE zif_sat_ty_object_search=>ty_query_filters.
+
+    METHODS get_self_expl_filt_conf
+      RETURNING
+        VALUE(result) TYPE zif_sat_ty_object_search=>ty_query_filter.
 ENDCLASS.
 
 
@@ -40,11 +47,19 @@ CLASS zcl_sat_message_query_config IMPLEMENTATION.
                             `dIT0AAAAAElFTkSuQmCC` ) ) ).
   ENDMETHOD.
 
-    METHOD zif_sat_object_search_config~get_option_config.
+  METHOD zif_sat_object_search_config~get_option_config.
     IF iv_target = zif_sat_c_object_search=>c_search_fields-message_filter_input_key.
       rs_option = mt_message_options[ name = iv_option ].
     ELSE.
       rs_option = super->zif_sat_object_search_config~get_option_config( iv_option ).
+    ENDIF.
+  ENDMETHOD.
+
+  METHOD zif_sat_object_search_config~has_option.
+    IF iv_target = zif_sat_c_object_search=>c_search_fields-message_filter_input_key.
+      rf_has_option = xsdbool( line_exists( mt_message_options[ name = iv_option ] ) ).
+    ELSE.
+      rf_has_option = super->zif_sat_object_search_config~has_option( iv_option = iv_option iv_target = iv_target ).
     ENDIF.
   ENDMETHOD.
 
@@ -61,7 +76,8 @@ CLASS zcl_sat_message_query_config IMPLEMENTATION.
                                                                                 ( get_max_rows_filt_conf( )  ) ).
 
     mt_message_options = VALUE #( ( get_changed_by_filt_conf( ) )
-                                  ( get_changed_on_filt_conf( ) ) ).
+                                  ( get_changed_on_filt_conf( ) )
+                                  ( get_self_expl_filt_conf( ) ) ).
 
     ms_search_type = VALUE #(
         label    = 'Message'
@@ -80,5 +96,24 @@ CLASS zcl_sat_message_query_config IMPLEMENTATION.
                               filters = mt_message_options ) ) ).
 
     mt_options = lt_object_filters.
+  ENDMETHOD.
+
+  METHOD get_self_expl_filt_conf.
+    result = VALUE #(
+        name             = c_msg_search_params-self_explanatory
+        description      = 'Is Self Explanatory?'
+        long_description = |Use '{ c_msg_search_params-self_explanatory }' to restrict query to messages that are self explanatory.\n\n| &&
+                           |Example:\n   { c_msg_search_params-self_explanatory } : true|
+        data_type        = zif_sat_c_object_search=>c_filter_data_type-boolean
+        single           = abap_true
+        img_info         = VALUE #(
+            img_key     = 'ABAP:IMG_MSG_SELF_EXPL'
+            img_encoded = `iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAACm0lEQVR4nJ2T3U+ScRTH/QO66LLLLlu18oWFL1ludWEmZRCkVtOabuZyunLLXDUNE5CAB0ymS3PafEvtRUNBLVKH5ts0rQmaKBoiIr6B` &&
+                          `8qTRt4enxrK6oe92Ls7Z73x2zu+c4+f3S6lF2j1pSu2jBEGz6eztpw8iMmS7/XxRurKzVljVu13bNobE3AYyKL5A7BMgTdlJdg/NYPCTGfmlWjDiRWYfAe80hQ39eNM3hSR+vZtxUVjmHynYe+yC4lk4` &&
+                          `T27yP12AUA4xzzwnKz7Azdn1F+CKqPn85bwXs9GZFd+YCVLjkVhCyGRLnUXVPdsjBgsGxs0Y1ltwl1C7Qjgya0CUiOFNTs57xU8WNDlzS98iU94KXlaNK5gjw5hxEZqeCYTzCARECRERp8DwhAWqLj2C` &&
+                          `2bIFbyWpwtfO8pcD0PZP4XFDHyKvlqCssR+OLTc418oQl14By/IGLt2oRAa/kY5nipqczBgp/+cExCp09E5ilKLXtIwgkCXGrG0da+Q2FlY2sLjugn7WjuOxCtwvVNNxtY6qLFbRRwNuSlrQNWiEYcaG` &&
+                          `+rZRUD1ixbW1w45yCaTcqYN1bZP2x01LCOUSNhqQRajRRvU6op9HtWqY6k+K6YVVLG98pc1APT4Rr8DnL8veWEu3gYLKTTQgm2g9lChohIvcQn7NAKJTnqCkrhdLDpK28Wkb5BVdsK5uemNZYpXnoyXe` &&
+                          `SfByauFRHgVIV3SAyZZ9H6JGt0iVrOkxgHe9HJNzdtp/3j7mmYJ1xz78Dsgu1+EwR7IewiEcRVU69/uPczDbHdB9MOGevJWkku2Bp0TBOxbpT8BBrsQWxHq4L5Qj1zDOSMgAlthNbaQxjEcU+8f849A8` &&
+                          `ANatSpxMK0VYkhL72WLfbuF/9QNtD+HnUTyLEAAAAABJRU5ErkJggg==` ) ).
   ENDMETHOD.
 ENDCLASS.
