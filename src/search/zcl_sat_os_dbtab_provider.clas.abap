@@ -52,7 +52,6 @@ CLASS zcl_sat_os_dbtab_provider DEFINITION
       END OF c_tech_fields.
 
     DATA mv_field_subquery     TYPE string.
-    DATA mv_incl_subquery      TYPE string.
     DATA mv_field_filter_count TYPE i.
     DATA mv_incl_filter_count  TYPE i.
     DATA mf_dd09l_join_needed  TYPE abap_bool.
@@ -92,9 +91,6 @@ CLASS zcl_sat_os_dbtab_provider IMPLEMENTATION.
   METHOD constructor.
     super->constructor( ).
     mv_field_subquery = |SELECT DISTINCT tablename | && c_cr_lf &&
-                        | FROM { zif_sat_c_select_source_id=>zsat_i_tablefield } | && c_cr_lf &&
-                        | WHERE |.
-    mv_incl_subquery = |SELECT DISTINCT tablename | && c_cr_lf &&
                         | FROM { zif_sat_c_select_source_id=>zsat_i_tablefield } | && c_cr_lf &&
                         | WHERE |.
   ENDMETHOD.
@@ -308,7 +304,7 @@ CLASS zcl_sat_os_dbtab_provider IMPLEMENTATION.
       create_not_in_filter( iv_subquery_fieldname = c_fields-include_name
                             iv_fieldname          = |{ c_base_table }~{ c_fields-tablename }|
                             it_excluding          = lt_excluding
-                            iv_subquery           = mv_incl_subquery ).
+                            iv_subquery           = mv_field_subquery ).
     ENDIF.
 
     IF lt_including IS INITIAL.
