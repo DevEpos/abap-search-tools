@@ -43,6 +43,15 @@ CLASS zcl_sat_dbtab_qc IMPLEMENTATION.
                              WHEN zif_sat_c_object_search=>c_db_buffer_status-ext-on THEN
                                zif_sat_c_object_search=>c_db_buffer_status-int-on ).
 
+      WHEN zif_sat_c_object_search=>c_dbtab_search_params-storage_type.
+        cv_value = SWITCH #( cv_value
+                             WHEN zif_sat_c_object_search=>c_table_storage_type-ext-column THEN
+                               zif_sat_c_object_search=>c_table_storage_type-int-column
+                             WHEN zif_sat_c_object_search=>c_table_storage_type-ext-row THEN
+                               zif_sat_c_object_search=>c_table_storage_type-int-row
+                             WHEN zif_sat_c_object_search=>c_table_storage_type-ext-undefined THEN
+                               zif_sat_c_object_search=>c_table_storage_type-int-undefined ).
+
       WHEN OTHERS.
         super->zif_sat_query_converter~convert_value( EXPORTING iv_option = iv_option
                                                                 iv_target = iv_target

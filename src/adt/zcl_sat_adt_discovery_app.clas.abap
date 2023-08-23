@@ -276,6 +276,14 @@ CLASS zcl_sat_adt_discovery_app IMPLEMENTATION.
         description     = 'Resource for base tables of dictionary views'
         category_scheme = zif_sat_c_object_search=>c_content_assist-category_scheme
         category_term   = zif_sat_c_object_search=>c_content_assist-terms-view_base_tab ).
+
+    io_registry->register_discoverable_resource(
+        url             = '/dbtabinclude'
+        handler_class   = 'ZCL_SAT_ADT_RES_DBTABINCL_VH'
+        description     = 'Resource for includes in a db table'
+        category_scheme = zif_sat_c_object_search=>c_content_assist-category_scheme
+        category_term   = zif_sat_c_object_search=>c_content_assist-terms-db_tab_include ).
+
   ENDMETHOD.
 
   METHOD register_sapaox_launcher.

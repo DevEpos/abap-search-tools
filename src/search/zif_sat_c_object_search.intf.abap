@@ -280,6 +280,8 @@ INTERFACE zif_sat_c_object_search
       buffering_type       TYPE string VALUE 'buffertype',
       data_class           TYPE string VALUE 'dataclass',
       enhancement_category TYPE string VALUE 'enhcat',
+      storage_type         TYPE string VALUE 'storetype',
+      include_usage        TYPE string VALUE 'include',
     END OF c_dbtab_search_params.
 
   CONSTANTS:
@@ -379,6 +381,20 @@ INTERFACE zif_sat_c_object_search
     END OF c_view_class.
 
   CONSTANTS:
+    BEGIN OF c_table_storage_type,
+      BEGIN OF int,
+        column    TYPE ddroworcolst VALUE 'C',
+        row       TYPE ddroworcolst VALUE 'R',
+        undefined TYPE ddroworcolst VALUE space,
+      END OF int,
+      BEGIN OF ext,
+        column    TYPE string VALUE 'COLUMN',
+        row       TYPE string VALUE 'ROW',
+        undefined TYPE string VALUE 'UNDEFINED',
+      END OF ext,
+    END OF c_table_storage_type.
+
+  CONSTANTS:
     "! Values for API option
     BEGIN OF c_api_option_value,
       released      TYPE string VALUE 'RELEASED',
@@ -424,6 +440,7 @@ INTERFACE zif_sat_c_object_search
         view_field        TYPE string VALUE 'viewfield',
         view_root_tab     TYPE string VALUE 'viewroottable',
         view_base_tab     TYPE string VALUE 'viewbasetable',
+        db_tab_include    TYPE string VALUE 'dbtableinclude',
       END OF terms,
     END OF c_content_assist.
 ENDINTERFACE.
