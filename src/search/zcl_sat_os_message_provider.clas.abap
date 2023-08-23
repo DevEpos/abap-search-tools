@@ -11,6 +11,8 @@ CLASS zcl_sat_os_message_provider DEFINITION
     METHODS prepare_search REDEFINITION.
 
   PRIVATE SECTION.
+    ALIASES c_msg_search_params FOR zif_sat_c_object_search~c_message_search_params.
+
     CONSTANTS:
       BEGIN OF c_aliases,
         msg_clas TYPE string VALUE 'msgclas',
@@ -29,6 +31,7 @@ CLASS zcl_sat_os_message_provider DEFINITION
         changed_on          TYPE string VALUE 'changedon',
         description         TYPE string VALUE 'description',
         development_package TYPE string VALUE 'developmentpackage',
+        is_self_explanatory TYPE string VALUE 'isselfexplanatory',
       END OF c_fields.
 
     METHODS configure_msg_clas_filters.
@@ -138,11 +141,9 @@ CLASS zcl_sat_os_message_provider IMPLEMENTATION.
                                  iv_ref_field       = |{ c_fields-message_class }|
                                  iv_ref_table_alias = c_aliases-msg_clas
                                  it_tadir_type      = VALUE #( ( zif_sat_c_tadir_types=>message_class ) ) ).
-
       ENDCASE.
     ENDLOOP.
   ENDMETHOD.
-
 
   METHOD configure_message_filters.
     LOOP AT mo_search_query->mt_search_options ASSIGNING FIELD-SYMBOL(<ls_option>)
@@ -158,6 +159,9 @@ CLASS zcl_sat_os_message_provider IMPLEMENTATION.
           add_date_filter( iv_fieldname = |{ c_aliases-message }~{ c_fields-changed_on }|
                            it_values    = <ls_option>-value_range ).
 
+        WHEN c_msg_search_params-self_explanatory.
+          add_option_filter( iv_fieldname = |{ c_aliases-message }~{ c_fields-is_self_explanatory }|
+                             it_values    = <ls_option>-value_range ).
       ENDCASE.
     ENDLOOP.
   ENDMETHOD.
