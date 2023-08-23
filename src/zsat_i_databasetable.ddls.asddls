@@ -1,7 +1,7 @@
 @AbapCatalog.sqlViewName: 'ZSATIDBTAB'
 @AbapCatalog.compiler.compareFilter: true
 @AbapCatalog.preserveKey: true
-@AccessControl.authorizationCheck: #CHECK
+@AccessControl.authorizationCheck: #NOT_REQUIRED
 @EndUserText.label: 'Database Table'
 
 define view ZSAT_I_DatabaseTable

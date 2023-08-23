@@ -10,7 +10,8 @@ define view ZSAT_I_TableField
   key Field.tabname   as TableName,
   key Field.fieldname as FieldName,
       Field.rollname  as RollName,
-      Field.domname   as DomainName
+      Field.domname   as DomainName,
+      Field.precfield as IncludeName
 }
 where
   Field.as4local = 'A'

@@ -1,4 +1,4 @@
-"! <p class="shorttext synchronized">Resource for 'field' parameter in Database table/view search</p>
+"! <p class="shorttext synchronized">Resource for 'field' parameter in Database table search</p>
 CLASS zcl_sat_adt_res_tabfield_vh DEFINITION
   PUBLIC
   INHERITING FROM cl_adt_res_named_items

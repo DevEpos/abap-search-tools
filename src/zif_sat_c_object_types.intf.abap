@@ -10,6 +10,7 @@ INTERFACE zif_sat_c_object_types
   CONSTANTS table_definition        TYPE string VALUE 'TABL/DT'.
   CONSTANTS view_definition         TYPE string VALUE 'VIEW/DV'.
   CONSTANTS view_field              TYPE string VALUE 'VIEW/DVF'.
+  CONSTANTS structure               TYPE string VALUE 'TABL/DS'.
   CONSTANTS structured_object       TYPE string VALUE 'STOB/DO'.
   CONSTANTS structured_object_field TYPE string VALUE 'STOB/DOF'.
   CONSTANTS interface               TYPE string VALUE 'INTF/OI'.
