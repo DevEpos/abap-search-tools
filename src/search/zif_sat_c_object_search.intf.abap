@@ -295,6 +295,11 @@ INTERFACE zif_sat_c_object_search
     END OF c_ddicview_search_params.
 
   CONSTANTS:
+    BEGIN OF c_message_search_params,
+      self_explanatory TYPE string VALUE 'selfexpl',
+    END OF c_message_search_params.
+
+  CONSTANTS:
     BEGIN OF c_tab_enh_categories,
       BEGIN OF int,
         not_classified        TYPE dd02l-exclass VALUE '0',
