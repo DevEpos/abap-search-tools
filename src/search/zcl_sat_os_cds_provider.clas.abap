@@ -441,23 +441,8 @@ CLASS zcl_sat_os_cds_provider IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD add_extensions_filter.
-    DATA(lv_and_or) = ``.
-    DATA(lt_ext_join_filter) = VALUE zsat_join_condition_data_t( ).
-
-    LOOP AT it_values ASSIGNING FIELD-SYMBOL(<ls_value_range>).
-
-      lt_ext_join_filter = VALUE #( BASE lt_ext_join_filter
-                                    ( field         = c_fields-entityid
-                                      operator      = COND #( WHEN <ls_value_range>-option = 'CP'
-                                                              THEN zif_sat_c_operator=>like
-                                                              ELSE zif_sat_c_operator=>equals )
-                                      value         = <ls_value_range>-low
-                                      value_type    = zif_sat_c_join_cond_val_type=>typed_input
-                                      tabname_alias = c_extension_view_alias
-                                      and_or        = lv_and_or
-                                      type          = zif_sat_c_join_cond_type=>filter ) ).
-      lv_and_or = zif_sat_c_selection_condition=>or.
-    ENDLOOP.
+    add_option_filter( iv_fieldname = |{ c_extension_view_alias }~{ c_fields-entityid }|
+                       it_values    = it_values ).
 
     add_join_table( iv_join_table = get_cds_sql_name( |{ zif_sat_c_select_source_id=>zsat_i_cdsextensionviews }| )
                     iv_alias      = c_extension_view_alias
@@ -465,7 +450,6 @@ CLASS zcl_sat_os_cds_provider IMPLEMENTATION.
                                                ref_field       = c_fields-ddlname
                                                ref_table_alias = c_base_alias
                                                type            = zif_sat_c_join_cond_type=>field
-                                               and_or          = zif_sat_c_selection_condition=>and )
-                                             ( LINES OF lt_ext_join_filter ) ) ).
+                                               and_or          = zif_sat_c_selection_condition=>and ) ) ).
   ENDMETHOD.
 ENDCLASS.
