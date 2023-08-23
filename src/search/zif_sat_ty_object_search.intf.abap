@@ -94,6 +94,7 @@ INTERFACE zif_sat_ty_object_search
 
     BEGIN OF ty_content_proposal,
       name        TYPE string,
+      data        TYPE string,
       description TYPE string,
     END OF ty_content_proposal,
 

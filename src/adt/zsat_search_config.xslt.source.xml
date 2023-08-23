@@ -186,6 +186,11 @@
             <tt:cond check="not-initial($ref.description)">
               <tt:attribute name="objectsearch:description" value-ref="$ref.description"/>
             </tt:cond>
+            <tt:cond check="not-initial($ref.data)">
+              <objectsearch:data>
+                <tt:value ref="$ref.data"/>
+              </objectsearch:data>
+            </tt:cond>
           </objectsearch:proposal>
         </tt:loop>
       </tt:cond>
