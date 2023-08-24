@@ -160,10 +160,14 @@ CLASS zcl_sat_os_message_provider IMPLEMENTATION.
                            it_values    = <ls_option>-value_range ).
 
         WHEN c_msg_search_params-self_explanatory.
+          " '3' - self explanatory
+          " ''  - object requires documentation
+          DATA(lv_self_expl) = COND doku_selfd( WHEN <ls_option>-value_range[ 1 ]-low = abap_true THEN '3' ELSE space  ).
+          add_option_filter( iv_fieldname = |{ c_aliases-message }~{ c_fields-is_self_explanatory }|
+                             it_values    = VALUE #( ( sign = 'I' option = 'EQ' low = lv_self_expl ) ) ).
           add_option_filter( iv_fieldname = |{ c_aliases-message }~{ c_fields-is_self_explanatory }|
                              it_values    = <ls_option>-value_range ).
       ENDCASE.
     ENDLOOP.
   ENDMETHOD.
-
 ENDCLASS.
