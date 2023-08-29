@@ -327,6 +327,7 @@ CLASS zcl_sat_adt_discovery_app IMPLEMENTATION.
         |\{?{ zif_sat_c_adt_utils=>c_cds_analysis_parameter-entity_name }\}| &&
         |\{&{ zif_sat_c_adt_utils=>c_cds_analysis_parameter-source_origin }*\}| &&
         |\{&{ zif_sat_c_adt_utils=>c_cds_analysis_parameter-only_local_assocs }*\}| &&
+        |\{&{ zif_sat_c_adt_utils=>c_cds_analysis_parameter-recursive_search }*\}| &&
         |\{&{ zif_sat_c_adt_utils=>c_cds_analysis_parameter-only_released_entities }*\}|.
 
     lo_element_info_collection->register_disc_res_w_template(
