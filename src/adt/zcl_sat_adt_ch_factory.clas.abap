@@ -77,6 +77,10 @@ CLASS zcl_sat_adt_ch_factory DEFINITION
     CLASS-METHODS create_field_entity_res_handlr
       RETURNING
         VALUE(result) TYPE REF TO if_adt_rest_content_handler.
+
+    CLASS-METHODS create_where_used_in_cds_res_h
+      RETURNING
+        VALUE(result) TYPE REF TO if_adt_rest_content_handler.
 ENDCLASS.
 
 
@@ -154,5 +158,10 @@ CLASS zcl_sat_adt_ch_factory IMPLEMENTATION.
   METHOD create_field_entity_res_handlr.
     result = cl_adt_rest_st_handler=>create_instance( st_name   = 'ZSAT_ADT_ENTITY_FIELD_INFOS'
                                                       root_name = 'FIELD_INFO_RESULT' ).
+  ENDMETHOD.
+
+  METHOD create_where_used_in_cds_res_h.
+    result = cl_adt_rest_st_handler=>create_instance( st_name   = 'ZSAT_WHERE_USED_IN_CDS_RESULT'
+                                                      root_name = 'WUSL_RESULT' ).
   ENDMETHOD.
 ENDCLASS.
