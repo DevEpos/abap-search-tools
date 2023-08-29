@@ -1,4 +1,7 @@
 *"* use this source file for your ABAP unit test classes
+CLASS ltcl_abap_unit DEFINITION DEFERRED.
+CLASS zcl_sat_adt_res_cds_a_wusl DEFINITION
+  LOCAL FRIENDS ltcl_abap_unit.
 CLASS ltcl_abap_unit DEFINITION FINAL FOR TESTING
   DURATION SHORT
   RISK LEVEL HARMLESS.
@@ -14,13 +17,13 @@ CLASS ltcl_abap_unit DEFINITION FINAL FOR TESTING
       IMPORTING
         iv_message_body TYPE xstring
       RETURNING
-        VALUE(result)   TYPE zif_sat_ty_adt_types=>ty_s_search_result.
+        VALUE(result)   TYPE zif_sat_ty_adt_types=>ty_where_used_in_cds_t.
 
-    methods run_test
-    importing
-    iv_uri_part type string
-    returning
-      value(result) type zif_sat_ty_adt_types=>ty_s_search_result.
+    METHODS run_test
+      IMPORTING
+        iv_uri_part   TYPE string
+      RETURNING
+        VALUE(result) TYPE zif_sat_ty_adt_types=>ty_where_used_in_cds_t.
 
     METHODS test_method1 FOR TESTING.
     METHODS test_method2 FOR TESTING.
@@ -36,26 +39,26 @@ CLASS ltcl_abap_unit IMPLEMENTATION.
 
   METHOD test_method1.
     DATA(ls_search_result) = run_test( iv_uri_part = '?entityName=zsat_p_cdsviewbase&sourceOrigin=' &&
-                                                     zif_sat_c_object_search=>c_cds_search_params-select_from ).
+                                                     zcl_sat_adt_res_cds_a_wusl=>c_source_origin-select_from ).
 
-    cl_abap_unit_assert=>assert_equals( exp = 2 act = lines( ls_search_result-objects ) ).
+    cl_abap_unit_assert=>assert_equals( exp = 2 act = lines( ls_search_result ) ).
   ENDMETHOD.
 
   METHOD test_method2.
-    DATA(ls_search_result) = run_test(
+    DATA(lt_wusl_result) = run_test(
         iv_uri_part = '?entityName=zsat_p_cdsviewbase&sourceOrigin=' &&
-                       zif_sat_c_object_search=>c_cds_search_params-select_from &&
+                       zcl_sat_adt_res_cds_a_wusl=>c_source_origin-select_from &&
                        '&' && zif_sat_c_adt_utils=>c_cds_analysis_parameter-only_released_entities && '=true' ).
 
-    cl_abap_unit_assert=>assert_initial( ls_search_result-objects ).
+    cl_abap_unit_assert=>assert_initial( lt_wusl_result ).
   ENDMETHOD.
 
   METHOD test_method3.
-    DATA(ls_search_result) = run_test(
+    DATA(lt_wusl_result) = run_test(
         iv_uri_part = '?entityName=zsat_i_apistates&sourceOrigin=' &&
-                      zif_sat_c_object_search=>c_cds_search_params-association &&
+                      zcl_sat_adt_res_cds_a_wusl=>c_source_origin-association &&
                       '&' && zif_sat_c_adt_utils=>c_cds_analysis_parameter-only_local_assocs && '=true' ).
-    cl_abap_unit_assert=>assert_equals( exp = 1 act = lines( ls_search_result-objects ) ).
+    cl_abap_unit_assert=>assert_equals( exp = 1 act = lines( lt_wusl_result ) ).
   ENDMETHOD.
 
   METHOD run_test.
@@ -84,10 +87,12 @@ CLASS ltcl_abap_unit IMPLEMENTATION.
                               IMPORTING data  = lv_xml ).
 
     TRY.
-        CALL TRANSFORMATION zsat_search_result
+        CALL TRANSFORMATION zsat_where_used_in_cds_result
           SOURCE XML lv_xml
-         RESULT object_search_result = result.
-      CATCH cx_root INTO DATA(lx_error). " TODO: variable is assigned but never used (ABAP cleaner)
+         RESULT wusl_result = result.
+      CATCH cx_root INTO DATA(lx_error).
     ENDTRY.
+
+    cl_abap_unit_assert=>assert_not_bound( act = lx_error ).
   ENDMETHOD.
 ENDCLASS.

@@ -29,6 +29,7 @@ INTERFACE zif_sat_c_adt_utils
       entity_name            TYPE string VALUE 'entityName',
       only_released_entities TYPE string VALUE 'releasedEntitiesOnly',
       only_local_assocs      TYPE string VALUE 'localDeclaredAssocOnly',
+      recursive_search       TYPE string VALUE 'recursiveSearch',
     END OF c_cds_analysis_parameter.
   CONSTANTS:
     BEGIN OF c_cds_elem_info_parameter,
