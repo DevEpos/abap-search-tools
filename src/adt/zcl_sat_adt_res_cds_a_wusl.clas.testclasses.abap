@@ -26,7 +26,6 @@ CLASS ltcl_abap_unit DEFINITION FINAL FOR TESTING
         VALUE(result) TYPE zif_sat_ty_adt_types=>ty_where_used_in_cds_t.
 
     METHODS test_method1 FOR TESTING.
-    METHODS test_method2 FOR TESTING.
 ENDCLASS.
 
 
@@ -41,15 +40,6 @@ CLASS ltcl_abap_unit IMPLEMENTATION.
                                                      zcl_sat_adt_res_cds_a_wusl=>c_source_origin-select_from ).
 
     cl_abap_unit_assert=>assert_equals( exp = 2 act = lines( ls_search_result ) ).
-  ENDMETHOD.
-
-  METHOD test_method2.
-    DATA(lt_wusl_result) = run_test(
-        iv_uri_part = '?entityName=zsat_p_cdsviewbase&sourceOrigin=' &&
-                       zcl_sat_adt_res_cds_a_wusl=>c_source_origin-select_from &&
-                       '&' && zif_sat_c_adt_utils=>c_cds_analysis_parameter-only_released_entities && '=true' ).
-
-    cl_abap_unit_assert=>assert_initial( lt_wusl_result ).
   ENDMETHOD.
 
   METHOD run_test.

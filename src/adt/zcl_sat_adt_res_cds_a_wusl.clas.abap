@@ -19,7 +19,6 @@ CLASS zcl_sat_adt_res_cds_a_wusl DEFINITION
 
     TYPES BEGIN OF ty_wusl_result.
             INCLUDE TYPE zif_sat_ty_adt_types=>ty_where_used_in_cds.
-    TYPES   filtervalue   TYPE zsat_i_apistates-filtervalue.
     TYPES   source_entity TYPE tabname.
     TYPES END OF ty_wusl_result.
 
@@ -139,13 +138,13 @@ CLASS zcl_sat_adt_res_cds_a_wusl IMPLEMENTATION.
                                         ( `base~ddlname` ) )
 
                       from   = VALUE #(
-                          ( |{ get_cds_sql_name( zif_sat_c_select_source_id=>zsat_i_cdsentity ) } as base| ) ) ).
+                          ( |{ get_cds_sql_name( zif_sat_c_select_source_id=>zsat_i_cdsentity ) }( p_language = @sy-langu ) as base| ) ) ).
   ENDMETHOD.
 
   METHOD build_sql_for_assoc_search.
     ms_sql-from  = VALUE #(
         BASE ms_sql-from
-        ( |inner join { get_cds_sql_name( zif_sat_c_select_source_id=>dd08b ) } as assoc on base~ddlname = assoc~strucobjn | ) ).
+        ( |inner join { zif_sat_c_select_source_id=>dd08b } as assoc on base~ddlname = assoc~strucobjn | ) ).
     ms_sql-where = VALUE #( ( `assoc~strucobjn_t = @mv_entity ` ) ).
   ENDMETHOD.
 
@@ -209,14 +208,10 @@ CLASS zcl_sat_adt_res_cds_a_wusl IMPLEMENTATION.
           iv_name = CONV #( lr_unique_result->ddlname )
           is_type = VALUE #( objtype_tr = zif_sat_c_tadir_types=>data_definition subtype_wb = 'DF' ) ).
       lr_unique_result->type = zif_sat_c_object_types=>data_definition.
-      IF lr_unique_result->filtervalue = zif_sat_c_cds_api_state=>add_custom_fields.
-        CLEAR lr_unique_result->api_state.
-      ENDIF.
 
       LOOP AT ct_where_used REFERENCE INTO DATA(lr_result) WHERE ddlname = lr_unique_result->ddlname.
         lr_result->uri       = lr_unique_result->uri.
         lr_result->type      = lr_unique_result->type.
-        lr_result->api_state = lr_unique_result->api_state.
       ENDLOOP.
     ENDLOOP.
   ENDMETHOD.
