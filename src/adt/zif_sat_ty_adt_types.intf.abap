@@ -83,6 +83,18 @@ INTERFACE zif_sat_ty_adt_types
 
     ty_cds_top_down_entries TYPE STANDARD TABLE OF ty_cds_top_down_entry WITH EMPTY KEY,
 
+    BEGIN OF ty_where_used_in_cds,
+      uri         TYPE string,
+      entity_name TYPE string,
+      ddlname     TYPE string,
+      description TYPE string,
+      type        TYPE string,
+      source_type TYPE string,
+      children    TYPE REF TO data,
+    END OF ty_where_used_in_cds,
+
+    ty_where_used_in_cds_t TYPE STANDARD TABLE OF ty_where_used_in_cds WITH EMPTY KEY,
+
     BEGIN OF ty_cds_top_down_result,
       source_entity TYPE ty_s_adt_obj_ref,
       entries       TYPE ty_cds_top_down_entries,

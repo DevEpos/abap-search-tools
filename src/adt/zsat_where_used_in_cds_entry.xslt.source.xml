@@ -1,0 +1,44 @@
+<?sap.transform simple?>
+<tt:transform xmlns:tt="http://www.sap.com/transformation-templates"
+              xmlns:cdsanalysis="http://www.devepos.com/adt/cdsanalysis"
+              xmlns:cl="http://www.sap.com/abapxml/types/class-pool/zif_sat_ty_adt_types">
+
+  <tt:root name="wusl_entry" type="cl:ty_where_used_in_cds"/>
+
+  <tt:template>
+    <tt:apply name="whereUsedEntry">
+      <tt:with-root name="wusl_entry" ref="wusl_entry"/>
+    </tt:apply>
+  </tt:template>
+
+  <tt:template name="whereUsedEntry">
+    <tt:context>
+      <tt:root name="wusl_entry" type="cl:ty_where_used_in_cds"/>
+    </tt:context>
+
+    <cdsanalysis:whereUsedInCdsEntry tt:extensible="deep">
+      <tt:attribute name="cdsanalysis:uri" value-ref="wusl_entry.uri"/>
+      <tt:attribute name="cdsanalysis:entityName" value-ref="wusl_entry.entity_name"/>
+      <tt:attribute name="cdsanalysis:ddlName" value-ref="wusl_entry.ddlname"/>
+
+      <tt:cond check="not-initial(wusl_entry.description)">
+        <tt:attribute name="cdsanalysis:description" value-ref="wusl_entry.description"/>
+      </tt:cond>
+
+      <tt:attribute name="cdsanalysis:type" value-ref="wusl_entry.type"/>
+
+      <tt:cond check="not-initial(wusl_entry.source_type)">
+        <tt:attribute name="cdsanalysis:sourceType" value-ref="wusl_entry.source_type"/>
+      </tt:cond>
+
+      <tt:cond check="exist(wusl_entry.children)">
+        <!-- Serialize children -->
+        <tt:call-method class="zcl_sat_adt_cdswus_res_xml_h" d-name="read_ext_attributes" reader="io_reader" s-name="serialize_ext_attributes" writer="io_writer">
+          <tt:with-parameter name="where_used_entry" ref="wusl_entry"/>
+        </tt:call-method>
+      </tt:cond>
+    </cdsanalysis:whereUsedInCdsEntry>
+
+  </tt:template>
+
+</tt:transform>

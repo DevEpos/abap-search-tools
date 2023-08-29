@@ -290,7 +290,8 @@ CLASS zcl_sat_adt_discovery_app IMPLEMENTATION.
     " Register URI templates for Where-Used-Analysis
     DATA(lv_where_used_in_template) = c_cds_analysis_uri-where_used_base &&
         |\{?{ zif_sat_c_adt_utils=>c_cds_analysis_parameter-entity_name }\}| &&
-        |\{&{ zif_sat_c_adt_utils=>c_cds_analysis_parameter-source_origin }*\}|.
+        |\{&{ zif_sat_c_adt_utils=>c_cds_analysis_parameter-source_origin }*\}| &&
+        |\{&{ zif_sat_c_adt_utils=>c_cds_analysis_parameter-recursive_search }*\}|.
 
     lo_element_info_collection->register_disc_res_w_template(
         template      = lv_where_used_in_template
