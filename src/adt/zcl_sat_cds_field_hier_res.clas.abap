@@ -164,8 +164,7 @@ CLASS zcl_sat_cds_field_hier_res IMPLEMENTATION.
         field~fieldname AS basefield
         FROM zsat_i_cdsbasefield AS field
         FOR ALL ENTRIES IN @lt_field_tables
-        WHERE field~rollname <> 'MANDT'
-          AND field~viewname = @lt_field_tables-basetable
+        WHERE field~viewname = @lt_field_tables-basetable
           AND field~viewfield = @lt_field_tables-basefield
         INTO CORRESPONDING FIELDS OF TABLE @lt_view_fields.
 
