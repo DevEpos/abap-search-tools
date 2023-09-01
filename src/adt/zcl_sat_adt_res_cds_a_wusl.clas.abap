@@ -1,14 +1,13 @@
 "! <p class="shorttext synchronized">Where-Used-Analysis for Table/View/CDS in CDS Views</p>
-class ZCL_SAT_ADT_RES_CDS_A_WUSL definition
-  public
-  inheriting from CL_ADT_REST_RESOURCE
-  final
-  create public .
+CLASS zcl_sat_adt_res_cds_a_wusl DEFINITION
+  PUBLIC
+  INHERITING FROM cl_adt_rest_resource
+  FINAL
+  CREATE PUBLIC.
 
-public section.
+  PUBLIC SECTION.
+    METHODS get REDEFINITION.
 
-  methods GET
-    redefinition .
   PROTECTED SECTION.
 
   PRIVATE SECTION.
@@ -27,10 +26,18 @@ public section.
     TYPES:
       ty_wusl_results TYPE STANDARD TABLE OF ty_wusl_result WITH EMPTY KEY,
 
-      BEGIN OF ty_cds_parent_ref,
+      BEGIN OF ty_wusl_result_ref,
         ddlname TYPE tabname,
         ref     TYPE REF TO ty_wusl_result,
-      END OF ty_cds_parent_ref.
+      END OF ty_wusl_result_ref,
+
+      ty_wusl_result_refs TYPE SORTED TABLE OF ty_wusl_result_ref WITH NON-UNIQUE KEY ddlname,
+
+      BEGIN OF ty_result_key,
+        ddlname TYPE tabname,
+      END OF ty_result_key,
+
+      ty_result_keys TYPE TABLE OF ty_result_key.
 
     DATA:
       BEGIN OF ms_sql,
@@ -40,6 +47,8 @@ public section.
       END OF ms_sql.
 
     DATA mt_result                  TYPE ty_wusl_results.
+    DATA mt_result_refs             TYPE ty_wusl_result_refs.
+    DATA mt_result_keys             TYPE ty_result_keys.
     DATA mv_entity                  TYPE zsat_entity_id.
     DATA mf_only_local_assocs       TYPE abap_bool.
     DATA mv_source_origin           TYPE string.
@@ -71,34 +80,26 @@ public section.
 
     METHODS build_sql.
 
-    METHODS fill_descriptions
-      CHANGING
-        ct_where_used TYPE ty_wusl_results.
+    METHODS fill_descriptions.
 
-    METHODS fill_other_properties
-      CHANGING
-        ct_where_used TYPE ty_wusl_results.
+    METHODS fill_other_properties.
 
     METHODS find_all_resursively
       RAISING
         cx_adt_rest.
 
-    METHODS add_api_state_info
-      CHANGING
-        ct_where_used TYPE ty_wusl_results.
+    METHODS add_api_state_info.
+
+    METHODS do_after_search.
 ENDCLASS.
 
 
-
-CLASS ZCL_SAT_ADT_RES_CDS_A_WUSL IMPLEMENTATION.
-
-
+CLASS zcl_sat_adt_res_cds_a_wusl IMPLEMENTATION.
   METHOD get.
     get_parameters( request ).
     execute_where_used_in_cds( ).
     fill_response( io_response = response ).
   ENDMETHOD.
-
 
   METHOD get_parameters.
     mv_entity = to_upper( zcl_sat_adt_res_util=>get_request_param_value(
@@ -120,7 +121,6 @@ CLASS ZCL_SAT_ADT_RES_CDS_A_WUSL IMPLEMENTATION.
                                io_request    = io_request ).
   ENDMETHOD.
 
-
   METHOD execute_where_used_in_cds.
     build_sql( ).
 
@@ -131,15 +131,13 @@ CLASS ZCL_SAT_ADT_RES_CDS_A_WUSL IMPLEMENTATION.
     ENDIF.
 
     run_search( ).
-    fill_descriptions( CHANGING ct_where_used = mt_result ).
-    fill_other_properties( CHANGING ct_where_used = mt_result ).
-    add_api_state_info( CHANGING ct_where_used = mt_result ).
 
     IF mf_recursive_search = abap_true AND mv_source_origin = c_source_origin-select_from.
       find_all_resursively( ).
     ENDIF.
-  ENDMETHOD.
 
+    do_after_search( ).
+  ENDMETHOD.
 
   METHOD fill_response.
     io_response->set_body_data(
@@ -147,23 +145,20 @@ CLASS ZCL_SAT_ADT_RES_CDS_A_WUSL IMPLEMENTATION.
         data            = CORRESPONDING zif_sat_ty_adt_types=>ty_where_used_in_cds_t(  mt_result ) ).
   ENDMETHOD.
 
-
   METHOD build_sql.
     ms_sql = VALUE #( select = VALUE #( ( `base~rawentityid as entity_name,` )
                                         ( `base~sourcetype as source_type,` )
                                         ( `base~ddlname` ) )
-
-                      from   = VALUE #( ( |{ zif_sat_c_select_source_id=>zsat_i_cdsentity } as base | ) ) ).
+                      from   = VALUE #( ( |{ zif_sat_c_select_source_id=>zsat_p_cds } as base | ) ) ).
 
     IF mf_released_entitites_only = abap_true.
       ms_sql-from = VALUE #( BASE ms_sql-from
                              ( |inner join { zif_sat_c_select_source_id=>zsat_i_apistates } as api | )
                              ( ` on  api~objectname = base~ddlname ` )
-                             ( ` and api~objecttype = 'DDLS' ` )
-                             ( ` and api~apistate   = 'RELEASED' ` ) ).
+                             ( | and api~objecttype = '{ zif_sat_c_tadir_types=>data_definition }' | )
+                             ( | and api~apistate   = '{ zif_sat_c_cds_api_state=>released }' | ) ).
     ENDIF.
   ENDMETHOD.
-
 
   METHOD build_sql_for_assoc_search.
     ms_sql-from  = VALUE #(
@@ -177,14 +172,12 @@ CLASS ZCL_SAT_ADT_RES_CDS_A_WUSL IMPLEMENTATION.
     ENDIF.
   ENDMETHOD.
 
-
   METHOD build_sql_for_from_search.
     ms_sql-from  = VALUE #( BASE ms_sql-from
                             ( |inner join { zif_sat_c_select_source_id=>zsat_i_cdsfrompartentity } as selectpart | )
                             ( | on base~viewname = selectpart~ddlviewname | ) ).
     ms_sql-where = VALUE #( ( `selectpart~sourceentity = @mv_entity ` ) ).
   ENDMETHOD.
-
 
   METHOD run_search.
     TRY.
@@ -199,55 +192,44 @@ CLASS ZCL_SAT_ADT_RES_CDS_A_WUSL IMPLEMENTATION.
     ENDTRY.
   ENDMETHOD.
 
-
   METHOD fill_descriptions.
     DATA lt_texts TYPE STANDARD TABLE OF seu_objtxt.
 
-    CHECK ct_where_used IS NOT INITIAL.
+    CHECK mt_result_keys IS NOT INITIAL.
 
-    lt_texts = VALUE #( FOR entity IN ct_where_used
+    lt_texts = VALUE #( FOR entity IN mt_result_keys
                         ( object = zif_sat_c_tadir_types=>data_definition obj_name = entity-ddlname ) ).
-
-    SORT lt_texts BY obj_name
-                     object.
-    DELETE ADJACENT DUPLICATES FROM lt_texts COMPARING obj_name object.
 
     CALL FUNCTION 'RS_SHORTTEXT_GET'
       TABLES obj_tab = lt_texts.
 
-    LOOP AT ct_where_used ASSIGNING FIELD-SYMBOL(<ls_entity>).
-      ASSIGN lt_texts[ obj_name = <ls_entity>-ddlname ] TO FIELD-SYMBOL(<ls_text>).
-      IF sy-subrc = 0.
-        <ls_entity>-description = <ls_text>-stext.
+    LOOP AT mt_result_refs REFERENCE INTO DATA(lr_result_ref).
+      DATA(lr_text) = REF #( lt_texts[ obj_name = lr_result_ref->ddlname ] OPTIONAL ).
+      IF lr_text IS BOUND.
+        lr_result_ref->ref->description = lr_text->stext.
       ENDIF.
     ENDLOOP.
   ENDMETHOD.
 
-
   METHOD fill_other_properties.
-    CHECK ct_where_used IS NOT INITIAL.
+    CHECK mt_result_keys IS NOT INITIAL.
 
-    DATA(lt_results) = ct_where_used.
-    SORT lt_results BY ddlname.
-    DELETE ADJACENT DUPLICATES FROM lt_results COMPARING ddlname.
+    LOOP AT mt_result_keys REFERENCE INTO DATA(lr_result_key).
+      DATA(lv_uri) = zcl_sat_adt_util=>get_adt_object_ref_uri(
+                         iv_name = CONV #( lr_result_key->ddlname )
+                         is_type = VALUE #( objtype_tr = zif_sat_c_tadir_types=>data_definition subtype_wb = 'DF' ) ).
+      DATA(lv_type) = zif_sat_c_object_types=>data_definition.
 
-    LOOP AT lt_results REFERENCE INTO DATA(lr_unique_result).
-      lr_unique_result->uri  = zcl_sat_adt_util=>get_adt_object_ref_uri(
-          iv_name = CONV #( lr_unique_result->ddlname )
-          is_type = VALUE #( objtype_tr = zif_sat_c_tadir_types=>data_definition subtype_wb = 'DF' ) ).
-      lr_unique_result->type = zif_sat_c_object_types=>data_definition.
-
-      LOOP AT ct_where_used REFERENCE INTO DATA(lr_result) WHERE ddlname = lr_unique_result->ddlname.
-        lr_result->uri  = lr_unique_result->uri.
-        lr_result->type = lr_unique_result->type.
+      LOOP AT mt_result_refs REFERENCE INTO DATA(lr_result_ref) WHERE ddlname = lr_result_key->ddlname.
+        lr_result_ref->ref->uri  = lv_uri.
+        lr_result_ref->ref->type = lv_type.
       ENDLOOP.
     ENDLOOP.
   ENDMETHOD.
 
-
   METHOD find_all_resursively.
     DATA lt_usages              LIKE mt_result.
-    DATA lt_current_parent_refs TYPE SORTED TABLE OF ty_cds_parent_ref WITH NON-UNIQUE KEY ddlname.
+    DATA lt_current_parent_refs TYPE SORTED TABLE OF ty_wusl_result_ref WITH NON-UNIQUE KEY ddlname.
     DATA lt_tmp_parent_refs     LIKE lt_current_parent_refs.
     DATA lr_usage_stored        TYPE REF TO ty_wusl_result.
 
@@ -272,10 +254,6 @@ CLASS ZCL_SAT_ADT_RES_CDS_A_WUSL IMPLEMENTATION.
         EXIT.
       ENDIF.
 
-      fill_descriptions( CHANGING ct_where_used = lt_usages ).
-      add_api_state_info( CHANGING ct_where_used = lt_usages ).
-      fill_other_properties( CHANGING ct_where_used = lt_usages ).
-
       LOOP AT lt_usages REFERENCE INTO DATA(lr_usage).
         LOOP AT lt_current_parent_refs REFERENCE INTO DATA(lr_parent) WHERE ddlname = lr_usage->source_entity.
           IF lr_parent->ref->children IS INITIAL.
@@ -287,6 +265,7 @@ CLASS ZCL_SAT_ADT_RES_CDS_A_WUSL IMPLEMENTATION.
 
           IF lr_usage_stored IS BOUND.
             lt_tmp_parent_refs = VALUE #( BASE lt_tmp_parent_refs ( ddlname = lr_usage->ddlname ref = lr_usage_stored ) ).
+            mt_result_refs = VALUE #( BASE mt_result_refs ( ddlname = lr_usage->ddlname ref = lr_usage_stored ) ).
           ENDIF.
         ENDLOOP.
 
@@ -300,24 +279,46 @@ CLASS ZCL_SAT_ADT_RES_CDS_A_WUSL IMPLEMENTATION.
     ENDWHILE.
   ENDMETHOD.
 
-
   METHOD add_api_state_info.
-    SELECT DISTINCT
-           objectname AS entity_id,
-           apistate AS api_state
-      FROM zsat_i_apistates
-      FOR ALL ENTRIES IN @ct_where_used
-      WHERE objectname = @ct_where_used-ddlname
-        AND objecttype = @zif_sat_c_tadir_types=>data_definition
-        AND filtervalue <> @zif_sat_c_cds_api_state=>add_custom_fields
-      INTO TABLE @DATA(lt_api_states).
+    CHECK mt_result_keys IS NOT INITIAL.
 
-    IF sy-subrc <> 0.
-      RETURN.
+    IF mf_released_entitites_only = abap_false.
+      SELECT DISTINCT
+             objectname AS entity_id,
+             apistate AS api_state
+        FROM zsat_i_apistates
+        FOR ALL ENTRIES IN @mt_result_keys
+        WHERE objectname = @mt_result_keys-ddlname
+          AND objecttype = @zif_sat_c_tadir_types=>data_definition
+          AND filtervalue <> @zif_sat_c_cds_api_state=>add_custom_fields
+        INTO TABLE @DATA(lt_api_states).
+
+      IF sy-subrc <> 0.
+        RETURN.
+      ENDIF.
     ENDIF.
 
-    LOOP AT ct_where_used REFERENCE INTO DATA(lr_where_used).
-      lr_where_used->api_state = VALUE #( lt_api_states[ entity_id = lr_where_used->ddlname ]-api_state OPTIONAL ).
+    LOOP AT mt_result_refs REFERENCE INTO DATA(lr_result_ref).
+      IF mf_released_entitites_only = abap_true.
+        lr_result_ref->ref->api_state = zif_sat_c_cds_api_state=>released.
+      ELSE.
+        lr_result_ref->ref->api_state = VALUE #( lt_api_states[ entity_id = lr_result_ref->ref->ddlname ]-api_state OPTIONAL ).
+      ENDIF.
     ENDLOOP.
+  ENDMETHOD.
+
+  METHOD do_after_search.
+    " Results at root level still need to be added to refs
+    LOOP AT mt_result REFERENCE INTO DATA(lr_result).
+      mt_result_refs = VALUE #( BASE mt_result_refs ( ddlname = lr_result->ddlname ref = lr_result ) ).
+    ENDLOOP.
+
+    mt_result_keys = CORRESPONDING #( mt_result_refs ).
+    SORT mt_result_keys.
+    DELETE ADJACENT DUPLICATES FROM mt_result_keys.
+
+    fill_descriptions( ).
+    fill_other_properties( ).
+    add_api_state_info( ).
   ENDMETHOD.
 ENDCLASS.
