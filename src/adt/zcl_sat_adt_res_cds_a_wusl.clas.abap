@@ -188,7 +188,7 @@ CLASS zcl_sat_adt_res_cds_a_wusl IMPLEMENTATION.
 
     CHECK ct_where_used IS NOT INITIAL.
 
-    lt_texts = VALUE #( FOR entity IN mt_result
+    lt_texts = VALUE #( FOR entity IN ct_where_used
                         ( object = zif_sat_c_tadir_types=>data_definition obj_name = entity-ddlname ) ).
 
     SORT lt_texts BY obj_name
