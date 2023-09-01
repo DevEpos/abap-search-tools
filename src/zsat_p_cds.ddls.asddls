@@ -15,7 +15,6 @@ define view ZSAT_P_Cds
   key Source.ddlname,
       CdsEntityHeader.strucobjn     as EntityId,
       CdsEntityHeader.strucobjn_raw as RawEntityId,
-      StructuredObject.DdlName,
       StructuredObject.ViewName,
       Source.parentname             as ParentDdlName,
       case
