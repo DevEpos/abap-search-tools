@@ -7,32 +7,22 @@
 @VDM.private: true
 
 define view ZSAT_P_CDSViewBase
-  as select from ddddlsrc             as Source
-    inner join   ZSAT_I_DdlDependency as StructuredObject on Source.ddlname = StructuredObject.DdlName
-    inner join   dd02b                as CdsEntityHeader  on  StructuredObject.EntityName = CdsEntityHeader.strucobjn
-                                                          and CdsEntityHeader.as4local    = 'A'
-    inner join   tadir                as Repo             on  StructuredObject.DdlName = Repo.obj_name
-                                                          and Repo.pgmid               = 'R3TR'
-                                                          and object                   = 'DDLS'
+  as select from ZSAT_P_Cds as CdsBase
+    inner join   tadir      as Repo on  CdsBase.ddlname = Repo.obj_name
+                                    and Repo.pgmid      = 'R3TR'
+                                    and Repo.object     = 'DDLS'
 {
-  CdsEntityHeader.strucobjn     as EntityId,
-  CdsEntityHeader.strucobjn_raw as RawEntityId,
-  StructuredObject.DdlName,
-  StructuredObject.ViewName,
-  Source.parentname             as ParentDdlName,
-  Source.source                 as DdlSource,
-  case
-    when Source.parentname = '' and StructuredObject.ViewName <> '' then 'V'
-    when StructuredObject.ViewName = '' or 
-         StructuredObject.ViewName is null                          then 'F'
-    else                                                                 'E'
-  end                             as SourceType,
-  Repo.devclass                 as DevelopmentPackage,
-  Repo.author                   as CreatedBy,
-  Repo.created_on               as CreatedDate,
-  Repo.masterlang               as OriginalLanguage,
-  CdsEntityHeader.chgdate       as ChangedDate,
-  CdsEntityHeader.chguser       as ChangedBy
+  key CdsBase.ddlname,
+      CdsBase.EntityId,
+      CdsBase.RawEntityId,
+      CdsBase.ViewName,
+      CdsBase.ParentDdlName,
+      CdsBase.SourceType,
+      CdsBase.DdlSource,
+      Repo.devclass   as DevelopmentPackage,
+      Repo.author     as CreatedBy,
+      Repo.created_on as CreatedDate,
+      Repo.masterlang as OriginalLanguage,
+      CdsBase.ChangedDate,
+      CdsBase.ChangedBy
 }
-where
-  Source.as4local = 'A'
