@@ -235,9 +235,9 @@ CLASS lcl_method_result_converter IMPLEMENTATION.
           ENDIF.
         ENDIF.
 
-        DATA(lv_uri) = CONV string( map_method_to_uri( iv_clif_name   = <ls_query_result>-object_name
-                                                       iv_type        = ls_obj_type
-                                                       iv_method_name = <ls_method>-method_name ) ).
+        DATA(lv_uri) = map_method_to_uri( iv_clif_name   = <ls_query_result>-object_name
+                                          iv_type        = ls_obj_type
+                                          iv_method_name = <ls_method>-method_name ).
 
         IF lv_uri IS NOT INITIAL.
           " reset the sub type to OM if necessary, so ADT produces the correct icon
@@ -264,6 +264,12 @@ CLASS lcl_method_result_converter IMPLEMENTATION.
   METHOD map_method_to_uri.
     DATA lo_wb_request  TYPE REF TO cl_wb_request.
     DATA lv_object_name TYPE seu_objkey.
+
+    IF iv_type-objtype_tr = zif_sat_c_tadir_types=>class.
+      result = |/sap/bc/adt/oo/classes/{ to_lower( cl_http_utility=>escape_url( CONV #( iv_clif_name ) ) ) }| &&
+               |/source/main#type={ iv_type-objtype_tr }/{ iv_type-subtype_wb };name={ to_lower( iv_method_name ) }|.
+      RETURN.
+    ENDIF.
 
     lv_object_name(30) = iv_clif_name.
     lv_object_name+30 = iv_method_name.
