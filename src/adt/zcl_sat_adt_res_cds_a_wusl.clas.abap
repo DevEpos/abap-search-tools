@@ -1,13 +1,14 @@
 "! <p class="shorttext synchronized">Where-Used-Analysis for Table/View/CDS in CDS Views</p>
-CLASS zcl_sat_adt_res_cds_a_wusl DEFINITION
-  PUBLIC
-  INHERITING FROM cl_adt_rest_resource
-  FINAL
-  CREATE PUBLIC.
+class ZCL_SAT_ADT_RES_CDS_A_WUSL definition
+  public
+  inheriting from CL_ADT_REST_RESOURCE
+  final
+  create public .
 
-  PUBLIC SECTION.
-    METHODS get REDEFINITION.
+public section.
 
+  methods GET
+    redefinition .
   PROTECTED SECTION.
 
   PRIVATE SECTION.
@@ -81,15 +82,23 @@ CLASS zcl_sat_adt_res_cds_a_wusl DEFINITION
     METHODS find_all_resursively
       RAISING
         cx_adt_rest.
+
+    METHODS add_api_state_info
+      CHANGING
+        ct_where_used TYPE ty_wusl_results.
 ENDCLASS.
 
 
-CLASS zcl_sat_adt_res_cds_a_wusl IMPLEMENTATION.
+
+CLASS ZCL_SAT_ADT_RES_CDS_A_WUSL IMPLEMENTATION.
+
+
   METHOD get.
     get_parameters( request ).
     execute_where_used_in_cds( ).
     fill_response( io_response = response ).
   ENDMETHOD.
+
 
   METHOD get_parameters.
     mv_entity = to_upper( zcl_sat_adt_res_util=>get_request_param_value(
@@ -111,6 +120,7 @@ CLASS zcl_sat_adt_res_cds_a_wusl IMPLEMENTATION.
                                io_request    = io_request ).
   ENDMETHOD.
 
+
   METHOD execute_where_used_in_cds.
     build_sql( ).
 
@@ -123,11 +133,13 @@ CLASS zcl_sat_adt_res_cds_a_wusl IMPLEMENTATION.
     run_search( ).
     fill_descriptions( CHANGING ct_where_used = mt_result ).
     fill_other_properties( CHANGING ct_where_used = mt_result ).
+    add_api_state_info( CHANGING ct_where_used = mt_result ).
 
     IF mf_recursive_search = abap_true AND mv_source_origin = c_source_origin-select_from.
       find_all_resursively( ).
     ENDIF.
   ENDMETHOD.
+
 
   METHOD fill_response.
     io_response->set_body_data(
@@ -135,21 +147,23 @@ CLASS zcl_sat_adt_res_cds_a_wusl IMPLEMENTATION.
         data            = CORRESPONDING zif_sat_ty_adt_types=>ty_where_used_in_cds_t(  mt_result ) ).
   ENDMETHOD.
 
-  METHOD build_sql.
-    ms_sql = VALUE #(
-        select = VALUE #( ( `base~rawentityid as entity_name,` )
-                          ( `base~sourcetype as source_type,` )
-                          ( `base~ddlname,` )
-                          ( `api~apistate as api_state,` )
-                          ( `api~filtervalue` ) )
 
-        from   = VALUE #(
-            LET lv_join_type = COND string( WHEN mf_released_entitites_only = abap_true THEN 'inner' ELSE 'left outer' ) IN
-            ( |{ zif_sat_c_select_source_id=>zsat_i_cdsentity } as base| )
-            ( |{ lv_join_type } join { zif_sat_c_select_source_id=>zsat_i_apistates } as api | )
-            ( ` on  api~objectname = base~ddlname ` )
-            ( ` and api~objecttype = 'DDLS' ` ) ) ).
+  METHOD build_sql.
+    ms_sql = VALUE #( select = VALUE #( ( `base~rawentityid as entity_name,` )
+                                        ( `base~sourcetype as source_type,` )
+                                        ( `base~ddlname` ) )
+
+                      from   = VALUE #( ( |{ zif_sat_c_select_source_id=>zsat_i_cdsentity } as base | ) ) ).
+
+    IF mf_released_entitites_only = abap_true.
+      ms_sql-from = VALUE #( BASE ms_sql-from
+                             ( |inner join { zif_sat_c_select_source_id=>zsat_i_apistates } as api | )
+                             ( ` on  api~objectname = base~ddlname ` )
+                             ( ` and api~objecttype = 'DDLS' ` )
+                             ( ` and api~apistate   = 'RELEASED' ` ) ).
+    ENDIF.
   ENDMETHOD.
+
 
   METHOD build_sql_for_assoc_search.
     ms_sql-from  = VALUE #(
@@ -163,12 +177,14 @@ CLASS zcl_sat_adt_res_cds_a_wusl IMPLEMENTATION.
     ENDIF.
   ENDMETHOD.
 
+
   METHOD build_sql_for_from_search.
     ms_sql-from  = VALUE #( BASE ms_sql-from
                             ( |inner join { zif_sat_c_select_source_id=>zsat_i_cdsfrompartentity } as selectpart | )
                             ( | on base~viewname = selectpart~ddlviewname | ) ).
     ms_sql-where = VALUE #( ( `selectpart~sourceentity = @mv_entity ` ) ).
   ENDMETHOD.
+
 
   METHOD run_search.
     TRY.
@@ -182,6 +198,7 @@ CLASS zcl_sat_adt_res_cds_a_wusl IMPLEMENTATION.
           EXPORTING textid = cx_adt_rest=>create_textid_from_exc_text( lx_sql_error ).
     ENDTRY.
   ENDMETHOD.
+
 
   METHOD fill_descriptions.
     DATA lt_texts TYPE STANDARD TABLE OF seu_objtxt.
@@ -206,6 +223,7 @@ CLASS zcl_sat_adt_res_cds_a_wusl IMPLEMENTATION.
     ENDLOOP.
   ENDMETHOD.
 
+
   METHOD fill_other_properties.
     CHECK ct_where_used IS NOT INITIAL.
 
@@ -218,17 +236,14 @@ CLASS zcl_sat_adt_res_cds_a_wusl IMPLEMENTATION.
           iv_name = CONV #( lr_unique_result->ddlname )
           is_type = VALUE #( objtype_tr = zif_sat_c_tadir_types=>data_definition subtype_wb = 'DF' ) ).
       lr_unique_result->type = zif_sat_c_object_types=>data_definition.
-      IF lr_unique_result->filtervalue = zif_sat_c_cds_api_state=>add_custom_fields.
-        CLEAR lr_unique_result->api_state.
-      ENDIF.
 
       LOOP AT ct_where_used REFERENCE INTO DATA(lr_result) WHERE ddlname = lr_unique_result->ddlname.
-        lr_result->uri       = lr_unique_result->uri.
-        lr_result->type      = lr_unique_result->type.
-        lr_result->api_state = lr_unique_result->api_state.
+        lr_result->uri  = lr_unique_result->uri.
+        lr_result->type = lr_unique_result->type.
       ENDLOOP.
     ENDLOOP.
   ENDMETHOD.
+
 
   METHOD find_all_resursively.
     DATA lt_usages              LIKE mt_result.
@@ -258,6 +273,7 @@ CLASS zcl_sat_adt_res_cds_a_wusl IMPLEMENTATION.
       ENDIF.
 
       fill_descriptions( CHANGING ct_where_used = lt_usages ).
+      add_api_state_info( CHANGING ct_where_used = lt_usages ).
       fill_other_properties( CHANGING ct_where_used = lt_usages ).
 
       LOOP AT lt_usages REFERENCE INTO DATA(lr_usage).
@@ -282,5 +298,26 @@ CLASS zcl_sat_adt_res_cds_a_wusl IMPLEMENTATION.
       CLEAR lt_tmp_parent_refs.
 
     ENDWHILE.
+  ENDMETHOD.
+
+
+  METHOD add_api_state_info.
+    SELECT DISTINCT
+           objectname AS entity_id,
+           apistate AS api_state
+      FROM zsat_i_apistates
+      FOR ALL ENTRIES IN @ct_where_used
+      WHERE objectname = @ct_where_used-ddlname
+        AND objecttype = @zif_sat_c_tadir_types=>data_definition
+        AND filtervalue <> @zif_sat_c_cds_api_state=>add_custom_fields
+      INTO TABLE @DATA(lt_api_states).
+
+    IF sy-subrc <> 0.
+      RETURN.
+    ENDIF.
+
+    LOOP AT ct_where_used REFERENCE INTO DATA(lr_where_used).
+      lr_where_used->api_state = VALUE #( lt_api_states[ entity_id = lr_where_used->ddlname ]-api_state OPTIONAL ).
+    ENDLOOP.
   ENDMETHOD.
 ENDCLASS.

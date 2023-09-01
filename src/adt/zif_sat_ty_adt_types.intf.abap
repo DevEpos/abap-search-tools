@@ -86,7 +86,7 @@ INTERFACE zif_sat_ty_adt_types
     BEGIN OF ty_where_used_in_cds,
       uri         TYPE string,
       entity_name TYPE string,
-      ddlname     TYPE string,
+      ddlname     TYPE tabname,
       description TYPE string,
       type        TYPE string,
       api_state   TYPE string,
