@@ -100,8 +100,8 @@ CLASS zcl_sat_os_method_provider IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD limit_result.
-    IF lines( mt_result_all ) > mo_query->mv_max_rows.
-      DELETE mt_result_all FROM mo_query->mv_max_rows.
+    IF lines( mt_result_all ) > mo_query->mv_max_rows + 1.
+      DELETE mt_result_all FROM mo_query->mv_max_rows + 2.
     ENDIF.
   ENDMETHOD.
 
