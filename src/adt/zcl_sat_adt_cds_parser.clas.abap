@@ -104,8 +104,9 @@ CLASS zcl_sat_adt_cds_parser IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD parse_cds.
-    DATA lv_ddlname TYPE ddlname.
-    DATA lv_entity  TYPE zsat_entity_id.
+    DATA lv_ddlname    TYPE ddlname.
+    DATA lv_entity     TYPE zsat_entity_id.
+    DATA lt_ddlsources TYPE cl_ddl_parser=>ddlsources.
 
     " Determine the correct DDL name first
     SELECT SINGLE ddlname,
@@ -127,8 +128,17 @@ CLASS zcl_sat_adt_cds_parser IMPLEMENTATION.
       RETURN.
     ENDIF.
 
+    lt_ddlsources = VALUE #( ( ls_cds ) ).
+
+    " find extend views for given cds and include them in the parser
+    SELECT *
+      FROM ddddlsrc
+      WHERE parentname = @lv_ddlname
+        AND as4local = 'A'
+      APPENDING TABLE @lt_ddlsources.
+
     DATA(lo_parser) = NEW cl_ddl_parser( ).
-    DATA(lo_stmnt) = lo_parser->parse_cds( it_sources = VALUE #( ( ls_cds ) )
+    DATA(lo_stmnt) = lo_parser->parse_cds( it_sources = lt_ddlsources
                                            iv_bitset  = cl_ddl_parser=>set_bitmask( iv_semantic      = abap_true
                                                                                     iv_ars_check_off = abap_true
                                                                                     iv_trace         = abap_false
