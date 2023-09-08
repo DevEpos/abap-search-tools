@@ -66,7 +66,14 @@ CLASS ltcl_abap_unit DEFINITION FINAL FOR TESTING
     METHODS search_with_intf_usage FOR TESTING.
     METHODS search_with_attribute  FOR TESTING.
     METHODS search_with_method     FOR TESTING.
-    METHODS search_api             FOR TESTING.
+    METHODS search_user            FOR TESTING.
+    METHODS search_createdon FOR TESTING RAISING cx_static_check.
+    METHODS search_changedby FOR TESTING RAISING cx_static_check.
+    METHODS search_changedon FOR TESTING RAISING cx_static_check.
+    METHODS search_package FOR TESTING RAISING cx_static_check.
+    METHODS search_comp FOR TESTING RAISING cx_static_check.
+    METHODS search_appl FOR TESTING RAISING cx_static_check.
+    METHODS search_cls_user_meth_user FOR TESTING RAISING cx_static_check.
 ENDCLASS.
 
 
@@ -95,7 +102,8 @@ CLASS ltcl_abap_unit IMPLEMENTATION.
     DATA(lo_query) = NEW lcl_query(
                              it_search_options = VALUE #(
                                  ( option      = zif_sat_c_object_search=>c_general_search_params-description
-                                   value_range = VALUE #( ( low = to_upper( 'Special Listener for Self-Test' ) ) ) ) )
+                                   target      = zif_sat_c_object_search=>c_search_fields-object_filter_input_key
+                                   value_range = VALUE #( ( sign = 'I' option = 'EQ' low = 'Search provider for ABAP OO Classes/interfaces' ) ) ) )
                              iv_type           = zif_sat_c_object_search=>c_search_type-class_interface ).
     TRY.
         mr_cut->zif_sat_object_search_provider~search( EXPORTING io_query  = lo_query
@@ -159,6 +167,7 @@ CLASS ltcl_abap_unit IMPLEMENTATION.
         it_search_term    = VALUE #( ( values = VALUE #( ( sign = 'I' option = 'EQ' low = 'CL_ADT_RES_NAMED_ITEMS' ) ) ) )
         it_search_options = VALUE #(
             ( option      = zif_sat_c_object_search=>c_class_intf_search_option-flag
+              target      = zif_sat_c_object_search=>c_search_fields-object_filter_input_key
               value_range = VALUE #( ( sign = 'E' option = 'EQ' low = zif_sat_c_object_search=>c_class_intf_flags-has_test ) ) ) )
         iv_type           = zif_sat_c_object_search=>c_search_type-class_interface ).
     TRY.
@@ -179,6 +188,7 @@ CLASS ltcl_abap_unit IMPLEMENTATION.
     DATA(lo_query) = NEW lcl_query(
         it_search_options = VALUE #(
             ( option      = zif_sat_c_object_search=>c_general_search_params-type
+              target      = zif_sat_c_object_search=>c_search_fields-object_filter_input_key
               value_range = VALUE #( ( sign = 'I' option = 'EQ' low = zif_sat_c_object_search=>c_class_types-interface ) ) ) )
         iv_type           = zif_sat_c_object_search=>c_search_type-class_interface
         iv_max_rows       = 1 ).
@@ -201,6 +211,7 @@ CLASS ltcl_abap_unit IMPLEMENTATION.
     DATA(lo_query) = NEW lcl_query(
         it_search_options = VALUE #(
             ( option      = zif_sat_c_object_search=>c_class_intf_search_option-friend
+              target      = zif_sat_c_object_search=>c_search_fields-object_filter_input_key
               value_range = VALUE #( ( sign = 'I' option = 'EQ' low = 'IF_ALV_RM_GRID_FRIEND' ) ) ) )
         iv_type           = zif_sat_c_object_search=>c_search_type-class_interface
         iv_max_rows       = 1 ).
@@ -222,6 +233,7 @@ CLASS ltcl_abap_unit IMPLEMENTATION.
         it_search_term    = VALUE #( ( values = VALUE #( ( sign = 'I' option = 'CP' low = 'CL_GUI_ALV*' ) ) ) )
         it_search_options = VALUE #(
             ( option      = zif_sat_c_object_search=>c_class_intf_search_option-super_type
+              target      = zif_sat_c_object_search=>c_search_fields-object_filter_input_key
               value_range = VALUE #( ( sign = 'I' option = 'EQ' low = 'CL_GUI_ALV_GRID_BASE' ) ) ) )
         iv_type           = zif_sat_c_object_search=>c_search_type-class_interface
         iv_max_rows       = 1 ).
@@ -242,6 +254,7 @@ CLASS ltcl_abap_unit IMPLEMENTATION.
     DATA(lo_query) = NEW lcl_query(
                              it_search_options = VALUE #(
                                  ( option      = zif_sat_c_object_search=>c_class_intf_search_option-interface
+                                   target      = zif_sat_c_object_search=>c_search_fields-object_filter_input_key
                                    value_range = VALUE #( ( sign = 'I' option = 'EQ' low = 'IF_AMDP_MARKER_HDB' ) ) ) )
                              iv_type           = zif_sat_c_object_search=>c_search_type-class_interface
                              iv_max_rows       = 1 ).
@@ -299,12 +312,13 @@ CLASS ltcl_abap_unit IMPLEMENTATION.
     cl_abap_unit_assert=>assert_not_bound( act = lx_search_error ).
   ENDMETHOD.
 
-  METHOD search_api.
+  METHOD search_user.
     mr_cut = NEW #( ).
 
     DATA(lo_query) = NEW lcl_query( it_search_options = VALUE #(
-                                        ( option      = zif_sat_c_object_search=>c_general_search_params-release_state
-                                          value_range = VALUE #( ( sign  = 'I'  option  = 'EQ' low  = 'RELEASED' ) ) ) )
+                                        ( option      = zif_sat_c_object_search=>c_general_search_params-user
+                                          target      = zif_sat_c_object_search=>c_search_fields-object_filter_input_key
+                                          value_range = VALUE #( ( sign  = 'I'  option  = 'EQ' low  = 'SAP' ) ) ) )
                                     iv_type           = zif_sat_c_object_search=>c_search_type-class_interface
                                     iv_max_rows       = 1 ).
     TRY.
@@ -316,4 +330,140 @@ CLASS ltcl_abap_unit IMPLEMENTATION.
 
     cl_abap_unit_assert=>assert_not_bound( act = lx_search_error ).
   ENDMETHOD.
+
+  METHOD search_createdon.
+    mr_cut = NEW #( ).
+
+    DATA(lo_query) = NEW lcl_query( it_search_options = VALUE #(
+                                        ( option      = zif_sat_c_object_search=>c_general_search_params-created_on
+                                          target      = zif_sat_c_object_search=>c_search_fields-object_filter_input_key
+                                          value_range = VALUE #( ( sign  = 'I'  option  = 'EQ' low  = '20210101' ) ) ) )
+                                    iv_type           = zif_sat_c_object_search=>c_search_type-class_interface
+                                    iv_max_rows       = 1 ).
+    TRY.
+        mr_cut->zif_sat_object_search_provider~search( EXPORTING io_query  = lo_query
+                                                       IMPORTING et_result = DATA(lt_result) ).
+        cl_abap_unit_assert=>assert_not_initial( act = lt_result ).
+      CATCH zcx_sat_object_search INTO DATA(lx_search_error).
+    ENDTRY.
+
+    cl_abap_unit_assert=>assert_not_bound( act = lx_search_error ).
+  ENDMETHOD.
+
+  METHOD search_changedby.
+    mr_cut = NEW #( ).
+
+    DATA(lo_query) = NEW lcl_query( it_search_options = VALUE #(
+                                        ( option      = zif_sat_c_object_search=>c_general_search_params-changed_by
+                                          target      = zif_sat_c_object_search=>c_search_fields-object_filter_input_key
+                                          value_range = VALUE #( ( sign  = 'I'  option  = 'EQ' low  = 'SAP' ) ) ) )
+                                    iv_type           = zif_sat_c_object_search=>c_search_type-class_interface
+                                    iv_max_rows       = 1 ).
+    TRY.
+        mr_cut->zif_sat_object_search_provider~search( EXPORTING io_query  = lo_query
+                                                       IMPORTING et_result = DATA(lt_result) ).
+        cl_abap_unit_assert=>assert_not_initial( act = lt_result ).
+      CATCH zcx_sat_object_search INTO DATA(lx_search_error).
+    ENDTRY.
+
+    cl_abap_unit_assert=>assert_not_bound( act = lx_search_error ).
+  ENDMETHOD.
+
+  METHOD search_changedon.
+    mr_cut = NEW #( ).
+
+    DATA(lo_query) = NEW lcl_query( it_search_options = VALUE #(
+                                        ( option      = zif_sat_c_object_search=>c_general_search_params-changed_on
+                                          target      = zif_sat_c_object_search=>c_search_fields-object_filter_input_key
+                                          value_range = VALUE #( ( sign  = 'I'  option  = 'EQ' low  = '20210101' ) ) ) )
+                                    iv_type           = zif_sat_c_object_search=>c_search_type-class_interface
+                                    iv_max_rows       = 1 ).
+    TRY.
+        mr_cut->zif_sat_object_search_provider~search( EXPORTING io_query  = lo_query
+                                                       IMPORTING et_result = DATA(lt_result) ).
+        cl_abap_unit_assert=>assert_not_initial( act = lt_result ).
+      CATCH zcx_sat_object_search INTO DATA(lx_search_error).
+    ENDTRY.
+
+    cl_abap_unit_assert=>assert_not_bound( act = lx_search_error ).
+  ENDMETHOD.
+  METHOD search_package.
+    mr_cut = NEW #( ).
+
+    DATA(lo_query) = NEW lcl_query( it_search_options = VALUE #(
+                                        ( option      = zif_sat_c_object_search=>c_general_search_params-package
+                                          target      = zif_sat_c_object_search=>c_search_fields-object_filter_input_key
+                                          value_range = VALUE #( ( sign  = 'I'  option  = 'EQ' low  = '$TMP' ) ) ) )
+                                    iv_type           = zif_sat_c_object_search=>c_search_type-class_interface
+                                    iv_max_rows       = 1 ).
+    TRY.
+        mr_cut->zif_sat_object_search_provider~search( EXPORTING io_query  = lo_query
+                                                       IMPORTING et_result = DATA(lt_result) ).
+        cl_abap_unit_assert=>assert_not_initial( act = lt_result ).
+      CATCH zcx_sat_object_search INTO DATA(lx_search_error).
+    ENDTRY.
+
+    cl_abap_unit_assert=>assert_not_bound( act = lx_search_error ).
+  ENDMETHOD.
+  METHOD search_comp.
+    mr_cut = NEW #( ).
+
+    DATA(lo_query) = NEW lcl_query( it_search_options = VALUE #(
+                                        ( option      = zif_sat_c_object_search=>c_general_search_params-software_component
+                                          target      = zif_sat_c_object_search=>c_search_fields-object_filter_input_key
+                                          value_range = VALUE #( ( sign  = 'I'  option  = 'EQ' low  = 'SAP_BASIS' ) ) ) )
+                                    iv_type           = zif_sat_c_object_search=>c_search_type-class_interface
+                                    iv_max_rows       = 1 ).
+    TRY.
+        mr_cut->zif_sat_object_search_provider~search( EXPORTING io_query  = lo_query
+                                                       IMPORTING et_result = DATA(lt_result) ).
+        cl_abap_unit_assert=>assert_not_initial( act = lt_result ).
+      CATCH zcx_sat_object_search INTO DATA(lx_search_error).
+    ENDTRY.
+
+    cl_abap_unit_assert=>assert_not_bound( act = lx_search_error ).
+  ENDMETHOD.
+  METHOD search_appl.
+    mr_cut = NEW #( ).
+
+    DATA(lo_query) = NEW lcl_query( it_search_options = VALUE #(
+                                        ( option      = zif_sat_c_object_search=>c_general_search_params-application_component
+                                          target      = zif_sat_c_object_search=>c_search_fields-object_filter_input_key
+                                          value_range = VALUE #( ( sign  = 'I'  option  = 'EQ' low  = 'BC-ABA' ) ) ) )
+                                    iv_type           = zif_sat_c_object_search=>c_search_type-class_interface
+                                    iv_max_rows       = 1 ).
+    TRY.
+        mr_cut->zif_sat_object_search_provider~search( EXPORTING io_query  = lo_query
+                                                       IMPORTING et_result = DATA(lt_result) ).
+        cl_abap_unit_assert=>assert_not_initial( act = lt_result ).
+      CATCH zcx_sat_object_search INTO DATA(lx_search_error).
+    ENDTRY.
+
+    cl_abap_unit_assert=>assert_not_bound( act = lx_search_error ).
+  ENDMETHOD.
+
+METHOD search_cls_user_meth_user.
+    mr_cut = NEW #( ).
+
+    DATA(lo_query) = NEW lcl_query( it_search_options = VALUE #(
+                                        ( option      = zif_sat_c_object_search=>c_general_search_params-user
+                                          target      = zif_sat_c_object_search=>c_search_fields-object_filter_input_key
+                                          value_range = VALUE #( ( sign  = 'I'  option  = 'EQ' low  = 'SAP' ) ) )
+                                        ( option      = zif_sat_c_object_search=>c_general_search_params-user
+                                          target      = zif_sat_c_object_search=>c_search_fields-method_filter_input_key
+                                          value_range = VALUE #( ( sign  = 'I'  option  = 'EQ' low  = 'SAP' ) ) )
+
+                                           )
+                                    iv_type           = zif_sat_c_object_search=>c_search_type-method
+                                    iv_max_rows       = 1 ).
+    TRY.
+        mr_cut->zif_sat_object_search_provider~search( EXPORTING io_query  = lo_query
+                                                       IMPORTING et_result = DATA(lt_result) ).
+        cl_abap_unit_assert=>assert_not_initial( act = lt_result ).
+      CATCH zcx_sat_object_search INTO DATA(lx_search_error).
+    ENDTRY.
+
+    cl_abap_unit_assert=>assert_not_bound( act = lx_search_error ).
+  ENDMETHOD.
+
 ENDCLASS.
