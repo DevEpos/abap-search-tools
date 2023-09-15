@@ -1,5 +1,5 @@
 @AbapCatalog.sqlViewName: 'ZSATIMSGCLAS'
-@AbapCatalog.compiler.compareFilter: true
+@AbapCatalog.compiler.CompareFilter: true
 @AbapCatalog.preserveKey: true
 @AccessControl.authorizationCheck: #NOT_REQUIRED
 @EndUserText.label: 'Message Classes'
@@ -14,6 +14,7 @@ define view ZSAT_I_MessageClass
       Repo.devclass           as DevelopmentPackage,
       MessageClass.masterlang as MasterLangauge,
       respuser                as CreatedBy,
+      created_on              as CreatedOn,
       lastuser                as ChangedBy,
       ldate                   as ChangedOn,
       stext                   as Description
