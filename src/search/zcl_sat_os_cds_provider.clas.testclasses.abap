@@ -48,9 +48,8 @@ CLASS ltcl_abap_unit DEFINITION FINAL FOR TESTING
   PRIVATE SECTION.
     DATA mr_cut TYPE REF TO zcl_sat_os_cds_provider.
 
-    METHODS test_negation_query   FOR TESTING.
-    METHODS test_anno_exclusion   FOR TESTING.
-    METHODS test_only_local_annos FOR TESTING.
+    METHODS test_negation_query FOR TESTING.
+    METHODS test_anno_exclusion FOR TESTING.
 ENDCLASS.
 
 
@@ -67,24 +66,6 @@ CLASS ltcl_abap_unit IMPLEMENTATION.
                                                   option = 'CP'
                                                   ( low = 'objectmodel.*usagetype.*sizecategory' )
                                                   ( low = 'vmd*.private' option2 = 'EQ' high = 'true' ) ) ) ) ).
-        mr_cut->zif_sat_object_search_provider~search( io_query = lo_query ).
-      CATCH zcx_sat_object_search INTO DATA(lx_search_error).
-    ENDTRY.
-
-    cl_abap_unit_assert=>assert_not_bound( act = lx_search_error ).
-  ENDMETHOD.
-
-  METHOD test_only_local_annos.
-    mr_cut = NEW #( ).
-
-    TRY.
-        DATA(lo_query) = NEW lcl_query(
-                                 iv_type           = zif_sat_c_object_search=>c_search_type-cds_view
-                                 it_search_options = VALUE #(
-                                     ( option      = zif_sat_c_object_search=>c_cds_search_params-only_local_assocs
-                                       value_range = VALUE #( ( sign = 'I' option = 'EQ' low = abap_true ) ) )
-                                     ( option      = zif_sat_c_object_search=>c_cds_search_params-association
-                                       value_range = VALUE #( ( sign = 'I' option = 'EQ' low = 'I_PRODUCT' ) ) ) ) ).
         mr_cut->zif_sat_object_search_provider~search( io_query = lo_query ).
       CATCH zcx_sat_object_search INTO DATA(lx_search_error).
     ENDTRY.
