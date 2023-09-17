@@ -14,6 +14,7 @@ define view ZSAT_I_MessageClass
       Repo.devclass           as DevelopmentPackage,
       MessageClass.masterlang as MasterLangauge,
       respuser                as CreatedBy,
+      created_on              as CreatedOn,
       lastuser                as ChangedBy,
       ldate                   as ChangedOn,
       stext                   as Description,
