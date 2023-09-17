@@ -23,7 +23,6 @@ CLASS zcl_sat_os_cds_provider DEFINITION
     DATA mv_anno_subquery             TYPE string.
     DATA mv_select_from_subquery      TYPE string.
     DATA mv_assoc_subquery            TYPE string.
-    DATA mv_only_local_assoc_subquery TYPE string.
     DATA mv_param_subquery            TYPE string.
     DATA mv_params_subquery           TYPE string.
 
@@ -110,10 +109,6 @@ CLASS zcl_sat_os_cds_provider IMPLEMENTATION.
     mv_assoc_subquery = |SELECT DISTINCT strucobjn | && c_cr_lf &&
                         | FROM { zif_sat_c_select_source_id=>dd08b } | && c_cr_lf &&
                         | WHERE |.
-    mv_only_local_assoc_subquery = |SELECT DISTINCT strucobjn | && c_cr_lf &&
-                                   | FROM { zif_sat_c_select_source_id=>dd08b } | && c_cr_lf &&
-                                   | WHERE strucobjn_s = @space| && c_cr_lf &&
-                                   |   AND |.
     mv_select_from_subquery = |SELECT DISTINCT ddlviewname | && c_cr_lf &&
                               | FROM { zif_sat_c_select_source_id=>zsat_i_cdsfrompartentity } | && c_cr_lf &&
                               | WHERE |.
@@ -387,19 +382,15 @@ CLASS zcl_sat_os_cds_provider IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD add_association_option_filter.
-    split_including_excluding(
-      EXPORTING it_values    = it_values
-      IMPORTING et_including = DATA(lt_including)
-                et_excluding = DATA(lt_excluding)
-    ).
+    split_including_excluding( EXPORTING it_values    = it_values
+                               IMPORTING et_including = DATA(lt_including)
+                                         et_excluding = DATA(lt_excluding) ).
 
     IF lt_excluding IS NOT INITIAL.
-      create_not_in_filter(
-          iv_subquery_fieldname = 'strucobjn_t'
-          iv_fieldname          = |{ c_base_alias }~{ c_fields-ddlname }|
-          it_excluding          = lt_excluding
-          iv_subquery           = mv_assoc_subquery
-      ).
+      create_not_in_filter( iv_subquery_fieldname = 'strucobjn_t'
+                            iv_fieldname          = |{ c_base_alias }~{ c_fields-ddlname }|
+                            it_excluding          = lt_excluding
+                            iv_subquery           = mv_assoc_subquery ).
     ENDIF.
 
     IF lt_including IS NOT INITIAL.
@@ -409,10 +400,8 @@ CLASS zcl_sat_os_cds_provider IMPLEMENTATION.
           it_conditions = VALUE #(
               ( field = 'strucobjn' ref_field = c_fields-ddlname ref_table_alias = c_base_alias type = zif_sat_c_join_cond_type=>field ) ) ).
 
-      add_option_filter(
-          iv_fieldname = |{ c_used_in_association_alias }~strucobjn_t|
-          it_values    = it_values
-      ).
+      add_option_filter( iv_fieldname = |{ c_used_in_association_alias }~strucobjn_t|
+                         it_values    = it_values ).
       mv_assoc_filter_count = lines( lt_including ).
     ENDIF.
   ENDMETHOD.
