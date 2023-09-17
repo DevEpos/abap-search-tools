@@ -1,0 +1,29 @@
+
+ABAP Search and Analysis Tools changelog
+=================
+
+Legend
+------
+* : fixed
+! : changed
++ : added
+- : removed
+
+2023-09-18 v2.0.0
+-------------------
+
+! Complete overhaul of search API
++ New filters 'changedby', 'changed', 'comp', 'appl' for CDS search
++ New filters 'changedby', 'changed', 'comp', 'appl', 'enhcat', 'maintflag', 'storetype', 
+  'buffering', 'buffertype', 'dataclass', 'sizecat' for DB Table search
++ New filters 'changedby', 'changed', 'comp', 'appl' for Class/Intf search
++ New object search type 'View'
++ New object search type 'Method'
++ New object search typp 'Message'
++ CDS Where-Used analysis has a dedicated API now
+
+
+2019-11-26 v1.0.0
+-------------------
+
++ Initial release
