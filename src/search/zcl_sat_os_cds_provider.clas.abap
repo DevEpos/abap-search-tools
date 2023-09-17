@@ -23,7 +23,6 @@ CLASS zcl_sat_os_cds_provider DEFINITION
     DATA mv_anno_subquery             TYPE string.
     DATA mv_select_from_subquery      TYPE string.
     DATA mv_assoc_subquery            TYPE string.
-    DATA mv_only_local_assoc_subquery TYPE string.
     DATA mv_param_subquery            TYPE string.
     DATA mv_params_subquery           TYPE string.
 
@@ -110,10 +109,6 @@ CLASS zcl_sat_os_cds_provider IMPLEMENTATION.
     mv_assoc_subquery = |SELECT DISTINCT strucobjn | && c_cr_lf &&
                         | FROM { zif_sat_c_select_source_id=>dd08b } | && c_cr_lf &&
                         | WHERE |.
-    mv_only_local_assoc_subquery = |SELECT DISTINCT strucobjn | && c_cr_lf &&
-                                   | FROM { zif_sat_c_select_source_id=>dd08b } | && c_cr_lf &&
-                                   | WHERE strucobjn_s = @space| && c_cr_lf &&
-                                   |   AND |.
     mv_select_from_subquery = |SELECT DISTINCT ddlviewname | && c_cr_lf &&
                               | FROM { zif_sat_c_select_source_id=>zsat_i_cdsfrompartentity } | && c_cr_lf &&
                               | WHERE |.
@@ -387,15 +382,6 @@ CLASS zcl_sat_os_cds_provider IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD add_association_option_filter.
-    DATA lf_only_local_assoc TYPE abap_bool.
-
-    DATA(lt_local_assocs_only_option) = VALUE #( mo_search_query->mt_search_options[
-                                                     option = c_cds_search_params-only_local_assocs
-                                                 ]-value_range OPTIONAL ).
-    IF lt_local_assocs_only_option IS NOT INITIAL.
-      lf_only_local_assoc = lt_local_assocs_only_option[ 1 ]-low.
-    ENDIF.
-
     split_including_excluding( EXPORTING it_values    = it_values
                                IMPORTING et_including = DATA(lt_including)
                                          et_excluding = DATA(lt_excluding) ).
@@ -404,9 +390,7 @@ CLASS zcl_sat_os_cds_provider IMPLEMENTATION.
       create_not_in_filter( iv_subquery_fieldname = 'strucobjn_t'
                             iv_fieldname          = |{ c_base_alias }~{ c_fields-ddlname }|
                             it_excluding          = lt_excluding
-                            iv_subquery           = COND #( WHEN lf_only_local_assoc = abap_true
-                                                            THEN mv_only_local_assoc_subquery
-                                                            ELSE mv_assoc_subquery ) ).
+                            iv_subquery           = mv_assoc_subquery ).
     ENDIF.
 
     IF lt_including IS NOT INITIAL.
@@ -418,12 +402,6 @@ CLASS zcl_sat_os_cds_provider IMPLEMENTATION.
 
       add_option_filter( iv_fieldname = |{ c_used_in_association_alias }~strucobjn_t|
                          it_values    = it_values ).
-      IF lf_only_local_assoc = abap_true.
-        " Only the locally defined Associations are considered as a usage
-        add_option_filter(
-            iv_fieldname = |{ c_used_in_association_alias }~strucobjn_s|
-            it_values    = VALUE #( ( sign = zif_sat_c_options=>including option = zif_sat_c_options=>equals ) ) ).
-      ENDIF.
       mv_assoc_filter_count = lines( lt_including ).
     ENDIF.
   ENDMETHOD.
