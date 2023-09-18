@@ -5,7 +5,7 @@ CLASS lcl_node_helper IMPLEMENTATION.
   METHOD constructor.
     mo_current_node = NEW #( ).
     mo_current_node->entity_type     = zif_sat_c_entity_type=>cds_view.
-    mo_current_node->type            = 'ENTITY'.
+    mo_current_node->type            = zcl_sat_adt_cds_parser=>c_node_type-entity.
     mo_current_node->name            = iv_name.
     mo_current_node->entity_name     = iv_entity_name.
     mo_current_node->raw_entity_name = iv_raw_entity_name.
@@ -33,7 +33,9 @@ CLASS lcl_node_helper IMPLEMENTATION.
     DATA(lo_child) = NEW lcl_node( ).
     lo_child->name        = iv_name.
     lo_child->entity_type = iv_entity_type.
-    lo_child->type        = COND #( WHEN iv_type IS NOT INITIAL THEN iv_type ELSE 'ENTITY' ).
+    lo_child->type        = COND #( WHEN iv_type IS NOT INITIAL
+                                    THEN iv_type
+                                    ELSE zcl_sat_adt_cds_parser=>c_node_type-entity ).
     lo_child->relation    = iv_relation.
     lo_child->alias       = iv_alias.
     lo_child->parent      = mo_current_node.
@@ -237,22 +239,21 @@ CLASS lcl_ddl_view_stmnt_intrpt IMPLEMENTATION.
       WHEN cl_qlast_constants=>datasource_table.
         DATA(lo_table_datasource) = CAST cl_qlast_table_datasource( io_datasource ).
 
-        mo_node_helper->add_child(
-            io_parent_node = io_parent_node
-            iv_name        = lo_table_datasource->get_name( )
-            iv_entity_name = lo_table_datasource->get_name( )
-            iv_relation    = mo_node_helper->get_relation( io_parent_node     = io_parent_node
-                                                           iv_datasource_type = iv_parent_type )
-            iv_entity_type = SWITCH #( lo_table_datasource->get_tabletype( )
-                                       WHEN cl_qlast_constants=>tabtype_entity OR
-                                            cl_qlast_constants=>tabtype_view_entity OR
-                                            cl_qlast_constants=>tabtype_table_function THEN
-                                         zif_sat_c_entity_type=>cds_view
-                                       WHEN cl_qlast_constants=>tabtype_transparent THEN
-                                         zif_sat_c_entity_type=>table
-                                       WHEN cl_qlast_constants=>tabtype_view THEN
-                                         zif_sat_c_entity_type=>view )
-            iv_alias       = lo_table_datasource->get_alias( upper_case = abap_false ) ).
+        mo_node_helper->add_child( io_parent_node = io_parent_node
+                                   iv_name        = lo_table_datasource->get_name( )
+                                   iv_entity_name = lo_table_datasource->get_name( )
+                                   iv_relation    = mo_node_helper->get_relation( io_parent_node     = io_parent_node
+                                                                                  iv_datasource_type = iv_parent_type )
+                                   iv_entity_type = SWITCH #( lo_table_datasource->get_tabletype( )
+                                                              WHEN cl_qlast_constants=>tabtype_entity OR
+                                                                   cl_qlast_constants=>tabtype_view_entity OR
+                                                                   cl_qlast_constants=>tabtype_table_function THEN
+                                                                zif_sat_c_entity_type=>cds_view
+                                                              WHEN cl_qlast_constants=>tabtype_transparent THEN
+                                                                zif_sat_c_entity_type=>table
+                                                              WHEN cl_qlast_constants=>tabtype_view THEN
+                                                                zif_sat_c_entity_type=>view )
+                                   iv_alias       = lo_table_datasource->get_alias( upper_case = abap_false ) ).
 
       WHEN cl_qlast_constants=>datasource_inner OR
            cl_qlast_constants=>datasource_cross OR
@@ -298,11 +299,9 @@ CLASS lcl_ddl_view_stmnt_intrpt IMPLEMENTATION.
     ENDLOOP.
   ENDMETHOD.
 
-
   METHOD get_root_select.
     ro_select = mo_stmnt->get_select( ).
   ENDMETHOD.
-
 ENDCLASS.
 
 
@@ -314,12 +313,10 @@ CLASS lcl_ddl_tab_func_stmnt_intrpt IMPLEMENTATION.
 
   METHOD interpret.
   ENDMETHOD.
-
 ENDCLASS.
 
 
 CLASS lcl_ddl_view2_stmnt_intrpt IMPLEMENTATION.
-
   METHOD get_root_select.
     IF mo_stmnt->get_query( ) IS INSTANCE OF cl_qlast_select.
       ro_select = CAST #( mo_stmnt->get_query( ) ).
@@ -327,11 +324,9 @@ CLASS lcl_ddl_view2_stmnt_intrpt IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD constructor.
-    super->constructor(
-      if_associations = if_associations
-      io_node_helper  = io_node_helper
-      io_stmnt        = io_stmnt ).
+    super->constructor( if_associations = if_associations
+                        io_node_helper  = io_node_helper
+                        io_stmnt        = io_stmnt ).
     mo_stmnt = io_stmnt.
   ENDMETHOD.
-
 ENDCLASS.
