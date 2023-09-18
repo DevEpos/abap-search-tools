@@ -34,6 +34,7 @@ CLASS zcl_sat_adt_cds_parser DEFINITION
     CONSTANTS:
       BEGIN OF c_sql_relation,
         from             TYPE string VALUE 'FROM',
+        implemented_by   TYPE string VALUE 'IMPLEMENTED_BY',
         association      TYPE string VALUE 'ASSOCIATION',
         inner_join       TYPE string VALUE 'INNER_JOIN',
         left_outer_join  TYPE string VALUE 'LEFT_OUTER_JOIN',
@@ -48,6 +49,8 @@ CLASS zcl_sat_adt_cds_parser DEFINITION
         result       TYPE string VALUE 'RESULT',
         union        TYPE string VALUE 'UNION',
         union_all    TYPE string VALUE 'UNION_ALL',
+        abap         TYPE string VALUE 'ABAP',
+        entity       TYPE string VALUE 'ENTITY',
       END OF c_node_type.
 
     DATA ms_result   TYPE zif_sat_ty_adt_types=>ty_cds_top_down_result READ-ONLY.
@@ -410,13 +413,10 @@ CLASS zcl_sat_adt_cds_parser IMPLEMENTATION.
 
     LOOP AT lt_amdp_info ASSIGNING FIELD-SYMBOL(<ls_amdp_info>).
       SPLIT <ls_amdp_info>-name AT '=>' INTO <ls_amdp_info>-class <ls_amdp_info>-method.
-      " TODO: use cl_src_adt_res_obj_struc to read the object structure to be able
-      "       to get the ADT URI for the specific AMDP method
-      DATA(ls_adt_object) = zcl_sat_adt_util=>create_adt_uri( iv_tadir_type = 'CLAS'
-                                                              iv_name       = CONV #( <ls_amdp_info>-class ) ).
       lt_class_name_range = VALUE #( BASE lt_class_name_range ( sign = 'I' option = 'EQ' low = <ls_amdp_info>-class ) ).
-      <ls_amdp_info>-uri      = ls_adt_object-uri.
-      <ls_amdp_info>-type     = ls_adt_object-type.
+      <ls_amdp_info>-uri      = |/sap/bc/adt/oo/classes/{ to_lower( cl_http_utility=>escape_url( <ls_amdp_info>-class  ) ) }| &&
+                                |/source/main#type=CLAS/OM;name={ to_lower( <ls_amdp_info>-method ) }|.
+      <ls_amdp_info>-type     = 'CLAS/OC'.
       " collect range of applicable CDS views for this table function
       <ls_amdp_info>-entities = VALUE #( FOR cds IN lt_table_func WHERE ( name = <ls_amdp_info>-name )
                                          ( sign = 'I' option = 'EQ' low = cds-entity ) ).
@@ -436,8 +436,9 @@ CLASS zcl_sat_adt_cds_parser IMPLEMENTATION.
         DATA(lo_amdp_node) = NEW lcl_node( ).
         lo_amdp_node->adt_type        = <ls_amdp_info>-type.
         lo_amdp_node->name            = <ls_amdp_info>-class.
-        lo_amdp_node->raw_entity_name = <ls_amdp_info>-class.
-        lo_amdp_node->relation        = c_sql_relation-from.
+        lo_amdp_node->type            = c_node_type-abap.
+        lo_amdp_node->raw_entity_name = <ls_amdp_info>-name.
+        lo_amdp_node->relation        = c_sql_relation-implemented_by.
         lo_amdp_node->description     = lv_description.
         lo_amdp_node->uri             = <ls_amdp_info>-uri.
         <ls_cds_node>-node->children = VALUE #( ( lo_amdp_node ) ).
