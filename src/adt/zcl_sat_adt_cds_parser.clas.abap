@@ -417,6 +417,8 @@ CLASS zcl_sat_adt_cds_parser IMPLEMENTATION.
       " collect range of applicable CDS views for this table function
       <ls_amdp_info>-entities = VALUE #( FOR cds IN lt_table_func WHERE ( name = <ls_amdp_info>-name )
                                          ( sign = 'I' option = 'EQ' low = cds-entity ) ).
+      " update default arrow (=>) with unicode array
+      <ls_amdp_info>-name     = <ls_amdp_info>-class && `→` && <ls_amdp_info>-method.
     ENDLOOP.
 
     SELECT clsname,
