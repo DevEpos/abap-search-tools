@@ -23,6 +23,8 @@ CLASS zcl_sat_os_subp_meth_redef DEFINITION
         classname  TYPE string VALUE 'classname',
         package    TYPE string VALUE 'developmentpackage',
         tadir_type TYPE string VALUE 'tadirtype',
+        methodname TYPE string VALUE 'methodname',
+        isabstract TYPE string VALUE 'isabstract',
       END OF c_fields.
 
     DATA mt_changed_on_filter TYPE RANGE OF dats.
@@ -42,18 +44,18 @@ ENDCLASS.
 
 CLASS zcl_sat_os_subp_meth_redef IMPLEMENTATION.
   METHOD prepare_search.
-    set_base_select_table( iv_entity = get_cds_sql_name( |{ zif_sat_c_select_source_id=>zsat_i_classinterface }| )
+    set_base_select_table( iv_entity = |{ zif_sat_c_select_source_id=>zsat_i_classinterface }|
                            iv_alias  = c_clif_alias ).
 
     " join to class/interface always necessary because of devclass/tadir type
-    add_join_table( iv_join_table = |{ zif_sat_c_select_source_id=>seoredef }|
+    add_join_table( iv_join_table = |{ zif_sat_c_select_source_id=>zsat_i_redefinedmethod }|
                     iv_alias      = c_alias_names-method
                     it_conditions = VALUE #( and_or = zif_sat_c_selection_condition=>and
-                                             ( field           = 'clsname'
+                                             ( field           = c_fields-classname
                                                ref_field       = c_fields-classname
                                                ref_table_alias = c_clif_alias
                                                type            = zif_sat_c_join_cond_type=>field )
-                                             ( field           = 'mtdabstrct'
+                                             ( field           = c_fields-isabstract
                                                tabname_alias   = c_alias_names-method
                                                type            = zif_sat_c_join_cond_type=>filter
                                                value           = abap_false ) ) ).
@@ -64,7 +66,7 @@ CLASS zcl_sat_os_subp_meth_redef IMPLEMENTATION.
     add_select_field( iv_fieldname       = c_fields-classname
                       iv_fieldname_alias = c_result_fields-raw_object_name
                       iv_entity          = c_clif_alias ).
-    add_select_field( iv_fieldname       = 'mtdname'
+    add_select_field( iv_fieldname       = c_fields-methodname
                       iv_fieldname_alias = c_result_fields-method_name
                       iv_entity          = c_alias_names-method ).
     add_select_field( iv_fieldname       = c_fields-tadir_type
@@ -119,7 +121,7 @@ CLASS zcl_sat_os_subp_meth_redef IMPLEMENTATION.
 
     add_search_terms_to_search(
         it_search_terms = VALUE #( BASE lr_method_names->* ( LINES OF lt_temp_method_name_terms ) )
-        it_field_names  = VALUE #( ( |{ c_alias_names-method }~mtdname| ) ) ).
+        it_field_names  = VALUE #( ( |{ c_alias_names-method }~{ c_fields-methodname }| ) ) ).
   ENDMETHOD.
 
   METHOD set_method_filters.
