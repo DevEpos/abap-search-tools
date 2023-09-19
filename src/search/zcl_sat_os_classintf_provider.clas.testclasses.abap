@@ -100,11 +100,11 @@ CLASS ltcl_abap_unit IMPLEMENTATION.
     mr_cut = NEW #( ).
 
     DATA(lo_query) = NEW lcl_query(
-                             it_search_options = VALUE #(
-                                 ( option      = zif_sat_c_object_search=>c_general_search_params-description
-                                   target      = zif_sat_c_object_search=>c_search_fields-object_filter_input_key
-                                   value_range = VALUE #( ( sign = 'I' option = 'EQ' low = 'Search provider for ABAP OO Classes/interfaces' ) ) ) )
-                             iv_type           = zif_sat_c_object_search=>c_search_type-class_interface ).
+        it_search_options = VALUE #(
+            ( option      = zif_sat_c_object_search=>c_general_search_params-description
+              target      = zif_sat_c_object_search=>c_search_fields-object_filter_input_key
+              value_range = VALUE #( ( sign = 'I' option = 'EQ' low = 'Search provider for ABAP OO Classes/interfaces' ) ) ) )
+        iv_type           = zif_sat_c_object_search=>c_search_type-class_interface ).
     TRY.
         mr_cut->zif_sat_object_search_provider~search( EXPORTING io_query  = lo_query
                                                        IMPORTING et_result = DATA(lt_result) ).
@@ -391,6 +391,7 @@ CLASS ltcl_abap_unit IMPLEMENTATION.
 
     cl_abap_unit_assert=>assert_not_bound( act = lx_search_error ).
   ENDMETHOD.
+
   METHOD search_package.
     mr_cut = NEW #( ).
 
@@ -409,15 +410,17 @@ CLASS ltcl_abap_unit IMPLEMENTATION.
 
     cl_abap_unit_assert=>assert_not_bound( act = lx_search_error ).
   ENDMETHOD.
+
   METHOD search_comp.
     mr_cut = NEW #( ).
 
-    DATA(lo_query) = NEW lcl_query( it_search_options = VALUE #(
-                                        ( option      = zif_sat_c_object_search=>c_general_search_params-software_component
-                                          target      = zif_sat_c_object_search=>c_search_fields-object_filter_input_key
-                                          value_range = VALUE #( ( sign  = 'I'  option  = 'EQ' low  = 'SAP_BASIS' ) ) ) )
-                                    iv_type           = zif_sat_c_object_search=>c_search_type-class_interface
-                                    iv_max_rows       = 1 ).
+    DATA(lo_query) = NEW lcl_query(
+                             it_search_options = VALUE #(
+                                 ( option      = zif_sat_c_object_search=>c_general_search_params-software_component
+                                   target      = zif_sat_c_object_search=>c_search_fields-object_filter_input_key
+                                   value_range = VALUE #( ( sign  = 'I'  option  = 'EQ' low  = 'SAP_BASIS' ) ) ) )
+                             iv_type           = zif_sat_c_object_search=>c_search_type-class_interface
+                             iv_max_rows       = 1 ).
     TRY.
         mr_cut->zif_sat_object_search_provider~search( EXPORTING io_query  = lo_query
                                                        IMPORTING et_result = DATA(lt_result) ).
@@ -427,15 +430,17 @@ CLASS ltcl_abap_unit IMPLEMENTATION.
 
     cl_abap_unit_assert=>assert_not_bound( act = lx_search_error ).
   ENDMETHOD.
+
   METHOD search_appl.
     mr_cut = NEW #( ).
 
-    DATA(lo_query) = NEW lcl_query( it_search_options = VALUE #(
-                                        ( option      = zif_sat_c_object_search=>c_general_search_params-application_component
-                                          target      = zif_sat_c_object_search=>c_search_fields-object_filter_input_key
-                                          value_range = VALUE #( ( sign  = 'I'  option  = 'EQ' low  = 'BC-ABA' ) ) ) )
-                                    iv_type           = zif_sat_c_object_search=>c_search_type-class_interface
-                                    iv_max_rows       = 1 ).
+    DATA(lo_query) = NEW lcl_query(
+                             it_search_options = VALUE #(
+                                 ( option      = zif_sat_c_object_search=>c_general_search_params-application_component
+                                   target      = zif_sat_c_object_search=>c_search_fields-object_filter_input_key
+                                   value_range = VALUE #( ( sign  = 'I'  option  = 'EQ' low  = 'BC-ABA' ) ) ) )
+                             iv_type           = zif_sat_c_object_search=>c_search_type-class_interface
+                             iv_max_rows       = 1 ).
     TRY.
         mr_cut->zif_sat_object_search_provider~search( EXPORTING io_query  = lo_query
                                                        IMPORTING et_result = DATA(lt_result) ).
@@ -465,8 +470,7 @@ CLASS ltcl_abap_unit IMPLEMENTATION.
         mr_cut->zif_sat_object_search_provider~search( EXPORTING io_query  = lo_query
                                                        IMPORTING et_result = DATA(lt_result) ).
         cl_abap_unit_assert=>assert_initial( lt_result ).
-      CATCH zcx_sat_object_search INTO DATA(lx_search_error).
+      CATCH zcx_sat_object_search INTO DATA(lx_search_error). " TODO: variable is assigned but never used (ABAP cleaner)
     ENDTRY.
   ENDMETHOD.
-
 ENDCLASS.

@@ -23,7 +23,7 @@ CLASS zcl_sat_os_subp_meth_redef DEFINITION
         classname  TYPE string VALUE 'classname',
         package    TYPE string VALUE 'developmentpackage',
         tadir_type TYPE string VALUE 'tadirtype',
-        methodname type string value 'methodname',
+        methodname TYPE string VALUE 'methodname',
         isabstract TYPE string VALUE 'isabstract',
       END OF c_fields.
 
