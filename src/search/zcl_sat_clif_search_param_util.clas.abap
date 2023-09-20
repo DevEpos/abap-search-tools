@@ -32,15 +32,6 @@ CLASS zcl_sat_clif_search_param_util DEFINITION
         iv_external        TYPE string
       RETURNING
         VALUE(rv_internal) TYPE seocategry.
-    "! <p class="shorttext synchronized" lang="en">Converts abap language to internal format</p>
-    "!
-    "! @parameter iv_external | <p class="shorttext synchronized" lang="en">external format</p>
-    "! @parameter rv_internal | <p class="shorttext synchronized" lang="en">internal format</p>
-    CLASS-METHODS convert_abap_lang_to_int
-      IMPORTING
-        iv_external        TYPE string
-      RETURNING
-        VALUE(rv_internal) TYPE abapvrs.
   PROTECTED SECTION.
   PRIVATE SECTION.
     CLASS-DATA mt_category_values TYPE ddfixvalues.
@@ -140,32 +131,6 @@ CLASS zcl_sat_clif_search_param_util IMPLEMENTATION.
 
       WHEN zif_sat_c_object_search=>c_class_categories-behavior.
         rv_internal = '06'.
-
-      WHEN OTHERS.
-        RAISE EXCEPTION TYPE zcx_sat_conversion_exc.
-    ENDCASE.
-  ENDMETHOD.
-
-  METHOD convert_abap_lang_to_int.
-    CASE iv_external.
-
-      WHEN zif_sat_c_object_search=>c_abap_lang_versions-unicode.
-        rv_internal = 'X'.
-
-      WHEN zif_sat_c_object_search=>c_abap_lang_versions-key_user.
-        rv_internal = '2'.
-
-      WHEN zif_sat_c_object_search=>c_abap_lang_versions-static_abap_limited_use.
-        rv_internal = '3'.
-
-      WHEN zif_sat_c_object_search=>c_abap_lang_versions-std_abap_limited_use.
-        rv_internal = '4'.
-
-      WHEN zif_sat_c_object_search=>c_abap_lang_versions-cloud_platform.
-        rv_internal = '5'.
-
-      WHEN zif_sat_c_object_search=>c_abap_lang_versions-non_unicode.
-        rv_internal = ''.
 
       WHEN OTHERS.
         RAISE EXCEPTION TYPE zcx_sat_conversion_exc.
