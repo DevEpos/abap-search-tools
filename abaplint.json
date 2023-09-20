@@ -3,7 +3,7 @@
     "files": "/src/**/*.*"
   },
   "syntax": {
-    "version": "v753",
+    "version": "v750",
     "errorNamespace": "^(Z|Y|LCL_|TY_|LIF_)"
   },
   "dependencies": [
