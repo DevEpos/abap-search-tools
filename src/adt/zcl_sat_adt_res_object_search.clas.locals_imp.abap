@@ -152,11 +152,8 @@ CLASS lcl_cds_result_converter IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD before_conversion.
-    " Positional URI is no longer needed for where used starting with NW 7.54
-    CHECK sy-saprl < '754'.
-
     " Read sources of all found DDLS search results to get row/column where the name of
-    " the entity is starting
+    " the entity is starting (required for NW <= 7.54)
     read_ddl_sources( ).
   ENDMETHOD.
 

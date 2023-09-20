@@ -59,7 +59,6 @@ CLASS zcl_sat_system_helper DEFINITION
       mtt_abap_callstack TYPE STANDARD TABLE OF mty_abap_callstack_entry WITH DEFAULT KEY .
 
     CLASS-DATA sv_cds_view_text_table TYPE tabname .
-    CLASS-DATA sf_is_750 TYPE abap_bool .
 
     CLASS-METHODS raise_general_error
       IMPORTING
@@ -109,9 +108,7 @@ CLASS zcl_sat_system_helper IMPLEMENTATION.
 
 
   METHOD get_cds_view_text_table.
-    result = COND #(
-      WHEN sy-saprl >= 750 THEN 'DDDDLSRC02BT' ELSE 'DD02BT'
-    ).
+    result = 'DDDDLSRC02BT'.
   ENDMETHOD.
 
 
