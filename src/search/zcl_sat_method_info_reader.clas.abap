@@ -253,10 +253,9 @@ CLASS zcl_sat_method_info_reader IMPLEMENTATION.
 
     DATA lt_implemented TYPE SORTED TABLE OF helper_type WITH UNIQUE KEY clsname refclsname.
 
-    SELECT
+    SELECT DISTINCT implementer~clsname,
+           implementer~refclsname
       FROM seometarel AS implementer
-      FIELDS DISTINCT implementer~clsname,
-             implementer~refclsname
       FOR ALL ENTRIES IN @it_methods
       WHERE implementer~clsname = @it_methods-current_class
         AND implementer~refclsname = @it_methods-classname
@@ -282,11 +281,10 @@ CLASS zcl_sat_method_info_reader IMPLEMENTATION.
 
     DATA lt_found_methods TYPE SORTED TABLE OF helper_type WITH UNIQUE KEY clsname cmpname.
 
-    SELECT
+    SELECT DISTINCT method~clsname,
+           method~cmpname,
+           method~mtdtype
       FROM seocompo AS method
-      FIELDS DISTINCT method~clsname,
-             method~cmpname,
-             method~mtdtype
       FOR ALL ENTRIES IN @it_methods
       WHERE method~clsname = @it_methods-current_class
         AND method~cmpname = @it_methods-method_name
@@ -316,10 +314,9 @@ CLASS zcl_sat_method_info_reader IMPLEMENTATION.
 
     DATA lt_super_class TYPE SORTED TABLE OF ty_super_class WITH UNIQUE KEY clsname refclsname.
 
-    SELECT
+    SELECT DISTINCT super_class~clsname,
+           super_class~refclsname
       FROM seometarel AS super_class
-      FIELDS DISTINCT super_class~clsname,
-             super_class~refclsname
       FOR ALL ENTRIES IN @it_methods
       WHERE super_class~clsname = @it_methods-current_class
         AND super_class~reltype = @seor_reltype_inheritance
@@ -347,22 +344,21 @@ CLASS zcl_sat_method_info_reader IMPLEMENTATION.
   METHOD read_method_infos.
     CHECK mt_methods_processed IS NOT INITIAL.
 
-    SELECT
+    SELECT DISTINCT method~clsname,
+           method~cmpname,
+           method~exposure,
+           method~mtddecltyp AS level,
+           method~mtdfinal AS is_final,
+           method_text~descript,
+           method~createdon,
+           method~author,
+           method~changedon,
+           method~changedby
       FROM seocompodf AS method
         LEFT OUTER JOIN seocompotx AS method_text
           ON  method~clsname = method_text~clsname
           AND method~cmpname = method_text~cmpname
           AND method_text~langu = @sy-langu
-      FIELDS DISTINCT method~clsname,
-             method~cmpname,
-             method~exposure,
-             method~mtddecltyp AS level,
-             method~mtdfinal AS is_final,
-             method_text~descript,
-             method~createdon,
-             method~author,
-             method~changedon,
-             method~changedby
       FOR ALL ENTRIES IN @mt_methods_processed
       WHERE method~clsname = @mt_methods_processed-classname
         AND method~cmpname = @mt_methods_processed-method_name
