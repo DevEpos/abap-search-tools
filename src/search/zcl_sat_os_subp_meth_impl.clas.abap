@@ -13,10 +13,11 @@ CLASS zcl_sat_os_subp_meth_impl DEFINITION
       RETURNING
         VALUE(result) TYPE abap_bool.
 
+    METHODS zif_sat_method_key_reader~get_method_key REDEFINITION.
+
   PROTECTED SECTION.
     METHODS prepare_search  REDEFINITION.
     METHODS do_after_search REDEFINITION.
-    METHODS get_method_key  REDEFINITION.
 
   PRIVATE SECTION.
     CONSTANTS:
@@ -31,6 +32,7 @@ CLASS zcl_sat_os_subp_meth_impl DEFINITION
       END OF c_alias_names.
 
     METHODS configure_incl_filters.
+    METHODS read_method_infos_n_filter2.
 ENDCLASS.
 
 
@@ -46,6 +48,14 @@ CLASS zcl_sat_os_subp_meth_impl IMPLEMENTATION.
       result = abap_true.
       EXIT.
     ENDLOOP.
+  ENDMETHOD.
+
+  METHOD zif_sat_method_key_reader~get_method_key.
+    cl_oo_classname_service=>get_method_by_include( EXPORTING  incname             = CONV #( iv_method_name )
+                                                    RECEIVING  mtdkey              = result
+                                                    EXCEPTIONS class_not_existing  = 1
+                                                               method_not_existing = 2
+                                                               OTHERS              = 3 ).
   ENDMETHOD.
 
   METHOD prepare_search.
@@ -113,20 +123,13 @@ CLASS zcl_sat_os_subp_meth_impl IMPLEMENTATION.
     fill_descriptions( ).
 
     set_method_filters( ).
-    read_method_infos_n_filter( ).
+*    read_method_infos_n_filter( ).
+    read_method_infos_n_filter2( ).
 
     NEW zcl_sat_meth_subco_filter( ir_result              = REF #( mt_result )
                                    if_use_and_for_options = ms_search_engine_params-use_and_cond_for_options
                                    it_meth_param_filter   = mt_meth_param_filter
                                    it_meth_exc_filter     = mt_meth_exc_filter )->apply( ).
-  ENDMETHOD.
-
-  METHOD get_method_key.
-    cl_oo_classname_service=>get_method_by_include( EXPORTING  incname             = CONV #( iv_method_name )
-                                                    RECEIVING  mtdkey              = result
-                                                    EXCEPTIONS class_not_existing  = 1
-                                                               method_not_existing = 2
-                                                               OTHERS              = 3 ).
   ENDMETHOD.
 
   METHOD configure_incl_filters.
@@ -151,6 +154,22 @@ CLASS zcl_sat_os_subp_meth_impl IMPLEMENTATION.
                            it_values    = <ls_option>-value_range ).
       ENDCASE.
 
+    ENDLOOP.
+  ENDMETHOD.
+
+  METHOD read_method_infos_n_filter2.
+    NEW zcl_sat_method_info_reader( ir_results           = REF #( mt_result )
+                                    io_method_key_reader = me  )->apply( ).
+
+    LOOP AT mt_result REFERENCE INTO DATA(lr_result).
+      IF NOT method_matches_filter( iv_method_name = lr_result->method_decl_method
+                                    is_method      = lr_result->*
+                                    is_method_info = VALUE #( changedby = lr_result->changed_by
+                                                              changedon = lr_result->changed_date
+                                                              createdon = lr_result->created_date
+                                                              author    = lr_result->created_by ) ).
+        DELETE mt_result.
+      ENDIF.
     ENDLOOP.
   ENDMETHOD.
 ENDCLASS.
