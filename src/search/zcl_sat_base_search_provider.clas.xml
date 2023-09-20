@@ -138,11 +138,6 @@
      <DESCRIPT>Preparation tasks before actual search</DESCRIPT>
     </SEOCOMPOTX>
     <SEOCOMPOTX>
-     <CMPNAME>SEARCH</CMPNAME>
-     <LANGU>E</LANGU>
-     <DESCRIPT>Starts the object search</DESCRIPT>
-    </SEOCOMPOTX>
-    <SEOCOMPOTX>
      <CMPNAME>SET_BASE_SELECT_TABLE</CMPNAME>
      <LANGU>E</LANGU>
      <DESCRIPT>Add base select entity</DESCRIPT>

@@ -13,11 +13,6 @@
    </VSEOCLASS>
    <DESCRIPTIONS>
     <SEOCOMPOTX>
-     <CMPNAME>CONVERT_ABAP_LANG_TO_INT</CMPNAME>
-     <LANGU>E</LANGU>
-     <DESCRIPT>Converts abap language to internal format</DESCRIPT>
-    </SEOCOMPOTX>
-    <SEOCOMPOTX>
      <CMPNAME>CONVERT_CATEGORY_TO_EXT</CMPNAME>
      <LANGU>E</LANGU>
      <DESCRIPT>Converts class category to external format</DESCRIPT>
