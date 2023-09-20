@@ -6,10 +6,12 @@ CLASS zcl_sat_os_subp_meth_base DEFINITION
   CREATE PUBLIC.
 
   PUBLIC SECTION.
+    INTERFACES zif_sat_method_key_reader ABSTRACT METHODS get_method_key.
 
   PROTECTED SECTION.
     ALIASES c_class_intf_search_option FOR zif_sat_c_object_search~c_class_intf_search_option.
     ALIASES c_method_option            FOR zif_sat_c_object_search~c_method_search_option.
+    ALIASES get_method_key             FOR zif_sat_method_key_reader~get_method_key.
 
     TYPES:
       BEGIN OF ty_method,
@@ -25,7 +27,6 @@ CLASS zcl_sat_os_subp_meth_base DEFINITION
       END OF ty_method,
 
       BEGIN OF ty_class,
-        classname          TYPE zsat_i_classinterface-classname,
         developmentpackage TYPE zsat_i_classinterface-developmentpackage,
         tadirtype          TYPE zsat_i_classinterface-tadirtype,
       END OF ty_class,
@@ -34,22 +35,22 @@ CLASS zcl_sat_os_subp_meth_base DEFINITION
         progname TYPE reposrc-progname,
       END OF ty_include.
 
-    DATA mt_meth_final_filter    TYPE RANGE OF abap_bool.
-    DATA mt_meth_cls_exc_filter  TYPE RANGE OF abap_bool.
-    DATA mt_meth_level_filter    TYPE RANGE OF seomtddecl.
-    DATA mt_meth_type_filter     TYPE RANGE OF seomtdtype.
-    DATA mt_meth_status_filter   TYPE RANGE OF string.
+    DATA mt_meth_final_filter TYPE RANGE OF abap_bool.
+    DATA mt_meth_cls_exc_filter TYPE RANGE OF abap_bool.
+    DATA mt_meth_level_filter TYPE RANGE OF seomtddecl.
+    DATA mt_meth_type_filter TYPE RANGE OF seomtdtype.
+    DATA mt_meth_status_filter TYPE RANGE OF string.
     DATA mt_meth_exposure_filter TYPE RANGE OF seoexpose.
-    DATA mt_meth_name_filter     TYPE RANGE OF string.
-    DATA mt_meth_param_filter    TYPE RANGE OF seosconame.
-    DATA mt_meth_exc_filter      TYPE RANGE OF seosconame.
+    DATA mt_meth_name_filter TYPE RANGE OF string.
+    DATA mt_meth_param_filter TYPE RANGE OF seosconame.
+    DATA mt_meth_exc_filter TYPE RANGE OF seosconame.
 
     METHODS read_method_infos_n_filter.
     METHODS set_method_filters.
 
     METHODS method_matches_filter
       IMPORTING
-        iv_method_name type seocmpname
+        iv_method_name TYPE seocmpname
         is_method      TYPE zif_sat_ty_object_search=>ty_s_search_result
         is_method_info TYPE vseomethod
       RETURNING
@@ -57,20 +58,13 @@ CLASS zcl_sat_os_subp_meth_base DEFINITION
 
     METHODS set_type_filter_to_class.
 
-    METHODS get_method_key ABSTRACT
-      IMPORTING
-        iv_classname   TYPE classname
-        iv_method_name TYPE seocpdname
-      RETURNING
-        VALUE(result)  TYPE seocpdkey.
-
   PRIVATE SECTION.
 ENDCLASS.
 
 
 CLASS zcl_sat_os_subp_meth_base IMPLEMENTATION.
   METHOD read_method_infos_n_filter.
-    DATA ls_method_info    TYPE vseomethod.
+    DATA ls_method_info TYPE vseomethod.
     DATA ls_method_details TYPE seoo_method_details.
 
     LOOP AT mt_result REFERENCE INTO DATA(lr_class_method).
@@ -111,14 +105,14 @@ CLASS zcl_sat_os_subp_meth_base IMPLEMENTATION.
       lr_class_method->method_type        = ls_method_info-mtdtype.
       lr_class_method->method_level       = ls_method_info-mtddecltyp.
       lr_class_method->method_status      = COND #(
-        WHEN ls_method_details-is_abstract_implemented  = abap_true
-          OR ls_method_details-is_final_implemented     = abap_true
-          OR ls_method_details-is_implemented_if_method = abap_true THEN
-          zif_sat_c_object_search=>c_method_status_int-implemented
         WHEN ls_method_details-is_final_redefined          = abap_true
           OR ls_method_details-is_redefined                = abap_true
           OR ls_method_details-is_final_redefined_in_super = abap_true THEN
           zif_sat_c_object_search=>c_method_status_int-redefined
+        WHEN ls_method_details-is_abstract_implemented  = abap_true
+          OR ls_method_details-is_final_implemented     = abap_true
+          OR ls_method_details-is_implemented_if_method = abap_true THEN
+          zif_sat_c_object_search=>c_method_status_int-implemented
         ELSE
           zif_sat_c_object_search=>c_method_status_int-standard ).
 
@@ -133,7 +127,7 @@ CLASS zcl_sat_os_subp_meth_base IMPLEMENTATION.
 
   METHOD set_method_filters.
     LOOP AT mo_search_query->mt_search_options REFERENCE INTO DATA(lr_filter)
-          WHERE target = zif_sat_c_object_search=>c_search_fields-method_filter_input_key.
+         WHERE target = zif_sat_c_object_search=>c_search_fields-method_filter_input_key.
 
       CASE lr_filter->option.
 

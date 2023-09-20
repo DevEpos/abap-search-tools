@@ -5,11 +5,11 @@ CLASS zcl_sat_os_subp_meth_redef DEFINITION
   CREATE PUBLIC.
 
   PUBLIC SECTION.
+    METHODS zif_sat_method_key_reader~get_method_key REDEFINITION.
 
   PROTECTED SECTION.
     METHODS prepare_search        REDEFINITION.
     METHODS do_after_search       REDEFINITION.
-    METHODS get_method_key        REDEFINITION.
     METHODS set_method_filters    REDEFINITION.
     METHODS method_matches_filter REDEFINITION.
 
@@ -39,10 +39,16 @@ CLASS zcl_sat_os_subp_meth_redef DEFINITION
         it_values     TYPE zif_sat_ty_object_search=>ty_t_value_range
       RETURNING
         VALUE(result) LIKE mt_changed_on_filter.
+
+    METHODS read_method_infos_n_filter2.
 ENDCLASS.
 
 
 CLASS zcl_sat_os_subp_meth_redef IMPLEMENTATION.
+  METHOD zif_sat_method_key_reader~get_method_key.
+    result = VALUE #( clsname = iv_classname cpdname = iv_method_name ).
+  ENDMETHOD.
+
   METHOD prepare_search.
     set_base_select_table( iv_entity = |{ zif_sat_c_select_source_id=>zsat_i_classinterface }|
                            iv_alias  = c_clif_alias ).
@@ -92,16 +98,13 @@ CLASS zcl_sat_os_subp_meth_redef IMPLEMENTATION.
     fill_descriptions( ).
 
     set_method_filters( ).
-    read_method_infos_n_filter( ).
+*    read_method_infos_n_filter( ).
+    read_method_infos_n_filter2( ).
 
     NEW zcl_sat_meth_subco_filter( ir_result              = REF #( mt_result )
                                    if_use_and_for_options = ms_search_engine_params-use_and_cond_for_options
                                    it_meth_param_filter   = mt_meth_param_filter
                                    it_meth_exc_filter     = mt_meth_exc_filter )->apply( ).
-  ENDMETHOD.
-
-  METHOD get_method_key.
-    result = VALUE #( clsname = iv_classname cpdname = iv_method_name ).
   ENDMETHOD.
 
   METHOD add_method_name_filter.
@@ -172,4 +175,22 @@ CLASS zcl_sat_os_subp_meth_redef IMPLEMENTATION.
       result = VALUE #( BASE result ( ls_date_range ) ).
     ENDLOOP.
   ENDMETHOD.
+
+  METHOD read_method_infos_n_filter2.
+    NEW zcl_sat_method_info_reader( ir_results           = REF #( mt_result )
+                                    io_method_key_reader = me
+                                    if_only_redefined    = abap_true )->apply( ).
+
+    LOOP AT mt_result REFERENCE INTO DATA(lr_result).
+      IF NOT method_matches_filter( iv_method_name = lr_result->method_decl_method
+                                    is_method      = lr_result->*
+                                    is_method_info = VALUE #( changedby = lr_result->changed_by
+                                                              changedon = lr_result->changed_date
+                                                              createdon = lr_result->created_date
+                                                              author    = lr_result->created_by ) ).
+        DELETE mt_result.
+      ENDIF.
+    ENDLOOP.
+  ENDMETHOD.
+
 ENDCLASS.

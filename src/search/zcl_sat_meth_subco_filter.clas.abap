@@ -7,10 +7,10 @@ CLASS zcl_sat_meth_subco_filter DEFINITION
   PUBLIC SECTION.
     METHODS constructor
       IMPORTING
-        ir_result            TYPE REF TO zif_sat_ty_object_search=>ty_t_search_result
-        if_use_and_for_options type abap_bool optional
-        it_meth_param_filter TYPE zif_sat_ty_object_search=>ty_class_subcomp_range
-        it_meth_exc_filter   TYPE zif_sat_ty_object_search=>ty_class_subcomp_range.
+        ir_result              TYPE REF TO zif_sat_ty_object_search=>ty_t_search_result
+        if_use_and_for_options TYPE abap_bool OPTIONAL
+        it_meth_param_filter   TYPE zif_sat_ty_object_search=>ty_class_subcomp_range
+        it_meth_exc_filter     TYPE zif_sat_ty_object_search=>ty_class_subcomp_range.
 
     METHODS apply.
 
@@ -28,9 +28,9 @@ CLASS zcl_sat_meth_subco_filter DEFINITION
         scotype TYPE seosubco-scotype,
       END OF ty_sub_comp.
 
-    DATA mr_method_result     TYPE REF TO zif_sat_ty_object_search=>ty_t_search_result.
+    DATA mr_method_result TYPE REF TO zif_sat_ty_object_search=>ty_t_search_result.
     DATA mt_meth_param_filter TYPE zif_sat_ty_object_search=>ty_class_subcomp_range.
-    DATA mt_meth_exc_filter   TYPE zif_sat_ty_object_search=>ty_class_subcomp_range.
+    DATA mt_meth_exc_filter TYPE zif_sat_ty_object_search=>ty_class_subcomp_range.
 
     DATA mt_sub_components TYPE SORTED TABLE OF ty_sub_comp WITH NON-UNIQUE KEY clsname cmpname.
     DATA mt_matching_comp TYPE SORTED TABLE OF ty_comp WITH UNIQUE KEY clsname cmpname.
@@ -40,11 +40,12 @@ CLASS zcl_sat_meth_subco_filter DEFINITION
 
     METHODS find_subcomp_matches.
     METHODS apply_excluding_filters.
-    methods conv_excl_filter_to_incl
-    importing
-    it_filter type zif_sat_ty_object_search=>ty_class_subcomp_range
-    returning
-      value(result) type zif_sat_ty_object_search=>ty_class_subcomp_range.
+
+    METHODS conv_excl_filter_to_incl
+      IMPORTING
+        it_filter     TYPE zif_sat_ty_object_search=>ty_class_subcomp_range
+      RETURNING
+        VALUE(result) TYPE zif_sat_ty_object_search=>ty_class_subcomp_range.
 ENDCLASS.
 
 
@@ -57,6 +58,8 @@ CLASS zcl_sat_meth_subco_filter IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD apply.
+    CHECK mr_method_result->* IS NOT INITIAL.
+
     IF     mt_meth_param_filter IS INITIAL
        AND mt_meth_exc_filter   IS INITIAL.
       RETURN.
@@ -64,7 +67,7 @@ CLASS zcl_sat_meth_subco_filter IMPLEMENTATION.
 
     select_sub_components( ).
 
-    IF mt_sub_components is INITIAL.
+    IF mt_sub_components IS INITIAL.
       CLEAR mr_method_result->*.
       RETURN.
     ENDIF.
@@ -81,7 +84,7 @@ CLASS zcl_sat_meth_subco_filter IMPLEMENTATION.
       RETURN.
     ENDIF.
 
-   find_subcomp_matches( ).
+    find_subcomp_matches( ).
 
     " delete all results that do not match the found sub components
     LOOP AT mr_method_result->* REFERENCE INTO DATA(lr_result).
@@ -90,11 +93,10 @@ CLASS zcl_sat_meth_subco_filter IMPLEMENTATION.
         DELETE mr_method_result->*.
       ENDIF.
     ENDLOOP.
-
   ENDMETHOD.
 
   METHOD select_sub_components.
-    DATA lt_dyn_select       TYPE string_table.
+    DATA lt_dyn_select TYPE string_table.
     DATA lt_comp_type_filter TYPE RANGE OF seoscotype.
 
     DATA(lt_comp_filter) = VALUE zif_sat_ty_object_search=>ty_class_subcomp_range( ( LINES OF mt_meth_param_filter )
@@ -215,5 +217,4 @@ CLASS zcl_sat_meth_subco_filter IMPLEMENTATION.
       result = VALUE #( BASE result ( ls_filter ) ).
     ENDLOOP.
   ENDMETHOD.
-
 ENDCLASS.
