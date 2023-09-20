@@ -209,7 +209,7 @@ CLASS zcl_sat_os_subp_method_std IMPLEMENTATION.
         it_field_names = VALUE #( ( |{ c_alias_names-method }~{ c_method_fields-classname }| ) ) ).
     add_search_terms_to_search(
         iv_target      = zif_sat_c_object_search=>c_search_fields-method_name_input_key
-        it_field_names = VALUE #( ( |{ c_alias_names-method }~{ c_method_fields-methodname }| ) ) ).
+        it_field_names = VALUE #( ( |{ c_alias_names-method }~{ c_method_fields-originalmethodname }| ) ) ).
   ENDMETHOD.
 
   METHOD configure_method_filters.
@@ -334,7 +334,7 @@ CLASS zcl_sat_os_subp_method_std IMPLEMENTATION.
       create_not_in_filter( iv_subquery_fieldname = 'exceptionname'
                             iv_fieldname          = |{ c_alias_names-method }~{ c_method_fields-methodname }|
                             it_excluding          = lt_excluding
-                            iv_subquery           = mv_param_subquery ).
+                            iv_subquery           = mv_exc_subquery ).
     ENDIF.
 
     IF lt_including IS NOT INITIAL.
