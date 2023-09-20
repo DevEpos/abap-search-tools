@@ -51,16 +51,6 @@
      <LANGU>E</LANGU>
      <DESCRIPT>Maps search option to another</DESCRIPT>
     </SEOCOMPOTX>
-    <SEOCOMPOTX>
-     <CMPNAME>TY_S_OPTION_SETTING</CMPNAME>
-     <LANGU>E</LANGU>
-     <DESCRIPT>Setting for search option</DESCRIPT>
-    </SEOCOMPOTX>
-    <SEOCOMPOTX>
-     <CMPNAME>TY_T_OPTION_SETTING</CMPNAME>
-     <LANGU>E</LANGU>
-     <DESCRIPT>List of option configurations</DESCRIPT>
-    </SEOCOMPOTX>
    </DESCRIPTIONS>
   </asx:values>
  </asx:abap>
