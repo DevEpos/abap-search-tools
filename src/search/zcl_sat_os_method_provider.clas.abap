@@ -10,8 +10,8 @@ CLASS zcl_sat_os_method_provider DEFINITION
   PRIVATE SECTION.
     TYPES ty_providers TYPE TABLE OF REF TO zif_sat_object_search_provider WITH EMPTY KEY.
 
-    DATA mo_query                TYPE REF TO zif_sat_object_search_query.
-    DATA mt_result_all           TYPE zif_sat_ty_object_search=>ty_t_search_result.
+    DATA mo_query TYPE REF TO zif_sat_object_search_query.
+    DATA mt_result_all TYPE zif_sat_ty_object_search=>ty_t_search_result.
     DATA ms_search_engine_params TYPE zif_sat_ty_object_search=>ty_s_search_engine_params.
 
     METHODS get_providers
@@ -118,7 +118,6 @@ CLASS zcl_sat_os_method_provider IMPLEMENTATION.
                                           target = zif_sat_c_object_search=>c_search_fields-method_filter_input_key
                                           option = zif_sat_c_object_search=>c_method_search_option-status ]-value_range OPTIONAL ).
 
-    " if lt_status_filter is initial
     IF lt_status_filter IS NOT INITIAL.
       DATA(lv_include_count) = 0.
       LOOP AT lt_status_filter INTO DATA(ls_status_filter).

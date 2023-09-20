@@ -13,10 +13,11 @@ CLASS zcl_sat_os_subp_meth_impl DEFINITION
       RETURNING
         VALUE(result) TYPE abap_bool.
 
+    METHODS zif_sat_method_key_reader~get_method_key REDEFINITION.
+
   PROTECTED SECTION.
     METHODS prepare_search  REDEFINITION.
     METHODS do_after_search REDEFINITION.
-    METHODS get_method_key  REDEFINITION.
 
   PRIVATE SECTION.
     CONSTANTS:
@@ -33,21 +34,30 @@ CLASS zcl_sat_os_subp_meth_impl DEFINITION
     METHODS configure_incl_filters.
     METHODS add_admin_data_filters.
     METHODS select_includes.
+    METHODS read_method_infos_n_filter2.
 ENDCLASS.
 
 
 CLASS zcl_sat_os_subp_meth_impl IMPLEMENTATION.
   METHOD is_search_possible.
     LOOP AT io_query->mt_search_options REFERENCE INTO DATA(lr_option) ##NEEDED
-          WHERE     target = zif_sat_c_object_search=>c_search_fields-method_filter_input_key
-                AND (    option = zif_sat_c_object_search=>c_general_search_params-changed_by
-                      OR option = zif_sat_c_object_search=>c_general_search_params-user
-                      OR option = zif_sat_c_object_search=>c_general_search_params-changed_on
-                      OR option = zif_sat_c_object_search=>c_general_search_params-created_on ).
+         WHERE     target = zif_sat_c_object_search=>c_search_fields-method_filter_input_key
+               AND (    option = zif_sat_c_object_search=>c_general_search_params-changed_by
+                     OR option = zif_sat_c_object_search=>c_general_search_params-user
+                     OR option = zif_sat_c_object_search=>c_general_search_params-changed_on
+                     OR option = zif_sat_c_object_search=>c_general_search_params-created_on ).
 
       result = abap_true.
       EXIT.
     ENDLOOP.
+  ENDMETHOD.
+
+  METHOD zif_sat_method_key_reader~get_method_key.
+    cl_oo_classname_service=>get_method_by_include( EXPORTING  incname             = CONV #( iv_method_name )
+                                                    RECEIVING  mtdkey              = result
+                                                    EXCEPTIONS class_not_existing  = 1
+                                                               method_not_existing = 2
+                                                               OTHERS              = 3 ).
   ENDMETHOD.
 
   METHOD prepare_search.
@@ -127,7 +137,8 @@ CLASS zcl_sat_os_subp_meth_impl IMPLEMENTATION.
     ENDIF.
 
     set_method_filters( ).
-    read_method_infos_n_filter( ).
+*    read_method_infos_n_filter( ).
+    read_method_infos_n_filter2( ).
 
     NEW zcl_sat_meth_subco_filter( ir_result              = REF #( mt_result )
                                    if_use_and_for_options = ms_search_engine_params-use_and_cond_for_options
@@ -135,17 +146,9 @@ CLASS zcl_sat_os_subp_meth_impl IMPLEMENTATION.
                                    it_meth_exc_filter     = mt_meth_exc_filter )->apply( ).
   ENDMETHOD.
 
-  METHOD get_method_key.
-    cl_oo_classname_service=>get_method_by_include( EXPORTING  incname             = CONV #( iv_method_name )
-                                                    RECEIVING  mtdkey              = result
-                                                    EXCEPTIONS class_not_existing  = 1
-                                                               method_not_existing = 2
-                                                               OTHERS              = 3 ).
-  ENDMETHOD.
-
   METHOD configure_incl_filters.
     LOOP AT mo_search_query->mt_search_options ASSIGNING FIELD-SYMBOL(<ls_option>)
-          WHERE target = zif_sat_c_object_search=>c_search_fields-method_filter_input_key.
+         WHERE target = zif_sat_c_object_search=>c_search_fields-method_filter_input_key.
 
       CASE <ls_option>-option.
         WHEN c_general_search_options-user.
@@ -243,7 +246,7 @@ CLASS zcl_sat_os_subp_meth_impl IMPLEMENTATION.
 
   METHOD add_admin_data_filters.
     LOOP AT mo_search_query->mt_search_options REFERENCE INTO DATA(lr_filter)
-            WHERE target = zif_sat_c_object_search=>c_search_fields-method_filter_input_key.
+         WHERE target = zif_sat_c_object_search=>c_search_fields-method_filter_input_key.
 
       CASE lr_filter->option.
         WHEN c_general_search_options-changed_by.
@@ -259,6 +262,22 @@ CLASS zcl_sat_os_subp_meth_impl IMPLEMENTATION.
           add_date_filter( iv_fieldname = 'cdat'
                            it_values    = lr_filter->value_range ).
       ENDCASE.
+    ENDLOOP.
+  ENDMETHOD.
+
+  METHOD read_method_infos_n_filter2.
+    NEW zcl_sat_method_info_reader( ir_results           = REF #( mt_result )
+                                    io_method_key_reader = me  )->apply( ).
+
+    LOOP AT mt_result REFERENCE INTO DATA(lr_result).
+      IF NOT method_matches_filter( iv_method_name = lr_result->method_decl_method
+                                    is_method      = lr_result->*
+                                    is_method_info = VALUE #( changedby = lr_result->changed_by
+                                                              changedon = lr_result->changed_date
+                                                              createdon = lr_result->created_date
+                                                              author    = lr_result->created_by ) ).
+        DELETE mt_result.
+      ENDIF.
     ENDLOOP.
   ENDMETHOD.
 ENDCLASS.
