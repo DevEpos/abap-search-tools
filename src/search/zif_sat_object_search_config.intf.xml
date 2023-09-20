@@ -12,19 +12,16 @@
    </VSEOINTERF>
    <DESCRIPTIONS>
     <SEOCOMPOTX>
-     <CLSNAME>ZIF_SAT_OBJECT_SEARCH_CONFIG</CLSNAME>
      <CMPNAME>GET_ALLOWED_OPTIONS</CMPNAME>
      <LANGU>E</LANGU>
      <DESCRIPT>Returns a table of allowed search options</DESCRIPT>
     </SEOCOMPOTX>
     <SEOCOMPOTX>
-     <CLSNAME>ZIF_SAT_OBJECT_SEARCH_CONFIG</CLSNAME>
      <CMPNAME>GET_OPTIONS</CMPNAME>
      <LANGU>E</LANGU>
      <DESCRIPT>Returns the search options with their settings</DESCRIPT>
     </SEOCOMPOTX>
     <SEOCOMPOTX>
-     <CLSNAME>ZIF_SAT_OBJECT_SEARCH_CONFIG</CLSNAME>
      <CMPNAME>GET_OPTION_CONFIG</CMPNAME>
      <LANGU>E</LANGU>
      <DESCRIPT>Retrieves configuration for search option</DESCRIPT>
@@ -40,19 +37,16 @@
      <DESCRIPT>Retrieves configuration of search type</DESCRIPT>
     </SEOCOMPOTX>
     <SEOCOMPOTX>
-     <CLSNAME>ZIF_SAT_OBJECT_SEARCH_CONFIG</CLSNAME>
      <CMPNAME>GET_TYPE</CMPNAME>
      <LANGU>E</LANGU>
      <DESCRIPT>Returns the search type</DESCRIPT>
     </SEOCOMPOTX>
     <SEOCOMPOTX>
-     <CLSNAME>ZIF_SAT_OBJECT_SEARCH_CONFIG</CLSNAME>
      <CMPNAME>HAS_OPTION</CMPNAME>
      <LANGU>E</LANGU>
      <DESCRIPT>Checks if an option exists in this configuration</DESCRIPT>
     </SEOCOMPOTX>
     <SEOCOMPOTX>
-     <CLSNAME>ZIF_SAT_OBJECT_SEARCH_CONFIG</CLSNAME>
      <CMPNAME>MAP_OPTION</CMPNAME>
      <LANGU>E</LANGU>
      <DESCRIPT>Maps search option to another</DESCRIPT>

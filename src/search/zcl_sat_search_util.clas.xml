@@ -13,7 +13,6 @@
    </VSEOCLASS>
    <DESCRIPTIONS>
     <SEOCOMPOTX>
-     <CLSNAME>ZCL_SAT_SEARCH_UTIL</CLSNAME>
      <CMPNAME>REMOVE_EXCLUSION_STRING</CMPNAME>
      <LANGU>E</LANGU>
      <DESCRIPT>Removes the exclusion strings from the given value</DESCRIPT>
