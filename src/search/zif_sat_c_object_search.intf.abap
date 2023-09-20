@@ -164,17 +164,6 @@ INTERFACE zif_sat_c_object_search
     END OF c_class_categories.
 
   CONSTANTS:
-    "! <p class="shorttext synchronized" lang="en">ABAP Language versions</p>
-    BEGIN OF c_abap_lang_versions,
-      unicode                 TYPE string VALUE 'UNICODE',
-      key_user                TYPE string VALUE 'KEY_USER',
-      static_abap_limited_use TYPE string VALUE 'STATIC_ABAP_LIMITED_USE',
-      std_abap_limited_use    TYPE string VALUE 'STD_ABAP_LIMITED_USE',
-      cloud_platform          TYPE string VALUE 'CLOUD_PLATFORM',
-      non_unicode             TYPE string VALUE 'NON_UNICODE',
-    END OF c_abap_lang_versions.
-
-  CONSTANTS:
     BEGIN OF c_method_types,
       general            TYPE string VALUE 'GENERAL',
       constructor        TYPE string VALUE 'CONSTRUCTOR',
@@ -438,7 +427,6 @@ INTERFACE zif_sat_c_object_search
         release_state     TYPE string VALUE 'releasestate',
         cds_type          TYPE string VALUE 'cdstype',
         cds_extension     TYPE string VALUE 'cdsextension',
-        abap_language     TYPE string VALUE 'abaplanguage',
         class_category    TYPE string VALUE 'classcategory',
         class_flag        TYPE string VALUE 'classflag',
         class_type        TYPE string VALUE 'classtype',
