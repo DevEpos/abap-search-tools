@@ -17,6 +17,5 @@ define view ZSAT_I_MessageClass
       created_on              as CreatedOn,
       lastuser                as ChangedBy,
       ldate                   as ChangedOn,
-      stext                   as Description,
-      upper(stext)            as DescriptionUpper
+      stext                   as Description
 }

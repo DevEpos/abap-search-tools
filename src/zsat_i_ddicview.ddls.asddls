@@ -25,10 +25,6 @@ define view ZSAT_I_DdicView
         when Text.ddtext is not null then Text.ddtext
         else FallBackText.ddtext
       end                      as Description,
-      case
-        when Text.ddtext is not null then upper(Text.ddtext)
-        else upper(FallBackText.ddtext)
-      end                      as DescriptionUpper,
       author                   as CreatedBy,
       Repo.created_on          as CreatedDate,
       as4date                  as ChangedDate,

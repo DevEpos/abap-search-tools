@@ -15,6 +15,5 @@ define view ZSAT_I_Message
       LastMsgChange.name    as ChangedBy,
       LastMsgChange.datum   as ChangedOn,
       LastMsgChange.selfdef as IsSelfExplanatory,
-      text                  as ShortText,
-      upper(text)           as ShortTextUpper
+      text                  as ShortText
 }

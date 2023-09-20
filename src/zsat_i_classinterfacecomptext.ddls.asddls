@@ -7,9 +7,8 @@
 define view ZSAT_I_ClassInterfaceCompText
   as select from seocompotx
 {
-  key clsname         as ClassName,
-  key cmpname         as Component,
-  key langu           as Language,
-      descript        as Description,
-      upper(descript) as DescriptionUpper
+  key clsname  as ClassName,
+  key cmpname  as Component,
+  key langu    as Language,
+      descript as Description
 }
