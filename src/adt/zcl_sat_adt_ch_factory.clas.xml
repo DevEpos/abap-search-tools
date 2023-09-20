@@ -13,31 +13,26 @@
    </VSEOCLASS>
    <DESCRIPTIONS>
     <SEOCOMPOTX>
-     <CLSNAME>ZCL_SAT_ADT_CH_FACTORY</CLSNAME>
      <CMPNAME>CREATE_CDS_ELEM_INFO_RES_CH</CMPNAME>
      <LANGU>E</LANGU>
      <DESCRIPT>Create content handler for CDS View element info</DESCRIPT>
     </SEOCOMPOTX>
     <SEOCOMPOTX>
-     <CLSNAME>ZCL_SAT_ADT_CH_FACTORY</CLSNAME>
      <CMPNAME>CREATE_CDS_SECONDARY_RES_CH</CMPNAME>
      <LANGU>E</LANGU>
      <DESCRIPT>Create content handler for CDS secondary elements</DESCRIPT>
     </SEOCOMPOTX>
     <SEOCOMPOTX>
-     <CLSNAME>ZCL_SAT_ADT_CH_FACTORY</CLSNAME>
      <CMPNAME>CREATE_GENERIC_ELEMINFO_RES_CH</CMPNAME>
      <LANGU>E</LANGU>
      <DESCRIPT>Create content handler for generic element info</DESCRIPT>
     </SEOCOMPOTX>
     <SEOCOMPOTX>
-     <CLSNAME>ZCL_SAT_ADT_CH_FACTORY</CLSNAME>
      <CMPNAME>CREATE_GEN_ELEMINFOS_RES_CH</CMPNAME>
      <LANGU>E</LANGU>
      <DESCRIPT>Create content handler for generic element infos</DESCRIPT>
     </SEOCOMPOTX>
     <SEOCOMPOTX>
-     <CLSNAME>ZCL_SAT_ADT_CH_FACTORY</CLSNAME>
      <CMPNAME>CREATE_NAV_TARGETS_REF_CH</CMPNAME>
      <LANGU>E</LANGU>
      <DESCRIPT>Create content handler for navigation targets</DESCRIPT>
@@ -48,13 +43,11 @@
      <DESCRIPT>Create content handler for search result</DESCRIPT>
     </SEOCOMPOTX>
     <SEOCOMPOTX>
-     <CLSNAME>ZCL_SAT_ADT_CH_FACTORY</CLSNAME>
      <CMPNAME>CREATE_TABLE_ELEM_INFO_RES_CH</CMPNAME>
      <LANGU>E</LANGU>
      <DESCRIPT>Create content handler for DB Table element info</DESCRIPT>
     </SEOCOMPOTX>
     <SEOCOMPOTX>
-     <CLSNAME>ZCL_SAT_ADT_CH_FACTORY</CLSNAME>
      <CMPNAME>CREATE_VIEW_ELEM_INFO_RES_CH</CMPNAME>
      <LANGU>E</LANGU>
      <DESCRIPT>Create content handler for DB View element info</DESCRIPT>
