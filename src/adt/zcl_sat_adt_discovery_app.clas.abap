@@ -195,13 +195,6 @@ CLASS zcl_sat_adt_discovery_app IMPLEMENTATION.
         category_term   = zif_sat_c_object_search=>c_content_assist-terms-cds_extension ).
 
     io_registry->register_discoverable_resource(
-        url             = '/tabletype'
-        handler_class   = 'ZCL_SAT_ADT_RES_TABLE_TYPE_VH'
-        description     = 'Resource for Table Types'
-        category_scheme = zif_sat_c_object_search=>c_content_assist-category_scheme
-        category_term   = zif_sat_c_object_search=>c_content_assist-terms-table_type ).
-
-    io_registry->register_discoverable_resource(
         url             = '/classcategory'
         handler_class   = 'ZCL_SAT_ADT_RES_CLASS_CATEG_VH'
         description     = 'Resource for ABAP Class Categories'
