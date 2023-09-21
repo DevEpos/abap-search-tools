@@ -75,24 +75,24 @@ CLASS zcl_sat_clsintf_query_config IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD build_config.
-    DATA(lt_object_filters) = VALUE zif_sat_ty_object_search=>ty_t_query_filter( ( get_user_filt_conf( ) )
-                                                                                 ( get_created_on_filt_conf( ) )
-                                                                                 ( get_changed_by_filt_conf( ) )
-                                                                                 ( get_changed_on_filt_conf( ) )
-                                                                                 ( get_package_filt_conf( ) )
-                                                                                 ( get_softw_comp_filt_conf( ) )
-                                                                                 ( get_appl_comp_filt_conf( ) )
-                                                                                 ( get_rel_state_filt_conf( ) )
-                                                                                 ( get_description_filt_conf( ) )
-                                                                                 ( get_max_rows_filt_conf( ) )
-                                                                                 ( get_clif_type_filt_conf( ) )
-                                                                                 ( get_flag_filter( ) )
-                                                                                 ( get_category_filter( ) )
-                                                                                 ( get_method_filter( ) )
-                                                                                 ( get_interface_filter( ) )
-                                                                                 ( get_attribute_filter( ) )
-                                                                                 ( get_friend_filter( ) )
-                                                                                 ( get_super_type_filter( ) ) ).
+    DATA(lt_object_filters) = VALUE zif_sat_ty_object_search=>ty_query_filters( ( get_user_filt_conf( ) )
+                                                                                ( get_created_on_filt_conf( ) )
+                                                                                ( get_changed_by_filt_conf( ) )
+                                                                                ( get_changed_on_filt_conf( ) )
+                                                                                ( get_package_filt_conf( ) )
+                                                                                ( get_softw_comp_filt_conf( ) )
+                                                                                ( get_appl_comp_filt_conf( ) )
+                                                                                ( get_rel_state_filt_conf( ) )
+                                                                                ( get_description_filt_conf( ) )
+                                                                                ( get_max_rows_filt_conf( ) )
+                                                                                ( get_clif_type_filt_conf( ) )
+                                                                                ( get_flag_filter( ) )
+                                                                                ( get_category_filter( ) )
+                                                                                ( get_method_filter( ) )
+                                                                                ( get_interface_filter( ) )
+                                                                                ( get_attribute_filter( ) )
+                                                                                ( get_friend_filter( ) )
+                                                                                ( get_super_type_filter( ) ) ).
 
     ms_search_type = VALUE #(
         label    = 'Class/Interface'
