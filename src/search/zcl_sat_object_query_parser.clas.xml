@@ -18,11 +18,6 @@
      <DESCRIPT>Adds value for option</DESCRIPT>
     </SEOCOMPOTX>
     <SEOCOMPOTX>
-     <CMPNAME>ENHANCE_OPTIONS</CMPNAME>
-     <LANGU>E</LANGU>
-     <DESCRIPT>Enhance certain query options</DESCRIPT>
-    </SEOCOMPOTX>
-    <SEOCOMPOTX>
      <CMPNAME>EXTRACT_OPTION</CMPNAME>
      <LANGU>E</LANGU>
      <DESCRIPT>Extract search option from token</DESCRIPT>

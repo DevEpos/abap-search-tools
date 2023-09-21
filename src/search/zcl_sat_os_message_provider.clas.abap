@@ -123,8 +123,8 @@ CLASS zcl_sat_os_message_provider IMPLEMENTATION.
                            it_values    = <ls_option>-value_range ).
 
         WHEN c_general_search_options-package.
-          add_option_filter( iv_fieldname = |{ c_aliases-msg_clas }~{ c_fields-development_package }|
-                             it_values    = <ls_option>-value_range ).
+          add_package_filter( iv_fieldname = |{ c_aliases-msg_clas }~{ c_fields-development_package }|
+                              it_values    = <ls_option>-value_range ).
 
         WHEN c_general_search_options-application_component.
           add_appl_comp_filter( it_values          = <ls_option>-value_range
