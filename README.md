@@ -16,3 +16,10 @@ NW version|Branch name
 7.50|nw-750
 7.40|nw-740
 < 7.40|*Not officially supported*
+
+## Necessary Authorizations
+
+To access the backend from ADT a user must have the following authorizations
+Authorization Object | Authorization Field | Value
+---------------------| ------------------- | -----
+S_ADT_RES            | URI                 | /devepos/adt/saat/*

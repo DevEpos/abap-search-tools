@@ -1,0 +1,27 @@
+<?sap.transform simple?>
+<tt:transform xmlns:tt="http://www.sap.com/transformation-templates"
+              xmlns:cdsanalysis="http://www.devepos.com/adt/cdsanalysis"
+              xmlns:cl="http://www.sap.com/abapxml/types/class-pool/zif_sat_ty_adt_types">
+
+  <tt:root name="field_info_result" type="cl:ty_entity_field_info_result"/>
+  <tt:include name="zsat_adt_entity_field_info" template="fieldInfo"/>
+  <tt:include name="zsat_adt_entity_field_info" template="fieldInfoProperties"/>
+
+  <tt:template>
+    <cdsanalysis:entityFieldInfos tt:extensible="deep">
+      <tt:cond check="not-initial(field_info_result.source_field)">
+        <cdsanalysis:sourceFieldInfo tt:extensible="deep">
+          <tt:apply name="fieldInfoProperties">
+            <tt:with-root name="field_info" ref="field_info_result.source_field"/>
+          </tt:apply>
+        </cdsanalysis:sourceFieldInfo>
+      </tt:cond>
+      <tt:loop ref="field_info_result.field_infos">
+        <tt:apply name="fieldInfo">
+          <tt:with-root name="field_info" ref="$ref"/>
+        </tt:apply>
+      </tt:loop>
+    </cdsanalysis:entityFieldInfos>
+  </tt:template>
+
+</tt:transform>

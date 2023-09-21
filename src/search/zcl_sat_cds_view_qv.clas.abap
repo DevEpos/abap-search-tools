@@ -1,32 +1,32 @@
-"! <p class="shorttext synchronized" lang="en">Validator for CDS Search query</p>
+"! <p class="shorttext synchronized">Validator for CDS Search query</p>
 CLASS zcl_sat_cds_view_qv DEFINITION
   PUBLIC
   FINAL
   INHERITING FROM zcl_sat_general_qv
-  CREATE PUBLIC .
+  CREATE PUBLIC.
 
   PUBLIC SECTION.
+    METHODS zif_sat_query_validator~validate_option        REDEFINITION.
+    METHODS zif_sat_query_validator~check_option_integrity REDEFINITION.
 
-    METHODS zif_sat_query_validator~validate_option
-        REDEFINITION.
-    METHODS zif_sat_query_validator~check_option_integrity
-        REDEFINITION.
   PROTECTED SECTION.
+
   PRIVATE SECTION.
 ENDCLASS.
 
 
-
 CLASS zcl_sat_cds_view_qv IMPLEMENTATION.
-
   METHOD zif_sat_query_validator~validate_option.
-    DATA: lf_invalid TYPE abap_bool.
+    DATA lf_invalid TYPE abap_bool.
 
-    super->validate(
-        iv_option = iv_option
-        iv_value  = iv_value
-        iv_value2 = iv_value2
-    ).
+    super->validate( iv_option         = iv_option
+                     is_content_assist = is_content_assist
+                     iv_value          = iv_value
+                     iv_value2         = iv_value2 ).
+
+    IF iv_target <> zif_sat_c_object_search=>c_search_fields-object_filter_input_key.
+      RETURN.
+    ENDIF.
 
     IF iv_option = zif_sat_c_object_search=>c_general_search_params-type.
       CASE iv_value.
@@ -49,10 +49,9 @@ CLASS zcl_sat_cds_view_qv IMPLEMENTATION.
 
     IF lf_invalid = abap_true.
       RAISE EXCEPTION TYPE zcx_sat_object_search
-        EXPORTING
-          textid = zcx_sat_object_search=>invalid_option_value
-          msgv1  = |{ iv_option }|
-          msgv2  = |{ iv_value }|.
+        EXPORTING textid = zcx_sat_object_search=>invalid_option_value
+                  msgv1  = |{ iv_option }|
+                  msgv2  = |{ iv_value }|.
     ENDIF.
   ENDMETHOD.
 
@@ -61,5 +60,4 @@ CLASS zcl_sat_cds_view_qv IMPLEMENTATION.
       DELETE ct_options WHERE option = zif_sat_c_object_search=>c_cds_search_params-params.
     ENDIF.
   ENDMETHOD.
-
 ENDCLASS.

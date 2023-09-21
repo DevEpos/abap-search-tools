@@ -1,0 +1,92 @@
+<?sap.transform simple?>
+<tt:transform xmlns:tt="http://www.sap.com/transformation-templates"
+              xmlns:objectsearch="http://www.devepos.com/adt/objectsearch"
+              xmlns:cl="http://www.sap.com/abapxml/types/class-pool/zif_sat_ty_adt_types">
+
+  <tt:root name="query_input" type="cl:ty_s_query_input"/>
+
+  <tt:template>
+    <objectsearch:queryInput tt:extensible="deep">
+      <tt:cond check="not-initial(query_input.max_rows)">
+        <tt:attribute name="objectsearch:maxRows" value-ref="query_input.max_rows"/>
+      </tt:cond>
+      <tt:cond check="not-initial(query_input.combine_filters_with_and)">
+        <tt:attribute name="objectsearch:combineFiltersWithAnd" option="format(boolean)" value-ref="query_input.combine_filters_with_and"/>
+      </tt:cond>
+      <tt:cond check="not-initial(query_input.with_api_state)">
+        <tt:attribute name="objectsearch:withApiState" option="format(boolean)" value-ref="query_input.with_api_state"/>
+      </tt:cond>
+      <tt:cond check="not-initial(query_input.no_row_limit)">
+        <tt:attribute name="objectsearch:rowLimitDisabled" option="format(boolean)" value-ref="query_input.no_row_limit"/>
+      </tt:cond>
+      <tt:cond check="not-initial(query_input.type)">
+        <tt:attribute name="objectsearch:type" value-ref="query_input.type"/>
+      </tt:cond>
+
+      <tt:loop ref="query_input.fields">
+        <tt:apply name="field">
+          <tt:with-root name="field" ref="$ref"/>
+        </tt:apply>
+      </tt:loop>
+
+      <tt:cond check="exist(query_input.custom_options)">
+        <tt:loop ref="query_input.custom_options">
+          <tt:apply name="customOption">
+            <tt:with-root name="option" ref="$ref"/>
+          </tt:apply>
+        </tt:loop>
+      </tt:cond>
+    </objectsearch:queryInput>
+  </tt:template>
+
+  <tt:template name="field">
+    <tt:context>
+      <tt:root name="field" type="cl:ty_s_query_input_field"/>
+    </tt:context>
+
+    <objectsearch:field tt:extensible="deep">
+      <tt:attribute name="objectsearch:name" value-ref="field.name"/>
+      <tt:cond check="exist(field.values)">
+        <tt:loop ref="field.values">
+          <objectsearch:value>
+            <tt:value ref="$ref"/>
+          </objectsearch:value>
+        </tt:loop>
+      </tt:cond>
+      <tt:cond check="exist(field.filters)">
+        <tt:loop ref="field.filters">
+          <tt:apply name="filter">
+            <tt:with-root name="filter" ref="$ref"/>
+          </tt:apply>
+        </tt:loop>
+      </tt:cond>
+    </objectsearch:field>
+  </tt:template>
+
+  <tt:template name="filter">
+    <tt:context>
+      <tt:root name="filter" type="cl:ty_s_query_input_filter"/>
+    </tt:context>
+
+    <objectsearch:filter tt:extensible="deep">
+      <tt:attribute name="objectsearch:name" value-ref="filter.name"/>
+      <tt:loop ref="filter.values">
+        <objectsearch:value>
+          <tt:value ref="$ref"/>
+        </objectsearch:value>
+      </tt:loop>
+    </objectsearch:filter>
+  </tt:template>
+
+  <tt:template name="customOption">
+    <tt:context>
+      <tt:root name="option" type="cl:ty_s_property"/>
+    </tt:context>
+
+    <objectsearch:customOption tt:extensible="deep">
+      <tt:attribute name="objectsearch:key" value-ref="option.key"/>
+      <tt:attribute name="objectsearch:value" value-ref="option.value"/>
+    </objectsearch:customOption>
+
+  </tt:template>
+</tt:transform>

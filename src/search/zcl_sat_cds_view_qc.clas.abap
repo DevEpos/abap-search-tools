@@ -15,6 +15,8 @@ ENDCLASS.
 
 
 CLASS zcl_sat_cds_view_qc IMPLEMENTATION.
+
+
   METHOD zif_sat_query_converter~convert_value.
 
     CASE iv_option.
@@ -51,12 +53,13 @@ CLASS zcl_sat_cds_view_qc IMPLEMENTATION.
 
       WHEN OTHERS.
         super->zif_sat_query_converter~convert_value(
-          EXPORTING iv_option = iv_option
-          CHANGING  cv_value  = cv_value
-                    cv_value2 = cv_value2
+          EXPORTING
+            iv_option = iv_option
+          CHANGING
+            cv_value  = cv_value
+            cv_value2 = cv_value2
         ).
 
     ENDCASE.
   ENDMETHOD.
-
 ENDCLASS.

@@ -18,6 +18,11 @@
      <DESCRIPT>Create filter for API option</DESCRIPT>
     </SEOCOMPOTX>
     <SEOCOMPOTX>
+     <CMPNAME>ADD_APPL_COMP_FILTER</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Creates filter for application component</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
      <CMPNAME>ADD_FILTER</CMPNAME>
      <LANGU>E</LANGU>
      <DESCRIPT>Add filter to the search</DESCRIPT>
@@ -108,6 +113,11 @@
      <DESCRIPT>Performs task after the Search</DESCRIPT>
     </SEOCOMPOTX>
     <SEOCOMPOTX>
+     <CMPNAME>EXECUTE_SQL_QUERY</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Starts the object search</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
      <CMPNAME>FILL_DESCRIPTIONS</CMPNAME>
      <LANGU>E</LANGU>
      <DESCRIPT>Fills the descriptions of the result</DESCRIPT>
@@ -126,11 +136,6 @@
      <CMPNAME>PREPARE_SEARCH</CMPNAME>
      <LANGU>E</LANGU>
      <DESCRIPT>Preparation tasks before actual search</DESCRIPT>
-    </SEOCOMPOTX>
-    <SEOCOMPOTX>
-     <CMPNAME>SEARCH</CMPNAME>
-     <LANGU>E</LANGU>
-     <DESCRIPT>Starts the object search</DESCRIPT>
     </SEOCOMPOTX>
     <SEOCOMPOTX>
      <CMPNAME>SET_BASE_SELECT_TABLE</CMPNAME>

@@ -17,9 +17,19 @@
      <DESCRIPT>Table for CDS Association Header</DESCRIPT>
     </SEOCOMPOTX>
     <SEOCOMPOTX>
+     <CMPNAME>DD09L</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Technical Settings of Table</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
      <CMPNAME>DD10B</CMPNAME>
      <LANGU>E</LANGU>
      <DESCRIPT>Table for CDS Parameters</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>DD26S</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Base tables of dictionary views</DESCRIPT>
     </SEOCOMPOTX>
     <SEOCOMPOTX>
      <CMPNAME>DDDDLSCR02BT</CMPNAME>
@@ -40,6 +50,11 @@
      <CMPNAME>DDLDEPENDENCY</CMPNAME>
      <LANGU>E</LANGU>
      <DESCRIPT>Table for dependent objects of database views</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>SEOREDEF</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Table for Redefined Methods</DESCRIPT>
     </SEOCOMPOTX>
    </DESCRIPTIONS>
   </asx:values>

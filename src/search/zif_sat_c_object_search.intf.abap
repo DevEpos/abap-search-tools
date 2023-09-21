@@ -1,13 +1,68 @@
-"! <p class="shorttext synchronized" lang="en">Constants for Object search</p>
+"! <p class="shorttext synchronized">Constants for Object search</p>
 INTERFACE zif_sat_c_object_search
-  PUBLIC .
+  PUBLIC.
 
   CONSTANTS:
     BEGIN OF c_search_type,
-      cds_view        TYPE zif_sat_ty_object_search=>ty_search_type VALUE 'CDS',
-      db_tab_view     TYPE zif_sat_ty_object_search=>ty_search_type VALUE 'DBTABVIEW',
-      class_interface TYPE zif_sat_ty_object_search=>ty_search_type VALUE 'CLASSINTF',
+      cds_view        TYPE zif_sat_ty_object_search=>ty_search_type VALUE 'cds',
+      db_tab          TYPE zif_sat_ty_object_search=>ty_search_type VALUE 'dbtab',
+      ddic_view       TYPE zif_sat_ty_object_search=>ty_search_type VALUE 'ddicview',
+      class_interface TYPE zif_sat_ty_object_search=>ty_search_type VALUE 'classintf',
+      method          TYPE zif_sat_ty_object_search=>ty_search_type VALUE 'method',
+      db_field        TYPE zif_sat_ty_object_search=>ty_search_type VALUE 'dbfield',
+      cds_field       TYPE zif_sat_ty_object_search=>ty_search_type VALUE 'cdsfield',
+      message         TYPE zif_sat_ty_object_search=>ty_search_type VALUE 'message',
     END OF c_search_type.
+
+  CONSTANTS:
+    BEGIN OF c_search_fields,
+      object_name_input_key      TYPE string VALUE 'objectName',
+      object_name_input_label    TYPE string VALUE 'Object &Name',
+      object_filter_input_key    TYPE string VALUE 'objectFilter',
+      object_filter_input_label  TYPE string VALUE 'Object &Filters',
+      method_name_input_key      TYPE string VALUE 'methodName',
+      method_name_input_label    TYPE string VALUE '&Method Name',
+      method_filter_input_key    TYPE string VALUE 'methodFilter',
+      method_filter_input_label  TYPE string VALUE 'M&ethod Filter',
+      message_text_input_key     TYPE string VALUE 'messageText',
+      message_text_input_label   TYPE string VALUE '&Message Short Text',
+      message_filter_input_key   TYPE string VALUE 'messageFilter',
+      message_filter_input_label TYPE string VALUE 'M&essage Filter',
+    END OF c_search_fields.
+
+  CONSTANTS:
+    BEGIN OF c_image_registry_id,
+      adt_type TYPE string VALUE 'ADT_OBJECT_TYPE',
+    END OF c_image_registry_id.
+
+  CONSTANTS:
+    BEGIN OF c_proposal_image_source,
+      same_as_filter TYPE string VALUE 'SAME_AS_FILTER',
+      proposal       TYPE string VALUE 'PROPOSAL',
+    END OF c_proposal_image_source.
+
+  CONSTANTS c_image_id_prefix TYPE string VALUE 'imageId='.
+
+  CONSTANTS:
+    BEGIN OF c_filter_data_type,
+      default TYPE string VALUE '',
+      date    TYPE string VALUE 'DATE',
+      boolean TYPE string VALUE 'BOOLEAN',
+    END OF c_filter_data_type.
+
+  CONSTANTS:
+    BEGIN OF c_custom_option_data_type,
+      string  TYPE string VALUE 'STRING',
+      boolean TYPE string VALUE 'BOOLEAN',
+    END OF c_custom_option_data_type.
+
+  CONSTANTS:
+    BEGIN OF c_filter_content_assist_type,
+      named_item       TYPE string VALUE 'objectsearch:NamedItemContentAssist',
+      fixed_named_item TYPE string VALUE 'objectsearch:FixedValuesContentAssist',
+      ris              TYPE string VALUE 'objectsearch:RisContentAssist',
+      user             TYPE string VALUE 'objectsearch:UserContentAssist',
+    END OF c_filter_content_assist_type.
 
   CONSTANTS:
     "! <p class="shorttext synchronized" lang="en">General Search options for object search</p>
@@ -30,13 +85,13 @@ INTERFACE zif_sat_c_object_search
   CONSTANTS:
     "! <p class="shorttext synchronized" lang="en">Search options for class/interface object search</p>
     BEGIN OF c_class_intf_search_option,
-      attribute  TYPE string VALUE 'attribute',
-      method     TYPE string VALUE 'method',
-      super_type TYPE string VALUE 'superType',
-      interface  TYPE string VALUE 'interface',
+      attribute  TYPE string VALUE 'attr',
+      method     TYPE string VALUE 'meth',
+      super_type TYPE string VALUE 'super',
+      interface  TYPE string VALUE 'intf',
       "! Category of the class/interface (see data element SEOCATEGRY)
       "! --> check against current NW stack to get valid options
-      category   TYPE string VALUE 'category',
+      category   TYPE string VALUE 'cat',
       friend     TYPE string VALUE 'friend',
       "! Checks for the following criteria
       "! <ul>
@@ -47,19 +102,38 @@ INTERFACE zif_sat_c_object_search
       "!   <li>shared_memory</li>
       "! </ul>
       flag       TYPE string VALUE 'flag',
+      "! Restricts usage to certain abap language stack (see data element ABAPVRS)
+      "! --> check against current NW stack to get valid options and correct description
+      abap_lang  TYPE string VALUE 'lang',
+      "! Holds the name of referenced cds view for behavior classes
+      "! (necessary???)
+      ref_object TYPE string VALUE 'refcls',
+    END OF c_class_intf_search_option.
+
+  CONSTANTS:
+    BEGIN OF c_method_search_option,
+      exception  TYPE string VALUE 'exc',
+      param      TYPE string VALUE 'param',
       "! Exposure (for methods/attributes). Possible values are
       "! <ul>
       "!   <li>private</li>
       "!   <li>protected</li>
       "!   <li>public</li>
       "! </ul>
-      exposure   TYPE string VALUE 'exposure',
-      "! Restricts usage to certain abap language stack (see data element ABAPVRS)
-      "! --> check against current NW stack to get valid options and correct description
-      abap_lang  TYPE string VALUE 'abapLanguage',
-      "! Holds the name of re
-      ref_object TYPE string VALUE 'refObject',
-    END OF c_class_intf_search_option.
+      visibility TYPE string VALUE 'visibility',
+      "! <ul>
+      "!    <li>instance</li>
+      "!    <li>static</li>
+      "! </ul>
+      level      TYPE string VALUE 'level',
+      "! <ul>
+      "!    <li>implemented</li>
+      "!    <li>redefined</li>
+      "!    <li>defined</li>
+      "! </ul>
+      status     TYPE string VALUE 'status',
+      flag       TYPE string VALUE 'flag',
+    END OF c_method_search_option.
 
   CONSTANTS:
     "! <p class="shorttext synchronized" lang="en">Flags for Class/Interface</p>
@@ -97,17 +171,78 @@ INTERFACE zif_sat_c_object_search
     END OF c_abap_lang_versions.
 
   CONSTANTS:
+    BEGIN OF c_method_types,
+      general            TYPE string VALUE 'GENERAL',
+      constructor        TYPE string VALUE 'CONSTRUCTOR',
+      event_handler      TYPE string VALUE 'EVENT_HANDLER',
+      virtual_getter     TYPE string VALUE 'VIRTUAL_GETTER',
+      virtual_setter     TYPE string VALUE 'VIRTUAL_SETTER',
+      test               TYPE string VALUE 'TEST',
+      cds_table_function TYPE string VALUE 'CDS_TABLE_FUNCTION',
+      amdp_ddl_object    TYPE string VALUE 'AMDP_DDL_OBJECT',
+    END OF c_method_types.
+
+  CONSTANTS:
+    BEGIN OF c_visibility,
+      private   TYPE string VALUE 'PRIVATE',
+      protected TYPE string VALUE 'PROTECTED',
+      public    TYPE string VALUE 'PUBLIC',
+    END OF c_visibility.
+
+  CONSTANTS:
+    "! External method status for ADT UI
+    BEGIN OF c_method_status,
+      standard    TYPE string VALUE 'STANDARD',
+      implemented TYPE string VALUE 'IMPLEMENTED',
+      redefined   TYPE string VALUE 'REDEFINED',
+    END OF c_method_status.
+
+  CONSTANTS:
+    "! Internal method status
+    BEGIN OF c_method_status_int,
+      standard    TYPE c LENGTH 1 VALUE '1',
+      implemented TYPE c LENGTH 1 VALUE '2',
+      redefined   TYPE c LENGTH 1 VALUE '3',
+    END OF c_method_status_int.
+
+  CONSTANTS:
+    BEGIN OF c_method_flags,
+      optional         TYPE string VALUE 'OPTIONAL',
+      abstract         TYPE string VALUE 'ABSTRACT',
+      final            TYPE string VALUE 'FINAL',
+      class_exceptions TYPE string VALUE 'CLASS_EXCEPTIONS',
+    END OF c_method_flags.
+
+  CONSTANTS:
+    BEGIN OF c_method_level,
+      instance TYPE string VALUE 'INSTANCE',
+      static   TYPE string VALUE 'STATIC',
+    END OF c_method_level.
+
+  CONSTANTS:
+    BEGIN OF c_custom_options,
+      BEGIN OF method,
+        target_incl_for_admin_data TYPE string VALUE 'targetIncludesForAdminData',
+      END OF method,
+    END OF c_custom_options.
+
+  CONSTANTS:
     "! <p class="shorttext synchronized" lang="en">General search options</p>
     BEGIN OF c_general_search_params,
-      query                  TYPE string VALUE 'query',
       object_name            TYPE string VALUE 'objectName',
       object_type            TYPE string VALUE 'objectType',
-      max_rows               TYPE string VALUE 'maxRows',
-      user                   TYPE string VALUE 'userName',
-      release_state          TYPE string VALUE 'releaseState',
-      description            TYPE string VALUE 'description',
+      max_rows               TYPE string VALUE 'maxrows',
+      user                   TYPE string VALUE 'owner',
+      changed_by             TYPE string VALUE 'changedby',
+      application_component  TYPE string VALUE 'appl',
+      software_component     TYPE string VALUE 'comp',
+      release_state          TYPE string VALUE 'api',
+      description            TYPE string VALUE 'desc',
       type                   TYPE string VALUE 'type',
-      package                TYPE string VALUE 'packageName',
+      package                TYPE string VALUE 'package',
+      created_on             TYPE string VALUE 'created',
+      changed_on             TYPE string VALUE 'changed',
+      maintenance            TYPE string VALUE 'maintflag',
       use_and_for_filters    TYPE string VALUE 'useAndForFilters',
       read_api_state         TYPE string VALUE 'withApiState',
       get_all_results        TYPE string VALUE 'getAllResults',
@@ -117,14 +252,13 @@ INTERFACE zif_sat_c_object_search
   CONSTANTS:
     "! <p class="shorttext synchronized" lang="en">Search options for CDS Search</p>
     BEGIN OF c_cds_search_params,
-      field             TYPE string VALUE 'fieldName',
-      select_from       TYPE string VALUE 'selectSourceIn',
-      association       TYPE string VALUE 'associatedIn',
-      only_local_assocs TYPE string VALUE 'localDeclaredAssocOnly',
-      annotation        TYPE string VALUE 'annotation',
-      param             TYPE string VALUE 'param',
-      params            TYPE string VALUE 'hasParams',
-      extended_by       TYPE string VALUE 'extendedBy',
+      field       TYPE string VALUE 'field',
+      select_from TYPE string VALUE 'from',
+      association TYPE string VALUE 'assoc',
+      annotation  TYPE string VALUE 'anno',
+      param       TYPE string VALUE 'param',
+      params      TYPE string VALUE 'params',
+      extended_by TYPE string VALUE 'extby',
     END OF c_cds_search_params.
 
   CONSTANTS:
@@ -135,11 +269,134 @@ INTERFACE zif_sat_c_object_search
     END OF c_class_types.
 
   CONSTANTS:
-    "! <p class="shorttext synchronized" lang="en">Search options DB search</p>
+    "! <p class="shorttext synchronized" lang="en">Search options DB Table search</p>
     BEGIN OF c_dbtab_search_params,
-      field          TYPE string VALUE 'fieldName',
-      delivery_class TYPE string VALUE 'deliveryClass',
+      field                TYPE string VALUE 'field',
+      delivery_class       TYPE string VALUE 'dlvclass',
+      flag                 TYPE string VALUE 'flag',
+      size_category        TYPE string VALUE 'sizecat',
+      buffering            TYPE string VALUE 'buffering',
+      buffering_type       TYPE string VALUE 'buffertype',
+      data_class           TYPE string VALUE 'dataclass',
+      enhancement_category TYPE string VALUE 'enhcat',
+      storage_type         TYPE string VALUE 'storetype',
+      include_usage        TYPE string VALUE 'include',
     END OF c_dbtab_search_params.
+
+  CONSTANTS:
+    "! <p class="shorttext synchronized" lang="en">Search options View search</p>
+    BEGIN OF c_ddicview_search_params,
+      field          TYPE string VALUE 'field',
+      delivery_class TYPE string VALUE 'dlvclass',
+      flag           TYPE string VALUE 'flag',
+      primary_table  TYPE string VALUE 'primtab',
+      base_table     TYPE string VALUE 'basetab',
+    END OF c_ddicview_search_params.
+
+  CONSTANTS:
+    BEGIN OF c_message_search_params,
+      self_explanatory TYPE string VALUE 'selfexpl',
+    END OF c_message_search_params.
+
+  CONSTANTS:
+    BEGIN OF c_tab_enh_categories,
+      BEGIN OF int,
+        not_classified        TYPE dd02l-exclass VALUE '0',
+        not_extendable        TYPE dd02l-exclass VALUE '1',
+        char_like             TYPE dd02l-exclass VALUE '2',
+        char_like_and_numeric TYPE dd02l-exclass VALUE '3',
+        any                   TYPE dd02l-exclass VALUE '4',
+      END OF int,
+      BEGIN OF ext,
+        not_classified        TYPE string VALUE 'NOT_CLASSIFIED',
+        not_extendable        TYPE string VALUE 'NOT_EXTENDABLE',
+        char_like             TYPE string VALUE 'CHARACTER_LIKE',
+        char_like_and_numeric TYPE string VALUE 'CHARACTER_LIKE_AND_NUMERIC',
+        any                   TYPE string VALUE 'ANY',
+      END OF ext,
+    END OF c_tab_enh_categories.
+
+  CONSTANTS:
+    BEGIN OF c_db_flags,
+      client_dep        TYPE string VALUE 'CLIENT_DEP',
+      used_in_shlp      TYPE string VALUE 'USED_IN_SHLP',
+      is_gtt            TYPE string VALUE 'IS_GTT',
+      change_log_active TYPE string VALUE 'CHANGE_LOG_ACTIVE',
+    END OF c_db_flags.
+
+  CONSTANTS:
+    BEGIN OF c_db_buffer_status,
+      BEGIN OF int,
+        off             TYPE dd09l-bufallow VALUE 'N',
+        allowed_but_off TYPE dd09l-bufallow VALUE 'A',
+        on              TYPE dd09l-bufallow VALUE 'X',
+      END OF int,
+      BEGIN OF ext,
+        off             TYPE string VALUE 'OFF',
+        allowed_but_off TYPE string VALUE 'ALLOWED_BUT_OFF',
+        on              TYPE string VALUE 'ON',
+      END OF ext,
+    END OF c_db_buffer_status.
+
+  CONSTANTS:
+    BEGIN OF c_table_maintenance,
+      BEGIN OF int,
+        allowed_with_restr TYPE maintflag VALUE '',
+        not_allowed        TYPE maintflag VALUE 'N',
+        allowed            TYPE maintflag VALUE 'X',
+      END OF int,
+      BEGIN OF ext,
+        allowed_with_restr TYPE string VALUE 'ALLOWED_WITH_RESTR',
+        not_allowed        TYPE string VALUE 'NOT_ALLOWED',
+        allowed            TYPE string VALUE 'ALLOWED',
+      END OF ext,
+    END OF c_table_maintenance.
+
+  CONSTANTS:
+    BEGIN OF c_db_buffer_type,
+      BEGIN OF int,
+        no_buffering      TYPE dd09l-pufferung VALUE '',
+        single_entries    TYPE dd09l-pufferung VALUE 'P',
+        full_with_gen_key TYPE dd09l-pufferung VALUE 'G',
+        full_table        TYPE dd09l-pufferung VALUE 'X',
+      END OF int,
+      BEGIN OF ext,
+        no_buffering      TYPE string VALUE 'NO_BUFFERING',
+        single_entries    TYPE string VALUE 'SINGLE_ENTRIES',
+        full_with_gen_key TYPE string VALUE 'FULL_WITH_GEN_KEY',
+        full_table        TYPE string VALUE 'FULL_TABLE',
+      END OF ext,
+    END OF c_db_buffer_type.
+
+  CONSTANTS:
+    BEGIN OF c_view_class,
+      BEGIN OF int,
+        database    TYPE viewclass VALUE 'D',
+        help        TYPE viewclass VALUE 'H',
+        projection  TYPE viewclass VALUE 'P',
+        maintenance TYPE viewclass VALUE 'C',
+      END OF int,
+      BEGIN OF ext,
+        database    TYPE string VALUE 'DATABASE',
+        help        TYPE string VALUE 'HELP',
+        projection  TYPE string VALUE 'PROJECTION',
+        maintenance TYPE string VALUE 'MAINTENANCE',
+      END OF ext,
+    END OF c_view_class.
+
+  CONSTANTS:
+    BEGIN OF c_table_storage_type,
+      BEGIN OF int,
+        column    TYPE ddroworcolst VALUE 'C',
+        row       TYPE ddroworcolst VALUE 'R',
+        undefined TYPE ddroworcolst VALUE space,
+      END OF int,
+      BEGIN OF ext,
+        column    TYPE string VALUE 'COLUMN',
+        row       TYPE string VALUE 'ROW',
+        undefined TYPE string VALUE 'UNDEFINED',
+      END OF ext,
+    END OF c_table_storage_type.
 
   CONSTANTS:
     "! Values for API option
@@ -160,4 +417,33 @@ INTERFACE zif_sat_c_object_search
       table           TYPE string VALUE 'TABLE',
       extend          TYPE string VALUE 'EXTEND',
     END OF c_type_option_value.
+
+  CONSTANTS:
+    "! Constants for value help providers for search parameters in
+    "! search input fields
+    BEGIN OF c_content_assist,
+      category_scheme TYPE string VALUE 'http://www.devepos.com/adt/saat/v2/objectsearch',
+      BEGIN OF terms,
+        cds_field         TYPE string VALUE 'cdsfield',
+        appl_comp         TYPE string VALUE 'applcomp',
+        software_comp     TYPE string VALUE 'softcomp',
+        table_field       TYPE string VALUE 'tablefield',
+        annotation        TYPE string VALUE 'annotation',
+        annotatio_value   TYPE string VALUE 'annotationvalue',
+        db_entity         TYPE string VALUE 'dbentity',
+        release_state     TYPE string VALUE 'releasestate',
+        cds_type          TYPE string VALUE 'cdstype',
+        cds_extension     TYPE string VALUE 'cdsextension',
+        abap_language     TYPE string VALUE 'abaplanguage',
+        class_category    TYPE string VALUE 'classcategory',
+        class_flag        TYPE string VALUE 'classflag',
+        class_type        TYPE string VALUE 'classtype',
+        table_deliv_class TYPE string VALUE 'tabledeliveryclass',
+        table_data_class  TYPE string VALUE 'tabledataclass',
+        view_field        TYPE string VALUE 'viewfield',
+        view_root_tab     TYPE string VALUE 'viewroottable',
+        view_base_tab     TYPE string VALUE 'viewbasetable',
+        db_tab_include    TYPE string VALUE 'dbtableinclude',
+      END OF terms,
+    END OF c_content_assist.
 ENDINTERFACE.

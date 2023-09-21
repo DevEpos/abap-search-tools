@@ -1,0 +1,19 @@
+<?sap.transform simple?>
+<tt:transform xmlns:tt="http://www.sap.com/transformation-templates"
+              xmlns:cdsanalysis="http://www.devepos.com/adt/cdsanalysis"
+              xmlns:cl="http://www.sap.com/abapxml/types/class-pool/zif_sat_ty_adt_types">
+
+  <tt:root name="wusl_result" type="cl:ty_where_used_in_cds_t"/>
+  <tt:include name="zsat_where_used_in_cds_entry" template="whereUsedEntry"/>
+
+  <tt:template>
+    <cdsanalysis:whereUsedInCdsResult tt:extensible="deep">
+      <tt:loop ref="wusl_result">
+        <tt:apply name="whereUsedEntry">
+          <tt:with-root name="wusl_entry" ref="$ref"/>
+        </tt:apply>
+      </tt:loop>
+    </cdsanalysis:whereUsedInCdsResult>
+  </tt:template>
+
+</tt:transform>

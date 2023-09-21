@@ -1,0 +1,19 @@
+<?sap.transform simple?>
+<tt:transform xmlns:tt="http://www.sap.com/transformation-templates"
+              xmlns:cl="http://www.sap.com/abapxml/types/class-pool/zif_sat_ty_adt_types"
+              xmlns:adtbase="http://www.devepos.com/adt/base">
+
+  <tt:root name="adt_obj_refs" type="cl:ty_t_adt_obj_ref"/>
+  <tt:include name="zsat_adt_obj_ref" template="adtObjRef"/>
+
+  <tt:template>
+    <adtbase:adtObjRefs tt:extensible="deep">
+      <tt:loop ref="adt_obj_refs">
+        <tt:apply name="adtObjRef">
+          <tt:with-root name="adt_obj_ref" ref="$ref"/>
+        </tt:apply>
+      </tt:loop>
+    </adtbase:adtObjRefs>
+  </tt:template>
+
+</tt:transform>

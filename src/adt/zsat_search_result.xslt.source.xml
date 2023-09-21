@@ -1,0 +1,48 @@
+<?sap.transform simple?>
+<tt:transform
+    xmlns:tt="http://www.sap.com/transformation-templates"
+    xmlns:objectsearch="http://www.devepos.com/adt/objectsearch"
+    xmlns:adtbase="http://www.devepos.com/adt/base"
+    xmlns:cl="http://www.sap.com/abapxml/types/class-pool/zif_sat_ty_adt_types">
+
+  <tt:root name="object_search_result" type="cl:ty_s_search_result"/>
+
+  <tt:include name="zsat_adt_obj_ref" template="adtObjRef"/>
+
+  <tt:template>
+    <tt:apply name="objectSearchResult">
+      <tt:with-root name="object_search_result" ref="object_search_result"/>
+    </tt:apply>
+  </tt:template>
+
+
+  <!-- Template for the result -->
+  <tt:template name="objectSearchResult">
+    <tt:context>
+      <tt:root name="object_search_result"/>
+    </tt:context>
+
+    <objectsearch:searchResult tt:extensible="deep">
+      <tt:namespace name="adtbase" />
+      <tt:attribute name="objectsearch:resultCount" value-ref="object_search_result.count" />
+      <tt:apply name="resultObjects">
+        <tt:with-root name="result_objects" ref="object_search_result.objects"/>
+      </tt:apply>
+    </objectsearch:searchResult>
+
+  </tt:template>
+
+  <!-- Template for the result objects -->
+  <tt:template name="resultObjects">
+    <tt:context>
+      <tt:root name="result_objects" type="cl:ty_t_adt_obj_ref"/>
+    </tt:context>
+
+    <tt:loop ref="result_objects">
+      <tt:apply name="adtObjRef">
+        <tt:with-root name="adt_obj_ref" ref="$ref"/>
+      </tt:apply>
+    </tt:loop>
+  </tt:template>
+
+</tt:transform>

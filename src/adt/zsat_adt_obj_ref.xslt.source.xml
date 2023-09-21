@@ -1,0 +1,109 @@
+<?sap.transform simple?>
+<tt:transform xmlns:tt="http://www.sap.com/transformation-templates" xmlns:adtbase="http://www.devepos.com/adt/base" xmlns:cl="http://www.sap.com/abapxml/types/class-pool/zif_sat_ty_adt_types">
+
+  <tt:root name="adt_obj_ref" type="cl:ty_s_adt_obj_ref"/>
+  <tt:root name="properties" type="cl:ty_t_property"/>
+
+  <tt:template>
+    <tt:apply name="adtObjRef">
+      <tt:with-root name="adt_obj_ref" ref="adt_obj_ref"/>
+    </tt:apply>
+  </tt:template>
+
+  <!-- PUBLIC TEMPLATES (can be called from other transformations) -->
+  <tt:template name="adtObjRef">
+    <tt:context>
+      <tt:root name="adt_obj_ref"/>
+    </tt:context>
+
+    <adtbase:adtObjRef tt:extensible="deep">
+      <tt:apply name="adtObjRefAttributes">
+        <tt:with-root name="adt_obj_ref" ref="adt_obj_ref"/>
+      </tt:apply>
+      <tt:cond check="exist(adt_obj_ref.properties)">
+        <tt:apply name="properties">
+          <tt:with-root name="properties" ref="adt_obj_ref.properties"/>
+        </tt:apply>
+      </tt:cond>
+    </adtbase:adtObjRef>
+  </tt:template>
+
+  <!-- PUBLIC TEMPLATES (can be called from other transformations) -->
+  <tt:template name="adtObjRefAttributes">
+    <tt:context>
+      <tt:root name="adt_obj_ref"/>
+    </tt:context>
+
+    <tt:cond check="not-initial(adt_obj_ref.uri)">
+      <tt:attribute name="adtbase:uri" value-ref="adt_obj_ref.uri"/>
+    </tt:cond>
+
+    <tt:cond check="not-initial(adt_obj_ref.parent_uri)">
+      <tt:attribute name="adtbase:parentUri" value-ref="adt_obj_ref.parent_uri"/>
+    </tt:cond>
+
+    <tt:cond check="not-initial(adt_obj_ref.type)">
+      <tt:attribute name="adtbase:type" value-ref="adt_obj_ref.type"/>
+    </tt:cond>
+
+    <tt:cond s-check="not-initial(adt_obj_ref.name)">
+      <tt:attribute name="adtbase:name" value-ref="adt_obj_ref.name"/>
+    </tt:cond>
+
+    <tt:cond check="not-initial(adt_obj_ref.alt_name)">
+      <tt:attribute name="adtbase:alternativeName" value-ref="adt_obj_ref.alt_name"/>
+    </tt:cond>
+
+    <tt:cond check="not-initial(adt_obj_ref.devclass)">
+      <tt:attribute name="adtbase:packageName" value-ref="adt_obj_ref.devclass"/>
+    </tt:cond>
+
+    <tt:cond check="not-initial(adt_obj_ref.description)">
+      <tt:attribute name="adtbase:description" value-ref="adt_obj_ref.description"/>
+    </tt:cond>
+
+    <tt:cond check="not-initial(adt_obj_ref.owner)">
+      <tt:attribute name="adtbase:owner" value-ref="adt_obj_ref.owner"/>
+    </tt:cond>
+
+    <tt:cond check="not-initial(adt_obj_ref.created_on)">
+      <tt:attribute name="adtbase:createdOn" value-ref="adt_obj_ref.created_on"/>
+    </tt:cond>
+
+    <tt:cond check="not-initial(adt_obj_ref.changed_by)">
+      <tt:attribute name="adtbase:changedBy" value-ref="adt_obj_ref.changed_by"/>
+    </tt:cond>
+
+    <tt:cond check="not-initial(adt_obj_ref.changed_on)">
+      <tt:attribute name="adtbase:changedOn" value-ref="adt_obj_ref.changed_on"/>
+    </tt:cond>
+
+  </tt:template>
+
+  <!-- PUBLIC TEMPLATES (can be called from other tranformations) -->
+  <tt:template name="properties">
+    <tt:context>
+      <tt:root name="properties"/>
+    </tt:context>
+
+    <tt:loop ref="properties">
+      <tt:cond check="not-initial($ref.value)">
+        <adtbase:property tt:extensible="deep">
+          <tt:attribute name="adtbase:key" value-ref="$ref.key"/>
+
+          <tt:s-cond check="$ref.type='bool'">
+            <tt:attribute map="xml('true')=val('X'),xml('false')=val('')" name="adtbase:value" value-ref="$ref.value"/>
+          </tt:s-cond>
+          <tt:s-cond check="$ref.type!='bool'">
+            <tt:attribute name="adtbase:value" value-ref="$ref.value"/>
+          </tt:s-cond>
+
+          <tt:d-cond>
+            <tt:attribute name="adtbase:value" value-ref="$ref.value"/>
+          </tt:d-cond>
+        </adtbase:property>
+      </tt:cond>
+    </tt:loop>
+  </tt:template>
+
+</tt:transform>
