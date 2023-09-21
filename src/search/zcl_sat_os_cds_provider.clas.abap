@@ -168,8 +168,8 @@ CLASS zcl_sat_os_cds_provider IMPLEMENTATION.
 
         " Find views which exist in a certain development package
         WHEN c_general_search_options-package.
-          add_option_filter( iv_fieldname = c_fields-development_package
-                             it_values    = <ls_option>-value_range ).
+          add_package_filter( iv_fieldname = c_fields-development_package
+                              it_values    = <ls_option>-value_range ).
 
         WHEN c_general_search_options-application_component.
           add_appl_comp_filter( if_use_ddic_sql_view = abap_true

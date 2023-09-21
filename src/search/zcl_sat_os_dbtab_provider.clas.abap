@@ -176,8 +176,8 @@ CLASS zcl_sat_os_dbtab_provider IMPLEMENTATION.
           add_date_filter( iv_fieldname = c_fields-created_date
                            it_values    = <ls_option>-value_range ).
         WHEN c_general_search_options-package.
-          add_option_filter( iv_fieldname = c_fields-development_package
-                             it_values    = <ls_option>-value_range ).
+          add_package_filter( iv_fieldname = c_fields-development_package
+                              it_values    = <ls_option>-value_range ).
 
         WHEN c_general_search_options-software_component.
           add_softw_comp_filter( if_use_ddic_sql_view = abap_true

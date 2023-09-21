@@ -32,6 +32,19 @@ CLASS zcl_sat_general_qv IMPLEMENTATION.
                       msgv1  = |{ iv_option }|.
         ENDIF.
 
+
+      WHEN zif_sat_c_object_search=>c_general_search_params-package.
+        IF iv_value NA '*+'.
+          SELECT SINGLE @abap_true
+            FROM tdevc
+            WHERE devclass = @iv_value
+            INTO @DATA(lf_package_exists).
+          IF lf_package_exists = abap_false.
+            RAISE EXCEPTION TYPE zcx_sat_object_search
+              EXPORTING textid = zcx_sat_object_search=>invalid_package
+                        msgv1  = |{ iv_value }|.
+          ENDIF.
+        ENDIF.
     ENDCASE.
 
     " handle options with fixed content assist
