@@ -172,7 +172,6 @@ INTERFACE zif_sat_c_object_search
       virtual_setter     TYPE string VALUE 'VIRTUAL_SETTER',
       test               TYPE string VALUE 'TEST',
       cds_table_function TYPE string VALUE 'CDS_TABLE_FUNCTION',
-      amdp_ddl_object    TYPE string VALUE 'AMDP_DDL_OBJECT',
     END OF c_method_types.
 
   CONSTANTS:
