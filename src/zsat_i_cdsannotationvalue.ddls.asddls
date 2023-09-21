@@ -1,11 +1,14 @@
 @AbapCatalog.sqlViewName: 'ZSATICDSANV'
 @AbapCatalog.compiler.compareFilter: true
 @AbapCatalog.preserveKey: true
-@AccessControl.authorizationCheck: #CHECK
+@AccessControl.authorizationCheck: #NOT_REQUIRED
 @EndUserText.label: 'Possible Values for a CDS Annotation'
 
+// Tables DDLA_RT_HEADER, DDLA_RT_ENUMS are available starting with NW 7.52
+
 define view ZSAT_I_CdsAnnotationValue
-  as select from ddla_rt_header // >= 7.51
+  // Value 'true' of boolean type annotations
+  as select from ddla_rt_header
 {
   key ddlaname                           as DdlAnnotationName,
   key key_upper                          as AnnotationNameUpper,
@@ -14,7 +17,8 @@ define view ZSAT_I_CdsAnnotationValue
 }
 where
   value_type = 'Boolean'
-union select from ddla_rt_header // >= 7.51
+// Value 'false' of boolean type annotations
+union select from ddla_rt_header
 {
   key ddlaname                            as DdlAnnotationName,
   key key_upper                           as AnnotationNameUpper,
@@ -23,3 +27,12 @@ union select from ddla_rt_header // >= 7.51
 }
 where
   value_type = 'Boolean'
+// Enum Values of annotations
+union select from ddla_rt_enums  as Enum
+  inner join      ddla_rt_header as Header on Header.key_guid = Enum.key_guid
+{
+  key Header.ddlaname          as DdlAnnotationName,
+  key key_upper                as AnnotationNameUpper,
+  key key_raw                  as AnnotationNameRaw,
+      concat('#', Enum.symbol) as Value
+}
