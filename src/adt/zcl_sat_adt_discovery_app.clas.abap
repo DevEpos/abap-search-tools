@@ -5,16 +5,16 @@ CLASS zcl_sat_adt_discovery_app DEFINITION
   CREATE PUBLIC.
 
   PUBLIC SECTION.
-    CONSTANTS c_utils_root_scheme    TYPE string VALUE 'http://www.devepos.com/adt/saat'.
+    CONSTANTS c_utils_root_scheme TYPE string VALUE 'http://www.devepos.com/adt/saat'.
     CONSTANTS c_utils_root_scheme_v2 TYPE string VALUE 'http://www.devepos.com/adt/saat/v2'.
-    CONSTANTS c_utils_rel_scheme     TYPE string VALUE 'http://www.devepos.com/adt/relations/saat'.
-    CONSTANTS c_utils_rel_scheme_v2  TYPE string VALUE 'http://www.devepos.com/adt/relations/saat/v2'.
-    CONSTANTS c_object_search_uri    TYPE string VALUE '/objectsearch'.
-    CONSTANTS c_sapaox_launcher_uri  TYPE string VALUE '/sapaox'.
+    CONSTANTS c_utils_rel_scheme TYPE string VALUE 'http://www.devepos.com/adt/relations/saat'.
+    CONSTANTS c_utils_rel_scheme_v2 TYPE string VALUE 'http://www.devepos.com/adt/relations/saat/v2'.
+    CONSTANTS c_object_search_uri TYPE string VALUE '/objectsearch'.
+    CONSTANTS c_sapaox_launcher_uri TYPE string VALUE '/sapaox'.
     CONSTANTS c_ddic_repo_access_uri TYPE string VALUE '/ddicaccess'.
-    CONSTANTS c_nav_targets_uri      TYPE string VALUE '/navigationtargets'.
-    CONSTANTS c_static_uri           TYPE string VALUE '/devepos/adt/saat'.
-    CONSTANTS c_app_title            TYPE string VALUE 'Discovery Provider for ABAP Search and Analysis Tools'.
+    CONSTANTS c_nav_targets_uri TYPE string VALUE '/navigationtargets'.
+    CONSTANTS c_static_uri TYPE string VALUE '/devepos/adt/saat'.
+    CONSTANTS c_app_title TYPE string VALUE 'Discovery Provider for ABAP Search and Analysis Tools'.
 
     CONSTANTS:
       BEGIN OF c_cds_analysis_uri,
@@ -173,11 +173,11 @@ CLASS zcl_sat_adt_discovery_app IMPLEMENTATION.
         category_term   = zif_sat_c_object_search=>c_content_assist-terms-table_field ).
 
     io_registry->register_discoverable_resource(
-      url             = '/annotation'
-      handler_class   = 'ZCL_SAT_ADT_RES_ANNO_VH'
-      description     = 'Search for Annotation'
-      category_scheme = zif_sat_c_object_search=>c_content_assist-category_scheme
-      category_term   = zif_sat_c_object_search=>c_content_assist-terms-annotation ).
+        url             = '/annotation'
+        handler_class   = 'ZCL_SAT_ADT_RES_ANNO_VH'
+        description     = 'Search for Annotation'
+        category_scheme = zif_sat_c_object_search=>c_content_assist-category_scheme
+        category_term   = zif_sat_c_object_search=>c_content_assist-terms-annotation ).
 
     IF sy-saprl >= 752.
       io_registry->register_discoverable_resource(
@@ -285,7 +285,6 @@ CLASS zcl_sat_adt_discovery_app IMPLEMENTATION.
         description     = 'Resource for includes in a db table'
         category_scheme = zif_sat_c_object_search=>c_content_assist-category_scheme
         category_term   = zif_sat_c_object_search=>c_content_assist-terms-db_tab_include ).
-
   ENDMETHOD.
 
   METHOD register_sapaox_launcher.
@@ -325,26 +324,23 @@ CLASS zcl_sat_adt_discovery_app IMPLEMENTATION.
         relation      = c_utils_rel_scheme_v2 && c_cds_analysis_uri-top_down_analysis ).
 
     " Register URI templates for Where-Used-Analysis
-    DATA(lv_wusl_in_assoc_template) = c_cds_analysis_uri-where_used_base &&
+    DATA(lv_where_used_in_template) = c_cds_analysis_uri-where_used_base &&
         |\{?{ zif_sat_c_adt_utils=>c_cds_analysis_parameter-entity_name }\}| &&
         |\{&{ zif_sat_c_adt_utils=>c_cds_analysis_parameter-source_origin }*\}| &&
+        |\{&{ zif_sat_c_adt_utils=>c_cds_analysis_parameter-recursive_search }*\}| &&
         |\{&{ zif_sat_c_adt_utils=>c_cds_analysis_parameter-only_released_entities }*\}|.
 
     IF sy-saprl >= 752.
-      lv_wusl_in_assoc_template = lv_wusl_in_assoc_template && |\{&{ zif_sat_c_adt_utils=>c_cds_analysis_parameter-only_local_assocs }*\}|.
+      lv_where_used_in_template = lv_where_used_in_template && |\{&{ zif_sat_c_adt_utils=>c_cds_analysis_parameter-only_local_assocs }*\}|.
     ENDIF.
 
     lo_element_info_collection->register_disc_res_w_template(
-        template      = c_cds_analysis_uri-where_used_base &&
-                        |\{?{ zif_sat_c_adt_utils=>c_cds_analysis_parameter-entity_name }\}| &&
-                        |\{&{ zif_sat_c_adt_utils=>c_cds_analysis_parameter-source_origin }*\}| &&
-                        |\{&{ zif_sat_c_adt_utils=>c_cds_analysis_parameter-recursive_search }*\}| &&
-                        |\{&{ zif_sat_c_adt_utils=>c_cds_analysis_parameter-only_released_entities }*\}|
+        template      = lv_where_used_in_template
         handler_class = 'ZCL_SAT_ADT_RES_CDS_A_WUSL'
         relation      = c_utils_rel_scheme_v2 && c_cds_analysis_uri-where_used_base && c_cds_analysis_uri-where_used_in_from ).
 
     lo_element_info_collection->register_disc_res_w_template(
-        template      = lv_wusl_in_assoc_template
+        template      = lv_where_used_in_template
         handler_class = 'ZCL_SAT_ADT_RES_CDS_A_WUSL'
         relation      = c_utils_rel_scheme_v2 && c_cds_analysis_uri-where_used_base && c_cds_analysis_uri-where_used_in_assoc ).
 
