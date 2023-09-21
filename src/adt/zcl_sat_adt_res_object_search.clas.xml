@@ -10,6 +10,7 @@
     <CLSCCINCL>X</CLSCCINCL>
     <FIXPT>X</FIXPT>
     <UNICODE>X</UNICODE>
+    <WITH_UNIT_TESTS>X</WITH_UNIT_TESTS>
    </VSEOCLASS>
    <DESCRIPTIONS>
     <SEOCOMPOTX>
@@ -18,49 +19,9 @@
      <DESCRIPT>Create response</DESCRIPT>
     </SEOCOMPOTX>
     <SEOCOMPOTX>
-     <CMPNAME>DETERMINE_PACKAGE_HIERARCHY</CMPNAME>
+     <CMPNAME>CREATE_RESULT_CONVERTER</CMPNAME>
      <LANGU>E</LANGU>
-     <DESCRIPT>Determine the package hierarchy of the search result</DESCRIPT>
-    </SEOCOMPOTX>
-    <SEOCOMPOTX>
-     <CMPNAME>GET_QUERY_PARAMETER</CMPNAME>
-     <LANGU>E</LANGU>
-     <DESCRIPT>Retrieve query parameters from request</DESCRIPT>
-    </SEOCOMPOTX>
-    <SEOCOMPOTX>
-     <CMPNAME>GET_REQUEST_PARAM_VALUE</CMPNAME>
-     <LANGU>E</LANGU>
-     <DESCRIPT>Retrieve value of request parameter</DESCRIPT>
-    </SEOCOMPOTX>
-    <SEOCOMPOTX>
-     <CMPNAME>GET_REQUEST_PARAM_VALUES</CMPNAME>
-     <LANGU>E</LANGU>
-     <DESCRIPT>Retrieve values of request parameter</DESCRIPT>
-    </SEOCOMPOTX>
-    <SEOCOMPOTX>
-     <CMPNAME>GET_SEARCH_PARAMETER</CMPNAME>
-     <LANGU>E</LANGU>
-     <DESCRIPT>Get search parameter value(s) from request</DESCRIPT>
-    </SEOCOMPOTX>
-    <SEOCOMPOTX>
-     <CMPNAME>POST_PROCESS_RESULT</CMPNAME>
-     <LANGU>E</LANGU>
-     <DESCRIPT>Post processing for search results</DESCRIPT>
-    </SEOCOMPOTX>
-    <SEOCOMPOTX>
-     <CMPNAME>POST_PROCESS_RESULT_ENTRY</CMPNAME>
-     <LANGU>E</LANGU>
-     <DESCRIPT>Post processing for a search result entry</DESCRIPT>
-    </SEOCOMPOTX>
-    <SEOCOMPOTX>
-     <CMPNAME>READ_DDL_SOURCES</CMPNAME>
-     <LANGU>E</LANGU>
-     <DESCRIPT>Reads DDL Sources in for search result</DESCRIPT>
-    </SEOCOMPOTX>
-    <SEOCOMPOTX>
-     <CMPNAME>SET_DDL_POSITIONAL_URI</CMPNAME>
-     <LANGU>E</LANGU>
-     <DESCRIPT>Sets the positional URI for the given DDLS result</DESCRIPT>
+     <DESCRIPT>Creates result converter for object search result</DESCRIPT>
     </SEOCOMPOTX>
    </DESCRIPTIONS>
   </asx:values>

@@ -22,6 +22,7 @@
      <MIN_RELEASE>751</MIN_RELEASE>
     </item>
    </REQUIREMENTS>
+   <VERSION_CONSTANT>zif_sat_version=&gt;version</VERSION_CONSTANT>
   </DATA>
  </asx:values>
 </asx:abap>

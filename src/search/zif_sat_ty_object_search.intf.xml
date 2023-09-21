@@ -12,6 +12,16 @@
    </VSEOINTERF>
    <DESCRIPTIONS>
     <SEOCOMPOTX>
+     <CMPNAME>TY_QUERY_FILTER</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Setting for search option</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>TY_QUERY_FILTERS</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>List of option configurations</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
      <CMPNAME>TY_SEARCH_TYPE</CMPNAME>
      <LANGU>E</LANGU>
      <DESCRIPT>Type for the object search</DESCRIPT>
