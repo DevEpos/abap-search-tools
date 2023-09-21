@@ -37,7 +37,6 @@ INTERFACE zif_sat_c_select_source_id
   CONSTANTS zsat_i_cdsextensionviews      TYPE string VALUE 'ZSAT_I_CDSEXTENSIONVIEWS'.
   CONSTANTS zsat_i_cdsviewt               TYPE string VALUE 'ZSAT_I_CDSVIEWT'.
   CONSTANTS zsat_i_databaseview           TYPE string VALUE 'ZSAT_I_DATABASEVIEW'.
-  CONSTANTS zsat_i_apistates              TYPE string VALUE 'ZSAT_I_APISTATES'.
   CONSTANTS zsat_i_ddlusageinddl          TYPE string VALUE 'ZSAT_I_DDLUSAGEINDDL'.
   CONSTANTS zsat_i_cdsviewfield           TYPE string VALUE 'ZSAT_I_CDSVIEWFIELD'.
   CONSTANTS zsat_i_cdsviewwithparameter   TYPE string VALUE 'ZSAT_I_CDSVIEWWITHPARAMETER'.

@@ -32,13 +32,12 @@ CLASS ltcl_abap_unit IMPLEMENTATION.
     DATA ls_response TYPE sadt_rest_response.
 
     DATA(ls_input) = VALUE zif_sat_ty_adt_types=>ty_s_query_input(
-        type           = zif_sat_c_object_search=>c_search_type-cds_view
-        max_rows       = 1
-        with_api_state = abap_true
-        fields         = VALUE #( ( name    = zif_sat_c_object_search=>c_search_fields-object_name_input_key
-                                    values  = VALUE #( ( `zsat_i_associatedincds` ) ) )
-                                  ( name    = zif_sat_c_object_search=>c_search_fields-object_filter_input_key
-                                    filters = VALUE #( ( name = 'field' values = VALUE #( ( `ddlname` ) ) ) ) ) ) ).
+        type     = zif_sat_c_object_search=>c_search_type-cds_view
+        max_rows = 1
+        fields   = VALUE #( ( name    = zif_sat_c_object_search=>c_search_fields-object_name_input_key
+                              values  = VALUE #( ( `zsat_i_associatedincds` ) ) )
+                            ( name    = zif_sat_c_object_search=>c_search_fields-object_filter_input_key
+                              filters = VALUE #( ( name = 'field' values = VALUE #( ( `ddlname` ) ) ) ) ) ) ).
 
     DATA(ls_request) = VALUE sadt_rest_request(
                                  request_line  = VALUE #( method = 'POST' uri = '/devepos/adt/saat/objectsearch' )

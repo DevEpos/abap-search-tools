@@ -109,8 +109,7 @@ CLASS lcl_result_converter IMPLEMENTATION.
                          owner       = is_result_entry-created_by
                          created_on  = is_result_entry-created_date
                          changed_by  = is_result_entry-changed_by
-                         changed_on  = is_result_entry-changed_date
-                         properties  = VALUE #( ( key = 'API_STATE' value = is_result_entry-api_state ) ) ).
+                         changed_on  = is_result_entry-changed_date ).
   ENDMETHOD.
 
   METHOD before_conversion.

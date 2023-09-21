@@ -13,11 +13,6 @@
    </VSEOCLASS>
    <DESCRIPTIONS>
     <SEOCOMPOTX>
-     <CMPNAME>ADD_API_OPTION_FILTER</CMPNAME>
-     <LANGU>E</LANGU>
-     <DESCRIPT>Create filter for API option</DESCRIPT>
-    </SEOCOMPOTX>
-    <SEOCOMPOTX>
      <CMPNAME>ADD_APPL_COMP_FILTER</CMPNAME>
      <LANGU>E</LANGU>
      <DESCRIPT>Creates filter for application component</DESCRIPT>

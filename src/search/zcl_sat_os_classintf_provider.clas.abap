@@ -27,7 +27,6 @@ CLASS zcl_sat_os_classintf_provider DEFINITION
         interface TYPE string VALUE 'interface',
         friend    TYPE string VALUE 'friend',
         super     TYPE string VALUE 'super',
-        api       TYPE string VALUE 'api',
       END OF c_alias_names.
 
     CONSTANTS:
@@ -229,14 +228,6 @@ CLASS zcl_sat_os_classintf_provider IMPLEMENTATION.
         WHEN c_class_intf_search_option-category.
           add_option_filter( iv_fieldname = |{ c_clif_alias }~{ c_fields-category }|
                              it_values    = <ls_option>-value_range ).
-
-        " Find classes/interfaces according to the given api release status
-        WHEN c_general_search_options-release_state.
-          add_api_option_filter(
-              it_values          = <ls_option>-value_range
-              iv_ref_field       = |{ c_fields-classintf }|
-              iv_ref_table_alias = c_clif_alias
-              it_tadir_type      = VALUE #( ( zif_sat_c_tadir_types=>class ) ( zif_sat_c_tadir_types=>interface ) ) ).
 
         " Find classes/interfaces with certain Attributes
         WHEN c_class_intf_search_option-attribute.

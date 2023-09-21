@@ -70,7 +70,6 @@ INTERFACE zif_sat_c_object_search
       by_owner       TYPE string VALUE 'OWNER',
       by_select_from TYPE string VALUE 'FROM',
       by_association TYPE string VALUE 'ASSOC',
-      by_api         TYPE string VALUE 'API',
       by_description TYPE string VALUE 'DESC',
       by_type        TYPE string VALUE 'TYPE',
       by_package     TYPE string VALUE 'PACKAGE',
@@ -232,7 +231,6 @@ INTERFACE zif_sat_c_object_search
       changed_by             TYPE string VALUE 'changedby',
       application_component  TYPE string VALUE 'appl',
       software_component     TYPE string VALUE 'comp',
-      release_state          TYPE string VALUE 'api',
       description            TYPE string VALUE 'desc',
       type                   TYPE string VALUE 'type',
       package                TYPE string VALUE 'package',
@@ -240,7 +238,6 @@ INTERFACE zif_sat_c_object_search
       changed_on             TYPE string VALUE 'changed',
       maintenance            TYPE string VALUE 'maintflag',
       use_and_for_filters    TYPE string VALUE 'useAndForFilters',
-      read_api_state         TYPE string VALUE 'withApiState',
       get_all_results        TYPE string VALUE 'getAllResults',
       read_package_hierarchy TYPE string VALUE 'withPackageHierarchy',
     END OF c_general_search_params.
@@ -395,14 +392,6 @@ INTERFACE zif_sat_c_object_search
     END OF c_table_storage_type.
 
   CONSTANTS:
-    "! Values for API option
-    BEGIN OF c_api_option_value,
-      released      TYPE string VALUE 'RELEASED',
-      deprecated    TYPE string VALUE 'DEPRECATED',
-      custom_fields TYPE string VALUE 'ADD_CUSTOM_FIELDS',
-    END OF c_api_option_value.
-
-  CONSTANTS:
     "! Values for 'TYPE' option
     BEGIN OF c_type_option_value,
       function        TYPE string VALUE 'FUNCTION',
@@ -427,7 +416,6 @@ INTERFACE zif_sat_c_object_search
         annotation        TYPE string VALUE 'annotation',
         annotatio_value   TYPE string VALUE 'annotationvalue',
         db_entity         TYPE string VALUE 'dbentity',
-        release_state     TYPE string VALUE 'releasestate',
         cds_type          TYPE string VALUE 'cdstype',
         cds_extension     TYPE string VALUE 'cdsextension',
         abap_language     TYPE string VALUE 'abaplanguage',

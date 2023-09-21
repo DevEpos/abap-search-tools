@@ -91,7 +91,6 @@ CLASS zcl_sat_adt_res_object_search IMPLEMENTATION.
                     it_options              = get_options( )
                     is_search_engine_params = VALUE #(
                         use_and_cond_for_options = ms_query_input-combine_filters_with_and
-                        with_api_state           = ms_query_input-with_api_state
                         get_all                  = ms_query_input-no_row_limit
                         custom_options           = ms_query_input-custom_options )
           IMPORTING et_results              = mt_query_result ).

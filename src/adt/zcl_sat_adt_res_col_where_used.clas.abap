@@ -56,7 +56,6 @@ CLASS zcl_sat_adt_res_col_where_used IMPLEMENTATION.
                                              alt_entity_name = <ls_where_used>-entityid
                                              type            = zif_sat_c_object_types=>data_definition
                                              is_calculated   = <ls_where_used>-is_calculated
-                                             api_state       = <ls_where_used>-apistate
                                              source_type     = <ls_where_used>-sourcetype ) ).
     ENDLOOP.
   ENDMETHOD.

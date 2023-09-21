@@ -49,10 +49,6 @@
       <tt:attribute name="cdsanalysis:sourceType" value-ref="field_info.source_type"/>
     </tt:cond>
 
-    <tt:cond check="not-initial(field_info.api_state)">
-      <tt:attribute name="cdsanalysis:apiState" value-ref="field_info.api_state"/>
-    </tt:cond>
-
     <tt:cond check="not-initial(field_info.description)">
       <tt:attribute name="cdsanalysis:description" value-ref="field_info.description"/>
     </tt:cond>
