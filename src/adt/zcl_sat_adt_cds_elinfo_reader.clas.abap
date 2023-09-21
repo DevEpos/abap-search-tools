@@ -18,7 +18,6 @@ CLASS zcl_sat_adt_cds_elinfo_reader DEFINITION
     TYPES:
       ddlname     TYPE ddlname,
       source_type TYPE char1,
-      api_state   TYPE string.
     TYPES: END OF ty_s_association.
     TYPES: ty_t_association TYPE STANDARD TABLE OF ty_s_association WITH EMPTY KEY.
 
@@ -158,7 +157,6 @@ CLASS zcl_sat_adt_cds_elinfo_reader IMPLEMENTATION.
          name         = <ls_assoc>-ref_cds_view
          raw_name     = <ls_assoc>-ref_cds_view_raw
          source_type  = <ls_assoc>-source_type
-         api_state    = <ls_assoc>-api_state
          object_type  = <ls_assoc>-entity_type
          description  = <ls_assoc>-ddtext
       ).
@@ -180,7 +178,6 @@ CLASS zcl_sat_adt_cds_elinfo_reader IMPLEMENTATION.
          raw_name     = <ls_base_entity>-entityname_raw
          object_type  = <ls_base_entity>-table_kind
          source_type  = <ls_base_entity>-source_type
-         api_state    = <ls_base_entity>-api_state
          description  = <ls_base_entity>-description
       ).
       DATA(ls_object_ref) = zcl_sat_adt_util=>create_adt_uri(

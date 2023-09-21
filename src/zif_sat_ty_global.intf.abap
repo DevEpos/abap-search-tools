@@ -7,8 +7,6 @@ INTERFACE zif_sat_ty_global
     ty_t_string_range        TYPE RANGE OF string,
     "! <p class="shorttext synchronized" lang="en">Range for Annotation name</p>
     ty_t_cds_anno_name_range TYPE RANGE OF ddannotation_key,
-    ty_api_state             TYPE c LENGTH 30,
-    ty_t_cds_api_state       TYPE STANDARD TABLE OF ty_api_state WITH EMPTY KEY,
     ty_sql_fieldname         TYPE c LENGTH 62,
     ty_selopt_tab_position   TYPE n LENGTH 3.
 

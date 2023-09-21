@@ -29,7 +29,6 @@ CLASS zcl_sat_cds_view DEFINITION
         !it_columns     TYPE dd03ndvtab
         !it_parameters  TYPE zif_sat_ty_global=>ty_t_cds_parameter
         !it_association TYPE zif_sat_ty_global=>ty_t_cds_association OPTIONAL
-        !it_api_states  TYPE zif_sat_ty_global=>ty_t_cds_api_state OPTIONAL
         !it_base_tables TYPE zsat_cds_view_base_table_t OPTIONAL .
     "! <p class="shorttext synchronized" lang="en">Get Annotation of CDS View</p>
     "!
@@ -98,7 +97,6 @@ CLASS zcl_sat_cds_view DEFINITION
     DATA mt_parameters TYPE zif_sat_ty_global=>ty_t_cds_parameter .
     "! <p class="shorttext synchronized" lang="en">DD: Table for Node Attributes</p>
     DATA mt_columns TYPE dd03ndvtab .
-    DATA mt_api_states TYPE zif_sat_ty_global=>ty_t_cds_api_state.
     DATA mt_association_header TYPE dd08bvtab .
     DATA mt_association_field TYPE dd05bvtab .
     DATA mf_has_associations TYPE abap_bool .
@@ -107,7 +105,6 @@ CLASS zcl_sat_cds_view DEFINITION
     "! <p class="shorttext synchronized" lang="en">List Base tables of CDS View</p>
     DATA mt_base_tables TYPE zsat_cds_view_base_table_t .
     DATA mf_base_tables_loaded TYPE abap_bool .
-    DATA mf_api_states_loaded TYPE abap_bool.
     DATA mf_tadir_info_loaded TYPE abap_bool.
     DATA ms_tadir_info TYPE zif_sat_ty_global=>ty_s_cds_tadir.
     DATA mt_annotations TYPE zif_sat_ty_global=>ty_t_cds_annotation.
@@ -129,10 +126,6 @@ CLASS zcl_sat_cds_view IMPLEMENTATION.
     IF it_base_tables IS SUPPLIED.
       mf_base_tables_loaded = abap_true.
       mt_base_tables        = it_base_tables.
-    ENDIF.
-    IF it_api_states IS SUPPLIED.
-      mf_api_states_loaded = abap_true.
-      mt_api_states = it_api_states.
     ENDIF.
     mf_has_associations   = xsdbool( mt_association IS NOT INITIAL ).
 

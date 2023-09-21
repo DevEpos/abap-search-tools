@@ -41,7 +41,6 @@ INTERFACE zif_sat_ty_adt_types
       fieldname     TYPE fieldname,
       ddlname       TYPE ddlname,
       sourcetype    TYPE char1,
-      apistate      TYPE string,
       is_calculated TYPE abap_bool,
     END OF ty_s_field_usage,
 
@@ -67,7 +66,6 @@ INTERFACE zif_sat_ty_adt_types
       max_rows                 TYPE i,
       no_row_limit             TYPE abap_bool,
       combine_filters_with_and TYPE abap_bool,
-      with_api_state           TYPE abap_bool,
       fields                   TYPE ty_t_query_input_field,
       custom_options           TYPE ty_t_property,
     END OF ty_s_query_input,
@@ -127,7 +125,6 @@ INTERFACE zif_sat_ty_adt_types
       uri             TYPE string,
       description     TYPE string,
       source_type     TYPE string,
-      api_state       TYPE string,
       is_key          TYPE abap_bool,
       is_calculated   TYPE abap_bool,
       children        TYPE REF TO data,

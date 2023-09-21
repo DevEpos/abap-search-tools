@@ -16,7 +16,6 @@ INTERFACE zif_sat_ty_object_search
       tadir_type         TYPE trobjtype,
       description        TYPE ddtext,
       devclass           TYPE devclass,
-      api_state          TYPE c LENGTH 30,
       cds_source_type    TYPE c LENGTH 1,
       message_number     TYPE t100-msgnr,
       message_short_text TYPE t100-text,
@@ -69,7 +68,6 @@ INTERFACE zif_sat_ty_object_search
     "! <p class="shorttext synchronized">Search engine parameters</p>
     BEGIN OF ty_s_search_engine_params,
       use_and_cond_for_options TYPE abap_bool,
-      with_api_state           TYPE abap_bool,
       get_all                  TYPE abap_bool,
       custom_options           TYPE zif_sat_ty_adt_types=>ty_t_property,
     END OF ty_s_search_engine_params,

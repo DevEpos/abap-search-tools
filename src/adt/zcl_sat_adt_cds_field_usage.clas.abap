@@ -22,7 +22,6 @@ CLASS zcl_sat_adt_cds_field_usage DEFINITION
         viewfield   TYPE fieldname,
         ddlname     TYPE ddlname,
         sourcetype  TYPE char1,
-        apistate    TYPE string,
       END OF ty_s_cds_usage.
 
     TYPES:

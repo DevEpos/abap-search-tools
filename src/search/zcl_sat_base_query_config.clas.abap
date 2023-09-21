@@ -99,7 +99,6 @@ CLASS zcl_sat_base_query_config DEFINITION
         owner       TYPE string VALUE 'ABAP:IMG_USER',
         owner_entry TYPE string VALUE 'ABAP:IMG_USER_EDIT',
         package     TYPE string VALUE 'ABAP:IMG_PACKAGE',
-        api         TYPE string VALUE 'ABAP:IMG_API',
         description TYPE string VALUE 'ABAP:IMG_DESCRIPTION',
         appl_comp   TYPE string VALUE 'ABAP:IMG_APPL_COMP',
         soft_comp   TYPE string VALUE 'ABAP:IMG_SOFT_COMP',

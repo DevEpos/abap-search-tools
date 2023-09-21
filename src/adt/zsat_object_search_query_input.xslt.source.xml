@@ -13,9 +13,6 @@
       <tt:cond check="not-initial(query_input.combine_filters_with_and)">
         <tt:attribute name="objectsearch:combineFiltersWithAnd" option="format(boolean)" value-ref="query_input.combine_filters_with_and"/>
       </tt:cond>
-      <tt:cond check="not-initial(query_input.with_api_state)">
-        <tt:attribute name="objectsearch:withApiState" option="format(boolean)" value-ref="query_input.with_api_state"/>
-      </tt:cond>
       <tt:cond check="not-initial(query_input.no_row_limit)">
         <tt:attribute name="objectsearch:rowLimitDisabled" option="format(boolean)" value-ref="query_input.no_row_limit"/>
       </tt:cond>

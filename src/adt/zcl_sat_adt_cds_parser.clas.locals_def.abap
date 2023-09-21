@@ -19,7 +19,6 @@ CLASS lcl_node DEFINITION FINAL.
     DATA relation        TYPE string.
     DATA alias           TYPE string.
     DATA source_type     TYPE char1.
-    DATA api_state       TYPE string.
     DATA entity_name     TYPE string.
     DATA raw_entity_name TYPE string.
     DATA description     TYPE string.

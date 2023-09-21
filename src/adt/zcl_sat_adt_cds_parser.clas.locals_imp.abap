@@ -84,10 +84,6 @@ CLASS lcl_node_helper IMPLEMENTATION.
     IF io_node->alias IS NOT INITIAL AND io_node->alias NP '=*'.
       cs_top_down_entry-alias = io_node->alias.
     ENDIF.
-    IF io_node->api_state IS NOT INITIAL.
-      cs_top_down_entry-entity_ref-properties = VALUE #( BASE cs_top_down_entry-entity_ref-properties
-                                                         ( key = 'API_STATE' value = io_node->api_state ) ).
-    ENDIF.
     IF io_node->source_type IS NOT INITIAL.
       cs_top_down_entry-entity_ref-properties = VALUE #( BASE cs_top_down_entry-entity_ref-properties
                                                          ( key   = 'SOURCE_TYPE'
@@ -110,9 +106,6 @@ CLASS lcl_node_helper IMPLEMENTATION.
                                     description = io_node->description
                                     uri         = io_node->uri
                                     owner       = io_node->owner ).
-    IF io_node->api_state IS NOT INITIAL.
-      result-source_entity-properties = VALUE #( ( key = 'API_STATE' value = io_node->api_state ) ).
-    ENDIF.
     IF io_node->source_type IS NOT INITIAL.
       result-source_entity-properties = VALUE #( BASE result-source_entity-properties
                                                  ( key   = 'SOURCE_TYPE'
