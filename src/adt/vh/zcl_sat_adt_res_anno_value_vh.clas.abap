@@ -15,8 +15,8 @@ CLASS zcl_sat_adt_res_anno_value_vh DEFINITION
   PRIVATE SECTION.
     CONSTANTS c_ddla_rt_header_tab TYPE tabname VALUE 'DDLA_RT_HEADER'.
 
-    TYPES ty_t_anno_name_range TYPE RANGE OF zsat_i_cdsannotationvalue-annotationnameupper.
-    TYPES ty_t_anno_value_range TYPE RANGE OF zsat_i_cdsannotationvalue-value.
+    TYPES ty_t_anno_name_range TYPE RANGE OF string.
+    TYPES ty_t_anno_value_range TYPE RANGE OF string.
 
     "! <p class="shorttext synchronized">Find boolean annotation values for the given criteria</p>
     METHODS find_boolean_values
