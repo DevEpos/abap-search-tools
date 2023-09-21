@@ -60,20 +60,20 @@ CLASS zcl_sat_base_search_provider DEFINITION
         changed_date       TYPE string VALUE 'CHANGED_DATE',
       END OF c_result_fields.
 
-    DATA mo_search_query             TYPE REF TO zif_sat_object_search_query.
-    DATA ms_search_engine_params     TYPE zif_sat_ty_object_search=>ty_s_search_engine_params.
-    DATA mt_result                   TYPE zif_sat_ty_object_search=>ty_t_search_result.
-    DATA mt_criteria                 TYPE zif_sat_ty_global=>ty_t_seltab_sql.
-    DATA mt_criteria_or              TYPE zif_sat_ty_global=>ty_t_or_seltab_sql.
-    DATA mt_criteria_and             TYPE zif_sat_ty_global=>ty_t_and_seltab_sql.
-    DATA mt_where                    TYPE string_table.
-    DATA mt_select                   TYPE string_table.
-    DATA mt_order_by                 TYPE string_table.
-    DATA mt_group_by                 TYPE string_table.
-    DATA mt_having                   TYPE string_table.
-    DATA mt_from                     TYPE TABLE OF string.
-    DATA ms_join_def                 TYPE zif_sat_ty_global=>ty_s_join_def.
-    DATA mf_excluding_found          TYPE abap_bool.
+    DATA mo_search_query TYPE REF TO zif_sat_object_search_query.
+    DATA ms_search_engine_params TYPE zif_sat_ty_object_search=>ty_s_search_engine_params.
+    DATA mt_result TYPE zif_sat_ty_object_search=>ty_t_search_result.
+    DATA mt_criteria TYPE zif_sat_ty_global=>ty_t_seltab_sql.
+    DATA mt_criteria_or TYPE zif_sat_ty_global=>ty_t_or_seltab_sql.
+    DATA mt_criteria_and TYPE zif_sat_ty_global=>ty_t_and_seltab_sql.
+    DATA mt_where TYPE string_table.
+    DATA mt_select TYPE string_table.
+    DATA mt_order_by TYPE string_table.
+    DATA mt_group_by TYPE string_table.
+    DATA mt_having TYPE string_table.
+    DATA mt_from TYPE TABLE OF string.
+    DATA ms_join_def TYPE zif_sat_ty_global=>ty_s_join_def.
+    DATA mf_excluding_found TYPE abap_bool.
     DATA mv_description_filter_field TYPE string.
 
     "! <p class="shorttext synchronized">Start new criteria table connected with OR</p>
@@ -252,9 +252,16 @@ CLASS zcl_sat_base_search_provider DEFINITION
         iv_ref_field         TYPE fieldname
         iv_ref_table_alias   TYPE string.
 
+    METHODS add_package_filter
+      IMPORTING
+        it_values    TYPE zif_sat_ty_object_search=>ty_t_value_range
+        iv_fieldname TYPE string.
+
     METHODS reset.
 
   PRIVATE SECTION.
+    TYPES ty_package_range TYPE RANGE OF devclass.
+
     CONSTANTS c_devc_tab_alias TYPE string VALUE 'devclass'.
 
     DATA mf_devclass_join_added TYPE abap_bool.
@@ -279,6 +286,12 @@ CLASS zcl_sat_base_search_provider DEFINITION
         if_use_ddic_sql_view TYPE abap_bool OPTIONAL
         iv_ref_table_alias   TYPE string
         iv_ref_field         TYPE fieldname.
+
+    METHODS resolve_package_hierarchy
+      IMPORTING
+        it_values     TYPE zif_sat_ty_object_search=>ty_t_value_range
+      RETURNING
+        VALUE(result) TYPE zif_sat_ty_object_search=>ty_t_value_range.
 ENDCLASS.
 
 
@@ -342,7 +355,7 @@ CLASS zcl_sat_base_search_provider IMPLEMENTATION.
   METHOD add_api_option_filter.
     CONSTANTS c_api_alias TYPE string VALUE 'api' ##NO_TEXT.
 
-    DATA lt_api_filters   TYPE zif_sat_ty_object_search=>ty_t_value_range.
+    DATA lt_api_filters TYPE zif_sat_ty_object_search=>ty_t_value_range.
     DATA lt_state_filters TYPE zif_sat_ty_object_search=>ty_t_value_range.
 
     DATA(lf_single_tadir_type) = xsdbool( lines( it_tadir_type ) = 1 ).
@@ -416,6 +429,11 @@ CLASS zcl_sat_base_search_provider IMPLEMENTATION.
 
     add_option_filter( iv_fieldname = |{ c_devc_tab_alias }~softwarecomponent|
                        it_values    = it_values ).
+  ENDMETHOD.
+
+  METHOD add_package_filter.
+    add_option_filter( iv_fieldname = iv_fieldname
+                       it_values    = resolve_package_hierarchy( it_values = it_values ) ).
   ENDMETHOD.
 
   METHOD add_filter.
@@ -787,5 +805,27 @@ CLASS zcl_sat_base_search_provider IMPLEMENTATION.
                                                  type            = zif_sat_c_join_cond_type=>field ) ) ).
       mf_devclass_join_added = abap_true.
     ENDIF.
+  ENDMETHOD.
+
+  METHOD resolve_package_hierarchy.
+    result = VALUE #( FOR range IN it_values
+                      WHERE ( option = zif_sat_c_options=>contains_pattern )
+                      ( range ) ).
+
+    LOOP AT it_values ASSIGNING FIELD-SYMBOL(<ls_value_range>) WHERE option <> zif_sat_c_options=>contains_pattern.
+      cl_pak_package_queries=>get_all_subpackages( EXPORTING  im_package             = CONV #( <ls_value_range>-low )
+                                                              im_also_local_packages = abap_true
+                                                   IMPORTING  et_subpackages         = DATA(lt_subpackages)
+                                                   EXCEPTIONS OTHERS                 = 1 ).
+
+      result = VALUE #( BASE result
+                        ( sign   = <ls_value_range>-sign
+                          option = zif_sat_c_options=>equals
+                          low    = <ls_value_range>-low )
+                        ( LINES OF VALUE #( FOR subpackage IN lt_subpackages
+                                            ( sign   = <ls_value_range>-sign
+                                              option = zif_sat_c_options=>equals
+                                              low    = subpackage-package ) ) ) ).
+    ENDLOOP.
   ENDMETHOD.
 ENDCLASS.

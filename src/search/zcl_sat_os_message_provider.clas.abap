@@ -38,80 +38,7 @@ CLASS zcl_sat_os_message_provider DEFINITION
 ENDCLASS.
 
 
-
-CLASS ZCL_SAT_OS_MESSAGE_PROVIDER IMPLEMENTATION.
-
-
-  METHOD configure_message_filters.
-    LOOP AT mo_search_query->mt_search_options ASSIGNING FIELD-SYMBOL(<ls_option>)
-            WHERE target = zif_sat_c_object_search=>c_search_fields-message_filter_input_key.
-
-      CASE <ls_option>-option.
-
-        WHEN c_general_search_options-changed_by.
-          add_option_filter( iv_fieldname = |{ c_aliases-message }~{ c_fields-changed_by }|
-                             it_values    = <ls_option>-value_range ).
-
-        WHEN c_general_search_options-changed_on.
-          add_date_filter( iv_fieldname = |{ c_aliases-message }~{ c_fields-changed_on }|
-                           it_values    = <ls_option>-value_range ).
-
-        WHEN c_msg_search_params-self_explanatory.
-          " '3' - self explanatory
-          " ''  - object required documentation
-          DATA(lv_self_expl) = COND doku_selfd( WHEN <ls_option>-value_range[ 1 ]-low = abap_true THEN '3' ELSE space  ).
-          add_option_filter( iv_fieldname = |{ c_aliases-message }~{ c_fields-is_self_explanatory }|
-                             it_values    = VALUE #( ( sign = 'I' option = 'EQ' low = lv_self_expl ) ) ).
-      ENDCASE.
-    ENDLOOP.
-  ENDMETHOD.
-
-
-  METHOD configure_msg_clas_filters.
-    LOOP AT mo_search_query->mt_search_options ASSIGNING FIELD-SYMBOL(<ls_option>)
-            WHERE target = zif_sat_c_object_search=>c_search_fields-object_filter_input_key.
-
-      CASE <ls_option>-option.
-
-        WHEN c_general_search_options-description.
-          add_option_filter( iv_fieldname = |{ c_aliases-msg_clas }~{ mv_description_filter_field }|
-                             it_values    = <ls_option>-value_range ).
-
-        WHEN c_general_search_options-user.
-          add_option_filter( iv_fieldname = |{ c_aliases-msg_clas }~{ c_fields-created_by }|
-                             it_values    = <ls_option>-value_range ).
-
-        WHEN c_general_search_options-created_on.
-          add_date_filter( iv_fieldname = |{ c_aliases-msg_clas }~{ c_fields-created_on }|
-                           it_values    = <ls_option>-value_range ).
-
-        WHEN c_general_search_options-changed_by.
-          add_option_filter( iv_fieldname = |{ c_aliases-msg_clas }~{ c_fields-changed_by }|
-                             it_values    = <ls_option>-value_range ).
-
-        WHEN c_general_search_options-changed_on.
-          add_date_filter( iv_fieldname = |{ c_aliases-msg_clas }~{ c_fields-changed_on }|
-                           it_values    = <ls_option>-value_range ).
-
-        WHEN c_general_search_options-package.
-          add_option_filter( iv_fieldname = |{ c_aliases-msg_clas }~{ c_fields-development_package }|
-                             it_values    = <ls_option>-value_range ).
-
-        WHEN c_general_search_options-application_component.
-          add_appl_comp_filter( it_values          = <ls_option>-value_range
-                                iv_ref_field       = CONV #( c_fields-development_package )
-                                iv_ref_table_alias = c_aliases-msg_clas ).
-
-        WHEN c_general_search_options-software_component.
-          add_softw_comp_filter( it_values          = <ls_option>-value_range
-                                 iv_ref_field       = CONV #( c_fields-development_package )
-                                 iv_ref_table_alias = c_aliases-msg_clas ).
-
-      ENDCASE.
-    ENDLOOP.
-  ENDMETHOD.
-
-
+CLASS zcl_sat_os_message_provider IMPLEMENTATION.
   METHOD prepare_search.
     set_base_select_table( iv_entity = |{ zif_sat_c_select_source_id=>zsat_i_messageclass }|
                            iv_alias  = c_aliases-msg_clas ).
@@ -166,5 +93,73 @@ CLASS ZCL_SAT_OS_MESSAGE_PROVIDER IMPLEMENTATION.
     configure_message_filters( ).
 
     new_and_cond_list( ).
+  ENDMETHOD.
+
+  METHOD configure_message_filters.
+    LOOP AT mo_search_query->mt_search_options ASSIGNING FIELD-SYMBOL(<ls_option>)
+            WHERE target = zif_sat_c_object_search=>c_search_fields-message_filter_input_key.
+
+      CASE <ls_option>-option.
+
+        WHEN c_general_search_options-changed_by.
+          add_option_filter( iv_fieldname = |{ c_aliases-message }~{ c_fields-changed_by }|
+                             it_values    = <ls_option>-value_range ).
+
+        WHEN c_general_search_options-changed_on.
+          add_date_filter( iv_fieldname = |{ c_aliases-message }~{ c_fields-changed_on }|
+                           it_values    = <ls_option>-value_range ).
+
+        WHEN c_msg_search_params-self_explanatory.
+          " '3' - self explanatory
+          " ''  - object required documentation
+          DATA(lv_self_expl) = COND doku_selfd( WHEN <ls_option>-value_range[ 1 ]-low = abap_true THEN '3' ELSE space  ).
+          add_option_filter( iv_fieldname = |{ c_aliases-message }~{ c_fields-is_self_explanatory }|
+                             it_values    = VALUE #( ( sign = 'I' option = 'EQ' low = lv_self_expl ) ) ).
+      ENDCASE.
+    ENDLOOP.
+  ENDMETHOD.
+
+  METHOD configure_msg_clas_filters.
+    LOOP AT mo_search_query->mt_search_options ASSIGNING FIELD-SYMBOL(<ls_option>)
+            WHERE target = zif_sat_c_object_search=>c_search_fields-object_filter_input_key.
+
+      CASE <ls_option>-option.
+
+        WHEN c_general_search_options-description.
+          add_option_filter( iv_fieldname = |{ c_aliases-msg_clas }~{ mv_description_filter_field }|
+                             it_values    = <ls_option>-value_range ).
+
+        WHEN c_general_search_options-user.
+          add_option_filter( iv_fieldname = |{ c_aliases-msg_clas }~{ c_fields-created_by }|
+                             it_values    = <ls_option>-value_range ).
+
+        WHEN c_general_search_options-created_on.
+          add_date_filter( iv_fieldname = |{ c_aliases-msg_clas }~{ c_fields-created_on }|
+                           it_values    = <ls_option>-value_range ).
+
+        WHEN c_general_search_options-changed_by.
+          add_option_filter( iv_fieldname = |{ c_aliases-msg_clas }~{ c_fields-changed_by }|
+                             it_values    = <ls_option>-value_range ).
+
+        WHEN c_general_search_options-changed_on.
+          add_date_filter( iv_fieldname = |{ c_aliases-msg_clas }~{ c_fields-changed_on }|
+                           it_values    = <ls_option>-value_range ).
+
+        WHEN c_general_search_options-package.
+          add_package_filter( iv_fieldname = |{ c_aliases-msg_clas }~{ c_fields-development_package }|
+                              it_values    = <ls_option>-value_range ).
+
+        WHEN c_general_search_options-application_component.
+          add_appl_comp_filter( it_values          = <ls_option>-value_range
+                                iv_ref_field       = CONV #( c_fields-development_package )
+                                iv_ref_table_alias = c_aliases-msg_clas ).
+
+        WHEN c_general_search_options-software_component.
+          add_softw_comp_filter( it_values          = <ls_option>-value_range
+                                 iv_ref_field       = CONV #( c_fields-development_package )
+                                 iv_ref_table_alias = c_aliases-msg_clas ).
+
+      ENDCASE.
+    ENDLOOP.
   ENDMETHOD.
 ENDCLASS.

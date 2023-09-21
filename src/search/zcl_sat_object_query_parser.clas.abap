@@ -27,9 +27,9 @@ CLASS zcl_sat_object_query_parser DEFINITION
            END OF ty_allowed_option_by_type.
     TYPES ty_lt_allowed_options TYPE RANGE OF string.
 
-    CONSTANTS c_option_separator         TYPE string VALUE ':' ##NO_TEXT.
-    CONSTANTS c_value_separator          TYPE string VALUE ',' ##NO_TEXT.
-    CONSTANTS c_negation_operator        TYPE string VALUE '!' ##NO_TEXT.
+    CONSTANTS c_option_separator TYPE string VALUE ':' ##NO_TEXT.
+    CONSTANTS c_value_separator TYPE string VALUE ',' ##NO_TEXT.
+    CONSTANTS c_negation_operator TYPE string VALUE '!' ##NO_TEXT.
     CONSTANTS c_key_value_pair_separator TYPE string VALUE '=' ##NO_TEXT.
 
     "! <p class="shorttext synchronized">Retrieves the search terms from the given string</p>
@@ -43,13 +43,6 @@ CLASS zcl_sat_object_query_parser DEFINITION
     METHODS parse_option
       IMPORTING
         is_option  TYPE ty_s_search_option
-      CHANGING
-        ct_options TYPE ty_t_search_option
-      RAISING
-        zcx_sat_object_search.
-
-    "! <p class="shorttext synchronized">Enhance certain query options</p>
-    METHODS enhance_options
       CHANGING
         ct_options TYPE ty_t_search_option
       RAISING
@@ -81,8 +74,8 @@ CLASS zcl_sat_object_query_parser DEFINITION
 
   PRIVATE SECTION.
     DATA mo_configuration TYPE REF TO zif_sat_object_search_config.
-    DATA mo_validator     TYPE REF TO zif_sat_query_validator.
-    DATA mo_converter     TYPE REF TO zif_sat_query_converter.
+    DATA mo_validator TYPE REF TO zif_sat_query_validator.
+    DATA mo_converter TYPE REF TO zif_sat_query_converter.
 
     METHODS convert_term_to_selopt
       IMPORTING
@@ -107,7 +100,7 @@ CLASS zcl_sat_object_query_parser IMPLEMENTATION.
   METHOD zif_sat_object_query_parser~parse_query.
     DATA lt_query_tokens TYPE TABLE OF string.
     DATA lv_search_terms TYPE string.
-    DATA lt_options      TYPE ty_t_search_option.
+    DATA lt_options TYPE ty_t_search_option.
 
     IF iv_search_query IS INITIAL.
       RAISE EXCEPTION TYPE zcx_sat_object_search
@@ -131,8 +124,6 @@ CLASS zcl_sat_object_query_parser IMPLEMENTATION.
 
     mo_validator->check_option_integrity( CHANGING ct_options = lt_options ).
 
-    enhance_options( CHANGING ct_options = lt_options ).
-
     ro_query = NEW zcl_sat_object_search_query( iv_query          = iv_search_query
                                                 iv_type           = mo_configuration->get_type( )
                                                 it_search_term    = get_search_terms( lv_search_terms )
@@ -148,8 +139,6 @@ CLASS zcl_sat_object_query_parser IMPLEMENTATION.
     ENDLOOP.
 
     mo_validator->check_option_integrity( CHANGING ct_options = lt_options ).
-
-    enhance_options( CHANGING ct_options = lt_options ).
 
     DATA(lt_search_terms) = it_search_terms.
     convert_to_selopt_terms( CHANGING ct_search_terms = lt_search_terms ).
@@ -185,7 +174,7 @@ CLASS zcl_sat_object_query_parser IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD get_search_terms.
-    DATA lt_word        TYPE TABLE OF string.
+    DATA lt_word TYPE TABLE OF string.
     DATA ls_search_term TYPE zif_sat_ty_object_search=>ty_s_search_term.
 
     CHECK iv_search_string IS NOT INITIAL.
@@ -290,9 +279,9 @@ CLASS zcl_sat_object_query_parser IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD extract_option.
-    DATA lv_option     TYPE string.
+    DATA lv_option TYPE string.
     DATA lv_value_list TYPE string.
-    DATA lt_values     TYPE string_table.
+    DATA lt_values TYPE string_table.
 
     SPLIT iv_token AT c_option_separator INTO lv_option lv_value_list.
     TRANSLATE lv_option TO LOWER CASE.
@@ -341,44 +330,6 @@ CLASS zcl_sat_object_query_parser IMPLEMENTATION.
                                       low
                                       high.
       DELETE ADJACENT DUPLICATES FROM <ls_option>-value_range COMPARING sign option low high.
-    ENDLOOP.
-  ENDMETHOD.
-
-  METHOD enhance_options.
-    DATA lt_package_range TYPE zif_sat_ty_object_search=>ty_t_value_range.
-
-    LOOP AT ct_options ASSIGNING FIELD-SYMBOL(<ls_option>).
-
-      IF <ls_option>-option <> c_general_search_options-package.
-        CONTINUE.
-      ENDIF.
-
-      lt_package_range = VALUE #( FOR range IN <ls_option>-value_range
-                                  WHERE ( option = zif_sat_c_options=>contains_pattern )
-                                  ( range ) ).
-
-      LOOP AT <ls_option>-value_range ASSIGNING FIELD-SYMBOL(<ls_value_range>) WHERE option <> zif_sat_c_options=>contains_pattern.
-        cl_pak_package_queries=>get_all_subpackages( EXPORTING  im_package             = CONV #( <ls_value_range>-low )
-                                                                im_also_local_packages = abap_true
-                                                     IMPORTING  et_subpackages         = DATA(lt_subpackages)
-                                                     EXCEPTIONS OTHERS                 = 1 ).
-        IF sy-subrc <> 0.
-          RAISE EXCEPTION TYPE zcx_sat_object_search
-            EXPORTING textid = zcx_sat_object_search=>invalid_package
-                      msgv1  = |{ <ls_value_range>-low }|.
-        ENDIF.
-        lt_package_range = VALUE #( BASE lt_package_range
-                                    ( sign   = <ls_value_range>-sign
-                                      option = zif_sat_c_options=>equals
-                                      low    = <ls_value_range>-low )
-                                    ( LINES OF VALUE #( FOR subpackage IN lt_subpackages
-                                                        ( sign   = <ls_value_range>-sign
-                                                          option = zif_sat_c_options=>equals
-                                                          low    = subpackage-package ) ) ) ).
-      ENDLOOP.
-
-      <ls_option>-value_range = lt_package_range.
-
     ENDLOOP.
   ENDMETHOD.
 
