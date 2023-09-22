@@ -17,7 +17,7 @@ CLASS zcl_sat_adt_cds_elinfo_reader DEFINITION
         INCLUDE TYPE zsat_cds_association.
     TYPES:
       ddlname     TYPE ddlname,
-      source_type TYPE char1,
+      source_type TYPE char1.
     TYPES: END OF ty_s_association.
     TYPES: ty_t_association TYPE STANDARD TABLE OF ty_s_association WITH EMPTY KEY.
 
