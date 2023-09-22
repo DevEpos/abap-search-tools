@@ -11,6 +11,8 @@ CLASS zcl_sat_clsintf_query_config DEFINITION
     METHODS zif_sat_object_search_config~get_type REDEFINITION.
 
   PROTECTED SECTION.
+    ALIASES c_custom_options FOR zif_sat_c_object_search~c_custom_options.
+
     CONSTANTS:
       BEGIN OF c_clif_image_keys,
         method TYPE string VALUE 'ABAP:IMG_METHOD',
@@ -113,6 +115,20 @@ CLASS zcl_sat_clsintf_query_config IMPLEMENTATION.
                               filters = lt_object_filters ) ) ).
 
     mt_options = lt_object_filters.
+
+    ms_search_type-custom_options = VALUE #(
+        ( key         = c_custom_options-mode_for_intf_super_filter-name
+          type        = zif_sat_c_object_search=>c_custom_option_data_type-combo
+          label       = 'Mode for &Hierarchy Filters:'
+          description = |Controls whether the search will resolve the full type hierarchy of either\n| &&
+                        |  • a given interface in the 'intf' filter or\n| &&
+                        |  • a given class in the 'super' filter.\n\n| &&
+                        |Note: The hierarchy will only be resolved when a single value is supplied for either filter (Wildcards/Negation not allowed)|
+          values      = VALUE #( ( key = space value = 'No Hierarchy Resolution' )
+                                 ( key   = c_custom_options-mode_for_intf_super_filter-options-resolve_intf
+                                   value = 'Resolve Type Hierarchy for ''intf'' Filter' )
+                                 ( key   = c_custom_options-mode_for_intf_super_filter-options-resolve_super
+                                   value = 'Resolve Type Hierarchy for ''super'' Filter' ) ) ) ).
   ENDMETHOD.
 
   METHOD zif_sat_object_search_config~get_type.
@@ -244,7 +260,9 @@ CLASS zcl_sat_clsintf_query_config IMPLEMENTATION.
                           `CglVi7AbQEwYJFQsV4iuWkV+GDg07GeJLlsrg6kbB0A2QKjMQUa20nGKXKXjI5lyh26BAgcBfHoxDFCodFwRODX2d++O2v8eE8N/ggwhwoDm37AAlSi1+1uyIvd/5er8/5mL0v9Ll9k/JWhAblmLBSxA` &&
                           `ZUod9uk3e/x36Q38r9Po9lu8xH4WQQOQgWihpYpUhf1OsRLbH5Ll9qtBYQISBwDP0MXt5h1aTgAAAABJRU5ErkJggg==` )
         allowed_length   = 30
-        patterns         = abap_true ).
+        patterns         = abap_true
+        content_assist   = VALUE #( assist_type      = zif_sat_c_object_search=>c_filter_content_assist_type-ris
+                                    adt_object_types = VALUE #( ( |{ zif_sat_c_tadir_types=>class }| ) ) ) ).
   ENDMETHOD.
 
   METHOD get_clif_image.
