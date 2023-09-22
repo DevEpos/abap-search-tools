@@ -54,6 +54,7 @@ INTERFACE zif_sat_c_object_search
     BEGIN OF c_custom_option_data_type,
       string  TYPE string VALUE 'STRING',
       boolean TYPE string VALUE 'BOOLEAN',
+      combo   TYPE string VALUE 'COMBO',
     END OF c_custom_option_data_type.
 
   CONSTANTS:
@@ -216,6 +217,13 @@ INTERFACE zif_sat_c_object_search
 
   CONSTANTS:
     BEGIN OF c_custom_options,
+      BEGIN OF mode_for_intf_super_filter,
+        name TYPE string VALUE 'modeForIntfOrSuperFilter',
+        BEGIN OF options,
+          resolve_intf  TYPE string VALUE 'resolveIntf',
+          resolve_super TYPE string VALUE 'resolveSuper',
+        END OF options,
+      END OF mode_for_intf_super_filter,
       BEGIN OF method,
         target_incl_for_admin_data TYPE string VALUE 'targetIncludesForAdminData',
       END OF method,
