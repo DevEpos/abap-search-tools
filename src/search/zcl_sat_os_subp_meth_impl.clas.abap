@@ -32,6 +32,8 @@ CLASS zcl_sat_os_subp_meth_impl DEFINITION
       END OF c_alias_names.
 
     METHODS configure_incl_filters.
+    METHODS add_admin_data_filters.
+    METHODS select_includes.
     METHODS read_method_infos_n_filter2.
 ENDCLASS.
 
@@ -39,11 +41,11 @@ ENDCLASS.
 CLASS zcl_sat_os_subp_meth_impl IMPLEMENTATION.
   METHOD is_search_possible.
     LOOP AT io_query->mt_search_options REFERENCE INTO DATA(lr_option) ##NEEDED
-          WHERE     target = zif_sat_c_object_search=>c_search_fields-method_filter_input_key
-                AND (    option = zif_sat_c_object_search=>c_general_search_params-changed_by
-                      OR option = zif_sat_c_object_search=>c_general_search_params-user
-                      OR option = zif_sat_c_object_search=>c_general_search_params-changed_on
-                      OR option = zif_sat_c_object_search=>c_general_search_params-created_on ).
+         WHERE     target = zif_sat_c_object_search=>c_search_fields-method_filter_input_key
+               AND (    option = zif_sat_c_object_search=>c_general_search_params-changed_by
+                     OR option = zif_sat_c_object_search=>c_general_search_params-user
+                     OR option = zif_sat_c_object_search=>c_general_search_params-changed_on
+                     OR option = zif_sat_c_object_search=>c_general_search_params-created_on ).
 
       result = abap_true.
       EXIT.
@@ -62,22 +64,24 @@ CLASS zcl_sat_os_subp_meth_impl IMPLEMENTATION.
     set_base_select_table( iv_entity = zif_sat_c_select_source_id=>zsat_i_classinterface
                            iv_alias  = c_clif_alias ).
 
-    add_join_table( iv_join_table = |{ zif_sat_c_select_source_id=>zsat_i_reposource }|
-                    iv_alias      = c_alias_names-includes
-                    it_conditions = VALUE #( and_or = zif_sat_c_selection_condition=>and
-                                             ( field           = 'objectname'
-                                               ref_field       = c_fields-classintf
-                                               ref_table_alias = c_clif_alias
-                                               type            = zif_sat_c_join_cond_type=>field )
-                                             ( field           = 'maintype'
-                                               tabname_alias   = c_alias_names-includes
-                                               type            = zif_sat_c_join_cond_type=>filter
-                                               value           = 'C' )
-                                             ( field           = 'includekind'
-                                               tabname_alias   = c_alias_names-includes
-                                               type            = zif_sat_c_join_cond_type=>filter
-                                               value           = 'M*'
-                                               operator        = zif_sat_c_operator=>like ) ) ).
+    IF sy-dbsys = 'HDB'.
+      add_join_table( iv_join_table = |{ zif_sat_c_select_source_id=>zsat_i_reposource }|
+                      iv_alias      = c_alias_names-includes
+                      it_conditions = VALUE #( and_or = zif_sat_c_selection_condition=>and
+                                               ( field           = 'objectname'
+                                                 ref_field       = c_fields-classintf
+                                                 ref_table_alias = c_clif_alias
+                                                 type            = zif_sat_c_join_cond_type=>field )
+                                               ( field           = 'maintype'
+                                                 tabname_alias   = c_alias_names-includes
+                                                 type            = zif_sat_c_join_cond_type=>filter
+                                                 value           = 'C' )
+                                               ( field           = 'includekind'
+                                                 tabname_alias   = c_alias_names-includes
+                                                 type            = zif_sat_c_join_cond_type=>filter
+                                                 value           = 'M*'
+                                                 operator        = zif_sat_c_operator=>like ) ) ).
+    ENDIF.
 
     add_select_field( iv_fieldname       = c_fields-classintf
                       iv_fieldname_alias = c_result_fields-object_name
@@ -85,25 +89,28 @@ CLASS zcl_sat_os_subp_meth_impl IMPLEMENTATION.
     add_select_field( iv_fieldname       = c_fields-classintf
                       iv_fieldname_alias = c_result_fields-raw_object_name
                       iv_entity          = c_clif_alias ).
-    add_select_field( iv_fieldname       = c_general_fields-created_by
-                      iv_fieldname_alias = c_result_fields-created_by
-                      iv_entity          = c_alias_names-includes ).
     add_select_field( iv_fieldname = c_fields-package iv_fieldname_alias = c_result_fields-devclass iv_entity = c_clif_alias ).
-    add_select_field( iv_fieldname       = 'progname'
-                      iv_fieldname_alias = c_result_fields-method_name
-                      iv_entity          = c_alias_names-includes ).
     add_select_field( iv_fieldname       = c_fields-tadir_type
                       iv_fieldname_alias = c_result_fields-tadir_type
                       iv_entity          = c_clif_alias ).
-    add_select_field( iv_fieldname       = c_general_fields-created_on
-                      iv_fieldname_alias = c_result_fields-created_date
-                      iv_entity          = c_alias_names-includes ).
-    add_select_field( iv_fieldname       = c_general_fields-changed_by
-                      iv_fieldname_alias = c_result_fields-changed_by
-                      iv_entity          = c_alias_names-includes ).
-    add_select_field( iv_fieldname       = c_general_fields-changed_on
-                      iv_fieldname_alias = c_result_fields-changed_date
-                      iv_entity          = c_alias_names-includes ).
+
+    IF sy-dbsys = 'HDB'.
+      add_select_field( iv_fieldname       = c_general_fields-created_by
+                        iv_fieldname_alias = c_result_fields-created_by
+                        iv_entity          = c_alias_names-includes ).
+      add_select_field( iv_fieldname       = 'progname'
+                        iv_fieldname_alias = c_result_fields-method_name
+                        iv_entity          = c_alias_names-includes ).
+      add_select_field( iv_fieldname       = c_general_fields-created_on
+                        iv_fieldname_alias = c_result_fields-created_date
+                        iv_entity          = c_alias_names-includes ).
+      add_select_field( iv_fieldname       = c_general_fields-changed_by
+                        iv_fieldname_alias = c_result_fields-changed_by
+                        iv_entity          = c_alias_names-includes ).
+      add_select_field( iv_fieldname       = c_general_fields-changed_on
+                        iv_fieldname_alias = c_result_fields-changed_date
+                        iv_entity          = c_alias_names-includes ).
+    ENDIF.
 
     add_order_by( iv_fieldname = c_fields-classintf iv_entity = c_clif_alias ).
 
@@ -111,7 +118,10 @@ CLASS zcl_sat_os_subp_meth_impl IMPLEMENTATION.
                                 it_field_names = VALUE #( ( |{ c_clif_alias }~{ c_fields-classintf }| ) ) ).
     set_type_filter_to_class( ).
     configure_class_filters( ).
-    configure_incl_filters( ).
+
+    IF sy-dbsys = 'HDB'.
+      configure_incl_filters( ).
+    ENDIF.
 
     new_and_cond_list( ).
   ENDMETHOD.
@@ -121,6 +131,10 @@ CLASS zcl_sat_os_subp_meth_impl IMPLEMENTATION.
 
     " get class descriptions
     fill_descriptions( ).
+
+    IF sy-dbsys <> 'HDB'.
+      select_includes( ).
+    ENDIF.
 
     set_method_filters( ).
 *    read_method_infos_n_filter( ).
@@ -134,7 +148,7 @@ CLASS zcl_sat_os_subp_meth_impl IMPLEMENTATION.
 
   METHOD configure_incl_filters.
     LOOP AT mo_search_query->mt_search_options ASSIGNING FIELD-SYMBOL(<ls_option>)
-          WHERE target = zif_sat_c_object_search=>c_search_fields-method_filter_input_key.
+         WHERE target = zif_sat_c_object_search=>c_search_fields-method_filter_input_key.
 
       CASE <ls_option>-option.
         WHEN c_general_search_options-user.
@@ -154,6 +168,100 @@ CLASS zcl_sat_os_subp_meth_impl IMPLEMENTATION.
                            it_values    = <ls_option>-value_range ).
       ENDCASE.
 
+    ENDLOOP.
+  ENDMETHOD.
+
+  METHOD select_includes.
+    TYPES:
+      BEGIN OF ty_method_include,
+        progname TYPE progname,
+        clsname  TYPE classname,
+      END OF ty_method_include.
+
+    DATA lt_progname_filter TYPE TABLE OF progname.
+    DATA lt_method_includes TYPE SORTED TABLE OF ty_method_include WITH NON-UNIQUE KEY clsname.
+
+    LOOP AT mt_result REFERENCE INTO DATA(lr_cls_result).
+      cl_oo_classname_service=>get_all_method_includes( EXPORTING  clsname = lr_cls_result->object_name
+                                                        RECEIVING  result  = DATA(lt_all_method_includes)
+                                                        EXCEPTIONS OTHERS  = 1 ).
+      IF sy-subrc <> 0.
+        DELETE mt_result.
+        CONTINUE.
+      ENDIF.
+
+      lt_progname_filter = VALUE #( BASE lt_progname_filter
+                                    FOR incl IN lt_all_method_includes
+                                    ( incl-incname ) ).
+    ENDLOOP.
+
+    IF sy-subrc <> 0.
+      RETURN.
+    ENDIF.
+
+    CLEAR: mt_where,
+           mt_criteria,
+           mt_criteria_and,
+           mt_criteria_or.
+
+    add_admin_data_filters( ).
+    new_and_cond_list( ).
+    create_where_clause( ).
+
+    DATA(lv_max_rows) = mo_search_query->mv_max_rows + 1.
+
+    " find method includes by class filter
+    SELECT progname
+      FROM reposrc
+      FOR ALL ENTRIES IN @lt_progname_filter
+      WHERE (mt_where)
+        AND progname = @lt_progname_filter-table_line
+      INTO CORRESPONDING FIELDS OF TABLE @lt_method_includes
+      UP TO @lv_max_rows ROWS.
+
+    IF sy-subrc <> 0.
+      CLEAR mt_result.
+      RETURN.
+    ENDIF.
+
+    " extract class name from include name
+    DATA(lt_incl_temp) = lt_method_includes.
+    CLEAR lt_method_includes.
+    LOOP AT lt_incl_temp REFERENCE INTO DATA(lr_meth_include).
+      INSERT VALUE #( progname = lr_meth_include->progname
+                      clsname  = translate( val  = lr_meth_include->progname(30)
+                                            from = `=`
+                                            to   = ` ` ) ) INTO TABLE lt_method_includes.
+    ENDLOOP.
+
+    DATA(lt_result_tmp) = mt_result.
+    CLEAR mt_result.
+    LOOP AT lt_result_tmp REFERENCE INTO lr_cls_result.
+      LOOP AT lt_method_includes REFERENCE INTO lr_meth_include WHERE clsname = lr_cls_result->object_name.
+        lr_cls_result->method_name = lr_meth_include->progname.
+        mt_result = VALUE #( BASE mt_result ( lr_cls_result->* ) ).
+      ENDLOOP.
+    ENDLOOP.
+  ENDMETHOD.
+
+  METHOD add_admin_data_filters.
+    LOOP AT mo_search_query->mt_search_options REFERENCE INTO DATA(lr_filter)
+         WHERE target = zif_sat_c_object_search=>c_search_fields-method_filter_input_key.
+
+      CASE lr_filter->option.
+        WHEN c_general_search_options-changed_by.
+          add_option_filter( iv_fieldname = 'unam'
+                             it_values    = lr_filter->value_range ).
+        WHEN c_general_search_options-changed_on.
+          add_date_filter( iv_fieldname = 'udat'
+                           it_values    = lr_filter->value_range ).
+        WHEN c_general_search_options-user.
+          add_option_filter( iv_fieldname = 'cnam'
+                             it_values    = lr_filter->value_range ).
+        WHEN c_general_search_options-created_on.
+          add_date_filter( iv_fieldname = 'cdat'
+                           it_values    = lr_filter->value_range ).
+      ENDCASE.
     ENDLOOP.
   ENDMETHOD.
 
