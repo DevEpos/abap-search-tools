@@ -26,14 +26,8 @@ CLASS zcl_sat_clif_meth_query_config DEFINITION
         exception  TYPE string VALUE 'ABAP:IMG_METH_EXCEPTION',
       END OF c_image_keys.
 
-    DATA mt_method_options        TYPE zif_sat_ty_object_search=>ty_query_filters.
+    DATA mt_method_options TYPE zif_sat_ty_object_search=>ty_query_filters.
     DATA mv_option_prefix_pattern TYPE string.
-
-    METHODS get_image
-      IMPORTING
-        iv_image_key  TYPE string
-      RETURNING
-        VALUE(result) TYPE string.
 
     METHODS delete_invalid_obj_filters.
 
@@ -131,18 +125,12 @@ CLASS zcl_sat_clif_meth_query_config IMPLEMENTATION.
           filters = mt_method_options ) ).
 
     ms_search_type-custom_options = VALUE #(
+        BASE ms_search_type-custom_options
         ( key         = zif_sat_c_object_search=>c_custom_options-method-target_incl_for_admin_data
           type        = zif_sat_c_object_search=>c_custom_option_data_type-boolean
-          label       = 'Set Focus of Admin-Data Filters to Method Include'
+          label       = 'Set Focus of Admin-Data Filters to Method &Include'
           description = |If admin data filters like 'changed' or 'changedby' are used the\n| &&
                         |SELECT Target will be switched to the Method-Include instead of the Method-Definition|  ) ).
-  ENDMETHOD.
-
-  METHOD get_image.
-    CASE iv_image_key.
-
-      WHEN OTHERS.
-    ENDCASE.
   ENDMETHOD.
 
   METHOD delete_invalid_obj_filters.
