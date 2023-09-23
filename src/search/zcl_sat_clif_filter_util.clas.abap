@@ -61,7 +61,9 @@ CLASS zcl_sat_clif_filter_util IMPLEMENTATION.
       lt_classes = lt_classes_temp.
     ENDWHILE.
 
-    lt_all_super_classes = CORRESPONDING #( lt_class_hier_temp DISCARDING DUPLICATES MAPPING classname = superclass ).
+    LOOP AT lt_class_hier_temp REFERENCE INTO DATA(lr_class_hier_entry).
+      INSERT VALUE #( classname = lr_class_hier_entry->superclass ) INTO TABLE lt_all_super_classes.
+    ENDLOOP.
 
     " delete all classes that do not have parent class
     LOOP AT lt_class_hier_temp REFERENCE INTO DATA(lr_class).
