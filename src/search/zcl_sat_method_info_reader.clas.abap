@@ -64,14 +64,16 @@ CLASS zcl_sat_method_info_reader DEFINITION
 
     TYPES:
       BEGIN OF ty_method_info,
-        status        TYPE ty_status,
-        type          TYPE ty_method_type,
-        current_class TYPE classname,
-        classname     TYPE classname,
-        method_name   TYPE seocmpname,
-        super_class   TYPE classname,
-        is_redefined  TYPE abap_bool,
-        result_ref    TYPE REF TO zif_sat_ty_object_search=>ty_s_search_result,
+        status               TYPE ty_status,
+        type                 TYPE ty_method_type,
+        original_class_name  TYPE classname,
+        original_method_name TYPE seocpdname,
+        current_class        TYPE classname,
+        classname            TYPE classname,
+        method_name          TYPE seocmpname,
+        super_class          TYPE classname,
+        is_redefined         TYPE abap_bool,
+        result_ref           TYPE REF TO zif_sat_ty_object_search=>ty_s_search_result,
       END OF ty_method_info,
 
       BEGIN OF ty_method_detail,
@@ -87,8 +89,15 @@ CLASS zcl_sat_method_info_reader DEFINITION
         changedby TYPE seocompodf-changedby,
       END OF ty_method_detail,
 
-     ty_method_infos TYPE SORTED TABLE OF ty_method_info WITH NON-UNIQUE KEY classname method_name.
+      ty_method_infos TYPE SORTED TABLE OF ty_method_info WITH NON-UNIQUE KEY classname method_name,
 
+      BEGIN OF ty_redef_method_info,
+        classname   TYPE seoredef-clsname,
+        method_name TYPE seoredef-mtdname,
+        is_final    TYPE seoredef-mtdfinal,
+      END OF ty_redef_method_info.
+
+    DATA mt_redef_method_info TYPE SORTED TABLE OF ty_redef_method_info WITH UNIQUE KEY classname method_name.
     DATA mf_processing_done TYPE abap_bool.
     DATA mf_only_redefined TYPE abap_bool.
     DATA mt_methods_processed TYPE ty_method_infos.
@@ -126,7 +135,8 @@ CLASS zcl_sat_method_info_reader DEFINITION
 
     METHODS read_method_infos.
     METHODS merge_mtd_infos_into_results.
-ENDCLASS.
+    METHODS read_redef_method_infos.
+  ENDCLASS.
 
 
 CLASS zcl_sat_method_info_reader IMPLEMENTATION.
@@ -145,8 +155,10 @@ CLASS zcl_sat_method_info_reader IMPLEMENTATION.
       " Overwrite the method name with the actual full method name
       lr_result->method_name = ls_method_key-cpdname.
 
-      DATA(ls_method_info) = VALUE ty_method_info( current_class = ls_method_key-clsname
-                                                   result_ref    = lr_result ).
+      DATA(ls_method_info) = VALUE ty_method_info( current_class        = ls_method_key-clsname
+                                                   original_class_name  = lr_result->object_name
+                                                   original_method_name = lr_result->method_name
+                                                   result_ref           = lr_result ).
 
       " is it an interface method??
       IF ls_method_key-cpdname CS '~'.
@@ -186,6 +198,7 @@ CLASS zcl_sat_method_info_reader IMPLEMENTATION.
 
     " read method information
     read_method_infos( ).
+    read_redef_method_infos( ).
     merge_mtd_infos_into_results( ).
   ENDMETHOD.
 
@@ -381,12 +394,20 @@ CLASS zcl_sat_method_info_reader IMPLEMENTATION.
       ls_result-method_decl_method = lr_processed_method->method_name.
       ls_result-method_descr       = lr_method_detail->descript.
       ls_result-method_exposure    = lr_method_detail->exposure.
-      ls_result-method_is_final    = lr_method_detail->is_final.
-      ls_result-method_level       = lr_method_detail->level.
-      ls_result-created_by         = lr_method_detail->author.
-      ls_result-created_date       = lr_method_detail->createdon.
-      ls_result-changed_by         = lr_method_detail->changedby.
-      ls_result-changed_date       = lr_method_detail->changedon.
+      IF mf_only_redefined = abap_false.
+        if lr_processed_method->is_redefined = abap_true.
+          ls_result-method_is_final = VALUE #( mt_redef_method_info[
+                                                   classname   = lr_processed_method->original_class_name
+                                                   method_name = lr_processed_method->original_method_name ]-is_final OPTIONAL ).
+        else.
+        ls_result-method_is_final = lr_method_detail->is_final.
+        endif.
+      ENDIF.
+      ls_result-method_level = lr_method_detail->level.
+      ls_result-created_by   = lr_method_detail->author.
+      ls_result-created_date = lr_method_detail->createdon.
+      ls_result-changed_by   = lr_method_detail->changedby.
+      ls_result-changed_date = lr_method_detail->changedon.
       IF lr_processed_method->is_redefined = abap_true.
         ls_result-method_status = zif_sat_c_object_search=>c_method_status_int-redefined.
       ELSEIF lr_processed_method->type = c_method_types-implemented.
@@ -398,5 +419,19 @@ CLASS zcl_sat_method_info_reader IMPLEMENTATION.
     ENDLOOP.
 
     mr_results->* = lt_results.
+  ENDMETHOD.
+
+  METHOD read_redef_method_infos.
+    CHECK: mf_only_redefined = abap_false,
+           line_exists( mt_methods_processed[ is_redefined = abap_true ] ).
+
+    SELECT clsname AS classname,
+           mtdname AS method_name,
+           mtdfinal AS is_final
+      FROM seoredef
+      FOR ALL ENTRIES IN @mt_methods_processed
+      WHERE clsname = @mt_methods_processed-original_class_name
+        AND mtdname = @mt_methods_processed-original_method_name
+      INTO CORRESPONDING FIELDS OF TABLE @mt_redef_method_info.
   ENDMETHOD.
 ENDCLASS.
