@@ -23,6 +23,7 @@ CLASS zcl_sat_os_subp_meth_redef DEFINITION
         classname  TYPE string VALUE 'classname',
         package    TYPE string VALUE 'developmentpackage',
         tadir_type TYPE string VALUE 'tadirtype',
+        is_final   TYPE string VALUE 'isfinal',
         methodname TYPE string VALUE 'methodname',
         isabstract TYPE string VALUE 'isabstract',
       END OF c_fields.
@@ -41,6 +42,7 @@ CLASS zcl_sat_os_subp_meth_redef DEFINITION
         VALUE(result) LIKE mt_changed_on_filter.
 
     METHODS read_method_infos_n_filter2.
+    METHODS configure_method_filters.
 ENDCLASS.
 
 
@@ -78,12 +80,15 @@ CLASS zcl_sat_os_subp_meth_redef IMPLEMENTATION.
     add_select_field( iv_fieldname       = c_fields-tadir_type
                       iv_fieldname_alias = c_result_fields-tadir_type
                       iv_entity          = c_clif_alias ).
+    add_select_field( iv_fieldname       = c_fields-is_final
+                      iv_entity          = c_alias_names-method
+                      iv_fieldname_alias = c_result_fields-method_is_final ).
     add_select_field( iv_fieldname = c_fields-package iv_fieldname_alias = c_result_fields-devclass iv_entity = c_clif_alias ).
 
     add_order_by( iv_fieldname = c_fields-classname iv_entity = c_clif_alias ).
 
     configure_class_filters( ).
-
+    configure_method_filters( ).
     add_search_terms_to_search( iv_target      = zif_sat_c_object_search=>c_search_fields-object_name_input_key
                                 it_field_names = VALUE #( ( |{ c_clif_alias }~{ c_fields-classname }| ) ) ).
     add_method_name_filter( ).
@@ -193,4 +198,20 @@ CLASS zcl_sat_os_subp_meth_redef IMPLEMENTATION.
     ENDLOOP.
   ENDMETHOD.
 
+  METHOD configure_method_filters.
+    LOOP AT mo_search_query->mt_search_options REFERENCE INTO DATA(lr_filter)
+         WHERE target = zif_sat_c_object_search=>c_search_fields-method_filter_input_key.
+
+      IF lr_filter->option = c_method_option-flag.
+        LOOP AT lr_filter->value_range INTO DATA(ls_option).
+          CASE ls_option-low.
+            WHEN zif_sat_c_object_search=>c_method_flags-final.
+              add_option_filter(
+                  iv_fieldname = |{ c_alias_names-method }~{ c_fields-is_final }|
+                  it_values    = VALUE #( ( sign = ls_option-sign option = ls_option-option low = abap_true ) ) ).
+          ENDCASE.
+        ENDLOOP.
+      ENDIF.
+    ENDLOOP.
+  ENDMETHOD.
 ENDCLASS.

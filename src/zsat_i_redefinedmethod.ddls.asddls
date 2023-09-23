@@ -11,7 +11,8 @@ define view ZSAT_I_RedefinedMethod
   key clsname    as ClassName,
   key refclsname as ParentClass,
   key mtdname    as MethodName,
-      mtdabstrct as IsAbstract
+      mtdabstrct as IsAbstract,
+      mtdfinal   as IsFinal
 }
 where
   version = '1'
