@@ -54,7 +54,7 @@ CLASS zcl_sat_clif_method_qc IMPLEMENTATION.
                                WHEN zif_sat_c_object_search=>c_method_types-test THEN
                                  seoo_mtdtype_test_method " '6'
                                WHEN zif_sat_c_object_search=>c_method_types-cds_table_function THEN
-                                 seoo_mtdtype_cds_table_func ). " '7'  
+                                 seoo_mtdtype_cds_table_func ). " '7'
 
         WHEN zif_sat_c_object_search=>c_method_search_option-status.
           cv_value = SWITCH #( cv_value
