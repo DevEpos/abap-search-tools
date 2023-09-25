@@ -6,7 +6,6 @@
     <DDLNAME>ZSAT_I_CLIFRELATIONS</DDLNAME>
     <DDLANGUAGE>E</DDLANGUAGE>
     <DDTEXT>Relationships between Classes and/or Interfaces</DDTEXT>
-    <SOURCE_TYPE>V</SOURCE_TYPE>
    </DDLS>
   </asx:values>
  </asx:abap>
