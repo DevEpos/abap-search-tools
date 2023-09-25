@@ -72,7 +72,9 @@ CLASS zcl_sat_os_method_provider IMPLEMENTATION.
     DATA(lf_incl_admin_data) = VALUE #( ms_search_engine_params-custom_options[
                                             key = zif_sat_c_object_search=>c_custom_options-method-target_incl_for_admin_data ]-value OPTIONAL ).
     IF lf_incl_admin_data = abap_true.
-      DATA(lo_meth_impl_provider) = NEW zcl_sat_os_subp_meth_impl( ).
+      DATA(lo_meth_impl_provider) = COND #( WHEN sy-dbsys = 'HDB'
+                                            THEN NEW zcl_sat_os_subp_meth_impl( )
+                                            ELSE NEW zcl_sat_os_subp_meth_impl_odb( ) ).
       IF lo_meth_impl_provider->is_search_possible( mo_query ).
         result = VALUE #( ( lo_meth_impl_provider ) ).
         RETURN.
@@ -100,9 +102,8 @@ CLASS zcl_sat_os_method_provider IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD limit_result.
-    DATA(lv_max_rows) = mo_query->mv_max_rows + 1.
-    IF lines( mt_result_all ) > lv_max_rows.
-      DELETE mt_result_all FROM lv_max_rows.
+    IF lines( mt_result_all ) > mo_query->mv_max_rows + 1.
+      DELETE mt_result_all FROM mo_query->mv_max_rows + 2.
     ENDIF.
   ENDMETHOD.
 
