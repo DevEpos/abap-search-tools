@@ -12,6 +12,7 @@ CLASS zcl_sat_os_subp_method_std DEFINITION
   PROTECTED SECTION.
     METHODS prepare_search     REDEFINITION.
     METHODS determine_grouping REDEFINITION.
+    METHODS do_after_search    REDEFINITION.
 
   PRIVATE SECTION.
     ALIASES c_class_intf_search_option FOR zif_sat_c_object_search~c_class_intf_search_option.
@@ -57,11 +58,23 @@ CLASS zcl_sat_os_subp_method_std DEFINITION
         description TYPE string VALUE 'description',
       END OF c_text_fields.
 
-    DATA mv_param_subquery     TYPE string.
-    DATA mv_exc_subquery       TYPE string.
+    TYPES:
+      BEGIN OF ty_tadir_name,
+        obj_name TYPE tadir-obj_name,
+      END OF ty_tadir_name,
+      BEGIN OF ty_tadir_info,
+        devclass TYPE tadir-devclass,
+        obj_name TYPE tadir-obj_name,
+        object   TYPE tadir-object,
+      END OF ty_tadir_info.
+
+    DATA mv_param_subquery TYPE string.
+    DATA mv_exc_subquery TYPE string.
 
     DATA mv_param_filter_count TYPE i.
-    DATA mv_exc_filter_count   TYPE i.
+    DATA mv_exc_filter_count TYPE i.
+    DATA mf_clif_join_active TYPE abap_bool.
+    DATA mf_comp_desc_join_active TYPE abap_bool.
 
     METHODS add_select_fields.
     METHODS configure_method_filters.
@@ -85,6 +98,18 @@ CLASS zcl_sat_os_subp_method_std DEFINITION
         iv_option     TYPE string
       RETURNING
         VALUE(result) TYPE string.
+
+    "! Runs check against some DB relevant filters to see
+    "! if certain DB intensive operations like Joins are really required
+    METHODS check_filter_availablity.
+
+    "! Performs FOR ALL ENTRIES select to read the missing TADIR information
+    "! if they have not already been read via Join
+    METHODS enhance_reslts_with_clif_data.
+
+    "! Performs FOR ALL ENTRIES select to read the missing method descriptions
+    "! if they have not already been read via JOIN
+    METHODS enhance_reslts_with_meth_texts.
 ENDCLASS.
 
 
@@ -109,32 +134,37 @@ CLASS zcl_sat_os_subp_method_std IMPLEMENTATION.
     set_base_select_table( iv_entity = zif_sat_c_select_source_id=>zsat_i_classinterfacemethod
                            iv_alias  = c_alias_names-method ).
 
-    " join to class/interface always necessary because of devclass/tadir type
-    add_join_table( iv_join_table = |{ zif_sat_c_select_source_id=>zsat_i_classinterface }|
-                    iv_alias      = c_clif_alias
-                    it_conditions = VALUE #( ( field           = c_class_fields-classname
-                                               ref_field       = c_method_fields-classname
-                                               ref_table_alias = c_alias_names-method
-                                               type            = zif_sat_c_join_cond_type=>field
-                                               and_or          = zif_sat_c_selection_condition=>and ) ) ).
+    check_filter_availablity( ).
+
+    IF mf_clif_join_active = abap_true.
+      add_join_table( iv_join_table = |{ zif_sat_c_select_source_id=>zsat_i_classinterface }|
+                      iv_alias      = c_clif_alias
+                      it_conditions = VALUE #( ( field           = c_class_fields-classname
+                                                 ref_field       = c_method_fields-classname
+                                                 ref_table_alias = c_alias_names-method
+                                                 type            = zif_sat_c_join_cond_type=>field
+                                                 and_or          = zif_sat_c_selection_condition=>and ) ) ).
+    ENDIF.
 
     " Method Descriptions can not be read via RS_SHORTTEXT_GET
-    add_join_table( iv_join_table = |{ zif_sat_c_select_source_id=>zsat_i_classinterfacecomptext }|
-                    iv_alias      = c_alias_names-method_text
-                    iv_join_type  = zif_sat_c_join_types=>left_outer_join
-                    it_conditions = VALUE #( and_or          = zif_sat_c_selection_condition=>and
-                                             ref_table_alias = c_alias_names-method
-                                             ( field         = c_class_fields-classname
-                                               type          = zif_sat_c_join_cond_type=>field
-                                               ref_field     = c_method_fields-originalclifname )
-                                             ( field         = c_text_fields-method
-                                               type          = zif_sat_c_join_cond_type=>field
-                                               ref_field     = c_method_fields-originalmethodname )
-                                             ( field         = c_text_fields-language
-                                               type          = zif_sat_c_join_cond_type=>filter
-                                               operator      = zif_sat_c_operator=>equals
-                                               tabname_alias = c_alias_names-method_text
-                                               value         = sy-langu ) ) ).
+    IF mf_comp_desc_join_active = abap_true.
+      add_join_table( iv_join_table = |{ zif_sat_c_select_source_id=>zsat_i_classinterfacecomptext }|
+                      iv_alias      = c_alias_names-method_text
+                      iv_join_type  = zif_sat_c_join_types=>left_outer_join
+                      it_conditions = VALUE #( and_or          = zif_sat_c_selection_condition=>and
+                                               ref_table_alias = c_alias_names-method
+                                               ( field         = c_class_fields-classname
+                                                 type          = zif_sat_c_join_cond_type=>field
+                                                 ref_field     = c_method_fields-originalclifname )
+                                               ( field         = c_text_fields-method
+                                                 type          = zif_sat_c_join_cond_type=>field
+                                                 ref_field     = c_method_fields-originalmethodname )
+                                               ( field         = c_text_fields-language
+                                                 type          = zif_sat_c_join_cond_type=>filter
+                                                 operator      = zif_sat_c_operator=>equals
+                                                 tabname_alias = c_alias_names-method_text
+                                                 value         = sy-langu ) ) ).
+    ENDIF.
 
     add_select_fields( ).
 
@@ -181,17 +211,6 @@ CLASS zcl_sat_os_subp_method_std IMPLEMENTATION.
     add_select_field( iv_fieldname       = c_method_fields-createdby
                       iv_fieldname_alias = c_result_fields-created_by
                       iv_entity          = c_alias_names-method ).
-    add_select_field( iv_fieldname       = c_class_fields-package
-                      iv_fieldname_alias = c_result_fields-devclass
-                      iv_entity          = c_clif_alias ).
-    add_select_field( iv_fieldname       = c_class_fields-tadir_type
-                      iv_fieldname_alias = c_result_fields-tadir_type
-                      iv_entity          = c_clif_alias ).
-    add_select_field( iv_fieldname       = c_text_fields-description
-                      " HINT: Method description is written not to 'description' field as default logic
-                      "       fills the class/interface description into this field after the sql query has been executed
-                      iv_fieldname_alias = c_result_fields-method_descr
-                      iv_entity          = c_alias_names-method_text ).
     add_select_field( iv_fieldname       = c_method_fields-createdon
                       iv_fieldname_alias = c_result_fields-created_date
                       iv_entity          = c_alias_names-method ).
@@ -201,6 +220,30 @@ CLASS zcl_sat_os_subp_method_std IMPLEMENTATION.
     add_select_field( iv_fieldname       = c_method_fields-changedon
                       iv_fieldname_alias = c_result_fields-changed_date
                       iv_entity          = c_alias_names-method ).
+
+    IF mf_clif_join_active = abap_true.
+      add_select_field( iv_fieldname       = c_class_fields-package
+                        iv_fieldname_alias = c_result_fields-devclass
+                        iv_entity          = c_clif_alias ).
+      add_select_field( iv_fieldname       = c_class_fields-tadir_type
+                        iv_fieldname_alias = c_result_fields-tadir_type
+                        iv_entity          = c_clif_alias ).
+    ENDIF.
+
+    IF mf_comp_desc_join_active = abap_true.
+      add_select_field( iv_fieldname       = c_text_fields-description
+                        " HINT: Method description is written not to 'description' field as default logic
+                        "       fills the class/interface description into this field after the sql query has been executed
+                        iv_fieldname_alias = c_result_fields-method_descr
+                        iv_entity          = c_alias_names-method_text ).
+    ELSE.
+      add_select_field( iv_fieldname       = c_method_fields-originalclifname
+                        iv_fieldname_alias = c_result_fields-method_decl_clif
+                        iv_entity          = c_alias_names-method ).
+      add_select_field( iv_fieldname       = c_method_fields-originalmethodname
+                        iv_fieldname_alias = c_result_fields-method_decl_method
+                        iv_entity          = c_alias_names-method ).
+    ENDIF.
   ENDMETHOD.
 
   METHOD configure_search_term_filters.
@@ -239,19 +282,19 @@ CLASS zcl_sat_os_subp_method_std IMPLEMENTATION.
           add_flag_filter( <ls_option>-value_range ).
 
         WHEN c_method_option-level.
-          add_option_filter( iv_fieldname = |{ c_alias_names-method }~methodlevel|
+          add_option_filter( iv_fieldname = |{ c_alias_names-method }~{ c_method_fields-methodlevel }|
                              it_values    = <ls_option>-value_range ).
 
         WHEN c_method_option-visibility.
-          add_option_filter( iv_fieldname = |{ c_alias_names-method }~exposure|
+          add_option_filter( iv_fieldname = |{ c_alias_names-method }~{ c_method_fields-exposure }|
                              it_values    = <ls_option>-value_range ).
 
         WHEN c_method_option-status.
-          add_option_filter( iv_fieldname = |{ c_alias_names-method }~category|
+          add_option_filter( iv_fieldname = |{ c_alias_names-method }~{ c_method_fields-category }|
                              it_values    = <ls_option>-value_range ).
 
         WHEN c_general_search_options-type.
-          add_option_filter( iv_fieldname = |{ c_alias_names-method }~methodtype|
+          add_option_filter( iv_fieldname = |{ c_alias_names-method }~{ c_method_fields-methodtype }|
                              it_values    = <ls_option>-value_range ).
 
         WHEN c_general_search_options-created_on.
@@ -285,12 +328,21 @@ CLASS zcl_sat_os_subp_method_std IMPLEMENTATION.
     add_group_by_clause( |{ c_alias_names-method }~{ c_method_fields-methodlevel }| ).
     add_group_by_clause( |{ c_alias_names-method }~{ c_method_fields-methodtype }| ).
     add_group_by_clause( |{ c_alias_names-method }~{ c_method_fields-createdby }| ).
-    add_group_by_clause( |{ c_clif_alias }~{ c_class_fields-package }| ).
-    add_group_by_clause( |{ c_clif_alias }~{ c_class_fields-tadir_type }| ).
-    add_group_by_clause( |{ c_alias_names-method_text }~{ c_text_fields-description }| ).
     add_group_by_clause( |{ c_alias_names-method }~{ c_method_fields-createdon }| ).
     add_group_by_clause( |{ c_alias_names-method }~{ c_method_fields-changedby }| ).
     add_group_by_clause( |{ c_alias_names-method }~{ c_method_fields-changedon }| ).
+
+    IF mf_clif_join_active = abap_true.
+      add_group_by_clause( |{ c_clif_alias }~{ c_class_fields-package }| ).
+      add_group_by_clause( |{ c_clif_alias }~{ c_class_fields-tadir_type }| ).
+    ENDIF.
+
+    IF mf_comp_desc_join_active = abap_true.
+      add_group_by_clause( |{ c_alias_names-method_text }~{ c_text_fields-description }| ).
+    ELSE.
+      add_group_by_clause( |{ c_alias_names-method }~{ c_method_fields-originalclifname }| ).
+      add_group_by_clause( |{ c_alias_names-method }~{ c_method_fields-originalmethodname }| ).
+    ENDIF.
 
     IF mv_param_filter_count > 1.
       add_having_clause( iv_field = |{ c_alias_names-param }~parametername| iv_counter_compare = mv_param_filter_count ).
@@ -298,6 +350,22 @@ CLASS zcl_sat_os_subp_method_std IMPLEMENTATION.
     IF mv_exc_filter_count > 1.
       add_having_clause( iv_field = |{ c_alias_names-exception }~exceptionname| iv_counter_compare = mv_exc_filter_count ).
     ENDIF.
+  ENDMETHOD.
+
+  METHOD do_after_search.
+    CHECK mt_result IS NOT INITIAL.
+
+    IF mf_clif_join_active = abap_false.
+      enhance_reslts_with_clif_data( ).
+    ENDIF.
+
+    IF mf_comp_desc_join_active = abap_false.
+      enhance_reslts_with_meth_texts( ).
+    ENDIF.
+
+    " fills class/interface descriptions
+    " Hint: Needs to be called after TADIR type (CLAS/INTF) has been determined
+    fill_descriptions( ).
   ENDMETHOD.
 
   METHOD add_param_filter.
@@ -393,5 +461,65 @@ CLASS zcl_sat_os_subp_method_std IMPLEMENTATION.
                             WHEN zif_sat_c_object_search=>c_method_flags-optional         THEN 'isoptional'
                             WHEN zif_sat_c_object_search=>c_method_flags-final            THEN 'isfinal'
                             WHEN zif_sat_c_object_search=>c_method_flags-class_exceptions THEN 'isusingnewexceptions' ).
+  ENDMETHOD.
+
+  METHOD check_filter_availablity.
+    mf_clif_join_active =
+        xsdbool( line_exists( mo_search_query->mt_search_options[
+                                  target = zif_sat_c_object_search=>c_search_fields-object_filter_input_key ] ) ).
+
+    mf_comp_desc_join_active =
+        xsdbool( line_exists( mo_search_query->mt_search_options[
+                                  target = zif_sat_c_object_search=>c_search_fields-method_filter_input_key
+                                  option = c_general_search_options-description ] ) ).
+  ENDMETHOD.
+
+  METHOD enhance_reslts_with_clif_data.
+    DATA lt_tadir_info TYPE SORTED TABLE OF ty_tadir_info WITH UNIQUE KEY obj_name.
+    DATA lt_tadir_names TYPE TABLE OF ty_tadir_name.
+
+    lt_tadir_names = CORRESPONDING #( mt_result MAPPING obj_name = object_name ).
+
+    SELECT DISTINCT devclass,
+           obj_name,
+           object
+      FROM tadir
+      FOR ALL ENTRIES IN @lt_tadir_names
+      WHERE obj_name = @lt_tadir_names-obj_name
+        AND object IN ( @zif_sat_c_tadir_types=>class, @zif_sat_c_tadir_types=>interface )
+      INTO TABLE @lt_tadir_info.
+
+    LOOP AT mt_result REFERENCE INTO DATA(lr_result).
+      DATA(lr_tadir_info) = REF #( lt_tadir_info[ obj_name = lr_result->object_name ] OPTIONAL ).
+      IF lr_tadir_info IS BOUND.
+        lr_result->devclass   = lr_tadir_info->devclass.
+        lr_result->tadir_type = lr_tadir_info->object.
+      ENDIF.
+    ENDLOOP.
+  ENDMETHOD.
+
+  METHOD enhance_reslts_with_meth_texts.
+    DATA lt_method_texts TYPE SORTED TABLE OF zsat_i_classinterfacecomptext WITH UNIQUE KEY classname component.
+
+    SELECT classname,
+           component,
+           description
+      FROM zsat_i_classinterfacecomptext
+      FOR ALL ENTRIES IN @mt_result
+      WHERE classname = @mt_result-method_decl_clif
+        AND component = @mt_result-method_decl_method
+        AND language = @sy-langu
+      INTO CORRESPONDING FIELDS OF TABLE @lt_method_texts.
+
+    IF sy-subrc <> 0.
+      RETURN.
+    ENDIF.
+
+    LOOP AT mt_result REFERENCE INTO DATA(lr_result).
+      DATA(lr_text) = REF #( lt_method_texts[ classname = lr_result->method_decl_clif component = lr_result->method_decl_method ] OPTIONAL ).
+      IF lr_text IS BOUND.
+        lr_result->method_descr = lr_text->description.
+      ENDIF.
+    ENDLOOP.
   ENDMETHOD.
 ENDCLASS.
