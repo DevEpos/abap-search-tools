@@ -73,8 +73,8 @@ CLASS zcl_sat_os_subp_method_std DEFINITION
 
     DATA mv_param_filter_count TYPE i.
     DATA mv_exc_filter_count TYPE i.
-    DATA mf_clif_join_active TYPE xsdboolean.
-    DATA mf_comp_desc_join_active TYPE xsdboolean.
+    DATA mf_clif_join_active TYPE abap_bool.
+    DATA mf_comp_desc_join_active TYPE abap_bool.
 
     METHODS add_select_fields.
     METHODS configure_method_filters.
