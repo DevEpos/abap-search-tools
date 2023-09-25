@@ -659,8 +659,7 @@ CLASS zcl_sat_base_search_provider IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD reset.
-    CLEAR: mt_result,
-           mt_criteria,
+    CLEAR: mt_criteria,
            mt_criteria_or,
            mt_criteria_and,
            mt_where,
