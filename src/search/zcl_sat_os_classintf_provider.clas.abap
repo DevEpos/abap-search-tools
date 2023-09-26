@@ -326,6 +326,7 @@ CLASS zcl_sat_os_classintf_provider IMPLEMENTATION.
     ENDIF.
 
     IF lt_including IS NOT INITIAL.
+      set_distinct_required( ).
       add_join_table( iv_join_table = |{ iv_join_table }|
                       iv_alias      = iv_join_table_alias
                       it_conditions = VALUE #( ( field           = c_fields-classintf
@@ -369,6 +370,7 @@ CLASS zcl_sat_os_classintf_provider IMPLEMENTATION.
 
     " .. Add filters for including annotation key/value pairs
     IF lt_including IS NOT INITIAL.
+      set_distinct_required( ).
       add_join_table( iv_join_table = |{ zif_sat_c_select_source_id=>zsat_i_classattribute }|
                       iv_alias      = c_alias_names-attribute
                       it_conditions = VALUE #( ( field           = c_fields-classintf
