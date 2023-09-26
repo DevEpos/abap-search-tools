@@ -68,8 +68,6 @@ CLASS zcl_sat_os_subp_meth_impl_odb IMPLEMENTATION.
                       iv_fieldname_alias = c_result_fields-changed_date
                       iv_entity          = c_alias_names-includes ).
 
-    add_order_by( iv_fieldname = c_fields-progname iv_entity = c_alias_names-includes ).
-
     configure_incl_filters( ).
     add_progname_search_terms( ).
 
@@ -106,6 +104,11 @@ CLASS zcl_sat_os_subp_meth_impl_odb IMPLEMENTATION.
 
     " get class descriptions
     fill_descriptions( ).
+
+    SORT mt_result BY object_name
+                      method_level
+                      method_exposure
+                      method_name.
   ENDMETHOD.
 
   METHOD configure_incl_filters.
@@ -228,7 +231,9 @@ CLASS zcl_sat_os_subp_meth_impl_odb IMPLEMENTATION.
   METHOD discard_non_method_includes.
     DATA lt_method_include_pattern TYPE RANGE OF seocpdname.
 
-    lt_method_include_pattern = VALUE #( ( sign = 'I' option = 'CP' low = c_progname_filter_suffix ) ).
+    lt_method_include_pattern = VALUE #( option = 'CP'
+                                         ( sign = 'I' low = c_progname_filter_suffix )
+                                         ( sign = 'E' low = '*CMAC' ) ).
 
     DELETE mt_result WHERE method_name NOT IN lt_method_include_pattern.
   ENDMETHOD.
