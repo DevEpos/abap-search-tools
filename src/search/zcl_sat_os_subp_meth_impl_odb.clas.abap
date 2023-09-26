@@ -6,6 +6,7 @@ CLASS zcl_sat_os_subp_meth_impl_odb DEFINITION
   INHERITING FROM zcl_sat_os_subp_meth_impl.
 
   PUBLIC SECTION.
+
   PROTECTED SECTION.
     METHODS prepare_search  REDEFINITION.
     METHODS do_after_search REDEFINITION.
@@ -36,10 +37,13 @@ CLASS zcl_sat_os_subp_meth_impl_odb DEFINITION
         tadirtype          TYPE zsat_i_classinterface-tadirtype,
       END OF ty_class_info.
 
+    DATA mf_no_object_name_filter TYPE abap_bool.
+
     METHODS configure_incl_filters.
     METHODS read_method_infos_n_filter2.
     METHODS add_progname_search_terms.
     METHODS apply_class_filters.
+    METHODS discard_non_method_includes.
 ENDCLASS.
 
 
@@ -74,6 +78,14 @@ CLASS zcl_sat_os_subp_meth_impl_odb IMPLEMENTATION.
 
   METHOD do_after_search.
     CHECK mt_result IS NOT INITIAL.
+
+    " exclude all non method includes - in case no object name filter was provided
+    IF mf_no_object_name_filter = abap_true.
+      discard_non_method_includes( ).
+      IF mt_result IS INITIAL.
+        RETURN.
+      ENDIF.
+    ENDIF.
 
     " determine the class name from the found include name
     LOOP AT mt_result REFERENCE INTO DATA(lr_result).
@@ -140,27 +152,36 @@ CLASS zcl_sat_os_subp_meth_impl_odb IMPLEMENTATION.
   METHOD add_progname_search_terms.
     DATA(lt_object_search_terms) = VALUE #( mo_search_query->mt_search_term[
                                                 target = zif_sat_c_object_search=>c_search_fields-object_name_input_key ]-values OPTIONAL ).
-    IF lt_object_search_terms IS INITIAL.
-      " we only want method includes so a manual filter is required
-      lt_object_search_terms = VALUE #( ( sign = 'I' option = 'CP' low = c_progname_filter_suffix ) ).
-    ELSE.
-      LOOP AT lt_object_search_terms REFERENCE INTO DATA(lr_search_term).
-        IF lr_search_term->option = 'CP'.
-          DATA(lv_last_char_offset) = strlen( lr_search_term->low ) - 1.
 
-          DATA(lv_last_char) = lr_search_term->low+lv_last_char_offset.
-
-          IF lv_last_char = '*'.
-            lr_search_term->low = lr_search_term->low && c_progname_filter_suffix.
-          ENDIF.
-        ELSE.
-          " We assume 'EQ' here, and therefore a full classname should have been specified
-          lr_search_term->option = 'CP'.
-          DATA(lv_progname) = CONV progname( lr_search_term->low ).
-          TRANSLATE lv_progname(30) USING ' ='.
-          lr_search_term->low = lv_progname && c_progname_filter_suffix.
+    LOOP AT lt_object_search_terms REFERENCE INTO DATA(lr_search_term).
+      IF lr_search_term->option = 'CP'.
+        " Wildcard only is possible but does not restrict the results in any way
+        " so we ignore such an entry
+        IF lr_search_term->low = '*'.
+          DELETE lt_object_search_terms.
+          CONTINUE.
         ENDIF.
-      ENDLOOP.
+        DATA(lv_last_char_offset) = strlen( lr_search_term->low ) - 1.
+        DATA(lv_last_char) = lr_search_term->low+lv_last_char_offset.
+
+        IF lv_last_char = '*'.
+          lr_search_term->low = lr_search_term->low && c_progname_filter_suffix+1.
+        ENDIF.
+      ELSE.
+        " We assume 'EQ' here, and therefore a full classname should have been specified
+        lr_search_term->option = 'CP'.
+
+        " The given class name is adjusted to a method include pattern of that class
+        " e.g. CL_CLASS======================CM+++
+        DATA(lv_progname) = CONV progname( lr_search_term->low ).
+        TRANSLATE lv_progname(30) USING ' ='.
+        lr_search_term->low = lv_progname && c_progname_filter_suffix+1.
+      ENDIF.
+    ENDLOOP.
+
+    IF lt_object_search_terms IS INITIAL.
+      mf_no_object_name_filter = abap_true.
+      RETURN.
     ENDIF.
 
     add_search_terms_to_search( it_search_terms = lt_object_search_terms
@@ -202,5 +223,13 @@ CLASS zcl_sat_os_subp_meth_impl_odb IMPLEMENTATION.
       lr_result->tadir_type = lr_class_info->tadirtype.
       lr_result->devclass   = lr_class_info->developmentpackage.
     ENDLOOP.
+  ENDMETHOD.
+
+  METHOD discard_non_method_includes.
+    DATA lt_method_include_pattern TYPE RANGE OF seocpdname.
+
+    lt_method_include_pattern = VALUE #( ( sign = 'I' option = 'CP' low = c_progname_filter_suffix ) ).
+
+    DELETE mt_result WHERE method_name NOT IN lt_method_include_pattern.
   ENDMETHOD.
 ENDCLASS.
