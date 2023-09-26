@@ -246,6 +246,7 @@ CLASS zcl_sat_base_search_provider DEFINITION
         it_values    TYPE zif_sat_ty_object_search=>ty_t_value_range
         iv_fieldname TYPE string.
 
+    METHODS set_distinct_required.
     METHODS reset.
 
   PRIVATE SECTION.
@@ -254,6 +255,7 @@ CLASS zcl_sat_base_search_provider DEFINITION
     CONSTANTS c_devc_tab_alias TYPE string VALUE 'devclass'.
 
     DATA mf_devclass_join_added TYPE abap_bool.
+    DATA mf_distinct_required TYPE abap_bool.
 
     METHODS get_select_string
       RETURNING
@@ -315,22 +317,42 @@ CLASS zcl_sat_base_search_provider IMPLEMENTATION.
                                 ELSE mo_search_query->mv_max_rows + 1 ).
 
     TRY.
-        IF mt_group_by IS NOT INITIAL.
-          SELECT DISTINCT (mt_select)
-            FROM (mt_from)
-            WHERE (mt_where)
-            GROUP BY (mt_group_by)
-            HAVING (mt_having)
-            ORDER BY (mt_order_by)
-          INTO CORRESPONDING FIELDS OF TABLE @mt_result
-            UP TO @lv_max_rows ROWS.
+        IF mf_distinct_required = abap_true.
+          IF mt_group_by IS NOT INITIAL.
+            SELECT DISTINCT (mt_select)
+              FROM (mt_from)
+              WHERE (mt_where)
+              GROUP BY (mt_group_by)
+              HAVING (mt_having)
+              ORDER BY (mt_order_by)
+              INTO CORRESPONDING FIELDS OF TABLE @mt_result
+              UP TO @lv_max_rows ROWS.
+          ELSE.
+            SELECT DISTINCT (mt_select)
+              FROM (mt_from)
+              WHERE (mt_where)
+              ORDER BY (mt_order_by)
+              INTO CORRESPONDING FIELDS OF TABLE @mt_result
+              UP TO @lv_max_rows ROWS.
+          ENDIF.
         ELSE.
-          SELECT DISTINCT (mt_select)
-            FROM (mt_from)
-            WHERE (mt_where)
-            ORDER BY (mt_order_by)
-          INTO CORRESPONDING FIELDS OF TABLE @mt_result
-            UP TO @lv_max_rows ROWS.
+          IF mt_group_by IS NOT INITIAL.
+            SELECT (mt_select)
+              FROM (mt_from)
+              WHERE (mt_where)
+              GROUP BY (mt_group_by)
+              HAVING (mt_having)
+              ORDER BY (mt_order_by)
+              INTO CORRESPONDING FIELDS OF TABLE @mt_result
+              UP TO @lv_max_rows ROWS.
+          ELSE.
+            SELECT (mt_select)
+              FROM (mt_from)
+              WHERE (mt_where)
+              ORDER BY (mt_order_by)
+              INTO CORRESPONDING FIELDS OF TABLE @mt_result
+              UP TO @lv_max_rows ROWS.
+          ENDIF.
         ENDIF.
         " TODO: variable is assigned but never used (ABAP cleaner)
         DATA(lv_sql) = get_select_string( ).
@@ -708,8 +730,7 @@ CLASS zcl_sat_base_search_provider IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD reset.
-    CLEAR: mt_result,
-           mt_criteria,
+    CLEAR: mt_criteria,
            mt_criteria_or,
            mt_criteria_and,
            mt_where,
@@ -721,6 +742,10 @@ CLASS zcl_sat_base_search_provider IMPLEMENTATION.
            ms_join_def,
            mf_excluding_found,
            mf_devclass_join_added.
+  ENDMETHOD.
+
+  METHOD set_distinct_required.
+    mf_distinct_required = abap_true.
   ENDMETHOD.
 
   METHOD get_select_string.
