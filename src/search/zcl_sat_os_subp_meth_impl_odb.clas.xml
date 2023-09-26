@@ -3,13 +3,14 @@
  <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
   <asx:values>
    <VSEOCLASS>
-    <CLSNAME>ZCL_SAT_OS_SUBP_METH_IMPL</CLSNAME>
+    <CLSNAME>ZCL_SAT_OS_SUBP_METH_IMPL_ODB</CLSNAME>
     <LANGU>E</LANGU>
-    <DESCRIPT>Searches methods by created/changed info of impl. (HANA)</DESCRIPT>
+    <DESCRIPT>Searches methods by created/changed info of impl. (non-HANA)</DESCRIPT>
     <STATE>1</STATE>
     <CLSCCINCL>X</CLSCCINCL>
     <FIXPT>X</FIXPT>
     <UNICODE>X</UNICODE>
+    <WITH_UNIT_TESTS>X</WITH_UNIT_TESTS>
    </VSEOCLASS>
   </asx:values>
  </asx:abap>
