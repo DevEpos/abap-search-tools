@@ -19,6 +19,7 @@ INTERFACE zif_sat_c_select_source_id
   CONSTANTS dd09l TYPE string VALUE 'DD09L'.
   "! <p class="shorttext synchronized">Base tables of dictionary views</p>
   CONSTANTS dd26s TYPE string VALUE 'DD26S'.
+  CONSTANTS reposrc TYPE string VALUE 'REPOSRC'.  
   CONSTANTS zsat_i_messageclass TYPE string VALUE 'ZSAT_I_MESSAGECLASS'.
   CONSTANTS zsat_i_message TYPE string VALUE 'ZSAT_I_MESSAGE'.
   " <p class="shorttext synchronized">Table for Redefined Methods</p>

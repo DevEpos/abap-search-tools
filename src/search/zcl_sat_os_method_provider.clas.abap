@@ -72,7 +72,9 @@ CLASS zcl_sat_os_method_provider IMPLEMENTATION.
     DATA(lf_incl_admin_data) = VALUE #( ms_search_engine_params-custom_options[
                                             key = zif_sat_c_object_search=>c_custom_options-method-target_incl_for_admin_data ]-value OPTIONAL ).
     IF lf_incl_admin_data = abap_true.
-      DATA(lo_meth_impl_provider) = NEW zcl_sat_os_subp_meth_impl( ).
+      DATA(lo_meth_impl_provider) = COND #( WHEN sy-dbsys = 'HDB'
+                                            THEN NEW zcl_sat_os_subp_meth_impl( )
+                                            ELSE NEW zcl_sat_os_subp_meth_impl_odb( ) ).
       IF lo_meth_impl_provider->is_search_possible( mo_query ).
         result = VALUE #( ( lo_meth_impl_provider ) ).
         RETURN.
