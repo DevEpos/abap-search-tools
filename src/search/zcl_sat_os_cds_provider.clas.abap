@@ -297,6 +297,7 @@ CLASS zcl_sat_os_cds_provider IMPLEMENTATION.
     ENDIF.
 
     IF lt_including IS NOT INITIAL.
+      set_distinct_required( ).
       add_join_table(
           iv_join_table = CONV #( zif_sat_c_select_source_id=>dd10b )
           iv_alias      = c_param_alias
@@ -339,6 +340,7 @@ CLASS zcl_sat_os_cds_provider IMPLEMENTATION.
 
     " Add filters for including annotation key/value pairs
     IF lt_including IS NOT INITIAL.
+      set_distinct_required( ).
       add_join_table( iv_join_table = get_cds_sql_name( |{ zif_sat_c_select_source_id=>zsat_i_cdsannotation }| )
                       iv_alias      = c_anno_alias
                       it_conditions = VALUE #( ( field           = c_fields-entityid
@@ -379,6 +381,7 @@ CLASS zcl_sat_os_cds_provider IMPLEMENTATION.
     ENDIF.
 
     IF lt_including IS NOT INITIAL.
+      set_distinct_required( ).
       add_join_table(
           iv_join_table = |{ zif_sat_c_select_source_id=>dd08b }|
           iv_alias      = c_used_in_association_alias
@@ -403,6 +406,7 @@ CLASS zcl_sat_os_cds_provider IMPLEMENTATION.
     ENDIF.
 
     IF lt_including IS NOT INITIAL.
+      set_distinct_required( ).
       add_join_table( iv_join_table = get_cds_sql_name( |{ zif_sat_c_select_source_id=>zsat_i_cdsviewfield }| )
                       iv_alias      = c_fields-alias
                       it_conditions = VALUE #( ( field           = c_fields-entityid
@@ -428,6 +432,7 @@ CLASS zcl_sat_os_cds_provider IMPLEMENTATION.
     ENDIF.
 
     IF lt_including IS NOT INITIAL.
+      set_distinct_required( ).
       add_join_table( iv_join_table = get_cds_sql_name( |{ zif_sat_c_select_source_id=>zsat_i_cdsfrompartentity }| )
                       iv_alias      = c_select_from_alias
                       it_conditions = VALUE #( ( field           = 'ddlviewname'
@@ -444,6 +449,7 @@ CLASS zcl_sat_os_cds_provider IMPLEMENTATION.
     add_option_filter( iv_fieldname = |{ c_extension_view_alias }~{ c_fields-entityid }|
                        it_values    = it_values ).
 
+    set_distinct_required( ).
     add_join_table( iv_join_table = get_cds_sql_name( |{ zif_sat_c_select_source_id=>zsat_i_cdsextensionviews }| )
                     iv_alias      = c_extension_view_alias
                     it_conditions = VALUE #( ( field           = 'parentddl'
