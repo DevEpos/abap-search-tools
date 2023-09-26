@@ -379,19 +379,22 @@ CLASS zcl_sat_os_subp_method_std IMPLEMENTATION.
                             iv_subquery           = mv_param_subquery ).
     ENDIF.
 
-    IF lt_including IS NOT INITIAL.
-      add_join_table( iv_join_table = |{ zif_sat_c_select_source_id=>zsat_i_clifmethodparam }|
-                      iv_alias      = c_alias_names-param
-                      it_conditions = VALUE #( ref_table_alias = c_alias_names-method
-                                               type            = zif_sat_c_join_cond_type=>field
-                                               ( field     = c_method_fields-classname
-                                                 ref_field = c_method_fields-originalclifname )
-                                               ( field     = 'methodname'
-                                                 ref_field = c_method_fields-originalmethodname ) ) ).
-      add_option_filter( iv_fieldname = |{ c_alias_names-param }~{ 'parametername' }|
-                         it_values    = lt_including ).
-      mv_param_filter_count = lines( lt_including ).
+    IF lt_including IS INITIAL.
+      RETURN.
     ENDIF.
+
+    set_distinct_required( ).
+    add_join_table( iv_join_table = |{ zif_sat_c_select_source_id=>zsat_i_clifmethodparam }|
+                    iv_alias      = c_alias_names-param
+                    it_conditions = VALUE #( ref_table_alias = c_alias_names-method
+                                             type            = zif_sat_c_join_cond_type=>field
+                                             ( field     = c_method_fields-classname
+                                               ref_field = c_method_fields-originalclifname )
+                                             ( field     = 'methodname'
+                                               ref_field = c_method_fields-originalmethodname ) ) ).
+    add_option_filter( iv_fieldname = |{ c_alias_names-param }~{ 'parametername' }|
+                       it_values    = lt_including ).
+    mv_param_filter_count = lines( lt_including ).
   ENDMETHOD.
 
   METHOD add_exception_filter.
@@ -405,19 +408,22 @@ CLASS zcl_sat_os_subp_method_std IMPLEMENTATION.
                             iv_subquery           = mv_exc_subquery ).
     ENDIF.
 
-    IF lt_including IS NOT INITIAL.
-      add_join_table( iv_join_table = |{ zif_sat_c_select_source_id=>zsat_i_clifmethodexception }|
-                      iv_alias      = c_alias_names-exception
-                      it_conditions = VALUE #( ref_table_alias = c_alias_names-method
-                                               type            = zif_sat_c_join_cond_type=>field
-                                               ( field     = c_method_fields-classname
-                                                 ref_field = c_method_fields-originalclifname )
-                                               ( field     = 'methodname'
-                                                 ref_field = c_method_fields-originalmethodname ) ) ).
-      add_option_filter( iv_fieldname = |{ c_alias_names-exception }~{ 'exceptionname' }|
-                         it_values    = lt_including ).
-      mv_exc_filter_count = lines( lt_including ).
+    IF lt_including IS INITIAL.
+      RETURN.
     ENDIF.
+
+    set_distinct_required( ).
+    add_join_table( iv_join_table = |{ zif_sat_c_select_source_id=>zsat_i_clifmethodexception }|
+                    iv_alias      = c_alias_names-exception
+                    it_conditions = VALUE #( ref_table_alias = c_alias_names-method
+                                             type            = zif_sat_c_join_cond_type=>field
+                                             ( field     = c_method_fields-classname
+                                               ref_field = c_method_fields-originalclifname )
+                                             ( field     = 'methodname'
+                                               ref_field = c_method_fields-originalmethodname ) ) ).
+    add_option_filter( iv_fieldname = |{ c_alias_names-exception }~{ 'exceptionname' }|
+                       it_values    = lt_including ).
+    mv_exc_filter_count = lines( lt_including ).
   ENDMETHOD.
 
   METHOD add_flag_filter.
