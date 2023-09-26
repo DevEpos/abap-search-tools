@@ -1,8 +1,7 @@
-"! <p class="shorttext synchronized">Searches methods by created/changed info of impl.</p>
+"! <p class="shorttext synchronized">Searches methods by created/changed info of impl. (HANA)</p>
 "! Provider for searching methods
 CLASS zcl_sat_os_subp_meth_impl DEFINITION
   PUBLIC
-  FINAL
   CREATE PUBLIC
   INHERITING FROM zcl_sat_os_subp_meth_base.
 
