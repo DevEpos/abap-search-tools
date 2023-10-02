@@ -527,18 +527,12 @@ CLASS zcl_sat_cds_view_factory IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD get_source_type.
-    IF sy-saprl >= 751.
-      DATA(lv_select) = 'SOURCE_TYPE'.
-      SELECT SINGLE (lv_select)
-        FROM ddddlsrc
-        WHERE ddlname = @iv_ddl_name
+    SELECT SINGLE source_type
+      FROM ddddlsrc
+      WHERE ddlname = @iv_ddl_name
       INTO @rv_source_type.
 
-      IF sy-subrc <> 0.
-        rv_source_type = zif_sat_c_cds_view_type=>view.
-      ENDIF.
-    ELSE.
-      " assume ddls is a normal view
+    IF sy-subrc <> 0.
       rv_source_type = zif_sat_c_cds_view_type=>view.
     ENDIF.
   ENDMETHOD.
@@ -778,10 +772,8 @@ CLASS zcl_sat_cds_view_factory IMPLEMENTATION.
           MAPPING inttype = abaptype ).
 
         " complete parameters with annotations (if existing)
-        IF sy-saprl >= 750.
-          read_param_annotations( EXPORTING iv_cds_view  = iv_cds_view
-                                  CHANGING  ct_parameter = lt_params ).
-        ENDIF.
+        read_param_annotations( EXPORTING iv_cds_view  = iv_cds_view
+                                CHANGING  ct_parameter = lt_params ).
 
         IF lt_assoc_header IS NOT INITIAL.
           SORT lt_assoc_fields BY associationname

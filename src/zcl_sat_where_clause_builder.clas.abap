@@ -565,17 +565,15 @@ CLASS zcl_sat_where_clause_builder IMPLEMENTATION.
       CASE iv_sql_function.
 
         WHEN zif_sat_c_sql_function=>upper.
-          IF sy-saprl >= 751.
-            lv_fieldname = |UPPER( { iv_fieldname } )|.
+          lv_fieldname = |UPPER( { iv_fieldname } )|.
 
-            " Convert low/high to upper case
-            IF cv_low IS NOT INITIAL.
-              TRANSLATE cv_low TO UPPER CASE.
-            ENDIF.
+          " Convert low/high to upper case
+          IF cv_low IS NOT INITIAL.
+            TRANSLATE cv_low TO UPPER CASE.
+          ENDIF.
 
-            IF cv_high IS NOT INITIAL.
-              TRANSLATE cv_high TO UPPER CASE.
-            ENDIF.
+          IF cv_high IS NOT INITIAL.
+            TRANSLATE cv_high TO UPPER CASE.
           ENDIF.
 
       ENDCASE.

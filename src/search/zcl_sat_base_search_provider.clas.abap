@@ -287,7 +287,7 @@ ENDCLASS.
 
 CLASS zcl_sat_base_search_provider IMPLEMENTATION.
   METHOD constructor.
-    mv_description_filter_field = COND #( WHEN sy-saprl >= 751 THEN 'descriptionupper' ELSE 'description' ).
+    mv_description_filter_field = 'descriptionupper'.
   ENDMETHOD.
 
   METHOD zif_sat_object_search_provider~search.
