@@ -1,14 +1,15 @@
-"! <p class="shorttext synchronized" lang="en">Base Converter for Object Search Query</p>
+"! <p class="shorttext synchronized">Base Converter for Object Search Query</p>
 CLASS zcl_sat_general_qc DEFINITION
   PUBLIC
-  CREATE PUBLIC .
+  CREATE PUBLIC.
 
   PUBLIC SECTION.
     INTERFACES zif_sat_query_converter.
+
   PROTECTED SECTION.
+
   PRIVATE SECTION.
 ENDCLASS.
-
 
 
 CLASS zcl_sat_general_qc IMPLEMENTATION.
@@ -20,5 +21,4 @@ CLASS zcl_sat_general_qc IMPLEMENTATION.
       ENDIF.
     ENDIF.
   ENDMETHOD.
-
 ENDCLASS.

@@ -10,7 +10,7 @@ CLASS zcl_sat_os_ddicview_provider DEFINITION
   PROTECTED SECTION.
     METHODS prepare_search     REDEFINITION.
     METHODS determine_grouping REDEFINITION.
-    methods do_after_search REDEFINITION.
+    METHODS do_after_search    REDEFINITION.
 
   PRIVATE SECTION.
     ALIASES c_search_params FOR zif_sat_c_object_search~c_ddicview_search_params.
@@ -37,10 +37,10 @@ CLASS zcl_sat_os_ddicview_provider DEFINITION
         maintenance_flag    TYPE string VALUE 'maintenanceflag',
       END OF c_fields.
 
-    DATA mv_field_subquery       TYPE string.
-    DATA mv_basetab_subquery     TYPE string.
+    DATA mv_field_subquery TYPE string.
+    DATA mv_basetab_subquery TYPE string.
 
-    DATA mv_field_filter_count   TYPE i.
+    DATA mv_field_filter_count TYPE i.
     DATA mv_basetab_filter_count TYPE i.
 
     METHODS configure_filters.

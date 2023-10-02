@@ -363,9 +363,9 @@ CLASS ltcl_method_class_filter_unit DEFINITION FINAL FOR TESTING
   RISK LEVEL HARMLESS.
 
   PRIVATE SECTION.
-    DATA mr_cut            TYPE REF TO zcl_sat_os_subp_method_std.
+    DATA mr_cut TYPE REF TO zcl_sat_os_subp_method_std.
     DATA mt_search_options TYPE zif_sat_ty_object_search=>ty_t_search_option.
-    DATA mt_search_terms   TYPE zif_sat_ty_object_search=>ty_t_search_term.
+    DATA mt_search_terms TYPE zif_sat_ty_object_search=>ty_t_search_term.
 
     METHODS setup.
 
@@ -3665,9 +3665,9 @@ CLASS ltcl_neg_meth_class_fltr_unit DEFINITION FINAL FOR TESTING
   RISK LEVEL HARMLESS.
 
   PRIVATE SECTION.
-    DATA mr_cut            TYPE REF TO zcl_sat_os_subp_method_std.
+    DATA mr_cut TYPE REF TO zcl_sat_os_subp_method_std.
     DATA mt_search_options TYPE zif_sat_ty_object_search=>ty_t_search_option.
-    DATA mt_search_terms   TYPE zif_sat_ty_object_search=>ty_t_search_term.
+    DATA mt_search_terms TYPE zif_sat_ty_object_search=>ty_t_search_term.
 
     METHODS setup.
 

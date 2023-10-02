@@ -5,16 +5,16 @@ CLASS zcl_sat_adt_discovery_app DEFINITION
   CREATE PUBLIC.
 
   PUBLIC SECTION.
-    CONSTANTS c_utils_root_scheme    TYPE string VALUE 'http://www.devepos.com/adt/saat'.
+    CONSTANTS c_utils_root_scheme TYPE string VALUE 'http://www.devepos.com/adt/saat'.
     CONSTANTS c_utils_root_scheme_v2 TYPE string VALUE 'http://www.devepos.com/adt/saat/v2'.
-    CONSTANTS c_utils_rel_scheme     TYPE string VALUE 'http://www.devepos.com/adt/relations/saat'.
-    CONSTANTS c_utils_rel_scheme_v2  TYPE string VALUE 'http://www.devepos.com/adt/relations/saat/v2'.
-    CONSTANTS c_object_search_uri    TYPE string VALUE '/objectsearch'.
-    CONSTANTS c_sapaox_launcher_uri  TYPE string VALUE '/sapaox'.
+    CONSTANTS c_utils_rel_scheme TYPE string VALUE 'http://www.devepos.com/adt/relations/saat'.
+    CONSTANTS c_utils_rel_scheme_v2 TYPE string VALUE 'http://www.devepos.com/adt/relations/saat/v2'.
+    CONSTANTS c_object_search_uri TYPE string VALUE '/objectsearch'.
+    CONSTANTS c_sapaox_launcher_uri TYPE string VALUE '/sapaox'.
     CONSTANTS c_ddic_repo_access_uri TYPE string VALUE '/ddicaccess'.
-    CONSTANTS c_nav_targets_uri      TYPE string VALUE '/navigationtargets'.
-    CONSTANTS c_static_uri           TYPE string VALUE '/devepos/adt/saat'.
-    CONSTANTS c_app_title            TYPE string VALUE 'Discovery Provider for ABAP Search and Analysis Tools'.
+    CONSTANTS c_nav_targets_uri TYPE string VALUE '/navigationtargets'.
+    CONSTANTS c_static_uri TYPE string VALUE '/devepos/adt/saat'.
+    CONSTANTS c_app_title TYPE string VALUE 'Discovery Provider for ABAP Search and Analysis Tools'.
 
     CONSTANTS:
       BEGIN OF c_cds_analysis_uri,
@@ -248,7 +248,6 @@ CLASS zcl_sat_adt_discovery_app IMPLEMENTATION.
         description     = 'Resource for includes in a db table'
         category_scheme = zif_sat_c_object_search=>c_content_assist-category_scheme
         category_term   = zif_sat_c_object_search=>c_content_assist-terms-db_tab_include ).
-
   ENDMETHOD.
 
   METHOD register_sapaox_launcher.

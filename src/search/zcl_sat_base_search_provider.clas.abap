@@ -752,18 +752,20 @@ CLASS zcl_sat_base_search_provider IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD add_devclass_join.
-    IF mf_devclass_join_added = abap_false.
-      DATA(lv_devclass_entity) = COND #( WHEN if_use_ddic_sql_view = abap_true
-                                         THEN get_cds_sql_name( |{ zif_sat_c_select_source_id=>zsat_i_developmentpackage }| )
-                                         ELSE |{ zif_sat_c_select_source_id=>zsat_i_developmentpackage }| ).
-      add_join_table( iv_join_table = lv_devclass_entity
-                      iv_alias      = c_devc_tab_alias
-                      it_conditions = VALUE #( ( field           = 'developmentpackage'
-                                                 ref_field       = iv_ref_field
-                                                 ref_table_alias = iv_ref_table_alias
-                                                 type            = zif_sat_c_join_cond_type=>field ) ) ).
-      mf_devclass_join_added = abap_true.
+    IF mf_devclass_join_added = abap_true.
+      RETURN.
     ENDIF.
+
+    DATA(lv_devclass_entity) = COND #( WHEN if_use_ddic_sql_view = abap_true
+                                       THEN get_cds_sql_name( |{ zif_sat_c_select_source_id=>zsat_i_developmentpackage }| )
+                                       ELSE |{ zif_sat_c_select_source_id=>zsat_i_developmentpackage }| ).
+    add_join_table( iv_join_table = lv_devclass_entity
+                    iv_alias      = c_devc_tab_alias
+                    it_conditions = VALUE #( ( field           = 'developmentpackage'
+                                               ref_field       = iv_ref_field
+                                               ref_table_alias = iv_ref_table_alias
+                                               type            = zif_sat_c_join_cond_type=>field ) ) ).
+    mf_devclass_join_added = abap_true.
   ENDMETHOD.
 
   METHOD resolve_package_hierarchy.

@@ -1,33 +1,31 @@
-"! <p class="shorttext synchronized" lang="en">Seriliazer for Element Information children property</p>
+"! <p class="shorttext synchronized">Seriliazer for Element Information children property</p>
 CLASS zcl_sat_adt_elem_info_serlzer DEFINITION
   PUBLIC
   FINAL
-  CREATE PUBLIC .
+  CREATE PUBLIC.
 
   PUBLIC SECTION.
-    "! <p class="shorttext synchronized" lang="en">Reads externala attributes</p>
+    "! <p class="shorttext synchronized">Reads externala attributes</p>
     CLASS-METHODS read_ext_attributes
       IMPORTING
         io_reader           TYPE REF TO if_sxml_reader
         transformation_name TYPE string
       EXPORTING
         code_element        TYPE zsat_adt_element_info.
-    "! <p class="shorttext synchronized" lang="en">Serializes the given element information</p>
+
+    "! <p class="shorttext synchronized">Serializes the given element information</p>
     CLASS-METHODS serialize_ext_attributes
       IMPORTING
         io_writer           TYPE REF TO if_sxml_writer
         code_element        TYPE zsat_adt_element_info
         transformation_name TYPE string.
-  PROTECTED SECTION.
-  PRIVATE SECTION.
 ENDCLASS.
-
 
 
 CLASS zcl_sat_adt_elem_info_serlzer IMPLEMENTATION.
   METHOD read_ext_attributes.
-    DATA: ls_child TYPE zsat_adt_element_info.
-    FIELD-SYMBOLS: <lt_children> TYPE zsat_adt_element_info_t.
+    DATA ls_child TYPE zsat_adt_element_info.
+    FIELD-SYMBOLS <lt_children> TYPE zsat_adt_element_info_t.
 
     io_reader->current_node( ).
     DATA(lv_type) = io_reader->read_next_node( )->type.
@@ -50,17 +48,17 @@ CLASS zcl_sat_adt_elem_info_serlzer IMPLEMENTATION.
             EXIT.
           ENDIF.
           CALL TRANSFORMATION (transformation_name)
-            SOURCE XML io_reader
-            RESULT element_info = ls_child.
+               SOURCE XML io_reader
+               RESULT element_info = ls_child.
           APPEND ls_child TO <lt_children>.
         ENDWHILE.
       CATCH cx_sxml_parse_error ##NO_HANDLER.
-        "silently ignored
+        " silently ignored
     ENDTRY.
   ENDMETHOD.
 
   METHOD serialize_ext_attributes.
-    FIELD-SYMBOLS: <lt_children> TYPE zsat_adt_element_info_t.
+    FIELD-SYMBOLS <lt_children> TYPE zsat_adt_element_info_t.
 
     CHECK code_element-children IS BOUND.
 
@@ -70,11 +68,10 @@ CLASS zcl_sat_adt_elem_info_serlzer IMPLEMENTATION.
 
       LOOP AT <lt_children> ASSIGNING FIELD-SYMBOL(<ls_child>).
         CALL TRANSFORMATION (transformation_name)
-         SOURCE element_info = <ls_child>
-         RESULT XML io_writer.
+             SOURCE element_info = <ls_child>
+             RESULT XML io_writer.
       ENDLOOP.
 
     ENDIF.
   ENDMETHOD.
-
 ENDCLASS.

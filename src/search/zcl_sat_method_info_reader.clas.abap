@@ -136,7 +136,7 @@ CLASS zcl_sat_method_info_reader DEFINITION
     METHODS read_method_infos.
     METHODS merge_mtd_infos_into_results.
     METHODS read_redef_method_infos.
-  ENDCLASS.
+ENDCLASS.
 
 
 CLASS zcl_sat_method_info_reader IMPLEMENTATION.
@@ -395,13 +395,13 @@ CLASS zcl_sat_method_info_reader IMPLEMENTATION.
       ls_result-method_descr       = lr_method_detail->descript.
       ls_result-method_exposure    = lr_method_detail->exposure.
       IF mf_only_redefined = abap_false.
-        if lr_processed_method->is_redefined = abap_true.
+        IF lr_processed_method->is_redefined = abap_true.
           ls_result-method_is_final = VALUE #( mt_redef_method_info[
                                                    classname   = lr_processed_method->original_class_name
                                                    method_name = lr_processed_method->original_method_name ]-is_final OPTIONAL ).
-        else.
-        ls_result-method_is_final = lr_method_detail->is_final.
-        endif.
+        ELSE.
+          ls_result-method_is_final = lr_method_detail->is_final.
+        ENDIF.
       ENDIF.
       ls_result-method_level = lr_method_detail->level.
       ls_result-created_by   = lr_method_detail->author.

@@ -32,7 +32,6 @@ CLASS zcl_sat_general_qv IMPLEMENTATION.
                       msgv1  = |{ iv_option }|.
         ENDIF.
 
-
       WHEN zif_sat_c_object_search=>c_general_search_params-package.
         IF iv_value NA '*+'.
           SELECT SINGLE @abap_true

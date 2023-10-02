@@ -394,8 +394,7 @@ CLASS zcl_sat_os_classintf_provider IMPLEMENTATION.
       DATA(lt_implementers) = zcl_sat_clif_filter_util=>get_intf_implementers( CONV #( it_values[ 1 ]-low ) ).
 
       IF lt_implementers IS NOT INITIAL.
-        DATA(lt_subs_of_implementers) = zcl_sat_clif_filter_util=>resolve_subclasses(
-                                            it_values = lt_implementers ).
+        DATA(lt_subs_of_implementers) = zcl_sat_clif_filter_util=>resolve_subclasses( it_values = lt_implementers ).
         IF lt_subs_of_implementers IS NOT INITIAL.
           add_join_table( iv_join_table = |{ zif_sat_c_select_source_id=>zsat_i_clifrelations }|
                           iv_alias      = c_alias_names-inh_or_impl
