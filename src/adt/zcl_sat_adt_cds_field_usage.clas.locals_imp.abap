@@ -10,7 +10,7 @@ CLASS lcl_field_visitor IMPLEMENTATION.
 
   METHOD visit_atomic_expression.
     CHECK: object IS BOUND,
-           mv_current_field IS NOT INITIAL",
+           mv_current_field IS NOT INITIAL ",
 *           mf_calc_field_found = abap_true.
            .
 
@@ -31,8 +31,7 @@ CLASS lcl_field_visitor IMPLEMENTATION.
     mv_source_entityname = iv_source_entityname.
     mv_source_field = iv_source_field.
 
-    m_mapping = VALUE #(
-       ( classname = 'CL_QLAST_ATOMIC_EXPRESSION'      method = 'VISIT_ATOMIC_EXPRESSION'        )
+    m_mapping = VALUE #( ( classname = 'CL_QLAST_ATOMIC_EXPRESSION'      method = 'VISIT_ATOMIC_EXPRESSION'        )
 *       ( classname = 'CL_QLAST_ARITHM_EXP'             method = 'VISIT_CALC'  )
 *       ( classname = 'CL_QLAST_BOOLEAN_EXPRESSION'     method = 'VISIT_CALC'  )
 *       ( classname = 'CL_QLAST_CASE_EXP_BASE'          method = 'VISIT_CALC'  )
@@ -58,14 +57,11 @@ CLASS lcl_field_visitor IMPLEMENTATION.
                 if_qlast_visitor=>bitmask_ignore_ast_base.
   ENDMETHOD.
 
-
   METHOD get_found_fields.
     rt_found_fields = mt_found_fields.
   ENDMETHOD.
 
-
   METHOD if_qlast_visitor~ignore.
     mask = mv_ignore.
   ENDMETHOD.
-
 ENDCLASS.

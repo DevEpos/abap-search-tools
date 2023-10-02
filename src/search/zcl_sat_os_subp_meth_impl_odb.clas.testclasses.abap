@@ -79,6 +79,7 @@ CLASS ltcl_abap_unit IMPLEMENTATION.
                         custom_options = VALUE #(
                             ( key   = zif_sat_c_object_search=>c_custom_options-method-target_incl_for_admin_data
                               value = abap_true ) ) )
+          " TODO: variable is assigned but never used (ABAP cleaner)
           IMPORTING et_result               = DATA(lt_result) ).
       CATCH zcx_sat_object_search INTO DATA(lx_error).
     ENDTRY.

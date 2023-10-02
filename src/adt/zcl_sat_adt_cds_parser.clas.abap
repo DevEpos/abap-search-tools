@@ -53,8 +53,8 @@ CLASS zcl_sat_adt_cds_parser DEFINITION
         entity       TYPE string VALUE 'ENTITY',
       END OF c_node_type.
 
-    DATA ms_result   TYPE zif_sat_ty_adt_types=>ty_cds_top_down_result READ-ONLY.
-    DATA mv_cds_view TYPE zsat_cds_view_name                           READ-ONLY.
+    DATA ms_result TYPE zif_sat_ty_adt_types=>ty_cds_top_down_result READ-ONLY.
+    DATA mv_cds_view TYPE zsat_cds_view_name READ-ONLY.
 
     "! <p class="shorttext synchronized">CONSTRUCTOR</p>
     METHODS constructor
@@ -107,8 +107,8 @@ CLASS zcl_sat_adt_cds_parser IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD parse_cds.
-    DATA lv_ddlname    TYPE ddlname.
-    DATA lv_entity     TYPE zsat_entity_id.
+    DATA lv_ddlname TYPE ddlname.
+    DATA lv_entity TYPE zsat_entity_id.
     DATA lt_ddlsources TYPE cl_ddl_parser=>ddlsources.
 
     " Determine the correct DDL name first
@@ -143,11 +143,11 @@ CLASS zcl_sat_adt_cds_parser IMPLEMENTATION.
 
     DATA(lo_parser) = NEW cl_ddl_parser( ).
     DATA(lo_stmnt) = lo_parser->parse_cds( it_sources = lt_ddlsources
-                                           iv_bitset  = cl_ddl_parser=>set_bitmask( iv_semantic      = abap_true
-                                                                                    iv_trace         = abap_false
-                                                                                    iv_locally       = abap_false
-                                                                                    iv_aiepp         = abap_false
-                                                                                    iv_extresol      = abap_true ) ).
+                                           iv_bitset  = cl_ddl_parser=>set_bitmask( iv_semantic = abap_true
+                                                                                    iv_trace    = abap_false
+                                                                                    iv_locally  = abap_false
+                                                                                    iv_aiepp    = abap_false
+                                                                                    iv_extresol = abap_true ) ).
 
     DATA(lo_node_helper) = NEW lcl_node_helper( iv_name        = |{ lv_entity }|
                                                 iv_entity_name = |{ lv_entity }| ).
@@ -382,8 +382,8 @@ CLASS zcl_sat_adt_cds_parser IMPLEMENTATION.
       END OF lty_s_amdp.
 
     DATA lt_table_func_cds_range TYPE RANGE OF zsat_entity_id.
-    DATA lt_class_name_range     TYPE RANGE OF seoclsname.
-    DATA lt_amdp_info            TYPE STANDARD TABLE OF lty_s_amdp.
+    DATA lt_class_name_range TYPE RANGE OF seoclsname.
+    DATA lt_amdp_info TYPE STANDARD TABLE OF lty_s_amdp.
 
     lt_table_func_cds_range = VALUE #( FOR table_function IN io_node_helper->mt_cds_views
                                        WHERE ( node->source_type = zif_sat_c_cds_view_type=>table_function )

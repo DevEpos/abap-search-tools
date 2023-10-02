@@ -46,8 +46,8 @@ CLASS zcl_sat_adt_entfieldinfo_xml_h IMPLEMENTATION.
             EXIT.
           ENDIF.
           CALL TRANSFORMATION zsat_adt_entity_field_info
-            SOURCE XML io_reader
-            RESULT field_info = ls_child.
+               SOURCE XML io_reader
+               RESULT field_info = ls_child.
           APPEND ls_child TO <lt_children>.
         ENDWHILE.
       CATCH cx_sxml_parse_error ##NO_HANDLER.
@@ -66,8 +66,8 @@ CLASS zcl_sat_adt_entfieldinfo_xml_h IMPLEMENTATION.
 
       LOOP AT <lt_children> ASSIGNING FIELD-SYMBOL(<ls_child>).
         CALL TRANSFORMATION zsat_adt_entity_field_info
-         SOURCE field_info = <ls_child>
-         RESULT XML io_writer.
+             SOURCE field_info = <ls_child>
+             RESULT XML io_writer.
       ENDLOOP.
 
     ENDIF.

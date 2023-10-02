@@ -1,11 +1,10 @@
-interface ZIF_SAT_C_CDS_ANNO_DEFINITION
-  public .
+INTERFACE zif_sat_c_cds_anno_definition
+  PUBLIC.
 
-
-  constants ENVIRONMENT_SYSTEMFIELD type DDANNOTATION_KEY value 'Environment.systemField' ##NO_TEXT.
-  constants CONSUMPTION_DEFAULTVALUE type DDANNOTATION_KEY value 'Consumption.defaultValue' ##NO_TEXT.
-  constants SEMANTICS type DDANNOTATION_KEY value 'Semantics' ##NO_TEXT.
-  constants SEMANTICS_AMOUNT_CURRENCYCODE type DDANNOTATION_KEY value 'Semantics.amount.currencyCode' ##NO_TEXT.
-  constants SEMANTICS_QUAN_UNITOFMEASURE type DDANNOTATION_KEY value 'Semantics.quantity.unitOfMeasure' ##NO_TEXT.
-  constants SEMANTICS_CURRENCYCODE type DDANNOTATION_KEY value 'Semantics.currencyCode' ##NO_TEXT.
-endinterface.
+  CONSTANTS environment_systemfield TYPE ddannotation_key VALUE 'Environment.systemField' ##NO_TEXT.
+  CONSTANTS consumption_defaultvalue TYPE ddannotation_key VALUE 'Consumption.defaultValue' ##NO_TEXT.
+  CONSTANTS semantics TYPE ddannotation_key VALUE 'Semantics' ##NO_TEXT.
+  CONSTANTS semantics_amount_currencycode TYPE ddannotation_key VALUE 'Semantics.amount.currencyCode' ##NO_TEXT.
+  CONSTANTS semantics_quan_unitofmeasure TYPE ddannotation_key VALUE 'Semantics.quantity.unitOfMeasure' ##NO_TEXT.
+  CONSTANTS semantics_currencycode TYPE ddannotation_key VALUE 'Semantics.currencyCode' ##NO_TEXT.
+ENDINTERFACE.
