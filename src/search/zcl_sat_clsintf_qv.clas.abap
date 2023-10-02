@@ -42,7 +42,7 @@ CLASS zcl_sat_clsintf_qv IMPLEMENTATION.
                zif_sat_c_object_search=>c_class_intf_flags-is_abstract OR
                zif_sat_c_object_search=>c_class_intf_flags-is_final OR
                zif_sat_c_object_search=>c_class_intf_flags-is_fixpoint OR
-               zif_sat_c_object_search=>c_class_intf_flags-is_shared_memory or
+               zif_sat_c_object_search=>c_class_intf_flags-is_shared_memory OR
                zif_sat_c_object_search=>c_class_intf_flags-has_unicode_checks.
 
           WHEN OTHERS.

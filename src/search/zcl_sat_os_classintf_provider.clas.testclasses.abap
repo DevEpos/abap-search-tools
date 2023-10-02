@@ -91,13 +91,10 @@ CLASS ltcl_abap_unit IMPLEMENTATION.
   METHOD search_description.
     mr_cut = NEW #( ).
 
-    DATA(lo_query) = NEW lcl_query(
-      it_search_options = VALUE #(
-        ( option      = zif_sat_c_object_search=>c_general_search_params-description
-          value_range = VALUE #( ( low = 'Special Listener for Self-Test' ) ) )
-      )
-      iv_type           = zif_sat_c_object_search=>c_search_type-class_interface
-    ).
+    DATA(lo_query) = NEW lcl_query( it_search_options = VALUE #(
+                                        ( option      = zif_sat_c_object_search=>c_general_search_params-description
+                                          value_range = VALUE #( ( low = 'Special Listener for Self-Test' ) ) ) )
+                                    iv_type           = zif_sat_c_object_search=>c_search_type-class_interface ).
     TRY.
         mr_cut->zif_sat_object_search_provider~search( EXPORTING io_query  = lo_query
                                                        IMPORTING et_result = DATA(lt_result) ).
@@ -109,7 +106,6 @@ CLASS ltcl_abap_unit IMPLEMENTATION.
 
     cl_abap_unit_assert=>assert_not_bound( act = lx_search_error ).
   ENDMETHOD.
-
 
   METHOD search_category.
     mr_cut = NEW #( ).

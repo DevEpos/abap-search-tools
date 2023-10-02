@@ -18,9 +18,9 @@ CLASS zcl_sat_adt_res_object_search DEFINITION
   PROTECTED SECTION.
 
   PRIVATE SECTION.
-    DATA mt_query_result           TYPE zif_sat_ty_object_search=>ty_t_search_result.
+    DATA mt_query_result TYPE zif_sat_ty_object_search=>ty_t_search_result.
     DATA mf_with_package_hierarchy TYPE abap_bool.
-    DATA ms_query_input            TYPE zif_sat_ty_adt_types=>ty_s_query_input.
+    DATA ms_query_input TYPE zif_sat_ty_adt_types=>ty_s_query_input.
 
     "! <p class="shorttext synchronized">Create response</p>
     METHODS create_response

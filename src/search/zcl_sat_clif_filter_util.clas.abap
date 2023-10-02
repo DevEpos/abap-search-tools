@@ -84,5 +84,4 @@ CLASS zcl_sat_clif_filter_util IMPLEMENTATION.
         AND refclsname = @iv_intf_name
       INTO CORRESPONDING FIELDS OF TABLE @result.
   ENDMETHOD.
-
 ENDCLASS.

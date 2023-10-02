@@ -142,9 +142,9 @@ CLASS zcl_sat_meth_subco_filter IMPLEMENTATION.
     " Group sub components that match both param and exception filters
     " TODO: consider 'AND' flag of search options
     LOOP AT mt_sub_components REFERENCE INTO lr_sub_comp
-      GROUP BY ( classname = lr_sub_comp->clsname
-                 methodname = lr_sub_comp->cmpname
-                 size = GROUP SIZE ) REFERENCE INTO DATA(lr_group).
+         GROUP BY ( classname = lr_sub_comp->clsname
+                    methodname = lr_sub_comp->cmpname
+                    size = GROUP SIZE ) REFERENCE INTO DATA(lr_group).
 
       IF mf_use_and_for_options = abap_true AND lr_group->size < lv_subcomp_filter_count.
         CONTINUE.

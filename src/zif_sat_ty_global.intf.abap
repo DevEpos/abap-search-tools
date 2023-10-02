@@ -1,16 +1,16 @@
-"! <p class="shorttext synchronized" lang="en">Global types</p>
+"! <p class="shorttext synchronized">Global types</p>
 INTERFACE zif_sat_ty_global
-  PUBLIC .
+  PUBLIC.
 
-  TYPES:
-    ty_t_tabname_range       TYPE RANGE OF tabname,
-    ty_t_string_range        TYPE RANGE OF string,
-    "! <p class="shorttext synchronized" lang="en">Range for Annotation name</p>
-    ty_t_cds_anno_name_range TYPE RANGE OF ddannotation_key,
-    ty_api_state             TYPE c LENGTH 30,
-    ty_t_cds_api_state       TYPE STANDARD TABLE OF ty_api_state WITH EMPTY KEY,
-    ty_sql_fieldname         TYPE c LENGTH 62,
-    ty_selopt_tab_position   TYPE n LENGTH 3.
+  TYPES ty_t_tabname_range TYPE RANGE OF tabname.
+  TYPES ty_t_string_range TYPE RANGE OF string.
+
+  "! <p class="shorttext synchronized">Range for Annotation name</p>
+  TYPES ty_t_cds_anno_name_range TYPE RANGE OF ddannotation_key.
+  TYPES ty_api_state TYPE c LENGTH 30.
+  TYPES ty_t_cds_api_state TYPE STANDARD TABLE OF ty_api_state WITH EMPTY KEY.
+  TYPES ty_sql_fieldname TYPE c LENGTH 62.
+  TYPES ty_selopt_tab_position TYPE n LENGTH 3.
 
   TYPES:
     "! <p class="shorttext synchronized" lang="en">Information about TADIR entry</p>
@@ -35,14 +35,13 @@ INTERFACE zif_sat_ty_global
       value     TYPE string,
     END OF ty_s_cds_annotation.
 
-  TYPES:
-    "! <p class="shorttext synchronized" lang="en">List of annotations</p>
-    ty_t_cds_annotation  TYPE STANDARD TABLE OF ty_s_cds_annotation WITH KEY name,
-    ty_t_cds_param_value TYPE STANDARD TABLE OF ty_s_cds_param_value WITH KEY name,
-    ty_t_cds_parameter   TYPE STANDARD TABLE OF zsat_cds_parameter WITH KEY parametername,
-    ty_t_cds_association TYPE STANDARD TABLE OF zsat_cds_association WITH KEY name,
-    ty_t_cds_header      TYPE STANDARD TABLE OF zsat_cds_view_header WITH KEY entityname,
-    ty_t_cds_view_name   TYPE STANDARD TABLE OF zsat_cds_view_name WITH KEY table_line.
+  "! <p class="shorttext synchronized">List of annotations</p>
+  TYPES ty_t_cds_annotation TYPE STANDARD TABLE OF ty_s_cds_annotation WITH KEY name.
+  TYPES ty_t_cds_param_value TYPE STANDARD TABLE OF ty_s_cds_param_value WITH KEY name.
+  TYPES ty_t_cds_parameter TYPE STANDARD TABLE OF zsat_cds_parameter WITH KEY parametername.
+  TYPES ty_t_cds_association TYPE STANDARD TABLE OF zsat_cds_association WITH KEY name.
+  TYPES ty_t_cds_header TYPE STANDARD TABLE OF zsat_cds_view_header WITH KEY entityname.
+  TYPES ty_t_cds_view_name TYPE STANDARD TABLE OF zsat_cds_view_name WITH KEY table_line.
 
   TYPES:
     "! <p class="shorttext synchronized" lang="en">Generic range structure</p>
@@ -123,7 +122,6 @@ INTERFACE zif_sat_ty_global
     END OF ty_s_join_table,
 
     ty_t_join_table TYPE STANDARD TABLE OF ty_s_join_table WITH EMPTY KEY.
-
 
   TYPES:
     BEGIN OF ty_s_join_def,
