@@ -2,21 +2,17 @@
 *"* local helper classes, interface definitions and type
 *"* declarations
 CLASS lcl_parser IMPLEMENTATION.
-
   METHOD constructor.
     me->ddls = ddls.
   ENDMETHOD.
 
   METHOD parse.
     DATA(parser) = NEW cl_ddl_parser( ).
-    DATA(stmnt) = parser->parse_cds(
-      it_sources   = VALUE #( ( ddls ) )
-      iv_bitset    = cl_ddl_parser=>set_bitmask(
-        iv_ars_check_off = abap_true
-        iv_extresol      = abap_true ) ).
+    DATA(stmnt) = parser->parse_cds( it_sources = VALUE #( ( ddls ) )
+                                     iv_bitset  = cl_ddl_parser=>set_bitmask( iv_ars_check_off = abap_true
+                                                                              iv_extresol      = abap_true ) ).
 
-    DATA(visitor) = NEW lcl_field_visitor(
-      source_entityname = |{ ddls-ddlname }| ).
+    DATA(visitor) = NEW lcl_field_visitor( source_entityname = |{ ddls-ddlname }| ).
     IF stmnt IS NOT BOUND.
       RETURN.
     ENDIF.
@@ -30,21 +26,18 @@ CLASS lcl_parser IMPLEMENTATION.
       CATCH cx_ddl_visitor_exception.
     ENDTRY.
   ENDMETHOD.
-
 ENDCLASS.
 
 
 CLASS lcl_field_visitor IMPLEMENTATION.
-
   METHOD constructor.
     super->constructor( ).
 
     me->source_entityname = source_entityname.
 
-    m_mapping = VALUE #(
-      ( classname = 'CL_QLAST_STDSELECTLIST_ENTRY'   method = 'VISIT_STDSELECTLIST_ENTRY' )
-      ( classname = 'CL_QLAST_ATOMIC_EXPRESSION'     method = 'VISIT_ATOMIC_EXPRESSION' )
-      ( classname = 'CL_QLAST_LITERAL_EXPRESSION'    method = 'VISIT_LITERAL_EXPRESSION' ) ).
+    m_mapping = VALUE #( ( classname = 'CL_QLAST_STDSELECTLIST_ENTRY'   method = 'VISIT_STDSELECTLIST_ENTRY' )
+                         ( classname = 'CL_QLAST_ATOMIC_EXPRESSION'     method = 'VISIT_ATOMIC_EXPRESSION' )
+                         ( classname = 'CL_QLAST_LITERAL_EXPRESSION'    method = 'VISIT_LITERAL_EXPRESSION' ) ).
 
     ignore_flags = if_qlast_visitor=>bitmask_ignore_associations BIT-OR
       if_qlast_visitor=>bitmask_ignore_path BIT-OR
@@ -57,39 +50,35 @@ CLASS lcl_field_visitor IMPLEMENTATION.
       if_qlast_visitor=>bitmask_ignore_ast_base.
   ENDMETHOD.
 
-
   METHOD get_found_fields.
     result = found_fields.
   ENDMETHOD.
-
 
   METHOD if_qlast_visitor~ignore.
     mask = ignore_flags.
   ENDMETHOD.
 
-
   METHOD if_qlast_visitor~after.
+    IF object IS NOT INSTANCE OF cl_qlast_stdselectlist_entry.
+      RETURN.
+    ENDIF.
 
-    IF object IS INSTANCE OF cl_qlast_stdselectlist_entry.
-      IF atomic_field_found = abap_false AND literal_found IS NOT INITIAL.
+    IF atomic_field_found = abap_false AND literal_found IS NOT INITIAL.
 
-        INSERT VALUE #(
-          ddlname       = source_entityname
-          basetable     = COND #( WHEN literal_found-char = abap_true THEN 'DDDDLCHARTYPES' ELSE 'DDDDLDECTYPES' )
-          fieldname     = COND #( WHEN literal_found-char = abap_true THEN 'CCHAR1' ELSE 'DEC1_0' )
-          viewfield     = source_field
-          fieldpos      = field_pos ) INTO TABLE found_fields.
+      INSERT VALUE #(
+          ddlname   = source_entityname
+          basetable = COND #( WHEN literal_found-char = abap_true THEN 'DDDDLCHARTYPES' ELSE 'DDDDLDECTYPES' )
+          fieldname = COND #( WHEN literal_found-char = abap_true THEN 'CCHAR1' ELSE 'DEC1_0' )
+          viewfield = source_field
+          fieldpos  = field_pos ) INTO TABLE found_fields.
 
-        field_pos = field_pos + 1.
-      ENDIF.
+      field_pos = field_pos + 1.
     ENDIF.
   ENDMETHOD.
-
 
   METHOD if_qlast_visitor~get_descend.
     descend = if_qlast_visitor=>descend_inorder.
   ENDMETHOD.
-
 
   METHOD visit_stdselectlist_entry.
     CHECK object IS BOUND.
@@ -105,10 +94,9 @@ CLASS lcl_field_visitor IMPLEMENTATION.
     ENDIF.
   ENDMETHOD.
 
-
   METHOD visit_atomic_expression.
-    DATA: datasource_name TYPE string,
-          is_cds_v1       TYPE abap_bool.
+    DATA datasource_name TYPE string.
+    DATA is_cds_v1 TYPE abap_bool.
 
     CHECK object IS BOUND.
 
@@ -126,18 +114,16 @@ CLASS lcl_field_visitor IMPLEMENTATION.
     ENDIF.
 
     IF datasource_name IS NOT INITIAL.
-      INSERT VALUE #(
-        ddlname       = source_entityname
-        basetable     = datasource_name
-        fieldname     = identifier
-        viewfield     = source_field
-        fieldpos      = field_pos
-        is_cds_v1     = is_cds_v1 ) INTO TABLE found_fields.
+      INSERT VALUE #( ddlname   = source_entityname
+                      basetable = datasource_name
+                      fieldname = identifier
+                      viewfield = source_field
+                      fieldpos  = field_pos
+                      is_cds_v1 = is_cds_v1 ) INTO TABLE found_fields.
 
       field_pos = field_pos + 1.
     ENDIF.
   ENDMETHOD.
-
 
   METHOD visit_literal_expression.
     CHECK: object IS BOUND,
@@ -146,5 +132,4 @@ CLASS lcl_field_visitor IMPLEMENTATION.
     DATA(literal_expr) = CAST cl_qlast_literal_expression( object ).
     literal_found = VALUE #( char = literal_expr->is_string( ) num = literal_expr->is_numeric( ) ).
   ENDMETHOD.
-
 ENDCLASS.

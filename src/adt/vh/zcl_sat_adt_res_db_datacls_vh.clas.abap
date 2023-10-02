@@ -1,16 +1,17 @@
-"! <p class="shorttext synchronized" lang="en">Table Data Class VH</p>
+"! <p class="shorttext synchronized">Table Data Class VH</p>
 CLASS zcl_sat_adt_res_db_datacls_vh DEFINITION
   PUBLIC
   INHERITING FROM cl_adt_res_named_items
   FINAL
-  CREATE PUBLIC .
+  CREATE PUBLIC.
 
   PUBLIC SECTION.
+
   PROTECTED SECTION.
-    METHODS: get_named_items REDEFINITION.
+    METHODS get_named_items REDEFINITION.
+
   PRIVATE SECTION.
 ENDCLASS.
-
 
 
 CLASS zcl_sat_adt_res_db_datacls_vh IMPLEMENTATION.
@@ -33,5 +34,4 @@ CLASS zcl_sat_adt_res_db_datacls_vh IMPLEMENTATION.
     p_named_item_list-total_item_count = lines( p_named_item_list-items ).
     p_filter_already_applied = abap_true.
   ENDMETHOD.
-
 ENDCLASS.

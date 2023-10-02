@@ -11,11 +11,11 @@ CLASS zcl_sat_adt_res_column_info DEFINITION
   PROTECTED SECTION.
     CONSTANTS c_field_name TYPE string VALUE 'FIELD' ##NO_TEXT.
 
-    DATA mv_field       TYPE fieldname.
+    DATA mv_field TYPE fieldname.
     DATA mv_object_name TYPE zsat_entity_id.
-    DATA mv_mode        TYPE string.
+    DATA mv_mode TYPE string.
 
-    DATA ms_field_info  TYPE zif_sat_ty_adt_types=>ty_entity_field_info_result.
+    DATA ms_field_info TYPE zif_sat_ty_adt_types=>ty_entity_field_info_result.
 
     "! <p class="shorttext synchronized">Retrieves request parameters</p>
     METHODS get_parameters

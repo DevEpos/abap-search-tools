@@ -2,12 +2,12 @@
 *"* definitions, interfaces or type declarations) you need for
 *"* components in the private section
 TYPES BEGIN OF ty_field.
-INCLUDE TYPE zsatcds2mfield.
-TYPES is_cds_v1 TYPE abap_bool.
+        INCLUDE TYPE zsatcds2mfield.
+TYPES   is_cds_v1 TYPE abap_bool.
 TYPES END OF ty_field.
 
 TYPES BEGIN OF ty_basetable.
-INCLUDE TYPE zsatcds2mbtab.
+        INCLUDE TYPE zsatcds2mbtab.
 TYPES END OF ty_basetable.
 
 TYPES:
@@ -21,49 +21,48 @@ TYPES:
 
 CLASS lcl_parser DEFINITION.
   PUBLIC SECTION.
-    METHODS:
-      constructor
-        IMPORTING
-          ddls TYPE ddddlsrc,
-      parse
-        EXPORTING
-          fields     TYPE ty_fields
-          basetables TYPE ty_basetables.
+    METHODS constructor
+      IMPORTING
+        ddls TYPE ddddlsrc.
+
+    METHODS parse
+      EXPORTING
+        !fields    TYPE ty_fields
+        basetables TYPE ty_basetables.
+
   PRIVATE SECTION.
-    DATA:
-      ddls TYPE ddddlsrc.
+    DATA ddls TYPE ddddlsrc.
 ENDCLASS.
+
 
 CLASS lcl_field_visitor DEFINITION
  INHERITING FROM cl_qlast_visitor.
+
   PUBLIC SECTION.
     DATA current_field TYPE string.
 
-    METHODS: constructor
+    METHODS constructor
       IMPORTING
-        source_entityname TYPE ddddlsrc-ddlname,
-      visit_stdselectlist_entry
-        REDEFINITION,
-      visit_atomic_expression
-        REDEFINITION,
-      visit_literal_expression
-        REDEFINITION,
-      get_found_fields
-        RETURNING
-          VALUE(result) TYPE ty_fields,
-      if_qlast_visitor~get_descend
-        REDEFINITION,
-      if_qlast_visitor~after
-        REDEFINITION,
-      if_qlast_visitor~ignore
-        REDEFINITION.
+        source_entityname TYPE ddddlsrc-ddlname.
+
+    METHODS visit_stdselectlist_entry REDEFINITION.
+    METHODS visit_atomic_expression   REDEFINITION.
+    METHODS visit_literal_expression  REDEFINITION.
+
+    METHODS get_found_fields
+      RETURNING
+        VALUE(result) TYPE ty_fields.
+
+    METHODS if_qlast_visitor~get_descend REDEFINITION.
+    METHODS if_qlast_visitor~after       REDEFINITION.
+    METHODS if_qlast_visitor~ignore      REDEFINITION.
+
   PRIVATE SECTION.
-    DATA:
-      field_pos          TYPE mcpos VALUE 1,
-      found_fields       TYPE ty_fields,
-      source_field       TYPE string,
-      literal_found      TYPE ty_literal,
-      atomic_field_found TYPE abap_bool,
-      source_entityname  TYPE string,
-      ignore_flags       TYPE if_qlast_visitor=>bitmask.
+    DATA field_pos TYPE mcpos VALUE 1.
+    DATA found_fields TYPE ty_fields.
+    DATA source_field TYPE string.
+    DATA literal_found TYPE ty_literal.
+    DATA atomic_field_found TYPE abap_bool.
+    DATA source_entityname TYPE string.
+    DATA ignore_flags TYPE if_qlast_visitor=>bitmask.
 ENDCLASS.

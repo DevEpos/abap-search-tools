@@ -12,7 +12,7 @@ CLASS zcl_sat_adt_res_col_where_used DEFINITION
 
   PRIVATE SECTION.
     DATA mf_search_calc_fields TYPE abap_bool.
-    DATA mf_search_db_views    TYPE abap_bool.
+    DATA mf_search_db_views TYPE abap_bool.
 
     "! <p class="shorttext synchronized">Fill where used in CDS information</p>
     METHODS fill_where_used_in_cds
@@ -93,7 +93,7 @@ CLASS zcl_sat_adt_res_col_where_used IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD internal_get.
-    DATA lt_type_parts  TYPE string_table.
+    DATA lt_type_parts TYPE string_table.
     DATA lv_source_type TYPE ddddlsrctype.
 
     DATA(lv_base_table) = mv_object_name.

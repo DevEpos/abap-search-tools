@@ -1,6 +1,6 @@
-"! <p class="shorttext synchronized" lang="en">Contract for IoC</p>
+"! <p class="shorttext synchronized">Contract for IoC</p>
 INTERFACE zif_sat_ioc_contract
-  PUBLIC .
+  PUBLIC.
   TYPES:
     "! <p class="shorttext synchronized" lang="en">Lifetime of instances in IoC</p>
     ty_lifetime TYPE i,
@@ -48,39 +48,38 @@ INTERFACE zif_sat_ioc_contract
       transient TYPE ty_lifetime VALUE 1,
     END OF c_lifetime.
 
-  DATA:
-    "! <p class="shorttext synchronized" lang="en">Name of the contract</p>
-    mv_name TYPE classname READ-ONLY.
+  "! <p class="shorttext synchronized">Name of the contract</p>
+  DATA mv_name TYPE classname READ-ONLY.
 
-  "! <p class="shorttext synchronized" lang="en">Maps the filter value to another</p>
+  "! <p class="shorttext synchronized">Maps the filter value to another</p>
   "!
-  "! @parameter iv_filter | <p class="shorttext synchronized" lang="en">The original filter value</p>
-  "! @parameter iv_mapped_filter | <p class="shorttext synchronized" lang="en">The mapped filter value</p>
+  "! @parameter iv_filter        | <p class="shorttext synchronized">The original filter value</p>
+  "! @parameter iv_mapped_filter | <p class="shorttext synchronized">The mapped filter value</p>
   METHODS map_filter
     IMPORTING
       iv_filter        TYPE string
       iv_mapped_filter TYPE string.
 
-  "! <p class="shorttext synchronized" lang="en">Adds new implementer to contract</p>
+  "! <p class="shorttext synchronized">Adds new implementer to contract</p>
   "!
-  "! @parameter iv_filter | <p class="shorttext synchronized" lang="en">Optional filter value</p>
-  "! @parameter iv_implementer | <p class="shorttext synchronized" lang="en">The name of the implementing class</p>
-  "! @parameter it_dependencies | <p class="shorttext synchronized" lang="en">Optional list of Constructor DIs</p>
-  "! @parameter ro_contract | <p class="shorttext synchronized" lang="en">Returns self</p>
+  "! @parameter iv_filter       | <p class="shorttext synchronized">Optional filter value</p>
+  "! @parameter iv_implementer  | <p class="shorttext synchronized">The name of the implementing class</p>
+  "! @parameter it_dependencies | <p class="shorttext synchronized">Optional list of Constructor DIs</p>
+  "! @parameter ro_contract     | <p class="shorttext synchronized">Returns self</p>
   METHODS add_implementer
     IMPORTING
-      iv_filter          TYPE string OPTIONAL
+      iv_filter          TYPE string            OPTIONAL
       iv_implementer     TYPE classname
       it_dependencies    TYPE ty_t_dependencies OPTIONAL
     RETURNING
       VALUE(ro_contract) TYPE REF TO zif_sat_ioc_contract.
 
-  "! <p class="shorttext synchronized" lang="en">Injects implementer instance</p>
+  "! <p class="shorttext synchronized">Injects implementer instance</p>
   "! This method is primarily intended for Unit testing
   "!
-  "! @parameter iv_filter | <p class="shorttext synchronized" lang="en">Optional filter value</p>
-  "! @parameter io_instance | <p class="shorttext synchronized" lang="en"></p>
-  "! @parameter ro_contract | <p class="shorttext synchronized" lang="en"></p>
+  "! @parameter iv_filter   | <p class="shorttext synchronized">Optional filter value</p>
+  "! @parameter io_instance | <p class="shorttext synchronized"></p>
+  "! @parameter ro_contract | <p class="shorttext synchronized"></p>
   METHODS inject_implementer
     IMPORTING
       iv_filter          TYPE string OPTIONAL
@@ -88,21 +87,21 @@ INTERFACE zif_sat_ioc_contract
     RETURNING
       VALUE(ro_contract) TYPE REF TO zif_sat_ioc_contract.
 
-  "! <p class="shorttext synchronized" lang="en">Retrieves implementer</p>
+  "! <p class="shorttext synchronized">Retrieves implementer</p>
   "! An optional filter can be supplied
-  "! @parameter iv_filter | <p class="shorttext synchronized" lang="en">Optional filter value</p>
-  "! @parameter ro_obj | <p class="shorttext synchronized" lang="en">The implementing class instance</p>
+  "! @parameter iv_filter | <p class="shorttext synchronized">Optional filter value</p>
+  "! @parameter ro_obj    | <p class="shorttext synchronized">The implementing class instance</p>
   METHODS get_implementer
     IMPORTING
       iv_filter     TYPE string OPTIONAL
     RETURNING
       VALUE(ro_obj) TYPE REF TO object.
 
-  "! <p class="shorttext synchronized" lang="en">Creates instance of implementer</p>
+  "! <p class="shorttext synchronized">Creates instance of implementer</p>
   "!
-  "! @parameter iv_implementer | <p class="shorttext synchronized" lang="en">Name of implementing class</p>
-  "! @parameter it_resolved_dependencies | <p class="shorttext synchronized" lang="en">List of resolved constructor dependencies</p>
-  "! @parameter ro_obj | <p class="shorttext synchronized" lang="en">The created implementer instance</p>
+  "! @parameter iv_implementer           | <p class="shorttext synchronized">Name of implementing class</p>
+  "! @parameter it_resolved_dependencies | <p class="shorttext synchronized">List of resolved constructor dependencies</p>
+  "! @parameter ro_obj                   | <p class="shorttext synchronized">The created implementer instance</p>
   METHODS create_implementer
     IMPORTING
       iv_implementer           TYPE classname
@@ -110,7 +109,7 @@ INTERFACE zif_sat_ioc_contract
     RETURNING
       VALUE(ro_obj)            TYPE REF TO object.
 
-  "! <p class="shorttext synchronized" lang="en">Cleans up this contract implementers</p>
+  "! <p class="shorttext synchronized">Cleans up this contract implementers</p>
   "!
   METHODS clean_up.
 ENDINTERFACE.

@@ -1,6 +1,5 @@
 INTERFACE zif_sat_c_cds_view_type
-  PUBLIC .
-
+  PUBLIC.
 
   CONSTANTS view TYPE zsat_cds_source_type VALUE 'V' ##NO_TEXT.
   CONSTANTS view_entity TYPE zsat_cds_source_type VALUE 'W' ##NO_TEXT.

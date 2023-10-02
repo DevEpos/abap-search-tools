@@ -1,10 +1,11 @@
 *"* use this source file for any type of declarations (class
 *"* definitions, interfaces or type declarations) you need for
 *"* components in the private section
-TYPES: ty_t_fields TYPE SORTED TABLE OF fieldname WITH UNIQUE DEFAULT KEY.
+TYPES ty_t_fields TYPE SORTED TABLE OF fieldname WITH UNIQUE DEFAULT KEY.
 
 CLASS lcl_field_visitor DEFINITION
  INHERITING FROM cl_qlast_visitor.
+
   PUBLIC SECTION.
     DATA mv_current_field TYPE string.
 
@@ -12,17 +13,19 @@ CLASS lcl_field_visitor DEFINITION
       IMPORTING
         iv_source_entityname TYPE string
         iv_source_field      TYPE string.
+
     METHODS visit_calc
       IMPORTING
-        object TYPE REF TO object.
+        !object TYPE REF TO object.
 
-    METHODS visit_atomic_expression
-        REDEFINITION.
+    METHODS visit_atomic_expression REDEFINITION.
+
     METHODS get_found_fields
       RETURNING
         VALUE(rt_found_fields) TYPE ty_t_fields.
-    METHODS if_qlast_visitor~ignore
-        REDEFINITION.
+
+    METHODS if_qlast_visitor~ignore REDEFINITION.
+
   PRIVATE SECTION.
     DATA mt_found_fields TYPE ty_t_fields.
     DATA mv_source_field TYPE string.

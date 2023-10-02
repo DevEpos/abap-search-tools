@@ -44,7 +44,7 @@ CLASS zcl_sat_cds_field_hier_res DEFINITION
       END OF ty_s_hierarchy_field,
       ty_t_hierarchy_field TYPE STANDARD TABLE OF ty_s_hierarchy_field WITH EMPTY KEY.
 
-    DATA mt_cached_nodes  TYPE STANDARD TABLE OF ty_s_cached_node.
+    DATA mt_cached_nodes TYPE STANDARD TABLE OF ty_s_cached_node.
     DATA mo_path_resolver TYPE REF TO cl_ddic_adt_ddls_path_resolver.
 
     "! <p class="shorttext synchronized">Retrieve field hierarchy</p>

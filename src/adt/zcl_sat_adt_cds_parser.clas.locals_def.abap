@@ -11,24 +11,24 @@ CLASS lcl_node DEFINITION FINAL.
       ty_t_cached_nodes TYPE STANDARD TABLE OF ty_s_cached_node WITH KEY name.
     TYPES ty_t_nodes TYPE STANDARD TABLE OF REF TO lcl_node WITH DEFAULT KEY.
 
-    DATA name            TYPE string.
-    DATA name2           TYPE string.
-    DATA type            TYPE string.
-    DATA adt_type        TYPE string.
-    DATA entity_type     TYPE zsat_entity_type.
-    DATA relation        TYPE string.
-    DATA alias           TYPE string.
-    DATA source_type     TYPE char1.
-    DATA api_state       TYPE string.
-    DATA entity_name     TYPE string.
+    DATA name TYPE string.
+    DATA name2 TYPE string.
+    DATA type TYPE string.
+    DATA adt_type TYPE string.
+    DATA entity_type TYPE zsat_entity_type.
+    DATA relation TYPE string.
+    DATA alias TYPE string.
+    DATA source_type TYPE char1.
+    DATA api_state TYPE string.
+    DATA entity_name TYPE string.
     DATA raw_entity_name TYPE string.
-    DATA description     TYPE string.
-    DATA package         TYPE string.
-    DATA owner           TYPE string.
-    DATA uri             TYPE string.
-    DATA parent          TYPE REF TO lcl_node.
-    DATA children        TYPE ty_t_nodes.
-    DATA ddls_name       TYPE string.
+    DATA description TYPE string.
+    DATA package TYPE string.
+    DATA owner TYPE string.
+    DATA uri TYPE string.
+    DATA parent TYPE REF TO lcl_node.
+    DATA children TYPE ty_t_nodes.
+    DATA ddls_name TYPE string.
 ENDCLASS.
 
 
@@ -39,8 +39,8 @@ CLASS lcl_node_helper DEFINITION
   PUBLIC SECTION.
     DATA mo_root_node TYPE REF TO lcl_node READ-ONLY.
     DATA mt_cds_views TYPE lcl_node=>ty_t_cached_nodes.
-    DATA mt_tables    TYPE lcl_node=>ty_t_cached_nodes.
-    DATA mt_views     TYPE lcl_node=>ty_t_cached_nodes.
+    DATA mt_tables TYPE lcl_node=>ty_t_cached_nodes.
+    DATA mt_views TYPE lcl_node=>ty_t_cached_nodes.
 
     "! <p class="shorttext synchronized">Creates new element information</p>
     METHODS constructor
@@ -153,7 +153,7 @@ CLASS lcl_ddl_view_stmnt_intrpt DEFINITION
         VALUE(ro_select) TYPE REF TO cl_qlast_select.
 
   PRIVATE SECTION.
-    DATA mo_stmnt        TYPE REF TO cl_qlast_view_definition.
+    DATA mo_stmnt TYPE REF TO cl_qlast_view_definition.
     DATA mf_associations TYPE abap_bool.
 
     "! <p class="shorttext synchronized">Interpret Select statement</p>

@@ -46,8 +46,8 @@ CLASS zcl_sat_adt_cdstd_res_xml_h IMPLEMENTATION.
             EXIT.
           ENDIF.
           CALL TRANSFORMATION zsat_topdown_analysis_entry
-            SOURCE XML io_reader
-            RESULT top_down_entry = ls_child.
+               SOURCE XML io_reader
+               RESULT top_down_entry = ls_child.
           APPEND ls_child TO <lt_children>.
         ENDWHILE.
       CATCH cx_sxml_parse_error ##NO_HANDLER.
@@ -66,8 +66,8 @@ CLASS zcl_sat_adt_cdstd_res_xml_h IMPLEMENTATION.
 
       LOOP AT <lt_children> ASSIGNING FIELD-SYMBOL(<ls_child>).
         CALL TRANSFORMATION zsat_topdown_analysis_entry
-         SOURCE top_down_entry = <ls_child>
-         RESULT XML io_writer.
+             SOURCE top_down_entry = <ls_child>
+             RESULT XML io_writer.
       ENDLOOP.
 
     ENDIF.
