@@ -1,34 +1,32 @@
-"! <p class="shorttext synchronized" lang="en">Annotation value for Search Parameter 'anno'</p>
+"! <p class="shorttext synchronized">Annotation value for Search Parameter 'anno'</p>
 CLASS zcl_sat_adt_res_anno_vh DEFINITION
   PUBLIC
   INHERITING FROM cl_adt_res_named_items
   FINAL
-  CREATE PUBLIC .
+  CREATE PUBLIC.
 
   PUBLIC SECTION.
+
   PROTECTED SECTION.
-    METHODS get_named_items
-        REDEFINITION.
+    METHODS get_named_items REDEFINITION.
+
   PRIVATE SECTION.
 ENDCLASS.
 
 
-
 CLASS zcl_sat_adt_res_anno_vh IMPLEMENTATION.
-
   METHOD get_named_items.
-    DATA: lt_anno_ddlname_range TYPE RANGE OF ddlaname,
-          lt_key_name_range     TYPE RANGE OF ddla_rt_header-key_raw.
+    DATA lt_anno_ddlname_range TYPE RANGE OF ddlaname.
+    DATA lt_key_name_range TYPE RANGE OF ddla_rt_header-key_raw.
 
-    lt_anno_ddlname_range = VALUE #(
-      ( sign = 'I' option = 'EQ' low = 'ABAPANNOTATION' )
-      ( sign = 'I' option = 'EQ' low = 'COMPATIBILITYCONTRACT' )
-      ( sign = 'I' option = 'CP' low = 'DEMO*' )
-      ( sign = 'I' option = 'EQ' low = 'FEATURE' )
-      ( sign = 'I' option = 'CP' low = 'KTD*' )
-      ( sign = 'I' option = 'EQ' low = 'LANGUAGEDEPENDENCY' )
-      ( sign = 'I' option = 'EQ' low = 'MAPPINGROLE' )
-    ).
+    lt_anno_ddlname_range = VALUE #( sign = 'I'
+                                     ( option = 'EQ' low = 'ABAPANNOTATION' )
+                                     ( option = 'EQ' low = 'COMPATIBILITYCONTRACT' )
+                                     ( option = 'CP' low = 'DEMO*' )
+                                     ( option = 'EQ' low = 'FEATURE' )
+                                     ( option = 'CP' low = 'KTD*' )
+                                     ( option = 'EQ' low = 'LANGUAGEDEPENDENCY' )
+                                     ( option = 'EQ' low = 'MAPPINGROLE' ) ).
 
     IF p_filter_name IS NOT INITIAL.
       lt_key_name_range = VALUE #( ( sign = 'I' option = 'CP' low = to_upper( p_filter_name ) ) ).
@@ -47,5 +45,4 @@ CLASS zcl_sat_adt_res_anno_vh IMPLEMENTATION.
     p_filter_already_applied = abap_true.
     p_named_item_list-total_item_count = lines( p_named_item_list-items ).
   ENDMETHOD.
-
 ENDCLASS.

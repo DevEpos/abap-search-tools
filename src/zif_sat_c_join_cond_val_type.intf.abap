@@ -1,8 +1,7 @@
-interface ZIF_SAT_C_JOIN_COND_VAL_TYPE
-  public .
+INTERFACE zif_sat_c_join_cond_val_type
+  PUBLIC.
 
-
-  constants SYSTEM_VALUE_INPUT type ZSAT_JOIN_COND_VALUE_TYPE value 'SYSTEM' ##NO_TEXT.
-  constants TYPED_INPUT type ZSAT_JOIN_COND_VALUE_TYPE value 'TYPED' ##NO_TEXT.
-  constants PARAMETER_INPUT type ZSAT_JOIN_COND_VALUE_TYPE value 'PARAM' ##NO_TEXT.
-endinterface.
+  CONSTANTS system_value_input TYPE zsat_join_cond_value_type VALUE 'SYSTEM' ##NO_TEXT.
+  CONSTANTS typed_input TYPE zsat_join_cond_value_type VALUE 'TYPED' ##NO_TEXT.
+  CONSTANTS parameter_input TYPE zsat_join_cond_value_type VALUE 'PARAM' ##NO_TEXT.
+ENDINTERFACE.

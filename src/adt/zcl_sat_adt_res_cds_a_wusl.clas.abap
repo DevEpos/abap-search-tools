@@ -46,14 +46,14 @@ CLASS zcl_sat_adt_res_cds_a_wusl DEFINITION
         where  TYPE string_table,
       END OF ms_sql.
 
-    DATA mt_result                  TYPE ty_wusl_results.
-    DATA mt_result_refs             TYPE ty_wusl_result_refs.
-    DATA mt_result_keys             TYPE ty_result_keys.
-    DATA mv_entity                  TYPE zsat_entity_id.
-    DATA mf_only_local_assocs       TYPE abap_bool.
-    DATA mv_source_origin           TYPE string.
+    DATA mt_result TYPE ty_wusl_results.
+    DATA mt_result_refs TYPE ty_wusl_result_refs.
+    DATA mt_result_keys TYPE ty_result_keys.
+    DATA mv_entity TYPE zsat_entity_id.
+    DATA mf_only_local_assocs TYPE abap_bool.
+    DATA mv_source_origin TYPE string.
     DATA mf_released_entitites_only TYPE abap_bool.
-    DATA mf_recursive_search        TYPE abap_bool.
+    DATA mf_recursive_search TYPE abap_bool.
 
     METHODS get_parameters
       IMPORTING
@@ -228,10 +228,10 @@ CLASS zcl_sat_adt_res_cds_a_wusl IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD find_all_resursively.
-    DATA lt_usages              LIKE mt_result.
+    DATA lt_usages LIKE mt_result.
     DATA lt_current_parent_refs TYPE SORTED TABLE OF ty_wusl_result_ref WITH NON-UNIQUE KEY ddlname.
-    DATA lt_tmp_parent_refs     LIKE lt_current_parent_refs.
-    DATA lr_usage_stored        TYPE REF TO ty_wusl_result.
+    DATA lt_tmp_parent_refs LIKE lt_current_parent_refs.
+    DATA lr_usage_stored TYPE REF TO ty_wusl_result.
 
     FIELD-SYMBOLS <lt_wusl_children> TYPE ty_wusl_results.
 

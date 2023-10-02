@@ -44,7 +44,7 @@ CLASS zcl_sat_cds_field_hier_res DEFINITION
       END OF ty_s_hierarchy_field,
       ty_t_hierarchy_field TYPE STANDARD TABLE OF ty_s_hierarchy_field WITH EMPTY KEY.
 
-    DATA mt_cached_nodes  TYPE STANDARD TABLE OF ty_s_cached_node.
+    DATA mt_cached_nodes TYPE STANDARD TABLE OF ty_s_cached_node.
     DATA mo_path_resolver TYPE REF TO cl_ddic_adt_ddls_path_resolver.
 
     "! <p class="shorttext synchronized">Retrieve field hierarchy</p>
@@ -132,7 +132,7 @@ CLASS zcl_sat_cds_field_hier_res IMPLEMENTATION.
   METHOD convert_hier_to_adt_result.
     DATA lr_field_info TYPE REF TO zif_sat_ty_adt_types=>ty_entity_field_info.
 
-    result-source_field-field = io_field->field.
+    result-source_field-field         = io_field->field.
     result-source_field-is_calculated = io_field->is_calculated.
 
     LOOP AT io_field->children INTO DATA(lo_child).
@@ -282,7 +282,6 @@ CLASS zcl_sat_cds_field_hier_res IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD get_children.
-
     LOOP AT it_hierarchy ASSIGNING FIELD-SYMBOL(<ls_hierarchy>) WHERE     viewname  = iv_viewname
                                                                       AND viewfield = iv_fieldname.
 

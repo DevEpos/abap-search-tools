@@ -44,8 +44,8 @@ CLASS lcl_result_converter DEFINITION.
         if_value TYPE abap_bool DEFAULT abap_true.
 
   PROTECTED SECTION.
-    DATA mt_query_result         TYPE zif_sat_ty_object_search=>ty_t_search_result.
-    DATA mo_devclass_util        TYPE REF TO lcl_devclass_util.
+    DATA mt_query_result TYPE zif_sat_ty_object_search=>ty_t_search_result.
+    DATA mo_devclass_util TYPE REF TO lcl_devclass_util.
     DATA mf_no_package_hierarchy TYPE abap_bool.
 
     METHODS before_conversion.
@@ -97,7 +97,7 @@ CLASS lcl_method_result_converter DEFINITION
 INHERITING FROM lcl_result_converter.
 
   PROTECTED SECTION.
-    METHODS convert_entries      REDEFINITION.
+    METHODS convert_entries REDEFINITION.
 
   PRIVATE SECTION.
     CONSTANTS:
@@ -122,13 +122,12 @@ INHERITING FROM lcl_result_converter.
         VALUE(result) TYPE zif_sat_ty_adt_types=>ty_s_adt_obj_ref-properties.
 ENDCLASS.
 
+
 CLASS lcl_message_result_converter DEFINITION
 INHERITING FROM lcl_result_converter.
 
   PROTECTED SECTION.
-    METHODS convert_entries      REDEFINITION.
-
-  PRIVATE SECTION.
+    METHODS convert_entries REDEFINITION.
 ENDCLASS.
 
 
