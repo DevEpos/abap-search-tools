@@ -69,6 +69,7 @@ CLASS zcl_sat_cds_view_query_config IMPLEMENTATION.
                                                                                 ( get_package_filt_conf( ) )
                                                                                 ( get_softw_comp_filt_conf( ) )
                                                                                 ( get_appl_comp_filt_conf( ) )
+                                                                                ( get_cds_type_filter( ) )
                                                                                 ( get_description_filt_conf( ) )
                                                                                 ( get_max_rows_filt_conf( ) )
                                                                                 ( get_params_filter( ) )
@@ -77,7 +78,6 @@ CLASS zcl_sat_cds_view_query_config IMPLEMENTATION.
                                                                                 ( get_association_filter( ) )
                                                                                 ( get_annotation_filter( ) )
                                                                                 ( get_field_filter( ) )
-                                                                                ( get_cds_type_filter( ) )
                                                                                 ( get_ext_by_filter( ) ) ).
 
     mt_options = lt_object_filters.
