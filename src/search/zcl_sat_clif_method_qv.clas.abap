@@ -10,7 +10,7 @@ CLASS zcl_sat_clif_method_qv DEFINITION
   PROTECTED SECTION.
 
   PRIVATE SECTION.
-    data mo_clif_qv type ref to zif_sat_query_validator.
+    DATA mo_clif_qv TYPE REF TO zif_sat_query_validator.
 ENDCLASS.
 
 

@@ -18,12 +18,12 @@ CLASS zcl_sat_os_cds_provider DEFINITION
     ALIASES c_cds_search_params FOR zif_sat_c_object_search~c_cds_search_params.
     ALIASES ty_t_value_range    FOR zif_sat_ty_object_search~ty_t_value_range.
 
-    DATA mv_field_subquery       TYPE string.
-    DATA mv_anno_subquery        TYPE string.
+    DATA mv_field_subquery TYPE string.
+    DATA mv_anno_subquery TYPE string.
     DATA mv_select_from_subquery TYPE string.
-    DATA mv_assoc_subquery       TYPE string.
-    DATA mv_param_subquery       TYPE string.
-    DATA mv_params_subquery      TYPE string.
+    DATA mv_assoc_subquery TYPE string.
+    DATA mv_param_subquery TYPE string.
+    DATA mv_params_subquery TYPE string.
 
     CONSTANTS:
       c_base_alias                TYPE string VALUE 'base' ##NO_TEXT,
@@ -53,8 +53,8 @@ CLASS zcl_sat_os_cds_provider DEFINITION
 
     DATA mv_param_filter_count TYPE i.
     DATA mv_field_filter_count TYPE i.
-    DATA mv_anno_filter_count  TYPE i.
-    DATA mv_from_filter_count  TYPE i.
+    DATA mv_anno_filter_count TYPE i.
+    DATA mv_from_filter_count TYPE i.
     DATA mv_assoc_filter_count TYPE i.
 
     "! <p class="shorttext synchronized">Create filter for ANNO option</p>

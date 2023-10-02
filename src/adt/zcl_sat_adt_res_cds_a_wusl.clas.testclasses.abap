@@ -10,7 +10,7 @@ CLASS ltcl_abap_unit DEFINITION FINAL FOR TESTING
     METHODS constructor.
 
   PRIVATE SECTION.
-    DATA mo_in_converter  TYPE REF TO cl_abap_conv_in_ce.
+    DATA mo_in_converter TYPE REF TO cl_abap_conv_in_ce.
     DATA mo_out_converter TYPE REF TO cl_abap_conv_out_ce.
 
     METHODS convert_response_body
@@ -69,8 +69,8 @@ CLASS ltcl_abap_unit IMPLEMENTATION.
 
     TRY.
         CALL TRANSFORMATION zsat_where_used_in_cds_result
-          SOURCE XML lv_xml
-         RESULT wusl_result = result.
+             SOURCE XML lv_xml
+             RESULT wusl_result = result.
       CATCH cx_root INTO DATA(lx_error).
     ENDTRY.
 

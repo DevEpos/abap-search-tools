@@ -97,7 +97,7 @@ CLASS zcl_sat_os_message_provider IMPLEMENTATION.
 
   METHOD configure_message_filters.
     LOOP AT mo_search_query->mt_search_options ASSIGNING FIELD-SYMBOL(<ls_option>)
-            WHERE target = zif_sat_c_object_search=>c_search_fields-message_filter_input_key.
+         WHERE target = zif_sat_c_object_search=>c_search_fields-message_filter_input_key.
 
       CASE <ls_option>-option.
 
@@ -121,7 +121,7 @@ CLASS zcl_sat_os_message_provider IMPLEMENTATION.
 
   METHOD configure_msg_clas_filters.
     LOOP AT mo_search_query->mt_search_options ASSIGNING FIELD-SYMBOL(<ls_option>)
-            WHERE target = zif_sat_c_object_search=>c_search_fields-object_filter_input_key.
+         WHERE target = zif_sat_c_object_search=>c_search_fields-object_filter_input_key.
 
       CASE <ls_option>-option.
 

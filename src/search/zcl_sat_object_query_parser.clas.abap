@@ -197,7 +197,7 @@ CLASS zcl_sat_object_query_parser IMPLEMENTATION.
     ASSIGN ct_options[ option = is_option-name target = iv_target ] TO FIELD-SYMBOL(<ls_option>).
     IF sy-subrc <> 0.
       INSERT VALUE #( option = is_option-name target = iv_target )
-      INTO TABLE ct_options ASSIGNING <ls_option>.
+             INTO TABLE ct_options ASSIGNING <ls_option>.
     ENDIF.
 
     DATA(lv_value) = iv_value.
@@ -376,6 +376,5 @@ CLASS zcl_sat_object_query_parser IMPLEMENTATION.
       ENDLOOP.
     ENDLOOP.
   ENDMETHOD.
-
 ENDCLASS.
 

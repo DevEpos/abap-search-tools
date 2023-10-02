@@ -1,4 +1,4 @@
-"! <p class="shorttext synchronized" lang="en">Converter for Object Search Query</p>
+"! <p class="shorttext synchronized">Converter for Object Search Query</p>
 INTERFACE zif_sat_query_converter
   PUBLIC.
 

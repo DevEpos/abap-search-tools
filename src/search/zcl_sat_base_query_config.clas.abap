@@ -12,9 +12,9 @@ CLASS zcl_sat_base_query_config DEFINITION
     METHODS constructor.
 
   PROTECTED SECTION.
-    CONSTANTS c_object_name_input_key     TYPE string VALUE 'objectName'.
-    CONSTANTS c_object_name_input_label   TYPE string VALUE 'Object Name'.
-    CONSTANTS c_object_filter_input_key   TYPE string VALUE 'objectFilter'.
+    CONSTANTS c_object_name_input_key TYPE string VALUE 'objectName'.
+    CONSTANTS c_object_name_input_label TYPE string VALUE 'Object Name'.
+    CONSTANTS c_object_filter_input_key TYPE string VALUE 'objectFilter'.
     CONSTANTS c_object_filter_input_label TYPE string VALUE 'Object Filters'.
 
     ALIASES c_search_option   FOR zif_sat_c_object_search~c_search_option.
@@ -43,9 +43,9 @@ CLASS zcl_sat_base_query_config DEFINITION
         package TYPE string VALUE 'PACKAGE',
       END OF c_output_grouping_level.
 
-    DATA mt_options         TYPE zif_sat_ty_object_search=>ty_query_filters.
+    DATA mt_options TYPE zif_sat_ty_object_search=>ty_query_filters.
     DATA mt_allowed_options TYPE zif_sat_ty_object_search=>ty_t_options.
-    DATA ms_search_type     TYPE zif_sat_ty_object_search=>ty_search_type_config.
+    DATA ms_search_type TYPE zif_sat_ty_object_search=>ty_search_type_config.
 
     "! Builds configuration
     "! NOTE: Must be overridden in sub classes
@@ -219,7 +219,7 @@ CLASS zcl_sat_base_query_config IMPLEMENTATION.
   METHOD get_appl_comp_filt_conf.
     result = VALUE #(
         name             = c_general_options-application_component
-        description = 'Application Component'
+        description      = 'Application Component'
         long_description = |Use '{ c_general_options-application_component }' to restrict the search query by Application Component.\n\n| &&
                            |Example:\n|  && |   { c_general_options-application_component } : ap|
         img_info         = VALUE #(

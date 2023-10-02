@@ -50,8 +50,8 @@ CLASS zcl_sat_adt_cds_parser DEFINITION
         union_all    TYPE string VALUE 'UNION_ALL',
       END OF c_node_type.
 
-    DATA ms_result   TYPE zif_sat_ty_adt_types=>ty_cds_top_down_result READ-ONLY.
-    DATA mv_cds_view TYPE zsat_cds_view_name                           READ-ONLY.
+    DATA ms_result TYPE zif_sat_ty_adt_types=>ty_cds_top_down_result READ-ONLY.
+    DATA mv_cds_view TYPE zsat_cds_view_name READ-ONLY.
 
     "! <p class="shorttext synchronized">CONSTRUCTOR</p>
     METHODS constructor
@@ -102,7 +102,7 @@ CLASS zcl_sat_adt_cds_parser IMPLEMENTATION.
 
   METHOD parse_cds.
     DATA lv_ddlname TYPE ddlname.
-    DATA lv_entity  TYPE zsat_entity_id.
+    DATA lv_entity TYPE zsat_entity_id.
 
     " Determine the correct DDL name first
     SELECT SINGLE ddlname,
@@ -302,7 +302,7 @@ CLASS zcl_sat_adt_cds_parser IMPLEMENTATION.
       <ls_node>-node->description     = <ls_entity_info>-description.
       <ls_node>-node->owner           = <ls_entity_info>-createdby.
       <ls_node>-node->package         = <ls_entity_info>-developmentpackage.
-      " .... move the node to the CDS view tables
+      "  move the node to the CDS view tables
       io_node_helper->mt_cds_views = VALUE #( BASE io_node_helper->mt_cds_views
                                               ( name = <ls_entity_info>-entityid node = <ls_node>-node ) ).
       DELETE io_node_helper->mt_views.

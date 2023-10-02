@@ -136,7 +136,7 @@ CLASS zcl_sat_os_subp_meth_redef IMPLEMENTATION.
     super->set_method_filters( ).
 
     LOOP AT mo_search_query->mt_search_options REFERENCE INTO DATA(lr_filter)
-          WHERE target = zif_sat_c_object_search=>c_search_fields-method_filter_input_key.
+         WHERE target = zif_sat_c_object_search=>c_search_fields-method_filter_input_key.
 
       CASE lr_filter->option.
         WHEN c_general_search_options-changed_by.

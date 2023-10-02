@@ -50,10 +50,10 @@ CLASS zcl_sat_os_dbtab_provider DEFINITION
         storage_type      TYPE string VALUE 'roworcolst',
       END OF c_tech_fields.
 
-    DATA mv_field_subquery     TYPE string.
+    DATA mv_field_subquery TYPE string.
     DATA mv_field_filter_count TYPE i.
-    DATA mv_incl_filter_count  TYPE i.
-    DATA mf_dd09l_join_needed  TYPE abap_bool.
+    DATA mv_incl_filter_count TYPE i.
+    DATA mf_dd09l_join_needed TYPE abap_bool.
 
     "! <p class="shorttext synchronized">Create filter for TYPE option</p>
     "!

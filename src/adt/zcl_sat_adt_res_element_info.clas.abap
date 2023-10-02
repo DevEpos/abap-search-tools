@@ -8,7 +8,7 @@ CLASS zcl_sat_adt_res_element_info DEFINITION
     METHODS get REDEFINITION.
 
   PROTECTED SECTION.
-    DATA mf_basic_info  TYPE abap_bool.
+    DATA mf_basic_info TYPE abap_bool.
     DATA mv_object_type TYPE zsat_entity_type.
     DATA mv_object_name TYPE zsat_entity_id.
 
