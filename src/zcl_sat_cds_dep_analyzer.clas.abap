@@ -1,14 +1,14 @@
-"! <p class="shorttext synchronized" lang="en">Dependency Analyzer for CDS View</p>
+"! <p class="shorttext synchronized">Dependency Analyzer for CDS View</p>
 CLASS zcl_sat_cds_dep_analyzer DEFINITION
   PUBLIC
-  CREATE PUBLIC .
+  CREATE PUBLIC.
 
   PUBLIC SECTION.
     TYPES:
       BEGIN OF ty_s_parent,
         name TYPE string,
       END OF ty_s_parent.
-    TYPES: ty_t_parent TYPE STANDARD TABLE OF ty_s_parent WITH EMPTY KEY.
+    TYPES ty_t_parent TYPE STANDARD TABLE OF ty_s_parent WITH EMPTY KEY.
     TYPES:
       BEGIN OF ty_s_dependency,
         name                TYPE zsat_entity_id,
@@ -27,7 +27,7 @@ CLASS zcl_sat_cds_dep_analyzer DEFINITION
         used_union_count    TYPE i,
       END OF ty_s_dependency.
 
-    TYPES: ty_t_dependency TYPE STANDARD TABLE OF ty_s_dependency WITH KEY name object_type.
+    TYPES ty_t_dependency TYPE STANDARD TABLE OF ty_s_dependency WITH KEY name object_type.
 
     TYPES:
       BEGIN OF ty_s_dependency_info,
@@ -50,6 +50,7 @@ CLASS zcl_sat_cds_dep_analyzer DEFINITION
         children                 TYPE REF TO data,
       END OF ty_s_dependency_graph_node,
       ty_t_dependency_graph_nodes TYPE STANDARD TABLE OF ty_s_dependency_graph_node WITH EMPTY KEY.
+
     CONSTANTS:
       BEGIN OF c_node_type,
         table                 TYPE string VALUE 'TABLE',
@@ -82,27 +83,31 @@ CLASS zcl_sat_cds_dep_analyzer DEFINITION
         inconsistent TYPE string VALUE 'INCONSISTENT',
       END OF c_activation_state.
 
-    "! <p class="shorttext synchronized" lang="en">Anaylyzes dependencies of View and returns tree</p>
+    "! <p class="shorttext synchronized">Anaylyzes dependencies of View and returns tree</p>
     CLASS-METHODS analyze_dependency
       IMPORTING
         iv_cds_view_name           TYPE zsat_cds_view_name
       RETURNING
         VALUE(rs_dependency_graph) TYPE ty_s_dependency_graph_node.
-    "! <p class="shorttext synchronized" lang="en">Retrieve distinct entities and count</p>
+
+    "! <p class="shorttext synchronized">Retrieve distinct entities and count</p>
     CLASS-METHODS get_used_entities
       IMPORTING
         iv_cds_view_name          TYPE zsat_cds_view_name
         if_for_adt                TYPE abap_bool OPTIONAL
       RETURNING
         VALUE(rs_dependency_info) TYPE ty_s_dependency_info.
+
   PROTECTED SECTION.
+
   PRIVATE SECTION.
     TYPES BEGIN OF ty_s_dep_graph_node_ext.
-    INCLUDE TYPE ty_s_dependency_graph_node.
-    TYPES parent TYPE string.
+            INCLUDE TYPE ty_s_dependency_graph_node.
+    TYPES   parent TYPE string.
     TYPES END OF ty_s_dep_graph_node_ext.
     TYPES ty_t_dep_graph_node_ext TYPE STANDARD TABLE OF ty_s_dep_graph_node_ext WITH EMPTY KEY.
-    "! <p class="shorttext synchronized" lang="en">Retrieve metrics about dependencies</p>
+
+    "! <p class="shorttext synchronized">Retrieve metrics about dependencies</p>
     CLASS-METHODS get_used_entity_count
       IMPORTING
         it_children          TYPE cl_ddls_dependency_visitor=>ty_t_dependency_graph_nodes
@@ -110,7 +115,8 @@ CLASS zcl_sat_cds_dep_analyzer DEFINITION
         cv_used_entity_count TYPE i OPTIONAL
         cv_used_joins        TYPE i OPTIONAL
         cv_used_unions       TYPE i OPTIONAL.
-    "! <p class="shorttext synchronized" lang="en">Fill additional information of dependencies</p>
+
+    "! <p class="shorttext synchronized">Fill additional information of dependencies</p>
     CLASS-METHODS fill_additional_information
       IMPORTING
         if_for_adt      TYPE abap_bool OPTIONAL
@@ -119,9 +125,7 @@ CLASS zcl_sat_cds_dep_analyzer DEFINITION
 ENDCLASS.
 
 
-
 CLASS zcl_sat_cds_dep_analyzer IMPLEMENTATION.
-
   METHOD analyze_dependency.
     DATA(lr_dependency_visitor) = NEW cl_ddls_dependency_visitor( ).
     lr_dependency_visitor->compute_dependency_information( to_upper( iv_cds_view_name ) ).
@@ -129,14 +133,14 @@ CLASS zcl_sat_cds_dep_analyzer IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD get_used_entities.
-    DATA: lv_entity_type TYPE zsat_entity_type,
-          lv_entity_id   TYPE zsat_entity_id.
+    DATA lv_entity_type TYPE zsat_entity_type.
+    DATA lv_entity_id TYPE zsat_entity_id.
 
     DATA(lo_dependency_visitor) = NEW cl_ddls_dependency_visitor( ).
     lo_dependency_visitor->compute_dependency_information( to_upper( iv_cds_view_name ) ).
 
     DATA(lt_dependencies) = VALUE ty_t_dep_graph_node_ext(
-      ( CORRESPONDING #( DEEP lo_dependency_visitor->get_dependency_graph( ) ) ) ).
+                                      ( CORRESPONDING #( DEEP lo_dependency_visitor->get_dependency_graph( ) ) ) ).
 
     LOOP AT lt_dependencies ASSIGNING FIELD-SYMBOL(<ls_dependency>).
       DATA(lv_used_entity_count) = 0.
@@ -146,33 +150,30 @@ CLASS zcl_sat_cds_dep_analyzer IMPLEMENTATION.
       DATA(lv_tabix) = sy-tabix.
       IF <ls_dependency>-children IS BOUND.
         DATA(lt_children) = CAST cl_ddls_dependency_visitor=>ty_t_dependency_graph_nodes( <ls_dependency>-children )->*.
-        get_used_entity_count(
-          EXPORTING
-            it_children          = lt_children
-          CHANGING
-            cv_used_entity_count = lv_used_entity_count
-            cv_used_joins        = lv_used_join_count
-            cv_used_unions       = lv_used_union_count
-        ).
+        get_used_entity_count( EXPORTING it_children          = lt_children
+                               CHANGING  cv_used_entity_count = lv_used_entity_count
+                                         cv_used_joins        = lv_used_join_count
+                                         cv_used_unions       = lv_used_union_count ).
         LOOP AT lt_children ASSIGNING FIELD-SYMBOL(<ls_child>).
           APPEND INITIAL LINE TO lt_dependencies ASSIGNING FIELD-SYMBOL(<ls_child_enhanced>).
           <ls_child_enhanced> = CORRESPONDING #( DEEP <ls_child> ).
-          IF <ls_dependency>-name = cl_ddls_dependency_visitor=>co_node_type-select OR
-             <ls_dependency>-name = cl_ddls_dependency_visitor=>co_node_type-result OR
-             <ls_dependency>-name = cl_ddls_dependency_visitor=>co_node_type-union OR
-             <ls_dependency>-name = cl_ddls_dependency_visitor=>co_node_type-union_all.
+          IF    <ls_dependency>-name = cl_ddls_dependency_visitor=>co_node_type-select
+             OR <ls_dependency>-name = cl_ddls_dependency_visitor=>co_node_type-result
+             OR <ls_dependency>-name = cl_ddls_dependency_visitor=>co_node_type-union
+             OR <ls_dependency>-name = cl_ddls_dependency_visitor=>co_node_type-union_all.
             <ls_child_enhanced>-parent = <ls_dependency>-parent.
           ELSE.
             <ls_child_enhanced>-parent = COND #(
-              WHEN <ls_dependency>-entity_name IS NOT INITIAL THEN <ls_dependency>-entity_name
+              WHEN <ls_dependency>-entity_name IS NOT INITIAL
+              THEN <ls_dependency>-entity_name
               ELSE <ls_dependency>-name ).
           ENDIF.
         ENDLOOP.
       ENDIF.
 
       IF lv_tabix = 1.
-*...... This is the starting CDS view
-        rs_dependency_info-cds_view = <ls_dependency>-entity_name.
+        "  This is the starting CDS view
+        rs_dependency_info-cds_view          = <ls_dependency>-entity_name.
         rs_dependency_info-used_entity_count = lv_used_entity_count.
         INSERT VALUE #( name                = to_upper( iv_cds_view_name )
                         object_type         = zif_sat_c_entity_type=>cds_view
@@ -181,9 +182,9 @@ CLASS zcl_sat_cds_dep_analyzer IMPLEMENTATION.
                         used_join_count     = lv_used_join_count
                         used_union_count    = lv_used_union_count ) INTO TABLE rs_dependency_info-dependencies.
       ELSE.
-*...... Add the entity to the dependency list
-        IF <ls_dependency>-type = cl_ddls_dependency_visitor=>co_node_type-cds_view OR
-          <ls_dependency>-type = cl_ddls_dependency_visitor=>co_node_type-cds_table_function.
+        "  Add the entity to the dependency list
+        IF    <ls_dependency>-type = cl_ddls_dependency_visitor=>co_node_type-cds_view
+           OR <ls_dependency>-type = cl_ddls_dependency_visitor=>co_node_type-cds_table_function.
           lv_entity_type = zif_sat_c_entity_type=>cds_view.
         ELSEIF <ls_dependency>-type = cl_ddls_dependency_visitor=>co_node_type-table.
           lv_entity_type = zif_sat_c_entity_type=>table.
@@ -194,7 +195,9 @@ CLASS zcl_sat_cds_dep_analyzer IMPLEMENTATION.
         ENDIF.
 
         IF lv_entity_type IS NOT INITIAL.
-          lv_entity_id = COND #( WHEN <ls_dependency>-entity_name IS NOT INITIAL THEN <ls_dependency>-entity_name ELSE <ls_dependency>-name ).
+          lv_entity_id = COND #( WHEN <ls_dependency>-entity_name IS NOT INITIAL
+                                 THEN <ls_dependency>-entity_name
+                                 ELSE <ls_dependency>-name ).
           ASSIGN rs_dependency_info-dependencies[ name = lv_entity_id object_type = lv_entity_type ] TO FIELD-SYMBOL(<ls_dep>).
           IF sy-subrc <> 0.
             INSERT VALUE #( name                = lv_entity_id
@@ -205,7 +208,7 @@ CLASS zcl_sat_cds_dep_analyzer IMPLEMENTATION.
                             used_union_count    = lv_used_union_count
                             parent_nodes        = VALUE #( ( name = <ls_dependency>-parent ) ) ) INTO TABLE rs_dependency_info-dependencies.
           ELSE.
-            <ls_dep>-occurrence = <ls_dep>-occurrence + 1.
+            <ls_dep>-occurrence   = <ls_dep>-occurrence + 1.
             <ls_dep>-parent_nodes = VALUE #( BASE <ls_dep>-parent_nodes ( name = <ls_dependency>-parent ) ).
           ENDIF.
         ENDIF.
@@ -220,23 +223,23 @@ CLASS zcl_sat_cds_dep_analyzer IMPLEMENTATION.
 
   METHOD get_used_entity_count.
     LOOP AT it_children ASSIGNING FIELD-SYMBOL(<ls_child>).
-*.... Add the entity to the dependency list
-      IF <ls_child>-type = cl_ddls_dependency_visitor=>co_node_type-cds_view OR
-        <ls_child>-type = cl_ddls_dependency_visitor=>co_node_type-cds_table_function.
-        ADD 1 TO cv_used_entity_count.
+      "  Add the entity to the dependency list
+      IF    <ls_child>-type = cl_ddls_dependency_visitor=>co_node_type-cds_view
+         OR <ls_child>-type = cl_ddls_dependency_visitor=>co_node_type-cds_table_function.
+        cv_used_entity_count = cv_used_entity_count + 1.
       ELSEIF <ls_child>-type = cl_ddls_dependency_visitor=>co_node_type-table.
-        ADD 1 TO cv_used_entity_count.
+        cv_used_entity_count = cv_used_entity_count + 1.
       ELSEIF <ls_child>-type = cl_ddls_dependency_visitor=>co_node_type-view.
-        ADD 1 TO cv_used_entity_count.
+        cv_used_entity_count = cv_used_entity_count + 1.
       ENDIF.
 
-      IF <ls_child>-relation = cl_ddls_dependency_visitor=>co_relation_type-inner_join OR
-         <ls_child>-relation = cl_ddls_dependency_visitor=>co_relation_type-right_outer_join OR
-         <ls_child>-relation = cl_ddls_dependency_visitor=>co_relation_type-left_outer_join.
-        ADD 1 TO cv_used_joins.
-      ELSEIF <ls_child>-relation = cl_ddls_dependency_visitor=>co_relation_type-union OR
-             <ls_child>-relation = cl_ddls_dependency_visitor=>co_relation_type-union_all.
-        ADD 1 TO cv_used_unions.
+      IF    <ls_child>-relation = cl_ddls_dependency_visitor=>co_relation_type-inner_join
+         OR <ls_child>-relation = cl_ddls_dependency_visitor=>co_relation_type-right_outer_join
+         OR <ls_child>-relation = cl_ddls_dependency_visitor=>co_relation_type-left_outer_join.
+        cv_used_joins = cv_used_joins + 1.
+      ELSEIF    <ls_child>-relation = cl_ddls_dependency_visitor=>co_relation_type-union
+             OR <ls_child>-relation = cl_ddls_dependency_visitor=>co_relation_type-union_all.
+        cv_used_unions = cv_used_unions + 1.
       ENDIF.
 
       IF <ls_child>-children IS BOUND.
@@ -247,16 +250,14 @@ CLASS zcl_sat_cds_dep_analyzer IMPLEMENTATION.
           CHANGING
             cv_used_entity_count = cv_used_entity_count
             cv_used_joins        = cv_used_joins
-            cv_used_unions       = cv_used_unions
-        ).
+            cv_used_unions       = cv_used_unions ).
       ENDIF.
     ENDLOOP.
   ENDMETHOD.
 
-
   METHOD fill_additional_information.
-    DATA: lt_entity_range  TYPE RANGE OF zsat_entity_id,
-          lt_tabname_range TYPE RANGE OF tabname.
+    DATA lt_entity_range TYPE RANGE OF zsat_entity_id.
+    DATA lt_tabname_range TYPE RANGE OF tabname.
 
     lt_entity_range = VALUE #( FOR cds IN ct_dependencies
                                WHERE ( object_type = zif_sat_c_entity_type=>cds_view )
@@ -265,7 +266,7 @@ CLASS zcl_sat_cds_dep_analyzer IMPLEMENTATION.
                                 WHERE ( object_type <> zif_sat_c_entity_type=>cds_view )
                                 ( sign = 'I' option = 'EQ' low = table-name ) ).
 
-*.. Enrich dependencies by description
+    "  Enrich dependencies by description
     IF lt_entity_range IS NOT INITIAL.
       IF if_for_adt = abap_true.
         SELECT entityid AS entity,
@@ -316,24 +317,23 @@ CLASS zcl_sat_cds_dep_analyzer IMPLEMENTATION.
         ASSIGN lt_entity_info[ secondary_entity_id = <ls_cds_dep>-name ] TO <ls_entity_descr>.
       ENDIF.
       CHECK sy-subrc = 0.
-      <ls_cds_dep>-name  = <ls_entity_descr>-entity.
-      <ls_cds_dep>-raw_name = <ls_entity_descr>-entityraw.
-      <ls_cds_dep>-api_state = <ls_entity_descr>-api_state.
+      <ls_cds_dep>-name        = <ls_entity_descr>-entity.
+      <ls_cds_dep>-raw_name    = <ls_entity_descr>-entityraw.
+      <ls_cds_dep>-api_state   = <ls_entity_descr>-api_state.
       <ls_cds_dep>-source_type = <ls_entity_descr>-source_type.
       <ls_cds_dep>-description = <ls_entity_descr>-description.
-      <ls_cds_dep>-package = <ls_entity_descr>-developmentpackage.
+      <ls_cds_dep>-package     = <ls_entity_descr>-developmentpackage.
       IF if_for_adt = abap_true.
         DATA(ls_obj_ref) = zcl_sat_adt_util=>create_adt_uri(
-            iv_type  = <ls_cds_dep>-object_type
-            iv_name  = <ls_entity_descr>-entity
-            iv_name2 = CONV #( <ls_entity_descr>-secondary_entity_id )
-        ).
+                               iv_type  = <ls_cds_dep>-object_type
+                               iv_name  = <ls_entity_descr>-entity
+                               iv_name2 = CONV #( <ls_entity_descr>-secondary_entity_id ) ).
         <ls_cds_dep>-adt_type = ls_obj_ref-type.
-        <ls_cds_dep>-uri = ls_obj_ref-uri.
+        <ls_cds_dep>-uri      = ls_obj_ref-uri.
       ENDIF.
     ENDLOOP.
 
-    SORT ct_dependencies BY used_entities_count DESCENDING occurrence DESCENDING.
+    SORT ct_dependencies BY used_entities_count DESCENDING
+                            occurrence DESCENDING.
   ENDMETHOD.
-
 ENDCLASS.

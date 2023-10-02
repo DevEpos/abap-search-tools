@@ -4,7 +4,7 @@
 CLASS lcl_devclass_util IMPLEMENTATION.
   METHOD determine_package_hierarchy.
     DATA packages_to_read TYPE STANDARD TABLE OF ty_package.
-    DATA read_packages    TYPE STANDARD TABLE OF ty_package.
+    DATA read_packages TYPE STANDARD TABLE OF ty_package.
 
     packages_to_read = CORRESPONDING #( search_results ).
     SORT packages_to_read.
@@ -259,7 +259,7 @@ CLASS lcl_method_result_converter IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD map_method_to_uri.
-    DATA lo_wb_request  TYPE REF TO cl_wb_request.
+    DATA lo_wb_request TYPE REF TO cl_wb_request.
     DATA lv_object_name TYPE seu_objkey.
 
     IF iv_type-objtype_tr = zif_sat_c_tadir_types=>class.

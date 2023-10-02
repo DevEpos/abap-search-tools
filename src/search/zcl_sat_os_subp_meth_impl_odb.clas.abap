@@ -113,7 +113,7 @@ CLASS zcl_sat_os_subp_meth_impl_odb IMPLEMENTATION.
 
   METHOD configure_incl_filters.
     LOOP AT mo_search_query->mt_search_options ASSIGNING FIELD-SYMBOL(<ls_option>)
-          WHERE target = zif_sat_c_object_search=>c_search_fields-method_filter_input_key.
+         WHERE target = zif_sat_c_object_search=>c_search_fields-method_filter_input_key.
 
       CASE <ls_option>-option.
         WHEN c_general_search_options-user.

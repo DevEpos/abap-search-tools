@@ -1,16 +1,17 @@
-"! <p class="shorttext synchronized" lang="en">Query Config for Dictionary Views</p>
+"! <p class="shorttext synchronized">Query Config for Dictionary Views</p>
 CLASS zcl_sat_ddicview_qc DEFINITION
   PUBLIC
   FINAL
   INHERITING FROM zcl_sat_general_qc
-  CREATE PUBLIC .
+  CREATE PUBLIC.
 
   PUBLIC SECTION.
-  methods zif_sat_query_converter~convert_value REDEFINITION.
+    METHODS zif_sat_query_converter~convert_value REDEFINITION.
+
   PROTECTED SECTION.
+
   PRIVATE SECTION.
 ENDCLASS.
-
 
 
 CLASS zcl_sat_ddicview_qc IMPLEMENTATION.
@@ -38,5 +39,4 @@ CLASS zcl_sat_ddicview_qc IMPLEMENTATION.
                                                                 cv_value2 = cv_value2 ).
     ENDCASE.
   ENDMETHOD.
-
 ENDCLASS.
