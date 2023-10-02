@@ -172,7 +172,7 @@ CLASS zcl_sat_cds_dep_analyzer IMPLEMENTATION.
       ENDIF.
 
       IF lv_tabix = 1.
-        " ...... This is the starting CDS view
+        " This is the starting CDS view
         rs_dependency_info-cds_view          = <ls_dependency>-entity_name.
         rs_dependency_info-used_entity_count = lv_used_entity_count.
         INSERT VALUE #( name                = to_upper( iv_cds_view_name )
@@ -182,7 +182,7 @@ CLASS zcl_sat_cds_dep_analyzer IMPLEMENTATION.
                         used_join_count     = lv_used_join_count
                         used_union_count    = lv_used_union_count ) INTO TABLE rs_dependency_info-dependencies.
       ELSE.
-        " ...... Add the entity to the dependency list
+        " Add the entity to the dependency list
         IF    <ls_dependency>-type = cl_ddls_dependency_visitor=>co_node_type-cds_view
            OR <ls_dependency>-type = cl_ddls_dependency_visitor=>co_node_type-cds_table_function
            OR <ls_dependency>-type = cl_ddls_dependency_visitor=>co_node_type-cds_db_view.
@@ -224,7 +224,7 @@ CLASS zcl_sat_cds_dep_analyzer IMPLEMENTATION.
 
   METHOD get_used_entity_count.
     LOOP AT it_children ASSIGNING FIELD-SYMBOL(<ls_child>).
-      " .... Add the entity to the dependency list
+      " Add the entity to the dependency list
       IF    <ls_child>-type = cl_ddls_dependency_visitor=>co_node_type-cds_view
          OR <ls_child>-type = cl_ddls_dependency_visitor=>co_node_type-cds_table_function
          OR <ls_child>-type = cl_ddls_dependency_visitor=>co_node_type-cds_db_view.
@@ -268,7 +268,7 @@ CLASS zcl_sat_cds_dep_analyzer IMPLEMENTATION.
                                 WHERE ( object_type <> zif_sat_c_entity_type=>cds_view )
                                 ( sign = 'I' option = 'EQ' low = table-name ) ).
 
-    " .. Enrich dependencies by description
+    " Enrich dependencies by description
     IF lt_entity_range IS NOT INITIAL.
       IF if_for_adt = abap_true.
         SELECT entityid AS entity,

@@ -77,7 +77,7 @@ CLASS zcl_sat_join_helper IMPLEMENTATION.
     DATA(ls_join_def) = repair_join_definition( if_use_ddl_for_select = if_use_ddl_for_select
                                                 is_join_def           = is_join_def ).
 
-    " .. parse join definition for building the FROM Clause string
+    " parse join definition for building the FROM Clause string
     DATA(ls_join_enriched) = prepare_tables( is_join_def = ls_join_def ).
 
     rt_from_clause = VALUE #( ( ls_join_enriched-primary_table ) ).
@@ -116,7 +116,7 @@ CLASS zcl_sat_join_helper IMPLEMENTATION.
     DATA lv_index TYPE sy-tabix.
     DATA lv_previous_join_cond TYPE string.
 
-    " ... prefill some needed join condition operator strings
+    " prefill some needed join condition operator strings
     lv_on_string = |  { zif_sat_c_selection_condition=>on ALIGN = RIGHT WIDTH = 5 } |.
     lv_and_string = |  { zif_sat_c_selection_condition=>and ALIGN = RIGHT WIDTH = 5 } |.
     lv_or_string = |  { zif_sat_c_selection_condition=>or ALIGN = RIGHT WIDTH = 5 } |.
@@ -132,7 +132,7 @@ CLASS zcl_sat_join_helper IMPLEMENTATION.
                             COND #( WHEN is_join_def-primary_table_alias IS NOT INITIAL
                                     THEN is_join_def-primary_table_alias ).
 
-    " ... build joins for defined join tables
+    " build joins for defined join tables
     LOOP AT is_join_def-tables ASSIGNING FIELD-SYMBOL(<ls_join_table>) WHERE is_virtual = abap_false.
 
       DATA(lv_join_table_alias) = COND #( WHEN <ls_join_table>-add_table_alias IS NOT INITIAL
@@ -154,11 +154,11 @@ CLASS zcl_sat_join_helper IMPLEMENTATION.
 
       ls_parsed_table-table = |{ ls_parsed_table-table } AS { lv_join_table_alias }|.
 
-      " .... parse the conditions
+      " parse the conditions
       LOOP AT <ls_join_table>-conditions INTO DATA(ls_cond).
         lv_index = sy-tabix.
 
-        " ...... Determine the alias of the reference field
+        " Determine the alias of the reference field
         IF ls_cond-type = zif_sat_c_join_cond_type=>field.
           lv_reference_alias = COND #( WHEN ls_cond-ref_table_alias IS NOT INITIAL THEN
                                          ls_cond-ref_table_alias
@@ -176,7 +176,7 @@ CLASS zcl_sat_join_helper IMPLEMENTATION.
                                          is_join_def-tables[ add_table = ls_cond-tabname ]-add_table_alias ).
         ENDIF.
 
-        " ...... check for need of possible open parenthesis
+        " check for need of possible open parenthesis
         IF ls_cond-and_or = zif_sat_c_selection_condition=>or.
           IF lf_parenthesis_opened = abap_false.
             lv_parenthesis_open = |( |.
@@ -201,12 +201,12 @@ CLASS zcl_sat_join_helper IMPLEMENTATION.
           DATA(lv_value1) = |{ ls_cond-value }|.
           DATA(lv_value2) = ||.
 
-          " ........ handle LIKE and NOT LIKE operator
+          " handle LIKE and NOT LIKE operator
           IF     (    ls_cond-operator = zif_sat_c_operator=>like
                    OR ls_cond-operator = zif_sat_c_operator=>not_like )
              AND ls_cond-value_type <> zif_sat_c_join_cond_val_type=>system_value_input.
             " ls_filter_cond-value = replace( val = ls_filter_cond-value sub = '*' with = '%' occ = 0 ).
-            " .......... Use proper SAP to SQL conversion for pattern
+            " Use proper SAP to SQL conversion for pattern
             zcl_sat_like_pattern_convrter=>conv_sap_to_sql_pattern( EXPORTING  iv_sap_pattern   = lv_value1
                                                                     IMPORTING  ev_sql_pattern   = lv_value1
                                                                                ef_escape_needed = DATA(lf_escape_needed)
@@ -274,22 +274,22 @@ CLASS zcl_sat_join_helper IMPLEMENTATION.
     ENDIF.
 
     LOOP AT rs_join_def-tables ASSIGNING FIELD-SYMBOL(<ls_table>).
-      " .... fill unified condition table
+      " fill unified condition table
       IF <ls_table>-conditions IS INITIAL.
-        " ....... First the field conditions are added
+        " First the field conditions are added
         LOOP AT <ls_table>-field_conditions ASSIGNING FIELD-SYMBOL(<ls_field_cond>).
           APPEND INITIAL LINE TO <ls_table>-conditions ASSIGNING <ls_condition>.
           <ls_condition> = CORRESPONDING #( <ls_field_cond> ).
           <ls_condition>-type   = zif_sat_c_join_cond_type=>field.
           <ls_condition>-and_or = zif_sat_c_selection_condition=>and.
         ENDLOOP.
-        " ........ and then the filter conditions
+        " and then the filter conditions
         LOOP AT <ls_table>-filter_conditions ASSIGNING FIELD-SYMBOL(<ls_filter_cond>).
           APPEND INITIAL LINE TO <ls_table>-conditions ASSIGNING <ls_condition>.
           <ls_condition> = CORRESPONDING #( <ls_filter_cond> MAPPING field = fieldname ).
           <ls_condition>-type = zif_sat_c_join_cond_type=>filter.
         ENDLOOP.
-        " ...... remove the last condition operator
+        " remove the last condition operator
         IF <ls_table>-conditions IS NOT INITIAL.
           <ls_table>-conditions[ lines( <ls_table>-conditions ) ]-and_or = space.
         ENDIF.
@@ -310,7 +310,7 @@ CLASS zcl_sat_join_helper IMPLEMENTATION.
         IF <ls_condition>-operator IS INITIAL.
           <ls_condition>-operator = zif_sat_c_operator=>equals.
         ENDIF.
-        " ...... Not quite sure if this can't still result in an erroneous select
+        " Not quite sure if this can't still result in an erroneous select
         IF <ls_condition>-tabname IS INITIAL AND <ls_condition>-tabname_alias IS INITIAL.
           <ls_condition>-tabname = <ls_table>-table_name.
         ENDIF.

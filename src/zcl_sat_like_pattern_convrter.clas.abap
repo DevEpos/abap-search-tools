@@ -72,7 +72,7 @@ CLASS zcl_sat_like_pattern_convrter IMPLEMENTATION.
       lv_charlen = charlen( iv_sap_pattern+lv_curr_pos ).
 
       IF gf_is_nuc = abap_true AND lv_charlen > 1.
-        " ...... multibyte character copy charlen bytes
+        " multibyte character copy charlen bytes
         CONCATENATE ev_sql_pattern iv_sap_pattern+lv_curr_pos(lv_charlen) INTO ev_sql_pattern.
         lv_continue_off = lv_continue_off + 1.
         lv_curr_pos = lv_curr_pos + lv_continue_off.
@@ -95,17 +95,17 @@ CLASS zcl_sat_like_pattern_convrter IMPLEMENTATION.
           next_char_pos = lv_curr_pos + 1.
           next_char_len = charlen( iv_sap_pattern+next_char_pos ).
           IF gf_is_nuc = abap_true AND next_char_len > 1.
-            " .......... next character is multibyte => copy charlen bytes
+            " next character is multibyte => copy charlen bytes
             CONCATENATE ev_sql_pattern iv_sap_pattern+next_char_pos(next_char_len) INTO ev_sql_pattern.
             lv_curr_pos = lv_curr_pos + 1 + next_char_len. " escape and next multibyte char processed
             CONTINUE.
           ENDIF.
 
           IF lv_curr_pos < lv_last_pos.
-            " .......... character after escape is single byte
+            " character after escape is single byte
             next_char_pos = lv_curr_pos + 1.
             lv_continue_off = lv_continue_off + 1.
-            " .......... Character after escape is sqlMeta or sapEscape
+            " Character after escape is sqlMeta or sapEscape
             next_char = iv_sap_pattern+next_char_pos(1).
             IF    next_char = c_sql_any_single
                OR next_char = c_sql_any_sequence
@@ -130,10 +130,9 @@ CLASS zcl_sat_like_pattern_convrter IMPLEMENTATION.
         WHEN OTHERS.
           CONCATENATE ev_sql_pattern iv_sap_pattern+lv_curr_pos(1) INTO ev_sql_pattern RESPECTING BLANKS.
       ENDCASE.
-      " 
       lv_curr_pos = lv_curr_pos + lv_continue_off.
     ENDWHILE.
-  ENDMETHOD.                    " sap_to_sql_patte_uc
+  ENDMETHOD.
 
   METHOD conv_sql_to_sap_pattern.
     DATA curr_pos TYPE i VALUE 0.
@@ -175,16 +174,16 @@ CLASS zcl_sat_like_pattern_convrter IMPLEMENTATION.
           lv_next_char_pos = curr_pos + 1.
           lv_next_char_len = charlen( iv_sql_pattern+lv_next_char_pos ).
           IF gf_is_nuc = abap_true AND lv_next_char_len > 1.
-            " .......... next character is multibyte => copy charlen bytes
+            " next character is multibyte => copy charlen bytes
             CONCATENATE ev_sap_pattern iv_sql_pattern+lv_next_char_pos(lv_next_char_len) INTO ev_sap_pattern.
             curr_pos = curr_pos + 1 + lv_next_char_len. " escape and next multibyte char processed
             CONTINUE.
           ENDIF.
           IF curr_pos < lv_last_pos.
-            " .......... character after escape is single byte
+            " character after escape is single byte
             lv_next_char_pos = curr_pos + 1.
             lv_continue_off = lv_continue_off + 1.
-            " .......... Character after escape is sqlMeta or sapEscape
+            " Character after escape is sqlMeta or sapEscape
             lv_next_char = iv_sql_pattern+lv_next_char_pos(1).
             IF    lv_next_char = c_sap_any_single
                OR lv_next_char = c_sap_any_sequence

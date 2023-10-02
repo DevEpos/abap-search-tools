@@ -287,7 +287,7 @@ CLASS zcl_sat_cds_view_factory IMPLEMENTATION.
 
     ls_ddl_source-source     = iv_source.
     ls_ddl_source-ddlanguage = sy-langu.
-    " .. TODO: Fill other components
+    " TODO: Fill other components
 
     DATA(lr_ddl) = cl_dd_ddl_handler_factory=>create( ).
 
@@ -345,7 +345,7 @@ CLASS zcl_sat_cds_view_factory IMPLEMENTATION.
     SORT lt_assoc_cds_view_range.
     DELETE ADJACENT DUPLICATES FROM lt_assoc_cds_view_range.
 
-    " .. Read database table+text if there are any association which point to database tables
+    " Read database table+text if there are any association which point to database tables
     IF line_exists( it_header[ typekind_t = zif_sat_c_cds_assoc_type=>table ] ).
       lt_db_table_range = VALUE #( FOR dbtab IN it_header WHERE ( typekind_t = zif_sat_c_cds_assoc_type=>table )
                                    ( sign = 'I' option = 'EQ' low = dbtab-strucobjn_t ) ).
@@ -355,7 +355,7 @@ CLASS zcl_sat_cds_view_factory IMPLEMENTATION.
       INTO CORRESPONDING FIELDS OF TABLE @lt_db_tables.
     ENDIF.
 
-    " ... read cds view texts for associations
+    " read cds view texts for associations
     SELECT entityid, rawentityid, description
       FROM zsat_i_cdsentity
       WHERE entityid IN @lt_assoc_cds_view_range
@@ -567,7 +567,7 @@ CLASS zcl_sat_cds_view_factory IMPLEMENTATION.
   METHOD on_base_table_loading_request.
     sender->mt_base_tables = read_cds_base_tables( iv_view_name = sender->ms_header-ddlview  ).
 
-    " ... remove handler for this cds view
+    " remove handler for this cds view
     SET HANDLER on_base_table_loading_request FOR sender ACTIVATION abap_false.
   ENDMETHOD.
 
@@ -594,7 +594,7 @@ CLASS zcl_sat_cds_view_factory IMPLEMENTATION.
 
     FIELD-SYMBOLS <ls_base> TYPE lty_base_table.
 
-    " .. Select all base tables for the given generated SQL View
+    " Select all base tables for the given generated SQL View
     SELECT basetable AS entityname,
            basetable AS original_base_name,
            entitytype,
@@ -619,7 +619,7 @@ CLASS zcl_sat_cds_view_factory IMPLEMENTATION.
                              WHERE ( generationflag = abap_false AND entitytype = zif_sat_c_entity_type=>view )
                              ( sign = 'I' option = 'EQ' low = view-entityname ) ).
 
-    " .. Fill additional information for CDS views bases
+    " Fill additional information for CDS views bases
     IF lt_cds_view_range IS NOT INITIAL.
       SELECT viewname,
              ddlname,
@@ -653,7 +653,7 @@ CLASS zcl_sat_cds_view_factory IMPLEMENTATION.
       ENDIF.
     ENDIF.
 
-    " .. Add view information
+    " Add view information
     IF lt_view_range IS NOT INITIAL.
       SELECT viewname,
              description
@@ -675,7 +675,7 @@ CLASS zcl_sat_cds_view_factory IMPLEMENTATION.
       ENDIF.
     ENDIF.
 
-    " .. Add table information
+    " Add table information
     IF lt_tab_range IS NOT INITIAL.
       SELECT tablename,
              description
@@ -701,12 +701,12 @@ CLASS zcl_sat_cds_view_factory IMPLEMENTATION.
   METHOD read_cds_view.
     DATA(lv_description_language) = zcl_sat_system_helper=>get_system_language( ).
 
-    " ... try to read view from cache
+    " try to read view from cache
     result = VALUE #( st_cds_view_cache[ cds_view_name = iv_cds_view
                                          language      = lv_description_language ]-ref OPTIONAL ).
 
     IF result IS BOUND.
-      " ... Check if the cds view was recently changed
+      " Check if the cds view was recently changed
       IF has_cds_view_changed( iv_cds_view_name     = result->mv_view_name
                                iv_last_changed_date = result->ms_header-chgdate
                                iv_last_changed_time = result->ms_header-chgtime ).
@@ -752,15 +752,15 @@ CLASS zcl_sat_cds_view_factory IMPLEMENTATION.
 
         ls_header-ddlname = get_ddl_for_entity_name( ls_header-entityname ).
 
-        " ... supply generated ddl database view of ddls
-        " ... and read base tables of cds view ( if view name was supplied )
+        " supply generated ddl database view of ddls
+        " and read base tables of cds view ( if view name was supplied )
         ls_header-ddlview = VALUE #( lt_nodes[ 1 ]-dbtabname OPTIONAL ).
 
-        " ... if this cds is an extend view the source type can be determined right here
+        " if this cds is an extend view the source type can be determined right here
         IF ls_dd02bv-strucobjclass = 'APPEND'.
           ls_header-source_type = zif_sat_c_cds_view_type=>extend.
         ELSE.
-          " ... determine the correct source type of the cds
+          " determine the correct source type of the cds
           ls_header-source_type = get_source_type( iv_ddl_name = ls_header-ddlname ).
         ENDIF.
 
@@ -772,7 +772,7 @@ CLASS zcl_sat_cds_view_factory IMPLEMENTATION.
           lt_params_db
           MAPPING inttype = abaptype ).
 
-        " ...... complete parameters with annotations (if existing)
+        " complete parameters with annotations (if existing)
         read_param_annotations( EXPORTING iv_cds_view  = iv_cds_view
                                 CHANGING  ct_parameter = lt_params ).
 
@@ -783,7 +783,7 @@ CLASS zcl_sat_cds_view_factory IMPLEMENTATION.
                                                     it_fields = lt_assoc_fields ).
         ENDIF.
 
-        " ...... Delete client field if existing
+        " Delete client field if existing
         DELETE lt_col WHERE datatype = 'CLNT'.
 
         result = NEW zcl_sat_cds_view( is_header      = ls_header
@@ -791,14 +791,14 @@ CLASS zcl_sat_cds_view_factory IMPLEMENTATION.
                                        it_columns     = lt_col
                                        it_parameters  = lt_params ).
 
-        " ... set handler for lazy loading of base tables
+        " set handler for lazy loading of base tables
         SET HANDLER on_base_table_loading_request FOR result.
         SET HANDLER on_annotation_read_request FOR result.
         SET HANDLER on_api_states_loading_request FOR result.
         SET HANDLER on_tadir_info_loading_request FOR result.
         SET HANDLER on_description_loading_request FOR result.
 
-        " ... fill cache
+        " fill cache
         INSERT VALUE #( ddl_view_name = ls_header-ddlview
                         cds_view_name = ls_header-entityname
                         language      = lv_description_language
@@ -907,7 +907,7 @@ CLASS zcl_sat_cds_view_factory IMPLEMENTATION.
       CATCH cx_sy_dynamic_osql_syntax INTO DATA(lr_osql_syntax_exc). " TODO: variable is assigned but never used (ABAP cleaner)
     ENDTRY.
 
-    " ... enrich parameters with annotation values
+    " enrich parameters with annotation values
     LOOP AT lt_paramanno ASSIGNING FIELD-SYMBOL(<ls_paramanno>)
          GROUP BY ( parameter = <ls_paramanno>-parametername )
          ASSIGNING FIELD-SYMBOL(<ls_anno_group>).
@@ -919,24 +919,24 @@ CLASS zcl_sat_cds_view_factory IMPLEMENTATION.
         lr_s_param->annotations = VALUE #( BASE lr_s_param->annotations
                                            ( CORRESPONDING #( <ls_anno> ) ) ).
 
-        " ...... do some annotation checks
+        " do some annotation checks
         IF <ls_anno>-name = to_upper( zif_sat_c_cds_anno_definition=>consumption_defaultvalue ).
           DATA(lv_val) = <ls_anno>-value.
           DATA(lv_length) = strlen( <ls_anno>-value ).
-          " ....... remove leading single quote
+          " remove leading single quote
           IF lv_val(1) = ''''.
             lv_length = lv_length - 1.
             lv_val = lv_val+1(lv_length).
           ENDIF.
 
-          " ....... remove trailing single quote
+          " remove trailing single quote
           lv_length = lv_length - 1.
           IF lv_val+lv_length(1) = ''''.
             lv_val = lv_val(lv_length).
           ENDIF.
           lr_s_param->default_value = lv_val.
         ELSEIF <ls_anno>-name = to_upper( zif_sat_c_cds_anno_definition=>environment_systemfield ).
-          " ........ Handle system environment annotations
+          " Handle system environment annotations
           IF <ls_anno>-value = zif_sat_c_cds_anno_value=>c_environment_system_field-client.
             lr_s_param->has_system_anno = abap_true.
           ELSE.
@@ -972,7 +972,7 @@ CLASS zcl_sat_cds_view_factory IMPLEMENTATION.
     ev_column = -1.
     ev_row = -1.
 
-    " .. Look for line 'DEFINE (VIEW|TABLE FUNCTION) <ENTITY_NAME>'
+    " Look for line 'DEFINE (VIEW|TABLE FUNCTION) <ENTITY_NAME>'
     SPLIT iv_source AT cl_abap_char_utilities=>cr_lf INTO TABLE lt_ddls_source_lines.
 
     LOOP AT lt_ddls_source_lines INTO DATA(lv_line).
