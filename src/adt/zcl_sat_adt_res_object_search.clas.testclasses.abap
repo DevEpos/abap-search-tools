@@ -7,8 +7,8 @@ CLASS ltcl_abap_unit DEFINITION FINAL FOR TESTING
     METHODS constructor.
 
   PRIVATE SECTION.
-    DATA cut              TYPE REF TO zcl_sat_adt_res_object_search.
-    DATA mo_in_converter  TYPE REF TO cl_abap_conv_in_ce.
+    DATA cut TYPE REF TO zcl_sat_adt_res_object_search.
+    DATA mo_in_converter TYPE REF TO cl_abap_conv_in_ce.
     DATA mo_out_converter TYPE REF TO cl_abap_conv_out_ce.
 
     METHODS convert_request_body
@@ -67,8 +67,8 @@ CLASS ltcl_abap_unit IMPLEMENTATION.
     DATA lv_xml TYPE string.
 
     CALL TRANSFORMATION zsat_object_search_query_input
-      SOURCE query_input = is_query_input
-      RESULT XML lv_xml.
+         SOURCE query_input = is_query_input
+         RESULT XML lv_xml.
 
     mo_out_converter->convert( EXPORTING data   = lv_xml
                                IMPORTING buffer = result ).
@@ -82,8 +82,8 @@ CLASS ltcl_abap_unit IMPLEMENTATION.
 
     TRY.
         CALL TRANSFORMATION zsat_search_result
-          SOURCE XML lv_xml
-         RESULT object_search_result = result.
+             SOURCE XML lv_xml
+             RESULT object_search_result = result.
       CATCH cx_root INTO DATA(lx_error). " TODO: variable is assigned but never used (ABAP cleaner)
         IF 1 = 2.
         ENDIF.

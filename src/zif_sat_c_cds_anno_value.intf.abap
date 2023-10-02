@@ -1,6 +1,6 @@
-"! <p class="shorttext synchronized" lang="en">Value constants for CDS annotations</p>
+"! <p class="shorttext synchronized">Value constants for CDS annotations</p>
 INTERFACE zif_sat_c_cds_anno_value
-  PUBLIC .
+  PUBLIC.
   CONSTANTS:
     "! <p class="shorttext synchronized" lang="en">Constants for 'Environment.systemField'</p>
     BEGIN OF c_environment_system_field,

@@ -16,7 +16,7 @@ ENDCLASS.
 
 CLASS zcl_sat_adt_res_viewbaset_vh IMPLEMENTATION.
   METHOD get_named_items.
-    DATA lt_tab_range       TYPE RANGE OF tabname.
+    DATA lt_tab_range TYPE RANGE OF tabname.
     DATA lt_viewclass_range TYPE RANGE OF dd25l-viewclass.
 
     lt_viewclass_range = VALUE #( sign   = 'I'

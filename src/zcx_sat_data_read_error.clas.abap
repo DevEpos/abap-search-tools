@@ -27,27 +27,25 @@ CLASS zcx_sat_data_read_error DEFINITION
     CLASS-METHODS raise_data_read_error_sy
       RAISING
         zcx_sat_data_read_error.
+
   PROTECTED SECTION.
+
   PRIVATE SECTION.
 ENDCLASS.
-
 
 
 CLASS zcx_sat_data_read_error IMPLEMENTATION.
   METHOD raise_data_read_error_sy.
     RAISE EXCEPTION TYPE zcx_sat_data_read_error
-      EXPORTING
-        textid = VALUE scx_t100key(
-           msgid = sy-msgid
-           msgno = sy-msgno
-           attr1 = 'MSGV1'
-           attr2 = 'MSGV2'
-           attr3 = 'MSGV3'
-           attr4 = 'MSGV4' )
-        msgv1  = sy-msgv1
-        msgv2  = sy-msgv2
-        msgv3  = sy-msgv3
-        msgv4  = sy-msgv4.
+      EXPORTING textid = VALUE scx_t100key( msgid = sy-msgid
+                                            msgno = sy-msgno
+                                            attr1 = 'MSGV1'
+                                            attr2 = 'MSGV2'
+                                            attr3 = 'MSGV3'
+                                            attr4 = 'MSGV4' )
+                msgv1  = sy-msgv1
+                msgv2  = sy-msgv2
+                msgv3  = sy-msgv3
+                msgv4  = sy-msgv4.
   ENDMETHOD.
-
 ENDCLASS.

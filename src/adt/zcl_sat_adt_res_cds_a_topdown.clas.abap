@@ -29,7 +29,6 @@ CLASS zcl_sat_adt_res_cds_a_topdown IMPLEMENTATION.
     ENDIF.
   ENDMETHOD.
 
-
   METHOD get_parameters.
     super->get_parameters( io_request ).
     mf_with_associations = zcl_sat_adt_res_util=>get_request_param_value(
