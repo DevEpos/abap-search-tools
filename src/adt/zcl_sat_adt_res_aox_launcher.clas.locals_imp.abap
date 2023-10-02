@@ -4,7 +4,6 @@
 
 
 CLASS lcl_dummy_content_handler IMPLEMENTATION.
-
   METHOD if_adt_rest_content_handler~deserialize.
     RETURN.
   ENDMETHOD.
@@ -14,10 +13,8 @@ CLASS lcl_dummy_content_handler IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD if_adt_rest_content_handler~serialize.
-    DATA(lt_params) = VALUE tihttpnvp(
-      ( name  = 'charset'
-        value = 'utf-8'  )
-    ).
+    DATA(lt_params) = VALUE tihttpnvp( ( name  = 'charset'
+                                         value = 'utf-8'  ) ).
 
     response_entity->set_binary_data( mv_launcher_xml ).
     response_entity->set_content_type( iv_media_type = me->if_adt_rest_content_handler~get_supported_content_type( )
@@ -27,5 +24,4 @@ CLASS lcl_dummy_content_handler IMPLEMENTATION.
   METHOD constructor.
     mv_launcher_xml = iv_launcher_xml.
   ENDMETHOD.
-
 ENDCLASS.

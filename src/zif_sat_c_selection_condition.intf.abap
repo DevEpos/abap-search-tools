@@ -1,5 +1,5 @@
 INTERFACE zif_sat_c_selection_condition
-  PUBLIC .
+  PUBLIC.
 
   CONSTANTS on TYPE vsconj VALUE 'ON' ##NO_TEXT.
   CONSTANTS or TYPE vsconj VALUE 'OR' ##NO_TEXT.
