@@ -98,8 +98,8 @@ CLASS zcl_sat_adt_cds_elinfo_reader IMPLEMENTATION.
         AND langu   = @sy-langu
     INTO @DATA(lv_description).
 
-    " .. TODO: use cl_src_adt_res_obj_struc to read the object structure to be able
-    " ........ to get the ADT URI for the specific AMDP method
+    " TODO: use cl_src_adt_res_obj_struc to read the object structure to be able
+    " to get the ADT URI for the specific AMDP method
     r_result = zcl_sat_adt_util=>create_adt_uri( iv_tadir_type = 'CLAS'
                                                  iv_name       = CONV #( lv_class ) ).
     r_result-description = lv_description.
@@ -122,7 +122,7 @@ CLASS zcl_sat_adt_cds_elinfo_reader IMPLEMENTATION.
         DATA(ls_tadir_props) = lo_cds_view->get_tadir_info( ).
 
         IF ls_header-source_type = zif_sat_c_cds_view_type=>table_function.
-          " ........ retrieve AMDP class from table
+          " retrieve AMDP class from table
           DATA(ls_amdp_ref) = create_amdp_object_ref( iv_entity_id = mv_cds_view_name ).
         ENDIF.
 

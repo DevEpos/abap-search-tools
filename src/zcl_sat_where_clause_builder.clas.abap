@@ -258,13 +258,13 @@ CLASS zcl_sat_where_clause_builder IMPLEMENTATION.
     CHECK it_sel IS NOT INITIAL.
 
     LOOP AT it_sel ASSIGNING FIELD-SYMBOL(<ls_selfield>).
-      " .... Handle incomplete options
+      " Handle incomplete options
       DATA(lv_fieldname) = COND #( WHEN <ls_selfield>-sqlfieldname IS NOT INITIAL
                                    THEN <ls_selfield>-sqlfieldname
                                    ELSE <ls_selfield>-field ).
       CHECK lv_fieldname IS NOT INITIAL.
 
-      " .... New fieldname
+      " New fieldname
       IF     lv_fieldname <> lv_old_field
          AND lv_old_field <> space.
         ls_field_range-convert-where_leng = ls_field_range-convert-clength.
@@ -315,7 +315,7 @@ CLASS zcl_sat_where_clause_builder IMPLEMENTATION.
       lv_old_field = lv_fieldname.
     ENDLOOP.
 
-    " .. Complete last field values
+    " Complete last field values
     IF ls_field_range-sqlfieldname IS NOT INITIAL.
       ls_field_range-convert-where_leng = ls_field_range-convert-clength.
       ls_field_range-convert-olength    = ls_field_range-convert-clength.
@@ -446,7 +446,7 @@ CLASS zcl_sat_where_clause_builder IMPLEMENTATION.
 
     FIELD-SYMBOLS <ls_option> TYPE ty_s_selopt.
 
-    " .. always use length of name to spare some spaces
+    " always use length of name to spare some spaces
     lv_fieldname_length = strlen( is_field_sel-sqlfieldname ).
     IF NOT lv_fieldname_length > 0.
       lv_fieldname_length = 1.
@@ -567,7 +567,7 @@ CLASS zcl_sat_where_clause_builder IMPLEMENTATION.
         WHEN zif_sat_c_sql_function=>upper.
           lv_fieldname = |UPPER( { iv_fieldname } )|.
 
-          " .........Convert low/high to upper case
+          " Convert low/high to upper case
           IF cv_low IS NOT INITIAL.
             TRANSLATE cv_low TO UPPER CASE.
           ENDIF.
@@ -589,7 +589,7 @@ CLASS zcl_sat_where_clause_builder IMPLEMENTATION.
   METHOD single_subquery_clause_new.
     DATA lt_subquery TYPE string_table.
 
-    " .. Always start a new row for a subquery clause
+    " Always start a new row for a subquery clause
     start_new_line( CHANGING ct_where  = ct_where
                              cv_where  = cv_where
                              cv_offset = cv_offset ).
@@ -615,13 +615,13 @@ CLASS zcl_sat_where_clause_builder IMPLEMENTATION.
                              CHANGING  ct_where       = ct_where
                                        cv_where       = cv_where
                                        cv_offset      = cv_offset ).
-      " .... Wrap subquery in parenthesis
+      " Wrap subquery in parenthesis
       where_single_word_new( EXPORTING iv_word        = '('
                                        iv_word_length = 1
                              CHANGING  ct_where       = ct_where
                                        cv_where       = cv_where
                                        cv_offset      = cv_offset ).
-      " .... Add subquery clause
+      " Add subquery clause
       SPLIT iv_subquery AT cl_abap_char_utilities=>cr_lf INTO TABLE lt_subquery.
       LOOP AT lt_subquery ASSIGNING FIELD-SYMBOL(<lv_query_line>).
         start_new_line( CHANGING ct_where  = ct_where
@@ -633,7 +633,7 @@ CLASS zcl_sat_where_clause_builder IMPLEMENTATION.
                                          cv_where       = cv_where
                                          cv_offset      = cv_offset ).
       ENDLOOP.
-      " .... Close the subquery clause
+      " Close the subquery clause
       where_single_word_new( EXPORTING iv_word        = ')'
                                        iv_word_length = 1
                              CHANGING  ct_where       = ct_where
@@ -641,7 +641,7 @@ CLASS zcl_sat_where_clause_builder IMPLEMENTATION.
                                        cv_offset      = cv_offset ).
 
     ELSE.
-      " .... Exists is not supported yet
+      " Exists is not supported yet
     ENDIF.
   ENDMETHOD.
 
@@ -663,7 +663,7 @@ CLASS zcl_sat_where_clause_builder IMPLEMENTATION.
 
     FIELD-SYMBOLS <l_f> TYPE c.
 
-    " .. Handle some special options
+    " Handle some special options
     CASE is_option-option.
 
       WHEN zif_sat_c_options=>not_in_subquery OR
@@ -681,7 +681,7 @@ CLASS zcl_sat_where_clause_builder IMPLEMENTATION.
         RETURN.
     ENDCASE.
 
-    " .. always use the original length of literals to prevent trailing spaces
+    " always use the original length of literals to prevent trailing spaces
     lv_lowlength = strlen( is_option-low ).
     IF NOT lv_lowlength > 0.
       lv_lowlength = 1.
@@ -795,17 +795,17 @@ CLASS zcl_sat_where_clause_builder IMPLEMENTATION.
     DATA lv_sql_pattern TYPE string.
     DATA lf_escape_needed TYPE abap_bool.
 
-    " .. TODO: If Between is active comparator and sql function is supplied
-    " .......... it has to be converted to the following pattern:
-    " .......... => [not (] function( field) >= value and function( field ) <= value [)]
+    " TODO: If Between is active comparator and sql function is supplied
+    " it has to be converted to the following pattern:
+    " => [not (] function( field) >= value and function( field ) <= value [)]
 
     CASE lv_option.
 
-      " .... Between Option -> low and high have to be filled
+      " Between Option -> low and high have to be filled
       WHEN zif_sat_c_options=>between OR
            zif_sat_c_options=>not_between.
 
-        " ...... Negate the option
+        " Negate the option
         IF lv_option = zif_sat_c_options=>not_between.
           where_single_word_new( EXPORTING iv_word        = 'NOT'
                                            iv_word_length = 3
@@ -835,11 +835,11 @@ CLASS zcl_sat_where_clause_builder IMPLEMENTATION.
                                          cv_where       = cv_where
                                          cv_offset      = cv_offset ).
 
-      " ..... Compare Pattern option i.e. '*word*'
+      " Compare Pattern option i.e. '*word*'
       WHEN zif_sat_c_options=>contains_pattern OR
            zif_sat_c_options=>not_contains_pattern.
 
-        " ...... Negate the option
+        " Negate the option
         IF lv_option = zif_sat_c_options=>not_contains_pattern.
           where_single_word_new( EXPORTING iv_word        = 'NOT'
                                            iv_word_length = 3
@@ -904,7 +904,7 @@ CLASS zcl_sat_where_clause_builder IMPLEMENTATION.
                                            cv_offset      = cv_offset ).
 
         ENDIF.
-        " .... The rest of the option can be handled in a simple manner
+        " The rest of the option can be handled in a simple manner
       WHEN OTHERS.
         where_single_word_new( EXPORTING iv_word        = CONV #( lv_option )
                                          iv_word_length = 2

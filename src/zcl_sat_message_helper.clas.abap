@@ -59,7 +59,7 @@ CLASS zcl_sat_message_helper IMPLEMENTATION.
               rv_message = lr_exception_message->get_message( ).
             ENDIF.
           CATCH cx_sy_move_cast_error.
-            " .......... Return message from non db browser exception
+            " Return message from non db browser exception
             IF if_to_screen = abap_true.
               MESSAGE ir_previous->get_text( ) TYPE iv_message_type DISPLAY LIKE iv_display_type.
             ELSE.

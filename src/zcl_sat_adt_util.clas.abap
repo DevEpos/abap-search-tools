@@ -173,7 +173,7 @@ CLASS zcl_sat_adt_util IMPLEMENTATION.
       ENDIF.
       " DATA(lo_uri_mapper) = cl_adt_uri_mapper=>get_instance( ).
       " TRY.
-      " ........ Method exists starting from NW 7.52
+      " Method exists starting from NW 7.52
       " rv_uri = lo_uri_mapper->if_adt_uri_mapper~get_adt_object_ref_uri(
       " name = iv_name
       " type = is_type
