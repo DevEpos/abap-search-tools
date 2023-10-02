@@ -147,49 +147,6 @@ CLASS lcl_cds_result_converter IMPLEMENTATION.
 
     cs_result-properties = VALUE #( BASE cs_result-properties
                                     ( key = 'SOURCE_TYPE' value = is_result_entry-cds_source_type ) ).
-    set_ddl_positional_uri( EXPORTING is_result_entity = is_result_entry
-                            CHANGING  cs_result        = cs_result ).
-  ENDMETHOD.
-
-  METHOD before_conversion.
-    " Positional URI is no longer needed for where used starting with NW 7.54
-    CHECK sy-saprl < '754'.
-
-    " Read sources of all found DDLS search results to get row/column where the name of
-    " the entity is starting
-    read_ddl_sources( ).
-  ENDMETHOD.
-
-  METHOD read_ddl_sources.
-    DATA lt_ddlname TYPE ty_lt_ddlname.
-
-    lt_ddlname = VALUE #( FOR res IN mt_query_result
-                          WHERE
-                                ( tadir_type = 'DDLS' )
-                          ( sign = 'I' option = 'EQ' low = res-alt_object_name ) ).
-
-    SELECT ddlname,
-           source
-       FROM ddddlsrc
-       WHERE as4local = 'A'
-         AND ddlname  IN @lt_ddlname
-    INTO CORRESPONDING FIELDS OF TABLE @mt_ddls_source.
-  ENDMETHOD.
-
-  METHOD set_ddl_positional_uri.
-    ASSIGN mt_ddls_source[ ddlname = is_result_entity-alt_object_name ] TO FIELD-SYMBOL(<ls_source>).
-    IF sy-subrc <> 0.
-      RETURN.
-    ENDIF.
-
-    zcl_sat_cds_view_factory=>get_entityname_pos_in_ddlsrc( EXPORTING iv_entity_id = is_result_entity-object_name
-                                                                      iv_source    = <ls_source>-source
-                                                            IMPORTING ev_column    = DATA(lv_col)
-                                                                      ev_row       = DATA(lv_row) ).
-    IF lv_col <> -1 AND lv_row <> -1.
-      " Adjust ADT URI
-      cs_result-uri = |{ cs_result-uri }{ zif_sat_c_adt_utils=>c_ddl_pos_uri_segment }{ lv_row },{ lv_col }|.
-    ENDIF.
   ENDMETHOD.
 ENDCLASS.
 

@@ -23,7 +23,6 @@ CLASS lcl_abap_unit IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD test_parse2.
-
     mr_cut = NEW #( 'SEPMRA_C_PD_PRODUCT' ).
     mr_cut->parse_cds( if_associations = abap_true ).
 

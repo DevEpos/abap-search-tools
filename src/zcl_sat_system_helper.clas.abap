@@ -70,7 +70,6 @@ CLASS zcl_sat_system_helper DEFINITION
     TYPES mtt_abap_callstack TYPE STANDARD TABLE OF mty_abap_callstack_entry WITH DEFAULT KEY.
 
     CLASS-DATA sv_cds_view_text_table TYPE tabname.
-    CLASS-DATA sf_is_750 TYPE abap_bool.
 
     CLASS-METHODS raise_general_error
       IMPORTING
@@ -80,10 +79,8 @@ ENDCLASS.
 
 CLASS zcl_sat_system_helper IMPLEMENTATION.
   METHOD check_abap_syntax.
-    " TODO: variable is assigned but never used (ABAP cleaner)
-    DATA lv_line TYPE i.
-    " TODO: variable is assigned but never used (ABAP cleaner)
-    DATA lv_word TYPE string.
+    DATA lv_line TYPE i ##NEEDED.
+    DATA lv_word TYPE string ##NEEDED.
 
     SELECT SINGLE * FROM trdir
     INTO @DATA(dir)
@@ -117,8 +114,7 @@ CLASS zcl_sat_system_helper IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD get_cds_view_text_table.
-    result = COND #(
-      WHEN sy-saprl >= 750 THEN 'DDDDLSRC02BT' ELSE 'DD02BT' ).
+    result = 'DDDDLSRC02BT'.
   ENDMETHOD.
 
   METHOD get_current_method_name.
