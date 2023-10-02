@@ -22,12 +22,12 @@ CLASS zcl_sat_adt_res_ddic_rep_acc DEFINITION
         no_client_columns TYPE string VALUE 'noClientCols',
       END OF c_filter_keys.
 
-    DATA ms_result            TYPE zif_sat_ty_adt_types=>ty_entity_field_info_result.
+    DATA ms_result TYPE zif_sat_ty_adt_types=>ty_entity_field_info_result.
     DATA mf_no_client_columns TYPE abap_bool.
-    DATA mt_paths             TYPE string_table.
-    DATA mv_access_mode       TYPE string.
-    DATA mv_object_type       TYPE zsat_entity_type.
-    DATA mv_object_name       TYPE string.
+    DATA mt_paths TYPE string_table.
+    DATA mv_access_mode TYPE string.
+    DATA mv_object_type TYPE zsat_entity_type.
+    DATA mv_object_name TYPE string.
 
     "! <p class="shorttext synchronized">Reads request parameters</p>
     METHODS get_parameters

@@ -46,8 +46,8 @@ CLASS zcl_sat_adt_cdswus_res_xml_h IMPLEMENTATION.
             EXIT.
           ENDIF.
           CALL TRANSFORMATION zsat_where_used_in_cds_entry
-            SOURCE XML io_reader
-            RESULT wusl_entry = ls_child.
+               SOURCE XML io_reader
+               RESULT wusl_entry = ls_child.
           APPEND ls_child TO <lt_children>.
         ENDWHILE.
       CATCH cx_sxml_parse_error ##NO_HANDLER.
@@ -69,8 +69,8 @@ CLASS zcl_sat_adt_cdswus_res_xml_h IMPLEMENTATION.
       LOOP AT <lt_children> ASSIGNING FIELD-SYMBOL(<ls_child>).
         DATA(ls_child) = CORRESPONDING zif_sat_ty_adt_types=>ty_where_used_in_cds( <ls_child> ).
         CALL TRANSFORMATION zsat_where_used_in_cds_entry
-         SOURCE wusl_entry = ls_child
-         RESULT XML io_writer.
+             SOURCE wusl_entry = ls_child
+             RESULT XML io_writer.
       ENDLOOP.
 
     ENDIF.

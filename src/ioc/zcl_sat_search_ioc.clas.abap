@@ -1,17 +1,19 @@
-"! <p class="shorttext synchronized" lang="en">IoC Container for Object search</p>
+"! <p class="shorttext synchronized">IoC Container for Object search</p>
 CLASS zcl_sat_search_ioc DEFINITION
   PUBLIC
   FINAL
   INHERITING FROM zcl_sat_base_ioc
-  CREATE PUBLIC .
+  CREATE PUBLIC.
 
   PUBLIC SECTION.
     INTERFACES zif_sat_c_object_search.
 
-    ALIASES:
-      c_search_type FOR zif_sat_c_object_search~c_search_type.
+    ALIASES c_search_type FOR zif_sat_c_object_search~c_search_type.
+
     METHODS constructor.
+
   PROTECTED SECTION.
+
   PRIVATE SECTION.
     CONSTANTS:
       BEGIN OF c_contracts,
@@ -27,7 +29,6 @@ CLASS zcl_sat_search_ioc DEFINITION
       END OF c_implementer.
 
 ENDCLASS.
-
 
 
 CLASS zcl_sat_search_ioc IMPLEMENTATION.
@@ -132,5 +133,4 @@ CLASS zcl_sat_search_ioc IMPLEMENTATION.
                             ( parameter = 'IO_VALIDATOR'     contract = c_contracts-query_validator )
                             ( parameter = 'IO_CONVERTER'     contract = c_contracts-query_converter ) ) ).
   ENDMETHOD.
-
 ENDCLASS.

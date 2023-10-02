@@ -1,12 +1,12 @@
 INTERFACE zif_sat_c_cds_assoc_type
-  PUBLIC .
+  PUBLIC.
 
-  CONSTANTS abstract_entity TYPE ddtargetkind VALUE 'A' ##no_text.
-  CONSTANTS custom_entity TYPE ddtargetkind VALUE 'C' ##no_text.
-  CONSTANTS entity TYPE ddtargetkind VALUE 'B' ##no_text.
-  CONSTANTS view TYPE ddtargetkind VALUE 'J' ##no_text.
-  CONSTANTS table TYPE ddtargetkind VALUE 'T' ##no_text.
-  CONSTANTS table_function TYPE ddtargetkind VALUE 'F' ##no_text.
-  CONSTANTS projection_entity TYPE ddtargetkind VALUE 'R' ##no_text.
+  CONSTANTS abstract_entity TYPE ddtargetkind VALUE 'A' ##NO_TEXT.
+  CONSTANTS custom_entity TYPE ddtargetkind VALUE 'C' ##NO_TEXT.
+  CONSTANTS entity TYPE ddtargetkind VALUE 'B' ##NO_TEXT.
+  CONSTANTS view TYPE ddtargetkind VALUE 'J' ##NO_TEXT.
+  CONSTANTS table TYPE ddtargetkind VALUE 'T' ##NO_TEXT.
+  CONSTANTS table_function TYPE ddtargetkind VALUE 'F' ##NO_TEXT.
+  CONSTANTS projection_entity TYPE ddtargetkind VALUE 'R' ##NO_TEXT.
 
 ENDINTERFACE.
