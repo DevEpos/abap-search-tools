@@ -24,6 +24,23 @@
     "parser_error": true,
     "superclass_final": false,
     "unknown_types": false,
-    "xml_consistency": true
+    "xml_consistency": true,
+    "object_naming": {
+      "clas": "^ZC(L|X)\\_SAT\\_",
+      "intf": "^ZIF\\_SAT\\_",
+      "prog": "^ZSAT",
+      "fugr": "^ZSAT",
+      "tabl": "^ZSAT",
+      "ttyp": "^ZSAT",
+      "dtel": "^ZSAT",
+      "doma": "^ZSAT",
+      "msag": "^ZSAT",
+      "tran": "^ZSAT",
+      "enqu": "^EZSAT",
+      "auth": "^ZSAT",
+      "shlp": "^ZSAT",
+      "xslt": "^ZSAT",
+      "enho": "^ZSAT"
+    }
   }
 }
