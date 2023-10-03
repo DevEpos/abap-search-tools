@@ -4,7 +4,8 @@
   "description": "ABAP Search and Analysis Tools",
   "scripts": {
     "lint": "abaplint -f summary",
-    "lint:file": "abaplint -f summary > lint-issues.txt"
+    "lint:file": "abaplint -f summary > lint-issues.txt",
+    "format": "abap-cleanerc.exe --sourcedir src --recursive --overwrite --release 740 --profile abapcleaner.cfj"
   },
   "repository": {
     "type": "git",
