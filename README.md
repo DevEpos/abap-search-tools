@@ -1,4 +1,3 @@
-![](https://img.shields.io/badge/ABAP-v7.55+-green)
 [![abap package version](https://img.shields.io/endpoint?url=https://shield.abap.space/version-shield-json/github/DevEpos/abap-search-tools/src/zif_sat_version.intf.abap/version&label=version)](https://github/DevEpos/abap-search-tools/src/zif_sat_version.intf.abap)
 
 # abap-search-tools
