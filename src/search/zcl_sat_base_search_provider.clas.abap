@@ -256,6 +256,7 @@ CLASS zcl_sat_base_search_provider DEFINITION
 
     DATA mf_devclass_join_added TYPE abap_bool.
     DATA mf_distinct_required TYPE abap_bool.
+    DATA mo_logger TYPE REF TO zcl_sat_os_logger.
 
     METHODS get_select_string
       RETURNING
@@ -282,6 +283,12 @@ CLASS zcl_sat_base_search_provider DEFINITION
         it_values     TYPE zif_sat_ty_object_search=>ty_t_value_range
       RETURNING
         VALUE(result) TYPE zif_sat_ty_object_search=>ty_t_value_range.
+
+    METHODS log_success.
+
+    METHODS log_error
+      IMPORTING
+        iv_error TYPE string.
 ENDCLASS.
 
 
@@ -291,18 +298,25 @@ CLASS zcl_sat_base_search_provider IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD zif_sat_object_search_provider~search.
+    mo_logger = NEW #( iv_search_type = io_query->mv_type iv_max_entries = io_query->mv_max_rows ).
     mo_search_query = io_query.
     ms_search_engine_params = is_search_engine_params.
 
     reset( ).
-
     prepare_search( ).
 
     IF search_possible( ).
       execute_sql_query( ).
+
+      mo_logger->start_timer( ).
       do_after_search( ).
+      log_success( ).
+
       et_result = mt_result.
     ENDIF.
+
+    CLEAR mo_logger.
+    reset( ).
   ENDMETHOD.
 
   METHOD execute_sql_query.
@@ -315,6 +329,9 @@ CLASS zcl_sat_base_search_provider IMPLEMENTATION.
     DATA(lv_max_rows) = COND #( WHEN ms_search_engine_params-get_all = abap_true
                                 THEN 0
                                 ELSE mo_search_query->mv_max_rows + 1 ).
+
+    mo_logger->set_group_by_active( xsdbool( mt_group_by IS NOT INITIAL ) ).
+    mo_logger->start_timer( ).
 
     TRY.
         IF mf_distinct_required = abap_true.
@@ -354,9 +371,11 @@ CLASS zcl_sat_base_search_provider IMPLEMENTATION.
               UP TO @lv_max_rows ROWS.
           ENDIF.
         ENDIF.
-        " TODO: variable is assigned but never used (ABAP cleaner)
-        DATA(lv_sql) = get_select_string( ).
+
+        mo_logger->stop_timer( ).
       CATCH cx_sy_open_sql_error INTO DATA(lx_sql_error).
+        log_error( lx_sql_error->get_text( ) ).
+
         RAISE EXCEPTION TYPE zcx_sat_object_search
           EXPORTING previous = lx_sql_error.
     ENDTRY.
@@ -483,6 +502,9 @@ CLASS zcl_sat_base_search_provider IMPLEMENTATION.
     TYPES ty_date_range TYPE RANGE OF dats.
     DATA ls_date_range TYPE LINE OF ty_date_range.
 
+    mo_logger->add_filter_count( 1 ).
+    mo_logger->add_filter_value_count( lines( it_values ) ).
+
     LOOP AT it_values INTO DATA(ls_value).
       ls_date_range = ls_value-low.
       mt_criteria = VALUE #( BASE mt_criteria
@@ -495,6 +517,9 @@ CLASS zcl_sat_base_search_provider IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD add_option_filter.
+    mo_logger->add_filter_count( 1 ).
+    mo_logger->add_filter_value_count( lines( it_values ) ).
+
     mt_criteria = VALUE #( BASE mt_criteria
                            ( LINES OF VALUE #( FOR value IN it_values
                                                ( sqlfieldname = iv_fieldname
@@ -538,6 +563,9 @@ CLASS zcl_sat_base_search_provider IMPLEMENTATION.
     ENDIF.
 
     new_and_cond_list( ).
+
+    mo_logger->add_filter_value_count( ( lines( lt_search_terms ) * lines( it_field_names ) ) ).
+    mo_logger->add_filter_count( lines( it_field_names ) ).
 
     LOOP AT lt_search_terms ASSIGNING FIELD-SYMBOL(<ls_term>).
       DATA(lv_tabix) = sy-tabix.
@@ -585,6 +613,8 @@ CLASS zcl_sat_base_search_provider IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD create_from_clause.
+    mo_logger->set_base_table( ms_join_def-primary_table ).
+    mo_logger->set_join_count( lines( ms_join_def-tables ) ).
     mt_from = zcl_sat_join_helper=>build_from_clause_for_join_def( is_join_def = ms_join_def ).
   ENDMETHOD.
 
@@ -645,6 +675,8 @@ CLASS zcl_sat_base_search_provider IMPLEMENTATION.
   METHOD create_select_clause.
     CHECK: mt_select IS NOT INITIAL,
            lines( mt_select ) > 1.
+
+    mo_logger->set_distinct_active( mf_distinct_required ).
 
     DATA(lv_line_count) = lines( mt_select ).
     LOOP AT mt_select ASSIGNING FIELD-SYMBOL(<lv_select>).
@@ -749,7 +781,8 @@ CLASS zcl_sat_base_search_provider IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD get_select_string.
-    add_select_part( EXPORTING iv_part_name = 'SELECT DISTINCT'
+    add_select_part( EXPORTING iv_part_name = 'SELECT' &&
+                                              COND #( WHEN mf_distinct_required = abap_true THEN ` DISTINCT` )
                                it_part      = mt_select
                      CHANGING  cv_select    = rv_result ).
     add_select_part( EXPORTING iv_part_name = 'FROM'
@@ -832,5 +865,19 @@ CLASS zcl_sat_base_search_provider IMPLEMENTATION.
                                               option = zif_sat_c_options=>equals
                                               low    = subpackage-package ) ) ) ).
     ENDLOOP.
+  ENDMETHOD.
+
+  METHOD log_success.
+    mo_logger->stop_timer( ).
+    mo_logger->set_selected_entries( lines( mt_result ) ).
+    mo_logger->set_select_stmnt( get_select_string( ) ).
+    mo_logger->write_log( ).
+  ENDMETHOD.
+
+  METHOD log_error.
+    mo_logger->stop_timer( ).
+    mo_logger->set_select_stmnt( get_select_string( ) ).
+    mo_logger->set_error( iv_error ).
+    mo_logger->write_log( ).
   ENDMETHOD.
 ENDCLASS.
