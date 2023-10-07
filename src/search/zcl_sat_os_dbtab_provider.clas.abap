@@ -176,7 +176,7 @@ CLASS zcl_sat_os_dbtab_provider IMPLEMENTATION.
           add_date_filter( iv_fieldname = c_fields-created_date
                            it_values    = <ls_option>-value_range ).
         WHEN c_general_search_options-package.
-          add_package_filter( iv_fieldname = c_fields-development_package
+          add_package_filter( iv_fieldname = |{ c_base_table }~{ c_fields-development_package }|
                               it_values    = <ls_option>-value_range ).
 
         WHEN c_general_search_options-software_component.
