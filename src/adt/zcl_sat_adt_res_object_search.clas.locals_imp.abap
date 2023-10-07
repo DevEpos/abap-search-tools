@@ -147,8 +147,11 @@ CLASS lcl_cds_result_converter IMPLEMENTATION.
 
     cs_result-properties = VALUE #( BASE cs_result-properties
                                     ( key = 'SOURCE_TYPE' value = is_result_entry-cds_source_type ) ).
-    set_ddl_positional_uri( EXPORTING is_result_entity = is_result_entry
-                            CHANGING  cs_result        = cs_result ).
+
+    IF sy-subrc < '754'.
+      set_ddl_positional_uri( EXPORTING is_result_entity = is_result_entry
+                              CHANGING  cs_result        = cs_result ).
+    ENDIF.
   ENDMETHOD.
 
   METHOD before_conversion.
