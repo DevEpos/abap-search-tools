@@ -32,6 +32,7 @@ CLASS zcl_sat_os_subp_meth_impl DEFINITION
 
     METHODS configure_incl_filters.
     METHODS read_method_infos_n_filter2.
+    METHODS add_fixed_incl_filters.
 ENDCLASS.
 
 
@@ -58,25 +59,16 @@ CLASS zcl_sat_os_subp_meth_impl IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD prepare_search.
-    set_base_select_table( iv_entity = zif_sat_c_select_source_id=>zsat_i_classinterface
-                           iv_alias  = c_clif_alias ).
+    set_base_select_table( iv_entity = zif_sat_c_select_source_id=>zsat_i_reposource
+                           iv_alias  = c_alias_names-includes ).
 
-    add_join_table( iv_join_table = |{ zif_sat_c_select_source_id=>zsat_i_reposource }|
-                    iv_alias      = c_alias_names-includes
+    add_join_table( iv_join_table = |{ zif_sat_c_select_source_id=>zsat_i_classinterface }|
+                    iv_alias      = c_clif_alias
                     it_conditions = VALUE #( and_or = zif_sat_c_selection_condition=>and
-                                             ( field           = 'objectname'
-                                               ref_field       = c_fields-classintf
-                                               ref_table_alias = c_clif_alias
-                                               type            = zif_sat_c_join_cond_type=>field )
-                                             ( field           = 'maintype'
-                                               tabname_alias   = c_alias_names-includes
-                                               type            = zif_sat_c_join_cond_type=>filter
-                                               value           = 'C' )
-                                             ( field           = 'includekind'
-                                               tabname_alias   = c_alias_names-includes
-                                               type            = zif_sat_c_join_cond_type=>filter
-                                               value           = 'M*'
-                                               operator        = zif_sat_c_operator=>like ) ) ).
+                                             ( field           = c_fields-classintf
+                                               ref_field       = 'objectname'
+                                               ref_table_alias = c_alias_names-includes
+                                               type            = zif_sat_c_join_cond_type=>field ) ) ).
 
     add_select_field( iv_fieldname       = c_fields-classintf
                       iv_fieldname_alias = c_result_fields-object_name
@@ -106,11 +98,13 @@ CLASS zcl_sat_os_subp_meth_impl IMPLEMENTATION.
 
     add_order_by( iv_fieldname = c_fields-classintf iv_entity = c_clif_alias ).
 
+    add_fixed_incl_filters( ).
+    configure_incl_filters( ).
+
     add_search_terms_to_search( iv_target      = zif_sat_c_object_search=>c_search_fields-object_name_input_key
                                 it_field_names = VALUE #( ( |{ c_clif_alias }~{ c_fields-classintf }| ) ) ).
     set_type_filter_to_class( ).
     configure_class_filters( ).
-    configure_incl_filters( ).
 
     new_and_cond_list( ).
   ENDMETHOD.
@@ -170,5 +164,12 @@ CLASS zcl_sat_os_subp_meth_impl IMPLEMENTATION.
         DELETE mt_result.
       ENDIF.
     ENDLOOP.
+  ENDMETHOD.
+
+  METHOD add_fixed_incl_filters.
+    add_filter(
+        is_filter = VALUE #( field = |{ c_alias_names-includes }~maintype| sign = 'I' option = 'EQ' low = 'C' ) ).
+    add_filter(
+        is_filter = VALUE #( field = |{ c_alias_names-includes }~includekind| sign = 'I' option = 'CP' low = 'M*' ) ).
   ENDMETHOD.
 ENDCLASS.

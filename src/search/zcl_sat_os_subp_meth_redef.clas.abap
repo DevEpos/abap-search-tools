@@ -50,21 +50,17 @@ CLASS zcl_sat_os_subp_meth_redef IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD prepare_search.
-    set_base_select_table( iv_entity = zif_sat_c_select_source_id=>zsat_i_classinterface
-                           iv_alias  = c_clif_alias ).
+    set_base_select_table( iv_entity = zif_sat_c_select_source_id=>seoredef
+                           iv_alias  = c_alias_names-method ).
 
     " join to class/interface always necessary because of devclass/tadir type
-    add_join_table( iv_join_table = |{ zif_sat_c_select_source_id=>seoredef }|
-                    iv_alias      = c_alias_names-method
+    add_join_table( iv_join_table = |{ zif_sat_c_select_source_id=>zsat_i_classinterface }|
+                    iv_alias      = c_clif_alias
                     it_conditions = VALUE #( and_or = zif_sat_c_selection_condition=>and
-                                             ( field           = 'clsname'
-                                               ref_field       = c_fields-classname
-                                               ref_table_alias = c_clif_alias
-                                               type            = zif_sat_c_join_cond_type=>field )
-                                             ( field           = 'mtdabstrct'
-                                               tabname_alias   = c_alias_names-method
-                                               type            = zif_sat_c_join_cond_type=>filter
-                                               value           = abap_false ) ) ).
+                                             ( field           = c_fields-classname
+                                               ref_field       = 'clsname'
+                                               ref_table_alias = c_alias_names-method
+                                               type            = zif_sat_c_join_cond_type=>field ) ) ).
 
     add_select_field( iv_fieldname       = c_fields-classname
                       iv_fieldname_alias = c_result_fields-object_name
@@ -86,9 +82,11 @@ CLASS zcl_sat_os_subp_meth_redef IMPLEMENTATION.
     add_order_by( iv_fieldname = c_fields-classname iv_entity = c_clif_alias ).
 
     configure_class_filters( ).
-    configure_method_filters( ).
     add_search_terms_to_search( iv_target      = zif_sat_c_object_search=>c_search_fields-object_name_input_key
                                 it_field_names = VALUE #( ( |{ c_clif_alias }~{ c_fields-classname }| ) ) ).
+
+    add_filter( VALUE #( field = |{ c_alias_names-method }~mtdabstrct| sign = 'I' option = 'EQ' low = abap_false ) ).
+    configure_method_filters( ).
     add_method_name_filter( ).
 
     new_and_cond_list( ).
