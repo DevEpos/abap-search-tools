@@ -11,48 +11,6 @@
     <FIXPT>X</FIXPT>
     <UNICODE>X</UNICODE>
    </VSEOCLASS>
-   <DESCRIPTIONS>
-    <SEOCOMPOTX>
-     <CMPNAME>CREATE_CDS_ELEM_INFO_RES_CH</CMPNAME>
-     <LANGU>E</LANGU>
-     <DESCRIPT>Create content handler for CDS View element info</DESCRIPT>
-    </SEOCOMPOTX>
-    <SEOCOMPOTX>
-     <CMPNAME>CREATE_CDS_SECONDARY_RES_CH</CMPNAME>
-     <LANGU>E</LANGU>
-     <DESCRIPT>Create content handler for CDS secondary elements</DESCRIPT>
-    </SEOCOMPOTX>
-    <SEOCOMPOTX>
-     <CMPNAME>CREATE_GENERIC_ELEMINFO_RES_CH</CMPNAME>
-     <LANGU>E</LANGU>
-     <DESCRIPT>Create content handler for generic element info</DESCRIPT>
-    </SEOCOMPOTX>
-    <SEOCOMPOTX>
-     <CMPNAME>CREATE_GEN_ELEMINFOS_RES_CH</CMPNAME>
-     <LANGU>E</LANGU>
-     <DESCRIPT>Create content handler for generic element infos</DESCRIPT>
-    </SEOCOMPOTX>
-    <SEOCOMPOTX>
-     <CMPNAME>CREATE_NAV_TARGETS_REF_CH</CMPNAME>
-     <LANGU>E</LANGU>
-     <DESCRIPT>Create content handler for navigation targets</DESCRIPT>
-    </SEOCOMPOTX>
-    <SEOCOMPOTX>
-     <CMPNAME>CREATE_SEARCH_RESULT_CH</CMPNAME>
-     <LANGU>E</LANGU>
-     <DESCRIPT>Create content handler for search result</DESCRIPT>
-    </SEOCOMPOTX>
-    <SEOCOMPOTX>
-     <CMPNAME>CREATE_TABLE_ELEM_INFO_RES_CH</CMPNAME>
-     <LANGU>E</LANGU>
-     <DESCRIPT>Create content handler for DB Table element info</DESCRIPT>
-    </SEOCOMPOTX>
-    <SEOCOMPOTX>
-     <CMPNAME>CREATE_VIEW_ELEM_INFO_RES_CH</CMPNAME>
-     <LANGU>E</LANGU>
-     <DESCRIPT>Create content handler for DB View element info</DESCRIPT>
-    </SEOCOMPOTX>
-   </DESCRIPTIONS>
   </asx:values>
  </asx:abap>
 </abapGit>
