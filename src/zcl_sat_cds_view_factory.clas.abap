@@ -497,20 +497,8 @@ CLASS zcl_sat_cds_view_factory IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD get_source_type.
-    IF sy-saprl >= 751.
-      DATA(lv_select) = 'SOURCE_TYPE'.
-      SELECT SINGLE (lv_select)
-        FROM ddddlsrc
-        WHERE ddlname = @iv_ddl_name
-      INTO @rv_source_type.
-
-      IF sy-subrc <> 0.
-        rv_source_type = zif_sat_c_cds_view_type=>view.
-      ENDIF.
-    ELSE.
-      "  assume ddls is a normal view
-      rv_source_type = zif_sat_c_cds_view_type=>view.
-    ENDIF.
+    " The field 'source_type' is not available in DDDDLSRC before 7.51
+    rv_source_type = zif_sat_c_cds_view_type=>view.
   ENDMETHOD.
 
   METHOD on_annotation_read_request.
