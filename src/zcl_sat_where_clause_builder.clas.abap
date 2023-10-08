@@ -556,36 +556,10 @@ CLASS zcl_sat_where_clause_builder IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD add_fieldname_to_clause.
-    DATA lv_fieldname LIKE iv_fieldname.
-
-    lv_fieldname = iv_fieldname.
-
-    IF iv_sql_function IS NOT INITIAL.
-
-      CASE iv_sql_function.
-
-        WHEN zif_sat_c_sql_function=>upper.
-          IF sy-saprl >= 751.
-            lv_fieldname = |UPPER( { iv_fieldname } )|.
-
-            "  Convert low/high to upper case
-            IF cv_low IS NOT INITIAL.
-              TRANSLATE cv_low TO UPPER CASE.
-            ENDIF.
-
-            IF cv_high IS NOT INITIAL.
-              TRANSLATE cv_high TO UPPER CASE.
-            ENDIF.
-          ENDIF.
-
-      ENDCASE.
-    ENDIF.
-
-    where_single_word_new( EXPORTING iv_word        = CONV #( lv_fieldname )
-                                     iv_word_length = strlen( lv_fieldname )
+    where_single_word_new( EXPORTING iv_word        = CONV #( iv_fieldname )
+                                     iv_word_length = strlen( iv_fieldname )
                            CHANGING  ct_where       = ct_where
-                                     cv_where       = cv_where
-                                     cv_offset      = cv_offset ).
+                                     cv_where       = cv_where ).
   ENDMETHOD.
 
   METHOD single_subquery_clause_new.

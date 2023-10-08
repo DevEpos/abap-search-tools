@@ -94,7 +94,7 @@ CLASS zcl_sat_adt_res_element_info IMPLEMENTATION.
                                                                          devclass    = ls_entity-devclass
                                                                          description = ls_entity-description ).
 
-    IF mv_object_type = zif_sat_c_entity_type=>cds_view AND sy-saprl < '754'.
+    IF mv_object_type = zif_sat_c_entity_type=>cds_view.
       " Take source_code and create uri so it can be used in Where-Used (<= NW 7.54)
       zcl_sat_cds_view_factory=>get_entityname_pos_in_ddlsrc( EXPORTING iv_entity_id = ls_entity-entity_id
                                                                         iv_source    = ls_entity-source_code
