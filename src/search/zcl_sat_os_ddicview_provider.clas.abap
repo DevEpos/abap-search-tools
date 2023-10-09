@@ -62,7 +62,7 @@ CLASS zcl_sat_os_ddicview_provider IMPLEMENTATION.
                         | FROM { get_cds_sql_name( |{ zif_sat_c_select_source_id=>zsat_i_tablefield }| ) } | && c_cr_lf &&
                         | WHERE |.
     mv_basetab_subquery = |SELECT DISTINCT viewname | && c_cr_lf &&
-                          | FROM {  zif_sat_c_select_source_id=>dd26s } | && c_cr_lf &&
+                          | FROM { zif_sat_c_select_source_id=>dd26s } | && c_cr_lf &&
                           | WHERE |.
   ENDMETHOD.
 
