@@ -202,13 +202,13 @@ CLASS zcl_sat_os_subp_meth_impl_odb IMPLEMENTATION.
     create_where_clause( ).
     create_from_clause( ).
 
-    SELECT classname,
-           developmentpackage,
-           tadirtype
+    SELECT clif~classname,
+           clif~developmentpackage,
+           clif~tadirtype
       FROM (mt_from)
       FOR ALL ENTRIES IN @mt_result
       WHERE (mt_where)
-        AND classname = @mt_result-object_name
+        AND clif~classname = @mt_result-object_name
       INTO CORRESPONDING FIELDS OF TABLE @lt_class_result.
 
     IF sy-subrc <> 0.
