@@ -559,7 +559,8 @@ CLASS zcl_sat_where_clause_builder IMPLEMENTATION.
     where_single_word_new( EXPORTING iv_word        = CONV #( iv_fieldname )
                                      iv_word_length = strlen( iv_fieldname )
                            CHANGING  ct_where       = ct_where
-                                     cv_where       = cv_where ).
+                                     cv_where       = cv_where
+                                     cv_offset      = cv_offset ).
   ENDMETHOD.
 
   METHOD single_subquery_clause_new.
