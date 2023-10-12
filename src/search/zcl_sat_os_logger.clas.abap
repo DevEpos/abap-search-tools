@@ -7,8 +7,8 @@ CLASS zcl_sat_os_logger DEFINITION
   PUBLIC SECTION.
     METHODS constructor
       IMPORTING
-        iv_search_type TYPE zif_sat_ty_object_search=>ty_search_type
-        iv_max_entries TYPE i.
+        io_query           TYPE REF TO zif_sat_object_search_query
+        is_search_settings TYPE zif_sat_ty_object_search=>ty_s_search_engine_params.
 
     METHODS start_timer.
     METHODS stop_timer.
@@ -43,6 +43,7 @@ CLASS zcl_sat_os_logger DEFINITION
       IMPORTING
         iv_value TYPE i.
 
+
     METHODS set_select_stmnt
       IMPORTING
         iv_value TYPE string.
@@ -54,13 +55,21 @@ CLASS zcl_sat_os_logger DEFINITION
   PRIVATE SECTION.
     DATA ms_log_entry TYPE zsatsearchlog.
     DATA mo_timer TYPE REF TO if_abap_runtime.
+
+    METHODS set_query_hash
+      IMPORTING
+        io_query TYPE ref to zif_sat_object_search_query
+        is_search_settings type zif_sat_ty_object_search=>ty_s_search_engine_params.
 ENDCLASS.
 
 
 CLASS zcl_sat_os_logger IMPLEMENTATION.
   METHOD constructor.
-    ms_log_entry-search_type = iv_search_type.
-    ms_log_entry-max_entries = iv_max_entries.
+    ms_log_entry-search_type = io_query->mv_type.
+    ms_log_entry-max_entries = io_query->mv_max_rows.
+    set_query_hash(
+      io_query = io_query
+      is_search_settings = is_search_settings ).
   ENDMETHOD.
 
   METHOD start_timer.
@@ -113,6 +122,39 @@ CLASS zcl_sat_os_logger IMPLEMENTATION.
 
   METHOD set_select_stmnt.
     ms_log_entry-select_stmnt = iv_value.
+  ENDMETHOD.
+
+  METHOD set_query_hash.
+    DATA lv_settings TYPE string.
+    DATA lv_sep TYPE string.
+
+    DATA(lv_query) = io_query->to_string( ).
+    lv_query = lv_query+1.
+
+    lv_settings = lv_settings && |"combineOptionsWithAnd":{ COND string( WHEN is_search_settings-use_and_cond_for_options = abap_true
+                                                                         THEN 'true'
+                                                                         ELSE 'false' ) },| &&
+         |"maxRows":{ io_query->mv_max_rows }|.
+
+    IF is_search_settings-custom_options IS NOT INITIAL.
+      lv_settings = |{ lv_settings },|.
+      CLEAR lv_sep.
+
+      LOOP AT is_search_settings-custom_options REFERENCE INTO DATA(lr_cust_opt).
+        lv_settings = |{ lv_settings }{ lv_sep }"{ lr_cust_opt->key }":"{ lr_cust_opt->value }"|.
+        lv_sep = ','.
+      ENDLOOP.
+    ENDIF.
+
+    lv_query = |\{{ lv_settings },{ lv_query }|.
+
+    TRY.
+        cl_abap_message_digest=>calculate_hash_for_char( EXPORTING if_data       = lv_query
+                                                         IMPORTING ef_hashstring = DATA(lv_hashed_value) ).
+        ms_log_entry-query_hash = lv_hashed_value.
+      CATCH cx_abap_message_digest.
+        ms_log_entry-query_hash = '-'.
+    ENDTRY.
   ENDMETHOD.
 
   METHOD write_log.
