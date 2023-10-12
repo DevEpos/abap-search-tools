@@ -101,7 +101,7 @@ CLASS zcl_sat_object_search_query IMPLEMENTATION.
 
     IF mt_search_options IS NOT INITIAL.
       result = |{ result }{ lv_sep }"searchOptions":[|.
-      clear lv_sep.
+      CLEAR lv_sep.
 
       LOOP AT mt_search_options REFERENCE INTO DATA(lr_option)
            GROUP BY lr_option->target.

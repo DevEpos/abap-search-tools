@@ -43,7 +43,6 @@ CLASS zcl_sat_os_logger DEFINITION
       IMPORTING
         iv_value TYPE i.
 
-
     METHODS set_select_stmnt
       IMPORTING
         iv_value TYPE string.
@@ -58,8 +57,8 @@ CLASS zcl_sat_os_logger DEFINITION
 
     METHODS set_query_hash
       IMPORTING
-        io_query TYPE ref to zif_sat_object_search_query
-        is_search_settings type zif_sat_ty_object_search=>ty_s_search_engine_params.
+        io_query           TYPE REF TO zif_sat_object_search_query
+        is_search_settings TYPE zif_sat_ty_object_search=>ty_s_search_engine_params.
 ENDCLASS.
 
 
@@ -67,9 +66,8 @@ CLASS zcl_sat_os_logger IMPLEMENTATION.
   METHOD constructor.
     ms_log_entry-search_type = io_query->mv_type.
     ms_log_entry-max_entries = io_query->mv_max_rows.
-    set_query_hash(
-      io_query = io_query
-      is_search_settings = is_search_settings ).
+    set_query_hash( io_query           = io_query
+                    is_search_settings = is_search_settings ).
   ENDMETHOD.
 
   METHOD start_timer.
