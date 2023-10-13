@@ -13,6 +13,7 @@ Legend
 -------------------
 
 ! Complete overhaul of search API
+! Include projection views in CDS Metadata Index
 + New filters 'changedby', 'changed', 'comp', 'appl' for CDS search
 + New filters 'changedby', 'changed', 'comp', 'appl', 'enhcat', 'maintflag', 'storetype', 
   'buffering', 'buffertype', 'dataclass', 'sizecat' for DB Table search
