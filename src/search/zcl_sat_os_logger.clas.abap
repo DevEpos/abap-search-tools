@@ -7,8 +7,7 @@ CLASS zcl_sat_os_logger DEFINITION
   PUBLIC SECTION.
     METHODS constructor
       IMPORTING
-        iv_search_type TYPE zif_sat_ty_object_search=>ty_search_type
-        iv_max_entries TYPE i.
+        io_query TYPE REF TO zif_sat_object_search_query.
 
     METHODS start_timer.
     METHODS stop_timer.
@@ -51,19 +50,29 @@ CLASS zcl_sat_os_logger DEFINITION
       IMPORTING
         iv_value TYPE tabname.
 
+    METHODS set_query_hash
+      IMPORTING
+        io_query           TYPE REF TO zif_sat_object_search_query
+        is_search_settings TYPE zif_sat_ty_object_search=>ty_s_search_engine_params.
+
   PRIVATE SECTION.
     DATA ms_log_entry TYPE zsatsearchlog.
     DATA mo_timer TYPE REF TO if_abap_runtime.
+    DATA mf_log_active TYPE abap_bool.
+
 ENDCLASS.
 
 
 CLASS zcl_sat_os_logger IMPLEMENTATION.
   METHOD constructor.
-    ms_log_entry-search_type = iv_search_type.
-    ms_log_entry-max_entries = iv_max_entries.
+    mf_log_active = zcl_sat_log=>is_search_log_active( ).
+    ms_log_entry-search_type = io_query->mv_type.
+    ms_log_entry-max_entries = io_query->mv_max_rows.
   ENDMETHOD.
 
   METHOD start_timer.
+    CHECK mf_log_active = abap_true.
+
     IF mo_timer IS INITIAL.
       mo_timer = cl_abap_runtime=>create_hr_timer( ).
     ENDIF.
@@ -72,6 +81,7 @@ CLASS zcl_sat_os_logger IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD stop_timer.
+    CHECK mf_log_active = abap_true.
     CHECK mo_timer IS BOUND.
 
     DATA(lv_duration) = mo_timer->get_runtime( ).
@@ -115,9 +125,29 @@ CLASS zcl_sat_os_logger IMPLEMENTATION.
     ms_log_entry-select_stmnt = iv_value.
   ENDMETHOD.
 
-  METHOD write_log.
-    CHECK zcl_sat_log=>is_search_log_active( ).
+  METHOD set_query_hash.
+    CHECK mf_log_active = abap_true.
 
+    CALL TRANSFORMATION id
+         OPTIONS initial_components = 'suppress'
+         SOURCE terms    = io_query->mt_search_term
+                max_rows = io_query->mv_max_rows
+                options  = io_query->mt_search_options
+                type     = io_query->mv_type
+                settings = is_search_settings
+         RESULT XML DATA(lv_query).
+
+    TRY.
+        cl_abap_message_digest=>calculate_hash_for_raw( EXPORTING if_data       = lv_query
+                                                        IMPORTING ef_hashstring = DATA(lv_hashed_value) ).
+        ms_log_entry-query_hash = lv_hashed_value.
+      CATCH cx_abap_message_digest.
+        ms_log_entry-query_hash = '-'.
+    ENDTRY.
+  ENDMETHOD.
+
+  METHOD write_log.
+    CHECK mf_log_active = abap_true.
     zcl_sat_log=>write_log_entry( ms_log_entry ).
   ENDMETHOD.
 
