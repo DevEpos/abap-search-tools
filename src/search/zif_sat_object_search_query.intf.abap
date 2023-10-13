@@ -39,8 +39,4 @@ INTERFACE zif_sat_object_search_query
     IMPORTING
       iv_max_rows TYPE i.
 
-  "! Converts query into a string
-  METHODS to_string
-    RETURNING
-      VALUE(result) TYPE string.
 ENDINTERFACE.

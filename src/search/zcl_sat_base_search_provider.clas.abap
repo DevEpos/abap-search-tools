@@ -303,8 +303,7 @@ CLASS zcl_sat_base_search_provider IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD zif_sat_object_search_provider~search.
-    mo_logger = NEW #( io_query           = io_query
-                       is_search_settings = is_search_engine_params ).
+    mo_logger = NEW #( io_query ).
     mo_search_query = io_query.
     ms_search_engine_params = is_search_engine_params.
 
@@ -832,6 +831,8 @@ CLASS zcl_sat_base_search_provider IMPLEMENTATION.
 
   METHOD log_sql_info.
     mo_logger->set_base_table( ms_join_def-primary_table ).
+    mo_logger->set_query_hash( io_query = mo_search_query
+                               is_search_settings = ms_search_engine_params ).
     mo_logger->set_join_count( lines( ms_join_def-tables ) ).
     mo_logger->set_distinct_active( xsdbool( mf_distinct_required = abap_true AND mt_group_by IS INITIAL ) ).
     mo_logger->set_group_by_active( xsdbool( mt_group_by IS NOT INITIAL ) ).

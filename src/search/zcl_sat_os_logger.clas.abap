@@ -7,8 +7,7 @@ CLASS zcl_sat_os_logger DEFINITION
   PUBLIC SECTION.
     METHODS constructor
       IMPORTING
-        io_query           TYPE REF TO zif_sat_object_search_query
-        is_search_settings TYPE zif_sat_ty_object_search=>ty_s_search_engine_params.
+        io_query TYPE REF TO zif_sat_object_search_query.
 
     METHODS start_timer.
     METHODS stop_timer.
@@ -51,26 +50,29 @@ CLASS zcl_sat_os_logger DEFINITION
       IMPORTING
         iv_value TYPE tabname.
 
-  PRIVATE SECTION.
-    DATA ms_log_entry TYPE zsatsearchlog.
-    DATA mo_timer TYPE REF TO if_abap_runtime.
-
     METHODS set_query_hash
       IMPORTING
         io_query           TYPE REF TO zif_sat_object_search_query
         is_search_settings TYPE zif_sat_ty_object_search=>ty_s_search_engine_params.
+
+  PRIVATE SECTION.
+    DATA ms_log_entry TYPE zsatsearchlog.
+    DATA mo_timer TYPE REF TO if_abap_runtime.
+    DATA mf_log_active TYPE abap_bool.
+
 ENDCLASS.
 
 
 CLASS zcl_sat_os_logger IMPLEMENTATION.
   METHOD constructor.
+    mf_log_active = zcl_sat_log=>is_search_log_active( ).
     ms_log_entry-search_type = io_query->mv_type.
     ms_log_entry-max_entries = io_query->mv_max_rows.
-    set_query_hash( io_query           = io_query
-                    is_search_settings = is_search_settings ).
   ENDMETHOD.
 
   METHOD start_timer.
+    CHECK mf_log_active = abap_true.
+
     IF mo_timer IS INITIAL.
       mo_timer = cl_abap_runtime=>create_hr_timer( ).
     ENDIF.
@@ -79,6 +81,7 @@ CLASS zcl_sat_os_logger IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD stop_timer.
+    CHECK mf_log_active = abap_true.
     CHECK mo_timer IS BOUND.
 
     DATA(lv_duration) = mo_timer->get_runtime( ).
@@ -123,32 +126,20 @@ CLASS zcl_sat_os_logger IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD set_query_hash.
-    DATA lv_settings TYPE string.
-    DATA lv_sep TYPE string.
+    CHECK mf_log_active = abap_true.
 
-    DATA(lv_query) = io_query->to_string( ).
-    lv_query = lv_query+1.
-
-    lv_settings = lv_settings && |"combineOptionsWithAnd":{ COND string( WHEN is_search_settings-use_and_cond_for_options = abap_true
-                                                                         THEN 'true'
-                                                                         ELSE 'false' ) },| &&
-         |"maxRows":{ io_query->mv_max_rows }|.
-
-    IF is_search_settings-custom_options IS NOT INITIAL.
-      lv_settings = |{ lv_settings },|.
-      CLEAR lv_sep.
-
-      LOOP AT is_search_settings-custom_options REFERENCE INTO DATA(lr_cust_opt).
-        lv_settings = |{ lv_settings }{ lv_sep }"{ lr_cust_opt->key }":"{ lr_cust_opt->value }"|.
-        lv_sep = ','.
-      ENDLOOP.
-    ENDIF.
-
-    lv_query = |\{{ lv_settings },{ lv_query }|.
+    CALL TRANSFORMATION id
+         OPTIONS initial_components = 'suppress'
+         SOURCE terms    = io_query->mt_search_term
+                max_rows = io_query->mv_max_rows
+                options  = io_query->mt_search_options
+                type     = io_query->mv_type
+                settings = is_search_settings
+         RESULT XML DATA(lv_query).
 
     TRY.
-        cl_abap_message_digest=>calculate_hash_for_char( EXPORTING if_data       = lv_query
-                                                         IMPORTING ef_hashstring = DATA(lv_hashed_value) ).
+        cl_abap_message_digest=>calculate_hash_for_raw( EXPORTING if_data       = lv_query
+                                                        IMPORTING ef_hashstring = DATA(lv_hashed_value) ).
         ms_log_entry-query_hash = lv_hashed_value.
       CATCH cx_abap_message_digest.
         ms_log_entry-query_hash = '-'.
@@ -156,8 +147,7 @@ CLASS zcl_sat_os_logger IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD write_log.
-    CHECK zcl_sat_log=>is_search_log_active( ).
-
+    CHECK mf_log_active = abap_true.
     zcl_sat_log=>write_log_entry( ms_log_entry ).
   ENDMETHOD.
 

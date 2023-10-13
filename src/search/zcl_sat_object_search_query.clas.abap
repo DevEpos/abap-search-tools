@@ -20,7 +20,6 @@ CLASS zcl_sat_object_search_query DEFINITION
     "! @parameter iv_max_rows       | Max rows to be retrieved by query
     "! @parameter it_search_term    | List of search terms for the main object type
     "! @parameter it_search_options | List of filter options for main/sub query type
-    "! @parameter is_settings       | Query Settings
     METHODS constructor
       IMPORTING
         iv_type           TYPE zif_sat_ty_object_search=>ty_search_type
@@ -73,71 +72,6 @@ CLASS zcl_sat_object_search_query IMPLEMENTATION.
 
   METHOD zif_sat_object_search_query~set_max_rows.
     mv_max_rows = iv_max_rows.
-  ENDMETHOD.
-
-  METHOD zif_sat_object_search_query~to_string.
-    DATA lv_sep TYPE string.
-
-    result = '{'.
-
-    IF mt_search_term IS NOT INITIAL.
-      result = result && '"terms":['.
-      LOOP AT mt_search_term REFERENCE INTO DATA(lr_term).
-        result = |{ result }{ lv_sep }\{"{ lr_term->target }":[|.
-        CLEAR lv_sep.
-
-        LOOP AT lr_term->values REFERENCE INTO DATA(lr_string_val).
-          result = |{ result }{ lv_sep }\{"sign":"{ lr_string_val->sign }"| &&
-                     |,"option":"{ lr_string_val->option }","low":"{ lr_string_val->low }"\}|.
-          lv_sep = ','.
-        ENDLOOP.
-
-        result = result && ']}'.
-        lv_sep = ','.
-      ENDLOOP.
-      result = result && ']'.
-      lv_sep = ','.
-    ENDIF.
-
-    IF mt_search_options IS NOT INITIAL.
-      result = |{ result }{ lv_sep }"searchOptions":[|.
-      CLEAR lv_sep.
-
-      LOOP AT mt_search_options REFERENCE INTO DATA(lr_option)
-           GROUP BY lr_option->target.
-
-        result = |{ result }{ lv_sep }\{"{ lr_option->target }":[|.
-        CLEAR lv_sep.
-
-        LOOP AT GROUP lr_option REFERENCE INTO DATA(lr_option_group).
-          result = |{ result }{ lv_sep }\{"{ lr_option_group->option }":[|.
-          CLEAR lv_sep.
-
-          LOOP AT lr_option_group->value_range REFERENCE INTO DATA(lr_value).
-            result = |{ result }{ lv_sep }\{"sign":"{ lr_value->sign }"| &&
-                       |,"option":"{ lr_value->option }","low":"{ lr_value->low }"|.
-            IF lr_value->high IS NOT INITIAL.
-              result = result && |,"high":"{ lr_value->high }"|.
-            ENDIF.
-            IF lr_value->option2 IS NOT INITIAL.
-              result = |{ result },"option2":"{ lr_value->option2 }","sign2":"{ lr_value->sign2 }"|.
-            ENDIF.
-            result = |{ result }\}|.
-            lv_sep = ','.
-          ENDLOOP.
-
-          result = |{ result }]\}|.
-          lv_sep = ','.
-        ENDLOOP.
-
-        result = |{ result }]\}|.
-        lv_sep = ','.
-      ENDLOOP.
-
-      result = |{ result }]|.
-    ENDIF.
-
-    result = |{ result }\}|.
   ENDMETHOD.
 ENDCLASS.
 
