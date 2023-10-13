@@ -23,7 +23,6 @@ CLASS zcl_sat_os_message_provider DEFINITION
         message_class       TYPE string VALUE 'messageclass',
         message_number      TYPE string VALUE 'messagenumber',
         short_text          TYPE string VALUE 'shorttext',
-        short_text_upper    TYPE string VALUE 'shorttextupper',
         language            TYPE string VALUE 'language',
         created_by          TYPE string VALUE 'createdby',
         created_on          TYPE string VALUE 'createdon',
@@ -83,7 +82,7 @@ CLASS zcl_sat_os_message_provider IMPLEMENTATION.
                                 it_field_names = VALUE #( ( |{ c_aliases-msg_clas }~{ c_fields-message_class }| ) ) ).
 
     add_search_terms_to_search( iv_target      = zif_sat_c_object_search=>c_search_fields-message_text_input_key
-                                it_field_names = VALUE #( ( |{ c_aliases-message }~{ c_fields-short_text_upper }| ) ) ).
+                                it_field_names = VALUE #( ( |{ c_aliases-message }~{ c_fields-short_text }| ) ) ).
 
     add_order_by( iv_fieldname = c_fields-message_class
                   iv_entity    = c_aliases-msg_clas ).
