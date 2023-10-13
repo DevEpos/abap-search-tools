@@ -5,12 +5,12 @@ CLASS zcl_sat_adt_ch_factory DEFINITION
   CREATE PRIVATE.
 
   PUBLIC SECTION.
-    "! Create content handler for navigation targets</p>
+    "! Create content handler for navigation targets
     CLASS-METHODS create_nav_targets_ref_ch
       RETURNING
         VALUE(result) TYPE REF TO if_adt_rest_content_handler.
 
-    "! Create content handler for search result</p>
+    "! Create content handler for search result
     CLASS-METHODS create_search_result_ch
       RETURNING
         VALUE(result) TYPE REF TO if_adt_rest_content_handler.
