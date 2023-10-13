@@ -94,9 +94,12 @@ CLASS zcl_sat_cds_v2_meta_updater IMPLEMENTATION.
            meta~last_generated_on,
            meta~last_generated_at
       FROM ddddlsrc AS src
+        INNER JOIN tadir AS repo ON  src~ddlname = repo~obj_name
+                                 AND repo~delflag = @abap_false
+                                 AND repo~object = 'DDLS'
         LEFT OUTER JOIN zsatcds2mhead AS meta
           ON  src~ddlname = meta~ddlname
-      WHERE source_type IN ( 'W', 'X' )
+      WHERE source_type IN ( 'W', 'X', 'P' )
         AND src~ddlname IN @ddlname_range
       INTO TABLE @DATA(ddls_to_update).
 
