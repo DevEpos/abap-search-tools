@@ -10,7 +10,10 @@ INTERFACE zif_sat_ty_adt_types
       value TYPE string,
     END OF ty_s_property,
 
-    ty_t_property TYPE SORTED TABLE OF ty_s_property WITH UNIQUE KEY key,
+    ty_t_property              TYPE SORTED TABLE OF ty_s_property WITH UNIQUE KEY key,
+
+    ty_api_adt_filter_value    TYPE c LENGTH 30,
+    ty_r_api_adt_filter_values TYPE RANGE OF ty_api_adt_filter_value,
 
     BEGIN OF ty_s_adt_obj_ref,
       uri         TYPE string,

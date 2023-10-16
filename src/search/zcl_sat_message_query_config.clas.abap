@@ -64,16 +64,17 @@ CLASS zcl_sat_message_query_config IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD build_config.
-    DATA(lt_object_filters) = VALUE zif_sat_ty_object_search=>ty_query_filters( ( get_user_filt_conf( ) )
-                                                                                ( get_created_on_filt_conf( ) )
-                                                                                ( get_changed_by_filt_conf( ) )
-                                                                                ( get_changed_on_filt_conf( ) )
-                                                                                ( get_package_filt_conf( ) )
-                                                                                ( get_softw_comp_filt_conf( ) )
-                                                                                ( get_appl_comp_filt_conf( ) )
-                                                                                ( get_rel_state_filt_conf( ) )
-                                                                                ( get_description_filt_conf( ) )
-                                                                                ( get_max_rows_filt_conf( )  ) ).
+    DATA(lt_object_filters) = VALUE zif_sat_ty_object_search=>ty_query_filters(
+        ( get_user_filt_conf( ) )
+        ( get_created_on_filt_conf( ) )
+        ( get_changed_by_filt_conf( ) )
+        ( get_changed_on_filt_conf( ) )
+        ( get_package_filt_conf( ) )
+        ( get_softw_comp_filt_conf( ) )
+        ( get_appl_comp_filt_conf( ) )
+        ( get_rel_state_filt_conf( iv_object_filter = zif_sat_c_object_types=>message_class ) )
+        ( get_description_filt_conf( ) )
+        ( get_max_rows_filt_conf( )  ) ).
 
     mt_message_options = VALUE #( ( get_changed_by_filt_conf( ) )
                                   ( get_changed_on_filt_conf( ) )

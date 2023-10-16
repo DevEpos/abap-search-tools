@@ -67,8 +67,10 @@ CLASS zcl_sat_base_query_config DEFINITION
         VALUE(result) TYPE zif_sat_ty_object_search=>ty_query_filter.
 
     METHODS get_rel_state_filt_conf
+      IMPORTING
+        iv_object_filter TYPE string OPTIONAL
       RETURNING
-        VALUE(result) TYPE zif_sat_ty_object_search=>ty_query_filter.
+        VALUE(result)    TYPE zif_sat_ty_object_search=>ty_query_filter.
 
     METHODS get_appl_comp_filt_conf
       RETURNING
@@ -233,6 +235,7 @@ CLASS zcl_sat_base_query_config IMPLEMENTATION.
         content_assist   = VALUE #(
             caching               = abap_true
             assist_type           = zif_sat_c_object_search=>c_filter_content_assist_type-named_item
+            initial_filter        = iv_object_filter
             category_scheme       = zif_sat_c_object_search=>c_content_assist-category_scheme
             category_term         = zif_sat_c_object_search=>c_content_assist-terms-release_state
             proposal_image_source = zif_sat_c_object_search=>c_proposal_image_source-same_as_filter ) ).

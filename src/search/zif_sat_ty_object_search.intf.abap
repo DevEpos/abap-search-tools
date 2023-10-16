@@ -107,6 +107,8 @@ INTERFACE zif_sat_ty_object_search
       category_term           TYPE string,
       secondary_category_term TYPE string,
       category_scheme         TYPE string,
+      "! Fixed filter to restrict
+      initial_filter          TYPE string,
       proposal_image_source   TYPE string,
       proposal_image_registry TYPE string,
       proposal_values         TYPE ty_content_proposals,
