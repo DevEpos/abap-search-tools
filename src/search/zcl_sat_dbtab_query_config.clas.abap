@@ -89,6 +89,7 @@ CLASS zcl_sat_dbtab_query_config IMPLEMENTATION.
                                                                                 ( get_softw_comp_filt_conf( ) )
                                                                                 ( get_appl_comp_filt_conf( ) )
                                                                                 ( get_description_filt_conf( ) )
+                                                                                ( get_rel_state_filt_conf( ) )
                                                                                 ( get_max_rows_filt_conf( ) )
                                                                                 ( get_field_filter( ) )
                                                                                 ( get_include_filter( ) )
