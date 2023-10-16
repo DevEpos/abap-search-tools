@@ -195,7 +195,7 @@ CLASS zcl_sat_adt_discovery_app IMPLEMENTATION.
 
     io_registry->register_discoverable_resource(
         url             = '/releasestate'
-        handler_class   = 'CL_RIS_ADT_RES_RELEASE_STATES'
+        handler_class   = 'ZCL_SAT_ADT_RES_RELSTATE_VH'
         description     = 'Search for Release API states'
         category_scheme = zif_sat_c_object_search=>c_content_assist-category_scheme
         category_term   = zif_sat_c_object_search=>c_content_assist-terms-release_state ).
