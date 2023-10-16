@@ -34,8 +34,6 @@ CLASS zcl_sat_api_state_util DEFINITION
     CONSTANTS c_c0 TYPE ty_contract_id VALUE 'C0'.
     CONSTANTS c_c1 TYPE ty_contract_id VALUE 'C1'.
     CONSTANTS c_c2 TYPE ty_contract_id VALUE 'C2'.
-    CONSTANTS c_c3 TYPE ty_contract_id VALUE 'C3'.
-    CONSTANTS c_c4 TYPE ty_contract_id VALUE 'C4'.
 
     TYPES:
       ty_ddl_sources TYPE STANDARD TABLE OF ddddlsrc WITH EMPTY KEY,
@@ -52,8 +50,6 @@ CLASS zcl_sat_api_state_util DEFINITION
         c0_supported          TYPE abap_bool,
         c1_supported          TYPE abap_bool,
         c2_supported          TYPE abap_bool,
-        c3_supported          TYPE abap_bool,
-        c4_supported          TYPE abap_bool,
         deprecation_supported TYPE abap_bool,
       END OF ty_contract_obj_info.
 
@@ -197,12 +193,6 @@ CLASS zcl_sat_api_state_util IMPLEMENTATION.
     ENDIF.
     IF i_object_info-c2_supported = abap_false.
       contract_id_filter = VALUE #( BASE contract_id_filter ( sign = 'I' option = 'EQ' low = c_c2 ) ).
-    ENDIF.
-    IF i_object_info-c3_supported = abap_false.
-      contract_id_filter = VALUE #( BASE contract_id_filter ( sign = 'I' option = 'EQ' low = c_c3 ) ).
-    ENDIF.
-    IF i_object_info-c4_supported = abap_false.
-      contract_id_filter = VALUE #( BASE contract_id_filter ( sign = 'I' option = 'EQ' low = c_c4 ) ).
     ENDIF.
 
     IF contract_id_filter IS NOT INITIAL.
