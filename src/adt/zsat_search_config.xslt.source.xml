@@ -145,6 +145,10 @@
     <objectsearch:contentAssist tt:extensible="deep">
       <tt:attribute name="xsi:type" value-ref="content_assist.assist_type"/>
 
+      <tt:cond check="not-initial(content_assist.initial_filter)">
+        <tt:attribute name="objectsearch:initialFilter" value-ref="content_assist.initial_filter"/>
+      </tt:cond>
+
       <tt:cond check="not-initial(content_assist.caching)">
         <tt:attribute name="objectsearch:caching" option="format(boolean)" value-ref="content_assist.caching"/>
       </tt:cond>
