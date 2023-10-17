@@ -284,9 +284,11 @@ CLASS zcl_sat_base_search_provider DEFINITION
       RETURNING
         VALUE(result) TYPE zif_sat_ty_object_search=>ty_t_value_range.
 
+    METHODS log_sql_info.
     METHODS log_success.
+    METHODS log_select_success.
 
-    METHODS log_error
+    METHODS log_select_error
       IMPORTING
         iv_error TYPE string.
 ENDCLASS.
@@ -330,51 +332,38 @@ CLASS zcl_sat_base_search_provider IMPLEMENTATION.
                                 THEN 0
                                 ELSE mo_search_query->mv_max_rows + 1 ).
 
-    mo_logger->set_group_by_active( xsdbool( mt_group_by IS NOT INITIAL ) ).
+    log_sql_info( ).
     mo_logger->start_timer( ).
 
     TRY.
-        IF mf_distinct_required = abap_true.
-          IF mt_group_by IS NOT INITIAL.
-            SELECT DISTINCT (mt_select)
-              FROM (mt_from)
-              WHERE (mt_where)
-              GROUP BY (mt_group_by)
-              HAVING (mt_having)
-              ORDER BY (mt_order_by)
-              INTO CORRESPONDING FIELDS OF TABLE @mt_result
-              UP TO @lv_max_rows ROWS.
-          ELSE.
-            SELECT DISTINCT (mt_select)
-              FROM (mt_from)
-              WHERE (mt_where)
-              ORDER BY (mt_order_by)
-              INTO CORRESPONDING FIELDS OF TABLE @mt_result
-              UP TO @lv_max_rows ROWS.
-          ENDIF.
+        IF mt_group_by IS NOT INITIAL.
+          SELECT (mt_select)
+            FROM (mt_from)
+            WHERE (mt_where)
+            GROUP BY (mt_group_by)
+            HAVING (mt_having)
+            ORDER BY (mt_order_by)
+            INTO CORRESPONDING FIELDS OF TABLE @mt_result
+            UP TO @lv_max_rows ROWS.
+        ELSEIF mf_distinct_required = abap_true.
+          SELECT DISTINCT (mt_select)
+            FROM (mt_from)
+            WHERE (mt_where)
+            ORDER BY (mt_order_by)
+            INTO CORRESPONDING FIELDS OF TABLE @mt_result
+            UP TO @lv_max_rows ROWS.
         ELSE.
-          IF mt_group_by IS NOT INITIAL.
-            SELECT (mt_select)
-              FROM (mt_from)
-              WHERE (mt_where)
-              GROUP BY (mt_group_by)
-              HAVING (mt_having)
-              ORDER BY (mt_order_by)
-              INTO CORRESPONDING FIELDS OF TABLE @mt_result
-              UP TO @lv_max_rows ROWS.
-          ELSE.
-            SELECT (mt_select)
-              FROM (mt_from)
-              WHERE (mt_where)
-              ORDER BY (mt_order_by)
-              INTO CORRESPONDING FIELDS OF TABLE @mt_result
-              UP TO @lv_max_rows ROWS.
-          ENDIF.
+          SELECT (mt_select)
+            FROM (mt_from)
+            WHERE (mt_where)
+            ORDER BY (mt_order_by)
+            INTO CORRESPONDING FIELDS OF TABLE @mt_result
+            UP TO @lv_max_rows ROWS.
         ENDIF.
 
-        mo_logger->stop_timer( ).
+        log_select_success( ).
       CATCH cx_sy_open_sql_error INTO DATA(lx_sql_error).
-        log_error( lx_sql_error->get_text( ) ).
+        log_select_error( lx_sql_error->get_text( ) ).
 
         RAISE EXCEPTION TYPE zcx_sat_object_search
           EXPORTING previous = lx_sql_error.
@@ -613,8 +602,6 @@ CLASS zcl_sat_base_search_provider IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD create_from_clause.
-    mo_logger->set_base_table( ms_join_def-primary_table ).
-    mo_logger->set_join_count( lines( ms_join_def-tables ) ).
     mt_from = zcl_sat_join_helper=>build_from_clause_for_join_def( is_join_def = ms_join_def ).
   ENDMETHOD.
 
@@ -675,8 +662,6 @@ CLASS zcl_sat_base_search_provider IMPLEMENTATION.
   METHOD create_select_clause.
     CHECK: mt_select IS NOT INITIAL,
            lines( mt_select ) > 1.
-
-    mo_logger->set_distinct_active( mf_distinct_required ).
 
     DATA(lv_line_count) = lines( mt_select ).
     LOOP AT mt_select ASSIGNING FIELD-SYMBOL(<lv_select>).
@@ -781,10 +766,13 @@ CLASS zcl_sat_base_search_provider IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD get_select_string.
-    add_select_part( EXPORTING iv_part_name = 'SELECT' &&
-                                              COND #( WHEN mf_distinct_required = abap_true THEN ` DISTINCT` )
-                               it_part      = mt_select
-                     CHANGING  cv_select    = rv_result ).
+    add_select_part(
+      EXPORTING
+        iv_part_name = 'SELECT' &&
+                       COND #( WHEN mf_distinct_required = abap_true AND mt_group_by IS INITIAL THEN ` DISTINCT` )
+        it_part      = mt_select
+      CHANGING
+        cv_select    = rv_result ).
     add_select_part( EXPORTING iv_part_name = 'FROM'
                                it_part      = mt_from
                      CHANGING  cv_select    = rv_result ).
@@ -869,12 +857,10 @@ CLASS zcl_sat_base_search_provider IMPLEMENTATION.
 
   METHOD log_success.
     mo_logger->stop_timer( ).
-    mo_logger->set_selected_entries( lines( mt_result ) ).
-    mo_logger->set_select_stmnt( get_select_string( ) ).
     mo_logger->write_log( ).
   ENDMETHOD.
 
-  METHOD log_error.
+  METHOD log_select_error.
     mo_logger->stop_timer( ).
     mo_logger->set_select_stmnt( get_select_string( ) ).
     mo_logger->set_error( iv_error ).
@@ -889,7 +875,7 @@ CLASS zcl_sat_base_search_provider IMPLEMENTATION.
 
   METHOD log_sql_info.
     mo_logger->set_base_table( ms_join_def-primary_table ).
-    mo_logger->set_query_hash( io_query = mo_search_query
+    mo_logger->set_query_hash( io_query           = mo_search_query
                                is_search_settings = ms_search_engine_params ).
     mo_logger->set_join_count( lines( ms_join_def-tables ) ).
     mo_logger->set_distinct_active( xsdbool( mf_distinct_required = abap_true AND mt_group_by IS INITIAL ) ).
