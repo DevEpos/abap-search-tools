@@ -208,6 +208,12 @@ CLASS zcl_sat_os_dbtab_provider IMPLEMENTATION.
         WHEN c_dbtab_search_params-flag.
           add_flag_filter( <ls_option>-value_range ).
 
+        WHEN c_general_search_options-release_state.
+          add_api_option_filter( it_values          = <ls_option>-value_range
+                                 iv_ref_field       = CONV #( c_fields-tablename )
+                                 iv_ref_table_alias = c_base_table
+                                 it_tadir_type      = VALUE #( ( zif_sat_c_tadir_types=>table ) ) ).
+
         WHEN c_dbtab_search_params-enhancement_category.
           add_option_filter( iv_fieldname = |{ c_base_table }~{ c_fields-extension_class }|
                              it_values    = <ls_option>-value_range ).

@@ -60,21 +60,23 @@ CLASS zcl_sat_ddicview_query_config IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD build_config.
-    DATA(lt_object_filters) = VALUE zif_sat_ty_object_search=>ty_query_filters( ( get_user_filt_conf( ) )
-                                                                                ( get_created_on_filt_conf( ) )
-                                                                                ( get_changed_by_filt_conf( ) )
-                                                                                ( get_changed_on_filt_conf( ) )
-                                                                                ( get_package_filt_conf( ) )
-                                                                                ( get_softw_comp_filt_conf( ) )
-                                                                                ( get_appl_comp_filt_conf( ) )
-                                                                                ( get_root_tab_filt_conf( ) )
-                                                                                ( get_base_tab_filt_conf( ) )
-                                                                                ( get_type_filter( ) )
-                                                                                ( get_description_filt_conf( ) )
-                                                                                ( get_max_rows_filt_conf( ) )
-                                                                                ( get_field_filter( ) )
-                                                                                ( get_deliv_class_filter( ) )
-                                                                                ( get_maintenance_filter( ) ) ).
+    DATA(lt_object_filters) = VALUE zif_sat_ty_object_search=>ty_query_filters(
+        ( get_user_filt_conf( ) )
+        ( get_created_on_filt_conf( ) )
+        ( get_changed_by_filt_conf( ) )
+        ( get_changed_on_filt_conf( ) )
+        ( get_package_filt_conf( ) )
+        ( get_softw_comp_filt_conf( ) )
+        ( get_appl_comp_filt_conf( ) )
+        ( get_rel_state_filt_conf( iv_object_filter = zif_sat_c_object_types=>view_definition ) )
+        ( get_root_tab_filt_conf( ) )
+        ( get_base_tab_filt_conf( ) )
+        ( get_type_filter( ) )
+        ( get_description_filt_conf( ) )
+        ( get_max_rows_filt_conf( ) )
+        ( get_field_filter( ) )
+        ( get_deliv_class_filter( ) )
+        ( get_maintenance_filter( ) ) ).
 
     ms_search_type = VALUE zif_sat_ty_object_search=>ty_search_type_config(
         label    = 'View'
