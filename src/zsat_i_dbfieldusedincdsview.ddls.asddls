@@ -13,7 +13,6 @@ define view ZSAT_I_DbFieldUsedInCdsView
     inner join            ZSAT_I_CdsViewField as CdsField on  CdsBase.EntityId   = CdsField.EntityId
                                                           and CdsField.FieldName = ViewField.ViewField
     left outer join       ZSAT_I_APIStates    as ApiState on  CdsBase.DdlName      =  ApiState.ObjectName
-                                                          and ApiState.FilterValue <> 'ADD_CUSTOM_FIELDS'
 {
   key case
        when CdsBase.RawEntityId <> '' then CdsBase.RawEntityId

@@ -16,7 +16,6 @@ define view ZSAT_I_CDSEntity
                                                        and FallbackText.ddlanguage = Base.OriginalLanguage
   association [0..*] to ZSAT_I_APIStates as _ApiState on  Base.DdlName          =  _ApiState.ObjectName
                                                       and _ApiState.ObjectType  =  'DDLS'
-                                                      and _ApiState.FilterValue <> 'ADD_CUSTOM_FIELDS'
 {
   Base.EntityId,
   Base.RawEntityId,
