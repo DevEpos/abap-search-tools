@@ -164,6 +164,12 @@ CLASS zcl_sat_os_ddicview_provider IMPLEMENTATION.
         WHEN c_search_params-base_table.
           add_basetab_filter( <ls_option>-value_range ).
 
+        WHEN c_general_search_options-release_state.
+          add_api_option_filter( it_values          = <ls_option>-value_range
+                                 iv_ref_field       = CONV #( c_fields-viewname )
+                                 iv_ref_table_alias = c_base_table
+                                 it_tadir_type      = VALUE #( ( zif_sat_c_tadir_types=>view ) ) ).
+
         WHEN c_search_params-primary_table.
           add_option_filter( iv_fieldname = |{ c_base_table }~{ c_fields-primary_table }|
                              it_values    = <ls_option>-value_range ).
