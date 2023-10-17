@@ -401,9 +401,8 @@ INTERFACE zif_sat_c_object_search
   CONSTANTS:
     "! Values for API option
     BEGIN OF c_api_option_value,
-      released      TYPE string VALUE 'RELEASED',
-      deprecated    TYPE string VALUE 'DEPRECATED',
-      custom_fields TYPE string VALUE 'ADD_CUSTOM_FIELDS',
+      released   TYPE string VALUE 'RELEASED',
+      deprecated TYPE string VALUE 'DEPRECATED',
     END OF c_api_option_value.
 
   CONSTANTS:
