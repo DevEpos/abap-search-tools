@@ -290,7 +290,6 @@ CLASS zcl_sat_adt_res_cds_a_wusl IMPLEMENTATION.
         FOR ALL ENTRIES IN @mt_result_keys
         WHERE objectname = @mt_result_keys-ddlname
           AND objecttype = @zif_sat_c_tadir_types=>data_definition
-          AND filtervalue <> @zif_sat_c_cds_api_state=>add_custom_fields
         INTO TABLE @DATA(lt_api_states).
 
       IF sy-subrc <> 0.
