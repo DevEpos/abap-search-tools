@@ -481,7 +481,6 @@ CLASS zcl_sat_os_cds_provider IMPLEMENTATION.
       FROM zsat_i_apistates
       FOR ALL ENTRIES IN @mt_result
       WHERE objectname = @mt_result-alt_object_name
-        AND filtervalue <> @zif_sat_c_cds_api_state=>add_custom_fields
       INTO TABLE @DATA(lt_api_states).
 
     IF sy-subrc <> 0.
