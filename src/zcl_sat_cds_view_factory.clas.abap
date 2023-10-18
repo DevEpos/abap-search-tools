@@ -456,7 +456,7 @@ CLASS zcl_sat_cds_view_factory IMPLEMENTATION.
     SELECT filtervalue
      FROM zsat_i_apistates
      WHERE objectname = @iv_cds_view
-       AND objecttype = 'DDLS'
+       AND objecttype = @zif_sat_c_tadir_types=>data_definition
      INTO TABLE @rt_api_states.
 
     IF sy-subrc <> 0.
