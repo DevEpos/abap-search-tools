@@ -73,10 +73,7 @@ CLASS zcl_sat_os_logger IMPLEMENTATION.
   METHOD start_timer.
     CHECK mf_log_active = abap_true.
 
-    IF mo_timer IS INITIAL.
-      mo_timer = cl_abap_runtime=>create_hr_timer( ).
-    ENDIF.
-
+    mo_timer = cl_abap_runtime=>create_hr_timer( ).
     mo_timer->get_runtime( ).
   ENDMETHOD.
 
