@@ -481,7 +481,8 @@ CLASS zcl_sat_os_cds_provider IMPLEMENTATION.
       FROM zsat_i_apistates
       FOR ALL ENTRIES IN @mt_result
       WHERE objectname = @mt_result-alt_object_name
-    INTO TABLE @DATA(lt_api_states).
+        AND objecttype = @zif_sat_c_tadir_types=>data_definition
+      INTO TABLE @DATA(lt_api_states).
 
     IF sy-subrc <> 0.
       RETURN.
