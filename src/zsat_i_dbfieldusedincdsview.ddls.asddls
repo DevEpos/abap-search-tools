@@ -12,7 +12,8 @@ define view ZSAT_I_DbFieldUsedInCdsView
     inner join            ZSAT_P_CDSViewBase  as CdsBase  on ViewField.viewname = CdsBase.ViewName
     inner join            ZSAT_I_CdsViewField as CdsField on  CdsBase.EntityId   = CdsField.EntityId
                                                           and CdsField.FieldName = ViewField.viewfield
-    left outer join       ZSAT_I_APIStates    as ApiState on  CdsBase.DdlName      =  ApiState.ObjectName
+    left outer join       ZSAT_I_APIStates    as ApiState on  CdsBase.DdlName     =  ApiState.ObjectName
+                                                          and ApiState.ObjectType = 'DDLS'
 {
   key case
        when CdsBase.RawEntityId <> '' then CdsBase.RawEntityId
