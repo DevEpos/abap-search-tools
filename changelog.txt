@@ -9,7 +9,7 @@ Legend
 + : added
 - : removed
 
-2023-09-18 v2.0.0
+2023-10-18 v2.0.0
 -------------------
 
 ! Complete overhaul of search API
@@ -22,6 +22,7 @@ Legend
 + New object search type 'Method'
 + New object search typp 'Message'
 + CDS Where-Used analysis has a dedicated API now
++ Search log for performance/error analysis
 
 
 2019-11-26 v1.0.0
