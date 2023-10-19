@@ -19,11 +19,6 @@
      <DESCRIPT>Create filter for ANNO option</DESCRIPT>
     </SEOCOMPOTX>
     <SEOCOMPOTX>
-     <CMPNAME>ADD_API_STATE_INFO</CMPNAME>
-     <LANGU>E</LANGU>
-     <DESCRIPT>Add API state information for results</DESCRIPT>
-    </SEOCOMPOTX>
-    <SEOCOMPOTX>
      <CMPNAME>ADD_ASSOCIATION_OPTION_FILTER</CMPNAME>
      <LANGU>E</LANGU>
      <DESCRIPT>Create filter for ASSOC option</DESCRIPT>

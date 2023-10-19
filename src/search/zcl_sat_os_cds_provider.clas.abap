@@ -13,7 +13,6 @@ CLASS zcl_sat_os_cds_provider DEFINITION
   PROTECTED SECTION.
     METHODS determine_grouping REDEFINITION.
     METHODS prepare_search     REDEFINITION.
-    METHODS do_after_search    REDEFINITION.
 
   PRIVATE SECTION.
     ALIASES c_cds_search_params FOR zif_sat_c_object_search~c_cds_search_params.
@@ -91,8 +90,6 @@ CLASS zcl_sat_os_cds_provider DEFINITION
       IMPORTING
         it_values TYPE ty_t_value_range.
 
-    "! <p class="shorttext synchronized">Add API state information for results</p>
-    METHODS add_api_state_info.
 ENDCLASS.
 
 
@@ -245,12 +242,6 @@ CLASS zcl_sat_os_cds_provider IMPLEMENTATION.
     ENDLOOP.
 
     new_and_cond_list( ).
-  ENDMETHOD.
-
-  METHOD do_after_search.
-    IF mt_result IS NOT INITIAL AND ms_search_engine_params-with_api_state = abap_true.
-      add_api_state_info( ).
-    ENDIF.
   ENDMETHOD.
 
   METHOD determine_grouping.
@@ -472,24 +463,5 @@ CLASS zcl_sat_os_cds_provider IMPLEMENTATION.
                                                ref_table_alias = c_base_alias
                                                type            = zif_sat_c_join_cond_type=>field
                                                and_or          = zif_sat_c_selection_condition=>and ) ) ).
-  ENDMETHOD.
-
-  METHOD add_api_state_info.
-    SELECT DISTINCT
-           objectname AS entity_id,
-           apistate AS api_state
-      FROM zsat_i_apistates
-      FOR ALL ENTRIES IN @mt_result
-      WHERE objectname = @mt_result-alt_object_name
-        AND objecttype = @zif_sat_c_tadir_types=>data_definition
-      INTO TABLE @DATA(lt_api_states).
-
-    IF sy-subrc <> 0.
-      RETURN.
-    ENDIF.
-
-    LOOP AT mt_result ASSIGNING FIELD-SYMBOL(<ls_result>).
-      <ls_result>-api_state = VALUE #( lt_api_states[ entity_id = <ls_result>-alt_object_name ]-api_state OPTIONAL ).
-    ENDLOOP.
   ENDMETHOD.
 ENDCLASS.
