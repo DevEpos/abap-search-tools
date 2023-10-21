@@ -7,6 +7,8 @@ CLASS zcl_sat_os_subp_method_std DEFINITION
   CREATE PUBLIC.
 
   PUBLIC SECTION.
+    INTERFACES zif_sat_c_os_meth_options.
+
     METHODS constructor.
 
   PROTECTED SECTION.
@@ -15,8 +17,8 @@ CLASS zcl_sat_os_subp_method_std DEFINITION
     METHODS do_after_search    REDEFINITION.
 
   PRIVATE SECTION.
-    ALIASES c_class_intf_search_option FOR zif_sat_c_object_search~c_class_intf_search_option.
-    ALIASES c_method_option            FOR zif_sat_c_object_search~c_method_search_option.
+    ALIASES c_class_intf_search_option FOR zif_sat_c_os_clif_options~c_filter_key.
+    ALIASES c_method_option            FOR zif_sat_c_os_meth_options~c_filter_key.
 
     CONSTANTS:
       BEGIN OF c_alias_names,
@@ -251,13 +253,13 @@ CLASS zcl_sat_os_subp_method_std IMPLEMENTATION.
         iv_target      = zif_sat_c_object_search=>c_search_fields-object_name_input_key
         it_field_names = VALUE #( ( |{ c_alias_names-method }~{ c_method_fields-classname }| ) ) ).
     add_search_terms_to_search(
-        iv_target      = zif_sat_c_object_search=>c_search_fields-method_name_input_key
+        iv_target      = zif_sat_c_os_meth_options=>c_search_fields-method_name_input_key
         it_field_names = VALUE #( ( |{ c_alias_names-method }~{ c_method_fields-originalmethodname }| ) ) ).
   ENDMETHOD.
 
   METHOD configure_method_filters.
     LOOP AT mo_search_query->mt_search_options ASSIGNING FIELD-SYMBOL(<ls_option>)
-         WHERE target = zif_sat_c_object_search=>c_search_fields-method_filter_input_key.
+         WHERE target = zif_sat_c_os_meth_options=>c_search_fields-method_filter_input_key.
 
       CASE <ls_option>-option.
         WHEN c_general_search_options-user.
@@ -463,10 +465,10 @@ CLASS zcl_sat_os_subp_method_std IMPLEMENTATION.
   METHOD map_flag_opt_to_field.
     result = |{ c_alias_names-method }~| &&
              SWITCH string( iv_option
-                            WHEN zif_sat_c_object_search=>c_method_flags-abstract         THEN 'isabstract'
-                            WHEN zif_sat_c_object_search=>c_method_flags-optional         THEN 'isoptional'
-                            WHEN zif_sat_c_object_search=>c_method_flags-final            THEN 'isfinal'
-                            WHEN zif_sat_c_object_search=>c_method_flags-class_exceptions THEN 'isusingnewexceptions' ).
+                            WHEN zif_sat_c_os_meth_options=>c_method_flags-abstract         THEN 'isabstract'
+                            WHEN zif_sat_c_os_meth_options=>c_method_flags-optional         THEN 'isoptional'
+                            WHEN zif_sat_c_os_meth_options=>c_method_flags-final            THEN 'isfinal'
+                            WHEN zif_sat_c_os_meth_options=>c_method_flags-class_exceptions THEN 'isusingnewexceptions' ).
   ENDMETHOD.
 
   METHOD check_filter_availablity.
@@ -476,7 +478,7 @@ CLASS zcl_sat_os_subp_method_std IMPLEMENTATION.
 
     mf_comp_desc_join_active =
         xsdbool( line_exists( mo_search_query->mt_search_options[
-                                  target = zif_sat_c_object_search=>c_search_fields-method_filter_input_key
+                                  target = zif_sat_c_os_meth_options=>c_search_fields-method_filter_input_key
                                   option = c_general_search_options-description ] ) ).
   ENDMETHOD.
 

@@ -12,7 +12,6 @@ CLASS zcl_sat_base_query_config DEFINITION
     METHODS constructor.
 
   PROTECTED SECTION.
-    ALIASES c_search_option   FOR zif_sat_c_object_search~c_search_option.
     ALIASES c_general_options FOR zif_sat_c_object_search~c_general_search_params.
 
     CONSTANTS:

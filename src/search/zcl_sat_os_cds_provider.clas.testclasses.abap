@@ -60,7 +60,7 @@ CLASS ltcl_abap_unit IMPLEMENTATION.
     TRY.
         DATA(lo_query) = NEW lcl_query( iv_type           = zif_sat_c_object_search=>c_search_type-cds_view
                                         it_search_options = VALUE #(
-                                            ( option      = zif_sat_c_object_search=>c_cds_search_params-annotation
+                                            ( option      = zif_sat_c_os_cds_options=>c_filter_key-annotation
                                               value_range = VALUE #(
                                                   sign   = 'E'
                                                   option = 'CP'
@@ -80,7 +80,7 @@ CLASS ltcl_abap_unit IMPLEMENTATION.
         DATA(lo_query) = NEW lcl_query( iv_type           = zif_sat_c_object_search=>c_search_type-cds_view
                                         iv_query          = 'C_'
                                         it_search_options = VALUE #(
-                                            ( option      = zif_sat_c_object_search=>c_cds_search_params-annotation
+                                            ( option      = zif_sat_c_os_cds_options=>c_filter_key-annotation
                                               value_range = VALUE #(
                                                   sign   = 'E'
                                                   option = 'CP'

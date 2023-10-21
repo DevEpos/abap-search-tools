@@ -23,14 +23,14 @@ CLASS zcl_sat_ddicview_qc IMPLEMENTATION.
 
       WHEN zif_sat_c_object_search=>c_general_search_params-type.
         cv_value = SWITCH #( cv_value
-                             WHEN zif_sat_c_object_search=>c_view_class-ext-database THEN
-                               zif_sat_c_object_search=>c_view_class-int-database
-                             WHEN zif_sat_c_object_search=>c_view_class-ext-help THEN
-                               zif_sat_c_object_search=>c_view_class-int-help
-                             WHEN zif_sat_c_object_search=>c_view_class-ext-maintenance THEN
-                               zif_sat_c_object_search=>c_view_class-int-maintenance
-                             WHEN zif_sat_c_object_search=>c_view_class-ext-projection THEN
-                               zif_sat_c_object_search=>c_view_class-int-projection ).
+                             WHEN zif_sat_c_os_view_options=>c_view_class-ext-database THEN
+                               zif_sat_c_os_view_options=>c_view_class-int-database
+                             WHEN zif_sat_c_os_view_options=>c_view_class-ext-help THEN
+                               zif_sat_c_os_view_options=>c_view_class-int-help
+                             WHEN zif_sat_c_os_view_options=>c_view_class-ext-maintenance THEN
+                               zif_sat_c_os_view_options=>c_view_class-int-maintenance
+                             WHEN zif_sat_c_os_view_options=>c_view_class-ext-projection THEN
+                               zif_sat_c_os_view_options=>c_view_class-int-projection ).
 
       WHEN OTHERS.
         super->zif_sat_query_converter~convert_value( EXPORTING iv_option = iv_option
