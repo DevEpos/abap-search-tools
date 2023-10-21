@@ -9,8 +9,6 @@ CLASS zcl_sat_object_query_parser DEFINITION
     INTERFACES zif_sat_ty_object_search.
 
     ALIASES c_general_search_options FOR zif_sat_c_object_search~c_general_search_params.
-    ALIASES c_cds_search_params      FOR zif_sat_c_object_search~c_cds_search_params.
-    ALIASES c_class_intf_options     FOR zif_sat_c_object_search~c_class_intf_search_option.
     ALIASES ty_t_search_option       FOR zif_sat_ty_object_search~ty_t_search_option.
     ALIASES ty_s_search_option       FOR zif_sat_ty_object_search~ty_s_search_option.
 

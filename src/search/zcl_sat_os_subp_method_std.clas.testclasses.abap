@@ -76,8 +76,8 @@ CLASS ltcl_method_filter_unit IMPLEMENTATION.
         it_search_term = VALUE #(
             ( target = zif_sat_c_object_search=>c_search_fields-object_name_input_key
               values = VALUE #( ( sign = 'I' option = 'EQ' low = `ZCL_SAT_OS_CLASSINTF_PROVIDER` ) ) )
-            ( target = zif_sat_c_object_search=>c_search_fields-method_name_input_key
-              values = VALUE #( ( sign = 'I' option = 'CP' low = 'CONF*' ) ) ) )
+            ( target = zif_sat_c_os_meth_options=>c_search_fields-method_name_input_key
+              values = VALUE #( ( sign = 'I' option = 'CP' low = 'PR*' ) ) ) )
         iv_type        = zif_sat_c_object_search=>c_search_type-method ).
     TRY.
         mr_cut->zif_sat_object_search_provider~search( EXPORTING io_query  = lo_query
@@ -99,7 +99,7 @@ CLASS ltcl_method_filter_unit IMPLEMENTATION.
             ( target = zif_sat_c_object_search=>c_search_fields-object_name_input_key
               values = VALUE #( ( sign = 'I' option = 'EQ' low = `ZCL_SAT_OS_CLASSINTF_PROVIDER` ) ) ) )
         it_search_options = VALUE #( ( option      = zif_sat_c_object_search=>c_general_search_params-changed_by
-                                       target      = zif_sat_c_object_search=>c_search_fields-method_filter_input_key
+                                       target      = zif_sat_c_os_meth_options=>c_search_fields-method_filter_input_key
                                        value_range = VALUE #( ( sign  = 'E'  option  = 'EQ' low  = 'SAP' ) ) ) )
         iv_type           = zif_sat_c_object_search=>c_search_type-method
         iv_max_rows       = 1 ).
@@ -121,7 +121,7 @@ CLASS ltcl_method_filter_unit IMPLEMENTATION.
             ( target = zif_sat_c_object_search=>c_search_fields-object_name_input_key
               values = VALUE #( ( sign = 'I' option = 'EQ' low = `ZCL_SAT_OS_CLASSINTF_PROVIDER` ) ) ) )
         it_search_options = VALUE #( ( option      = zif_sat_c_object_search=>c_general_search_params-changed_by
-                                       target      = zif_sat_c_object_search=>c_search_fields-method_filter_input_key
+                                       target      = zif_sat_c_os_meth_options=>c_search_fields-method_filter_input_key
                                        value_range = VALUE #( ( sign  = 'E'  option  = 'EQ' low  = 'SAP' ) ) ) )
         iv_type           = zif_sat_c_object_search=>c_search_type-method
         iv_max_rows       = 1 ).
@@ -143,7 +143,7 @@ CLASS ltcl_method_filter_unit IMPLEMENTATION.
             ( target = zif_sat_c_object_search=>c_search_fields-object_name_input_key
               values = VALUE #( ( sign = 'I' option = 'EQ' low = `ZCL_SAT_OS_CLASSINTF_PROVIDER` ) ) ) )
         it_search_options = VALUE #( ( option      = zif_sat_c_object_search=>c_general_search_params-created_on
-                                       target      = zif_sat_c_object_search=>c_search_fields-method_filter_input_key
+                                       target      = zif_sat_c_os_meth_options=>c_search_fields-method_filter_input_key
                                        value_range = VALUE #( ( sign  = 'E'  option  = 'EQ' low  = 'EEQ20990101' ) ) ) )
         iv_type           = zif_sat_c_object_search=>c_search_type-method
         iv_max_rows       = 1 ).
@@ -165,7 +165,7 @@ CLASS ltcl_method_filter_unit IMPLEMENTATION.
             ( target = zif_sat_c_object_search=>c_search_fields-object_name_input_key
               values = VALUE #( ( sign = 'I' option = 'EQ' low = `ZCL_SAT_OS_CLASSINTF_PROVIDER` ) ) ) )
         it_search_options = VALUE #( ( option      = zif_sat_c_object_search=>c_general_search_params-changed_by
-                                       target      = zif_sat_c_object_search=>c_search_fields-method_filter_input_key
+                                       target      = zif_sat_c_os_meth_options=>c_search_fields-method_filter_input_key
                                        value_range = VALUE #( ( sign  = 'E'  option  = 'EQ' low  = 'EEQ20000101' ) ) ) )
         iv_type           = zif_sat_c_object_search=>c_search_type-method
         iv_max_rows       = 1 ).
@@ -188,7 +188,7 @@ CLASS ltcl_method_filter_unit IMPLEMENTATION.
               values = VALUE #( ( sign = 'I' option = 'EQ' low = `ZCL_SAT_OS_CLASSINTF_PROVIDER` ) ) ) )
         it_search_options = VALUE #(
             ( option      = zif_sat_c_object_search=>c_general_search_params-description
-              target      = zif_sat_c_object_search=>c_search_fields-method_filter_input_key
+              target      = zif_sat_c_os_meth_options=>c_search_fields-method_filter_input_key
               value_range = VALUE #( ( sign = 'I' option = 'EQ' low = 'Create filter for ATTR option' ) ) ) )
         iv_type           = zif_sat_c_object_search=>c_search_type-method ).
     TRY.
@@ -208,8 +208,8 @@ CLASS ltcl_method_filter_unit IMPLEMENTATION.
         it_search_term    = VALUE #(
             ( target = zif_sat_c_object_search=>c_search_fields-object_name_input_key
               values = VALUE #( ( sign = 'I' option = 'EQ' low = `ZCL_SAT_OS_CLASSINTF_PROVIDER` ) ) ) )
-        it_search_options = VALUE #( ( option      = zif_sat_c_object_search=>c_method_search_option-param
-                                       target      = zif_sat_c_object_search=>c_search_fields-method_filter_input_key
+        it_search_options = VALUE #( ( option      = zif_sat_c_os_meth_options=>c_filter_key-param
+                                       target      = zif_sat_c_os_meth_options=>c_search_fields-method_filter_input_key
                                        value_range = VALUE #( ( sign = 'I' option = 'CP' low = 'I*' ) ) ) )
         iv_type           = zif_sat_c_object_search=>c_search_type-method
         iv_max_rows       = 1 ).
@@ -230,8 +230,8 @@ CLASS ltcl_method_filter_unit IMPLEMENTATION.
         it_search_term    = VALUE #(
             ( target = zif_sat_c_object_search=>c_search_fields-object_name_input_key
               values = VALUE #( ( sign = 'I' option = 'EQ' low = `ZCL_SAT_OS_CLASSINTF_PROVIDER` ) ) ) )
-        it_search_options = VALUE #( ( option      = zif_sat_c_object_search=>c_method_search_option-level
-                                       target      = zif_sat_c_object_search=>c_search_fields-method_filter_input_key
+        it_search_options = VALUE #( ( option      = zif_sat_c_os_meth_options=>c_filter_key-level
+                                       target      = zif_sat_c_os_meth_options=>c_search_fields-method_filter_input_key
                                        value_range = VALUE #( ( sign = 'I' option = 'EQ' low = '0' ) ) ) )
         iv_type           = zif_sat_c_object_search=>c_search_type-method
         iv_max_rows       = 1 ).
@@ -252,8 +252,8 @@ CLASS ltcl_method_filter_unit IMPLEMENTATION.
         it_search_term    = VALUE #(
             ( target = zif_sat_c_object_search=>c_search_fields-object_name_input_key
               values = VALUE #( ( sign = 'I' option = 'EQ' low = `ZCL_SAT_OS_CLASSINTF_PROVIDER` ) ) ) )
-        it_search_options = VALUE #( ( option      = zif_sat_c_object_search=>c_method_search_option-level
-                                       target      = zif_sat_c_object_search=>c_search_fields-method_filter_input_key
+        it_search_options = VALUE #( ( option      = zif_sat_c_os_meth_options=>c_filter_key-level
+                                       target      = zif_sat_c_os_meth_options=>c_search_fields-method_filter_input_key
                                        value_range = VALUE #( ( sign = 'I' option = 'EQ' low = '0' ) ) ) )
         iv_type           = zif_sat_c_object_search=>c_search_type-method
         iv_max_rows       = 1 ).
@@ -274,8 +274,8 @@ CLASS ltcl_method_filter_unit IMPLEMENTATION.
         it_search_term    = VALUE #(
             ( target = zif_sat_c_object_search=>c_search_fields-object_name_input_key
               values = VALUE #( ( sign = 'I' option = 'EQ' low = `ZCL_SAT_OS_CLASSINTF_PROVIDER` ) ) ) )
-        it_search_options = VALUE #( ( option      = zif_sat_c_object_search=>c_method_search_option-level
-                                       target      = zif_sat_c_object_search=>c_search_fields-method_filter_input_key
+        it_search_options = VALUE #( ( option      = zif_sat_c_os_meth_options=>c_filter_key-level
+                                       target      = zif_sat_c_os_meth_options=>c_search_fields-method_filter_input_key
                                        value_range = VALUE #( ( sign = 'I' option = 'EQ' low = '0' ) ) ) )
         iv_type           = zif_sat_c_object_search=>c_search_type-method
         iv_max_rows       = 1 ).
@@ -296,8 +296,8 @@ CLASS ltcl_method_filter_unit IMPLEMENTATION.
         it_search_term    = VALUE #(
             ( target = zif_sat_c_object_search=>c_search_fields-object_name_input_key
               values = VALUE #( ( sign = 'I' option = 'EQ' low = `ZCL_SAT_OS_CLASSINTF_PROVIDER` ) ) ) )
-        it_search_options = VALUE #( ( option      = zif_sat_c_object_search=>c_method_search_option-status
-                                       target      = zif_sat_c_object_search=>c_search_fields-method_filter_input_key
+        it_search_options = VALUE #( ( option      = zif_sat_c_os_meth_options=>c_filter_key-status
+                                       target      = zif_sat_c_os_meth_options=>c_search_fields-method_filter_input_key
                                        value_range = VALUE #( ( sign = 'I' option = 'EQ' low = '1' ) ) ) )
         iv_type           = zif_sat_c_object_search=>c_search_type-method ).
     TRY.
@@ -318,8 +318,8 @@ CLASS ltcl_method_filter_unit IMPLEMENTATION.
 *           ( target = zif_sat_c_object_search=>c_search_fields-object_name_input_key
 *                                    values            = value #( ( sign = 'I' option = 'EQ' low = `ZCL_SAT_OS_CLASSINTF_PROVIDER` ) ) ) )
                                     it_search_options = VALUE #(
-                                        ( option      = zif_sat_c_object_search=>c_method_search_option-exception
-                                          target      = zif_sat_c_object_search=>c_search_fields-method_filter_input_key
+                                        ( option      = zif_sat_c_os_meth_options=>c_filter_key-exception
+                                          target      = zif_sat_c_os_meth_options=>c_search_fields-method_filter_input_key
                                           value_range = VALUE #( ( sign = 'I' option = 'CP' low = 'ZCX*' ) ) ) )
                                     iv_type           = zif_sat_c_object_search=>c_search_type-method
                                     iv_max_rows       = 1 ).
@@ -340,8 +340,8 @@ CLASS ltcl_method_filter_unit IMPLEMENTATION.
         it_search_term    = VALUE #(
             ( target = zif_sat_c_object_search=>c_search_fields-object_name_input_key
               values = VALUE #( ( sign = 'I' option = 'EQ' low = `ZCL_SAT_OS_CLASSINTF_PROVIDER` ) ) ) )
-        it_search_options = VALUE #( ( option      = zif_sat_c_object_search=>c_method_search_option-flag
-                                       target      = zif_sat_c_object_search=>c_search_fields-method_filter_input_key
+        it_search_options = VALUE #( ( option      = zif_sat_c_os_meth_options=>c_filter_key-flag
+                                       target      = zif_sat_c_os_meth_options=>c_search_fields-method_filter_input_key
                                        value_range = VALUE #( ( sign = 'E' option = 'EQ' low = 'ABSTRACT' ) ) ) )
         iv_type           = zif_sat_c_object_search=>c_search_type-method
         iv_max_rows       = 1 ).
@@ -569,7 +569,7 @@ CLASS ltcl_method_class_filter_unit IMPLEMENTATION.
   METHOD add_method_filter.
     mt_search_options = VALUE #( BASE mt_search_options
                                  ( option      = iv_filter
-                                   target      = zif_sat_c_object_search=>c_search_fields-method_filter_input_key
+                                   target      = zif_sat_c_os_meth_options=>c_search_fields-method_filter_input_key
                                    value_range = VALUE #( ( sign  = 'I'  option  = 'EQ' low  = iv_value ) ) ) ).
   ENDMETHOD.
 
@@ -580,7 +580,7 @@ CLASS ltcl_method_class_filter_unit IMPLEMENTATION.
         it_search_term = VALUE #(
             ( target = zif_sat_c_object_search=>c_search_fields-object_name_input_key
               values = VALUE #( ( sign = 'I' option = 'EQ' low = `ZCL_SAT_OS_CLASSINTF_PROVIDER` ) ) )
-            ( target = zif_sat_c_object_search=>c_search_fields-method_name_input_key
+            ( target = zif_sat_c_os_meth_options=>c_search_fields-method_name_input_key
               values = VALUE #( ( sign = 'I' option = 'CP' low = 'CONF*' ) ) ) )
         iv_type        = zif_sat_c_object_search=>c_search_type-method ).
     TRY.
@@ -709,7 +709,7 @@ CLASS ltcl_method_class_filter_unit IMPLEMENTATION.
 
     CLEAR mt_search_options.
     add_class_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-user iv_value = 'SAP' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-flag iv_value = 'ABSTRACT' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-flag iv_value = 'ABSTRACT' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -727,7 +727,7 @@ CLASS ltcl_method_class_filter_unit IMPLEMENTATION.
 
     CLEAR mt_search_options.
     add_class_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-user iv_value = 'SAP' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-param iv_value = 'IV_SUBQUERY' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-param iv_value = 'IV_SUBQUERY' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -745,7 +745,7 @@ CLASS ltcl_method_class_filter_unit IMPLEMENTATION.
 
     CLEAR mt_search_options.
     add_class_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-user iv_value = 'SAP' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-exception iv_value = 'ZCX_SAT_OBJECT_SEARCH' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-exception iv_value = 'ZCX_SAT_OBJECT_SEARCH' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -763,7 +763,7 @@ CLASS ltcl_method_class_filter_unit IMPLEMENTATION.
 
     CLEAR mt_search_options.
     add_class_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-user iv_value = 'SAP' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-level iv_value = '0' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-level iv_value = '0' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -781,7 +781,7 @@ CLASS ltcl_method_class_filter_unit IMPLEMENTATION.
 
     CLEAR mt_search_options.
     add_class_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-user iv_value = 'SAP' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-status iv_value = '1' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-status iv_value = '1' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -799,7 +799,7 @@ CLASS ltcl_method_class_filter_unit IMPLEMENTATION.
 
     CLEAR mt_search_options.
     add_class_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-user iv_value = 'SAP' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-visibility iv_value = '0' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-visibility iv_value = '0' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -926,7 +926,7 @@ CLASS ltcl_method_class_filter_unit IMPLEMENTATION.
 
     CLEAR mt_search_options.
     add_class_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-created_on iv_value = 'IEQ20000101' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-flag iv_value = 'ABSTRACT' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-flag iv_value = 'ABSTRACT' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -944,7 +944,7 @@ CLASS ltcl_method_class_filter_unit IMPLEMENTATION.
 
     CLEAR mt_search_options.
     add_class_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-created_on iv_value = 'IEQ20000101' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-param iv_value = 'IV_SUBQUERY' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-param iv_value = 'IV_SUBQUERY' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -962,7 +962,7 @@ CLASS ltcl_method_class_filter_unit IMPLEMENTATION.
 
     CLEAR mt_search_options.
     add_class_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-created_on iv_value = 'IEQ20000101' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-exception iv_value = 'ZCX_SAT_OBJECT_SEARCH' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-exception iv_value = 'ZCX_SAT_OBJECT_SEARCH' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -980,7 +980,7 @@ CLASS ltcl_method_class_filter_unit IMPLEMENTATION.
 
     CLEAR mt_search_options.
     add_class_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-created_on iv_value = 'IEQ20000101' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-level iv_value = '0' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-level iv_value = '0' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -998,7 +998,7 @@ CLASS ltcl_method_class_filter_unit IMPLEMENTATION.
 
     CLEAR mt_search_options.
     add_class_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-created_on iv_value = 'IEQ20000101' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-status iv_value = '1' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-status iv_value = '1' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -1016,7 +1016,7 @@ CLASS ltcl_method_class_filter_unit IMPLEMENTATION.
 
     CLEAR mt_search_options.
     add_class_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-created_on iv_value = 'IEQ20000101' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-visibility iv_value = '0' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-visibility iv_value = '0' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -1143,7 +1143,7 @@ CLASS ltcl_method_class_filter_unit IMPLEMENTATION.
 
     CLEAR mt_search_options.
     add_class_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-changed_by iv_value = 'SAP' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-flag iv_value = 'ABSTRACT' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-flag iv_value = 'ABSTRACT' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -1161,7 +1161,7 @@ CLASS ltcl_method_class_filter_unit IMPLEMENTATION.
 
     CLEAR mt_search_options.
     add_class_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-changed_by iv_value = 'SAP' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-param iv_value = 'IV_SUBQUERY' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-param iv_value = 'IV_SUBQUERY' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -1179,7 +1179,7 @@ CLASS ltcl_method_class_filter_unit IMPLEMENTATION.
 
     CLEAR mt_search_options.
     add_class_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-changed_by iv_value = 'SAP' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-exception iv_value = 'ZCX_SAT_OBJECT_SEARCH' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-exception iv_value = 'ZCX_SAT_OBJECT_SEARCH' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -1197,7 +1197,7 @@ CLASS ltcl_method_class_filter_unit IMPLEMENTATION.
 
     CLEAR mt_search_options.
     add_class_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-changed_by iv_value = 'SAP' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-level iv_value = '0' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-level iv_value = '0' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -1215,7 +1215,7 @@ CLASS ltcl_method_class_filter_unit IMPLEMENTATION.
 
     CLEAR mt_search_options.
     add_class_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-changed_by iv_value = 'SAP' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-status iv_value = '1' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-status iv_value = '1' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -1233,7 +1233,7 @@ CLASS ltcl_method_class_filter_unit IMPLEMENTATION.
 
     CLEAR mt_search_options.
     add_class_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-changed_by iv_value = 'SAP' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-visibility iv_value = '0' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-visibility iv_value = '0' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -1360,7 +1360,7 @@ CLASS ltcl_method_class_filter_unit IMPLEMENTATION.
 
     CLEAR mt_search_options.
     add_class_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-changed_on iv_value = 'IEQ20000101' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-flag iv_value = 'ABSTRACT' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-flag iv_value = 'ABSTRACT' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -1378,7 +1378,7 @@ CLASS ltcl_method_class_filter_unit IMPLEMENTATION.
 
     CLEAR mt_search_options.
     add_class_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-changed_on iv_value = 'IEQ20000101' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-param iv_value = 'IV_SUBQUERY' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-param iv_value = 'IV_SUBQUERY' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -1396,7 +1396,7 @@ CLASS ltcl_method_class_filter_unit IMPLEMENTATION.
 
     CLEAR mt_search_options.
     add_class_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-changed_on iv_value = 'IEQ20000101' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-exception iv_value = 'ZCX_SAT_OBJECT_SEARCH' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-exception iv_value = 'ZCX_SAT_OBJECT_SEARCH' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -1414,7 +1414,7 @@ CLASS ltcl_method_class_filter_unit IMPLEMENTATION.
 
     CLEAR mt_search_options.
     add_class_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-changed_on iv_value = 'IEQ20000101' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-level iv_value = '0' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-level iv_value = '0' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -1432,7 +1432,7 @@ CLASS ltcl_method_class_filter_unit IMPLEMENTATION.
 
     CLEAR mt_search_options.
     add_class_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-changed_on iv_value = 'IEQ20000101' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-status iv_value = '1' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-status iv_value = '1' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -1450,7 +1450,7 @@ CLASS ltcl_method_class_filter_unit IMPLEMENTATION.
 
     CLEAR mt_search_options.
     add_class_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-changed_on iv_value = 'IEQ20000101' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-visibility iv_value = '0' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-visibility iv_value = '0' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -1577,7 +1577,7 @@ CLASS ltcl_method_class_filter_unit IMPLEMENTATION.
 
     CLEAR mt_search_options.
     add_class_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-package iv_value = 'BASIS' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-flag iv_value = 'ABSTRACT' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-flag iv_value = 'ABSTRACT' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -1595,7 +1595,7 @@ CLASS ltcl_method_class_filter_unit IMPLEMENTATION.
 
     CLEAR mt_search_options.
     add_class_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-package iv_value = 'BASIS' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-param iv_value = 'IV_SUBQUERY' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-param iv_value = 'IV_SUBQUERY' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -1613,7 +1613,7 @@ CLASS ltcl_method_class_filter_unit IMPLEMENTATION.
 
     CLEAR mt_search_options.
     add_class_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-package iv_value = 'BASIS' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-exception iv_value = 'ZCX_SAT_OBJECT_SEARCH' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-exception iv_value = 'ZCX_SAT_OBJECT_SEARCH' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -1631,7 +1631,7 @@ CLASS ltcl_method_class_filter_unit IMPLEMENTATION.
 
     CLEAR mt_search_options.
     add_class_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-package iv_value = 'BASIS' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-level iv_value = '0' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-level iv_value = '0' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -1649,7 +1649,7 @@ CLASS ltcl_method_class_filter_unit IMPLEMENTATION.
 
     CLEAR mt_search_options.
     add_class_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-package iv_value = 'BASIS' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-status iv_value = '1' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-status iv_value = '1' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -1667,7 +1667,7 @@ CLASS ltcl_method_class_filter_unit IMPLEMENTATION.
 
     CLEAR mt_search_options.
     add_class_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-package iv_value = 'BASIS' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-visibility iv_value = '0' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-visibility iv_value = '0' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -1794,7 +1794,7 @@ CLASS ltcl_method_class_filter_unit IMPLEMENTATION.
 
     CLEAR mt_search_options.
     add_class_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-software_component iv_value = 'SAP_BASIS' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-flag iv_value = 'ABSTRACT' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-flag iv_value = 'ABSTRACT' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -1812,7 +1812,7 @@ CLASS ltcl_method_class_filter_unit IMPLEMENTATION.
 
     CLEAR mt_search_options.
     add_class_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-software_component iv_value = 'SAP_BASIS' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-param iv_value = 'IV_SUBQUERY' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-param iv_value = 'IV_SUBQUERY' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -1830,7 +1830,7 @@ CLASS ltcl_method_class_filter_unit IMPLEMENTATION.
 
     CLEAR mt_search_options.
     add_class_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-software_component iv_value = 'SAP_BASIS' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-exception iv_value = 'ZCX_SAT_OBJECT_SEARCH' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-exception iv_value = 'ZCX_SAT_OBJECT_SEARCH' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -1848,7 +1848,7 @@ CLASS ltcl_method_class_filter_unit IMPLEMENTATION.
 
     CLEAR mt_search_options.
     add_class_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-software_component iv_value = 'SAP_BASIS' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-level iv_value = '0' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-level iv_value = '0' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -1866,7 +1866,7 @@ CLASS ltcl_method_class_filter_unit IMPLEMENTATION.
 
     CLEAR mt_search_options.
     add_class_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-software_component iv_value = 'SAP_BASIS' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-status iv_value = '1' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-status iv_value = '1' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -1884,7 +1884,7 @@ CLASS ltcl_method_class_filter_unit IMPLEMENTATION.
 
     CLEAR mt_search_options.
     add_class_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-software_component iv_value = 'SAP_BASIS' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-visibility iv_value = '0' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-visibility iv_value = '0' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -2011,7 +2011,7 @@ CLASS ltcl_method_class_filter_unit IMPLEMENTATION.
 
     CLEAR mt_search_options.
     add_class_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-application_component iv_value = 'BC' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-flag iv_value = 'ABSTRACT' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-flag iv_value = 'ABSTRACT' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -2029,7 +2029,7 @@ CLASS ltcl_method_class_filter_unit IMPLEMENTATION.
 
     CLEAR mt_search_options.
     add_class_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-application_component iv_value = 'BC' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-param iv_value = 'IV_SUBQUERY' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-param iv_value = 'IV_SUBQUERY' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -2047,7 +2047,7 @@ CLASS ltcl_method_class_filter_unit IMPLEMENTATION.
 
     CLEAR mt_search_options.
     add_class_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-application_component iv_value = 'BC' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-exception iv_value = 'ZCX_SAT_OBJECT_SEARCH' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-exception iv_value = 'ZCX_SAT_OBJECT_SEARCH' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -2065,7 +2065,7 @@ CLASS ltcl_method_class_filter_unit IMPLEMENTATION.
 
     CLEAR mt_search_options.
     add_class_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-application_component iv_value = 'BC' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-level iv_value = '0' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-level iv_value = '0' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -2083,7 +2083,7 @@ CLASS ltcl_method_class_filter_unit IMPLEMENTATION.
 
     CLEAR mt_search_options.
     add_class_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-application_component iv_value = 'BC' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-status iv_value = '1' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-status iv_value = '1' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -2101,7 +2101,7 @@ CLASS ltcl_method_class_filter_unit IMPLEMENTATION.
 
     CLEAR mt_search_options.
     add_class_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-application_component iv_value = 'BC' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-visibility iv_value = '0' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-visibility iv_value = '0' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -2235,7 +2235,7 @@ CLASS ltcl_method_class_filter_unit IMPLEMENTATION.
     CLEAR mt_search_options.
     add_class_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-description
                       iv_value  = 'Search provider for ABAP OO Classes/interfaces' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-flag iv_value = 'ABSTRACT' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-flag iv_value = 'ABSTRACT' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -2254,7 +2254,7 @@ CLASS ltcl_method_class_filter_unit IMPLEMENTATION.
     CLEAR mt_search_options.
     add_class_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-description
                       iv_value  = 'Search provider for ABAP OO Classes/interfaces' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-param iv_value = 'IV_SUBQUERY' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-param iv_value = 'IV_SUBQUERY' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -2273,7 +2273,7 @@ CLASS ltcl_method_class_filter_unit IMPLEMENTATION.
     CLEAR mt_search_options.
     add_class_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-description
                       iv_value  = 'Search provider for ABAP OO Classes/interfaces' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-exception iv_value = 'ZCX_SAT_OBJECT_SEARCH' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-exception iv_value = 'ZCX_SAT_OBJECT_SEARCH' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -2292,7 +2292,7 @@ CLASS ltcl_method_class_filter_unit IMPLEMENTATION.
     CLEAR mt_search_options.
     add_class_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-description
                       iv_value  = 'Search provider for ABAP OO Classes/interfaces' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-level iv_value = '0' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-level iv_value = '0' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -2311,7 +2311,7 @@ CLASS ltcl_method_class_filter_unit IMPLEMENTATION.
     CLEAR mt_search_options.
     add_class_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-description
                       iv_value  = 'Search provider for ABAP OO Classes/interfaces' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-status iv_value = '1' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-status iv_value = '1' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -2330,7 +2330,7 @@ CLASS ltcl_method_class_filter_unit IMPLEMENTATION.
     CLEAR mt_search_options.
     add_class_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-description
                       iv_value  = 'Search provider for ABAP OO Classes/interfaces' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-visibility iv_value = '0' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-visibility iv_value = '0' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -2457,7 +2457,7 @@ CLASS ltcl_method_class_filter_unit IMPLEMENTATION.
 
     CLEAR mt_search_options.
     add_class_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-type iv_value = 'CLAS' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-flag iv_value = 'ABSTRACT' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-flag iv_value = 'ABSTRACT' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -2475,7 +2475,7 @@ CLASS ltcl_method_class_filter_unit IMPLEMENTATION.
 
     CLEAR mt_search_options.
     add_class_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-type iv_value = 'CLAS' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-param iv_value = 'IV_SUBQUERY' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-param iv_value = 'IV_SUBQUERY' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -2493,7 +2493,7 @@ CLASS ltcl_method_class_filter_unit IMPLEMENTATION.
 
     CLEAR mt_search_options.
     add_class_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-type iv_value = 'CLAS' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-exception iv_value = 'ZCX_SAT_OBJECT_SEARCH' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-exception iv_value = 'ZCX_SAT_OBJECT_SEARCH' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -2511,7 +2511,7 @@ CLASS ltcl_method_class_filter_unit IMPLEMENTATION.
 
     CLEAR mt_search_options.
     add_class_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-type iv_value = 'CLAS' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-level iv_value = '0' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-level iv_value = '0' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -2529,7 +2529,7 @@ CLASS ltcl_method_class_filter_unit IMPLEMENTATION.
 
     CLEAR mt_search_options.
     add_class_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-type iv_value = 'CLAS' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-status iv_value = '1' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-status iv_value = '1' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -2547,7 +2547,7 @@ CLASS ltcl_method_class_filter_unit IMPLEMENTATION.
 
     CLEAR mt_search_options.
     add_class_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-type iv_value = 'CLAS' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-visibility iv_value = '0' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-visibility iv_value = '0' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -2564,7 +2564,7 @@ CLASS ltcl_method_class_filter_unit IMPLEMENTATION.
     mr_cut = NEW #( ).
 
     CLEAR mt_search_options.
-    add_class_filter( iv_filter = zif_sat_c_object_search=>c_class_intf_search_option-flag iv_value = 'ABSTRACT' ).
+    add_class_filter( iv_filter = zif_sat_c_os_clif_options=>c_filter_key-flag iv_value = 'ABSTRACT' ).
     add_method_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-user iv_value = 'SAP' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
@@ -2582,7 +2582,7 @@ CLASS ltcl_method_class_filter_unit IMPLEMENTATION.
     mr_cut = NEW #( ).
 
     CLEAR mt_search_options.
-    add_class_filter( iv_filter = zif_sat_c_object_search=>c_class_intf_search_option-flag iv_value = 'ABSTRACT' ).
+    add_class_filter( iv_filter = zif_sat_c_os_clif_options=>c_filter_key-flag iv_value = 'ABSTRACT' ).
     add_method_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-created_on iv_value = 'IEQ20000101' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
@@ -2600,7 +2600,7 @@ CLASS ltcl_method_class_filter_unit IMPLEMENTATION.
     mr_cut = NEW #( ).
 
     CLEAR mt_search_options.
-    add_class_filter( iv_filter = zif_sat_c_object_search=>c_class_intf_search_option-flag iv_value = 'ABSTRACT' ).
+    add_class_filter( iv_filter = zif_sat_c_os_clif_options=>c_filter_key-flag iv_value = 'ABSTRACT' ).
     add_method_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-changed_by iv_value = 'SAP' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
@@ -2618,7 +2618,7 @@ CLASS ltcl_method_class_filter_unit IMPLEMENTATION.
     mr_cut = NEW #( ).
 
     CLEAR mt_search_options.
-    add_class_filter( iv_filter = zif_sat_c_object_search=>c_class_intf_search_option-flag iv_value = 'ABSTRACT' ).
+    add_class_filter( iv_filter = zif_sat_c_os_clif_options=>c_filter_key-flag iv_value = 'ABSTRACT' ).
     add_method_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-changed_on iv_value = 'IEQ20000101' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
@@ -2636,7 +2636,7 @@ CLASS ltcl_method_class_filter_unit IMPLEMENTATION.
     mr_cut = NEW #( ).
 
     CLEAR mt_search_options.
-    add_class_filter( iv_filter = zif_sat_c_object_search=>c_class_intf_search_option-flag iv_value = 'ABSTRACT' ).
+    add_class_filter( iv_filter = zif_sat_c_os_clif_options=>c_filter_key-flag iv_value = 'ABSTRACT' ).
     add_method_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-description
                        iv_value  = 'Create filter for ATTR option' ).
 
@@ -2655,7 +2655,7 @@ CLASS ltcl_method_class_filter_unit IMPLEMENTATION.
     mr_cut = NEW #( ).
 
     CLEAR mt_search_options.
-    add_class_filter( iv_filter = zif_sat_c_object_search=>c_class_intf_search_option-flag iv_value = 'ABSTRACT' ).
+    add_class_filter( iv_filter = zif_sat_c_os_clif_options=>c_filter_key-flag iv_value = 'ABSTRACT' ).
     add_method_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-type iv_value = '0' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
@@ -2673,8 +2673,8 @@ CLASS ltcl_method_class_filter_unit IMPLEMENTATION.
     mr_cut = NEW #( ).
 
     CLEAR mt_search_options.
-    add_class_filter( iv_filter = zif_sat_c_object_search=>c_class_intf_search_option-flag iv_value = 'ABSTRACT' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-flag iv_value = 'ABSTRACT' ).
+    add_class_filter( iv_filter = zif_sat_c_os_clif_options=>c_filter_key-flag iv_value = 'ABSTRACT' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-flag iv_value = 'ABSTRACT' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -2691,8 +2691,8 @@ CLASS ltcl_method_class_filter_unit IMPLEMENTATION.
     mr_cut = NEW #( ).
 
     CLEAR mt_search_options.
-    add_class_filter( iv_filter = zif_sat_c_object_search=>c_class_intf_search_option-flag iv_value = 'ABSTRACT' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-param iv_value = 'IV_SUBQUERY' ).
+    add_class_filter( iv_filter = zif_sat_c_os_clif_options=>c_filter_key-flag iv_value = 'ABSTRACT' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-param iv_value = 'IV_SUBQUERY' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -2709,8 +2709,8 @@ CLASS ltcl_method_class_filter_unit IMPLEMENTATION.
     mr_cut = NEW #( ).
 
     CLEAR mt_search_options.
-    add_class_filter( iv_filter = zif_sat_c_object_search=>c_class_intf_search_option-flag iv_value = 'ABSTRACT' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-exception iv_value = 'ZCX_SAT_OBJECT_SEARCH' ).
+    add_class_filter( iv_filter = zif_sat_c_os_clif_options=>c_filter_key-flag iv_value = 'ABSTRACT' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-exception iv_value = 'ZCX_SAT_OBJECT_SEARCH' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -2727,8 +2727,8 @@ CLASS ltcl_method_class_filter_unit IMPLEMENTATION.
     mr_cut = NEW #( ).
 
     CLEAR mt_search_options.
-    add_class_filter( iv_filter = zif_sat_c_object_search=>c_class_intf_search_option-flag iv_value = 'ABSTRACT' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-level iv_value = '0' ).
+    add_class_filter( iv_filter = zif_sat_c_os_clif_options=>c_filter_key-flag iv_value = 'ABSTRACT' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-level iv_value = '0' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -2745,8 +2745,8 @@ CLASS ltcl_method_class_filter_unit IMPLEMENTATION.
     mr_cut = NEW #( ).
 
     CLEAR mt_search_options.
-    add_class_filter( iv_filter = zif_sat_c_object_search=>c_class_intf_search_option-flag iv_value = 'ABSTRACT' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-status iv_value = '1' ).
+    add_class_filter( iv_filter = zif_sat_c_os_clif_options=>c_filter_key-flag iv_value = 'ABSTRACT' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-status iv_value = '1' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -2763,8 +2763,8 @@ CLASS ltcl_method_class_filter_unit IMPLEMENTATION.
     mr_cut = NEW #( ).
 
     CLEAR mt_search_options.
-    add_class_filter( iv_filter = zif_sat_c_object_search=>c_class_intf_search_option-flag iv_value = 'ABSTRACT' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-visibility iv_value = '0' ).
+    add_class_filter( iv_filter = zif_sat_c_os_clif_options=>c_filter_key-flag iv_value = 'ABSTRACT' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-visibility iv_value = '0' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -2781,7 +2781,7 @@ CLASS ltcl_method_class_filter_unit IMPLEMENTATION.
     mr_cut = NEW #( ).
 
     CLEAR mt_search_options.
-    add_class_filter( iv_filter = zif_sat_c_object_search=>c_class_intf_search_option-category iv_value = '00' ).
+    add_class_filter( iv_filter = zif_sat_c_os_clif_options=>c_filter_key-category iv_value = '00' ).
     add_method_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-user iv_value = 'SAP' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
@@ -2799,7 +2799,7 @@ CLASS ltcl_method_class_filter_unit IMPLEMENTATION.
     mr_cut = NEW #( ).
 
     CLEAR mt_search_options.
-    add_class_filter( iv_filter = zif_sat_c_object_search=>c_class_intf_search_option-category iv_value = '00' ).
+    add_class_filter( iv_filter = zif_sat_c_os_clif_options=>c_filter_key-category iv_value = '00' ).
     add_method_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-created_on iv_value = 'IEQ20000101' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
@@ -2817,7 +2817,7 @@ CLASS ltcl_method_class_filter_unit IMPLEMENTATION.
     mr_cut = NEW #( ).
 
     CLEAR mt_search_options.
-    add_class_filter( iv_filter = zif_sat_c_object_search=>c_class_intf_search_option-category iv_value = '00' ).
+    add_class_filter( iv_filter = zif_sat_c_os_clif_options=>c_filter_key-category iv_value = '00' ).
     add_method_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-changed_by iv_value = 'SAP' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
@@ -2835,7 +2835,7 @@ CLASS ltcl_method_class_filter_unit IMPLEMENTATION.
     mr_cut = NEW #( ).
 
     CLEAR mt_search_options.
-    add_class_filter( iv_filter = zif_sat_c_object_search=>c_class_intf_search_option-category iv_value = '00' ).
+    add_class_filter( iv_filter = zif_sat_c_os_clif_options=>c_filter_key-category iv_value = '00' ).
     add_method_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-changed_on iv_value = 'IEQ20000101' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
@@ -2853,7 +2853,7 @@ CLASS ltcl_method_class_filter_unit IMPLEMENTATION.
     mr_cut = NEW #( ).
 
     CLEAR mt_search_options.
-    add_class_filter( iv_filter = zif_sat_c_object_search=>c_class_intf_search_option-category iv_value = '00' ).
+    add_class_filter( iv_filter = zif_sat_c_os_clif_options=>c_filter_key-category iv_value = '00' ).
     add_method_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-description
                        iv_value  = 'Create filter for ATTR option' ).
 
@@ -2872,7 +2872,7 @@ CLASS ltcl_method_class_filter_unit IMPLEMENTATION.
     mr_cut = NEW #( ).
 
     CLEAR mt_search_options.
-    add_class_filter( iv_filter = zif_sat_c_object_search=>c_class_intf_search_option-category iv_value = '00' ).
+    add_class_filter( iv_filter = zif_sat_c_os_clif_options=>c_filter_key-category iv_value = '00' ).
     add_method_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-type iv_value = '0' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
@@ -2890,8 +2890,8 @@ CLASS ltcl_method_class_filter_unit IMPLEMENTATION.
     mr_cut = NEW #( ).
 
     CLEAR mt_search_options.
-    add_class_filter( iv_filter = zif_sat_c_object_search=>c_class_intf_search_option-category iv_value = '00' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-flag iv_value = 'ABSTRACT' ).
+    add_class_filter( iv_filter = zif_sat_c_os_clif_options=>c_filter_key-category iv_value = '00' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-flag iv_value = 'ABSTRACT' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -2908,8 +2908,8 @@ CLASS ltcl_method_class_filter_unit IMPLEMENTATION.
     mr_cut = NEW #( ).
 
     CLEAR mt_search_options.
-    add_class_filter( iv_filter = zif_sat_c_object_search=>c_class_intf_search_option-category iv_value = '00' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-param iv_value = 'IV_SUBQUERY' ).
+    add_class_filter( iv_filter = zif_sat_c_os_clif_options=>c_filter_key-category iv_value = '00' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-param iv_value = 'IV_SUBQUERY' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -2926,8 +2926,8 @@ CLASS ltcl_method_class_filter_unit IMPLEMENTATION.
     mr_cut = NEW #( ).
 
     CLEAR mt_search_options.
-    add_class_filter( iv_filter = zif_sat_c_object_search=>c_class_intf_search_option-category iv_value = '00' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-exception iv_value = 'ZCX_SAT_OBJECT_SEARCH' ).
+    add_class_filter( iv_filter = zif_sat_c_os_clif_options=>c_filter_key-category iv_value = '00' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-exception iv_value = 'ZCX_SAT_OBJECT_SEARCH' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -2944,8 +2944,8 @@ CLASS ltcl_method_class_filter_unit IMPLEMENTATION.
     mr_cut = NEW #( ).
 
     CLEAR mt_search_options.
-    add_class_filter( iv_filter = zif_sat_c_object_search=>c_class_intf_search_option-category iv_value = '00' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-level iv_value = '0' ).
+    add_class_filter( iv_filter = zif_sat_c_os_clif_options=>c_filter_key-category iv_value = '00' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-level iv_value = '0' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -2962,8 +2962,8 @@ CLASS ltcl_method_class_filter_unit IMPLEMENTATION.
     mr_cut = NEW #( ).
 
     CLEAR mt_search_options.
-    add_class_filter( iv_filter = zif_sat_c_object_search=>c_class_intf_search_option-category iv_value = '00' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-status iv_value = '1' ).
+    add_class_filter( iv_filter = zif_sat_c_os_clif_options=>c_filter_key-category iv_value = '00' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-status iv_value = '1' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -2980,8 +2980,8 @@ CLASS ltcl_method_class_filter_unit IMPLEMENTATION.
     mr_cut = NEW #( ).
 
     CLEAR mt_search_options.
-    add_class_filter( iv_filter = zif_sat_c_object_search=>c_class_intf_search_option-category iv_value = '00' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-visibility iv_value = '0' ).
+    add_class_filter( iv_filter = zif_sat_c_os_clif_options=>c_filter_key-category iv_value = '00' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-visibility iv_value = '0' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -2998,7 +2998,7 @@ CLASS ltcl_method_class_filter_unit IMPLEMENTATION.
     mr_cut = NEW #( ).
 
     CLEAR mt_search_options.
-    add_class_filter( iv_filter = zif_sat_c_object_search=>c_class_intf_search_option-interface iv_value = 'ZIF_SAT_C_JOIN_COND_TYPE' ).
+    add_class_filter( iv_filter = zif_sat_c_os_clif_options=>c_filter_key-interface iv_value = 'ZIF_SAT_C_JOIN_COND_TYPE' ).
     add_method_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-user iv_value = 'SAP' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
@@ -3016,7 +3016,7 @@ CLASS ltcl_method_class_filter_unit IMPLEMENTATION.
     mr_cut = NEW #( ).
 
     CLEAR mt_search_options.
-    add_class_filter( iv_filter = zif_sat_c_object_search=>c_class_intf_search_option-interface iv_value = 'ZIF_SAT_C_JOIN_COND_TYPE' ).
+    add_class_filter( iv_filter = zif_sat_c_os_clif_options=>c_filter_key-interface iv_value = 'ZIF_SAT_C_JOIN_COND_TYPE' ).
     add_method_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-created_on iv_value = 'IEQ20000101' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
@@ -3034,7 +3034,7 @@ CLASS ltcl_method_class_filter_unit IMPLEMENTATION.
     mr_cut = NEW #( ).
 
     CLEAR mt_search_options.
-    add_class_filter( iv_filter = zif_sat_c_object_search=>c_class_intf_search_option-interface iv_value = 'ZIF_SAT_C_JOIN_COND_TYPE' ).
+    add_class_filter( iv_filter = zif_sat_c_os_clif_options=>c_filter_key-interface iv_value = 'ZIF_SAT_C_JOIN_COND_TYPE' ).
     add_method_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-changed_by iv_value = 'SAP' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
@@ -3052,7 +3052,7 @@ CLASS ltcl_method_class_filter_unit IMPLEMENTATION.
     mr_cut = NEW #( ).
 
     CLEAR mt_search_options.
-    add_class_filter( iv_filter = zif_sat_c_object_search=>c_class_intf_search_option-interface iv_value = 'ZIF_SAT_C_JOIN_COND_TYPE' ).
+    add_class_filter( iv_filter = zif_sat_c_os_clif_options=>c_filter_key-interface iv_value = 'ZIF_SAT_C_JOIN_COND_TYPE' ).
     add_method_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-changed_on iv_value = 'IEQ20000101' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
@@ -3070,7 +3070,7 @@ CLASS ltcl_method_class_filter_unit IMPLEMENTATION.
     mr_cut = NEW #( ).
 
     CLEAR mt_search_options.
-    add_class_filter( iv_filter = zif_sat_c_object_search=>c_class_intf_search_option-interface iv_value = 'ZIF_SAT_C_JOIN_COND_TYPE' ).
+    add_class_filter( iv_filter = zif_sat_c_os_clif_options=>c_filter_key-interface iv_value = 'ZIF_SAT_C_JOIN_COND_TYPE' ).
     add_method_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-description
                        iv_value  = 'Create filter for ATTR option' ).
 
@@ -3089,7 +3089,7 @@ CLASS ltcl_method_class_filter_unit IMPLEMENTATION.
     mr_cut = NEW #( ).
 
     CLEAR mt_search_options.
-    add_class_filter( iv_filter = zif_sat_c_object_search=>c_class_intf_search_option-interface iv_value = 'ZIF_SAT_C_JOIN_COND_TYPE' ).
+    add_class_filter( iv_filter = zif_sat_c_os_clif_options=>c_filter_key-interface iv_value = 'ZIF_SAT_C_JOIN_COND_TYPE' ).
     add_method_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-type iv_value = '0' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
@@ -3107,8 +3107,8 @@ CLASS ltcl_method_class_filter_unit IMPLEMENTATION.
     mr_cut = NEW #( ).
 
     CLEAR mt_search_options.
-    add_class_filter( iv_filter = zif_sat_c_object_search=>c_class_intf_search_option-interface iv_value = 'ZIF_SAT_C_JOIN_COND_TYPE' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-flag iv_value = 'ABSTRACT' ).
+    add_class_filter( iv_filter = zif_sat_c_os_clif_options=>c_filter_key-interface iv_value = 'ZIF_SAT_C_JOIN_COND_TYPE' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-flag iv_value = 'ABSTRACT' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -3125,8 +3125,8 @@ CLASS ltcl_method_class_filter_unit IMPLEMENTATION.
     mr_cut = NEW #( ).
 
     CLEAR mt_search_options.
-    add_class_filter( iv_filter = zif_sat_c_object_search=>c_class_intf_search_option-interface iv_value = 'ZIF_SAT_C_JOIN_COND_TYPE' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-param iv_value = 'IV_SUBQUERY' ).
+    add_class_filter( iv_filter = zif_sat_c_os_clif_options=>c_filter_key-interface iv_value = 'ZIF_SAT_C_JOIN_COND_TYPE' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-param iv_value = 'IV_SUBQUERY' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -3143,8 +3143,8 @@ CLASS ltcl_method_class_filter_unit IMPLEMENTATION.
     mr_cut = NEW #( ).
 
     CLEAR mt_search_options.
-    add_class_filter( iv_filter = zif_sat_c_object_search=>c_class_intf_search_option-interface iv_value = 'ZIF_SAT_C_JOIN_COND_TYPE' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-exception iv_value = 'ZCX_SAT_OBJECT_SEARCH' ).
+    add_class_filter( iv_filter = zif_sat_c_os_clif_options=>c_filter_key-interface iv_value = 'ZIF_SAT_C_JOIN_COND_TYPE' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-exception iv_value = 'ZCX_SAT_OBJECT_SEARCH' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -3161,8 +3161,8 @@ CLASS ltcl_method_class_filter_unit IMPLEMENTATION.
     mr_cut = NEW #( ).
 
     CLEAR mt_search_options.
-    add_class_filter( iv_filter = zif_sat_c_object_search=>c_class_intf_search_option-interface iv_value = 'ZIF_SAT_C_JOIN_COND_TYPE' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-level iv_value = '0' ).
+    add_class_filter( iv_filter = zif_sat_c_os_clif_options=>c_filter_key-interface iv_value = 'ZIF_SAT_C_JOIN_COND_TYPE' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-level iv_value = '0' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -3179,8 +3179,8 @@ CLASS ltcl_method_class_filter_unit IMPLEMENTATION.
     mr_cut = NEW #( ).
 
     CLEAR mt_search_options.
-    add_class_filter( iv_filter = zif_sat_c_object_search=>c_class_intf_search_option-interface iv_value = 'ZIF_SAT_C_JOIN_COND_TYPE' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-status iv_value = '1' ).
+    add_class_filter( iv_filter = zif_sat_c_os_clif_options=>c_filter_key-interface iv_value = 'ZIF_SAT_C_JOIN_COND_TYPE' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-status iv_value = '1' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -3197,8 +3197,8 @@ CLASS ltcl_method_class_filter_unit IMPLEMENTATION.
     mr_cut = NEW #( ).
 
     CLEAR mt_search_options.
-    add_class_filter( iv_filter = zif_sat_c_object_search=>c_class_intf_search_option-interface iv_value = 'ZIF_SAT_C_JOIN_COND_TYPE' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-visibility iv_value = '0' ).
+    add_class_filter( iv_filter = zif_sat_c_os_clif_options=>c_filter_key-interface iv_value = 'ZIF_SAT_C_JOIN_COND_TYPE' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-visibility iv_value = '0' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -3215,7 +3215,7 @@ CLASS ltcl_method_class_filter_unit IMPLEMENTATION.
     mr_cut = NEW #( ).
 
     CLEAR mt_search_options.
-    add_class_filter( iv_filter = zif_sat_c_object_search=>c_class_intf_search_option-friend iv_value = 'ZCL_SAT_BASE_SEARCH_PROVIDER' ).
+    add_class_filter( iv_filter = zif_sat_c_os_clif_options=>c_filter_key-friend iv_value = 'ZCL_SAT_BASE_SEARCH_PROVIDER' ).
     add_method_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-user iv_value = 'SAP' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
@@ -3233,7 +3233,7 @@ CLASS ltcl_method_class_filter_unit IMPLEMENTATION.
     mr_cut = NEW #( ).
 
     CLEAR mt_search_options.
-    add_class_filter( iv_filter = zif_sat_c_object_search=>c_class_intf_search_option-friend iv_value = 'ZCL_SAT_BASE_SEARCH_PROVIDER' ).
+    add_class_filter( iv_filter = zif_sat_c_os_clif_options=>c_filter_key-friend iv_value = 'ZCL_SAT_BASE_SEARCH_PROVIDER' ).
     add_method_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-created_on iv_value = 'IEQ20000101' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
@@ -3251,7 +3251,7 @@ CLASS ltcl_method_class_filter_unit IMPLEMENTATION.
     mr_cut = NEW #( ).
 
     CLEAR mt_search_options.
-    add_class_filter( iv_filter = zif_sat_c_object_search=>c_class_intf_search_option-friend iv_value = 'ZCL_SAT_BASE_SEARCH_PROVIDER' ).
+    add_class_filter( iv_filter = zif_sat_c_os_clif_options=>c_filter_key-friend iv_value = 'ZCL_SAT_BASE_SEARCH_PROVIDER' ).
     add_method_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-changed_by iv_value = 'SAP' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
@@ -3269,7 +3269,7 @@ CLASS ltcl_method_class_filter_unit IMPLEMENTATION.
     mr_cut = NEW #( ).
 
     CLEAR mt_search_options.
-    add_class_filter( iv_filter = zif_sat_c_object_search=>c_class_intf_search_option-friend iv_value = 'ZCL_SAT_BASE_SEARCH_PROVIDER' ).
+    add_class_filter( iv_filter = zif_sat_c_os_clif_options=>c_filter_key-friend iv_value = 'ZCL_SAT_BASE_SEARCH_PROVIDER' ).
     add_method_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-changed_on iv_value = 'IEQ20000101' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
@@ -3287,7 +3287,7 @@ CLASS ltcl_method_class_filter_unit IMPLEMENTATION.
     mr_cut = NEW #( ).
 
     CLEAR mt_search_options.
-    add_class_filter( iv_filter = zif_sat_c_object_search=>c_class_intf_search_option-friend iv_value = 'ZCL_SAT_BASE_SEARCH_PROVIDER' ).
+    add_class_filter( iv_filter = zif_sat_c_os_clif_options=>c_filter_key-friend iv_value = 'ZCL_SAT_BASE_SEARCH_PROVIDER' ).
     add_method_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-description
                        iv_value  = 'Create filter for ATTR option' ).
 
@@ -3306,7 +3306,7 @@ CLASS ltcl_method_class_filter_unit IMPLEMENTATION.
     mr_cut = NEW #( ).
 
     CLEAR mt_search_options.
-    add_class_filter( iv_filter = zif_sat_c_object_search=>c_class_intf_search_option-friend iv_value = 'ZCL_SAT_BASE_SEARCH_PROVIDER' ).
+    add_class_filter( iv_filter = zif_sat_c_os_clif_options=>c_filter_key-friend iv_value = 'ZCL_SAT_BASE_SEARCH_PROVIDER' ).
     add_method_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-type iv_value = '0' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
@@ -3324,8 +3324,8 @@ CLASS ltcl_method_class_filter_unit IMPLEMENTATION.
     mr_cut = NEW #( ).
 
     CLEAR mt_search_options.
-    add_class_filter( iv_filter = zif_sat_c_object_search=>c_class_intf_search_option-friend iv_value = 'ZCL_SAT_BASE_SEARCH_PROVIDER' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-flag iv_value = 'ABSTRACT' ).
+    add_class_filter( iv_filter = zif_sat_c_os_clif_options=>c_filter_key-friend iv_value = 'ZCL_SAT_BASE_SEARCH_PROVIDER' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-flag iv_value = 'ABSTRACT' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -3342,8 +3342,8 @@ CLASS ltcl_method_class_filter_unit IMPLEMENTATION.
     mr_cut = NEW #( ).
 
     CLEAR mt_search_options.
-    add_class_filter( iv_filter = zif_sat_c_object_search=>c_class_intf_search_option-friend iv_value = 'ZCL_SAT_BASE_SEARCH_PROVIDER' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-param iv_value = 'IV_SUBQUERY' ).
+    add_class_filter( iv_filter = zif_sat_c_os_clif_options=>c_filter_key-friend iv_value = 'ZCL_SAT_BASE_SEARCH_PROVIDER' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-param iv_value = 'IV_SUBQUERY' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -3360,8 +3360,8 @@ CLASS ltcl_method_class_filter_unit IMPLEMENTATION.
     mr_cut = NEW #( ).
 
     CLEAR mt_search_options.
-    add_class_filter( iv_filter = zif_sat_c_object_search=>c_class_intf_search_option-friend iv_value = 'ZCL_SAT_BASE_SEARCH_PROVIDER' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-exception iv_value = 'ZCX_SAT_OBJECT_SEARCH' ).
+    add_class_filter( iv_filter = zif_sat_c_os_clif_options=>c_filter_key-friend iv_value = 'ZCL_SAT_BASE_SEARCH_PROVIDER' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-exception iv_value = 'ZCX_SAT_OBJECT_SEARCH' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -3378,8 +3378,8 @@ CLASS ltcl_method_class_filter_unit IMPLEMENTATION.
     mr_cut = NEW #( ).
 
     CLEAR mt_search_options.
-    add_class_filter( iv_filter = zif_sat_c_object_search=>c_class_intf_search_option-friend iv_value = 'ZCL_SAT_BASE_SEARCH_PROVIDER' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-level iv_value = '0' ).
+    add_class_filter( iv_filter = zif_sat_c_os_clif_options=>c_filter_key-friend iv_value = 'ZCL_SAT_BASE_SEARCH_PROVIDER' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-level iv_value = '0' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -3396,8 +3396,8 @@ CLASS ltcl_method_class_filter_unit IMPLEMENTATION.
     mr_cut = NEW #( ).
 
     CLEAR mt_search_options.
-    add_class_filter( iv_filter = zif_sat_c_object_search=>c_class_intf_search_option-friend iv_value = 'ZCL_SAT_BASE_SEARCH_PROVIDER' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-status iv_value = '1' ).
+    add_class_filter( iv_filter = zif_sat_c_os_clif_options=>c_filter_key-friend iv_value = 'ZCL_SAT_BASE_SEARCH_PROVIDER' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-status iv_value = '1' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -3414,8 +3414,8 @@ CLASS ltcl_method_class_filter_unit IMPLEMENTATION.
     mr_cut = NEW #( ).
 
     CLEAR mt_search_options.
-    add_class_filter( iv_filter = zif_sat_c_object_search=>c_class_intf_search_option-friend iv_value = 'ZCL_SAT_BASE_SEARCH_PROVIDER' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-visibility iv_value = '0' ).
+    add_class_filter( iv_filter = zif_sat_c_os_clif_options=>c_filter_key-friend iv_value = 'ZCL_SAT_BASE_SEARCH_PROVIDER' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-visibility iv_value = '0' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -3432,7 +3432,7 @@ CLASS ltcl_method_class_filter_unit IMPLEMENTATION.
     mr_cut = NEW #( ).
 
     CLEAR mt_search_options.
-    add_class_filter( iv_filter = zif_sat_c_object_search=>c_class_intf_search_option-super_type
+    add_class_filter( iv_filter = zif_sat_c_os_clif_options=>c_filter_key-super_type
                       iv_value  = 'ZCL_SAT_BASE_SEARCH_PROVIDER' ).
     add_method_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-user iv_value = 'SAP' ).
 
@@ -3451,7 +3451,7 @@ CLASS ltcl_method_class_filter_unit IMPLEMENTATION.
     mr_cut = NEW #( ).
 
     CLEAR mt_search_options.
-    add_class_filter( iv_filter = zif_sat_c_object_search=>c_class_intf_search_option-super_type
+    add_class_filter( iv_filter = zif_sat_c_os_clif_options=>c_filter_key-super_type
                       iv_value  = 'ZCL_SAT_BASE_SEARCH_PROVIDER' ).
     add_method_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-created_on iv_value = 'IEQ20000101' ).
 
@@ -3470,7 +3470,7 @@ CLASS ltcl_method_class_filter_unit IMPLEMENTATION.
     mr_cut = NEW #( ).
 
     CLEAR mt_search_options.
-    add_class_filter( iv_filter = zif_sat_c_object_search=>c_class_intf_search_option-super_type
+    add_class_filter( iv_filter = zif_sat_c_os_clif_options=>c_filter_key-super_type
                       iv_value  = 'ZCL_SAT_BASE_SEARCH_PROVIDER' ).
     add_method_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-changed_by iv_value = 'SAP' ).
 
@@ -3489,7 +3489,7 @@ CLASS ltcl_method_class_filter_unit IMPLEMENTATION.
     mr_cut = NEW #( ).
 
     CLEAR mt_search_options.
-    add_class_filter( iv_filter = zif_sat_c_object_search=>c_class_intf_search_option-super_type
+    add_class_filter( iv_filter = zif_sat_c_os_clif_options=>c_filter_key-super_type
                       iv_value  = 'ZCL_SAT_BASE_SEARCH_PROVIDER' ).
     add_method_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-changed_on iv_value = 'IEQ20000101' ).
 
@@ -3508,7 +3508,7 @@ CLASS ltcl_method_class_filter_unit IMPLEMENTATION.
     mr_cut = NEW #( ).
 
     CLEAR mt_search_options.
-    add_class_filter( iv_filter = zif_sat_c_object_search=>c_class_intf_search_option-super_type
+    add_class_filter( iv_filter = zif_sat_c_os_clif_options=>c_filter_key-super_type
                       iv_value  = 'ZCL_SAT_BASE_SEARCH_PROVIDER' ).
     add_method_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-description
                        iv_value  = 'Create filter for ATTR option' ).
@@ -3528,7 +3528,7 @@ CLASS ltcl_method_class_filter_unit IMPLEMENTATION.
     mr_cut = NEW #( ).
 
     CLEAR mt_search_options.
-    add_class_filter( iv_filter = zif_sat_c_object_search=>c_class_intf_search_option-super_type
+    add_class_filter( iv_filter = zif_sat_c_os_clif_options=>c_filter_key-super_type
                       iv_value  = 'ZCL_SAT_BASE_SEARCH_PROVIDER' ).
     add_method_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-type iv_value = '0' ).
 
@@ -3547,9 +3547,9 @@ CLASS ltcl_method_class_filter_unit IMPLEMENTATION.
     mr_cut = NEW #( ).
 
     CLEAR mt_search_options.
-    add_class_filter( iv_filter = zif_sat_c_object_search=>c_class_intf_search_option-super_type
+    add_class_filter( iv_filter = zif_sat_c_os_clif_options=>c_filter_key-super_type
                       iv_value  = 'ZCL_SAT_BASE_SEARCH_PROVIDER' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-flag iv_value = 'ABSTRACT' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-flag iv_value = 'ABSTRACT' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -3566,9 +3566,9 @@ CLASS ltcl_method_class_filter_unit IMPLEMENTATION.
     mr_cut = NEW #( ).
 
     CLEAR mt_search_options.
-    add_class_filter( iv_filter = zif_sat_c_object_search=>c_class_intf_search_option-super_type
+    add_class_filter( iv_filter = zif_sat_c_os_clif_options=>c_filter_key-super_type
                       iv_value  = 'ZCL_SAT_BASE_SEARCH_PROVIDER' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-param iv_value = 'IV_SUBQUERY' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-param iv_value = 'IV_SUBQUERY' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -3585,9 +3585,9 @@ CLASS ltcl_method_class_filter_unit IMPLEMENTATION.
     mr_cut = NEW #( ).
 
     CLEAR mt_search_options.
-    add_class_filter( iv_filter = zif_sat_c_object_search=>c_class_intf_search_option-super_type
+    add_class_filter( iv_filter = zif_sat_c_os_clif_options=>c_filter_key-super_type
                       iv_value  = 'ZCL_SAT_BASE_SEARCH_PROVIDER' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-exception iv_value = 'ZCX_SAT_OBJECT_SEARCH' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-exception iv_value = 'ZCX_SAT_OBJECT_SEARCH' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -3604,9 +3604,9 @@ CLASS ltcl_method_class_filter_unit IMPLEMENTATION.
     mr_cut = NEW #( ).
 
     CLEAR mt_search_options.
-    add_class_filter( iv_filter = zif_sat_c_object_search=>c_class_intf_search_option-super_type
+    add_class_filter( iv_filter = zif_sat_c_os_clif_options=>c_filter_key-super_type
                       iv_value  = 'ZCL_SAT_BASE_SEARCH_PROVIDER' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-level iv_value = '0' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-level iv_value = '0' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -3623,9 +3623,9 @@ CLASS ltcl_method_class_filter_unit IMPLEMENTATION.
     mr_cut = NEW #( ).
 
     CLEAR mt_search_options.
-    add_class_filter( iv_filter = zif_sat_c_object_search=>c_class_intf_search_option-super_type
+    add_class_filter( iv_filter = zif_sat_c_os_clif_options=>c_filter_key-super_type
                       iv_value  = 'ZCL_SAT_BASE_SEARCH_PROVIDER' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-status iv_value = '1' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-status iv_value = '1' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -3642,9 +3642,9 @@ CLASS ltcl_method_class_filter_unit IMPLEMENTATION.
     mr_cut = NEW #( ).
 
     CLEAR mt_search_options.
-    add_class_filter( iv_filter = zif_sat_c_object_search=>c_class_intf_search_option-super_type
+    add_class_filter( iv_filter = zif_sat_c_os_clif_options=>c_filter_key-super_type
                       iv_value  = 'ZCL_SAT_BASE_SEARCH_PROVIDER' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-visibility iv_value = '0' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-visibility iv_value = '0' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -3871,7 +3871,7 @@ CLASS ltcl_neg_meth_class_fltr_unit IMPLEMENTATION.
   METHOD add_method_filter.
     mt_search_options = VALUE #( BASE mt_search_options
                                  ( option      = iv_filter
-                                   target      = zif_sat_c_object_search=>c_search_fields-method_filter_input_key
+                                   target      = zif_sat_c_os_meth_options=>c_search_fields-method_filter_input_key
                                    value_range = VALUE #( ( sign  = 'E'  option  = 'EQ' low  = iv_value ) ) ) ).
   ENDMETHOD.
 
@@ -3882,7 +3882,7 @@ CLASS ltcl_neg_meth_class_fltr_unit IMPLEMENTATION.
         it_search_term = VALUE #(
             ( target = zif_sat_c_object_search=>c_search_fields-object_name_input_key
               values = VALUE #( ( sign = 'I' option = 'EQ' low = `ZCL_SAT_OS_CLASSINTF_PROVIDER` ) ) )
-            ( target = zif_sat_c_object_search=>c_search_fields-method_name_input_key
+            ( target = zif_sat_c_os_meth_options=>c_search_fields-method_name_input_key
               values = VALUE #( ( sign = 'I' option = 'CP' low = 'CONF*' ) ) ) )
         iv_type        = zif_sat_c_object_search=>c_search_type-method ).
     TRY.
@@ -4011,7 +4011,7 @@ CLASS ltcl_neg_meth_class_fltr_unit IMPLEMENTATION.
 
     CLEAR mt_search_options.
     add_class_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-user iv_value = 'SAP' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-flag iv_value = 'ABSTRACT' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-flag iv_value = 'ABSTRACT' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -4029,7 +4029,7 @@ CLASS ltcl_neg_meth_class_fltr_unit IMPLEMENTATION.
 
     CLEAR mt_search_options.
     add_class_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-user iv_value = 'SAP' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-param iv_value = 'IV_SUBQUERY' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-param iv_value = 'IV_SUBQUERY' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -4047,7 +4047,7 @@ CLASS ltcl_neg_meth_class_fltr_unit IMPLEMENTATION.
 
     CLEAR mt_search_options.
     add_class_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-user iv_value = 'SAP' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-exception iv_value = 'ZCX_SAT_OBJECT_SEARCH' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-exception iv_value = 'ZCX_SAT_OBJECT_SEARCH' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -4065,7 +4065,7 @@ CLASS ltcl_neg_meth_class_fltr_unit IMPLEMENTATION.
 
     CLEAR mt_search_options.
     add_class_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-user iv_value = 'SAP' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-level iv_value = '0' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-level iv_value = '0' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -4083,7 +4083,7 @@ CLASS ltcl_neg_meth_class_fltr_unit IMPLEMENTATION.
 
     CLEAR mt_search_options.
     add_class_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-user iv_value = 'SAP' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-status iv_value = '1' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-status iv_value = '1' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -4101,7 +4101,7 @@ CLASS ltcl_neg_meth_class_fltr_unit IMPLEMENTATION.
 
     CLEAR mt_search_options.
     add_class_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-user iv_value = 'SAP' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-visibility iv_value = '0' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-visibility iv_value = '0' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -4228,7 +4228,7 @@ CLASS ltcl_neg_meth_class_fltr_unit IMPLEMENTATION.
 
     CLEAR mt_search_options.
     add_class_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-created_on iv_value = 'IEQ20000101' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-flag iv_value = 'ABSTRACT' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-flag iv_value = 'ABSTRACT' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -4246,7 +4246,7 @@ CLASS ltcl_neg_meth_class_fltr_unit IMPLEMENTATION.
 
     CLEAR mt_search_options.
     add_class_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-created_on iv_value = 'IEQ20000101' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-param iv_value = 'IV_SUBQUERY' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-param iv_value = 'IV_SUBQUERY' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -4264,7 +4264,7 @@ CLASS ltcl_neg_meth_class_fltr_unit IMPLEMENTATION.
 
     CLEAR mt_search_options.
     add_class_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-created_on iv_value = 'IEQ20000101' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-exception iv_value = 'ZCX_SAT_OBJECT_SEARCH' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-exception iv_value = 'ZCX_SAT_OBJECT_SEARCH' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -4282,7 +4282,7 @@ CLASS ltcl_neg_meth_class_fltr_unit IMPLEMENTATION.
 
     CLEAR mt_search_options.
     add_class_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-created_on iv_value = 'IEQ20000101' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-level iv_value = '0' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-level iv_value = '0' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -4300,7 +4300,7 @@ CLASS ltcl_neg_meth_class_fltr_unit IMPLEMENTATION.
 
     CLEAR mt_search_options.
     add_class_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-created_on iv_value = 'IEQ20000101' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-status iv_value = '1' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-status iv_value = '1' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -4318,7 +4318,7 @@ CLASS ltcl_neg_meth_class_fltr_unit IMPLEMENTATION.
 
     CLEAR mt_search_options.
     add_class_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-created_on iv_value = 'IEQ20000101' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-visibility iv_value = '0' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-visibility iv_value = '0' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -4445,7 +4445,7 @@ CLASS ltcl_neg_meth_class_fltr_unit IMPLEMENTATION.
 
     CLEAR mt_search_options.
     add_class_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-changed_by iv_value = 'SAP' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-flag iv_value = 'ABSTRACT' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-flag iv_value = 'ABSTRACT' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -4463,7 +4463,7 @@ CLASS ltcl_neg_meth_class_fltr_unit IMPLEMENTATION.
 
     CLEAR mt_search_options.
     add_class_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-changed_by iv_value = 'SAP' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-param iv_value = 'IV_SUBQUERY' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-param iv_value = 'IV_SUBQUERY' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -4481,7 +4481,7 @@ CLASS ltcl_neg_meth_class_fltr_unit IMPLEMENTATION.
 
     CLEAR mt_search_options.
     add_class_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-changed_by iv_value = 'SAP' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-exception iv_value = 'ZCX_SAT_OBJECT_SEARCH' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-exception iv_value = 'ZCX_SAT_OBJECT_SEARCH' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -4499,7 +4499,7 @@ CLASS ltcl_neg_meth_class_fltr_unit IMPLEMENTATION.
 
     CLEAR mt_search_options.
     add_class_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-changed_by iv_value = 'SAP' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-level iv_value = '0' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-level iv_value = '0' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -4517,7 +4517,7 @@ CLASS ltcl_neg_meth_class_fltr_unit IMPLEMENTATION.
 
     CLEAR mt_search_options.
     add_class_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-changed_by iv_value = 'SAP' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-status iv_value = '1' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-status iv_value = '1' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -4535,7 +4535,7 @@ CLASS ltcl_neg_meth_class_fltr_unit IMPLEMENTATION.
 
     CLEAR mt_search_options.
     add_class_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-changed_by iv_value = 'SAP' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-visibility iv_value = '0' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-visibility iv_value = '0' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -4662,7 +4662,7 @@ CLASS ltcl_neg_meth_class_fltr_unit IMPLEMENTATION.
 
     CLEAR mt_search_options.
     add_class_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-changed_on iv_value = 'IEQ20000101' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-flag iv_value = 'ABSTRACT' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-flag iv_value = 'ABSTRACT' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -4680,7 +4680,7 @@ CLASS ltcl_neg_meth_class_fltr_unit IMPLEMENTATION.
 
     CLEAR mt_search_options.
     add_class_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-changed_on iv_value = 'IEQ20000101' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-param iv_value = 'IV_SUBQUERY' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-param iv_value = 'IV_SUBQUERY' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -4698,7 +4698,7 @@ CLASS ltcl_neg_meth_class_fltr_unit IMPLEMENTATION.
 
     CLEAR mt_search_options.
     add_class_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-changed_on iv_value = 'IEQ20000101' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-exception iv_value = 'ZCX_SAT_OBJECT_SEARCH' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-exception iv_value = 'ZCX_SAT_OBJECT_SEARCH' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -4716,7 +4716,7 @@ CLASS ltcl_neg_meth_class_fltr_unit IMPLEMENTATION.
 
     CLEAR mt_search_options.
     add_class_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-changed_on iv_value = 'IEQ20000101' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-level iv_value = '0' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-level iv_value = '0' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -4734,7 +4734,7 @@ CLASS ltcl_neg_meth_class_fltr_unit IMPLEMENTATION.
 
     CLEAR mt_search_options.
     add_class_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-changed_on iv_value = 'IEQ20000101' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-status iv_value = '1' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-status iv_value = '1' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -4752,7 +4752,7 @@ CLASS ltcl_neg_meth_class_fltr_unit IMPLEMENTATION.
 
     CLEAR mt_search_options.
     add_class_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-changed_on iv_value = 'IEQ20000101' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-visibility iv_value = '0' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-visibility iv_value = '0' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -4879,7 +4879,7 @@ CLASS ltcl_neg_meth_class_fltr_unit IMPLEMENTATION.
 
     CLEAR mt_search_options.
     add_class_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-package iv_value = 'BASIS' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-flag iv_value = 'ABSTRACT' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-flag iv_value = 'ABSTRACT' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -4897,7 +4897,7 @@ CLASS ltcl_neg_meth_class_fltr_unit IMPLEMENTATION.
 
     CLEAR mt_search_options.
     add_class_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-package iv_value = 'BASIS' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-param iv_value = 'IV_SUBQUERY' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-param iv_value = 'IV_SUBQUERY' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -4915,7 +4915,7 @@ CLASS ltcl_neg_meth_class_fltr_unit IMPLEMENTATION.
 
     CLEAR mt_search_options.
     add_class_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-package iv_value = 'BASIS' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-exception iv_value = 'ZCX_SAT_OBJECT_SEARCH' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-exception iv_value = 'ZCX_SAT_OBJECT_SEARCH' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -4933,7 +4933,7 @@ CLASS ltcl_neg_meth_class_fltr_unit IMPLEMENTATION.
 
     CLEAR mt_search_options.
     add_class_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-package iv_value = 'BASIS' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-level iv_value = '0' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-level iv_value = '0' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -4951,7 +4951,7 @@ CLASS ltcl_neg_meth_class_fltr_unit IMPLEMENTATION.
 
     CLEAR mt_search_options.
     add_class_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-package iv_value = 'BASIS' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-status iv_value = '1' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-status iv_value = '1' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -4969,7 +4969,7 @@ CLASS ltcl_neg_meth_class_fltr_unit IMPLEMENTATION.
 
     CLEAR mt_search_options.
     add_class_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-package iv_value = 'BASIS' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-visibility iv_value = '0' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-visibility iv_value = '0' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -5096,7 +5096,7 @@ CLASS ltcl_neg_meth_class_fltr_unit IMPLEMENTATION.
 
     CLEAR mt_search_options.
     add_class_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-software_component iv_value = 'SAP_BASIS' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-flag iv_value = 'ABSTRACT' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-flag iv_value = 'ABSTRACT' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -5114,7 +5114,7 @@ CLASS ltcl_neg_meth_class_fltr_unit IMPLEMENTATION.
 
     CLEAR mt_search_options.
     add_class_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-software_component iv_value = 'SAP_BASIS' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-param iv_value = 'IV_SUBQUERY' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-param iv_value = 'IV_SUBQUERY' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -5132,7 +5132,7 @@ CLASS ltcl_neg_meth_class_fltr_unit IMPLEMENTATION.
 
     CLEAR mt_search_options.
     add_class_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-software_component iv_value = 'SAP_BASIS' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-exception iv_value = 'ZCX_SAT_OBJECT_SEARCH' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-exception iv_value = 'ZCX_SAT_OBJECT_SEARCH' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -5150,7 +5150,7 @@ CLASS ltcl_neg_meth_class_fltr_unit IMPLEMENTATION.
 
     CLEAR mt_search_options.
     add_class_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-software_component iv_value = 'SAP_BASIS' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-level iv_value = '0' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-level iv_value = '0' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -5168,7 +5168,7 @@ CLASS ltcl_neg_meth_class_fltr_unit IMPLEMENTATION.
 
     CLEAR mt_search_options.
     add_class_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-software_component iv_value = 'SAP_BASIS' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-status iv_value = '1' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-status iv_value = '1' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -5186,7 +5186,7 @@ CLASS ltcl_neg_meth_class_fltr_unit IMPLEMENTATION.
 
     CLEAR mt_search_options.
     add_class_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-software_component iv_value = 'SAP_BASIS' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-visibility iv_value = '0' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-visibility iv_value = '0' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -5313,7 +5313,7 @@ CLASS ltcl_neg_meth_class_fltr_unit IMPLEMENTATION.
 
     CLEAR mt_search_options.
     add_class_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-application_component iv_value = 'BC' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-flag iv_value = 'ABSTRACT' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-flag iv_value = 'ABSTRACT' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -5331,7 +5331,7 @@ CLASS ltcl_neg_meth_class_fltr_unit IMPLEMENTATION.
 
     CLEAR mt_search_options.
     add_class_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-application_component iv_value = 'BC' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-param iv_value = 'IV_SUBQUERY' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-param iv_value = 'IV_SUBQUERY' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -5349,7 +5349,7 @@ CLASS ltcl_neg_meth_class_fltr_unit IMPLEMENTATION.
 
     CLEAR mt_search_options.
     add_class_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-application_component iv_value = 'BC' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-exception iv_value = 'ZCX_SAT_OBJECT_SEARCH' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-exception iv_value = 'ZCX_SAT_OBJECT_SEARCH' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -5367,7 +5367,7 @@ CLASS ltcl_neg_meth_class_fltr_unit IMPLEMENTATION.
 
     CLEAR mt_search_options.
     add_class_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-application_component iv_value = 'BC' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-level iv_value = '0' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-level iv_value = '0' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -5385,7 +5385,7 @@ CLASS ltcl_neg_meth_class_fltr_unit IMPLEMENTATION.
 
     CLEAR mt_search_options.
     add_class_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-application_component iv_value = 'BC' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-status iv_value = '1' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-status iv_value = '1' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -5403,7 +5403,7 @@ CLASS ltcl_neg_meth_class_fltr_unit IMPLEMENTATION.
 
     CLEAR mt_search_options.
     add_class_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-application_component iv_value = 'BC' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-visibility iv_value = '0' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-visibility iv_value = '0' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -5537,7 +5537,7 @@ CLASS ltcl_neg_meth_class_fltr_unit IMPLEMENTATION.
     CLEAR mt_search_options.
     add_class_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-description
                       iv_value  = 'Search provider for ABAP OO Classes/interfaces' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-flag iv_value = 'ABSTRACT' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-flag iv_value = 'ABSTRACT' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -5556,7 +5556,7 @@ CLASS ltcl_neg_meth_class_fltr_unit IMPLEMENTATION.
     CLEAR mt_search_options.
     add_class_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-description
                       iv_value  = 'Search provider for ABAP OO Classes/interfaces' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-param iv_value = 'IV_SUBQUERY' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-param iv_value = 'IV_SUBQUERY' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -5575,7 +5575,7 @@ CLASS ltcl_neg_meth_class_fltr_unit IMPLEMENTATION.
     CLEAR mt_search_options.
     add_class_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-description
                       iv_value  = 'Search provider for ABAP OO Classes/interfaces' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-exception iv_value = 'ZCX_SAT_OBJECT_SEARCH' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-exception iv_value = 'ZCX_SAT_OBJECT_SEARCH' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -5594,7 +5594,7 @@ CLASS ltcl_neg_meth_class_fltr_unit IMPLEMENTATION.
     CLEAR mt_search_options.
     add_class_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-description
                       iv_value  = 'Search provider for ABAP OO Classes/interfaces' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-level iv_value = '0' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-level iv_value = '0' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -5613,7 +5613,7 @@ CLASS ltcl_neg_meth_class_fltr_unit IMPLEMENTATION.
     CLEAR mt_search_options.
     add_class_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-description
                       iv_value  = 'Search provider for ABAP OO Classes/interfaces' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-status iv_value = '1' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-status iv_value = '1' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -5632,7 +5632,7 @@ CLASS ltcl_neg_meth_class_fltr_unit IMPLEMENTATION.
     CLEAR mt_search_options.
     add_class_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-description
                       iv_value  = 'Search provider for ABAP OO Classes/interfaces' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-visibility iv_value = '0' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-visibility iv_value = '0' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -5759,7 +5759,7 @@ CLASS ltcl_neg_meth_class_fltr_unit IMPLEMENTATION.
 
     CLEAR mt_search_options.
     add_class_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-type iv_value = 'CLAS' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-flag iv_value = 'ABSTRACT' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-flag iv_value = 'ABSTRACT' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -5777,7 +5777,7 @@ CLASS ltcl_neg_meth_class_fltr_unit IMPLEMENTATION.
 
     CLEAR mt_search_options.
     add_class_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-type iv_value = 'CLAS' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-param iv_value = 'IV_SUBQUERY' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-param iv_value = 'IV_SUBQUERY' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -5795,7 +5795,7 @@ CLASS ltcl_neg_meth_class_fltr_unit IMPLEMENTATION.
 
     CLEAR mt_search_options.
     add_class_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-type iv_value = 'CLAS' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-exception iv_value = 'ZCX_SAT_OBJECT_SEARCH' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-exception iv_value = 'ZCX_SAT_OBJECT_SEARCH' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -5813,7 +5813,7 @@ CLASS ltcl_neg_meth_class_fltr_unit IMPLEMENTATION.
 
     CLEAR mt_search_options.
     add_class_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-type iv_value = 'CLAS' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-level iv_value = '0' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-level iv_value = '0' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -5831,7 +5831,7 @@ CLASS ltcl_neg_meth_class_fltr_unit IMPLEMENTATION.
 
     CLEAR mt_search_options.
     add_class_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-type iv_value = 'CLAS' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-status iv_value = '1' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-status iv_value = '1' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -5849,7 +5849,7 @@ CLASS ltcl_neg_meth_class_fltr_unit IMPLEMENTATION.
 
     CLEAR mt_search_options.
     add_class_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-type iv_value = 'CLAS' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-visibility iv_value = '0' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-visibility iv_value = '0' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -5866,7 +5866,7 @@ CLASS ltcl_neg_meth_class_fltr_unit IMPLEMENTATION.
     mr_cut = NEW #( ).
 
     CLEAR mt_search_options.
-    add_class_filter( iv_filter = zif_sat_c_object_search=>c_class_intf_search_option-flag iv_value = 'ABSTRACT' ).
+    add_class_filter( iv_filter = zif_sat_c_os_clif_options=>c_filter_key-flag iv_value = 'ABSTRACT' ).
     add_method_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-user iv_value = 'SAP' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
@@ -5884,7 +5884,7 @@ CLASS ltcl_neg_meth_class_fltr_unit IMPLEMENTATION.
     mr_cut = NEW #( ).
 
     CLEAR mt_search_options.
-    add_class_filter( iv_filter = zif_sat_c_object_search=>c_class_intf_search_option-flag iv_value = 'ABSTRACT' ).
+    add_class_filter( iv_filter = zif_sat_c_os_clif_options=>c_filter_key-flag iv_value = 'ABSTRACT' ).
     add_method_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-created_on iv_value = 'IEQ20000101' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
@@ -5902,7 +5902,7 @@ CLASS ltcl_neg_meth_class_fltr_unit IMPLEMENTATION.
     mr_cut = NEW #( ).
 
     CLEAR mt_search_options.
-    add_class_filter( iv_filter = zif_sat_c_object_search=>c_class_intf_search_option-flag iv_value = 'ABSTRACT' ).
+    add_class_filter( iv_filter = zif_sat_c_os_clif_options=>c_filter_key-flag iv_value = 'ABSTRACT' ).
     add_method_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-changed_by iv_value = 'SAP' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
@@ -5920,7 +5920,7 @@ CLASS ltcl_neg_meth_class_fltr_unit IMPLEMENTATION.
     mr_cut = NEW #( ).
 
     CLEAR mt_search_options.
-    add_class_filter( iv_filter = zif_sat_c_object_search=>c_class_intf_search_option-flag iv_value = 'ABSTRACT' ).
+    add_class_filter( iv_filter = zif_sat_c_os_clif_options=>c_filter_key-flag iv_value = 'ABSTRACT' ).
     add_method_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-changed_on iv_value = 'IEQ20000101' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
@@ -5938,7 +5938,7 @@ CLASS ltcl_neg_meth_class_fltr_unit IMPLEMENTATION.
     mr_cut = NEW #( ).
 
     CLEAR mt_search_options.
-    add_class_filter( iv_filter = zif_sat_c_object_search=>c_class_intf_search_option-flag iv_value = 'ABSTRACT' ).
+    add_class_filter( iv_filter = zif_sat_c_os_clif_options=>c_filter_key-flag iv_value = 'ABSTRACT' ).
     add_method_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-description
                        iv_value  = 'Create filter for ATTR option' ).
 
@@ -5957,7 +5957,7 @@ CLASS ltcl_neg_meth_class_fltr_unit IMPLEMENTATION.
     mr_cut = NEW #( ).
 
     CLEAR mt_search_options.
-    add_class_filter( iv_filter = zif_sat_c_object_search=>c_class_intf_search_option-flag iv_value = 'ABSTRACT' ).
+    add_class_filter( iv_filter = zif_sat_c_os_clif_options=>c_filter_key-flag iv_value = 'ABSTRACT' ).
     add_method_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-type iv_value = '0' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
@@ -5975,8 +5975,8 @@ CLASS ltcl_neg_meth_class_fltr_unit IMPLEMENTATION.
     mr_cut = NEW #( ).
 
     CLEAR mt_search_options.
-    add_class_filter( iv_filter = zif_sat_c_object_search=>c_class_intf_search_option-flag iv_value = 'ABSTRACT' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-flag iv_value = 'ABSTRACT' ).
+    add_class_filter( iv_filter = zif_sat_c_os_clif_options=>c_filter_key-flag iv_value = 'ABSTRACT' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-flag iv_value = 'ABSTRACT' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -5993,8 +5993,8 @@ CLASS ltcl_neg_meth_class_fltr_unit IMPLEMENTATION.
     mr_cut = NEW #( ).
 
     CLEAR mt_search_options.
-    add_class_filter( iv_filter = zif_sat_c_object_search=>c_class_intf_search_option-flag iv_value = 'ABSTRACT' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-param iv_value = 'IV_SUBQUERY' ).
+    add_class_filter( iv_filter = zif_sat_c_os_clif_options=>c_filter_key-flag iv_value = 'ABSTRACT' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-param iv_value = 'IV_SUBQUERY' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -6011,8 +6011,8 @@ CLASS ltcl_neg_meth_class_fltr_unit IMPLEMENTATION.
     mr_cut = NEW #( ).
 
     CLEAR mt_search_options.
-    add_class_filter( iv_filter = zif_sat_c_object_search=>c_class_intf_search_option-flag iv_value = 'ABSTRACT' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-exception iv_value = 'ZCX_SAT_OBJECT_SEARCH' ).
+    add_class_filter( iv_filter = zif_sat_c_os_clif_options=>c_filter_key-flag iv_value = 'ABSTRACT' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-exception iv_value = 'ZCX_SAT_OBJECT_SEARCH' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -6029,8 +6029,8 @@ CLASS ltcl_neg_meth_class_fltr_unit IMPLEMENTATION.
     mr_cut = NEW #( ).
 
     CLEAR mt_search_options.
-    add_class_filter( iv_filter = zif_sat_c_object_search=>c_class_intf_search_option-flag iv_value = 'ABSTRACT' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-level iv_value = '0' ).
+    add_class_filter( iv_filter = zif_sat_c_os_clif_options=>c_filter_key-flag iv_value = 'ABSTRACT' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-level iv_value = '0' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -6047,8 +6047,8 @@ CLASS ltcl_neg_meth_class_fltr_unit IMPLEMENTATION.
     mr_cut = NEW #( ).
 
     CLEAR mt_search_options.
-    add_class_filter( iv_filter = zif_sat_c_object_search=>c_class_intf_search_option-flag iv_value = 'ABSTRACT' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-status iv_value = '1' ).
+    add_class_filter( iv_filter = zif_sat_c_os_clif_options=>c_filter_key-flag iv_value = 'ABSTRACT' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-status iv_value = '1' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -6065,8 +6065,8 @@ CLASS ltcl_neg_meth_class_fltr_unit IMPLEMENTATION.
     mr_cut = NEW #( ).
 
     CLEAR mt_search_options.
-    add_class_filter( iv_filter = zif_sat_c_object_search=>c_class_intf_search_option-flag iv_value = 'ABSTRACT' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-visibility iv_value = '0' ).
+    add_class_filter( iv_filter = zif_sat_c_os_clif_options=>c_filter_key-flag iv_value = 'ABSTRACT' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-visibility iv_value = '0' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -6083,7 +6083,7 @@ CLASS ltcl_neg_meth_class_fltr_unit IMPLEMENTATION.
     mr_cut = NEW #( ).
 
     CLEAR mt_search_options.
-    add_class_filter( iv_filter = zif_sat_c_object_search=>c_class_intf_search_option-category iv_value = '00' ).
+    add_class_filter( iv_filter = zif_sat_c_os_clif_options=>c_filter_key-category iv_value = '00' ).
     add_method_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-user iv_value = 'SAP' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
@@ -6101,7 +6101,7 @@ CLASS ltcl_neg_meth_class_fltr_unit IMPLEMENTATION.
     mr_cut = NEW #( ).
 
     CLEAR mt_search_options.
-    add_class_filter( iv_filter = zif_sat_c_object_search=>c_class_intf_search_option-category iv_value = '00' ).
+    add_class_filter( iv_filter = zif_sat_c_os_clif_options=>c_filter_key-category iv_value = '00' ).
     add_method_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-created_on iv_value = 'IEQ20000101' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
@@ -6119,7 +6119,7 @@ CLASS ltcl_neg_meth_class_fltr_unit IMPLEMENTATION.
     mr_cut = NEW #( ).
 
     CLEAR mt_search_options.
-    add_class_filter( iv_filter = zif_sat_c_object_search=>c_class_intf_search_option-category iv_value = '00' ).
+    add_class_filter( iv_filter = zif_sat_c_os_clif_options=>c_filter_key-category iv_value = '00' ).
     add_method_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-changed_by iv_value = 'SAP' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
@@ -6137,7 +6137,7 @@ CLASS ltcl_neg_meth_class_fltr_unit IMPLEMENTATION.
     mr_cut = NEW #( ).
 
     CLEAR mt_search_options.
-    add_class_filter( iv_filter = zif_sat_c_object_search=>c_class_intf_search_option-category iv_value = '00' ).
+    add_class_filter( iv_filter = zif_sat_c_os_clif_options=>c_filter_key-category iv_value = '00' ).
     add_method_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-changed_on iv_value = 'IEQ20000101' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
@@ -6155,7 +6155,7 @@ CLASS ltcl_neg_meth_class_fltr_unit IMPLEMENTATION.
     mr_cut = NEW #( ).
 
     CLEAR mt_search_options.
-    add_class_filter( iv_filter = zif_sat_c_object_search=>c_class_intf_search_option-category iv_value = '00' ).
+    add_class_filter( iv_filter = zif_sat_c_os_clif_options=>c_filter_key-category iv_value = '00' ).
     add_method_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-description
                        iv_value  = 'Create filter for ATTR option' ).
 
@@ -6174,7 +6174,7 @@ CLASS ltcl_neg_meth_class_fltr_unit IMPLEMENTATION.
     mr_cut = NEW #( ).
 
     CLEAR mt_search_options.
-    add_class_filter( iv_filter = zif_sat_c_object_search=>c_class_intf_search_option-category iv_value = '00' ).
+    add_class_filter( iv_filter = zif_sat_c_os_clif_options=>c_filter_key-category iv_value = '00' ).
     add_method_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-type iv_value = '0' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
@@ -6192,8 +6192,8 @@ CLASS ltcl_neg_meth_class_fltr_unit IMPLEMENTATION.
     mr_cut = NEW #( ).
 
     CLEAR mt_search_options.
-    add_class_filter( iv_filter = zif_sat_c_object_search=>c_class_intf_search_option-category iv_value = '00' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-flag iv_value = 'ABSTRACT' ).
+    add_class_filter( iv_filter = zif_sat_c_os_clif_options=>c_filter_key-category iv_value = '00' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-flag iv_value = 'ABSTRACT' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -6210,8 +6210,8 @@ CLASS ltcl_neg_meth_class_fltr_unit IMPLEMENTATION.
     mr_cut = NEW #( ).
 
     CLEAR mt_search_options.
-    add_class_filter( iv_filter = zif_sat_c_object_search=>c_class_intf_search_option-category iv_value = '00' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-param iv_value = 'IV_SUBQUERY' ).
+    add_class_filter( iv_filter = zif_sat_c_os_clif_options=>c_filter_key-category iv_value = '00' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-param iv_value = 'IV_SUBQUERY' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -6228,8 +6228,8 @@ CLASS ltcl_neg_meth_class_fltr_unit IMPLEMENTATION.
     mr_cut = NEW #( ).
 
     CLEAR mt_search_options.
-    add_class_filter( iv_filter = zif_sat_c_object_search=>c_class_intf_search_option-category iv_value = '00' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-exception iv_value = 'ZCX_SAT_OBJECT_SEARCH' ).
+    add_class_filter( iv_filter = zif_sat_c_os_clif_options=>c_filter_key-category iv_value = '00' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-exception iv_value = 'ZCX_SAT_OBJECT_SEARCH' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -6246,8 +6246,8 @@ CLASS ltcl_neg_meth_class_fltr_unit IMPLEMENTATION.
     mr_cut = NEW #( ).
 
     CLEAR mt_search_options.
-    add_class_filter( iv_filter = zif_sat_c_object_search=>c_class_intf_search_option-category iv_value = '00' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-level iv_value = '0' ).
+    add_class_filter( iv_filter = zif_sat_c_os_clif_options=>c_filter_key-category iv_value = '00' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-level iv_value = '0' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -6264,8 +6264,8 @@ CLASS ltcl_neg_meth_class_fltr_unit IMPLEMENTATION.
     mr_cut = NEW #( ).
 
     CLEAR mt_search_options.
-    add_class_filter( iv_filter = zif_sat_c_object_search=>c_class_intf_search_option-category iv_value = '00' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-status iv_value = '1' ).
+    add_class_filter( iv_filter = zif_sat_c_os_clif_options=>c_filter_key-category iv_value = '00' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-status iv_value = '1' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -6282,8 +6282,8 @@ CLASS ltcl_neg_meth_class_fltr_unit IMPLEMENTATION.
     mr_cut = NEW #( ).
 
     CLEAR mt_search_options.
-    add_class_filter( iv_filter = zif_sat_c_object_search=>c_class_intf_search_option-category iv_value = '00' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-visibility iv_value = '0' ).
+    add_class_filter( iv_filter = zif_sat_c_os_clif_options=>c_filter_key-category iv_value = '00' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-visibility iv_value = '0' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -6300,7 +6300,7 @@ CLASS ltcl_neg_meth_class_fltr_unit IMPLEMENTATION.
     mr_cut = NEW #( ).
 
     CLEAR mt_search_options.
-    add_class_filter( iv_filter = zif_sat_c_object_search=>c_class_intf_search_option-interface iv_value = 'ZIF_SAT_C_JOIN_COND_TYPE' ).
+    add_class_filter( iv_filter = zif_sat_c_os_clif_options=>c_filter_key-interface iv_value = 'ZIF_SAT_C_JOIN_COND_TYPE' ).
     add_method_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-user iv_value = 'SAP' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
@@ -6318,7 +6318,7 @@ CLASS ltcl_neg_meth_class_fltr_unit IMPLEMENTATION.
     mr_cut = NEW #( ).
 
     CLEAR mt_search_options.
-    add_class_filter( iv_filter = zif_sat_c_object_search=>c_class_intf_search_option-interface iv_value = 'ZIF_SAT_C_JOIN_COND_TYPE' ).
+    add_class_filter( iv_filter = zif_sat_c_os_clif_options=>c_filter_key-interface iv_value = 'ZIF_SAT_C_JOIN_COND_TYPE' ).
     add_method_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-created_on iv_value = 'IEQ20000101' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
@@ -6336,7 +6336,7 @@ CLASS ltcl_neg_meth_class_fltr_unit IMPLEMENTATION.
     mr_cut = NEW #( ).
 
     CLEAR mt_search_options.
-    add_class_filter( iv_filter = zif_sat_c_object_search=>c_class_intf_search_option-interface iv_value = 'ZIF_SAT_C_JOIN_COND_TYPE' ).
+    add_class_filter( iv_filter = zif_sat_c_os_clif_options=>c_filter_key-interface iv_value = 'ZIF_SAT_C_JOIN_COND_TYPE' ).
     add_method_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-changed_by iv_value = 'SAP' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
@@ -6354,7 +6354,7 @@ CLASS ltcl_neg_meth_class_fltr_unit IMPLEMENTATION.
     mr_cut = NEW #( ).
 
     CLEAR mt_search_options.
-    add_class_filter( iv_filter = zif_sat_c_object_search=>c_class_intf_search_option-interface iv_value = 'ZIF_SAT_C_JOIN_COND_TYPE' ).
+    add_class_filter( iv_filter = zif_sat_c_os_clif_options=>c_filter_key-interface iv_value = 'ZIF_SAT_C_JOIN_COND_TYPE' ).
     add_method_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-changed_on iv_value = 'IEQ20000101' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
@@ -6372,7 +6372,7 @@ CLASS ltcl_neg_meth_class_fltr_unit IMPLEMENTATION.
     mr_cut = NEW #( ).
 
     CLEAR mt_search_options.
-    add_class_filter( iv_filter = zif_sat_c_object_search=>c_class_intf_search_option-interface iv_value = 'ZIF_SAT_C_JOIN_COND_TYPE' ).
+    add_class_filter( iv_filter = zif_sat_c_os_clif_options=>c_filter_key-interface iv_value = 'ZIF_SAT_C_JOIN_COND_TYPE' ).
     add_method_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-description
                        iv_value  = 'Create filter for ATTR option' ).
 
@@ -6391,7 +6391,7 @@ CLASS ltcl_neg_meth_class_fltr_unit IMPLEMENTATION.
     mr_cut = NEW #( ).
 
     CLEAR mt_search_options.
-    add_class_filter( iv_filter = zif_sat_c_object_search=>c_class_intf_search_option-interface iv_value = 'ZIF_SAT_C_JOIN_COND_TYPE' ).
+    add_class_filter( iv_filter = zif_sat_c_os_clif_options=>c_filter_key-interface iv_value = 'ZIF_SAT_C_JOIN_COND_TYPE' ).
     add_method_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-type iv_value = '0' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
@@ -6409,8 +6409,8 @@ CLASS ltcl_neg_meth_class_fltr_unit IMPLEMENTATION.
     mr_cut = NEW #( ).
 
     CLEAR mt_search_options.
-    add_class_filter( iv_filter = zif_sat_c_object_search=>c_class_intf_search_option-interface iv_value = 'ZIF_SAT_C_JOIN_COND_TYPE' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-flag iv_value = 'ABSTRACT' ).
+    add_class_filter( iv_filter = zif_sat_c_os_clif_options=>c_filter_key-interface iv_value = 'ZIF_SAT_C_JOIN_COND_TYPE' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-flag iv_value = 'ABSTRACT' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -6427,8 +6427,8 @@ CLASS ltcl_neg_meth_class_fltr_unit IMPLEMENTATION.
     mr_cut = NEW #( ).
 
     CLEAR mt_search_options.
-    add_class_filter( iv_filter = zif_sat_c_object_search=>c_class_intf_search_option-interface iv_value = 'ZIF_SAT_C_JOIN_COND_TYPE' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-param iv_value = 'IV_SUBQUERY' ).
+    add_class_filter( iv_filter = zif_sat_c_os_clif_options=>c_filter_key-interface iv_value = 'ZIF_SAT_C_JOIN_COND_TYPE' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-param iv_value = 'IV_SUBQUERY' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -6445,8 +6445,8 @@ CLASS ltcl_neg_meth_class_fltr_unit IMPLEMENTATION.
     mr_cut = NEW #( ).
 
     CLEAR mt_search_options.
-    add_class_filter( iv_filter = zif_sat_c_object_search=>c_class_intf_search_option-interface iv_value = 'ZIF_SAT_C_JOIN_COND_TYPE' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-exception iv_value = 'ZCX_SAT_OBJECT_SEARCH' ).
+    add_class_filter( iv_filter = zif_sat_c_os_clif_options=>c_filter_key-interface iv_value = 'ZIF_SAT_C_JOIN_COND_TYPE' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-exception iv_value = 'ZCX_SAT_OBJECT_SEARCH' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -6463,8 +6463,8 @@ CLASS ltcl_neg_meth_class_fltr_unit IMPLEMENTATION.
     mr_cut = NEW #( ).
 
     CLEAR mt_search_options.
-    add_class_filter( iv_filter = zif_sat_c_object_search=>c_class_intf_search_option-interface iv_value = 'ZIF_SAT_C_JOIN_COND_TYPE' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-level iv_value = '0' ).
+    add_class_filter( iv_filter = zif_sat_c_os_clif_options=>c_filter_key-interface iv_value = 'ZIF_SAT_C_JOIN_COND_TYPE' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-level iv_value = '0' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -6481,8 +6481,8 @@ CLASS ltcl_neg_meth_class_fltr_unit IMPLEMENTATION.
     mr_cut = NEW #( ).
 
     CLEAR mt_search_options.
-    add_class_filter( iv_filter = zif_sat_c_object_search=>c_class_intf_search_option-interface iv_value = 'ZIF_SAT_C_JOIN_COND_TYPE' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-status iv_value = '1' ).
+    add_class_filter( iv_filter = zif_sat_c_os_clif_options=>c_filter_key-interface iv_value = 'ZIF_SAT_C_JOIN_COND_TYPE' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-status iv_value = '1' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -6499,8 +6499,8 @@ CLASS ltcl_neg_meth_class_fltr_unit IMPLEMENTATION.
     mr_cut = NEW #( ).
 
     CLEAR mt_search_options.
-    add_class_filter( iv_filter = zif_sat_c_object_search=>c_class_intf_search_option-interface iv_value = 'ZIF_SAT_C_JOIN_COND_TYPE' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-visibility iv_value = '0' ).
+    add_class_filter( iv_filter = zif_sat_c_os_clif_options=>c_filter_key-interface iv_value = 'ZIF_SAT_C_JOIN_COND_TYPE' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-visibility iv_value = '0' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -6517,7 +6517,7 @@ CLASS ltcl_neg_meth_class_fltr_unit IMPLEMENTATION.
     mr_cut = NEW #( ).
 
     CLEAR mt_search_options.
-    add_class_filter( iv_filter = zif_sat_c_object_search=>c_class_intf_search_option-friend iv_value = 'ZCL_SAT_BASE_SEARCH_PROVIDER' ).
+    add_class_filter( iv_filter = zif_sat_c_os_clif_options=>c_filter_key-friend iv_value = 'ZCL_SAT_BASE_SEARCH_PROVIDER' ).
     add_method_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-user iv_value = 'SAP' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
@@ -6535,7 +6535,7 @@ CLASS ltcl_neg_meth_class_fltr_unit IMPLEMENTATION.
     mr_cut = NEW #( ).
 
     CLEAR mt_search_options.
-    add_class_filter( iv_filter = zif_sat_c_object_search=>c_class_intf_search_option-friend iv_value = 'ZCL_SAT_BASE_SEARCH_PROVIDER' ).
+    add_class_filter( iv_filter = zif_sat_c_os_clif_options=>c_filter_key-friend iv_value = 'ZCL_SAT_BASE_SEARCH_PROVIDER' ).
     add_method_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-created_on iv_value = 'IEQ20000101' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
@@ -6553,7 +6553,7 @@ CLASS ltcl_neg_meth_class_fltr_unit IMPLEMENTATION.
     mr_cut = NEW #( ).
 
     CLEAR mt_search_options.
-    add_class_filter( iv_filter = zif_sat_c_object_search=>c_class_intf_search_option-friend iv_value = 'ZCL_SAT_BASE_SEARCH_PROVIDER' ).
+    add_class_filter( iv_filter = zif_sat_c_os_clif_options=>c_filter_key-friend iv_value = 'ZCL_SAT_BASE_SEARCH_PROVIDER' ).
     add_method_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-changed_by iv_value = 'SAP' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
@@ -6571,7 +6571,7 @@ CLASS ltcl_neg_meth_class_fltr_unit IMPLEMENTATION.
     mr_cut = NEW #( ).
 
     CLEAR mt_search_options.
-    add_class_filter( iv_filter = zif_sat_c_object_search=>c_class_intf_search_option-friend iv_value = 'ZCL_SAT_BASE_SEARCH_PROVIDER' ).
+    add_class_filter( iv_filter = zif_sat_c_os_clif_options=>c_filter_key-friend iv_value = 'ZCL_SAT_BASE_SEARCH_PROVIDER' ).
     add_method_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-changed_on iv_value = 'IEQ20000101' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
@@ -6589,7 +6589,7 @@ CLASS ltcl_neg_meth_class_fltr_unit IMPLEMENTATION.
     mr_cut = NEW #( ).
 
     CLEAR mt_search_options.
-    add_class_filter( iv_filter = zif_sat_c_object_search=>c_class_intf_search_option-friend iv_value = 'ZCL_SAT_BASE_SEARCH_PROVIDER' ).
+    add_class_filter( iv_filter = zif_sat_c_os_clif_options=>c_filter_key-friend iv_value = 'ZCL_SAT_BASE_SEARCH_PROVIDER' ).
     add_method_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-description
                        iv_value  = 'Create filter for ATTR option' ).
 
@@ -6608,7 +6608,7 @@ CLASS ltcl_neg_meth_class_fltr_unit IMPLEMENTATION.
     mr_cut = NEW #( ).
 
     CLEAR mt_search_options.
-    add_class_filter( iv_filter = zif_sat_c_object_search=>c_class_intf_search_option-friend iv_value = 'ZCL_SAT_BASE_SEARCH_PROVIDER' ).
+    add_class_filter( iv_filter = zif_sat_c_os_clif_options=>c_filter_key-friend iv_value = 'ZCL_SAT_BASE_SEARCH_PROVIDER' ).
     add_method_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-type iv_value = '0' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
@@ -6626,8 +6626,8 @@ CLASS ltcl_neg_meth_class_fltr_unit IMPLEMENTATION.
     mr_cut = NEW #( ).
 
     CLEAR mt_search_options.
-    add_class_filter( iv_filter = zif_sat_c_object_search=>c_class_intf_search_option-friend iv_value = 'ZCL_SAT_BASE_SEARCH_PROVIDER' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-flag iv_value = 'ABSTRACT' ).
+    add_class_filter( iv_filter = zif_sat_c_os_clif_options=>c_filter_key-friend iv_value = 'ZCL_SAT_BASE_SEARCH_PROVIDER' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-flag iv_value = 'ABSTRACT' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -6644,8 +6644,8 @@ CLASS ltcl_neg_meth_class_fltr_unit IMPLEMENTATION.
     mr_cut = NEW #( ).
 
     CLEAR mt_search_options.
-    add_class_filter( iv_filter = zif_sat_c_object_search=>c_class_intf_search_option-friend iv_value = 'ZCL_SAT_BASE_SEARCH_PROVIDER' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-param iv_value = 'IV_SUBQUERY' ).
+    add_class_filter( iv_filter = zif_sat_c_os_clif_options=>c_filter_key-friend iv_value = 'ZCL_SAT_BASE_SEARCH_PROVIDER' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-param iv_value = 'IV_SUBQUERY' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -6662,8 +6662,8 @@ CLASS ltcl_neg_meth_class_fltr_unit IMPLEMENTATION.
     mr_cut = NEW #( ).
 
     CLEAR mt_search_options.
-    add_class_filter( iv_filter = zif_sat_c_object_search=>c_class_intf_search_option-friend iv_value = 'ZCL_SAT_BASE_SEARCH_PROVIDER' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-exception iv_value = 'ZCX_SAT_OBJECT_SEARCH' ).
+    add_class_filter( iv_filter = zif_sat_c_os_clif_options=>c_filter_key-friend iv_value = 'ZCL_SAT_BASE_SEARCH_PROVIDER' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-exception iv_value = 'ZCX_SAT_OBJECT_SEARCH' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -6680,8 +6680,8 @@ CLASS ltcl_neg_meth_class_fltr_unit IMPLEMENTATION.
     mr_cut = NEW #( ).
 
     CLEAR mt_search_options.
-    add_class_filter( iv_filter = zif_sat_c_object_search=>c_class_intf_search_option-friend iv_value = 'ZCL_SAT_BASE_SEARCH_PROVIDER' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-level iv_value = '0' ).
+    add_class_filter( iv_filter = zif_sat_c_os_clif_options=>c_filter_key-friend iv_value = 'ZCL_SAT_BASE_SEARCH_PROVIDER' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-level iv_value = '0' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -6698,8 +6698,8 @@ CLASS ltcl_neg_meth_class_fltr_unit IMPLEMENTATION.
     mr_cut = NEW #( ).
 
     CLEAR mt_search_options.
-    add_class_filter( iv_filter = zif_sat_c_object_search=>c_class_intf_search_option-friend iv_value = 'ZCL_SAT_BASE_SEARCH_PROVIDER' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-status iv_value = '1' ).
+    add_class_filter( iv_filter = zif_sat_c_os_clif_options=>c_filter_key-friend iv_value = 'ZCL_SAT_BASE_SEARCH_PROVIDER' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-status iv_value = '1' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -6716,8 +6716,8 @@ CLASS ltcl_neg_meth_class_fltr_unit IMPLEMENTATION.
     mr_cut = NEW #( ).
 
     CLEAR mt_search_options.
-    add_class_filter( iv_filter = zif_sat_c_object_search=>c_class_intf_search_option-friend iv_value = 'ZCL_SAT_BASE_SEARCH_PROVIDER' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-visibility iv_value = '0' ).
+    add_class_filter( iv_filter = zif_sat_c_os_clif_options=>c_filter_key-friend iv_value = 'ZCL_SAT_BASE_SEARCH_PROVIDER' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-visibility iv_value = '0' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -6734,7 +6734,7 @@ CLASS ltcl_neg_meth_class_fltr_unit IMPLEMENTATION.
     mr_cut = NEW #( ).
 
     CLEAR mt_search_options.
-    add_class_filter( iv_filter = zif_sat_c_object_search=>c_class_intf_search_option-super_type
+    add_class_filter( iv_filter = zif_sat_c_os_clif_options=>c_filter_key-super_type
                       iv_value  = 'ZCL_SAT_BASE_SEARCH_PROVIDER' ).
     add_method_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-user iv_value = 'SAP' ).
 
@@ -6753,7 +6753,7 @@ CLASS ltcl_neg_meth_class_fltr_unit IMPLEMENTATION.
     mr_cut = NEW #( ).
 
     CLEAR mt_search_options.
-    add_class_filter( iv_filter = zif_sat_c_object_search=>c_class_intf_search_option-super_type
+    add_class_filter( iv_filter = zif_sat_c_os_clif_options=>c_filter_key-super_type
                       iv_value  = 'ZCL_SAT_BASE_SEARCH_PROVIDER' ).
     add_method_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-created_on iv_value = 'IEQ20000101' ).
 
@@ -6772,7 +6772,7 @@ CLASS ltcl_neg_meth_class_fltr_unit IMPLEMENTATION.
     mr_cut = NEW #( ).
 
     CLEAR mt_search_options.
-    add_class_filter( iv_filter = zif_sat_c_object_search=>c_class_intf_search_option-super_type
+    add_class_filter( iv_filter = zif_sat_c_os_clif_options=>c_filter_key-super_type
                       iv_value  = 'ZCL_SAT_BASE_SEARCH_PROVIDER' ).
     add_method_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-changed_by iv_value = 'SAP' ).
 
@@ -6791,7 +6791,7 @@ CLASS ltcl_neg_meth_class_fltr_unit IMPLEMENTATION.
     mr_cut = NEW #( ).
 
     CLEAR mt_search_options.
-    add_class_filter( iv_filter = zif_sat_c_object_search=>c_class_intf_search_option-super_type
+    add_class_filter( iv_filter = zif_sat_c_os_clif_options=>c_filter_key-super_type
                       iv_value  = 'ZCL_SAT_BASE_SEARCH_PROVIDER' ).
     add_method_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-changed_on iv_value = 'IEQ20000101' ).
 
@@ -6810,7 +6810,7 @@ CLASS ltcl_neg_meth_class_fltr_unit IMPLEMENTATION.
     mr_cut = NEW #( ).
 
     CLEAR mt_search_options.
-    add_class_filter( iv_filter = zif_sat_c_object_search=>c_class_intf_search_option-super_type
+    add_class_filter( iv_filter = zif_sat_c_os_clif_options=>c_filter_key-super_type
                       iv_value  = 'ZCL_SAT_BASE_SEARCH_PROVIDER' ).
     add_method_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-description
                        iv_value  = 'Create filter for ATTR option' ).
@@ -6830,7 +6830,7 @@ CLASS ltcl_neg_meth_class_fltr_unit IMPLEMENTATION.
     mr_cut = NEW #( ).
 
     CLEAR mt_search_options.
-    add_class_filter( iv_filter = zif_sat_c_object_search=>c_class_intf_search_option-super_type
+    add_class_filter( iv_filter = zif_sat_c_os_clif_options=>c_filter_key-super_type
                       iv_value  = 'ZCL_SAT_BASE_SEARCH_PROVIDER' ).
     add_method_filter( iv_filter = zif_sat_c_object_search=>c_general_search_params-type iv_value = '0' ).
 
@@ -6849,9 +6849,9 @@ CLASS ltcl_neg_meth_class_fltr_unit IMPLEMENTATION.
     mr_cut = NEW #( ).
 
     CLEAR mt_search_options.
-    add_class_filter( iv_filter = zif_sat_c_object_search=>c_class_intf_search_option-super_type
+    add_class_filter( iv_filter = zif_sat_c_os_clif_options=>c_filter_key-super_type
                       iv_value  = 'ZCL_SAT_BASE_SEARCH_PROVIDER' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-flag iv_value = 'ABSTRACT' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-flag iv_value = 'ABSTRACT' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -6868,9 +6868,9 @@ CLASS ltcl_neg_meth_class_fltr_unit IMPLEMENTATION.
     mr_cut = NEW #( ).
 
     CLEAR mt_search_options.
-    add_class_filter( iv_filter = zif_sat_c_object_search=>c_class_intf_search_option-super_type
+    add_class_filter( iv_filter = zif_sat_c_os_clif_options=>c_filter_key-super_type
                       iv_value  = 'ZCL_SAT_BASE_SEARCH_PROVIDER' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-param iv_value = 'IV_SUBQUERY' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-param iv_value = 'IV_SUBQUERY' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -6887,9 +6887,9 @@ CLASS ltcl_neg_meth_class_fltr_unit IMPLEMENTATION.
     mr_cut = NEW #( ).
 
     CLEAR mt_search_options.
-    add_class_filter( iv_filter = zif_sat_c_object_search=>c_class_intf_search_option-super_type
+    add_class_filter( iv_filter = zif_sat_c_os_clif_options=>c_filter_key-super_type
                       iv_value  = 'ZCL_SAT_BASE_SEARCH_PROVIDER' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-exception iv_value = 'ZCX_SAT_OBJECT_SEARCH' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-exception iv_value = 'ZCX_SAT_OBJECT_SEARCH' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -6906,9 +6906,9 @@ CLASS ltcl_neg_meth_class_fltr_unit IMPLEMENTATION.
     mr_cut = NEW #( ).
 
     CLEAR mt_search_options.
-    add_class_filter( iv_filter = zif_sat_c_object_search=>c_class_intf_search_option-super_type
+    add_class_filter( iv_filter = zif_sat_c_os_clif_options=>c_filter_key-super_type
                       iv_value  = 'ZCL_SAT_BASE_SEARCH_PROVIDER' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-level iv_value = '0' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-level iv_value = '0' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -6925,9 +6925,9 @@ CLASS ltcl_neg_meth_class_fltr_unit IMPLEMENTATION.
     mr_cut = NEW #( ).
 
     CLEAR mt_search_options.
-    add_class_filter( iv_filter = zif_sat_c_object_search=>c_class_intf_search_option-super_type
+    add_class_filter( iv_filter = zif_sat_c_os_clif_options=>c_filter_key-super_type
                       iv_value  = 'ZCL_SAT_BASE_SEARCH_PROVIDER' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-status iv_value = '1' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-status iv_value = '1' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.
@@ -6944,9 +6944,9 @@ CLASS ltcl_neg_meth_class_fltr_unit IMPLEMENTATION.
     mr_cut = NEW #( ).
 
     CLEAR mt_search_options.
-    add_class_filter( iv_filter = zif_sat_c_object_search=>c_class_intf_search_option-super_type
+    add_class_filter( iv_filter = zif_sat_c_os_clif_options=>c_filter_key-super_type
                       iv_value  = 'ZCL_SAT_BASE_SEARCH_PROVIDER' ).
-    add_method_filter( iv_filter = zif_sat_c_object_search=>c_method_search_option-visibility iv_value = '0' ).
+    add_method_filter( iv_filter = zif_sat_c_os_meth_options=>c_filter_key-visibility iv_value = '0' ).
 
     DATA(lo_query) = NEW lcl_query( it_search_term = mt_search_terms it_search_options = mt_search_options ).
     TRY.

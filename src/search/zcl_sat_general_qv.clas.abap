@@ -25,7 +25,7 @@ CLASS zcl_sat_general_qv IMPLEMENTATION.
 
     CASE iv_option.
 
-      WHEN zif_sat_c_object_search=>c_search_option-max_rows.
+      WHEN zif_sat_c_object_search=>c_general_search_params-max_rows.
         IF iv_value CN '0123456789'.
           RAISE EXCEPTION TYPE zcx_sat_object_search
             EXPORTING textid = zcx_sat_object_search=>option_val_not_numeric

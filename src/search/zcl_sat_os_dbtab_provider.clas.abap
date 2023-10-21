@@ -5,6 +5,8 @@ CLASS zcl_sat_os_dbtab_provider DEFINITION
   INHERITING FROM zcl_sat_base_search_provider.
 
   PUBLIC SECTION.
+    INTERFACES zif_sat_c_os_dtab_options.
+
     "! <p class="shorttext synchronized">CONSTRUCTOR</p>
     METHODS constructor.
 
@@ -14,7 +16,7 @@ CLASS zcl_sat_os_dbtab_provider DEFINITION
     METHODS do_after_search    REDEFINITION.
 
   PRIVATE SECTION.
-    ALIASES c_dbtab_search_params FOR zif_sat_c_object_search~c_dbtab_search_params.
+    ALIASES c_dbtab_search_params FOR zif_sat_c_os_dtab_options~c_filter_key.
 
     CONSTANTS:
       c_base_table          TYPE string VALUE 'base',
@@ -54,12 +56,6 @@ CLASS zcl_sat_os_dbtab_provider DEFINITION
     DATA mv_field_filter_count TYPE i.
     DATA mv_incl_filter_count TYPE i.
     DATA mf_dd09l_join_needed TYPE abap_bool.
-
-    "! <p class="shorttext synchronized">Create filter for TYPE option</p>
-    "!
-    METHODS add_type_option_filter
-      IMPORTING
-        it_values TYPE zif_sat_ty_object_search=>ty_t_value_range.
 
     "! <p class="shorttext synchronized">Create filter for FIELD option</p>
     METHODS add_field_filter
@@ -186,13 +182,9 @@ CLASS zcl_sat_os_dbtab_provider IMPLEMENTATION.
                                  iv_ref_table_alias   = c_base_table ).
 
         WHEN c_general_search_options-application_component.
-          add_appl_comp_filter( if_use_ddic_sql_view = abap_true
-                                it_values            = <ls_option>-value_range
-                                iv_ref_field         = CONV #( c_fields-development_package )
-                                iv_ref_table_alias   = c_base_table ).
-
-        WHEN c_general_search_options-type.
-          add_type_option_filter( <ls_option>-value_range ).
+          add_appl_comp_filter( it_values          = <ls_option>-value_range
+                                iv_ref_field       = CONV #( c_fields-development_package )
+                                iv_ref_table_alias = c_base_table ).
 
         WHEN c_dbtab_search_params-field.
           add_field_filter( <ls_option>-value_range ).
@@ -249,29 +241,6 @@ CLASS zcl_sat_os_dbtab_provider IMPLEMENTATION.
           add_include_filter( it_values = <ls_option>-value_range  ).
       ENDCASE.
     ENDLOOP.
-  ENDMETHOD.
-
-  METHOD add_type_option_filter.
-    DATA lt_type_filters TYPE zif_sat_ty_object_search=>ty_t_value_range.
-
-    LOOP AT it_values INTO DATA(ls_value).
-      CASE ls_value-low.
-
-        WHEN zif_sat_c_object_search=>c_type_option_value-table.
-          ls_value-low = zif_sat_c_entity_type=>table.
-
-        WHEN zif_sat_c_object_search=>c_type_option_value-view.
-          ls_value-low = zif_sat_c_entity_type=>view.
-
-      ENDCASE.
-
-      lt_type_filters = VALUE #( BASE lt_type_filters ( ls_value ) ).
-    ENDLOOP.
-
-    add_option_filter( iv_fieldname = c_fields-type
-                       it_values    = lt_type_filters ).
-    add_option_filter( iv_fieldname = c_fields-type
-                       it_values    = lt_type_filters ).
   ENDMETHOD.
 
   METHOD add_field_filter.
@@ -370,18 +339,18 @@ CLASS zcl_sat_os_dbtab_provider IMPLEMENTATION.
       new_and_cond_list( ).
     ENDIF.
 
-    IF line_exists( it_values[ low = zif_sat_c_object_search=>c_db_flags-change_log_active ] ).
+    IF line_exists( it_values[ low = zif_sat_c_os_dtab_options=>c_db_flags-change_log_active ] ).
       mf_dd09l_join_needed = abap_true.
     ENDIF.
   ENDMETHOD.
 
   METHOD map_flag_opt_to_field.
     result = SWITCH string( iv_option
-                            WHEN zif_sat_c_object_search=>c_db_flags-client_dep THEN
+                            WHEN zif_sat_c_os_dtab_options=>c_db_flags-client_dep THEN
                               |{ c_base_table }~{ c_fields-client_dependent }|
-                            WHEN zif_sat_c_object_search=>c_db_flags-used_in_shlp THEN
+                            WHEN zif_sat_c_os_dtab_options=>c_db_flags-used_in_shlp THEN
                               |{ c_base_table }~{ c_fields-search_help_binding_exists }|
-                            WHEN zif_sat_c_object_search=>c_db_flags-change_log_active THEN
+                            WHEN zif_sat_c_os_dtab_options=>c_db_flags-change_log_active THEN
                               |{ c_tech_settings_table }~{ c_tech_fields-change_log_active }| ).
   ENDMETHOD.
 
