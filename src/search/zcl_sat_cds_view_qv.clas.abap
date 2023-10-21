@@ -31,17 +31,17 @@ CLASS zcl_sat_cds_view_qv IMPLEMENTATION.
     IF iv_option = zif_sat_c_object_search=>c_general_search_params-type.
       CASE iv_value.
 
-        WHEN zif_sat_c_object_search=>c_type_option_value-function OR
-             zif_sat_c_object_search=>c_type_option_value-hierarchy OR
-             zif_sat_c_object_search=>c_type_option_value-abstract_entity OR
-             zif_sat_c_object_search=>c_type_option_value-custom_entity OR
-             zif_sat_c_object_search=>c_type_option_value-view OR
-             zif_sat_c_object_search=>c_type_option_value-extend.
+        WHEN zif_sat_c_os_cds_options=>c_type_option_value-function OR
+             zif_sat_c_os_cds_options=>c_type_option_value-hierarchy OR
+             zif_sat_c_os_cds_options=>c_type_option_value-abstract_entity OR
+             zif_sat_c_os_cds_options=>c_type_option_value-custom_entity OR
+             zif_sat_c_os_cds_options=>c_type_option_value-view OR
+             zif_sat_c_os_cds_options=>c_type_option_value-extend.
 
         WHEN OTHERS.
           lf_invalid = abap_true.
       ENDCASE.
-    ELSEIF iv_option = zif_sat_c_object_search=>c_cds_search_params-params.
+    ELSEIF iv_option = zif_sat_c_os_cds_options=>c_filter_key-params.
       IF iv_value <> 'TRUE' AND iv_value <> 'FALSE'.
         lf_invalid = abap_true.
       ENDIF.
@@ -56,8 +56,8 @@ CLASS zcl_sat_cds_view_qv IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD zif_sat_query_validator~check_option_integrity.
-    IF line_exists( ct_options[ option = zif_sat_c_object_search=>c_cds_search_params-param ] ).
-      DELETE ct_options WHERE option = zif_sat_c_object_search=>c_cds_search_params-params.
+    IF line_exists( ct_options[ option = zif_sat_c_os_cds_options=>c_filter_key-param ] ).
+      DELETE ct_options WHERE option = zif_sat_c_os_cds_options=>c_filter_key-params.
     ENDIF.
   ENDMETHOD.
 ENDCLASS.

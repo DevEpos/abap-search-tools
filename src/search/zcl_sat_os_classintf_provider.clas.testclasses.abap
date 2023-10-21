@@ -114,7 +114,7 @@ CLASS ltcl_abap_unit IMPLEMENTATION.
     mr_cut = NEW #( ).
 
     DATA(lo_query) = NEW lcl_query( it_search_options = VALUE #(
-                                        ( option      = zif_sat_c_object_search=>c_class_intf_search_option-abap_lang
+                                        ( option      = zif_sat_c_os_clif_options=>c_filter_key-abap_lang
                                           value_range = VALUE #( ( low = 'X' ) ) ) ) " Unicode
                                     iv_type           = zif_sat_c_object_search=>c_search_type-class_interface ).
 
@@ -131,7 +131,7 @@ CLASS ltcl_abap_unit IMPLEMENTATION.
 
     DATA(lo_query) = NEW lcl_query(
         it_search_term    = VALUE #( ( values = VALUE #( ( sign = 'I' option = 'EQ' low = 'CX_REST_EXCEPTION' ) ) ) )
-        it_search_options = VALUE #( ( option      = zif_sat_c_object_search=>c_class_intf_search_option-category
+        it_search_options = VALUE #( ( option      = zif_sat_c_os_clif_options=>c_filter_key-category
                                        value_range = VALUE #( ( sign = 'I' option = 'EQ' low = '40' ) ) ) ) " Exception
         iv_type           = zif_sat_c_object_search=>c_search_type-class_interface ).
     TRY.
@@ -150,11 +150,11 @@ CLASS ltcl_abap_unit IMPLEMENTATION.
     DATA(lo_query) = NEW lcl_query(
         it_search_term    = VALUE #( ( values = VALUE #( ( sign = 'I' option = 'EQ' low = 'CL_ADT_RES_NAMED_ITEMS' ) ) ) )
         it_search_options = VALUE #(
-            ( option      = zif_sat_c_object_search=>c_class_intf_search_option-flag
+            ( option      = zif_sat_c_os_clif_options=>c_filter_key-flag
               value_range = VALUE #( option = 'EQ'
-                                     ( sign = 'I' low = zif_sat_c_object_search=>c_class_intf_flags-is_abstract )
-                                     ( sign = 'I' low = zif_sat_c_object_search=>c_class_intf_flags-is_fixpoint )
-                                     ( sign = 'E' low = zif_sat_c_object_search=>c_class_intf_flags-is_final ) ) ) )
+                                     ( sign = 'I' low = zif_sat_c_os_clif_options=>c_class_intf_flags-is_abstract )
+                                     ( sign = 'I' low = zif_sat_c_os_clif_options=>c_class_intf_flags-is_fixpoint )
+                                     ( sign = 'E' low = zif_sat_c_os_clif_options=>c_class_intf_flags-is_final ) ) ) )
         iv_type           = zif_sat_c_object_search=>c_search_type-class_interface ).
     TRY.
         mr_cut->zif_sat_object_search_provider~search(
@@ -175,8 +175,8 @@ CLASS ltcl_abap_unit IMPLEMENTATION.
     DATA(lo_query) = NEW lcl_query(
         it_search_term    = VALUE #( ( values = VALUE #( ( sign = 'I' option = 'EQ' low = 'CL_ADT_RES_NAMED_ITEMS' ) ) ) )
         it_search_options = VALUE #(
-            ( option      = zif_sat_c_object_search=>c_class_intf_search_option-flag
-              value_range = VALUE #( ( sign = 'E' option = 'EQ' low = zif_sat_c_object_search=>c_class_intf_flags-has_test ) ) ) )
+            ( option      = zif_sat_c_os_clif_options=>c_filter_key-flag
+              value_range = VALUE #( ( sign = 'E' option = 'EQ' low = zif_sat_c_os_clif_options=>c_class_intf_flags-has_test ) ) ) )
         iv_type           = zif_sat_c_object_search=>c_search_type-class_interface ).
     TRY.
         mr_cut->zif_sat_object_search_provider~search(
@@ -196,7 +196,7 @@ CLASS ltcl_abap_unit IMPLEMENTATION.
     DATA(lo_query) = NEW lcl_query(
         it_search_options = VALUE #(
             ( option      = zif_sat_c_object_search=>c_general_search_params-type
-              value_range = VALUE #( ( sign = 'I' option = 'EQ' low = zif_sat_c_object_search=>c_class_types-interface ) ) ) )
+              value_range = VALUE #( ( sign = 'I' option = 'EQ' low = zif_sat_c_os_clif_options=>c_class_types-interface ) ) ) )
         iv_type           = zif_sat_c_object_search=>c_search_type-class_interface
         iv_max_rows       = 1 ).
     TRY.
@@ -205,7 +205,7 @@ CLASS ltcl_abap_unit IMPLEMENTATION.
         cl_abap_unit_assert=>assert_not_initial( act = lt_result ).
 
         cl_abap_unit_assert=>assert_equals( act = lt_result[ 1 ]-tadir_type
-                                            exp = zif_sat_c_object_search=>c_class_types-interface ).
+                                            exp = zif_sat_c_os_clif_options=>c_class_types-interface ).
       CATCH zcx_sat_object_search INTO DATA(lx_search_error).
     ENDTRY.
 
@@ -217,7 +217,7 @@ CLASS ltcl_abap_unit IMPLEMENTATION.
 
     DATA(lo_query) = NEW lcl_query(
         it_search_options = VALUE #(
-            ( option      = zif_sat_c_object_search=>c_class_intf_search_option-friend
+            ( option      = zif_sat_c_os_clif_options=>c_filter_key-friend
               value_range = VALUE #( ( sign = 'I' option = 'EQ' low = 'IF_ALV_RM_GRID_FRIEND' ) ) ) )
         iv_type           = zif_sat_c_object_search=>c_search_type-class_interface
         iv_max_rows       = 1 ).
@@ -238,7 +238,7 @@ CLASS ltcl_abap_unit IMPLEMENTATION.
     DATA(lo_query) = NEW lcl_query(
         it_search_term    = VALUE #( ( values = VALUE #( ( sign = 'I' option = 'CP' low = 'CL_GUI_ALV*' ) ) ) )
         it_search_options = VALUE #(
-            ( option      = zif_sat_c_object_search=>c_class_intf_search_option-super_type
+            ( option      = zif_sat_c_os_clif_options=>c_filter_key-super_type
               value_range = VALUE #( ( sign = 'I' option = 'EQ' low = 'CL_GUI_ALV_GRID_BASE' ) ) ) )
         iv_type           = zif_sat_c_object_search=>c_search_type-class_interface
         iv_max_rows       = 1 ).
@@ -257,7 +257,7 @@ CLASS ltcl_abap_unit IMPLEMENTATION.
     mr_cut = NEW #( ).
 
     DATA(lo_query) = NEW lcl_query( it_search_options = VALUE #(
-                                        ( option      = zif_sat_c_object_search=>c_class_intf_search_option-abap_lang
+                                        ( option      = zif_sat_c_os_clif_options=>c_filter_key-abap_lang
                                           value_range = VALUE #( sign   = 'I'
                                                                  option = 'EQ'
                                                                  ( low = 'X' )
@@ -279,7 +279,7 @@ CLASS ltcl_abap_unit IMPLEMENTATION.
 
     DATA(lo_query) = NEW lcl_query(
                              it_search_options = VALUE #(
-                                 ( option      = zif_sat_c_object_search=>c_class_intf_search_option-interface
+                                 ( option      = zif_sat_c_os_clif_options=>c_filter_key-interface
                                    value_range = VALUE #( ( sign = 'I' option = 'EQ' low = 'IF_AMDP_MARKER_HDB' ) ) ) )
                              iv_type           = zif_sat_c_object_search=>c_search_type-class_interface
                              iv_max_rows       = 1 ).
@@ -298,7 +298,7 @@ CLASS ltcl_abap_unit IMPLEMENTATION.
 
     DATA(lo_query) = NEW lcl_query(
         it_search_term    = VALUE #( ( values = VALUE #( ( sign = 'I' option = 'EQ' low = 'ZCL_SAT_OBJECT_QUERY_PARSER' ) ) ) )
-        it_search_options = VALUE #( ( option      = zif_sat_c_object_search=>c_class_intf_search_option-attribute
+        it_search_options = VALUE #( ( option      = zif_sat_c_os_clif_options=>c_filter_key-attribute
                                        value_range = VALUE #( ( sign    = 'I'
                                                                 option  = 'EQ'
                                                                 low     = 'C_OPTION_SEPARATOR'
@@ -323,7 +323,7 @@ CLASS ltcl_abap_unit IMPLEMENTATION.
     DATA(lo_query) = NEW lcl_query(
         it_search_term    = VALUE #( ( values = VALUE #( ( sign = 'I' option = 'EQ' low = 'CL_GUI_ALV_GRID' ) ) ) )
         it_search_options = VALUE #(
-            ( option      = zif_sat_c_object_search=>c_class_intf_search_option-method
+            ( option      = zif_sat_c_os_clif_options=>c_filter_key-method
               value_range = VALUE #( ( sign  = 'I'  option  = 'EQ' low  = 'GET_FRONTEND_LAYOUT' ) ) ) )
         iv_type           = zif_sat_c_object_search=>c_search_type-class_interface
         iv_max_rows       = 1 ).
