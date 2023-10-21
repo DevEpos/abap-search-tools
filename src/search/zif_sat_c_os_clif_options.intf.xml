@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_INTF" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <VSEOINTERF>
+    <CLSNAME>ZIF_SAT_C_OS_CLIF_OPTIONS</CLSNAME>
+    <LANGU>E</LANGU>
+    <DESCRIPT>Options/Constants for Class/Interface Search</DESCRIPT>
+    <EXPOSURE>2</EXPOSURE>
+    <STATE>1</STATE>
+    <UNICODE>X</UNICODE>
+   </VSEOINTERF>
+   <DESCRIPTIONS>
+    <SEOCOMPOTX>
+     <CMPNAME>C_ABAP_LANG_VERSIONS</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>ABAP Language versions</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>C_CLASS_CATEGORIES</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Categories of ABAP OO Class</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>C_CLASS_INTF_FLAGS</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Flags for Class/Interface</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>C_CLASS_TYPES</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Types for class/interface</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>C_FILTER_KEY</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Search options for class/interface object search</DESCRIPT>
+    </SEOCOMPOTX>
+   </DESCRIPTIONS>
+  </asx:values>
+ </asx:abap>
+</abapGit>

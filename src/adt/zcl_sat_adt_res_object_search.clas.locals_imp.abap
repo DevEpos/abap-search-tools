@@ -313,7 +313,7 @@ CLASS lcl_method_result_converter IMPLEMENTATION.
       result = VALUE #( BASE result ( key = 'isStatic' value = abap_true type = zif_sat_c_adt_utils=>c_property_type-bool ) ).
     ENDIF.
 
-    IF is_method-method_status = zif_sat_c_object_search=>c_method_status_int-redefined.
+    IF is_method-method_status = zif_sat_c_os_meth_options=>c_method_status_int-redefined.
       result = VALUE #( BASE result ( key = 'isRedefined' value = abap_true type = zif_sat_c_adt_utils=>c_property_type-bool ) ).
     ENDIF.
 
@@ -327,9 +327,9 @@ CLASS lcl_method_result_converter IMPLEMENTATION.
         BASE result
         ( key   = 'visibility'
           value = SWITCH string( is_method-method_exposure
-                                 WHEN seoc_exposure_public    THEN zif_sat_c_object_search=>c_visibility-public
-                                 WHEN seoc_exposure_protected THEN zif_sat_c_object_search=>c_visibility-protected
-                                 WHEN seoc_exposure_private   THEN zif_sat_c_object_search=>c_visibility-private ) ) ).
+                                 WHEN seoc_exposure_public    THEN zif_sat_c_os_meth_options=>c_visibility-public
+                                 WHEN seoc_exposure_protected THEN zif_sat_c_os_meth_options=>c_visibility-protected
+                                 WHEN seoc_exposure_private   THEN zif_sat_c_os_meth_options=>c_visibility-private ) ) ).
   ENDMETHOD.
 ENDCLASS.
 

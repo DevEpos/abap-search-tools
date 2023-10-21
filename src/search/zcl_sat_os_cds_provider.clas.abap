@@ -5,6 +5,7 @@ CLASS zcl_sat_os_cds_provider DEFINITION
   INHERITING FROM zcl_sat_base_search_provider.
 
   PUBLIC SECTION.
+    INTERFACES zif_sat_c_os_cds_options.
     INTERFACES zif_sat_ty_object_search.
 
     "! <p class="shorttext synchronized">CONSTRUCTOR</p>
@@ -15,7 +16,7 @@ CLASS zcl_sat_os_cds_provider DEFINITION
     METHODS prepare_search     REDEFINITION.
 
   PRIVATE SECTION.
-    ALIASES c_cds_search_params FOR zif_sat_c_object_search~c_cds_search_params.
+    ALIASES c_cds_search_params FOR zif_sat_c_os_cds_options~c_filter_key.
     ALIASES ty_t_value_range    FOR zif_sat_ty_object_search~ty_t_value_range.
 
     DATA mv_field_subquery TYPE string.
