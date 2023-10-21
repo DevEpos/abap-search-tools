@@ -413,11 +413,11 @@ CLASS zcl_sat_method_info_reader IMPLEMENTATION.
       ls_result-changed_by   = lr_method_detail->changedby.
       ls_result-changed_date = lr_method_detail->changedon.
       IF lr_processed_method->is_redefined = abap_true.
-        ls_result-method_status = zif_sat_c_object_search=>c_method_status_int-redefined.
+        ls_result-method_status = zif_sat_c_os_meth_options=>c_method_status_int-redefined.
       ELSEIF lr_processed_method->type = c_method_types-implemented.
-        ls_result-method_status = zif_sat_c_object_search=>c_method_status_int-implemented.
+        ls_result-method_status = zif_sat_c_os_meth_options=>c_method_status_int-implemented.
       ELSE.
-        ls_result-method_status = zif_sat_c_object_search=>c_method_status_int-standard.
+        ls_result-method_status = zif_sat_c_os_meth_options=>c_method_status_int-standard.
       ENDIF.
       lt_results = VALUE #( BASE lt_results ( ls_result ) ).
     ENDLOOP.

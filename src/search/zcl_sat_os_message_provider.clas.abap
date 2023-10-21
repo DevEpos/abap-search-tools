@@ -6,12 +6,13 @@ CLASS zcl_sat_os_message_provider DEFINITION
   CREATE PUBLIC.
 
   PUBLIC SECTION.
+    INTERFACES zif_sat_c_os_mess_options.
 
   PROTECTED SECTION.
     METHODS prepare_search REDEFINITION.
 
   PRIVATE SECTION.
-    ALIASES c_msg_search_params FOR zif_sat_c_object_search~c_message_search_params.
+    ALIASES c_msg_search_params FOR zif_sat_c_os_mess_options~c_filter_key.
 
     CONSTANTS:
       BEGIN OF c_aliases,
@@ -82,7 +83,7 @@ CLASS zcl_sat_os_message_provider IMPLEMENTATION.
     add_search_terms_to_search( iv_target      = zif_sat_c_object_search=>c_search_fields-object_name_input_key
                                 it_field_names = VALUE #( ( |{ c_aliases-msg_clas }~{ c_fields-message_class }| ) ) ).
 
-    add_search_terms_to_search( iv_target      = zif_sat_c_object_search=>c_search_fields-message_text_input_key
+    add_search_terms_to_search( iv_target      = zif_sat_c_os_mess_options=>c_search_fields-message_text_input_key
                                 it_field_names = VALUE #( ( |{ c_aliases-message }~{ c_fields-short_text_upper }| ) ) ).
 
     add_order_by( iv_fieldname = c_fields-message_class
@@ -147,7 +148,7 @@ CLASS zcl_sat_os_message_provider IMPLEMENTATION.
 
   METHOD configure_message_filters.
     LOOP AT mo_search_query->mt_search_options ASSIGNING FIELD-SYMBOL(<ls_option>)
-         WHERE target = zif_sat_c_object_search=>c_search_fields-message_filter_input_key.
+         WHERE target = zif_sat_c_os_mess_options=>c_search_fields-message_filter_input_key.
 
       CASE <ls_option>-option.
 

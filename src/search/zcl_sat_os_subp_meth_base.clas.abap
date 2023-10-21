@@ -6,11 +6,12 @@ CLASS zcl_sat_os_subp_meth_base DEFINITION
   CREATE PUBLIC.
 
   PUBLIC SECTION.
+    INTERFACES zif_sat_c_os_meth_options.
     INTERFACES zif_sat_method_key_reader ABSTRACT METHODS get_method_key.
 
   PROTECTED SECTION.
-    ALIASES c_class_intf_search_option FOR zif_sat_c_object_search~c_class_intf_search_option.
-    ALIASES c_method_option            FOR zif_sat_c_object_search~c_method_search_option.
+    ALIASES c_class_intf_search_option FOR zif_sat_c_os_clif_options~c_filter_key.
+    ALIASES c_method_option            FOR zif_sat_c_os_meth_options~c_filter_key.
     ALIASES get_method_key             FOR zif_sat_method_key_reader~get_method_key.
 
     TYPES:
@@ -108,13 +109,13 @@ CLASS zcl_sat_os_subp_meth_base IMPLEMENTATION.
         WHEN ls_method_details-is_final_redefined          = abap_true
           OR ls_method_details-is_redefined                = abap_true
           OR ls_method_details-is_final_redefined_in_super = abap_true THEN
-          zif_sat_c_object_search=>c_method_status_int-redefined
+          zif_sat_c_os_meth_options=>c_method_status_int-redefined
         WHEN ls_method_details-is_abstract_implemented  = abap_true
           OR ls_method_details-is_final_implemented     = abap_true
           OR ls_method_details-is_implemented_if_method = abap_true THEN
-          zif_sat_c_object_search=>c_method_status_int-implemented
+          zif_sat_c_os_meth_options=>c_method_status_int-implemented
         ELSE
-          zif_sat_c_object_search=>c_method_status_int-standard ).
+          zif_sat_c_os_meth_options=>c_method_status_int-standard ).
 
       IF NOT method_matches_filter( iv_method_name = ls_method_info-cmpname
                                     is_method      = lr_class_method->*
@@ -127,7 +128,7 @@ CLASS zcl_sat_os_subp_meth_base IMPLEMENTATION.
 
   METHOD set_method_filters.
     LOOP AT mo_search_query->mt_search_options REFERENCE INTO DATA(lr_filter)
-         WHERE target = zif_sat_c_object_search=>c_search_fields-method_filter_input_key.
+         WHERE target = zif_sat_c_os_meth_options=>c_search_fields-method_filter_input_key.
 
       CASE lr_filter->option.
 
@@ -152,9 +153,9 @@ CLASS zcl_sat_os_subp_meth_base IMPLEMENTATION.
         WHEN c_method_option-flag.
           LOOP AT lr_filter->value_range INTO DATA(ls_option).
             CASE ls_option-low.
-              WHEN zif_sat_c_object_search=>c_method_flags-final.
+              WHEN zif_sat_c_os_meth_options=>c_method_flags-final.
                 mt_meth_final_filter = VALUE #( ( sign = ls_option-sign option = ls_option-option low = abap_true ) ).
-              WHEN zif_sat_c_object_search=>c_method_flags-class_exceptions.
+              WHEN zif_sat_c_os_meth_options=>c_method_flags-class_exceptions.
                 mt_meth_cls_exc_filter = VALUE #( ( sign = ls_option-sign option = ls_option-option low = abap_true ) ).
 
             ENDCASE.
@@ -164,7 +165,7 @@ CLASS zcl_sat_os_subp_meth_base IMPLEMENTATION.
     ENDLOOP.
 
     mt_meth_name_filter = VALUE #( mo_search_query->mt_search_term[
-                                       target = zif_sat_c_object_search=>c_search_fields-method_name_input_key ]-values OPTIONAL ).
+                                       target = zif_sat_c_os_meth_options=>c_search_fields-method_name_input_key ]-values OPTIONAL ).
   ENDMETHOD.
 
   METHOD method_matches_filter.

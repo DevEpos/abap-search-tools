@@ -22,22 +22,22 @@ CLASS zcl_sat_cds_view_qc IMPLEMENTATION.
       WHEN zif_sat_c_object_search=>c_general_search_params-type.
 
         CASE cv_value.
-          WHEN zif_sat_c_object_search=>c_type_option_value-extend.
+          WHEN zif_sat_c_os_cds_options=>c_type_option_value-extend.
             cv_value = zif_sat_c_cds_view_type=>extend.
 
-          WHEN zif_sat_c_object_search=>c_type_option_value-function.
+          WHEN zif_sat_c_os_cds_options=>c_type_option_value-function.
             cv_value = zif_sat_c_cds_view_type=>table_function.
 
-          WHEN zif_sat_c_object_search=>c_type_option_value-hierarchy.
+          WHEN zif_sat_c_os_cds_options=>c_type_option_value-hierarchy.
             cv_value = zif_sat_c_cds_view_type=>hierarchy.
 
-          WHEN zif_sat_c_object_search=>c_type_option_value-view.
+          WHEN zif_sat_c_os_cds_options=>c_type_option_value-view.
             cv_value = zif_sat_c_cds_view_type=>view.
 
-          WHEN zif_sat_c_object_search=>c_type_option_value-abstract_entity.
+          WHEN zif_sat_c_os_cds_options=>c_type_option_value-abstract_entity.
             cv_value = zif_sat_c_cds_view_type=>abstract_entity.
 
-          WHEN zif_sat_c_object_search=>c_type_option_value-custom_entity.
+          WHEN zif_sat_c_os_cds_options=>c_type_option_value-custom_entity.
             cv_value = zif_sat_c_cds_view_type=>custom_entity.
 
           WHEN OTHERS.
