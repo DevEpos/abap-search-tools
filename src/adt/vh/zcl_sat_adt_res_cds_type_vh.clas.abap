@@ -17,8 +17,8 @@ ENDCLASS.
 CLASS zcl_sat_adt_res_cds_type_vh IMPLEMENTATION.
   METHOD get_named_items.
     p_named_item_list-items = VALUE #(
-        ( name = zif_sat_c_object_search=>c_type_option_value-view   description = |{ 'Standard CDS View'(003) }| )
-        ( name = zif_sat_c_object_search=>c_type_option_value-extend description = |{ 'Extension View'(006) }| ) ).
+        ( name = zif_sat_c_os_cds_options=>c_type_option_value-view   description = |{ 'Standard CDS View'(003) }| )
+        ( name = zif_sat_c_os_cds_options=>c_type_option_value-extend description = |{ 'Extension View'(006) }| ) ).
     p_filter_already_applied = abap_true.
   ENDMETHOD.
 ENDCLASS.

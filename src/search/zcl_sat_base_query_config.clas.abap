@@ -12,12 +12,6 @@ CLASS zcl_sat_base_query_config DEFINITION
     METHODS constructor.
 
   PROTECTED SECTION.
-    CONSTANTS c_object_name_input_key TYPE string VALUE 'objectName'.
-    CONSTANTS c_object_name_input_label TYPE string VALUE 'Object Name'.
-    CONSTANTS c_object_filter_input_key TYPE string VALUE 'objectFilter'.
-    CONSTANTS c_object_filter_input_label TYPE string VALUE 'Object Filters'.
-
-    ALIASES c_search_option   FOR zif_sat_c_object_search~c_search_option.
     ALIASES c_general_options FOR zif_sat_c_object_search~c_general_search_params.
 
     CONSTANTS:

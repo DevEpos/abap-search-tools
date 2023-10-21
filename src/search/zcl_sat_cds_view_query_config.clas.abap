@@ -5,6 +5,8 @@ CLASS zcl_sat_cds_view_query_config DEFINITION
   CREATE PUBLIC.
 
   PUBLIC SECTION.
+    INTERFACES zif_sat_c_os_cds_options.
+
     METHODS constructor.
     METHODS zif_sat_object_search_config~get_type REDEFINITION.
 
@@ -12,7 +14,7 @@ CLASS zcl_sat_cds_view_query_config DEFINITION
     METHODS build_config REDEFINITION.
 
   PRIVATE SECTION.
-    ALIASES c_cds_options FOR zif_sat_c_object_search~c_cds_search_params.
+    ALIASES c_cds_options FOR zif_sat_c_os_cds_options~c_filter_key.
 
     CONSTANTS:
       BEGIN OF c_image_keys,

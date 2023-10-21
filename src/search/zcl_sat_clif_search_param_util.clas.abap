@@ -58,39 +58,39 @@ CLASS zcl_sat_clif_search_param_util IMPLEMENTATION.
     CASE iv_internal.
 
       WHEN '00'.
-        ev_external = zif_sat_c_object_search=>c_class_categories-general.
+        ev_external = zif_sat_c_os_clif_options=>c_class_categories-general.
         lv_default_text = 'General Class'.
 
       WHEN '01'.
-        ev_external = zif_sat_c_object_search=>c_class_categories-exit.
+        ev_external = zif_sat_c_os_clif_options=>c_class_categories-exit.
         lv_default_text = 'Exit Class'.
 
       WHEN '10'.
-        ev_external = zif_sat_c_object_search=>c_class_categories-persistent.
+        ev_external = zif_sat_c_os_clif_options=>c_class_categories-persistent.
         lv_default_text = 'Persistent Class'.
 
       WHEN '11'.
-        ev_external = zif_sat_c_object_search=>c_class_categories-pers_factory.
+        ev_external = zif_sat_c_os_clif_options=>c_class_categories-pers_factory.
         lv_default_text = 'Factory for persistent class'.
 
       WHEN '40'.
-        ev_external = zif_sat_c_object_search=>c_class_categories-exception.
+        ev_external = zif_sat_c_os_clif_options=>c_class_categories-exception.
         lv_default_text = 'Exception Class'.
 
       WHEN '05'.
-        ev_external = zif_sat_c_object_search=>c_class_categories-test_class.
+        ev_external = zif_sat_c_os_clif_options=>c_class_categories-test_class.
         lv_default_text = 'Test Class (ABAP Unit)'.
 
       WHEN '45'.
-        ev_external = zif_sat_c_object_search=>c_class_categories-area_class.
+        ev_external = zif_sat_c_os_clif_options=>c_class_categories-area_class.
         lv_default_text = 'Area Class (Shared Objects)'.
 
       WHEN '80'.
-        ev_external = zif_sat_c_object_search=>c_class_categories-wd_runtime.
+        ev_external = zif_sat_c_os_clif_options=>c_class_categories-wd_runtime.
         lv_default_text = 'Web Dynpro Runtime Object'.
 
       WHEN '06'.
-        ev_external = zif_sat_c_object_search=>c_class_categories-behavior.
+        ev_external = zif_sat_c_os_clif_options=>c_class_categories-behavior.
         lv_default_text = 'Behavior (Class ... for Behavior of ...)'.
 
       WHEN OTHERS.
@@ -106,31 +106,31 @@ CLASS zcl_sat_clif_search_param_util IMPLEMENTATION.
   METHOD convert_category_to_int.
     CASE iv_external.
 
-      WHEN zif_sat_c_object_search=>c_class_categories-general.
+      WHEN zif_sat_c_os_clif_options=>c_class_categories-general.
         rv_internal = '00'.
 
-      WHEN zif_sat_c_object_search=>c_class_categories-exit.
+      WHEN zif_sat_c_os_clif_options=>c_class_categories-exit.
         rv_internal = '01'.
 
-      WHEN zif_sat_c_object_search=>c_class_categories-persistent.
+      WHEN zif_sat_c_os_clif_options=>c_class_categories-persistent.
         rv_internal = '10'.
 
-      WHEN zif_sat_c_object_search=>c_class_categories-pers_factory.
+      WHEN zif_sat_c_os_clif_options=>c_class_categories-pers_factory.
         rv_internal = '11'.
 
-      WHEN zif_sat_c_object_search=>c_class_categories-exception.
+      WHEN zif_sat_c_os_clif_options=>c_class_categories-exception.
         rv_internal = '40'.
 
-      WHEN zif_sat_c_object_search=>c_class_categories-test_class.
+      WHEN zif_sat_c_os_clif_options=>c_class_categories-test_class.
         rv_internal = '05'.
 
-      WHEN zif_sat_c_object_search=>c_class_categories-area_class.
+      WHEN zif_sat_c_os_clif_options=>c_class_categories-area_class.
         rv_internal = '45'.
 
-      WHEN zif_sat_c_object_search=>c_class_categories-wd_runtime.
+      WHEN zif_sat_c_os_clif_options=>c_class_categories-wd_runtime.
         rv_internal = '80'.
 
-      WHEN zif_sat_c_object_search=>c_class_categories-behavior.
+      WHEN zif_sat_c_os_clif_options=>c_class_categories-behavior.
         rv_internal = '06'.
 
       WHEN OTHERS.

@@ -6,6 +6,8 @@ CLASS zcl_sat_clif_meth_query_config DEFINITION
   CREATE PUBLIC.
 
   PUBLIC SECTION.
+    INTERFACES zif_sat_c_os_meth_options.
+
     METHODS constructor.
     METHODS zif_sat_object_search_config~get_type          REDEFINITION.
     METHODS zif_sat_object_search_config~get_option_config REDEFINITION.
@@ -16,7 +18,7 @@ CLASS zcl_sat_clif_meth_query_config DEFINITION
     METHODS build_config REDEFINITION.
 
   PRIVATE SECTION.
-    ALIASES c_method_options FOR zif_sat_c_object_search~c_method_search_option.
+    ALIASES c_method_options FOR zif_sat_c_os_meth_options~c_filter_key.
 
     CONSTANTS:
       BEGIN OF c_image_keys,
@@ -72,7 +74,7 @@ CLASS zcl_sat_clif_meth_query_config IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD zif_sat_object_search_config~get_option_config.
-    IF iv_target = zif_sat_c_object_search=>c_search_fields-method_filter_input_key.
+    IF iv_target = zif_sat_c_os_meth_options=>c_search_fields-method_filter_input_key.
       rs_option = mt_method_options[ name = iv_option ].
     ELSE.
       rs_option = super->zif_sat_object_search_config~get_option_config( iv_option ).
@@ -87,7 +89,7 @@ CLASS zcl_sat_clif_meth_query_config IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD zif_sat_object_search_config~has_option.
-    IF iv_target = zif_sat_c_object_search=>c_search_fields-method_filter_input_key.
+    IF iv_target = zif_sat_c_os_meth_options=>c_search_fields-method_filter_input_key.
       rf_has_option = xsdbool( line_exists( mt_method_options[ name = iv_option ] ) ).
     ELSE.
       rf_has_option = super->zif_sat_object_search_config~has_option( iv_option = iv_option iv_target = iv_target ).
@@ -118,15 +120,15 @@ CLASS zcl_sat_clif_meth_query_config IMPLEMENTATION.
     ms_search_type-name           = zif_sat_c_object_search=>c_search_type-method.
     ms_search_type-inputs         = VALUE #(
         BASE ms_search_type-inputs
-        ( name    = zif_sat_c_object_search=>c_search_fields-method_name_input_key
-          label   = zif_sat_c_object_search=>c_search_fields-method_name_input_label )
-        ( name    = zif_sat_c_object_search=>c_search_fields-method_filter_input_key
-          label   = zif_sat_c_object_search=>c_search_fields-method_filter_input_label
+        ( name    = zif_sat_c_os_meth_options=>c_search_fields-method_name_input_key
+          label   = zif_sat_c_os_meth_options=>c_search_fields-method_name_input_label )
+        ( name    = zif_sat_c_os_meth_options=>c_search_fields-method_filter_input_key
+          label   = zif_sat_c_os_meth_options=>c_search_fields-method_filter_input_label
           filters = mt_method_options ) ).
 
     ms_search_type-custom_options = VALUE #(
         BASE ms_search_type-custom_options
-        ( key         = zif_sat_c_object_search=>c_custom_options-method-target_incl_for_admin_data
+        ( key         = zif_sat_c_os_meth_options=>c_custom_options-method-target_incl_for_admin_data
           type        = zif_sat_c_object_search=>c_custom_option_data_type-boolean
           label       = 'Set Focus of Admin-Data Filters to Method &Include'
           description = |If admin data filters like 'changed' or 'changedby' are used the\n| &&
@@ -155,10 +157,10 @@ CLASS zcl_sat_clif_meth_query_config IMPLEMENTATION.
         content_assist   = VALUE #(
             assist_type     = zif_sat_c_object_search=>c_filter_content_assist_type-fixed_named_item
             proposal_values = VALUE #(
-                ( name = zif_sat_c_object_search=>c_method_flags-optional         description = 'Implementation is Optional' )
-                ( name = zif_sat_c_object_search=>c_method_flags-abstract         description = 'Abstract' )
-                ( name = zif_sat_c_object_search=>c_method_flags-final            description = 'Final' )
-                ( name = zif_sat_c_object_search=>c_method_flags-class_exceptions description = 'Class Based Exceptions are used' ) ) ) ).
+                ( name = zif_sat_c_os_meth_options=>c_method_flags-optional         description = 'Implementation is Optional' )
+                ( name = zif_sat_c_os_meth_options=>c_method_flags-abstract         description = 'Abstract' )
+                ( name = zif_sat_c_os_meth_options=>c_method_flags-final            description = 'Final' )
+                ( name = zif_sat_c_os_meth_options=>c_method_flags-class_exceptions description = 'Class Based Exceptions are used' ) ) ) ).
   ENDMETHOD.
 
   METHOD get_exception_filter.
@@ -203,9 +205,9 @@ CLASS zcl_sat_clif_meth_query_config IMPLEMENTATION.
         content_assist   = VALUE #(
             assist_type     = zif_sat_c_object_search=>c_filter_content_assist_type-fixed_named_item
             proposal_values = VALUE #(
-                ( name = zif_sat_c_object_search=>c_visibility-public    description = 'Public' )
-                ( name = zif_sat_c_object_search=>c_visibility-protected description = 'Protected' )
-                ( name = zif_sat_c_object_search=>c_visibility-private   description = 'Private' ) ) ) ).
+                ( name = zif_sat_c_os_meth_options=>c_visibility-public    description = 'Public' )
+                ( name = zif_sat_c_os_meth_options=>c_visibility-protected description = 'Protected' )
+                ( name = zif_sat_c_os_meth_options=>c_visibility-private   description = 'Private' ) ) ) ).
   ENDMETHOD.
 
   METHOD get_level_filter.
@@ -222,8 +224,8 @@ CLASS zcl_sat_clif_meth_query_config IMPLEMENTATION.
         content_assist   = VALUE #(
             assist_type     = zif_sat_c_object_search=>c_filter_content_assist_type-fixed_named_item
             proposal_values = VALUE #(
-                ( name = zif_sat_c_object_search=>c_method_level-instance description = 'Instance Method' )
-                ( name = zif_sat_c_object_search=>c_method_level-static   description = 'Class Method' ) ) ) ).
+                ( name = zif_sat_c_os_meth_options=>c_method_level-instance description = 'Instance Method' )
+                ( name = zif_sat_c_os_meth_options=>c_method_level-static   description = 'Class Method' ) ) ) ).
   ENDMETHOD.
 
   METHOD get_status_filter.
@@ -240,9 +242,9 @@ CLASS zcl_sat_clif_meth_query_config IMPLEMENTATION.
         content_assist   = VALUE #(
             assist_type     = zif_sat_c_object_search=>c_filter_content_assist_type-fixed_named_item
             proposal_values = VALUE #(
-                ( name = zif_sat_c_object_search=>c_method_status-standard    description = 'Defined in Class/Interface' )
-                ( name = zif_sat_c_object_search=>c_method_status-implemented description = 'Implemented from Interface' )
-                ( name = zif_sat_c_object_search=>c_method_status-redefined   description = 'Redefined from Super Class' ) ) ) ).
+                ( name = zif_sat_c_os_meth_options=>c_method_status-standard    description = 'Defined in Class/Interface' )
+                ( name = zif_sat_c_os_meth_options=>c_method_status-implemented description = 'Implemented from Interface' )
+                ( name = zif_sat_c_os_meth_options=>c_method_status-redefined   description = 'Redefined from Super Class' ) ) ) ).
   ENDMETHOD.
 
   METHOD get_type_filter.
@@ -256,12 +258,12 @@ CLASS zcl_sat_clif_meth_query_config IMPLEMENTATION.
         content_assist   = VALUE #(
             assist_type     = zif_sat_c_object_search=>c_filter_content_assist_type-fixed_named_item
             proposal_values = VALUE #(
-                ( name = zif_sat_c_object_search=>c_method_types-general            description = 'General Method' )
-                ( name = zif_sat_c_object_search=>c_method_types-constructor        description = 'Constructor' )
-                ( name = zif_sat_c_object_search=>c_method_types-event_handler      description = 'Event Handler Method' )
-                ( name = zif_sat_c_object_search=>c_method_types-virtual_getter     description = 'Get Method of a virtual attribute' )
-                ( name = zif_sat_c_object_search=>c_method_types-virtual_setter     description = 'Set Method of a virtual attribute' )
-                ( name = zif_sat_c_object_search=>c_method_types-test               description = 'Test method for ABAP Unit' ) )
+                ( name = zif_sat_c_os_meth_options=>c_method_types-general            description = 'General Method' )
+                ( name = zif_sat_c_os_meth_options=>c_method_types-constructor        description = 'Constructor' )
+                ( name = zif_sat_c_os_meth_options=>c_method_types-event_handler      description = 'Event Handler Method' )
+                ( name = zif_sat_c_os_meth_options=>c_method_types-virtual_getter     description = 'Get Method of a virtual attribute' )
+                ( name = zif_sat_c_os_meth_options=>c_method_types-virtual_setter     description = 'Set Method of a virtual attribute' )
+                ( name = zif_sat_c_os_meth_options=>c_method_types-test               description = 'Test method for ABAP Unit' ) )
             proposal_images = VALUE #( ( img_key     = c_general_image_keys-type_group
                                          img_encoded = get_general_image( c_general_image_keys-type_group ) ) ) ) ).
   ENDMETHOD.
