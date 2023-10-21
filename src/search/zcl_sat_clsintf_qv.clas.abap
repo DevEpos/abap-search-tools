@@ -28,22 +28,22 @@ CLASS zcl_sat_clsintf_qv IMPLEMENTATION.
 
     CASE iv_option.
 
-      WHEN zif_sat_c_object_search=>c_class_intf_search_option-category.
+      WHEN zif_sat_c_os_clif_options=>c_filter_key-category.
         TRY.
             zcl_sat_clif_search_param_util=>convert_category_to_int( iv_external = iv_value ).
           CATCH zcx_sat_conversion_exc.
             lf_invalid = abap_true.
         ENDTRY.
 
-      WHEN zif_sat_c_object_search=>c_class_intf_search_option-flag.
+      WHEN zif_sat_c_os_clif_options=>c_filter_key-flag.
         CASE iv_value.
 
-          WHEN zif_sat_c_object_search=>c_class_intf_flags-has_test OR
-               zif_sat_c_object_search=>c_class_intf_flags-is_abstract OR
-               zif_sat_c_object_search=>c_class_intf_flags-is_final OR
-               zif_sat_c_object_search=>c_class_intf_flags-is_fixpoint OR
-               zif_sat_c_object_search=>c_class_intf_flags-is_shared_memory OR
-               zif_sat_c_object_search=>c_class_intf_flags-has_unicode_checks.
+          WHEN zif_sat_c_os_clif_options=>c_class_intf_flags-has_test OR
+               zif_sat_c_os_clif_options=>c_class_intf_flags-is_abstract OR
+               zif_sat_c_os_clif_options=>c_class_intf_flags-is_final OR
+               zif_sat_c_os_clif_options=>c_class_intf_flags-is_fixpoint OR
+               zif_sat_c_os_clif_options=>c_class_intf_flags-is_shared_memory OR
+               zif_sat_c_os_clif_options=>c_class_intf_flags-has_unicode_checks.
 
           WHEN OTHERS.
             lf_invalid = abap_true.

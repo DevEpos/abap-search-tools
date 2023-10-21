@@ -70,7 +70,7 @@ CLASS zcl_sat_os_method_provider IMPLEMENTATION.
 
   METHOD get_providers.
     DATA(lf_incl_admin_data) = VALUE #( ms_search_engine_params-custom_options[
-                                            key = zif_sat_c_object_search=>c_custom_options-method-target_incl_for_admin_data ]-value OPTIONAL ).
+                                            key = zif_sat_c_os_meth_options=>c_custom_options-method-target_incl_for_admin_data ]-value OPTIONAL ).
     IF lf_incl_admin_data = abap_true.
       DATA(lo_meth_impl_provider) = COND #( WHEN sy-dbsys = 'HDB'
                                             THEN NEW zcl_sat_os_subp_meth_impl( )
@@ -109,22 +109,22 @@ CLASS zcl_sat_os_method_provider IMPLEMENTATION.
 
   METHOD get_status_filter.
     result = VALUE #( mo_query->mt_search_options[
-                          target = zif_sat_c_object_search=>c_search_fields-method_filter_input_key
-                          option = zif_sat_c_object_search=>c_method_search_option-status ]-value_range OPTIONAL ).
+                          target = zif_sat_c_os_meth_options=>c_search_fields-method_filter_input_key
+                          option = zif_sat_c_os_meth_options=>c_filter_key-status ]-value_range OPTIONAL ).
   ENDMETHOD.
 
   METHOD check_redefined_search.
     " check if 'redefined' methods should be search inclusively or exclusively
     DATA(lt_status_filter) = VALUE #( mo_query->mt_search_options[
-                                          target = zif_sat_c_object_search=>c_search_fields-method_filter_input_key
-                                          option = zif_sat_c_object_search=>c_method_search_option-status ]-value_range OPTIONAL ).
+                                          target = zif_sat_c_os_meth_options=>c_search_fields-method_filter_input_key
+                                          option = zif_sat_c_os_meth_options=>c_filter_key-status ]-value_range OPTIONAL ).
 
     IF lt_status_filter IS NOT INITIAL.
       DATA(lv_include_count) = 0.
       LOOP AT lt_status_filter INTO DATA(ls_status_filter).
         IF ls_status_filter-sign = 'I'.
           lv_include_count = lv_include_count + 1.
-          IF ls_status_filter-low = zif_sat_c_object_search=>c_method_status_int-redefined.
+          IF ls_status_filter-low = zif_sat_c_os_meth_options=>c_method_status_int-redefined.
             ef_redefined_active = abap_true.
           ENDIF.
         ENDIF.
@@ -148,8 +148,8 @@ CLASS zcl_sat_os_method_provider IMPLEMENTATION.
     TYPES ty_level_filter TYPE RANGE OF seomtddecl.
 
     DATA(lt_level_filter) = VALUE #( mo_query->mt_search_options[
-                                         target = zif_sat_c_object_search=>c_search_fields-method_filter_input_key
-                                         option = zif_sat_c_object_search=>c_method_search_option-level ]-value_range OPTIONAL ).
+                                         target = zif_sat_c_os_meth_options=>c_search_fields-method_filter_input_key
+                                         option = zif_sat_c_os_meth_options=>c_filter_key-level ]-value_range OPTIONAL ).
 
     IF lt_level_filter IS INITIAL.
       RETURN.
@@ -163,15 +163,15 @@ CLASS zcl_sat_os_method_provider IMPLEMENTATION.
 
   METHOD is_abstract_requested.
     DATA(lt_flag_filter) = VALUE #( mo_query->mt_search_options[
-                                        target = zif_sat_c_object_search=>c_search_fields-method_filter_input_key
-                                        option = zif_sat_c_object_search=>c_method_search_option-flag ]-value_range OPTIONAL ).
+                                        target = zif_sat_c_os_meth_options=>c_search_fields-method_filter_input_key
+                                        option = zif_sat_c_os_meth_options=>c_filter_key-flag ]-value_range OPTIONAL ).
     IF lt_flag_filter IS INITIAL.
       RETURN.
     ENDIF.
 
     DATA(lt_flag_range) = CORRESPONDING zif_sat_ty_global=>ty_t_string_range( lt_flag_filter ).
 
-    result = xsdbool(     zif_sat_c_object_search=>c_method_flags-abstract IN lt_flag_range
+    result = xsdbool(     zif_sat_c_os_meth_options=>c_method_flags-abstract IN lt_flag_range
                       AND lines( lt_flag_filter ) = 1 ).
   ENDMETHOD.
 
@@ -179,8 +179,8 @@ CLASS zcl_sat_os_method_provider IMPLEMENTATION.
     DATA lt_visibility_range TYPE RANGE OF seoexpose.
 
     DATA(lt_visibility_filter) = VALUE #( mo_query->mt_search_options[
-                                              target = zif_sat_c_object_search=>c_search_fields-method_filter_input_key
-                                              option = zif_sat_c_object_search=>c_method_search_option-visibility ]-value_range OPTIONAL ).
+                                              target = zif_sat_c_os_meth_options=>c_search_fields-method_filter_input_key
+                                              option = zif_sat_c_os_meth_options=>c_filter_key-visibility ]-value_range OPTIONAL ).
     IF lt_visibility_filter IS INITIAL.
       RETURN.
     ENDIF.

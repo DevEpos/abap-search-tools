@@ -3,18 +3,18 @@
  <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
   <asx:values>
    <VSEOINTERF>
-    <CLSNAME>ZIF_SAT_C_OBJECT_SEARCH</CLSNAME>
+    <CLSNAME>ZIF_SAT_C_OS_CDS_OPTIONS</CLSNAME>
     <LANGU>E</LANGU>
-    <DESCRIPT>Constants for Object search</DESCRIPT>
+    <DESCRIPT>Options/Constants for CDS Search</DESCRIPT>
     <EXPOSURE>2</EXPOSURE>
     <STATE>1</STATE>
     <UNICODE>X</UNICODE>
    </VSEOINTERF>
    <DESCRIPTIONS>
     <SEOCOMPOTX>
-     <CMPNAME>C_GENERAL_SEARCH_PARAMS</CMPNAME>
+     <CMPNAME>C_FILTER_KEY</CMPNAME>
      <LANGU>E</LANGU>
-     <DESCRIPT>General search options</DESCRIPT>
+     <DESCRIPT>Search options for CDS Search</DESCRIPT>
     </SEOCOMPOTX>
    </DESCRIPTIONS>
   </asx:values>

@@ -5,13 +5,15 @@ CLASS zcl_sat_clsintf_query_config DEFINITION
   CREATE PUBLIC.
 
   PUBLIC SECTION.
-    ALIASES c_class_intf_search_option FOR zif_sat_c_object_search~c_class_intf_search_option.
+    INTERFACES zif_sat_c_os_clif_options.
+
+    ALIASES c_class_intf_search_option FOR zif_sat_c_os_clif_options~c_filter_key.
 
     METHODS constructor.
     METHODS zif_sat_object_search_config~get_type REDEFINITION.
 
   PROTECTED SECTION.
-    ALIASES c_custom_options FOR zif_sat_c_object_search~c_custom_options.
+    ALIASES c_custom_options FOR zif_sat_c_os_clif_options~c_custom_options.
 
     CONSTANTS:
       BEGIN OF c_clif_image_keys,
