@@ -68,7 +68,7 @@ CLASS ltcl_abap_unit IMPLEMENTATION.
         iv_type           = zif_sat_c_object_search=>c_search_type-method
         iv_max_rows       = 1
         it_search_options = VALUE #(
-            ( target      = zif_sat_c_object_search=>c_search_fields-method_filter_input_key
+            ( target      = zif_sat_c_os_meth_options=>c_search_fields-method_filter_input_key
               option      = zif_sat_c_object_search=>c_general_search_params-changed_on
               value_range = VALUE #( ( sign = 'I' option = 'EQ' low = |IEQ{ sy-datum DATE = RAW }| ) ) ) ) ).
 
