@@ -17,10 +17,10 @@ CLASS zcl_sat_clsintf_qc IMPLEMENTATION.
   METHOD zif_sat_query_converter~convert_value.
     CASE iv_option.
 
-      WHEN zif_sat_c_object_search=>c_class_intf_search_option-abap_lang.
+      WHEN zif_sat_c_os_clif_options=>c_filter_key-abap_lang.
         cv_value = zcl_sat_clif_search_param_util=>convert_abap_lang_to_int( iv_external = cv_value ).
 
-      WHEN zif_sat_c_object_search=>c_class_intf_search_option-category.
+      WHEN zif_sat_c_os_clif_options=>c_filter_key-category.
         cv_value = zcl_sat_clif_search_param_util=>convert_category_to_int( iv_external = cv_value ).
 
       WHEN OTHERS.

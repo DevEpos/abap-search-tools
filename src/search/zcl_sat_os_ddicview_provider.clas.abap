@@ -5,6 +5,8 @@ CLASS zcl_sat_os_ddicview_provider DEFINITION
   INHERITING FROM zcl_sat_base_search_provider.
 
   PUBLIC SECTION.
+    INTERFACES zif_sat_c_os_view_options.
+
     METHODS constructor.
 
   PROTECTED SECTION.
@@ -13,7 +15,7 @@ CLASS zcl_sat_os_ddicview_provider DEFINITION
     METHODS do_after_search    REDEFINITION.
 
   PRIVATE SECTION.
-    ALIASES c_search_params FOR zif_sat_c_object_search~c_ddicview_search_params.
+    ALIASES c_search_params FOR zif_sat_c_os_view_options~c_filter_key.
 
     CONSTANTS:
       c_base_table     TYPE string VALUE 'base',

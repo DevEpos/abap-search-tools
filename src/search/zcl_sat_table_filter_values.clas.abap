@@ -17,24 +17,24 @@ ENDCLASS.
 
 CLASS zcl_sat_table_filter_values IMPLEMENTATION.
   METHOD get_maintenance_filt_values.
-    result = VALUE #( ( name        = zif_sat_c_object_search=>c_table_maintenance-ext-allowed
+    result = VALUE #( ( name        = zif_sat_c_os_dtab_options=>c_table_maintenance-ext-allowed
                         description = 'Display/Maintenance Allowed' )
-                      ( name        = zif_sat_c_object_search=>c_table_maintenance-ext-allowed_with_restr
+                      ( name        = zif_sat_c_os_dtab_options=>c_table_maintenance-ext-allowed_with_restr
                         description = 'Display/Maintenance Allowed with Restrictions' )
-                      ( name        = zif_sat_c_object_search=>c_table_maintenance-ext-not_allowed
+                      ( name        = zif_sat_c_os_dtab_options=>c_table_maintenance-ext-not_allowed
                         description = 'Display/Maintenance Not Allowed' ) ).
   ENDMETHOD.
 
   METHOD get_enhancecat_filt_values.
-    result = VALUE #( ( name        = zif_sat_c_object_search=>c_tab_enh_categories-ext-not_classified
+    result = VALUE #( ( name        = zif_sat_c_os_dtab_options=>c_tab_enh_categories-ext-not_classified
                         description = 'Not Classified' )
-                      ( name        = zif_sat_c_object_search=>c_tab_enh_categories-ext-not_extendable
+                      ( name        = zif_sat_c_os_dtab_options=>c_tab_enh_categories-ext-not_extendable
                         description = 'Cannot be Enhanced' )
-                      ( name        = zif_sat_c_object_search=>c_tab_enh_categories-ext-char_like
+                      ( name        = zif_sat_c_os_dtab_options=>c_tab_enh_categories-ext-char_like
                         description = 'Can be enhanced - character-like' )
-                      ( name        = zif_sat_c_object_search=>c_tab_enh_categories-ext-char_like_and_numeric
+                      ( name        = zif_sat_c_os_dtab_options=>c_tab_enh_categories-ext-char_like_and_numeric
                         description = 'Can be enhanced - character-like or numeric' )
-                      ( name        = zif_sat_c_object_search=>c_tab_enh_categories-ext-any
+                      ( name        = zif_sat_c_os_dtab_options=>c_tab_enh_categories-ext-any
                         description = 'Can be enhanced (deep)' ) ).
   ENDMETHOD.
 ENDCLASS.

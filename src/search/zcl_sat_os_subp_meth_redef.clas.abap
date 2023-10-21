@@ -112,7 +112,7 @@ CLASS zcl_sat_os_subp_meth_redef IMPLEMENTATION.
     DATA lt_temp_method_name_terms TYPE zif_sat_ty_object_search=>ty_s_search_term-values.
 
     DATA(lr_method_names) = REF #( mo_search_query->mt_search_term[
-                                       target = zif_sat_c_object_search=>c_search_fields-method_name_input_key ]-values OPTIONAL ).
+                                       target = zif_sat_c_os_meth_options=>c_search_fields-method_name_input_key ]-values OPTIONAL ).
     IF lr_method_names IS INITIAL.
       RETURN.
     ENDIF.
@@ -132,7 +132,7 @@ CLASS zcl_sat_os_subp_meth_redef IMPLEMENTATION.
     super->set_method_filters( ).
 
     LOOP AT mo_search_query->mt_search_options REFERENCE INTO DATA(lr_filter)
-         WHERE target = zif_sat_c_object_search=>c_search_fields-method_filter_input_key.
+         WHERE target = zif_sat_c_os_meth_options=>c_search_fields-method_filter_input_key.
 
       CASE lr_filter->option.
         WHEN c_general_search_options-changed_by.
@@ -196,12 +196,12 @@ CLASS zcl_sat_os_subp_meth_redef IMPLEMENTATION.
 
   METHOD configure_method_filters.
     LOOP AT mo_search_query->mt_search_options REFERENCE INTO DATA(lr_filter)
-         WHERE target = zif_sat_c_object_search=>c_search_fields-method_filter_input_key.
+         WHERE target = zif_sat_c_os_meth_options=>c_search_fields-method_filter_input_key.
 
       IF lr_filter->option = c_method_option-flag.
         LOOP AT lr_filter->value_range INTO DATA(ls_option).
           CASE ls_option-low.
-            WHEN zif_sat_c_object_search=>c_method_flags-final.
+            WHEN zif_sat_c_os_meth_options=>c_method_flags-final.
               add_option_filter(
                   iv_fieldname = |{ c_alias_names-method }~{ c_fields-is_final }|
                   it_values    = VALUE #( ( sign = ls_option-sign option = ls_option-option low = abap_true ) ) ).

@@ -17,13 +17,13 @@ ENDCLASS.
 CLASS zcl_sat_adt_res_cds_type_vh IMPLEMENTATION.
   METHOD get_named_items.
     p_named_item_list-items = VALUE #(
-        ( name = zif_sat_c_object_search=>c_type_option_value-view            description = |{ 'Standard CDS View'(003) }| )
-        ( name = zif_sat_c_object_search=>c_type_option_value-function        description = |{ 'CDS Table Function View'(001) }| )
-        ( name = zif_sat_c_object_search=>c_type_option_value-extend          description = |{ 'Extension View'(006) }| )
-        ( name = zif_sat_c_object_search=>c_type_option_value-abstract_entity description = |{ 'Abstract Entity'(004) }| )
-        ( name = zif_sat_c_object_search=>c_type_option_value-custom_entity   description = |{ 'Custom Entity'(005) }| )
-        ( name = zif_sat_c_object_search=>c_type_option_value-hierarchy       description = |{ 'Hierarchy View'(002) }| )
-        ( name = zif_sat_c_object_search=>c_type_option_value-projection      description = |{ 'Projection View'(007) }| ) ).
+        ( name = zif_sat_c_os_cds_options=>c_type_option_value-view            description = |{ 'Standard CDS View'(003) }| )
+        ( name = zif_sat_c_os_cds_options=>c_type_option_value-function        description = |{ 'CDS Table Function View'(001) }| )
+        ( name = zif_sat_c_os_cds_options=>c_type_option_value-extend          description = |{ 'Extension View'(006) }| )
+        ( name = zif_sat_c_os_cds_options=>c_type_option_value-abstract_entity description = |{ 'Abstract Entity'(004) }| )
+        ( name = zif_sat_c_os_cds_options=>c_type_option_value-custom_entity   description = |{ 'Custom Entity'(005) }| )
+        ( name = zif_sat_c_os_cds_options=>c_type_option_value-hierarchy       description = |{ 'Hierarchy View'(002) }| )
+        ( name = zif_sat_c_os_cds_options=>c_type_option_value-projection      description = |{ 'Projection View'(007) }| ) ).
     p_filter_already_applied = abap_true.
   ENDMETHOD.
 ENDCLASS.
