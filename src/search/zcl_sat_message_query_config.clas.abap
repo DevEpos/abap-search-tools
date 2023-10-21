@@ -6,6 +6,8 @@ CLASS zcl_sat_message_query_config DEFINITION
   CREATE PUBLIC.
 
   PUBLIC SECTION.
+    INTERFACES zif_sat_c_os_mess_options.
+
     METHODS constructor.
     METHODS zif_sat_object_search_config~get_type          REDEFINITION.
     METHODS zif_sat_object_search_config~get_output_config REDEFINITION.
@@ -16,7 +18,7 @@ CLASS zcl_sat_message_query_config DEFINITION
     METHODS build_config REDEFINITION.
 
   PRIVATE SECTION.
-    ALIASES c_msg_search_params FOR zif_sat_c_object_search~c_message_search_params.
+    ALIASES c_msg_search_params FOR zif_sat_c_os_mess_options~c_filter_key.
 
     DATA mt_message_options TYPE zif_sat_ty_object_search=>ty_query_filters.
 
@@ -48,7 +50,7 @@ CLASS zcl_sat_message_query_config IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD zif_sat_object_search_config~get_option_config.
-    IF iv_target = zif_sat_c_object_search=>c_search_fields-message_filter_input_key.
+    IF iv_target = zif_sat_c_os_mess_options=>c_search_fields-message_filter_input_key.
       rs_option = mt_message_options[ name = iv_option ].
     ELSE.
       rs_option = super->zif_sat_object_search_config~get_option_config( iv_option ).
@@ -56,7 +58,7 @@ CLASS zcl_sat_message_query_config IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD zif_sat_object_search_config~has_option.
-    IF iv_target = zif_sat_c_object_search=>c_search_fields-message_filter_input_key.
+    IF iv_target = zif_sat_c_os_mess_options=>c_search_fields-message_filter_input_key.
       rf_has_option = xsdbool( line_exists( mt_message_options[ name = iv_option ] ) ).
     ELSE.
       rf_has_option = super->zif_sat_object_search_config~has_option( iv_option = iv_option iv_target = iv_target ).
@@ -90,10 +92,10 @@ CLASS zcl_sat_message_query_config IMPLEMENTATION.
                             ( name    = zif_sat_c_object_search=>c_search_fields-object_filter_input_key
                               label   = zif_sat_c_object_search=>c_search_fields-object_filter_input_label
                               filters = lt_object_filters )
-                            ( name    = zif_sat_c_object_search=>c_search_fields-message_text_input_key
-                              label   = zif_sat_c_object_search=>c_search_fields-message_text_input_label )
-                            ( name    = zif_sat_c_object_search=>c_search_fields-message_filter_input_key
-                              label   = zif_sat_c_object_search=>c_search_fields-message_filter_input_label
+                            ( name    = zif_sat_c_os_mess_options=>c_search_fields-message_text_input_key
+                              label   = zif_sat_c_os_mess_options=>c_search_fields-message_text_input_label )
+                            ( name    = zif_sat_c_os_mess_options=>c_search_fields-message_filter_input_key
+                              label   = zif_sat_c_os_mess_options=>c_search_fields-message_filter_input_label
                               filters = mt_message_options ) ) ).
 
     mt_options = lt_object_filters.

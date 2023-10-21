@@ -5,11 +5,13 @@ CLASS zcl_sat_dbtab_query_config DEFINITION
   CREATE PUBLIC.
 
   PUBLIC SECTION.
+    INTERFACES zif_sat_c_os_dtab_options.
+
     METHODS constructor.
     METHODS zif_sat_object_search_config~get_type REDEFINITION.
 
   PROTECTED SECTION.
-    ALIASES c_dbtab_options FOR zif_sat_c_object_search~c_dbtab_search_params.
+    ALIASES c_dbtab_options FOR zif_sat_c_os_dtab_options~c_filter_key.
 
     METHODS build_config REDEFINITION.
 
@@ -176,11 +178,11 @@ CLASS zcl_sat_dbtab_query_config IMPLEMENTATION.
             assist_type           = zif_sat_c_object_search=>c_filter_content_assist_type-fixed_named_item
             proposal_image_source = zif_sat_c_object_search=>c_proposal_image_source-same_as_filter
             proposal_values       = VALUE #(
-                ( name        = zif_sat_c_object_search=>c_db_buffer_status-ext-on
+                ( name        = zif_sat_c_os_dtab_options=>c_db_buffer_status-ext-on
                   description = 'Buffering switched on' )
-                ( name        = zif_sat_c_object_search=>c_db_buffer_status-ext-allowed_but_off
+                ( name        = zif_sat_c_os_dtab_options=>c_db_buffer_status-ext-allowed_but_off
                   description = 'Buffering allowed but switched off' )
-                ( name        = zif_sat_c_object_search=>c_db_buffer_status-ext-off
+                ( name        = zif_sat_c_os_dtab_options=>c_db_buffer_status-ext-off
                   description = 'Buffering switched off' ) ) ) ).
   ENDMETHOD.
 
@@ -202,13 +204,13 @@ CLASS zcl_sat_dbtab_query_config IMPLEMENTATION.
             assist_type           = zif_sat_c_object_search=>c_filter_content_assist_type-fixed_named_item
             proposal_image_source = zif_sat_c_object_search=>c_proposal_image_source-same_as_filter
             proposal_values       = VALUE #(
-                ( name        = zif_sat_c_object_search=>c_db_buffer_type-ext-no_buffering
+                ( name        = zif_sat_c_os_dtab_options=>c_db_buffer_type-ext-no_buffering
                   description = 'No Buffering' )
-                ( name        = zif_sat_c_object_search=>c_db_buffer_type-ext-single_entries
+                ( name        = zif_sat_c_os_dtab_options=>c_db_buffer_type-ext-single_entries
                   description = 'Single entries of table were buffered' )
-                ( name        = zif_sat_c_object_search=>c_db_buffer_type-ext-full_with_gen_key
+                ( name        = zif_sat_c_os_dtab_options=>c_db_buffer_type-ext-full_with_gen_key
                   description = 'Full buffering as specified by generic key' )
-                ( name        = zif_sat_c_object_search=>c_db_buffer_type-ext-full_table
+                ( name        = zif_sat_c_os_dtab_options=>c_db_buffer_type-ext-full_table
                   description = 'Full table is passed to buffer' ) ) ) ).
   ENDMETHOD.
 
@@ -257,10 +259,10 @@ CLASS zcl_sat_dbtab_query_config IMPLEMENTATION.
             assist_type           = zif_sat_c_object_search=>c_filter_content_assist_type-fixed_named_item
             proposal_image_source = zif_sat_c_object_search=>c_proposal_image_source-same_as_filter
             proposal_values       = VALUE #(
-                ( name = zif_sat_c_object_search=>c_db_flags-client_dep        description = 'Client Dependent' )
-                ( name = zif_sat_c_object_search=>c_db_flags-used_in_shlp      description = 'Used in Search Help' )
-                ( name = zif_sat_c_object_search=>c_db_flags-is_gtt            description = 'Is Global Temporary Table' )
-                ( name = zif_sat_c_object_search=>c_db_flags-change_log_active description = 'Changes to table entries are logged' ) ) ) ).
+                ( name = zif_sat_c_os_dtab_options=>c_db_flags-client_dep        description = 'Client Dependent' )
+                ( name = zif_sat_c_os_dtab_options=>c_db_flags-used_in_shlp      description = 'Used in Search Help' )
+                ( name = zif_sat_c_os_dtab_options=>c_db_flags-is_gtt            description = 'Is Global Temporary Table' )
+                ( name = zif_sat_c_os_dtab_options=>c_db_flags-change_log_active description = 'Changes to table entries are logged' ) ) ) ).
   ENDMETHOD.
 
   METHOD get_size_category_filter.
@@ -337,11 +339,12 @@ CLASS zcl_sat_dbtab_query_config IMPLEMENTATION.
         content_assist   = VALUE #(
             assist_type           = zif_sat_c_object_search=>c_filter_content_assist_type-fixed_named_item
             proposal_image_source = zif_sat_c_object_search=>c_proposal_image_source-same_as_filter
-            proposal_values       = VALUE #( ( name        = zif_sat_c_object_search=>c_table_storage_type-ext-column
-                                               description = 'Column Store'  )
-                                             ( name        = zif_sat_c_object_search=>c_table_storage_type-ext-row
-                                               description = 'Row Store' )
-                                             ( name        = zif_sat_c_object_search=>c_table_storage_type-ext-undefined
-                                               description = 'Undefined' ) ) ) ).
+            proposal_values       = VALUE #(
+                ( name        = zif_sat_c_os_dtab_options=>c_table_storage_type-ext-column
+                  description = 'Column Store'  )
+                ( name        = zif_sat_c_os_dtab_options=>c_table_storage_type-ext-row
+                  description = 'Row Store' )
+                ( name        = zif_sat_c_os_dtab_options=>c_table_storage_type-ext-undefined
+                  description = 'Undefined' ) ) ) ).
   ENDMETHOD.
 ENDCLASS.
