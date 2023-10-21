@@ -54,6 +54,10 @@ In addition to this program the ADT plugin [ABAP Search and Analysis Tools](http
 
 See [Wiki](https://github.com/DevEpos/abap-search-tools/wiki/Installation-Issues)
 
+## Contributing
+
+If you want to contribute a new Search Type then have a look at [this](./docs/new-search-type-guide.md) implementation guide.
+
 ## Necessary Authorizations
 
 To access the backend from ADT a user must have the following authorizations
