@@ -21,10 +21,10 @@ CLASS zcl_sat_adt_res_viewbaset_vh IMPLEMENTATION.
 
     lt_viewclass_range = VALUE #( sign   = 'I'
                                   option = 'EQ'
-                                  ( low = zif_sat_c_object_search=>c_view_class-int-database )
-                                  ( low = zif_sat_c_object_search=>c_view_class-int-help )
-                                  ( low = zif_sat_c_object_search=>c_view_class-int-maintenance )
-                                  ( low = zif_sat_c_object_search=>c_view_class-int-projection ) ).
+                                  ( low = zif_sat_c_os_view_options=>c_view_class-int-database )
+                                  ( low = zif_sat_c_os_view_options=>c_view_class-int-help )
+                                  ( low = zif_sat_c_os_view_options=>c_view_class-int-maintenance )
+                                  ( low = zif_sat_c_os_view_options=>c_view_class-int-projection ) ).
 
     IF p_filter_name IS NOT INITIAL.
       lt_tab_range = VALUE #( ( sign = 'I' option = 'CP' low = to_upper( p_filter_name ) ) ).

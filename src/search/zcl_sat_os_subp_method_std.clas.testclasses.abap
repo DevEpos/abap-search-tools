@@ -63,7 +63,7 @@ CLASS ltcl_abap_unit IMPLEMENTATION.
         it_search_term = VALUE #(
             ( target = zif_sat_c_object_search=>c_search_fields-object_name_input_key
               values = VALUE #( ( sign = 'I' option = 'EQ' low = `ZCL_SAT_OS_CLASSINTF_PROVIDER` ) ) )
-            ( target = zif_sat_c_object_search=>c_search_fields-method_name_input_key
+            ( target = zif_sat_c_os_meth_options=>c_search_fields-method_name_input_key
               values = VALUE #( ( sign = 'I' option = 'CP' low = 'PR*' ) ) ) )
         iv_type        = zif_sat_c_object_search=>c_search_type-method ).
     TRY.

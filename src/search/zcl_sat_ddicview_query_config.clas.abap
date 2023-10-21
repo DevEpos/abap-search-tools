@@ -5,11 +5,13 @@ CLASS zcl_sat_ddicview_query_config DEFINITION
   CREATE PUBLIC.
 
   PUBLIC SECTION.
+    INTERFACES zif_sat_c_os_view_options.
+
     METHODS constructor.
     METHODS zif_sat_object_search_config~get_type REDEFINITION.
 
   PROTECTED SECTION.
-    ALIASES c_view_search_options FOR zif_sat_c_object_search~c_ddicview_search_params.
+    ALIASES c_view_search_options FOR zif_sat_c_os_view_options~c_filter_key.
 
     METHODS build_config REDEFINITION.
 
@@ -103,10 +105,10 @@ CLASS zcl_sat_ddicview_query_config IMPLEMENTATION.
         content_assist   = VALUE #(
             assist_type     = zif_sat_c_object_search=>c_filter_content_assist_type-fixed_named_item
             proposal_values = VALUE #(
-                ( name = zif_sat_c_object_search=>c_view_class-ext-database    description = 'Database View' )
-                ( name = zif_sat_c_object_search=>c_view_class-ext-help        description = 'Help View' )
-                ( name = zif_sat_c_object_search=>c_view_class-ext-projection  description = 'Projection View' )
-                ( name = zif_sat_c_object_search=>c_view_class-ext-maintenance description = 'Maintenance View' ) )
+                ( name = zif_sat_c_os_view_options=>c_view_class-ext-database    description = 'Database View' )
+                ( name = zif_sat_c_os_view_options=>c_view_class-ext-help        description = 'Help View' )
+                ( name = zif_sat_c_os_view_options=>c_view_class-ext-projection  description = 'Projection View' )
+                ( name = zif_sat_c_os_view_options=>c_view_class-ext-maintenance description = 'Maintenance View' ) )
             proposal_images = VALUE #( ( img_key     = c_general_image_keys-type_group
                                          img_encoded = get_general_image( c_general_image_keys-type_group ) ) )  ) ).
   ENDMETHOD.
