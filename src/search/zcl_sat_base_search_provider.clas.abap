@@ -336,42 +336,29 @@ CLASS zcl_sat_base_search_provider IMPLEMENTATION.
     mo_logger->start_timer( ).
 
     TRY.
-        IF mf_distinct_required = abap_true.
-          IF mt_group_by IS NOT INITIAL.
-            SELECT DISTINCT (mt_select)
-              FROM (mt_from)
-              WHERE (mt_where)
-              GROUP BY (mt_group_by)
-              HAVING (mt_having)
-              ORDER BY (mt_order_by)
-              INTO CORRESPONDING FIELDS OF TABLE @mt_result
-              UP TO @lv_max_rows ROWS.
-          ELSE.
-            SELECT DISTINCT (mt_select)
-              FROM (mt_from)
-              WHERE (mt_where)
-              ORDER BY (mt_order_by)
-              INTO CORRESPONDING FIELDS OF TABLE @mt_result
-              UP TO @lv_max_rows ROWS.
-          ENDIF.
+        IF mt_group_by IS NOT INITIAL.
+          SELECT (mt_select)
+            FROM (mt_from)
+            WHERE (mt_where)
+            GROUP BY (mt_group_by)
+            HAVING (mt_having)
+            ORDER BY (mt_order_by)
+            INTO CORRESPONDING FIELDS OF TABLE @mt_result
+            UP TO @lv_max_rows ROWS.
+        ELSEIF mf_distinct_required = abap_true.
+          SELECT DISTINCT (mt_select)
+            FROM (mt_from)
+            WHERE (mt_where)
+            ORDER BY (mt_order_by)
+            INTO CORRESPONDING FIELDS OF TABLE @mt_result
+            UP TO @lv_max_rows ROWS.
         ELSE.
-          IF mt_group_by IS NOT INITIAL.
-            SELECT (mt_select)
-              FROM (mt_from)
-              WHERE (mt_where)
-              GROUP BY (mt_group_by)
-              HAVING (mt_having)
-              ORDER BY (mt_order_by)
-              INTO CORRESPONDING FIELDS OF TABLE @mt_result
-              UP TO @lv_max_rows ROWS.
-          ELSE.
-            SELECT (mt_select)
-              FROM (mt_from)
-              WHERE (mt_where)
-              ORDER BY (mt_order_by)
-              INTO CORRESPONDING FIELDS OF TABLE @mt_result
-              UP TO @lv_max_rows ROWS.
-          ENDIF.
+          SELECT (mt_select)
+            FROM (mt_from)
+            WHERE (mt_where)
+            ORDER BY (mt_order_by)
+            INTO CORRESPONDING FIELDS OF TABLE @mt_result
+            UP TO @lv_max_rows ROWS.
         ENDIF.
 
         log_select_success( ).
