@@ -101,8 +101,8 @@ CLASS zcl_sat_os_subp_meth_impl IMPLEMENTATION.
     add_fixed_incl_filters( ).
     configure_incl_filters( ).
 
-    add_search_terms_to_search( iv_target      = zif_sat_c_object_search=>c_search_fields-object_name_input_key
-                                it_field_names = VALUE #( ( |{ c_clif_alias }~{ c_fields-classintf }| ) ) ).
+    add_search_terms_to_search( iv_target = zif_sat_c_object_search=>c_search_fields-object_name_input_key
+                                it_fields = VALUE #( ( fieldname =  |{ c_clif_alias }~{ c_fields-classintf }| ) ) ).
     set_type_filter_to_class( ).
     configure_class_filters( ).
 
