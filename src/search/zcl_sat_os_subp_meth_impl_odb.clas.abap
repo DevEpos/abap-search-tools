@@ -187,8 +187,9 @@ CLASS zcl_sat_os_subp_meth_impl_odb IMPLEMENTATION.
       RETURN.
     ENDIF.
 
-    add_search_terms_to_search( it_search_terms = lt_object_search_terms
-                                it_field_names  = VALUE #( ( |{ c_alias_names-includes }~{ c_fields-progname }| ) ) ).
+    add_search_terms_to_search(
+        it_search_terms = lt_object_search_terms
+        it_fields       = VALUE #( ( fieldname = |{ c_alias_names-includes }~{ c_fields-progname }| ) ) ).
   ENDMETHOD.
 
   METHOD apply_class_filters.

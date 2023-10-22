@@ -118,8 +118,8 @@ CLASS zcl_sat_os_classintf_provider IMPLEMENTATION.
     set_base_select_table( iv_entity = zif_sat_c_select_source_id=>zsat_i_classinterface
                            iv_alias  = c_clif_alias ).
 
-    add_search_terms_to_search( iv_target      = zif_sat_c_object_search=>c_search_fields-object_name_input_key
-                                it_field_names = VALUE #( ( |{ c_clif_alias }~{ c_fields-classintf }| ) ) ).
+    add_search_terms_to_search( iv_target = zif_sat_c_object_search=>c_search_fields-object_name_input_key
+                                it_fields = VALUE #( ( fieldname =  |{ c_clif_alias }~{ c_fields-classintf }| ) ) ).
 
     add_select_field( iv_fieldname       = c_fields-classintf
                       iv_fieldname_alias = c_result_fields-object_name
