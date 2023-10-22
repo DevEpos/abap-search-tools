@@ -284,7 +284,8 @@ CLASS lcl_ddl_view_stmnt_intrpt IMPLEMENTATION.
                           iv_relation    = zcl_sat_adt_cds_parser=>c_sql_relation-association
                           iv_entity_type = SWITCH #( lo_target->get_tabletype( )
                                                      WHEN cl_qlast_constants=>tabtype_entity OR
-                                                          cl_qlast_constants=>tabtype_table_function THEN
+                                                          cl_qlast_constants=>tabtype_table_function OR
+                                                          cl_qlast_constants=>tabtype_custom_entity THEN
                                                        zif_sat_c_entity_type=>cds_view
                                                      WHEN cl_qlast_constants=>tabtype_transparent THEN
                                                        zif_sat_c_entity_type=>table
