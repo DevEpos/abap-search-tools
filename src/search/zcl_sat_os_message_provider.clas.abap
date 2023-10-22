@@ -85,7 +85,7 @@ CLASS zcl_sat_os_message_provider IMPLEMENTATION.
 
     add_search_terms_to_search(
         iv_target = zif_sat_c_os_mess_options=>c_search_fields-message_text_input_key
-        it_fields = VALUE #( ( fieldname =  |{ c_aliases-message }~{ c_fields-short_text_upper }| ) ) ).
+        it_fields = VALUE #( ( fieldname =  |{ c_aliases-message }~{ c_fields-short_text }| ) ) ).
 
     add_order_by( iv_fieldname = c_fields-message_class
                   iv_entity    = c_aliases-msg_clas ).
