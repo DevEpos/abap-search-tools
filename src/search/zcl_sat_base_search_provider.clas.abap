@@ -16,7 +16,13 @@ CLASS zcl_sat_base_search_provider DEFINITION
     METHODS constructor.
 
   PROTECTED SECTION.
-    TYPES ty_search_term TYPE RANGE OF string.
+    TYPES:
+      ty_search_term TYPE RANGE OF string,
+      BEGIN OF ty_search_term_field,
+        fieldname     TYPE string,
+        null_possible TYPE abap_bool,
+      END OF ty_search_term_field,
+      ty_search_term_fields TYPE STANDARD TABLE OF ty_search_term_field WITH EMPTY KEY.
 
     ALIASES c_general_search_options FOR zif_sat_c_object_search~c_general_search_params.
 
@@ -202,7 +208,7 @@ CLASS zcl_sat_base_search_provider DEFINITION
       IMPORTING
         iv_target       TYPE string                               OPTIONAL
         it_search_terms TYPE zif_sat_ty_global=>ty_t_string_range OPTIONAL
-        it_field_names  TYPE string_table.
+        it_fields       TYPE ty_search_term_fields.
 
     "! <p class="shorttext synchronized">Performs task after the Search</p>
     METHODS do_after_search
@@ -553,20 +559,37 @@ CLASS zcl_sat_base_search_provider IMPLEMENTATION.
 
     new_and_cond_list( ).
 
-    mo_logger->add_filter_value_count( ( lines( lt_search_terms ) * lines( it_field_names ) ) ).
-    mo_logger->add_filter_count( lines( it_field_names ) ).
+    mo_logger->add_filter_value_count( ( lines( lt_search_terms ) * lines( it_fields ) ) ).
+    mo_logger->add_filter_count( lines( it_fields ) ).
 
     LOOP AT lt_search_terms ASSIGNING FIELD-SYMBOL(<ls_term>).
       DATA(lv_tabix) = sy-tabix.
       DATA(lf_and) = xsdbool( <ls_term>-sign = zif_sat_c_options=>excluding ).
 
-      LOOP AT it_field_names INTO DATA(lv_fieldname).
-        add_filter( VALUE #( sqlfieldname = lv_fieldname
-                             option       = <ls_term>-option
-                             sign         = <ls_term>-sign
-                             low          = <ls_term>-low  ) ).
+      LOOP AT it_fields INTO DATA(ls_field).
 
-        CHECK sy-tabix <> lines( it_field_names ).
+        " if null values are possible for a field we do not want to exclude the rows with null
+        IF ls_field-null_possible = abap_true AND lf_and = abap_true.
+          new_or_cond_list( ).
+          add_filter( VALUE #( sqlfieldname = ls_field-fieldname
+                               option       = zif_sat_c_options=>is_null
+                               sign         = zif_sat_c_options=>including ) ).
+          new_or_cond_list( ).
+          add_filter( VALUE #( sqlfieldname = ls_field-fieldname
+                               option       = <ls_term>-option
+                               sign         = <ls_term>-sign
+                               low          = <ls_term>-low  ) ).
+          add_filter( VALUE #( sqlfieldname = ls_field-fieldname
+                               option       = zif_sat_c_options=>is_not_null
+                               sign         = zif_sat_c_options=>including ) ).
+        ELSE.
+          add_filter( VALUE #( sqlfieldname = ls_field-fieldname
+                               option       = <ls_term>-option
+                               sign         = <ls_term>-sign
+                               low          = <ls_term>-low  ) ).
+        ENDIF.
+
+        CHECK sy-tabix <> lines( it_fields ).
         IF lf_and = abap_true.
           new_and_cond_list( ).
         ELSE.
