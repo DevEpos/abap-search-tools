@@ -156,7 +156,8 @@ CLASS zcl_sat_adt_cds_parser IMPLEMENTATION.
     IF lo_stmnt IS BOUND.
       CASE lo_stmnt->get_type( ).
 
-        WHEN cl_qlast_constants=>ddlstmt_type_view_definition.
+        WHEN cl_qlast_constants=>ddlstmt_type_view_definition or
+             cl_qlast_constants=>ddlstmt_type_hierarchy.
           mo_interpreter = NEW lcl_ddl_view_stmnt_intrpt( if_associations = if_associations
                                                           io_node_helper  = lo_node_helper
                                                           io_stmnt        = CAST cl_qlast_view_definition( lo_stmnt ) ).
