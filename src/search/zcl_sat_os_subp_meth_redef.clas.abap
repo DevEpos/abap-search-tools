@@ -84,8 +84,8 @@ CLASS zcl_sat_os_subp_meth_redef IMPLEMENTATION.
     add_order_by( iv_fieldname = c_fields-classname iv_entity = c_clif_alias ).
 
     configure_class_filters( ).
-    add_search_terms_to_search( iv_target      = zif_sat_c_object_search=>c_search_fields-object_name_input_key
-                                it_field_names = VALUE #( ( |{ c_clif_alias }~{ c_fields-classname }| ) ) ).
+    add_search_terms_to_search( iv_target = zif_sat_c_object_search=>c_search_fields-object_name_input_key
+                                it_fields = VALUE #( ( fieldname =  |{ c_clif_alias }~{ c_fields-classname }| ) ) ).
 
     add_filter(
         VALUE #( field = |{ c_alias_names-method }~{ c_fields-isabstract }| sign = 'I' option = 'EQ' low = abap_false ) ).
@@ -128,7 +128,7 @@ CLASS zcl_sat_os_subp_meth_redef IMPLEMENTATION.
 
     add_search_terms_to_search(
         it_search_terms = VALUE #( BASE lr_method_names->* ( LINES OF lt_temp_method_name_terms ) )
-        it_field_names  = VALUE #( ( |{ c_alias_names-method }~{ c_fields-methodname }| ) ) ).
+        it_fields       = VALUE #( ( fieldname = |{ c_alias_names-method }~mtdname| ) ) ).
   ENDMETHOD.
 
   METHOD set_method_filters.

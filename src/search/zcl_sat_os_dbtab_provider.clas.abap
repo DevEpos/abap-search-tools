@@ -113,8 +113,8 @@ CLASS zcl_sat_os_dbtab_provider IMPLEMENTATION.
 
     add_order_by( iv_fieldname = c_fields-tablename iv_entity = c_base_table  ).
 
-    add_search_terms_to_search( iv_target      = zif_sat_c_object_search=>c_search_fields-object_name_input_key
-                                it_field_names = VALUE #( ( |{ c_base_table }~{ c_fields-tablename }| ) ) ).
+    add_search_terms_to_search( iv_target = zif_sat_c_object_search=>c_search_fields-object_name_input_key
+                                it_fields = VALUE #( ( fieldname =  |{ c_base_table }~{ c_fields-tablename }| ) ) ).
 
     configure_filters( ).
 

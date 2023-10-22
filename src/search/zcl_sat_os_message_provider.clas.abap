@@ -79,11 +79,13 @@ CLASS zcl_sat_os_message_provider IMPLEMENTATION.
                       iv_entity          = c_aliases-message ).
     add_select_field( iv_fieldname = |'{ zif_sat_c_tadir_types=>message_class }'| iv_fieldname_alias = c_result_fields-tadir_type ).
 
-    add_search_terms_to_search( iv_target      = zif_sat_c_object_search=>c_search_fields-object_name_input_key
-                                it_field_names = VALUE #( ( |{ c_aliases-msg_clas }~{ c_fields-message_class }| ) ) ).
+    add_search_terms_to_search(
+        iv_target = zif_sat_c_object_search=>c_search_fields-object_name_input_key
+        it_fields = VALUE #( ( fieldname =  |{ c_aliases-msg_clas }~{ c_fields-message_class }| ) ) ).
 
-    add_search_terms_to_search( iv_target      = zif_sat_c_os_mess_options=>c_search_fields-message_text_input_key
-                                it_field_names = VALUE #( ( |{ c_aliases-message }~{ c_fields-short_text }| ) ) ).
+    add_search_terms_to_search(
+        iv_target = zif_sat_c_os_mess_options=>c_search_fields-message_text_input_key
+        it_fields = VALUE #( ( fieldname =  |{ c_aliases-message }~{ c_fields-short_text_upper }| ) ) ).
 
     add_order_by( iv_fieldname = c_fields-message_class
                   iv_entity    = c_aliases-msg_clas ).
