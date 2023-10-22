@@ -135,10 +135,11 @@ INTERFACE zif_sat_ty_object_search
 
     "! Input field for a search type
     BEGIN OF ty_input_field,
-      name    TYPE string,
-      label   TYPE string,
-      mixed   TYPE abap_bool,
-      filters TYPE ty_query_filters,
+      name           TYPE string,
+      label          TYPE string,
+      mixed          TYPE abap_bool,
+      case_sensitive TYPE abap_bool,
+      filters        TYPE ty_query_filters,
     END OF ty_input_field,
 
     ty_input_fields TYPE STANDARD TABLE OF ty_input_field WITH KEY name,
