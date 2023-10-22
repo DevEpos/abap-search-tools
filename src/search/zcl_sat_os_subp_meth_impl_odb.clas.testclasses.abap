@@ -77,7 +77,7 @@ CLASS ltcl_abap_unit IMPLEMENTATION.
           EXPORTING io_query                = lo_query
                     is_search_engine_params = VALUE #(
                         custom_options = VALUE #(
-                            ( key   = zif_sat_c_object_search=>c_custom_options-method-target_incl_for_admin_data
+                            ( key   = zif_sat_c_os_meth_options=>c_custom_options-method-target_incl_for_admin_data
                               value = abap_true ) ) )
           " TODO: variable is assigned but never used (ABAP cleaner)
           IMPORTING et_result               = DATA(lt_result) ).
