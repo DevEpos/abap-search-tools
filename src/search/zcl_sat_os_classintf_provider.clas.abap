@@ -10,6 +10,8 @@ CLASS zcl_sat_os_classintf_provider DEFINITION
     METHODS constructor.
 
   PROTECTED SECTION.
+    ALIASES c_class_intf_search_option FOR zif_sat_c_os_clif_options~c_filter_key.
+
     CONSTANTS c_clif_alias TYPE string VALUE 'clif'.
 
     METHODS prepare_search     REDEFINITION.
@@ -18,7 +20,6 @@ CLASS zcl_sat_os_classintf_provider DEFINITION
     METHODS configure_class_filters.
 
   PRIVATE SECTION.
-    ALIASES c_class_intf_search_option FOR zif_sat_c_os_clif_options~c_filter_key.
     ALIASES c_custom_options           FOR zif_sat_c_os_clif_options~c_custom_options.
 
     CONSTANTS:
