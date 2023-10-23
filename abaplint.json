@@ -9,7 +9,7 @@
   "dependencies": [
     {
       "files": "/src/**",
-      "folder": "/deps"
+      "folder": "/deps_740"
     }
   ],
   "rules": {
@@ -22,8 +22,8 @@
     "cds_parser_error": true,
     "method_implemented_twice": true,
     "parser_error": true,
-    "superclass_final": false,
-    "unknown_types": false,
+    "superclass_final": true,
+    "unknown_types": true,
     "xml_consistency": true,
     "object_naming": {
       "clas": "^ZC(L|X)\\_SAT\\_",
