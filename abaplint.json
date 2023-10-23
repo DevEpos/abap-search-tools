@@ -9,7 +9,7 @@
   "dependencies": [
     {
       "files": "/src/**",
-      "folder": "/deps"
+      "folder": "/deps_754"
     }
   ],
   "rules": {
