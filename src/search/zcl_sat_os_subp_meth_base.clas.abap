@@ -10,7 +10,6 @@ CLASS zcl_sat_os_subp_meth_base DEFINITION
     INTERFACES zif_sat_method_key_reader ABSTRACT METHODS get_method_key.
 
   PROTECTED SECTION.
-    ALIASES c_class_intf_search_option FOR zif_sat_c_os_clif_options~c_filter_key.
     ALIASES c_method_option            FOR zif_sat_c_os_meth_options~c_filter_key.
     ALIASES get_method_key             FOR zif_sat_method_key_reader~get_method_key.
 

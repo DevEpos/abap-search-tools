@@ -17,7 +17,6 @@ CLASS zcl_sat_os_subp_method_std DEFINITION
     METHODS do_after_search    REDEFINITION.
 
   PRIVATE SECTION.
-    ALIASES c_class_intf_search_option FOR zif_sat_c_os_clif_options~c_filter_key.
     ALIASES c_method_option            FOR zif_sat_c_os_meth_options~c_filter_key.
 
     CONSTANTS:
