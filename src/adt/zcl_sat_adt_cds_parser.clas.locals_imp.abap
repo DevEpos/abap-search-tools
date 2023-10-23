@@ -41,17 +41,21 @@ CLASS lcl_node_helper IMPLEMENTATION.
     lo_child->parent      = mo_current_node.
 
     IF iv_entity_type = zif_sat_c_entity_type=>view.
-      mt_views = VALUE #( BASE mt_views ( name = lo_child->name node = lo_child ) ).
+      mt_views = VALUE #( BASE mt_views
+                          ( name = lo_child->name node = lo_child ) ).
     ELSEIF iv_entity_type = zif_sat_c_entity_type=>table.
-      mt_tables = VALUE #( BASE mt_tables ( name = lo_child->name node = lo_child ) ).
+      mt_tables = VALUE #( BASE mt_tables
+                           ( name = lo_child->name node = lo_child ) ).
     ELSEIF iv_entity_type = zif_sat_c_entity_type=>cds_view.
-      mt_cds_views = VALUE #( BASE mt_cds_views ( name = lo_child->name node = lo_child ) ).
+      mt_cds_views = VALUE #( BASE mt_cds_views
+                              ( name = lo_child->name node = lo_child ) ).
     ENDIF.
 
     IF io_parent_node->children IS INITIAL.
       io_parent_node->children = VALUE #( ).
     ENDIF.
-    io_parent_node->children = VALUE #( BASE io_parent_node->children ( lo_child ) ).
+    io_parent_node->children = VALUE #( BASE io_parent_node->children
+                                        ( lo_child ) ).
 
     ro_added = lo_child.
   ENDMETHOD.
@@ -133,7 +137,8 @@ CLASS lcl_node_helper IMPLEMENTATION.
   METHOD convert_node_to_top_down_ent.
     FIELD-SYMBOLS <lt_children> TYPE zif_sat_ty_adt_types=>ty_cds_top_down_entries.
 
-    fill_element_info_from_node( EXPORTING io_node = io_node CHANGING cs_top_down_entry = cs_top_down_entry ).
+    fill_element_info_from_node( EXPORTING io_node           = io_node
+                                 CHANGING  cs_top_down_entry = cs_top_down_entry ).
 
     IF io_node->children IS NOT INITIAL.
       cs_top_down_entry-children = NEW zif_sat_ty_adt_types=>ty_cds_top_down_entries( ).
@@ -241,12 +246,12 @@ CLASS lcl_ddl_view_stmnt_intrpt IMPLEMENTATION.
 
         mo_node_helper->add_child( io_parent_node = io_parent_node
                                    iv_name        = lo_table_datasource->get_name( )
-                                   iv_entity_name = lo_table_datasource->get_name( )
                                    iv_relation    = mo_node_helper->get_relation( io_parent_node     = io_parent_node
                                                                                   iv_datasource_type = iv_parent_type )
                                    iv_entity_type = SWITCH #( lo_table_datasource->get_tabletype( )
                                                               WHEN cl_qlast_constants=>tabtype_entity OR
                                                                    cl_qlast_constants=>tabtype_view_entity OR
+                                                                   cl_qlast_constants=>tabtype_cds_projection OR
                                                                    cl_qlast_constants=>tabtype_table_function THEN
                                                                 zif_sat_c_entity_type=>cds_view
                                                               WHEN cl_qlast_constants=>tabtype_transparent THEN
@@ -284,12 +289,12 @@ CLASS lcl_ddl_view_stmnt_intrpt IMPLEMENTATION.
       DATA(lo_node) = mo_node_helper->add_child(
                           io_parent_node = lo_associations_node
                           iv_name        = lo_target->get_name( )
-                          iv_entity_name = lo_target->get_name( )
                           iv_relation    = zcl_sat_adt_cds_parser=>c_sql_relation-association
                           iv_entity_type = SWITCH #( lo_target->get_tabletype( )
                                                      WHEN cl_qlast_constants=>tabtype_entity OR
                                                           cl_qlast_constants=>tabtype_view_entity OR
                                                           cl_qlast_constants=>tabtype_table_function OR
+                                                          cl_qlast_constants=>tabtype_cds_projection OR
                                                           cl_qlast_constants=>tabtype_custom_entity THEN
                                                        zif_sat_c_entity_type=>cds_view
                                                      WHEN cl_qlast_constants=>tabtype_transparent THEN
@@ -329,5 +334,33 @@ CLASS lcl_ddl_view2_stmnt_intrpt IMPLEMENTATION.
                         io_node_helper  = io_node_helper
                         io_stmnt        = io_stmnt ).
     mo_stmnt = io_stmnt.
+  ENDMETHOD.
+ENDCLASS.
+
+
+CLASS lcl_custom_entity IMPLEMENTATION.
+  METHOD constructor.
+    super->constructor( io_node_helper = io_node_helper ).
+    mo_stmnt = io_stmnt.
+  ENDMETHOD.
+
+  METHOD interpret.
+    DATA(lo_annos) = mo_stmnt->if_qlast_annotable~get_annotations( ).
+    LOOP AT lo_annos->get_entries( ) INTO DATA(lo_anno).
+      IF lo_anno->get_name( ) = 'OBJECTMODEL.QUERY.IMPLEMENTEDBY'.
+        DATA(lv_anno_content) = CAST cl_qlast_text_annotation( lo_anno->get_content( ) )->get_unescaped_text( ).
+        DATA(lo_query_node) = mo_node_helper->add_child(
+                                  io_parent_node = mo_node_helper->mo_root_node
+                                  iv_type        = zcl_sat_adt_cds_parser=>c_node_type-abap
+                                  iv_name        = |{ lv_anno_content+5 }|
+                                  iv_relation    = zcl_sat_adt_cds_parser=>c_sql_relation-implemented_by ).
+        lo_query_node->implementing_class = lv_anno_content+5.
+        lo_query_node->adt_type           = zif_sat_c_object_types=>class.
+        lo_query_node->uri                = |/sap/bc/adt/oo/classes/{ to_lower(
+                                                                          cl_http_utility=>escape_url(
+                                                                              CONV #( lo_query_node->implementing_class ) ) ) }|.
+        EXIT.
+      ENDIF.
+    ENDLOOP.
   ENDMETHOD.
 ENDCLASS.

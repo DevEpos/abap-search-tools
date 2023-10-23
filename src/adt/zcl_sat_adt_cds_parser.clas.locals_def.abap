@@ -29,6 +29,7 @@ CLASS lcl_node DEFINITION FINAL.
     DATA parent TYPE REF TO lcl_node.
     DATA children TYPE ty_t_nodes.
     DATA ddls_name TYPE string.
+    DATA implementing_class TYPE classname.
 ENDCLASS.
 
 
@@ -58,8 +59,6 @@ CLASS lcl_node_helper DEFINITION
         iv_entity_type     TYPE zsat_entity_type OPTIONAL
         iv_alias           TYPE string           OPTIONAL
         iv_relation        TYPE string           OPTIONAL
-        iv_entity_name     TYPE string           OPTIONAL
-        iv_raw_entity_name TYPE string           OPTIONAL
       RETURNING
         VALUE(ro_added)    TYPE REF TO lcl_node.
 
@@ -201,4 +200,23 @@ CLASS lcl_ddl_view2_stmnt_intrpt DEFINITION
 
   PRIVATE SECTION.
     DATA mo_stmnt TYPE REF TO cl_qlast_view_entity_def.
+ENDCLASS.
+
+
+CLASS lcl_custom_entity DEFINITION
+  INHERITING FROM lcl_ddl_stmnt_interpreter.
+
+  PUBLIC SECTION.
+    METHODS constructor
+      IMPORTING
+        if_associations TYPE abap_bool OPTIONAL
+        io_node_helper  TYPE REF TO lcl_node_helper
+        io_stmnt        TYPE REF TO cl_qlast_custom_entity.
+
+    METHODS interpret REDEFINITION.
+
+  PROTECTED SECTION.
+
+  PRIVATE SECTION.
+    DATA mo_stmnt TYPE REF TO cl_qlast_custom_entity.
 ENDCLASS.
