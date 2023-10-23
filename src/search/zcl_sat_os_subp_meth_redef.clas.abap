@@ -128,7 +128,7 @@ CLASS zcl_sat_os_subp_meth_redef IMPLEMENTATION.
 
     add_search_terms_to_search(
         it_search_terms = VALUE #( BASE lr_method_names->* ( LINES OF lt_temp_method_name_terms ) )
-        it_fields       = VALUE #( ( fieldname = |{ c_alias_names-method }~mtdname| ) ) ).
+        it_fields       = VALUE #( ( fieldname = |{ c_alias_names-method }~{ c_fields-methodname }| ) ) ).
   ENDMETHOD.
 
   METHOD set_method_filters.
