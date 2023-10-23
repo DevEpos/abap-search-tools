@@ -156,7 +156,8 @@ CLASS zcl_sat_adt_cds_parser IMPLEMENTATION.
       CASE lo_stmnt->get_type( ).
 
         WHEN cl_qlast_constants=>ddlstmt_type_view_definition OR
-             cl_qlast_constants=>ddlstmt_type_hierarchy.
+             cl_qlast_constants=>ddlstmt_type_hierarchy OR
+             cl_qlast_constants=>ddlstmt_type_projection_view.
           mo_interpreter = NEW lcl_ddl_view_stmnt_intrpt( if_associations = if_associations
                                                           io_node_helper  = lo_node_helper
                                                           io_stmnt        = CAST #( lo_stmnt ) ).
@@ -170,6 +171,11 @@ CLASS zcl_sat_adt_cds_parser IMPLEMENTATION.
           mo_interpreter = NEW lcl_ddl_tab_func_stmnt_intrpt(
                                    io_node_helper = lo_node_helper
                                    io_stmnt       = CAST cl_qlast_tab_func_definition( lo_stmnt ) ).
+
+        WHEN cl_qlast_constants=>ddlstmt_type_custom_entity.
+          mo_interpreter = NEW lcl_custom_entity( if_associations = if_associations
+                                                  io_node_helper  = lo_node_helper
+                                                  io_stmnt        = CAST #( lo_stmnt ) ).
 
         WHEN cl_qlast_constants=>ddlstmt_type_entity_definition.
 
@@ -199,8 +205,10 @@ CLASS zcl_sat_adt_cds_parser IMPLEMENTATION.
     lt_uri = VALUE #(
         ( LINES OF VALUE #( FOR cds IN io_node_helper->mt_cds_views
                             ( name = cds-name entity_type = cds-node->entity_type ddlname = cds-node->ddls_name ) ) )
-        ( LINES OF VALUE #( FOR table IN io_node_helper->mt_tables ( name = table-name entity_type = table-node->entity_type ) ) )
-        ( LINES OF VALUE #( FOR view IN io_node_helper->mt_views ( name = view-name entity_type = view-node->entity_type ) ) ) ).
+        ( LINES OF VALUE #( FOR table IN io_node_helper->mt_tables
+                            ( name = table-name entity_type = table-node->entity_type ) ) )
+        ( LINES OF VALUE #( FOR view IN io_node_helper->mt_views
+                            ( name = view-name entity_type = view-node->entity_type ) ) ) ).
 
     SORT lt_uri BY name.
     DELETE ADJACENT DUPLICATES FROM lt_uri COMPARING name.
@@ -241,7 +249,8 @@ CLASS zcl_sat_adt_cds_parser IMPLEMENTATION.
 
     CHECK io_node_helper->mt_cds_views IS NOT INITIAL.
 
-    lt_cds_range = VALUE #( FOR cds IN io_node_helper->mt_cds_views ( sign = 'I' option = 'EQ' low = cds-name ) ).
+    lt_cds_range = VALUE #( FOR cds IN io_node_helper->mt_cds_views
+                            ( sign = 'I' option = 'EQ' low = cds-name ) ).
 
     SELECT entityid,
            rawentityid,
@@ -281,7 +290,8 @@ CLASS zcl_sat_adt_cds_parser IMPLEMENTATION.
 
     CHECK io_node_helper->mt_tables IS NOT INITIAL.
 
-    lt_tabname_range = VALUE #( FOR table IN io_node_helper->mt_tables ( sign = 'I' option = 'EQ' low = table-name ) ).
+    lt_tabname_range = VALUE #( FOR table IN io_node_helper->mt_tables
+                                ( sign = 'I' option = 'EQ' low = table-name ) ).
 
     SELECT tablename AS entityid,
            tablename AS rawentityid,
@@ -306,7 +316,8 @@ CLASS zcl_sat_adt_cds_parser IMPLEMENTATION.
 
     FIELD-SYMBOLS <ls_node> TYPE lcl_node=>ty_s_cached_node.
 
-    lt_view_range = VALUE #( FOR view IN io_node_helper->mt_views ( sign = 'I' option = 'EQ' low = view-name ) ).
+    lt_view_range = VALUE #( FOR view IN io_node_helper->mt_views
+                             ( sign = 'I' option = 'EQ' low = view-name ) ).
 
     " Determine view information
     IF lt_view_range IS INITIAL.
@@ -350,7 +361,8 @@ CLASS zcl_sat_adt_cds_parser IMPLEMENTATION.
     IF io_node_helper->mt_views IS INITIAL.
       RETURN.
     ENDIF.
-    lt_view_range = VALUE #( FOR view IN io_node_helper->mt_views ( sign = 'I' option = 'EQ' low = view-name ) ).
+    lt_view_range = VALUE #( FOR view IN io_node_helper->mt_views
+                             ( sign = 'I' option = 'EQ' low = view-name ) ).
 
     SELECT viewname AS entityid,
            viewname AS rawentityid,
@@ -377,6 +389,7 @@ CLASS zcl_sat_adt_cds_parser IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD add_table_function_info.
+    " TODO: read implementing class from parsed object
     TYPES:
       BEGIN OF lty_s_amdp,
         name     TYPE ddamdpname,
@@ -414,10 +427,11 @@ CLASS zcl_sat_adt_cds_parser IMPLEMENTATION.
 
     LOOP AT lt_amdp_info ASSIGNING FIELD-SYMBOL(<ls_amdp_info>).
       SPLIT <ls_amdp_info>-name AT '=>' INTO <ls_amdp_info>-class <ls_amdp_info>-method.
-      lt_class_name_range = VALUE #( BASE lt_class_name_range ( sign = 'I' option = 'EQ' low = <ls_amdp_info>-class ) ).
+      lt_class_name_range = VALUE #( BASE lt_class_name_range
+                                     ( sign = 'I' option = 'EQ' low = <ls_amdp_info>-class ) ).
       <ls_amdp_info>-uri      = |/sap/bc/adt/oo/classes/{ to_lower( cl_http_utility=>escape_url( <ls_amdp_info>-class  ) ) }| &&
                                 |/source/main#type=CLAS/OM;name={ to_lower( <ls_amdp_info>-method ) }|.
-      <ls_amdp_info>-type     = 'CLAS/OC'.
+      <ls_amdp_info>-type     = zif_sat_c_object_types=>class.
       " collect range of applicable CDS views for this table function
       <ls_amdp_info>-entities = VALUE #( FOR cds IN lt_table_func WHERE ( name = <ls_amdp_info>-name )
                                          ( sign = 'I' option = 'EQ' low = cds-entity ) ).
