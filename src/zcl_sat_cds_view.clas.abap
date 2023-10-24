@@ -139,7 +139,7 @@ CLASS zcl_sat_cds_view IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD get_annotations.
-    "  Check if the requested annotations were already read
+    " Check if the requested annotations were already read
     LOOP AT mt_annotations ASSIGNING FIELD-SYMBOL(<ls_annotation>) WHERE name IN it_annotation_name.
     ENDLOOP.
 
@@ -159,7 +159,7 @@ CLASS zcl_sat_cds_view IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD get_base_tables.
-    "  were the base tables already loaded?
+    " were the base tables already loaded?
     IF mf_base_tables_loaded = abap_false.
       RAISE EVENT request_base_tables.
       mf_base_tables_loaded = abap_true.

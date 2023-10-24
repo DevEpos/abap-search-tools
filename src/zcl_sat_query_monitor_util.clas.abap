@@ -43,9 +43,9 @@ CLASS zcl_sat_query_monitor_util IMPLEMENTATION.
   METHOD open_in_analyis_for_office.
     DATA lt_params TYPE TABLE OF rsparams.
 
-    "  this sets the radio-group to document
-    "  all entries are set to insure that exactly one parameter is set to true
-    "  radio-button "Query" set to true
+    " this sets the radio-group to document
+    " all entries are set to insure that exactly one parameter is set to true
+    " radio-button "Query" set to true
     lt_params = VALUE #( kind = 'P'
                          ( selname = 'P_T_DOC'
                            low     = ' ' )

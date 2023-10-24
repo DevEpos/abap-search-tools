@@ -18,7 +18,7 @@ CLASS zcl_sat_cds_view_qc IMPLEMENTATION.
   METHOD zif_sat_query_converter~convert_value.
     CASE iv_option.
 
-      "  Converts the external CDS Types to internal DDL Source types
+      " Converts the external CDS Types to internal DDL Source types
       WHEN zif_sat_c_object_search=>c_general_search_params-type.
 
         CASE cv_value.

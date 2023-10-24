@@ -73,8 +73,8 @@ CLASS zcl_sat_adt_cds_field_usage IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD read_cds_usages.
-    "  Select all possible CDS views which have at least one calculated field
-    "  and the "mv_cds_view"-view as a data source
+    " Select all possible CDS views which have at least one calculated field
+    " and the "mv_cds_view"-view as a data source
     SELECT base~entityid,
            base~rawentityid,
            base~ddlname,
@@ -132,7 +132,7 @@ CLASS zcl_sat_adt_cds_field_usage IMPLEMENTATION.
 
         IF lt_fields IS NOT INITIAL.
 
-          "  Select raw field names
+          " Select raw field names
           SELECT fieldname,
                  rawfieldname
              FROM zsat_i_cdsviewfield

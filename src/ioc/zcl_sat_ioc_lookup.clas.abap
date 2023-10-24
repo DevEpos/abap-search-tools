@@ -97,7 +97,7 @@ CLASS zcl_sat_ioc_lookup IMPLEMENTATION.
       load_ioc_containers( ).
     ENDIF.
 
-    "  1) check the register if this instance was already loaded
+    " 1) check the register if this instance was already loaded
     IF gt_ioc_containers IS INITIAL.
       RETURN.
     ENDIF.
