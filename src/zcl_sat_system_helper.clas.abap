@@ -146,7 +146,7 @@ CLASS zcl_sat_system_helper IMPLEMENTATION.
       RETURN.
     ENDIF.
 
-    "  get descriptor for system field
+    " get descriptor for system field
     DATA(lr_system_type_descr) = CAST cl_abap_elemdescr(
       cl_abap_typedescr=>describe_by_data( p_data = <lv_system_variable> ) ).
 
@@ -162,8 +162,8 @@ CLASS zcl_sat_system_helper IMPLEMENTATION.
     IF sy-subrc = 0.
       DATA(lr_converter) = NEW zcl_sat_data_converter( ).
       rv_display_value = <lv_system_variable>.
-      "  System language was changed always to English because of GUI Text translations missing
-      "  in other languages -> use the cached original language to get the true sy-langu value
+      " System language was changed always to English because of GUI Text translations missing
+      " in other languages -> use the cached original language to get the true sy-langu value
       IF iv_system_var_name = 'SY-LANGU'.
         rv_display_value = COND #( WHEN gv_original_system_langu IS NOT INITIAL
                                    THEN gv_original_system_langu
