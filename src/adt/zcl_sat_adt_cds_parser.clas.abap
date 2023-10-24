@@ -302,7 +302,7 @@ CLASS zcl_sat_adt_cds_parser IMPLEMENTATION.
       <ls_node>-node->description     = <ls_entity_info>-description.
       <ls_node>-node->owner           = <ls_entity_info>-createdby.
       <ls_node>-node->package         = <ls_entity_info>-developmentpackage.
-      "  move the node to the CDS view tables
+      " move the node to the CDS view tables
       io_node_helper->mt_cds_views = VALUE #( BASE io_node_helper->mt_cds_views
                                               ( name = <ls_entity_info>-entityid node = <ls_node>-node ) ).
       DELETE io_node_helper->mt_views.
