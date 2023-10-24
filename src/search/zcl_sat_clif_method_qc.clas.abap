@@ -54,9 +54,7 @@ CLASS zcl_sat_clif_method_qc IMPLEMENTATION.
                                WHEN zif_sat_c_os_meth_options=>c_method_types-test THEN
                                  seoo_mtdtype_test_method " '6'
                                WHEN zif_sat_c_os_meth_options=>c_method_types-cds_table_function THEN
-                                 seoo_mtdtype_cds_table_func " '7'
-                               WHEN zif_sat_c_os_meth_options=>c_method_types-amdp_ddl_object THEN
-                                 seoo_mtdtype_amdp_ddl_object ). " '8'
+                                 seoo_mtdtype_cds_table_func ). " '7'
 
         WHEN zif_sat_c_os_meth_options=>c_filter_key-status.
           cv_value = SWITCH #( cv_value

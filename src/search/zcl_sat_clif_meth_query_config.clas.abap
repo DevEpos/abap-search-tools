@@ -264,8 +264,7 @@ CLASS zcl_sat_clif_meth_query_config IMPLEMENTATION.
                 ( name = zif_sat_c_os_meth_options=>c_method_types-virtual_getter     description = 'Get Method of a virtual attribute' )
                 ( name = zif_sat_c_os_meth_options=>c_method_types-virtual_setter     description = 'Set Method of a virtual attribute' )
                 ( name = zif_sat_c_os_meth_options=>c_method_types-test               description = 'Test method for ABAP Unit' )
-                ( name = zif_sat_c_os_meth_options=>c_method_types-cds_table_function description = 'CDS table function' )
-                ( name = zif_sat_c_os_meth_options=>c_method_types-amdp_ddl_object    description = 'AMDP DDL object' ) )
+                ( name = zif_sat_c_os_meth_options=>c_method_types-cds_table_function description = 'CDS table function' ) )
             proposal_images = VALUE #( ( img_key     = c_general_image_keys-type_group
                                          img_encoded = get_general_image( c_general_image_keys-type_group ) ) ) ) ).
   ENDMETHOD.
