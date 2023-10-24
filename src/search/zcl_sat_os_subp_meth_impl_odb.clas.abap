@@ -195,6 +195,8 @@ CLASS zcl_sat_os_subp_meth_impl_odb IMPLEMENTATION.
   METHOD apply_class_filters.
     DATA lt_class_result TYPE SORTED TABLE OF ty_class_info WITH UNIQUE KEY classname.
 
+    CHECK mt_result IS NOT INITIAL.
+
     reset( ).
 
     set_base_select_table( iv_entity = |{ zif_sat_c_select_source_id=>zsat_i_classinterface }| iv_alias = c_clif_alias ).
@@ -203,13 +205,13 @@ CLASS zcl_sat_os_subp_meth_impl_odb IMPLEMENTATION.
     create_where_clause( ).
     create_from_clause( ).
 
-    SELECT classname,
-           developmentpackage,
-           tadirtype
+    SELECT clif~classname,
+           clif~developmentpackage,
+           clif~tadirtype
       FROM (mt_from)
       FOR ALL ENTRIES IN @mt_result
       WHERE (mt_where)
-        AND classname = @mt_result-object_name
+        AND clif~classname = @mt_result-object_name
       INTO CORRESPONDING FIELDS OF TABLE @lt_class_result.
 
     IF sy-subrc <> 0.
