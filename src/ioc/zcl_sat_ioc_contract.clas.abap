@@ -61,9 +61,9 @@ CLASS zcl_sat_ioc_contract IMPLEMENTATION.
       RETURN.
     ENDIF.
 
-    "  TODO: consider lifetime for object creation
+    " TODO: consider lifetime for object creation
 
-    "  Was the instance already created?
+    " Was the instance already created?
     IF <ls_implementer>-instance IS BOUND.
       ro_obj = <ls_implementer>-instance.
       RETURN.
@@ -74,7 +74,7 @@ CLASS zcl_sat_ioc_contract IMPLEMENTATION.
                                                 IMPORTING et_resolved_dependency = DATA(lt_resolved_dependencies) ).
     ENDIF.
 
-    "  Finally create the requested object
+    " Finally create the requested object
     ro_obj = zif_sat_ioc_contract~create_implementer( iv_implementer           = <ls_implementer>-implementer
                                                       it_resolved_dependencies = lt_resolved_dependencies ).
 

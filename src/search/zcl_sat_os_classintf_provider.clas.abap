@@ -96,7 +96,7 @@ ENDCLASS.
 CLASS zcl_sat_os_classintf_provider IMPLEMENTATION.
   METHOD constructor.
     super->constructor( ).
-    "  Create sub queries for parameters where boolean operation AND is senseful
+    " Create sub queries for parameters where boolean operation AND is senseful
     mv_flag_subquery = |SELECT DISTINCT { c_fields-classintf } | && c_cr_lf &&
                        | FROM { zif_sat_c_select_source_id=>zsat_i_classflags } | && c_cr_lf &&
                        | WHERE |.
@@ -152,7 +152,7 @@ CLASS zcl_sat_os_classintf_provider IMPLEMENTATION.
   METHOD determine_grouping.
     CHECK ms_search_engine_params-use_and_cond_for_options = abap_true.
 
-    "  Excluding would break the relational division logic and would lead to unreliable results
+    " Excluding would break the relational division logic and would lead to unreliable results
     " CHECK mf_excluding_found = abap_false.
     IF NOT (    mv_flag_filter_count   > 1
              OR mv_attr_filter_count   > 1
@@ -162,7 +162,7 @@ CLASS zcl_sat_os_classintf_provider IMPLEMENTATION.
       RETURN.
     ENDIF.
 
-    "  Create grouping clause
+    " Create grouping clause
     add_group_by_clause( |{ c_clif_alias }~{ c_fields-classintf }| ).
     add_group_by_clause( |{ c_clif_alias }~{ c_fields-author }| ).
     add_group_by_clause( |{ c_clif_alias }~{ c_fields-package }| ).
@@ -276,7 +276,7 @@ CLASS zcl_sat_os_classintf_provider IMPLEMENTATION.
                       iv_subquery               = mv_flag_subquery
             CHANGING  cv_including_filter_count = mv_flag_filter_count ).
 
-        "  Find classes/interfaces with certain global friend releationships
+        " Find classes/interfaces with certain global friend releationships
         WHEN c_class_intf_search_option-friend.
           add_multi_value_filter(
             EXPORTING it_values                 = <ls_option>-value_range
@@ -343,7 +343,7 @@ CLASS zcl_sat_os_classintf_provider IMPLEMENTATION.
                                IMPORTING et_including = DATA(lt_including)
                                          et_excluding = DATA(lt_excluding) ).
 
-    "  Create sub query for negated annotation key/value pairs
+    " Create sub query for negated annotation key/value pairs
     IF lt_excluding IS NOT INITIAL.
       LOOP AT lt_excluding ASSIGNING FIELD-SYMBOL(<ls_excluding>).
         DATA(lt_and_seltab) = VALUE zif_sat_ty_global=>ty_t_seltab_sql( ( sqlfieldname = c_fields-attribute
@@ -365,7 +365,7 @@ CLASS zcl_sat_os_classintf_provider IMPLEMENTATION.
                                       iv_subquery  = mv_attribute_subquery ).
     ENDIF.
 
-    "  Add filters for including annotation key/value pairs
+    " Add filters for including annotation key/value pairs
     IF lt_including IS NOT INITIAL.
       set_distinct_required( ).
       add_join_table( iv_join_table = |{ zif_sat_c_select_source_id=>zsat_i_classattribute }|
