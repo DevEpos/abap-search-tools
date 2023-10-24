@@ -40,7 +40,6 @@ CLASS zcl_sat_os_subp_meth_impl_odb DEFINITION
     DATA mf_no_object_name_filter TYPE abap_bool.
 
     METHODS configure_incl_filters.
-    METHODS read_method_infos_n_filter2.
     METHODS add_progname_search_terms.
     METHODS apply_class_filters.
     METHODS discard_non_method_includes.
@@ -93,7 +92,7 @@ CLASS zcl_sat_os_subp_meth_impl_odb IMPLEMENTATION.
     ENDLOOP.
 
     set_method_filters( ).
-    read_method_infos_n_filter2( ).
+    read_method_infos_n_filter( ).
 
     apply_class_filters( ).
 
@@ -133,22 +132,6 @@ CLASS zcl_sat_os_subp_meth_impl_odb IMPLEMENTATION.
                            it_values    = <ls_option>-value_range ).
       ENDCASE.
 
-    ENDLOOP.
-  ENDMETHOD.
-
-  METHOD read_method_infos_n_filter2.
-    NEW zcl_sat_method_info_reader( ir_results           = REF #( mt_result )
-                                    io_method_key_reader = me  )->apply( ).
-
-    LOOP AT mt_result REFERENCE INTO DATA(lr_result).
-      IF NOT method_matches_filter( iv_method_name = lr_result->method_decl_method
-                                    is_method      = lr_result->*
-                                    is_method_info = VALUE #( changedby = lr_result->changed_by
-                                                              changedon = lr_result->changed_date
-                                                              createdon = lr_result->created_date
-                                                              author    = lr_result->created_by ) ).
-        DELETE mt_result.
-      ENDIF.
     ENDLOOP.
   ENDMETHOD.
 
