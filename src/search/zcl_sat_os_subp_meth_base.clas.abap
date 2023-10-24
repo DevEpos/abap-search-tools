@@ -10,8 +10,8 @@ CLASS zcl_sat_os_subp_meth_base DEFINITION
     INTERFACES zif_sat_method_key_reader ABSTRACT METHODS get_method_key.
 
   PROTECTED SECTION.
-    ALIASES c_method_option            FOR zif_sat_c_os_meth_options~c_filter_key.
-    ALIASES get_method_key             FOR zif_sat_method_key_reader~get_method_key.
+    ALIASES c_method_option FOR zif_sat_c_os_meth_options~c_filter_key.
+    ALIASES get_method_key  FOR zif_sat_method_key_reader~get_method_key.
 
     TYPES:
       BEGIN OF ty_method,
@@ -45,6 +45,10 @@ CLASS zcl_sat_os_subp_meth_base DEFINITION
     DATA mt_meth_param_filter TYPE RANGE OF seosconame.
     DATA mt_meth_exc_filter TYPE RANGE OF seosconame.
 
+    METHODS create_method_info_reader ABSTRACT
+      RETURNING
+        VALUE(result) TYPE REF TO zcl_sat_method_info_reader.
+
     METHODS read_method_infos_n_filter.
     METHODS set_method_filters.
 
@@ -64,63 +68,21 @@ ENDCLASS.
 
 CLASS zcl_sat_os_subp_meth_base IMPLEMENTATION.
   METHOD read_method_infos_n_filter.
-    DATA ls_method_info TYPE vseomethod.
-    DATA ls_method_details TYPE seoo_method_details.
+    DATA(lo_method_info_reader) = create_method_info_reader( ).
+    IF lo_method_info_reader IS INITIAL.
+      RETURN.
+    ENDIF.
 
-    LOOP AT mt_result REFERENCE INTO DATA(lr_class_method).
-      DATA(ls_mtdkey) = get_method_key( iv_classname   = lr_class_method->object_name
-                                        iv_method_name = lr_class_method->method_name ).
-      IF ls_mtdkey IS INITIAL.
+    lo_method_info_reader->apply( ).
+
+    LOOP AT mt_result REFERENCE INTO DATA(lr_result).
+      IF NOT method_matches_filter( iv_method_name = lr_result->method_decl_method
+                                    is_method      = lr_result->*
+                                    is_method_info = VALUE #( changedby = lr_result->changed_by
+                                                              changedon = lr_result->changed_date
+                                                              createdon = lr_result->created_date
+                                                              author    = lr_result->created_by ) ).
         DELETE mt_result.
-        CONTINUE.
-      ENDIF.
-
-      CLEAR: ls_method_info,
-             ls_method_details.
-
-      CALL FUNCTION 'SEO_METHOD_GET_DETAIL'
-        EXPORTING  cpdkey         = ls_mtdkey
-        IMPORTING  method         = ls_method_info
-                   method_details = ls_method_details
-        EXCEPTIONS not_existing   = 1
-                   no_method      = 2
-                   OTHERS         = 3.
-
-      IF sy-subrc <> 0.
-        DELETE mt_result.
-        CONTINUE.
-      ENDIF.
-
-      IF ls_method_info IS INITIAL.
-        DELETE mt_result.
-        CONTINUE.
-      ENDIF.
-
-      lr_class_method->method_descr       = ls_method_info-descript.
-      lr_class_method->method_exposure    = ls_method_info-exposure.
-      lr_class_method->method_name        = ls_mtdkey-cpdname.
-      lr_class_method->method_decl_clif   = ls_method_info-clsname.
-      lr_class_method->method_decl_method = ls_method_info-cmpname.
-      lr_class_method->method_is_final    = ls_method_info-mtdfinal.
-      lr_class_method->method_type        = ls_method_info-mtdtype.
-      lr_class_method->method_level       = ls_method_info-mtddecltyp.
-      lr_class_method->method_status      = COND #(
-        WHEN ls_method_details-is_final_redefined          = abap_true
-          OR ls_method_details-is_redefined                = abap_true
-          OR ls_method_details-is_final_redefined_in_super = abap_true THEN
-          zif_sat_c_os_meth_options=>c_method_status_int-redefined
-        WHEN ls_method_details-is_abstract_implemented  = abap_true
-          OR ls_method_details-is_final_implemented     = abap_true
-          OR ls_method_details-is_implemented_if_method = abap_true THEN
-          zif_sat_c_os_meth_options=>c_method_status_int-implemented
-        ELSE
-          zif_sat_c_os_meth_options=>c_method_status_int-standard ).
-
-      IF NOT method_matches_filter( iv_method_name = ls_method_info-cmpname
-                                    is_method      = lr_class_method->*
-                                    is_method_info = ls_method_info ).
-        DELETE mt_result.
-        CONTINUE.
       ENDIF.
     ENDLOOP.
   ENDMETHOD.

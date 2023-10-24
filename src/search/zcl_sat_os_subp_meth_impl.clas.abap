@@ -17,6 +17,7 @@ CLASS zcl_sat_os_subp_meth_impl DEFINITION
   PROTECTED SECTION.
     METHODS prepare_search  REDEFINITION.
     METHODS do_after_search REDEFINITION.
+    methods create_method_info_reader REDEFINITION.
 
   PRIVATE SECTION.
     CONSTANTS:
@@ -31,7 +32,6 @@ CLASS zcl_sat_os_subp_meth_impl DEFINITION
       END OF c_alias_names.
 
     METHODS configure_incl_filters.
-    METHODS read_method_infos_n_filter2.
     METHODS add_fixed_incl_filters.
 ENDCLASS.
 
@@ -116,8 +116,7 @@ CLASS zcl_sat_os_subp_meth_impl IMPLEMENTATION.
     fill_descriptions( ).
 
     set_method_filters( ).
-*    read_method_infos_n_filter( ).
-    read_method_infos_n_filter2( ).
+    read_method_infos_n_filter( ).
 
     NEW zcl_sat_meth_subco_filter( ir_result              = REF #( mt_result )
                                    if_use_and_for_options = ms_search_engine_params-use_and_cond_for_options
@@ -150,20 +149,9 @@ CLASS zcl_sat_os_subp_meth_impl IMPLEMENTATION.
     ENDLOOP.
   ENDMETHOD.
 
-  METHOD read_method_infos_n_filter2.
-    NEW zcl_sat_method_info_reader( ir_results           = REF #( mt_result )
-                                    io_method_key_reader = me  )->apply( ).
-
-    LOOP AT mt_result REFERENCE INTO DATA(lr_result).
-      IF NOT method_matches_filter( iv_method_name = lr_result->method_decl_method
-                                    is_method      = lr_result->*
-                                    is_method_info = VALUE #( changedby = lr_result->changed_by
-                                                              changedon = lr_result->changed_date
-                                                              createdon = lr_result->created_date
-                                                              author    = lr_result->created_by ) ).
-        DELETE mt_result.
-      ENDIF.
-    ENDLOOP.
+  METHOD create_method_info_reader.
+    result = NEW zcl_sat_method_info_reader( ir_results           = REF #( mt_result )
+                                             io_method_key_reader = me  ).
   ENDMETHOD.
 
   METHOD add_fixed_incl_filters.
