@@ -151,9 +151,11 @@ CLASS lcl_ddl_view_stmnt_intrpt DEFINITION
       RETURNING
         VALUE(ro_select) TYPE REF TO cl_qlast_select.
 
-  PRIVATE SECTION.
-    DATA mo_stmnt TYPE REF TO cl_qlast_view_definition.
-    DATA mf_associations TYPE abap_bool.
+    "! <p class="shorttext synchronized">Get associations of data source</p>
+    METHODS get_associations
+      IMPORTING
+        io_parent_node TYPE REF TO lcl_node
+        io_select      TYPE REF TO cl_qlast_select.
 
     "! <p class="shorttext synchronized">Interpret Select statement</p>
     METHODS interpret_select_stmnt
@@ -162,6 +164,10 @@ CLASS lcl_ddl_view_stmnt_intrpt DEFINITION
         io_select      TYPE REF TO cl_qlast_select
         if_union       TYPE abap_bool OPTIONAL
         if_union_all   TYPE abap_bool OPTIONAL.
+
+  PRIVATE SECTION.
+    DATA mo_stmnt TYPE REF TO cl_qlast_view_definition.
+    DATA mf_associations TYPE abap_bool.
 
     "! <p class="shorttext synchronized">Interpret Join data source</p>
     METHODS interpret_join
@@ -176,11 +182,6 @@ CLASS lcl_ddl_view_stmnt_intrpt DEFINITION
         io_datasource  TYPE REF TO cl_qlast_datasource
         iv_parent_type TYPE qlast_datasource_type.
 
-    "! <p class="shorttext synchronized">Get associations of data source</p>
-    METHODS get_associations
-      IMPORTING
-        io_parent_node TYPE REF TO lcl_node
-        io_select      TYPE REF TO cl_qlast_select.
 ENDCLASS.
 
 
@@ -195,11 +196,21 @@ CLASS lcl_ddl_view2_stmnt_intrpt DEFINITION
         io_node_helper  TYPE REF TO lcl_node_helper
         io_stmnt        TYPE REF TO cl_qlast_view_entity_def.
 
+    METHODS interpret REDEFINITION.
+
   PROTECTED SECTION.
     METHODS get_root_select REDEFINITION.
 
   PRIVATE SECTION.
     DATA mo_stmnt TYPE REF TO cl_qlast_view_entity_def.
+    DATA mf_select_node_created TYPE abap_bool.
+
+    METHODS interpret_query
+      IMPORTING
+        io_query       TYPE REF TO cl_qlast_query
+        io_parent_node TYPE REF TO lcl_node
+      RETURNING
+        VALUE(result)  TYPE REF TO lcl_node.
 ENDCLASS.
 
 

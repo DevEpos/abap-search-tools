@@ -44,13 +44,17 @@ CLASS zcl_sat_adt_cds_parser DEFINITION
       END OF c_sql_relation.
     CONSTANTS:
       BEGIN OF c_node_type,
-        associations TYPE string VALUE 'ASSOCIATIONS',
-        select       TYPE string VALUE 'SELECT',
-        result       TYPE string VALUE 'RESULT',
-        union        TYPE string VALUE 'UNION',
-        union_all    TYPE string VALUE 'UNION_ALL',
-        abap         TYPE string VALUE 'ABAP',
-        entity       TYPE string VALUE 'ENTITY',
+        associations  TYPE string VALUE 'ASSOCIATIONS',
+        select        TYPE string VALUE 'SELECT',
+        result        TYPE string VALUE 'RESULT',
+        union         TYPE string VALUE 'UNION',
+        union_all     TYPE string VALUE 'UNION_ALL',
+        except        TYPE string VALUE 'EXCEPT',
+        except_all    TYPE string VALUE 'EXCEPT_ALL',
+        intersect     TYPE string VALUE 'INTERSECT',
+        intersect_all TYPE string VALUE 'INTERSECT_ALL',
+        abap          TYPE string VALUE 'ABAP',
+        entity        TYPE string VALUE 'ENTITY',
       END OF c_node_type.
 
     DATA ms_result TYPE zif_sat_ty_adt_types=>ty_cds_top_down_result READ-ONLY.
