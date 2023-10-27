@@ -323,17 +323,72 @@ ENDCLASS.
 
 
 CLASS lcl_ddl_view2_stmnt_intrpt IMPLEMENTATION.
-  METHOD get_root_select.
-    IF mo_stmnt->get_query( ) IS INSTANCE OF cl_qlast_select.
-      ro_select = CAST #( mo_stmnt->get_query( ) ).
-    ENDIF.
-  ENDMETHOD.
-
   METHOD constructor.
     super->constructor( if_associations = if_associations
                         io_node_helper  = io_node_helper
                         io_stmnt        = io_stmnt ).
     mo_stmnt = io_stmnt.
+  ENDMETHOD.
+
+  METHOD get_root_select.
+    DATA(lo_query) = mo_stmnt->get_query( ).
+    IF lo_query IS INSTANCE OF cl_qlast_select.
+      ro_select = CAST #( lo_query ).
+    ENDIF.
+  ENDMETHOD.
+
+  METHOD interpret.
+    DATA(lo_query) = mo_stmnt->get_query( ).
+    IF lo_query IS INSTANCE OF cl_qlast_select.
+      super->interpret( ).
+    ELSE.
+      interpret_query( io_query       = CAST #( lo_query )
+                       io_parent_node = mo_node_helper->mo_root_node ).
+    ENDIF.
+  ENDMETHOD.
+
+  METHOD interpret_query.
+    DATA lo_parent_node TYPE REF TO lcl_node.
+
+    IF io_query IS INSTANCE OF cl_qlast_union.
+      DATA(lo_union) = CAST cl_qlast_union( io_query ).
+      interpret_query( io_query       = lo_union->get_left( )
+                       io_parent_node = io_parent_node ).
+
+      " create union node as parent
+      DATA(lv_name) = SWITCH #( lo_union->get_type( )
+                                WHEN cl_qlast_constants=>union_type_union_distinct THEN
+                                  zcl_sat_adt_cds_parser=>c_node_type-union
+                                WHEN cl_qlast_constants=>union_type_union_all THEN
+                                  zcl_sat_adt_cds_parser=>c_node_type-union_all
+                                WHEN cl_qlast_constants=>union_type_except_distinct THEN
+                                  zcl_sat_adt_cds_parser=>c_node_type-except
+                                WHEN cl_qlast_constants=>union_type_except_all THEN
+                                  zcl_sat_adt_cds_parser=>c_node_type-except_all
+                                WHEN cl_qlast_constants=>union_type_intersect_distinct THEN
+                                  zcl_sat_adt_cds_parser=>c_node_type-intersect
+                                WHEN cl_qlast_constants=>union_type_intersect_all THEN
+                                  zcl_sat_adt_cds_parser=>c_node_type-intersect_all ).
+
+      lo_parent_node = mo_node_helper->add_child( io_parent_node = io_parent_node
+                                                  iv_name        = lv_name
+                                                  iv_type        = lv_name ).
+      interpret_query( io_query       = lo_union->get_right( )
+                       io_parent_node = lo_parent_node ).
+    ELSE.
+      " create select node as parent
+      IF mf_select_node_created = abap_false.
+        lo_parent_node = mo_node_helper->add_child( io_parent_node = io_parent_node
+                                                    iv_name        = zcl_sat_adt_cds_parser=>c_node_type-select
+                                                    iv_type        = zcl_sat_adt_cds_parser=>c_node_type-select ).
+        mf_select_node_created = abap_true.
+      ELSE.
+        lo_parent_node = io_parent_node.
+      ENDIF.
+      interpret_select_stmnt( io_parent_node = lo_parent_node
+                              io_select      = CAST #( io_query ) ).
+
+    ENDIF.
   ENDMETHOD.
 ENDCLASS.
 
