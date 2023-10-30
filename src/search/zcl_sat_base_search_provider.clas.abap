@@ -783,6 +783,7 @@ CLASS zcl_sat_base_search_provider IMPLEMENTATION.
            mt_from,
            ms_join_def,
            mf_excluding_found,
+           mf_distinct_required,
            mf_devclass_join_added.
   ENDMETHOD.
 
