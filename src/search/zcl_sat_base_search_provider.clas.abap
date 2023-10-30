@@ -401,6 +401,8 @@ CLASS zcl_sat_base_search_provider IMPLEMENTATION.
                     iv_alias      = c_api_alias
                     it_conditions = lt_conditions ).
 
+    set_distinct_required( ).
+
     LOOP AT it_values INTO DATA(ls_value).
 
       CASE ls_value-low.
