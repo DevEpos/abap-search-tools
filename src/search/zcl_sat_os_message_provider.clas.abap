@@ -9,7 +9,8 @@ CLASS zcl_sat_os_message_provider DEFINITION
     INTERFACES zif_sat_c_os_mess_options.
 
   PROTECTED SECTION.
-    METHODS prepare_search REDEFINITION.
+    METHODS prepare_search     REDEFINITION.
+    METHODS determine_grouping REDEFINITION.
 
   PRIVATE SECTION.
     ALIASES c_msg_search_params FOR zif_sat_c_os_mess_options~c_filter_key.
@@ -97,6 +98,22 @@ CLASS zcl_sat_os_message_provider IMPLEMENTATION.
     configure_message_filters( ).
 
     new_and_cond_list( ).
+  ENDMETHOD.
+
+  METHOD determine_grouping.
+    CHECK ms_search_engine_params-use_and_cond_for_options = abap_true.
+
+    IF mf_grouping_required = abap_false.
+      RETURN.
+    ENDIF.
+
+    add_group_by_clause( |{ c_aliases-msg_clas }~{ c_fields-message_class }| ).
+    add_group_by_clause( |{ c_aliases-msg_clas }~{ c_fields-development_package }| ).
+    add_group_by_clause( |{ c_aliases-msg_clas }~{ c_fields-description }| ).
+    add_group_by_clause( |{ c_aliases-message }~{ c_fields-changed_on }| ).
+    add_group_by_clause( |{ c_aliases-message }~{ c_fields-changed_by }| ).
+    add_group_by_clause( |{ c_aliases-message }~{ c_fields-message_number }| ).
+    add_group_by_clause( |{ c_aliases-message }~{ c_fields-short_text }| ).
   ENDMETHOD.
 
   METHOD configure_msg_clas_filters.
