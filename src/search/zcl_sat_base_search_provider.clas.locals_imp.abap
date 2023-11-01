@@ -108,9 +108,7 @@ CLASS lcl_api_state_filter_helper IMPLEMENTATION.
                           tabname_alias = CONV #( c_api_alias )
                           value         = lv_type
                           type          = zif_sat_c_join_cond_type=>filter
-                          and_or        = COND #( WHEN sy-tabix = 1
-                                                  THEN zif_sat_c_selection_condition=>and
-                                                  ELSE zif_sat_c_selection_condition=>or ) ) ).
+                          and_or        = zif_sat_c_selection_condition=>or ) ).
     ENDLOOP.
   ENDMETHOD.
 
