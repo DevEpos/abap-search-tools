@@ -115,6 +115,7 @@ CLASS zcl_sat_join_helper IMPLEMENTATION.
 
     DATA lv_index TYPE sy-tabix.
     DATA lv_previous_join_cond TYPE string.
+    DATA lr_last_cond TYPE REF TO ty_join_condition.
 
     " prefill some needed join condition operator strings
     lv_on_string = |  { zif_sat_c_selection_condition=>on ALIGN = RIGHT WIDTH = 5 } |.
@@ -154,8 +155,11 @@ CLASS zcl_sat_join_helper IMPLEMENTATION.
 
       ls_parsed_table-table = |{ ls_parsed_table-table } AS { lv_join_table_alias }|.
 
+      CLEAR lf_parenthesis_opened.
+
       " parse the conditions
       LOOP AT <ls_join_table>-conditions INTO DATA(ls_cond).
+        CLEAR lr_last_cond.
         lv_index = sy-tabix.
 
         " Determine the alias of the reference field
@@ -190,13 +194,11 @@ CLASS zcl_sat_join_helper IMPLEMENTATION.
         ENDIF.
 
         IF ls_cond-type = zif_sat_c_join_cond_type=>field.
-          ls_parsed_table-conditions = VALUE #(
-              BASE ls_parsed_table-conditions
-              ( open_bracket    = lv_parenthesis_open
-                join_operator   = COND #( WHEN lv_index = 1 THEN lv_on_string ELSE lv_previous_join_cond )
-                value           = |{ lv_join_table_alias }~{ ls_cond-field } { ls_cond-operator } | &&
-                                  |{ lv_reference_alias }~{ ls_cond-ref_field }|
-                closing_bracket = lv_parenthesis_closed ) ).
+          APPEND VALUE #( open_bracket    = lv_parenthesis_open
+                          join_operator   = COND #( WHEN lv_index = 1 THEN lv_on_string ELSE lv_previous_join_cond )
+                          value           = |{ lv_join_table_alias }~{ ls_cond-field } { ls_cond-operator } | &&
+                                            |{ lv_reference_alias }~{ ls_cond-ref_field }|
+                          closing_bracket = lv_parenthesis_closed ) TO ls_parsed_table-conditions REFERENCE INTO lr_last_cond.
         ELSE.
           DATA(lv_value1) = |{ ls_cond-value }|.
           DATA(lv_value2) = ||.
@@ -237,14 +239,12 @@ CLASS zcl_sat_join_helper IMPLEMENTATION.
             lv_value2 = | { zif_sat_c_selection_condition=>and } { lv_value2 }|.
           ENDIF.
 
-          ls_parsed_table-conditions = VALUE #(
-              BASE ls_parsed_table-conditions
-              ( open_bracket    = lv_parenthesis_open
-                join_operator   = COND #( WHEN lv_index = 1 THEN lv_on_string ELSE lv_previous_join_cond )
-                value           = |{ lv_reference_alias }~{ ls_cond-field }| &&
-                                  | { ls_cond-operator } | &&
-                                  |{ lv_value1 }{ lv_value2 }|
-                closing_bracket = lv_parenthesis_closed ) ).
+          APPEND VALUE #( open_bracket    = lv_parenthesis_open
+                          join_operator   = COND #( WHEN lv_index = 1 THEN lv_on_string ELSE lv_previous_join_cond )
+                          value           = |{ lv_reference_alias }~{ ls_cond-field }| &&
+                                            | { ls_cond-operator } | &&
+                                            |{ lv_value1 }{ lv_value2 }|
+                          closing_bracket = lv_parenthesis_closed ) TO ls_parsed_table-conditions REFERENCE INTO lr_last_cond.
         ENDIF.
 
         lv_previous_join_cond = COND #( WHEN ls_cond-and_or = zif_sat_c_selection_condition=>or
@@ -257,6 +257,10 @@ CLASS zcl_sat_join_helper IMPLEMENTATION.
           lv_parenthesis_open = |  |.
         ENDIF.
       ENDLOOP.
+
+      IF lf_parenthesis_opened = abap_true AND lr_last_cond IS BOUND.
+        lr_last_cond->closing_bracket = | )|.
+      ENDIF.
 
       rs_join-tables = VALUE #( BASE rs_join-tables ( ls_parsed_table ) ).
 

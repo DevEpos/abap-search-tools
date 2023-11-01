@@ -10,9 +10,10 @@ CLASS zcl_sat_os_ddicview_provider DEFINITION
     METHODS constructor.
 
   PROTECTED SECTION.
-    METHODS prepare_search     REDEFINITION.
-    METHODS determine_grouping REDEFINITION.
-    METHODS do_after_search    REDEFINITION.
+    METHODS prepare_search       REDEFINITION.
+    METHODS is_grouping_required REDEFINITION.
+    METHODS add_having_clauses   REDEFINITION.
+    METHODS do_after_search      REDEFINITION.
 
   PRIVATE SECTION.
     ALIASES c_search_params FOR zif_sat_c_os_view_options~c_filter_key.
@@ -72,22 +73,37 @@ CLASS zcl_sat_os_ddicview_provider IMPLEMENTATION.
     set_base_select_table( iv_entity = zif_sat_c_select_source_id=>zsat_i_ddicview
                            iv_alias  = c_base_table ).
 
-    add_select_field( iv_fieldname = c_fields-viewname iv_fieldname_alias = c_result_fields-object_name iv_entity = c_base_table ).
+    add_select_field( iv_fieldname       = c_fields-viewname
+                      iv_fieldname_alias = c_result_fields-object_name
+                      iv_entity          = c_base_table ).
     add_select_field( iv_fieldname       = c_fields-viewname
                       iv_fieldname_alias = c_result_fields-raw_object_name
+                      iv_entity          = c_base_table
+                      if_no_grouping     = abap_true ).
+    add_select_field( iv_fieldname       = c_fields-created_by
+                      iv_fieldname_alias = c_result_fields-created_by
                       iv_entity          = c_base_table ).
-    add_select_field( iv_fieldname = c_fields-created_by iv_fieldname_alias = c_result_fields-created_by iv_entity = c_base_table ).
-    add_select_field( iv_fieldname = c_fields-created_date iv_fieldname_alias = c_result_fields-created_date iv_entity = c_base_table ).
-    add_select_field( iv_fieldname = c_fields-changed_by iv_fieldname_alias = c_result_fields-changed_by iv_entity = c_base_table ).
-    add_select_field( iv_fieldname = c_fields-changed_date iv_fieldname_alias = c_result_fields-changed_date iv_entity = c_base_table ).
+    add_select_field( iv_fieldname       = c_fields-created_date
+                      iv_fieldname_alias = c_result_fields-created_date
+                      iv_entity          = c_base_table ).
+    add_select_field( iv_fieldname       = c_fields-changed_by
+                      iv_fieldname_alias = c_result_fields-changed_by
+                      iv_entity          = c_base_table ).
+    add_select_field( iv_fieldname       = c_fields-changed_date
+                      iv_fieldname_alias = c_result_fields-changed_date
+                      iv_entity          = c_base_table ).
     add_select_field( iv_fieldname       = c_fields-development_package
                       iv_fieldname_alias = c_result_fields-devclass
                       iv_entity          = c_base_table ).
     add_select_field( iv_fieldname       = |'{ zif_sat_c_entity_type=>view }'|
-                      iv_fieldname_alias = c_result_fields-entity_type ).
-    add_select_field( iv_fieldname       = |'{ zif_sat_c_tadir_types=>view }'| iv_fieldname_alias = c_result_fields-tadir_type ).
+                      iv_fieldname_alias = c_result_fields-entity_type
+                      if_no_grouping     = abap_true ).
+    add_select_field( iv_fieldname       = |'{ zif_sat_c_tadir_types=>view }'|
+                      iv_fieldname_alias = c_result_fields-tadir_type
+                      if_no_grouping     = abap_true ).
 
-    add_order_by( iv_fieldname = c_fields-viewname iv_entity = c_base_table  ).
+    add_order_by( iv_fieldname = c_fields-viewname
+                  iv_entity    = c_base_table  ).
 
     add_search_terms_to_search( iv_target = zif_sat_c_object_search=>c_search_fields-object_name_input_key
                                 it_fields = VALUE #( ( fieldname = |{ c_base_table }~{ c_fields-viewname }| ) ) ).
@@ -101,27 +117,25 @@ CLASS zcl_sat_os_ddicview_provider IMPLEMENTATION.
     fill_descriptions( ).
   ENDMETHOD.
 
-  METHOD determine_grouping.
-    CHECK ms_search_engine_params-use_and_cond_for_options = abap_true.
-
-    IF NOT ( mv_field_filter_count > 1 OR mv_basetab_filter_count > 1 ).
+  METHOD is_grouping_required.
+    result = super->is_grouping_required( ).
+    IF result = abap_true.
       RETURN.
     ENDIF.
 
-    add_group_by_clause( |{ c_base_table }~{ c_fields-viewname }| ).
-    add_group_by_clause( |{ c_base_table }~{ c_fields-viewname }| ).
-    add_group_by_clause( |{ c_base_table }~{ c_fields-created_by }| ).
-    add_group_by_clause( |{ c_base_table }~{ c_fields-created_date }| ).
-    add_group_by_clause( |{ c_base_table }~{ c_fields-changed_by }| ).
-    add_group_by_clause( |{ c_base_table }~{ c_fields-changed_date }| ).
-    add_group_by_clause( |{ c_base_table }~{ c_fields-development_package }| ).
-    add_group_by_clause( |{ c_base_table }~{ c_fields-type }| ).
+    IF mv_field_filter_count > 1 OR mv_basetab_filter_count > 1.
+      result = abap_true.
+    ENDIF.
+  ENDMETHOD.
 
+  METHOD add_having_clauses.
     IF mv_field_filter_count > 1.
-      add_having_clause( iv_field = |{ c_field_table }~{ c_fields-fieldname }| iv_counter_compare = mv_field_filter_count ).
+      add_having_clause( iv_field           = |{ c_field_table }~{ c_fields-fieldname }|
+                         iv_counter_compare = mv_field_filter_count ).
     ENDIF.
     IF mv_basetab_filter_count > 1.
-      add_having_clause( iv_field = |{ c_base_tab_table }~tabname| iv_counter_compare = mv_basetab_filter_count ).
+      add_having_clause( iv_field           = |{ c_base_tab_table }~tabname|
+                         iv_counter_compare = mv_basetab_filter_count ).
     ENDIF.
   ENDMETHOD.
 
