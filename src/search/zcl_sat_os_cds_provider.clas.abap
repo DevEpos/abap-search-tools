@@ -255,7 +255,8 @@ CLASS zcl_sat_os_cds_provider IMPLEMENTATION.
              OR mv_field_filter_count > 1
              OR mv_assoc_filter_count > 1
              OR mv_from_filter_count  > 1
-             OR mv_param_filter_count > 1 ).
+             OR mv_param_filter_count > 1
+             OR mf_grouping_required  = abap_true ).
       RETURN.
     ENDIF.
 
@@ -272,23 +273,28 @@ CLASS zcl_sat_os_cds_provider IMPLEMENTATION.
     add_group_by_clause( |{ c_base_alias }~{ c_fields-changed_date }| ).
 
     IF mv_anno_filter_count > 1.
-      add_having_clause( iv_field = |{ c_anno_alias }~{ c_fields-name }| iv_counter_compare = mv_anno_filter_count ).
+      add_having_clause( iv_field           = |{ c_anno_alias }~{ c_fields-name }|
+                         iv_counter_compare = mv_anno_filter_count ).
     ENDIF.
 
     IF mv_assoc_filter_count > 1.
-      add_having_clause( iv_field = |{ c_used_in_association_alias }~strucobjn_t| iv_counter_compare = mv_assoc_filter_count ).
+      add_having_clause( iv_field           = |{ c_used_in_association_alias }~strucobjn_t|
+                         iv_counter_compare = mv_assoc_filter_count ).
     ENDIF.
 
     IF mv_from_filter_count > 1.
-      add_having_clause( iv_field = |{ c_select_from_alias }~sourceentity| iv_counter_compare = mv_from_filter_count ).
+      add_having_clause( iv_field           = |{ c_select_from_alias }~sourceentity|
+                         iv_counter_compare = mv_from_filter_count ).
     ENDIF.
 
     IF mv_field_filter_count > 1.
-      add_having_clause( iv_field = |{ c_fields-alias }~{ c_fields-fieldname }| iv_counter_compare = mv_field_filter_count ).
+      add_having_clause( iv_field           = |{ c_fields-alias }~{ c_fields-fieldname }|
+                         iv_counter_compare = mv_field_filter_count ).
     ENDIF.
 
     IF mv_param_filter_count > 1.
-      add_having_clause( iv_field = |{ c_param_alias }~parametername| iv_counter_compare = mv_param_filter_count ).
+      add_having_clause( iv_field           = |{ c_param_alias }~parametername|
+                         iv_counter_compare = mv_param_filter_count ).
     ENDIF.
   ENDMETHOD.
 
