@@ -12,12 +12,13 @@ CLASS zcl_sat_os_subp_method_std DEFINITION
     METHODS constructor.
 
   PROTECTED SECTION.
-    METHODS prepare_search     REDEFINITION.
-    METHODS determine_grouping REDEFINITION.
-    METHODS do_after_search    REDEFINITION.
+    METHODS prepare_search       REDEFINITION.
+    METHODS is_grouping_required REDEFINITION.
+    METHODS add_having_clauses   REDEFINITION.
+    METHODS do_after_search      REDEFINITION.
 
   PRIVATE SECTION.
-    ALIASES c_method_option            FOR zif_sat_c_os_meth_options~c_filter_key.
+    ALIASES c_method_option FOR zif_sat_c_os_meth_options~c_filter_key.
 
     CONSTANTS:
       BEGIN OF c_alias_names,
@@ -169,10 +170,16 @@ CLASS zcl_sat_os_subp_method_std IMPLEMENTATION.
 
     add_select_fields( ).
 
-    add_order_by( iv_fieldname = c_method_fields-classname iv_entity = c_alias_names-method ).
-    add_order_by( iv_fieldname = c_method_fields-methodlevel iv_entity = c_alias_names-method if_descending = abap_true ).
-    add_order_by( iv_fieldname = c_method_fields-exposure iv_entity = c_alias_names-method if_descending = abap_true ).
-    add_order_by( iv_fieldname = c_method_fields-methodname iv_entity = c_alias_names-method ).
+    add_order_by( iv_fieldname = c_method_fields-classname
+                  iv_entity    = c_alias_names-method ).
+    add_order_by( iv_fieldname  = c_method_fields-methodlevel
+                  iv_entity     = c_alias_names-method
+                  if_descending = abap_true ).
+    add_order_by( iv_fieldname  = c_method_fields-exposure
+                  iv_entity     = c_alias_names-method
+                  if_descending = abap_true ).
+    add_order_by( iv_fieldname = c_method_fields-methodname
+                  iv_entity    = c_alias_names-method ).
 
     configure_search_term_filters( ).
     configure_class_filters( ).
@@ -187,7 +194,8 @@ CLASS zcl_sat_os_subp_method_std IMPLEMENTATION.
                       iv_entity          = c_alias_names-method ).
     add_select_field( iv_fieldname       = c_method_fields-classname
                       iv_fieldname_alias = c_result_fields-raw_object_name
-                      iv_entity          = c_alias_names-method ).
+                      iv_entity          = c_alias_names-method
+                      if_no_grouping     = abap_true ).
     add_select_field( iv_fieldname       = c_method_fields-methodname
                       iv_fieldname_alias = c_result_fields-method_name
                       iv_entity          = c_alias_names-method ).
@@ -310,46 +318,26 @@ CLASS zcl_sat_os_subp_method_std IMPLEMENTATION.
     ENDLOOP.
   ENDMETHOD.
 
-  METHOD determine_grouping.
-    CHECK ms_search_engine_params-use_and_cond_for_options = abap_true.
-
-    " Excluding would break the relational division logic and would lead to unreliable results
-    IF NOT ( mv_param_filter_count > 1 OR mv_exc_filter_count > 1 ).
+  METHOD is_grouping_required.
+    result = super->is_grouping_required( ).
+    IF result = abap_true.
       RETURN.
     ENDIF.
 
-    " Create grouping clause
-    add_group_by_clause( |{ c_alias_names-method }~{ c_method_fields-classname }| ).
-    add_group_by_clause( |{ c_alias_names-method }~{ c_method_fields-classname }| ).
-    add_group_by_clause( |{ c_alias_names-method }~{ c_method_fields-methodname }| ).
-    add_group_by_clause( |{ c_alias_names-method }~{ c_method_fields-category }| ).
-    add_group_by_clause( |{ c_alias_names-method }~{ c_method_fields-isabstract }| ).
-    add_group_by_clause( |{ c_alias_names-method }~{ c_method_fields-isfinal }| ).
-    add_group_by_clause( |{ c_alias_names-method }~{ c_method_fields-exposure }| ).
-    add_group_by_clause( |{ c_alias_names-method }~{ c_method_fields-methodlevel }| ).
-    add_group_by_clause( |{ c_alias_names-method }~{ c_method_fields-methodtype }| ).
-    add_group_by_clause( |{ c_alias_names-method }~{ c_method_fields-createdby }| ).
-    add_group_by_clause( |{ c_alias_names-method }~{ c_method_fields-createdon }| ).
-    add_group_by_clause( |{ c_alias_names-method }~{ c_method_fields-changedby }| ).
-    add_group_by_clause( |{ c_alias_names-method }~{ c_method_fields-changedon }| ).
-
-    IF mf_clif_join_active = abap_true.
-      add_group_by_clause( |{ c_clif_alias }~{ c_class_fields-package }| ).
-      add_group_by_clause( |{ c_clif_alias }~{ c_class_fields-tadir_type }| ).
+    IF mv_param_filter_count > 1 OR mv_exc_filter_count > 1.
+      result = abap_true.
     ENDIF.
+  ENDMETHOD.
 
-    IF mf_comp_desc_join_active = abap_true.
-      add_group_by_clause( |{ c_alias_names-method_text }~{ c_text_fields-description }| ).
-    ELSE.
-      add_group_by_clause( |{ c_alias_names-method }~{ c_method_fields-originalclifname }| ).
-      add_group_by_clause( |{ c_alias_names-method }~{ c_method_fields-originalmethodname }| ).
-    ENDIF.
-
+  METHOD add_having_clauses.
+    super->add_having_clauses( ).
     IF mv_param_filter_count > 1.
-      add_having_clause( iv_field = |{ c_alias_names-param }~parametername| iv_counter_compare = mv_param_filter_count ).
+      add_having_clause( iv_field           = |{ c_alias_names-param }~parametername|
+                         iv_counter_compare = mv_param_filter_count ).
     ENDIF.
     IF mv_exc_filter_count > 1.
-      add_having_clause( iv_field = |{ c_alias_names-exception }~exceptionname| iv_counter_compare = mv_exc_filter_count ).
+      add_having_clause( iv_field           = |{ c_alias_names-exception }~exceptionname|
+                         iv_counter_compare = mv_exc_filter_count ).
     ENDIF.
   ENDMETHOD.
 
@@ -523,7 +511,8 @@ CLASS zcl_sat_os_subp_method_std IMPLEMENTATION.
     ENDIF.
 
     LOOP AT mt_result REFERENCE INTO DATA(lr_result).
-      DATA(lr_text) = REF #( lt_method_texts[ classname = lr_result->method_decl_clif component = lr_result->method_decl_method ] OPTIONAL ).
+      DATA(lr_text) = REF #( lt_method_texts[ classname = lr_result->method_decl_clif
+                                              component = lr_result->method_decl_method ] OPTIONAL ).
       IF lr_text IS BOUND.
         lr_result->method_descr = lr_text->description.
       ENDIF.

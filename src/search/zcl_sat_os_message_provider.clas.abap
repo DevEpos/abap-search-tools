@@ -1,8 +1,7 @@
 "! <p class="shorttext synchronized">Search provider messages in message classes</p>
 CLASS zcl_sat_os_message_provider DEFINITION
   PUBLIC
-  INHERITING FROM zcl_sat_base_search_provider
-  FINAL
+  INHERITING FROM zcl_sat_base_search_provider FINAL
   CREATE PUBLIC.
 
   PUBLIC SECTION.
@@ -62,12 +61,16 @@ CLASS zcl_sat_os_message_provider IMPLEMENTATION.
                       iv_entity          = c_aliases-msg_clas ).
     add_select_field( iv_fieldname       = c_fields-message_class
                       iv_fieldname_alias = c_result_fields-raw_object_name
-                      iv_entity          = c_aliases-msg_clas ).
-    add_select_field( iv_fieldname = c_fields-changed_by iv_fieldname_alias = c_result_fields-changed_by iv_entity = c_aliases-message ).
+                      iv_entity          = c_aliases-msg_clas
+                      if_no_grouping     = abap_true ).
+    add_select_field( iv_fieldname       = c_fields-changed_by
+                      iv_fieldname_alias = c_result_fields-changed_by
+                      iv_entity          = c_aliases-message ).
     add_select_field( iv_fieldname       = c_fields-changed_on
                       iv_fieldname_alias = c_result_fields-changed_date
                       iv_entity          = c_aliases-message ).
-    add_select_field( iv_fieldname = c_fields-description  iv_entity = c_aliases-msg_clas ).
+    add_select_field( iv_fieldname = c_fields-description
+                      iv_entity    = c_aliases-msg_clas ).
     add_select_field( iv_fieldname       = c_fields-development_package
                       iv_fieldname_alias = c_result_fields-devclass
                       iv_entity          = c_aliases-msg_clas ).
@@ -77,7 +80,9 @@ CLASS zcl_sat_os_message_provider IMPLEMENTATION.
     add_select_field( iv_fieldname       = c_fields-short_text
                       iv_fieldname_alias = c_result_fields-message_short_text
                       iv_entity          = c_aliases-message ).
-    add_select_field( iv_fieldname = |'{ zif_sat_c_tadir_types=>message_class }'| iv_fieldname_alias = c_result_fields-tadir_type ).
+    add_select_field( iv_fieldname       = |'{ zif_sat_c_tadir_types=>message_class }'|
+                      iv_fieldname_alias = c_result_fields-tadir_type
+                      if_no_grouping     = abap_true ).
 
     add_search_terms_to_search(
         iv_target = zif_sat_c_object_search=>c_search_fields-object_name_input_key

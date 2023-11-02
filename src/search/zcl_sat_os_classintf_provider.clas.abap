@@ -14,13 +14,14 @@ CLASS zcl_sat_os_classintf_provider DEFINITION
 
     CONSTANTS c_clif_alias TYPE string VALUE 'clif'.
 
-    METHODS prepare_search     REDEFINITION.
-    METHODS do_after_search    REDEFINITION.
-    METHODS determine_grouping REDEFINITION.
+    METHODS prepare_search       REDEFINITION.
+    METHODS do_after_search      REDEFINITION.
+    METHODS is_grouping_required REDEFINITION.
+    METHODS add_having_clauses   REDEFINITION.
     METHODS configure_class_filters.
 
   PRIVATE SECTION.
-    ALIASES c_custom_options           FOR zif_sat_c_os_clif_options~c_custom_options.
+    ALIASES c_custom_options FOR zif_sat_c_os_clif_options~c_custom_options.
 
     CONSTANTS:
       BEGIN OF c_alias_names,
@@ -65,6 +66,7 @@ CLASS zcl_sat_os_classintf_provider DEFINITION
     DATA mv_meth_subquery TYPE string.
     DATA mv_friend_filter_count TYPE i.
     DATA mv_friend_subquery TYPE string.
+    DATA mv_super_subquery TYPE string.
 
     METHODS add_multi_value_filter
       IMPORTING
@@ -111,6 +113,9 @@ CLASS zcl_sat_os_classintf_provider IMPLEMENTATION.
     mv_intf_subquery = |SELECT DISTINCT { c_fields-classintf } | && c_cr_lf &&
                        | FROM { zif_sat_c_select_source_id=>zsat_i_interfaceusage } | && c_cr_lf &&
                        | WHERE |.
+    mv_super_subquery = |SELECT DISTINCT { c_fields-classintf } | && c_cr_lf &&
+                        | FROM { zif_sat_c_select_source_id=>zsat_i_superclass } | && c_cr_lf &&
+                        | WHERE |.
   ENDMETHOD.
 
   METHOD prepare_search.
@@ -125,9 +130,14 @@ CLASS zcl_sat_os_classintf_provider IMPLEMENTATION.
                       iv_entity          = c_clif_alias ).
     add_select_field( iv_fieldname       = c_fields-classintf
                       iv_fieldname_alias = c_result_fields-raw_object_name
+                      iv_entity          = c_clif_alias
+                      if_no_grouping     = abap_true ).
+    add_select_field( iv_fieldname       = c_fields-author
+                      iv_fieldname_alias = c_result_fields-created_by
                       iv_entity          = c_clif_alias ).
-    add_select_field( iv_fieldname = c_fields-author iv_fieldname_alias = c_result_fields-created_by iv_entity = c_clif_alias ).
-    add_select_field( iv_fieldname = c_fields-package iv_fieldname_alias = c_result_fields-devclass iv_entity = c_clif_alias ).
+    add_select_field( iv_fieldname       = c_fields-package
+                      iv_fieldname_alias = c_result_fields-devclass
+                      iv_entity          = c_clif_alias ).
     add_select_field( iv_fieldname       = c_fields-tadir_type
                       iv_fieldname_alias = c_result_fields-tadir_type
                       iv_entity          = c_clif_alias ).
@@ -141,49 +151,49 @@ CLASS zcl_sat_os_classintf_provider IMPLEMENTATION.
                       iv_fieldname_alias = c_result_fields-changed_date
                       iv_entity          = c_clif_alias ).
 
-    add_order_by( iv_fieldname = c_fields-classintf iv_entity = c_clif_alias  ).
+    add_order_by( iv_fieldname = c_fields-classintf
+                  iv_entity    = c_clif_alias  ).
 
     configure_class_filters( ).
 
     new_and_cond_list( ).
   ENDMETHOD.
 
-  METHOD determine_grouping.
-    CHECK ms_search_engine_params-use_and_cond_for_options = abap_true.
-
-    " Excluding would break the relational division logic and would lead to unreliable results
-    IF NOT (    mv_flag_filter_count   > 1
-             OR mv_attr_filter_count   > 1
-             OR mv_meth_filter_count   > 1
-             OR mv_friend_filter_count > 1
-             OR mv_intf_filter_count   > 1 ).
+  METHOD is_grouping_required.
+    result = super->is_grouping_required( ).
+    IF result = abap_true.
       RETURN.
     ENDIF.
 
-    " Create grouping clause
-    add_group_by_clause( |{ c_clif_alias }~{ c_fields-classintf }| ).
-    add_group_by_clause( |{ c_clif_alias }~{ c_fields-author }| ).
-    add_group_by_clause( |{ c_clif_alias }~{ c_fields-package }| ).
-    add_group_by_clause( |{ c_clif_alias }~{ c_fields-tadir_type }| ).
-    add_group_by_clause( |{ c_clif_alias }~{ c_fields-created_on }| ).
-    add_group_by_clause( |{ c_clif_alias }~{ c_fields-changed_by }| ).
-    add_group_by_clause( |{ c_clif_alias }~{ c_fields-changed_on }| ).
+    IF    mv_flag_filter_count   > 1
+       OR mv_attr_filter_count   > 1
+       OR mv_meth_filter_count   > 1
+       OR mv_friend_filter_count > 1
+       OR mv_intf_filter_count   > 1.
+      result = abap_true.
+    ENDIF.
+  ENDMETHOD.
 
+  METHOD add_having_clauses.
     IF mv_flag_filter_count > 1.
-      add_having_clause( iv_field = |{ c_alias_names-flags }~{ c_fields-flag }| iv_counter_compare = mv_flag_filter_count ).
+      add_having_clause( iv_field           = |{ c_alias_names-flags }~{ c_fields-flag }|
+                         iv_counter_compare = mv_flag_filter_count ).
     ENDIF.
     IF mv_attr_filter_count > 1.
-      add_having_clause( iv_field = |{ c_alias_names-attribute }~{ c_fields-attribute }| iv_counter_compare = mv_attr_filter_count ).
+      add_having_clause( iv_field           = |{ c_alias_names-attribute }~{ c_fields-attribute }|
+                         iv_counter_compare = mv_attr_filter_count ).
     ENDIF.
     IF mv_meth_filter_count > 1.
-      add_having_clause( iv_field = |{ c_alias_names-method }~{ c_fields-method }| iv_counter_compare = mv_meth_filter_count ).
+      add_having_clause( iv_field           = |{ c_alias_names-method }~{ c_fields-method }|
+                         iv_counter_compare = mv_meth_filter_count ).
     ENDIF.
     IF mv_intf_filter_count > 1.
       add_having_clause( iv_field           = |{ c_alias_names-interface }~{ c_fields-using_interface }|
                          iv_counter_compare = mv_intf_filter_count ).
     ENDIF.
     IF mv_friend_filter_count > 1.
-      add_having_clause( iv_field = |{ c_alias_names-friend }~{ c_fields-friend }| iv_counter_compare = mv_friend_filter_count ).
+      add_having_clause( iv_field           = |{ c_alias_names-friend }~{ c_fields-friend }|
+                         iv_counter_compare = mv_friend_filter_count ).
     ENDIF.
   ENDMETHOD.
 
@@ -347,7 +357,8 @@ CLASS zcl_sat_os_classintf_provider IMPLEMENTATION.
                                      option       = <ls_excluding>-option2
                                      low          = <ls_excluding>-high ) ).
         ENDIF.
-        lt_or_seltab = VALUE #( BASE lt_or_seltab ( values = lt_and_seltab ) ).
+        lt_or_seltab = VALUE #( BASE lt_or_seltab
+                                ( values = lt_and_seltab ) ).
       ENDLOOP.
 
       create_not_in_filter_for_where( it_where     = zcl_sat_where_clause_builder=>create_or_condition( lt_or_seltab )
@@ -407,7 +418,8 @@ CLASS zcl_sat_os_classintf_provider IMPLEMENTATION.
                                                      type            = zif_sat_c_join_cond_type=>field  ) ) ).
 
           add_option_filter( iv_fieldname = |{ c_alias_names-inh_or_impl }~refclassname|
-                             it_values    = VALUE #( ( LINES OF it_values ) ( LINES OF lt_subs_of_implementers ) ) ).
+                             it_values    = VALUE #( ( LINES OF it_values )
+                                                     ( LINES OF lt_subs_of_implementers ) ) ).
           add_option_filter( iv_fieldname = |{ c_alias_names-inh_or_impl }~reltype|
                              it_values    = VALUE #( sign   = 'I'
                                                      option = 'EQ'
@@ -430,14 +442,8 @@ CLASS zcl_sat_os_classintf_provider IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD add_super_filter.
-    add_join_table( iv_join_table = |{ zif_sat_c_select_source_id=>zsat_i_superclass }|
-                    iv_alias      = c_alias_names-super
-                    it_conditions = VALUE #( ( field           = c_fields-classintf
-                                               ref_field       = c_fields-classintf
-                                               ref_table_alias = c_clif_alias
-                                               type            = zif_sat_c_join_cond_type=>field  ) ) ).
+    DATA lv_dummy TYPE i ##NEEDED.
 
-    DATA(lt_filter_values) = it_values.
     DATA(lv_custom_option) = VALUE #( ms_search_engine_params-custom_options[
                                           key = c_custom_options-mode_for_intf_super_filter-name ]-value OPTIONAL ).
 
@@ -446,12 +452,26 @@ CLASS zcl_sat_os_classintf_provider IMPLEMENTATION.
        AND lines( it_values )    = 1
        AND it_values[ 1 ]-option = 'EQ'
        AND it_values[ 1 ]-sign   = 'I'.
-      lt_filter_values = VALUE #( BASE lt_filter_values
-                                  ( LINES OF zcl_sat_clif_filter_util=>resolve_subclasses(
-                                                 it_values = lt_filter_values ) ) ).
+      add_join_table( iv_join_table = |{ zif_sat_c_select_source_id=>zsat_i_superclass }|
+                      iv_alias      = c_alias_names-super
+                      it_conditions = VALUE #( ( field           = c_fields-classintf
+                                                 ref_field       = c_fields-classintf
+                                                 ref_table_alias = c_clif_alias
+                                                 type            = zif_sat_c_join_cond_type=>field  ) ) ).
+      add_option_filter( iv_fieldname = |{ c_alias_names-super }~{ c_fields-super_class }|
+                         it_values    = VALUE #( ( LINES OF it_values )
+                                                 ( LINES OF zcl_sat_clif_filter_util=>resolve_subclasses(
+                                                                it_values = it_values ) ) ) ).
+      RETURN.
     ENDIF.
 
-    add_option_filter( iv_fieldname = |{ c_alias_names-super }~{ c_fields-super_class }|
-                       it_values    = lt_filter_values ).
+    " Multiple super classes are not possible so it makes no sense to create a having/group by clause
+    " so the filter count will be not be saved here
+    add_multi_value_filter( EXPORTING it_values                 = it_values
+                                      iv_join_table             = |{ zif_sat_c_select_source_id=>zsat_i_superclass }|
+                                      iv_join_table_alias       = c_alias_names-super
+                                      iv_filter_field           = c_fields-super_class
+                                      iv_subquery               = mv_super_subquery
+                            CHANGING  cv_including_filter_count = lv_dummy ).
   ENDMETHOD.
 ENDCLASS.

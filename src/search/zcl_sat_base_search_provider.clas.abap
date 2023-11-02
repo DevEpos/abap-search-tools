@@ -1,7 +1,6 @@
 "! <p class="shorttext synchronized">Generic Searcher for Object Search</p>
 CLASS zcl_sat_base_search_provider DEFINITION
-  PUBLIC
-  ABSTRACT
+  PUBLIC ABSTRACT
   CREATE PUBLIC.
 
   PUBLIC SECTION.
@@ -80,6 +79,7 @@ CLASS zcl_sat_base_search_provider DEFINITION
     DATA ms_join_def TYPE zif_sat_ty_global=>ty_s_join_def.
     DATA mf_excluding_found TYPE abap_bool.
     DATA mv_description_filter_field TYPE string.
+    DATA mt_fields_for_grouping TYPE string_table.
 
     "! <p class="shorttext synchronized">Start new criteria table connected with OR</p>
     METHODS new_or_cond_list.
@@ -104,8 +104,9 @@ CLASS zcl_sat_base_search_provider DEFINITION
     METHODS add_select_field
       IMPORTING
         iv_fieldname       TYPE string
-        iv_fieldname_alias TYPE string OPTIONAL
-        iv_entity          TYPE string OPTIONAL.
+        iv_fieldname_alias TYPE string    OPTIONAL
+        iv_entity          TYPE string    OPTIONAL
+        if_no_grouping     TYPE abap_bool OPTIONAL.
 
     "! <p class="shorttext synchronized">Add filter to the search</p>
     METHODS add_filter
@@ -185,8 +186,18 @@ CLASS zcl_sat_base_search_provider DEFINITION
       IMPORTING
         iv_field TYPE string.
 
-    "! <p class="shorttext synchronized">Determine grouping state</p>
-    METHODS determine_grouping.
+    "! Should return abap_true if group by clause is required
+    "! Note: Subclass may adjust but should call super
+    METHODS is_grouping_required
+      RETURNING
+        VALUE(result) TYPE abap_bool.
+
+    "! Adds group by clauses to query
+    METHODS add_group_by_clauses.
+
+    "! Adds having clauses to query<br/>
+    "! See ADD_HAVING_CLAUSE
+    METHODS add_having_clauses.
 
     "! <p class="shorttext synchronized">Splits including/excluding from given value range list</p>
     METHODS split_including_excluding
@@ -264,6 +275,7 @@ CLASS zcl_sat_base_search_provider DEFINITION
 
     DATA mf_devclass_join_added TYPE abap_bool.
     DATA mf_distinct_required TYPE abap_bool.
+    DATA mf_grouping_required TYPE abap_bool.
     DATA mo_logger TYPE REF TO zcl_sat_os_logger.
 
     METHODS get_select_string
@@ -335,7 +347,11 @@ CLASS zcl_sat_base_search_provider IMPLEMENTATION.
     create_from_clause( ).
     create_where_clause( ).
     create_order_by_clause( ).
-    determine_grouping( ).
+
+    IF ms_search_engine_params-use_and_cond_for_options = abap_true AND is_grouping_required( ).
+      add_group_by_clauses( ).
+      add_having_clauses( ).
+    ENDIF.
 
     DATA(lv_max_rows) = COND #( WHEN ms_search_engine_params-get_all = abap_true
                                 THEN 0
@@ -415,13 +431,20 @@ CLASS zcl_sat_base_search_provider IMPLEMENTATION.
     ENDIF.
   ENDMETHOD.
 
+  METHOD add_group_by_clauses.
+    LOOP AT mt_fields_for_grouping INTO DATA(lv_grouping_field).
+      add_group_by_clause( lv_grouping_field ).
+    ENDLOOP.
+  ENDMETHOD.
+
   METHOD add_group_by_clause.
     IF mt_group_by IS NOT INITIAL.
       DATA(lr_last_group_by) = REF #( mt_group_by[ lines( mt_group_by ) ] ).
       lr_last_group_by->* = |{ lr_last_group_by->* },|.
     ENDIF.
 
-    mt_group_by = VALUE #( BASE mt_group_by ( iv_field ) ).
+    mt_group_by = VALUE #( BASE mt_group_by
+                           ( iv_field ) ).
   ENDMETHOD.
 
   METHOD add_having_clause.
@@ -558,10 +581,16 @@ CLASS zcl_sat_base_search_provider IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD add_select_field.
+    DATA(lv_sql_fieldname) = COND #( WHEN iv_entity IS NOT INITIAL THEN |{ iv_entity }~| )
+                                  && |{ iv_fieldname }|.
     mt_select = VALUE #( BASE mt_select
-                         ( COND #( WHEN iv_entity IS NOT INITIAL THEN |{ iv_entity }~| ) &&
-                           |{ iv_fieldname }| &&
+                         ( lv_sql_fieldname &&
                            COND #( WHEN iv_fieldname_alias IS NOT INITIAL THEN | AS { iv_fieldname_alias }| ) ) ).
+
+    IF if_no_grouping = abap_false.
+      mt_fields_for_grouping = VALUE #( BASE mt_fields_for_grouping
+                                        ( lv_sql_fieldname ) ).
+    ENDIF.
   ENDMETHOD.
 
   METHOD add_subquery_filter.
@@ -648,7 +677,11 @@ CLASS zcl_sat_base_search_provider IMPLEMENTATION.
     mt_where = zcl_sat_where_clause_builder=>create_and_condition( it_and_seltab = mt_criteria_and ).
   ENDMETHOD.
 
-  METHOD determine_grouping.
+  METHOD is_grouping_required.
+    result = mf_grouping_required.
+  ENDMETHOD.
+
+  METHOD add_having_clauses.
     RETURN.
   ENDMETHOD.
 
@@ -690,17 +723,20 @@ CLASS zcl_sat_base_search_provider IMPLEMENTATION.
       IF mt_criteria IS NOT INITIAL.
         new_or_cond_list( ).
       ENDIF.
-      mt_criteria_and = VALUE #( BASE mt_criteria_and ( VALUE #( ( LINES OF mt_criteria_or ) ) ) ).
+      mt_criteria_and = VALUE #( BASE mt_criteria_and
+                                 ( VALUE #( ( LINES OF mt_criteria_or ) ) ) ).
       CLEAR mt_criteria_or.
     ELSEIF mt_criteria IS NOT INITIAL.
-      mt_criteria_and = VALUE #( BASE mt_criteria_and ( VALUE #( ( values = mt_criteria ) ) ) ).
+      mt_criteria_and = VALUE #( BASE mt_criteria_and
+                                 ( VALUE #( ( values = mt_criteria ) ) ) ).
       CLEAR mt_criteria.
     ENDIF.
   ENDMETHOD.
 
   METHOD new_or_cond_list.
     IF mt_criteria IS NOT INITIAL.
-      mt_criteria_or = VALUE #( BASE mt_criteria_or ( values = mt_criteria ) ).
+      mt_criteria_or = VALUE #( BASE mt_criteria_or
+                                ( values = mt_criteria ) ).
       CLEAR mt_criteria.
     ENDIF.
   ENDMETHOD.
@@ -728,11 +764,13 @@ CLASS zcl_sat_base_search_provider IMPLEMENTATION.
            mt_select,
            mt_order_by,
            mt_group_by,
+           mt_fields_for_grouping,
            mt_having,
            mt_from,
            ms_join_def,
            mf_excluding_found,
            mf_distinct_required,
+           mf_grouping_required,
            mf_devclass_join_added.
   ENDMETHOD.
 
