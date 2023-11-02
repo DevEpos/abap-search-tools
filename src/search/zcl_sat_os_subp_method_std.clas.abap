@@ -120,20 +120,20 @@ CLASS zcl_sat_os_subp_method_std IMPLEMENTATION.
     super->constructor( ).
 
     mv_param_subquery = |SELECT DISTINCT methodname | && c_cr_lf &&
-                        | FROM { |{ zif_sat_c_select_source_id=>zsat_i_clifmethodparam }| } | && c_cr_lf &&
+                        | FROM { zif_sat_c_select_source_id=>zsat_i_clifmethodparam } | && c_cr_lf &&
                         | WHERE classname = { c_alias_names-method }~{ c_method_fields-classname } | && c_cr_lf &&
                         |   AND methodname = { c_alias_names-method }~{ c_method_fields-methodname } | && c_cr_lf &&
                         |   AND |.
 
     mv_exc_subquery = |SELECT DISTINCT methodname | && c_cr_lf &&
-                        | FROM { |{ zif_sat_c_select_source_id=>zsat_i_clifmethodexception }| } | && c_cr_lf &&
+                        | FROM { zif_sat_c_select_source_id=>zsat_i_clifmethodexception } | && c_cr_lf &&
                         | WHERE classname = { c_alias_names-method }~{ c_method_fields-classname } | && c_cr_lf &&
                         |   AND methodname = { c_alias_names-method }~{ c_method_fields-methodname } | && c_cr_lf &&
                         |   AND |.
   ENDMETHOD.
 
   METHOD prepare_search.
-    set_base_select_table( iv_entity = |{ zif_sat_c_select_source_id=>zsat_i_classinterfacemethod }|
+    set_base_select_table( iv_entity = zif_sat_c_select_source_id=>zsat_i_classinterfacemethod
                            iv_alias  = c_alias_names-method ).
 
     check_filter_availablity( ).

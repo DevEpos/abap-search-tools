@@ -182,7 +182,8 @@ CLASS zcl_sat_os_subp_meth_impl_odb IMPLEMENTATION.
 
     reset( ).
 
-    set_base_select_table( iv_entity = |{ zif_sat_c_select_source_id=>zsat_i_classinterface }| iv_alias = c_clif_alias ).
+    set_base_select_table( iv_entity = zif_sat_c_select_source_id=>zsat_i_classinterface
+                           iv_alias  = c_clif_alias ).
     configure_class_filters( ).
     new_and_cond_list( ).
     create_where_clause( ).
