@@ -1,8 +1,8 @@
 "! <p class="shorttext synchronized">CDS View Search Provider for Object Search</p>
 CLASS zcl_sat_os_cds_provider DEFINITION
   PUBLIC
-  CREATE PUBLIC
-  INHERITING FROM zcl_sat_base_search_provider.
+  INHERITING FROM zcl_sat_base_search_provider
+  CREATE PUBLIC.
 
   PUBLIC SECTION.
     INTERFACES zif_sat_c_os_cds_options.
@@ -12,8 +12,10 @@ CLASS zcl_sat_os_cds_provider DEFINITION
     METHODS constructor.
 
   PROTECTED SECTION.
-    METHODS determine_grouping REDEFINITION.
-    METHODS prepare_search     REDEFINITION.
+    METHODS prepare_search       REDEFINITION.
+    METHODS is_grouping_required REDEFINITION.
+    METHODS add_having_clauses   REDEFINITION.
+    METHODS configure_cds_filters.
 
   PRIVATE SECTION.
     ALIASES c_cds_search_params FOR zif_sat_c_os_cds_options~c_filter_key.
@@ -120,32 +122,53 @@ CLASS zcl_sat_os_cds_provider IMPLEMENTATION.
                            iv_alias      = c_base_alias
                            it_parameters = VALUE #( ( param_name = 'p_language' param_value = sy-langu ) ) ).
 
-    add_select_field( iv_fieldname = c_fields-entityid iv_fieldname_alias = c_result_fields-object_name iv_entity = c_base_alias ).
+    add_select_field( iv_fieldname       = c_fields-entityid
+                      iv_fieldname_alias = c_result_fields-object_name
+                      iv_entity          = c_base_alias ).
     add_select_field( iv_fieldname       = c_fields-source_type
                       iv_fieldname_alias = c_result_fields-cds_source_type
                       iv_entity          = c_base_alias ).
-    add_select_field( iv_fieldname = c_fields-ddlname iv_fieldname_alias = c_result_fields-alt_object_name iv_entity = c_base_alias ).
-    add_select_field( iv_fieldname = c_fields-created_by iv_fieldname_alias = c_result_fields-created_by iv_entity = c_base_alias ).
-    add_select_field( iv_fieldname = c_fields-created_date iv_fieldname_alias = c_result_fields-created_date iv_entity = c_base_alias ).
-    add_select_field( iv_fieldname = c_fields-changed_by iv_fieldname_alias = c_result_fields-changed_by iv_entity = c_base_alias ).
-    add_select_field( iv_fieldname = c_fields-changed_date iv_fieldname_alias = c_result_fields-changed_date iv_entity = c_base_alias ).
+    add_select_field( iv_fieldname       = c_fields-ddlname
+                      iv_fieldname_alias = c_result_fields-alt_object_name
+                      iv_entity          = c_base_alias ).
+    add_select_field( iv_fieldname       = c_fields-created_by
+                      iv_fieldname_alias = c_result_fields-created_by
+                      iv_entity          = c_base_alias ).
+    add_select_field( iv_fieldname       = c_fields-created_date
+                      iv_fieldname_alias = c_result_fields-created_date
+                      iv_entity          = c_base_alias ).
+    add_select_field( iv_fieldname       = c_fields-changed_by
+                      iv_fieldname_alias = c_result_fields-changed_by
+                      iv_entity          = c_base_alias ).
+    add_select_field( iv_fieldname       = c_fields-changed_date
+                      iv_fieldname_alias = c_result_fields-changed_date
+                      iv_entity          = c_base_alias ).
     add_select_field( iv_fieldname       = c_fields-rawentity_id
                       iv_fieldname_alias = c_result_fields-raw_object_name
                       iv_entity          = c_base_alias ).
-    add_select_field( iv_fieldname = c_fields-description  iv_entity = c_base_alias ).
+    add_select_field( iv_fieldname = c_fields-description
+                      iv_entity    = c_base_alias ).
     add_select_field( iv_fieldname       = c_fields-development_package
                       iv_fieldname_alias = c_result_fields-devclass
                       iv_entity          = c_base_alias ).
-    add_select_field( iv_fieldname = |'C'| iv_fieldname_alias = c_result_fields-entity_type ).
-    add_select_field( iv_fieldname = |'DDLS'| iv_fieldname_alias = c_result_fields-tadir_type ).
+    add_select_field( iv_fieldname       = |'{ zif_sat_c_entity_type=>cds_view }'|
+                      iv_fieldname_alias = c_result_fields-entity_type
+                      if_no_grouping     = abap_true ).
+    add_select_field( iv_fieldname       = |'{ zif_sat_c_tadir_types=>data_definition }'|
+                      iv_fieldname_alias = c_result_fields-tadir_type
+                      if_no_grouping     = abap_true ).
 
-    add_order_by( iv_fieldname = c_fields-entityid iv_entity = c_base_alias  ).
+    add_order_by( iv_fieldname = c_fields-entityid
+                  iv_entity    = c_base_alias  ).
 
     add_search_terms_to_search( iv_target = zif_sat_c_object_search=>c_search_fields-object_name_input_key
                                 it_fields = VALUE #( ( fieldname = |{ c_base_alias }~{ c_fields-entityid }| )
                                                      ( fieldname = |{ c_base_alias }~{ c_fields-ddlname }| )
                                                      ( fieldname = |{ c_base_alias }~{ c_fields-viewname }| ) ) ).
+    configure_cds_filters( ).
+  ENDMETHOD.
 
+  METHOD configure_cds_filters.
     LOOP AT mo_search_query->mt_search_options ASSIGNING FIELD-SYMBOL(<ls_option>).
       CASE <ls_option>-option.
 
@@ -240,48 +263,45 @@ CLASS zcl_sat_os_cds_provider IMPLEMENTATION.
     new_and_cond_list( ).
   ENDMETHOD.
 
-  METHOD determine_grouping.
-    CHECK ms_search_engine_params-use_and_cond_for_options = abap_true.
-
-    " Excluding would break the relational division logic and would lead to unreliable results
-    IF NOT (    mv_anno_filter_count  > 1
-             OR mv_field_filter_count > 1
-             OR mv_assoc_filter_count > 1
-             OR mv_from_filter_count  > 1
-             OR mv_param_filter_count > 1 ).
+  METHOD is_grouping_required.
+    result = super->is_grouping_required( ).
+    IF result = abap_true.
       RETURN.
     ENDIF.
 
-    " Create grouping clause
-    add_group_by_clause( |{ c_base_alias }~{ c_fields-entityid }| ).
-    add_group_by_clause( |{ c_base_alias }~{ c_fields-rawentity_id }| ).
-    add_group_by_clause( |{ c_base_alias }~{ c_fields-source_type }| ).
-    add_group_by_clause( |{ c_base_alias }~{ c_fields-ddlname }| ).
-    add_group_by_clause( |{ c_base_alias }~{ c_fields-description }| ).
-    add_group_by_clause( |{ c_base_alias }~{ c_fields-created_by }| ).
-    add_group_by_clause( |{ c_base_alias }~{ c_fields-development_package }| ).
-    add_group_by_clause( |{ c_base_alias }~{ c_fields-created_date }| ).
-    add_group_by_clause( |{ c_base_alias }~{ c_fields-changed_by }| ).
-    add_group_by_clause( |{ c_base_alias }~{ c_fields-changed_date }| ).
+    IF    mv_anno_filter_count  > 1
+       OR mv_field_filter_count > 1
+       OR mv_assoc_filter_count > 1
+       OR mv_from_filter_count  > 1
+       OR mv_param_filter_count > 1.
+      result = abap_true.
+    ENDIF.
+  ENDMETHOD.
 
+  METHOD add_having_clauses.
     IF mv_anno_filter_count > 1.
-      add_having_clause( iv_field = |{ c_anno_alias }~{ c_fields-name }| iv_counter_compare = mv_anno_filter_count ).
+      add_having_clause( iv_field           = |{ c_anno_alias }~{ c_fields-name }|
+                         iv_counter_compare = mv_anno_filter_count ).
     ENDIF.
 
     IF mv_assoc_filter_count > 1.
-      add_having_clause( iv_field = |{ c_used_in_association_alias }~strucobj_t| iv_counter_compare = mv_assoc_filter_count ).
+      add_having_clause( iv_field           = |{ c_used_in_association_alias }~strucobjn_t|
+                         iv_counter_compare = mv_assoc_filter_count ).
     ENDIF.
 
     IF mv_from_filter_count > 1.
-      add_having_clause( iv_field = |{ c_select_from_alias }~sourceentity| iv_counter_compare = mv_from_filter_count ).
+      add_having_clause( iv_field           = |{ c_select_from_alias }~sourceentity|
+                         iv_counter_compare = mv_from_filter_count ).
     ENDIF.
 
     IF mv_field_filter_count > 1.
-      add_having_clause( iv_field = |{ c_fields-alias }~{ c_fields-fieldname }| iv_counter_compare = mv_field_filter_count ).
+      add_having_clause( iv_field           = |{ c_fields-alias }~{ c_fields-fieldname }|
+                         iv_counter_compare = mv_field_filter_count ).
     ENDIF.
 
     IF mv_param_filter_count > 1.
-      add_having_clause( iv_field = |{ c_param_alias }~parametername| iv_counter_compare = mv_param_filter_count ).
+      add_having_clause( iv_field           = |{ c_param_alias }~parametername|
+                         iv_counter_compare = mv_param_filter_count ).
     ENDIF.
   ENDMETHOD.
 
@@ -331,7 +351,8 @@ CLASS zcl_sat_os_cds_provider IMPLEMENTATION.
                                      option       = <ls_excluding>-option2
                                      low          = <ls_excluding>-high ) ).
         ENDIF.
-        lt_or_seltab = VALUE #( BASE lt_or_seltab ( values = lt_and_seltab ) ).
+        lt_or_seltab = VALUE #( BASE lt_or_seltab
+                                ( values = lt_and_seltab ) ).
       ENDLOOP.
 
       create_not_in_filter_for_where( it_where     = zcl_sat_where_clause_builder=>create_or_condition( lt_or_seltab )
