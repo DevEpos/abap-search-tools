@@ -24,30 +24,6 @@
      <DOMVALUE_L>E</DOMVALUE_L>
      <DDTEXT>Extend</DDTEXT>
     </DD07V>
-    <DD07V>
-     <VALPOS>0003</VALPOS>
-     <DDLANGUAGE>E</DDLANGUAGE>
-     <DOMVALUE_L>F</DOMVALUE_L>
-     <DDTEXT>Table Function</DDTEXT>
-    </DD07V>
-    <DD07V>
-     <VALPOS>0004</VALPOS>
-     <DDLANGUAGE>E</DDLANGUAGE>
-     <DOMVALUE_L>T</DOMVALUE_L>
-     <DDTEXT>Table Entity</DDTEXT>
-    </DD07V>
-    <DD07V>
-     <VALPOS>0005</VALPOS>
-     <DDLANGUAGE>E</DDLANGUAGE>
-     <DOMVALUE_L>A</DOMVALUE_L>
-     <DDTEXT>Abstract Entity</DDTEXT>
-    </DD07V>
-    <DD07V>
-     <VALPOS>0006</VALPOS>
-     <DDLANGUAGE>E</DDLANGUAGE>
-     <DOMVALUE_L>H</DOMVALUE_L>
-     <DDTEXT>Hierarchy</DDTEXT>
-    </DD07V>
    </DD07V_TAB>
   </asx:values>
  </asx:abap>
