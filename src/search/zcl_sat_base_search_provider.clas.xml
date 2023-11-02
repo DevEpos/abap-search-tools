@@ -103,11 +103,6 @@
      <DESCRIPT>Create Where clause for SQL</DESCRIPT>
     </SEOCOMPOTX>
     <SEOCOMPOTX>
-     <CMPNAME>DETERMINE_GROUPING</CMPNAME>
-     <LANGU>E</LANGU>
-     <DESCRIPT>Determine grouping state</DESCRIPT>
-    </SEOCOMPOTX>
-    <SEOCOMPOTX>
      <CMPNAME>DO_AFTER_SEARCH</CMPNAME>
      <LANGU>E</LANGU>
      <DESCRIPT>Performs task after the Search</DESCRIPT>

@@ -15,9 +15,9 @@ CLASS zcl_sat_os_subp_meth_impl DEFINITION
     METHODS zif_sat_method_key_reader~get_method_key REDEFINITION.
 
   PROTECTED SECTION.
-    METHODS prepare_search  REDEFINITION.
-    METHODS do_after_search REDEFINITION.
-    methods create_method_info_reader REDEFINITION.
+    METHODS prepare_search            REDEFINITION.
+    METHODS do_after_search           REDEFINITION.
+    METHODS create_method_info_reader REDEFINITION.
 
   PRIVATE SECTION.
     CONSTANTS:
@@ -75,11 +75,14 @@ CLASS zcl_sat_os_subp_meth_impl IMPLEMENTATION.
                       iv_entity          = c_clif_alias ).
     add_select_field( iv_fieldname       = c_fields-classintf
                       iv_fieldname_alias = c_result_fields-raw_object_name
-                      iv_entity          = c_clif_alias ).
+                      iv_entity          = c_clif_alias
+                      if_no_grouping     = abap_true ).
     add_select_field( iv_fieldname       = c_general_fields-created_by
                       iv_fieldname_alias = c_result_fields-created_by
                       iv_entity          = c_alias_names-includes ).
-    add_select_field( iv_fieldname = c_fields-package iv_fieldname_alias = c_result_fields-devclass iv_entity = c_clif_alias ).
+    add_select_field( iv_fieldname       = c_fields-package
+                      iv_fieldname_alias = c_result_fields-devclass
+                      iv_entity          = c_clif_alias ).
     add_select_field( iv_fieldname       = 'progname'
                       iv_fieldname_alias = c_result_fields-method_name
                       iv_entity          = c_alias_names-includes ).
@@ -96,7 +99,8 @@ CLASS zcl_sat_os_subp_meth_impl IMPLEMENTATION.
                       iv_fieldname_alias = c_result_fields-changed_date
                       iv_entity          = c_alias_names-includes ).
 
-    add_order_by( iv_fieldname = c_fields-classintf iv_entity = c_clif_alias ).
+    add_order_by( iv_fieldname = c_fields-classintf
+                  iv_entity    = c_clif_alias ).
 
     add_fixed_incl_filters( ).
     configure_incl_filters( ).
