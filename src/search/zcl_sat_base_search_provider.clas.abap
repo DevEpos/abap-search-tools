@@ -80,6 +80,7 @@ CLASS zcl_sat_base_search_provider DEFINITION
     DATA mt_from TYPE TABLE OF string.
     DATA ms_join_def TYPE zif_sat_ty_global=>ty_s_join_def.
     DATA mf_excluding_found TYPE abap_bool.
+    data mf_grouping_required type abap_bool.
     DATA mv_description_filter_field TYPE string.
 
     "! <p class="shorttext synchronized">Start new criteria table connected with OR</p>
@@ -377,61 +378,16 @@ CLASS zcl_sat_base_search_provider IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD add_api_option_filter.
-    CONSTANTS c_api_alias TYPE string VALUE 'api' ##NO_TEXT.
+    DATA(lo_api_state_filter_helper) = NEW lcl_api_state_filter_helper( io_search_provider = me
+                                                                        it_values          = it_values
+                                                                        iv_ref_field       = iv_ref_field
+                                                                        iv_ref_table_alias = iv_ref_table_alias
+                                                                        it_tadir_type      = it_tadir_type ).
+    lo_api_state_filter_helper->create_api_filter( ).
 
-    DATA lt_api_filters TYPE zif_sat_ty_object_search=>ty_t_value_range.
-    DATA lt_state_filters TYPE zif_sat_ty_object_search=>ty_t_value_range.
-
-    DATA(lf_single_tadir_type) = xsdbool( lines( it_tadir_type ) = 1 ).
-
-    DATA(lt_conditions) = VALUE zsat_join_condition_data_t( ( field           = 'objectname'
-                                                              ref_field       = iv_ref_field
-                                                              ref_table_alias = iv_ref_table_alias
-                                                              type            = zif_sat_c_join_cond_type=>field ) ).
-
-    IF lf_single_tadir_type = abap_true.
-      lt_conditions = VALUE #( BASE lt_conditions
-                               ( field         = 'objecttype'
-                                 tabname_alias = CONV #( c_api_alias )
-                                 value         = it_tadir_type[ 1 ]
-                                 type          = zif_sat_c_join_cond_type=>filter ) ).
-    ENDIF.
-
-    add_join_table( iv_join_table = |{ zif_sat_c_select_source_id=>zsat_i_apistates }|
-                    iv_alias      = c_api_alias
-                    it_conditions = lt_conditions ).
-
-    set_distinct_required( ).
-
-    LOOP AT it_values INTO DATA(ls_value).
-
-      CASE ls_value-low.
-
-        WHEN zif_sat_c_object_search=>c_api_option_value-released OR
-             zif_sat_c_object_search=>c_api_option_value-deprecated.
-          lt_state_filters = VALUE #( BASE lt_state_filters ( ls_value ) ).
-
-        WHEN OTHERS.
-          lt_api_filters = VALUE #( BASE lt_api_filters ( ls_value ) ).
-      ENDCASE.
-
-    ENDLOOP.
-
-    IF lf_single_tadir_type = abap_false.
-      add_option_filter( iv_fieldname = |{ c_api_alias }~objecttype|
-                         it_values    = VALUE #( FOR type IN it_tadir_type
-                                                 ( sign = 'I' option = 'EQ' low = type ) ) ).
-    ENDIF.
-
-    IF lt_api_filters IS NOT INITIAL.
-
-      add_option_filter( iv_fieldname = |{ c_api_alias }~filtervalue|
-                         it_values    = lt_api_filters ).
-    ENDIF.
-
-    IF lt_state_filters IS NOT INITIAL.
-      add_option_filter( iv_fieldname = |{ c_api_alias }~apistate|
-                         it_values    = lt_state_filters ).
+    IF     ms_search_engine_params-use_and_cond_for_options = abap_true
+       AND lo_api_state_filter_helper->has_including_filters( ).
+      mf_grouping_required = abap_true.
     ENDIF.
   ENDMETHOD.
 
@@ -784,6 +740,7 @@ CLASS zcl_sat_base_search_provider IMPLEMENTATION.
            ms_join_def,
            mf_excluding_found,
            mf_distinct_required,
+           mf_grouping_required,
            mf_devclass_join_added.
   ENDMETHOD.
 
