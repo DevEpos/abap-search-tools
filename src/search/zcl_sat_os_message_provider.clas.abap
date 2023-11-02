@@ -40,7 +40,7 @@ ENDCLASS.
 
 CLASS zcl_sat_os_message_provider IMPLEMENTATION.
   METHOD prepare_search.
-    set_base_select_table( iv_entity = |{ zif_sat_c_select_source_id=>zsat_i_messageclass }|
+    set_base_select_table( iv_entity = zif_sat_c_select_source_id=>zsat_i_messageclass
                            iv_alias  = c_aliases-msg_clas ).
 
     add_join_table( iv_join_table = |{ zif_sat_c_select_source_id=>zsat_i_message }|
