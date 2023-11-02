@@ -246,7 +246,10 @@ CLASS zcl_sat_clsintf_query_config IMPLEMENTATION.
                           `6r08l71Ptg5ZWZ3dzKyu64vxrf6ClKW6yfCszIv38a+9hYC5/mMlwNwom59oxhlssEhleinNhJE9fXuMP9n6QjjVNc53j5vKks+ihsIHuxybNp5vOPKVQVuLPepVkSw2SPG4luZxzR/S0pIfC6jzCza5` &&
                           `p+oiwX1nakOOq/YlSJn9uXG3VEwNMBzQM1Sqn9n7pmOXoHY85GjzwCOXqm/iYYReKmURlzK86FAIi45rQkgU7FJ+DjkUZ48d/Nf4BdpeseqJ1iPyAAAAAElFTkSuQmCC` )
         allowed_length   = 30
-        patterns         = abap_true ).
+        patterns         = abap_true
+        content_assist   = VALUE #( assist_type      = zif_sat_c_object_search=>c_filter_content_assist_type-ris
+                                    adt_object_types = VALUE #( ( |{ zif_sat_c_tadir_types=>interface }| )
+                                                                ( |{ zif_sat_c_tadir_types=>class }| ) ) ) ).
   ENDMETHOD.
 
   METHOD get_super_type_filter.
