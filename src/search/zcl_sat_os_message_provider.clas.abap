@@ -9,8 +9,7 @@ CLASS zcl_sat_os_message_provider DEFINITION
     INTERFACES zif_sat_c_os_mess_options.
 
   PROTECTED SECTION.
-    METHODS prepare_search     REDEFINITION.
-    METHODS determine_grouping REDEFINITION.
+    METHODS prepare_search       REDEFINITION.
 
   PRIVATE SECTION.
     ALIASES c_msg_search_params FOR zif_sat_c_os_mess_options~c_filter_key.
@@ -63,12 +62,16 @@ CLASS zcl_sat_os_message_provider IMPLEMENTATION.
                       iv_entity          = c_aliases-msg_clas ).
     add_select_field( iv_fieldname       = c_fields-message_class
                       iv_fieldname_alias = c_result_fields-raw_object_name
-                      iv_entity          = c_aliases-msg_clas ).
-    add_select_field( iv_fieldname = c_fields-changed_by iv_fieldname_alias = c_result_fields-changed_by iv_entity = c_aliases-message ).
+                      iv_entity          = c_aliases-msg_clas
+                      if_no_grouping     = abap_true ).
+    add_select_field( iv_fieldname       = c_fields-changed_by
+                      iv_fieldname_alias = c_result_fields-changed_by
+                      iv_entity          = c_aliases-message ).
     add_select_field( iv_fieldname       = c_fields-changed_on
                       iv_fieldname_alias = c_result_fields-changed_date
                       iv_entity          = c_aliases-message ).
-    add_select_field( iv_fieldname = c_fields-description  iv_entity = c_aliases-msg_clas ).
+    add_select_field( iv_fieldname = c_fields-description
+                      iv_entity    = c_aliases-msg_clas ).
     add_select_field( iv_fieldname       = c_fields-development_package
                       iv_fieldname_alias = c_result_fields-devclass
                       iv_entity          = c_aliases-msg_clas ).
@@ -78,7 +81,9 @@ CLASS zcl_sat_os_message_provider IMPLEMENTATION.
     add_select_field( iv_fieldname       = c_fields-short_text
                       iv_fieldname_alias = c_result_fields-message_short_text
                       iv_entity          = c_aliases-message ).
-    add_select_field( iv_fieldname = |'{ zif_sat_c_tadir_types=>message_class }'| iv_fieldname_alias = c_result_fields-tadir_type ).
+    add_select_field( iv_fieldname       = |'{ zif_sat_c_tadir_types=>message_class }'|
+                      iv_fieldname_alias = c_result_fields-tadir_type
+                      if_no_grouping     = abap_true ).
 
     add_search_terms_to_search(
         iv_target = zif_sat_c_object_search=>c_search_fields-object_name_input_key
@@ -97,22 +102,6 @@ CLASS zcl_sat_os_message_provider IMPLEMENTATION.
     configure_message_filters( ).
 
     new_and_cond_list( ).
-  ENDMETHOD.
-
-  METHOD determine_grouping.
-    CHECK ms_search_engine_params-use_and_cond_for_options = abap_true.
-
-    IF mf_grouping_required = abap_false.
-      RETURN.
-    ENDIF.
-
-    add_group_by_clause( |{ c_aliases-msg_clas }~{ c_fields-message_class }| ).
-    add_group_by_clause( |{ c_aliases-msg_clas }~{ c_fields-development_package }| ).
-    add_group_by_clause( |{ c_aliases-msg_clas }~{ c_fields-description }| ).
-    add_group_by_clause( |{ c_aliases-message }~{ c_fields-changed_on }| ).
-    add_group_by_clause( |{ c_aliases-message }~{ c_fields-changed_by }| ).
-    add_group_by_clause( |{ c_aliases-message }~{ c_fields-message_number }| ).
-    add_group_by_clause( |{ c_aliases-message }~{ c_fields-short_text }| ).
   ENDMETHOD.
 
   METHOD configure_msg_clas_filters.
