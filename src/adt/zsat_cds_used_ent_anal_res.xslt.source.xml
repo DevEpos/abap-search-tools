@@ -52,20 +52,48 @@
     </tt:context>
 
     <cdsanalysis:usageInformation tt:extensible="deep">
-      <tt:cond check="not-initial(usage_info.occurrence)">
-        <tt:attribute name="cdsanalysis:occurrence" value-ref="usage_info.occurrence"/>
+      <tt:cond check="not-initial(usage_info.occurrences)">
+        <tt:attribute name="cdsanalysis:occurrence" value-ref="usage_info.occurrences"/>
       </tt:cond>
 
-      <tt:cond check="not-initial(usage_info.entity_count)">
-        <tt:attribute name="cdsanalysis:entityCount" value-ref="usage_info.entity_count"/>
+      <tt:cond check="not-initial(usage_info.cds_view_count)">
+        <tt:attribute name="cdsanalysis:cdsViewCount" value-ref="usage_info.cds_view_count"/>
+      </tt:cond>
+
+      <tt:cond check="not-initial(usage_info.table_func_count)">
+        <tt:attribute name="cdsanalysis:tableFunctionCount" value-ref="usage_info.table_func_count"/>
+      </tt:cond>
+
+      <tt:cond check="not-initial(usage_info.view_count)">
+        <tt:attribute name="cdsanalysis:viewCount" value-ref="usage_info.view_count"/>
+      </tt:cond>
+
+      <tt:cond check="not-initial(usage_info.table_count)">
+        <tt:attribute name="cdsanalysis:tableCount" value-ref="usage_info.table_count"/>
       </tt:cond>
 
       <tt:cond check="not-initial(usage_info.join_count)">
         <tt:attribute name="cdsanalysis:joinCount" value-ref="usage_info.join_count"/>
       </tt:cond>
 
-      <tt:cond check="not-initial(usage_info.union_count)">
-        <tt:attribute name="cdsanalysis:unionCount" value-ref="usage_info.union_count"/>
+      <tt:cond check="not-initial(usage_info.set_operation_count)">
+        <tt:attribute name="cdsanalysis:setOperationCount" value-ref="usage_info.set_operation_count"/>
+      </tt:cond>
+
+      <tt:cond check="not-initial(usage_info.group_by_count)">
+        <tt:attribute name="cdsanalysis:groupByCount" value-ref="usage_info.group_by_count"/>
+      </tt:cond>
+
+      <tt:cond check="not-initial(usage_info.function_count)">
+        <tt:attribute name="cdsanalysis:functionCount" value-ref="usage_info.function_count"/>
+      </tt:cond>
+
+      <tt:cond check="not-initial(usage_info.case_count)">
+        <tt:attribute name="cdsanalysis:caseCount" value-ref="usage_info.case_count"/>
+      </tt:cond>
+
+      <tt:cond check="not-initial(usage_info.cast_count)">
+        <tt:attribute name="cdsanalysis:castCount" value-ref="usage_info.cast_count"/>
       </tt:cond>
     </cdsanalysis:usageInformation>
   </tt:template>
