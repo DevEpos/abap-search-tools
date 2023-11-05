@@ -126,23 +126,16 @@ CLASS zcl_sat_adt_cds_parser IMPLEMENTATION.
       RETURN.
     ENDIF.
 
-    SELECT SINGLE
+    SELECT *
       FROM ddddlsrc
-      FIELDS *
-      WHERE ddlname = @lv_ddlname
-      INTO @DATA(ls_cds).
+      WHERE (    ddlname = @lv_ddlname
+              OR parentname = @lv_ddlname )
+        AND as4local = 'A'
+      INTO TABLE @lt_ddlsources.
+
     IF sy-subrc <> 0.
       RETURN.
     ENDIF.
-
-    lt_ddlsources = VALUE #( ( ls_cds ) ).
-
-    " find extend views for given cds and include them in the parser
-    SELECT *
-      FROM ddddlsrc
-      WHERE parentname = @lv_ddlname
-        AND as4local = 'A'
-      APPENDING TABLE @lt_ddlsources.
 
     DATA(lo_parser) = NEW cl_ddl_parser( ).
     DATA(lo_stmnt) = lo_parser->parse_cds( it_sources = lt_ddlsources
