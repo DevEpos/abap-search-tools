@@ -1,8 +1,7 @@
 "! <p class="shorttext synchronized">Resource for CDS Used Entities Analysis</p>
 CLASS zcl_sat_adt_res_cds_a_used_ent DEFINITION
   PUBLIC
-  INHERITING FROM zcl_sat_adt_res_cds_analysis
-  FINAL
+  INHERITING FROM zcl_sat_adt_res_cds_analysis FINAL
   CREATE PUBLIC.
 
   PUBLIC SECTION.
@@ -38,8 +37,9 @@ CLASS zcl_sat_adt_res_cds_a_used_ent IMPLEMENTATION.
          OR ddlname  = @mv_cds_view
       INTO @DATA(ls_root).
 
-    DATA(ls_dependency_info) = zcl_sat_cds_dep_analyzer=>get_used_entities( iv_cds_view_name = |{ ls_root-ddlname }|
-                                                                            if_for_adt       = abap_true ).
+    DATA(lt_dependencies) = NEW zcl_sat_cds_usage_analyzer(
+                                    if_adt     = abap_true
+                                    iv_ddlname = |{ ls_root-ddlname }| )->analyze_dependencies( ).
 
     DATA(ls_root_adt_object) = zcl_sat_adt_util=>create_adt_uri( iv_type  = zif_sat_c_entity_type=>cds_view
                                                                  iv_name  = space
@@ -52,7 +52,7 @@ CLASS zcl_sat_adt_res_cds_a_used_ent IMPLEMENTATION.
                                        type     = ls_root_adt_object-type
                                        uri      = ls_root_adt_object-uri ).
 
-    LOOP AT ls_dependency_info-dependencies REFERENCE INTO DATA(lr_dependency).
+    LOOP AT lt_dependencies REFERENCE INTO DATA(lr_dependency).
       DATA(ls_used_entity) = VALUE zif_sat_ty_adt_types=>ty_cds_used_entity(
                                        entity_ref = VALUE #( name        = lr_dependency->name
                                                              alt_name    = lr_dependency->raw_name
@@ -60,10 +60,7 @@ CLASS zcl_sat_adt_res_cds_a_used_ent IMPLEMENTATION.
                                                              type        = lr_dependency->adt_type
                                                              description = lr_dependency->description
                                                              uri         = lr_dependency->uri )
-                                       usage_info = VALUE #( occurrence   = lr_dependency->occurrence
-                                                             join_count   = lr_dependency->used_join_count
-                                                             entity_count = lr_dependency->used_entities_count
-                                                             union_count  = lr_dependency->used_union_count ) ).
+                                       usage_info = CORRESPONDING #( lr_dependency->* ) ).
 
       IF lr_dependency->api_state IS NOT INITIAL.
         ls_used_entity-entity_ref-properties = VALUE #( BASE ls_used_entity-entity_ref-properties
