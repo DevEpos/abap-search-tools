@@ -105,10 +105,18 @@ INTERFACE zif_sat_ty_adt_types
     END OF ty_cds_top_down_result,
 
     BEGIN OF ty_cds_ent_usage_info,
-      occurrence   TYPE i,
-      entity_count TYPE i,
-      join_count   TYPE i,
-      union_count  TYPE i,
+      occurrences         TYPE i,
+      cds_view_count      TYPE i,
+      table_func_count    TYPE i,
+      view_count          TYPE i,
+      table_count         TYPE i,
+      "! Union, Except, intersect
+      set_operation_count TYPE i,
+      join_count          TYPE i,
+      group_by_count      TYPE i,
+      cast_count          TYPE i,
+      case_count          TYPE i,
+      function_count      TYPE i,
     END OF ty_cds_ent_usage_info,
 
     BEGIN OF ty_cds_used_entity,
