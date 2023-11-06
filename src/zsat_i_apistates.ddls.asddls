@@ -3,7 +3,7 @@
 @AccessControl.authorizationCheck: #CHECK
 @EndUserText.label: 'API states'
 
-define view ZSAT_I_APIStates
+define view ZSAT_I_ApiStates
   as select distinct from ZSAT_P_ArsApis as api
 {
   key api.ObjectType,
