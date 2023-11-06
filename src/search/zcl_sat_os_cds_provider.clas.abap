@@ -220,6 +220,7 @@ CLASS zcl_sat_os_cds_provider IMPLEMENTATION.
           CHECK <ls_option>-value_range IS NOT INITIAL.
           DATA(lf_views_with_parameters) = xsdbool( <ls_option>-value_range[ 1 ]-low = abap_true ).
           IF lf_views_with_parameters = abap_true.
+            set_filters_active( ).
             add_join_table(
                 iv_join_table = get_cds_sql_name( |{ zif_sat_c_select_source_id=>zsat_i_cdsviewwithparameter }| )
                 iv_alias      = c_parameterized_view_alias
