@@ -106,7 +106,8 @@ CLASS zcl_sat_ddicview_query_config IMPLEMENTATION.
                 ( name = zif_sat_c_os_view_options=>c_view_class-ext-database    description = 'Database View' )
                 ( name = zif_sat_c_os_view_options=>c_view_class-ext-help        description = 'Help View' )
                 ( name = zif_sat_c_os_view_options=>c_view_class-ext-projection  description = 'Projection View' )
-                ( name = zif_sat_c_os_view_options=>c_view_class-ext-maintenance description = 'Maintenance View' ) )
+                ( name = zif_sat_c_os_view_options=>c_view_class-ext-maintenance description = 'Maintenance View' )
+                ( name = zif_sat_c_os_view_options=>c_view_class-ext-external    description = 'External View (HANA)' ) )
             proposal_images = VALUE #( ( img_key     = c_general_image_keys-type_group
                                          img_encoded = get_general_image( c_general_image_keys-type_group ) ) )  ) ).
   ENDMETHOD.
