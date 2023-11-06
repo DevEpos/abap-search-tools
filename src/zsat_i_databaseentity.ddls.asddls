@@ -31,7 +31,7 @@ union select from ZSAT_I_DatabaseView
   ChangedDate,
   Type
 }
-union select from ZSAT_I_CDSEntity
+union select from ZSAT_I_CdsEntity
 {
   EntityId    as Entity,
   RawEntityId as EntityRaw,

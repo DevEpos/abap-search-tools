@@ -12,7 +12,7 @@ define view ZSAT_P_Cds
     left outer join dd02b                as CdsEntityHeader  on  StructuredObject.EntityName = CdsEntityHeader.strucobjn
                                                              and CdsEntityHeader.as4local    = 'A'
 {
-  key Source.ddlname,
+  key Source.ddlname                as DdlName,
       CdsEntityHeader.strucobjn     as EntityId,
       CdsEntityHeader.strucobjn_raw as RawEntityId,
       StructuredObject.ViewName,
