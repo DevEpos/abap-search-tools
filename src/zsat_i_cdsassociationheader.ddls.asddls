@@ -4,10 +4,10 @@
 @AccessControl.authorizationCheck: #CHECK
 @EndUserText.label: 'Header of Association in CDS View'
 
-define view ZSAT_I_CDSAssociationHeader
+define view ZSAT_I_CdsAssociationHeader
   as select from dd08b as Header
-  association [1..*] to ZSAT_I_CDSAssociationField as _AssociationField on  Header.strucobjn       = _AssociationField.Entity
-                                                                         and Header.associationname = _AssociationField.AssociationName
+  association [1..*] to ZSAT_I_CdsAssociationField as _AssociationField on  Header.strucobjn       = _AssociationField.Entity
+                                                                        and Header.associationname = _AssociationField.AssociationName
 {
   key strucobjn       as SourceEntity,
   key associationname as AssociationName,

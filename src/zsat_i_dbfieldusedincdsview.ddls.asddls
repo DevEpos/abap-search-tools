@@ -8,10 +8,10 @@ define view ZSAT_I_DbFieldUsedInCdsView
   with parameters
     P_BaseTable : tabname,
     P_BaseField : fieldname
-  as select distinct from dd27s                as ViewField
-    inner join            ZSAT_P_CDSViewBase  as CdsBase  on ViewField.viewname = CdsBase.ViewName
+  as select distinct from dd27s               as ViewField
+    inner join            ZSAT_P_CdsViewBase  as CdsBase  on ViewField.viewname = CdsBase.ViewName
     inner join            ZSAT_I_CdsViewField as CdsField on  CdsBase.EntityId   = CdsField.EntityId
-                                                           and CdsField.FieldName = ViewField.viewfield
+                                                          and CdsField.FieldName = ViewField.viewfield
 {
   key case
      when CdsBase.RawEntityId <> '' then CdsBase.RawEntityId

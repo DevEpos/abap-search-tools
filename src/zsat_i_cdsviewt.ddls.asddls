@@ -6,7 +6,7 @@
 
 @VDM.viewType: #BASIC
 
-define view ZSAT_I_CDSViewT
+define view ZSAT_I_CdsViewT
   as select distinct from ddddlsrct    as Text
 {
   key    Text.ddlname    as DdlName,
