@@ -16,6 +16,7 @@ define view ZSAT_I_CdsFromPartEntity
 }
 where
       BaseTable.as4local = 'A'
+  and BaseTable.tabname  not like 'DDDDL%TYPES'
 -- CDS views which have Database Views (not DDL Views of CDS views) in select part
 union select from dd26s as BaseTable
   inner join      tadir as Repo on  BaseTable.tabname = Repo.obj_name
