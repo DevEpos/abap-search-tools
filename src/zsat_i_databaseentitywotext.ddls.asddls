@@ -6,7 +6,8 @@
 
 define view ZSAT_I_DatabaseEntityWoText
   as select from tadir as Repo
-    inner join   dd02l as Table on Repo.obj_name = Table.tabname
+    inner join   dd02l as Table on  Repo.obj_name  = Table.tabname
+                                and Table.as4local = 'A'
 {
   Table.tabname as Entity,
   'T'           as Type

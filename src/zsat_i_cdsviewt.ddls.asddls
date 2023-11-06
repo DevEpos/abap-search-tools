@@ -25,3 +25,5 @@ define view ZSAT_I_CdsViewT
          FallbackText.ddtext     as FallbackDescription,
          EndUserText.ddtext      as EnduserDescription
 }
+where
+  FallbackText.as4local = 'A'
