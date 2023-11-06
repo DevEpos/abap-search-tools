@@ -4,7 +4,7 @@
 @AccessControl.authorizationCheck: #NOT_REQUIRED
 @EndUserText.label: 'On Condition Field of Assoc. in CDS View'
 
-define view ZSAT_I_CDSAssociationField
+define view ZSAT_I_CdsAssociationField
   as select from dd05b
 {
   key strucobjn       as Entity,

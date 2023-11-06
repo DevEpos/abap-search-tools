@@ -6,13 +6,13 @@
 
 @VDM.private: true
 
-define view ZSAT_P_CDSViewBase
+define view ZSAT_P_CdsViewBase
   as select from ZSAT_P_Cds as CdsBase
-    inner join   tadir      as Repo on  CdsBase.ddlname = Repo.obj_name
+    inner join   tadir      as Repo on  CdsBase.DdlName = Repo.obj_name
                                     and Repo.pgmid      = 'R3TR'
                                     and Repo.object     = 'DDLS'
 {
-  key CdsBase.ddlname,
+  key CdsBase.DdlName,
       CdsBase.EntityId,
       CdsBase.RawEntityId,
       CdsBase.ViewName,
