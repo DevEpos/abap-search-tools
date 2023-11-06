@@ -77,7 +77,6 @@ CLASS zcl_sat_base_search_provider DEFINITION
     DATA mt_having TYPE string_table.
     DATA mt_from TYPE TABLE OF string.
     DATA ms_join_def TYPE zif_sat_ty_global=>ty_s_join_def.
-    DATA mf_excluding_found TYPE abap_bool.
     DATA mv_description_filter_field TYPE string.
     DATA mt_fields_for_grouping TYPE string_table.
 
@@ -266,6 +265,9 @@ CLASS zcl_sat_base_search_provider DEFINITION
         iv_fieldname TYPE string.
 
     METHODS set_distinct_required.
+    "! Manual switch to indicate that filters are available
+    "! and the provider should execute the search
+    METHODS set_filters_active.
     METHODS reset.
 
   PRIVATE SECTION.
@@ -276,6 +278,8 @@ CLASS zcl_sat_base_search_provider DEFINITION
     DATA mf_devclass_join_added TYPE abap_bool.
     DATA mf_distinct_required TYPE abap_bool.
     DATA mf_grouping_required TYPE abap_bool.
+    DATA mf_excluding_found TYPE abap_bool.
+    DATA mf_filters_active TYPE abap_bool.
     DATA mo_logger TYPE REF TO zcl_sat_os_logger.
 
     METHODS get_select_string
@@ -769,6 +773,7 @@ CLASS zcl_sat_base_search_provider IMPLEMENTATION.
            mt_from,
            ms_join_def,
            mf_excluding_found,
+           mf_filters_active,
            mf_distinct_required,
            mf_grouping_required,
            mf_devclass_join_added.
@@ -776,6 +781,10 @@ CLASS zcl_sat_base_search_provider IMPLEMENTATION.
 
   METHOD set_distinct_required.
     mf_distinct_required = abap_true.
+  ENDMETHOD.
+
+  METHOD set_filters_active.
+    mf_filters_active = abap_true.
   ENDMETHOD.
 
   METHOD get_select_string.
@@ -823,7 +832,8 @@ CLASS zcl_sat_base_search_provider IMPLEMENTATION.
 
     IF     mt_criteria     IS INITIAL
        AND mt_criteria_and IS INITIAL
-       AND mt_criteria_or  IS INITIAL.
+       AND mt_criteria_or  IS INITIAL
+       AND mf_filters_active = abap_false.
       result = abap_false.
       RETURN.
     ENDIF.
