@@ -8,13 +8,13 @@
 @AccessControl.authorizationCheck: #CHECK
 @EndUserText.label: 'CDS View fields with assigned Value H.'
 
-define view ZSAT_I_CDSFieldValueWithVH
+define view ZSAT_I_CdsFieldValueWithVH
   as select from ddfieldanno
 {
-  key strucobjn                                     as Entity,
-  key lfieldname                                    as FieldName,
-      value                                         as AssociationNameRaw,
-      upper(replace(value, '''', ''))               as AssociationName
+  key strucobjn                       as Entity,
+  key lfieldname                      as FieldName,
+      value                           as AssociationNameRaw,
+      upper(replace(value, '''', '')) as AssociationName
 }
 where
      name = 'OBJECTMODEL.FOREIGNKEY.ASSOCIATION'

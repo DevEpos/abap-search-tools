@@ -4,7 +4,7 @@
 @AccessControl.authorizationCheck: #CHECK
 @EndUserText.label: 'Referenced clses in CDS views via Annot.'
 
-define view ZSAT_I_CDSReferencedClsInAnno
+define view ZSAT_I_CdsReferencedClsInAnno
   as select from ZSAT_I_CdsAnnotation
 {
   EntityId,
