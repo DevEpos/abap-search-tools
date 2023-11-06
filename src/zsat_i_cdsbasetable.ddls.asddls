@@ -22,6 +22,9 @@ define view ZSAT_I_CdsBaseTable
   Repo.genflag       as GenerationFlag
 }
 where
-     Repo.object = 'VIEW'
-  or Repo.object = 'STOB'
-  or Repo.object = 'TABL'
+       BaseTable.as4local = 'A'
+  and(
+       Repo.object        = 'VIEW'
+    or Repo.object        = 'STOB'
+    or Repo.object        = 'TABL'
+  )

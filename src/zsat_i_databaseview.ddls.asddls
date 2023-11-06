@@ -10,8 +10,10 @@ define view ZSAT_I_DatabaseView
   as select from    ZSAT_P_DatabaseView as DbView
     left outer join dd25t               as Text         on  DbView.ViewName = Text.viewname
                                                         and Text.ddlanguage = $parameters.p_language
+                                                        and Text.as4local   = 'A'
     left outer join dd25t               as FallBackText on  DbView.ViewName         = FallBackText.viewname
                                                         and FallBackText.ddlanguage = DbView.OriginalLanguage
+                                                        and FallBackText.as4local   = 'A'
 {
   DbView.ViewName,
   $parameters.p_language as Language,
