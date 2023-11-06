@@ -19,12 +19,14 @@ INTERFACE zif_sat_c_os_view_options
         help        TYPE viewclass VALUE 'H',
         projection  TYPE viewclass VALUE 'P',
         maintenance TYPE viewclass VALUE 'C',
+        external    TYPE viewclass VALUE 'X',
       END OF int,
       BEGIN OF ext,
         database    TYPE string VALUE 'DATABASE',
         help        TYPE string VALUE 'HELP',
         projection  TYPE string VALUE 'PROJECTION',
         maintenance TYPE string VALUE 'MAINTENANCE',
+        external    TYPE string VALUE 'EXTERNAL',
       END OF ext,
     END OF c_view_class.
 ENDINTERFACE.
