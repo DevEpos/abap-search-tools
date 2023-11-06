@@ -8,13 +8,12 @@ CLASS zcl_sat_cds_usage_analyzer DEFINITION
     TYPES:
       BEGIN OF ty_metrics,
         occurrences         TYPE i,
-        "! Union, Except, intersect
-        entity_count        TYPE i,
         cds_view_count      TYPE i,
         table_func_count    TYPE i,
         view_count          TYPE i,
         table_count         TYPE i,
         join_count          TYPE i,
+        "! Union, Except, intersect
         set_operation_count TYPE i,
         group_by_count      TYPE i,
         cast_count          TYPE i,
@@ -230,8 +229,10 @@ CLASS zcl_sat_cds_usage_analyzer IMPLEMENTATION.
     mv_ignore = if_qlast_visitor=>bitmask_ignore_associations BIT-OR
                 if_qlast_visitor=>bitmask_ignore_path BIT-OR
                 if_qlast_visitor=>bitmask_ignore_annotations BIT-OR
-*                if_qlast_visitor=>bitmask_ignore_group_by BIT-OR
-                if_qlast_visitor=>bitmask_ignore_where BIT-OR
+                " Not Ignored to count GROUP BY Clause
+                " if_qlast_visitor=>bitmask_ignore_group_by BIT-OR
+                " Not ignored to collect function calls in WHERE clauses
+                " if_qlast_visitor=>bitmask_ignore_where BIT-OR
                 if_qlast_visitor=>bitmask_ignore_filter BIT-OR
                 if_qlast_visitor=>bitmask_ignore_order_by BIT-OR
                 if_qlast_visitor=>bitmask_ignore_ast_base.
@@ -662,16 +663,22 @@ CLASS zcl_sat_cds_usage_analyzer IMPLEMENTATION.
     lt_ddlname_range = VALUE #( FOR cds IN mt_entities
                                 WHERE ( entity_type = zif_sat_c_entity_type=>cds_view )
                                 ( sign = 'I' option = 'EQ' low = cds-entity_name ) ).
+    IF lt_ddlname_range IS INITIAL.
+      RETURN.
+    ENDIF.
+
     SELECT entityid,
            rawentityid,
            ddlname,
            sourcetype,
-           \_apistate-apistate,
+           \_apistate-apistate AS apistate,
            description,
            developmentpackage,
            createdby
       FROM zsat_i_cdsentity
       WHERE ddlname IN @lt_ddlname_range
+      ORDER BY ddlname,
+               \_apistate-apistate DESCENDING
       INTO CORRESPONDING FIELDS OF TABLE @result.
   ENDMETHOD.
 
@@ -681,6 +688,10 @@ CLASS zcl_sat_cds_usage_analyzer IMPLEMENTATION.
     lt_table_range = VALUE #( FOR table IN mt_entities
                               WHERE ( entity_type = zif_sat_c_entity_type=>table )
                               ( sign = 'I' option = 'EQ' low = table-entity_name ) ).
+    IF lt_table_range IS INITIAL.
+      RETURN.
+    ENDIF.
+
     SELECT tablename,
            description,
            developmentpackage,
@@ -696,6 +707,10 @@ CLASS zcl_sat_cds_usage_analyzer IMPLEMENTATION.
     lt_view_range = VALUE #( FOR view IN mt_entities
                              WHERE ( entity_type = zif_sat_c_entity_type=>view )
                              ( sign = 'I' option = 'EQ' low = view-entity_name ) ).
+    IF lt_view_range IS INITIAL.
+      RETURN.
+    ENDIF.
+
     SELECT viewname,
            description,
            developmentpackage,
