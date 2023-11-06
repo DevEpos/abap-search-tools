@@ -33,7 +33,7 @@ union select from ZSAT_I_DatabaseView(p_language : $parameters.p_language)
   ChangedDate,
   Type
 }
-union select from ZSAT_I_CDSEntity(p_language : $parameters.p_language)
+union select from ZSAT_I_CdsEntity(p_language : $parameters.p_language)
 {
   EntityId    as Entity,
   RawEntityId as EntityRaw,
