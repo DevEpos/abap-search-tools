@@ -9,6 +9,7 @@ define view ZSAT_I_DatabaseTable
     inner join            dd02l as DbTable on DbTable.tabname  = Repo.obj_name
     left outer join       dd02t as Text    on  Text.tabname    = DbTable.tabname
                                            and Text.ddlanguage = $session.system_language
+                                           and Text.as4local   = 'A'
 {
   key DbTable.tabname          as TableName,
       DbTable.contflag         as DeliveryClass,
