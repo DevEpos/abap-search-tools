@@ -13,6 +13,7 @@ define view ZSAT_I_CdsEntity
   as select from    ZSAT_P_CdsViewBase as Base
     left outer join ddddlsrct          as Text on  Text.ddlname    = Base.DdlName
                                                and Text.ddlanguage = $parameters.p_language
+                                               and Text.as4local   = 'A'
 {
   Base.EntityId,
   Base.RawEntityId,

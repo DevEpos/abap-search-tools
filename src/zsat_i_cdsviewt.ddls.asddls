@@ -13,3 +13,5 @@ define view ZSAT_I_CdsViewT
   key    Text.ddlanguage as Language,
          Text.ddtext     as Description
 }
+where
+  FallbackText.as4local = 'A'
