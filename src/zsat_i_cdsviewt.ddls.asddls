@@ -6,7 +6,7 @@
 
 @VDM.viewType: #BASIC
 
-define view ZSAT_I_CDSViewT
+define view ZSAT_I_CdsViewT
   as select distinct from ddddlsrct    as FallbackText
     left outer join       ddddlsrc02bt as EndUserText on  EndUserText.ddlname    = FallbackText.ddlname
                                                       and EndUserText.as4local   = 'A'

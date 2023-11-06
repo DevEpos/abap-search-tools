@@ -9,10 +9,10 @@ define view ZSAT_I_DbFieldUsedInCdsView
     P_BaseTable : tabname,
     P_BaseField : fieldname
   as select distinct from ZSAT_I_CdsBaseField as ViewField
-    inner join            ZSAT_P_CDSViewBase  as CdsBase  on ViewField.ViewName = CdsBase.ViewName
+    inner join            ZSAT_P_CdsViewBase  as CdsBase  on ViewField.ViewName = CdsBase.ViewName
     inner join            ZSAT_I_CdsViewField as CdsField on  CdsBase.EntityId   = CdsField.EntityId
                                                           and CdsField.FieldName = ViewField.ViewField
-    left outer join       ZSAT_I_APIStates    as ApiState on  CdsBase.DdlName     =  ApiState.ObjectName
+    left outer join       ZSAT_I_ApiStates    as ApiState on  CdsBase.DdlName     = ApiState.ObjectName
                                                           and ApiState.ObjectType = 'DDLS'
 {
   key case

@@ -8,7 +8,7 @@
 @AccessControl.authorizationCheck: #NOT_REQUIRED
 @EndUserText.label: 'CDS View fields with assigned Value H.'
 
-define view ZSAT_I_CDSFieldValueWithVH
+define view ZSAT_I_CdsFieldValueWithVH
   as select from ddfieldanno
 {
   key strucobjn                       as Entity,

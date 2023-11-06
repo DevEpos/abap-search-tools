@@ -7,15 +7,15 @@
 @AccessControl.authorizationCheck: #NOT_REQUIRED
 @EndUserText.label: 'Entity in Data Definition'
 
-define view ZSAT_I_CDSEntity
-  as select from    ZSAT_P_CDSViewBase as Base
+define view ZSAT_I_CdsEntity
+  as select from    ZSAT_P_CdsViewBase as Base
     left outer join ddddlsrc02bt       as Text         on  Text.ddlname    = Base.DdlName
                                                        and Text.strucobjn  = Base.EntityId
                                                        and Text.ddlanguage = $session.system_language
     left outer join ddddlsrct          as FallbackText on  FallbackText.ddlname    = Base.DdlName
                                                        and FallbackText.ddlanguage = Base.OriginalLanguage
-  association [0..*] to ZSAT_I_APIStates as _ApiState on  Base.DdlName          =  _ApiState.ObjectName
-                                                      and _ApiState.ObjectType  =  'DDLS'
+  association [0..*] to ZSAT_I_ApiStates as _ApiState on  Base.DdlName         = _ApiState.ObjectName
+                                                      and _ApiState.ObjectType = 'DDLS'
 {
   Base.EntityId,
   Base.RawEntityId,

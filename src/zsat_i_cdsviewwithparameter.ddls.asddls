@@ -4,7 +4,7 @@
 @AccessControl.authorizationCheck: #NOT_REQUIRED
 @EndUserText.label: 'CDS View that has parameters'
 
-define view ZSAT_I_CDSViewWithParameter
+define view ZSAT_I_CdsViewWithParameter
   as select distinct from dd10b
 {
   key strucobjn as EntityId
