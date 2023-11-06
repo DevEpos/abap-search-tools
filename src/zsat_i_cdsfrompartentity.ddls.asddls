@@ -5,7 +5,7 @@
 @EndUserText.label: 'Entities in Select From clause of CDS'
 
 -- CDS views which have Database tables in select part
-define view ZSAT_I_CDSFromPartEntity
+define view ZSAT_I_CdsFromPartEntity
   as select from dd26s as BaseTable
     inner join   dd02l as DbTable on  BaseTable.tabname = DbTable.tabname
                                   and DbTable.tabclass  = 'TRANSP'

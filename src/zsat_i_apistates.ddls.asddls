@@ -3,7 +3,7 @@
 @AccessControl.authorizationCheck: #CHECK
 @EndUserText.label: 'API states'
 
-define view ZSAT_I_APIStates
+define view ZSAT_I_ApiStates
   as select from SRIS_API_STATES_AGGREGATED
 {
   key trobjtype                            as ObjectType,
