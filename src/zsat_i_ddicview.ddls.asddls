@@ -11,8 +11,10 @@ define view ZSAT_I_DdicView
                                           and Repo.object   = 'VIEW'
     left outer join dd25t as Text         on  DbView.viewname = Text.viewname
                                           and Text.ddlanguage = $session.system_language
+                                          and Text.as4local   = 'A'
     left outer join dd25t as FallBackText on  DbView.viewname         = FallBackText.viewname
                                           and FallBackText.ddlanguage = Repo.masterlang
+                                          and FallBackText.as4local   = 'A'
 {
   key DbView.viewname          as ViewName,
       DbView.viewclass         as ViewClass,

@@ -28,6 +28,7 @@ define view ZSAT_I_DbFieldUsedInCdsView
       ApiState.APIState
 }
 where
-      ViewField.BaseTable   = $parameters.P_BaseTable
+      ViewField.as4local    = 'A'
+  and ViewField.BaseTable   = $parameters.P_BaseTable
   and ViewField.FieldName   = $parameters.P_BaseField
   and CdsBase.ParentDdlName = ''
