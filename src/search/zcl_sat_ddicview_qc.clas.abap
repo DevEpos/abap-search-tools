@@ -30,7 +30,9 @@ CLASS zcl_sat_ddicview_qc IMPLEMENTATION.
                              WHEN zif_sat_c_os_view_options=>c_view_class-ext-maintenance THEN
                                zif_sat_c_os_view_options=>c_view_class-int-maintenance
                              WHEN zif_sat_c_os_view_options=>c_view_class-ext-projection THEN
-                               zif_sat_c_os_view_options=>c_view_class-int-projection ).
+                               zif_sat_c_os_view_options=>c_view_class-int-projection
+                             WHEN zif_sat_c_os_view_options=>c_view_class-ext-external THEN
+                               zif_sat_c_os_view_options=>c_view_class-int-external ).
 
       WHEN OTHERS.
         super->zif_sat_query_converter~convert_value( EXPORTING iv_option = iv_option
