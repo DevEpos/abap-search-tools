@@ -14,4 +14,4 @@ define view ZSAT_I_CdsViewT
          Text.ddtext     as Description
 }
 where
-  FallbackText.as4local = 'A'
+  Text.as4local = 'A'
