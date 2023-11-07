@@ -15,7 +15,8 @@ define view ZSAT_I_CdsBaseField
   BaseField.fieldname as FieldName
 }
 where
-  BaseField.fieldname <> 'MANDT'
+      BaseField.as4local = 'A'
+  and BaseField.fieldname <> 'MANDT'
 
 union all select from zsatcds2mfield
 {
