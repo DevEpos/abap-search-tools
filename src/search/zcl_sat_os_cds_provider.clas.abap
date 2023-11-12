@@ -19,6 +19,7 @@ CLASS zcl_sat_os_cds_provider DEFINITION
 
   PRIVATE SECTION.
     ALIASES c_cds_search_params FOR zif_sat_c_os_cds_options~c_filter_key.
+    ALIASES c_custom_options    FOR zif_sat_c_os_cds_options~c_custom_options.
     ALIASES ty_t_value_range    FOR zif_sat_ty_object_search~ty_t_value_range.
 
     DATA mv_field_subquery TYPE string.
@@ -448,6 +449,28 @@ CLASS zcl_sat_os_cds_provider IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD add_from_option_filter.
+    DATA(lf_resolve_from_hierarchy) = VALUE #( ms_search_engine_params-custom_options[
+                                                   key = c_custom_options-resolve_from_hierarchy ]-value OPTIONAL ).
+    IF     lf_resolve_from_hierarchy = abap_true
+       AND contains_single_i_eq_filter( it_values ).
+
+      DATA(lo_wusl_analyzer) = NEW zcl_sat_cds_wusi_analysis(
+                                       iv_entity        = CONV #( it_values[ 1 ]-low )
+                                       iv_source_origin = zcl_sat_cds_wusi_analysis=>c_source_origin-select_from
+                                       if_recursive     = abap_true ).
+      TRY.
+          lo_wusl_analyzer->run( ).
+          DATA(lt_ddlname_range) = lo_wusl_analyzer->get_result_key_range( ).
+          IF lt_ddlname_range IS NOT INITIAL.
+            new_and_cond_list( ).
+            add_option_filter( iv_fieldname = |{ c_base_alias }~{ c_fields-ddlname }|
+                               it_values    = CORRESPONDING #( lt_ddlname_range ) ).
+            RETURN.
+          ENDIF.
+        CATCH zcx_sat_application_exc ##NEEDED.
+      ENDTRY.
+    ENDIF.
+
     split_including_excluding( EXPORTING it_values    = it_values
                                IMPORTING et_including = DATA(lt_including)
                                          et_excluding = DATA(lt_excluding) ).
