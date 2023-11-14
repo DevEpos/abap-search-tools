@@ -86,15 +86,21 @@ CLASS zcl_sat_cds_view_query_config IMPLEMENTATION.
     mt_options = lt_object_filters.
 
     ms_search_type = VALUE zif_sat_ty_object_search=>ty_search_type_config(
-        label    = 'CDS View'
-        name     = zif_sat_c_object_search=>c_search_type-cds_view
-        img_info = VALUE #( img_registry = zif_sat_c_object_search=>c_image_registry_id-adt_type
-                            img_key      = zif_sat_c_object_types=>structured_object )
-        inputs   = VALUE #( ( name    = zif_sat_c_object_search=>c_search_fields-object_name_input_key
-                              label   = zif_sat_c_object_search=>c_search_fields-object_name_input_label )
-                            ( name    = zif_sat_c_object_search=>c_search_fields-object_filter_input_key
-                              label   = zif_sat_c_object_search=>c_search_fields-object_filter_input_label
-                              filters = lt_object_filters ) ) ).
+        label          = 'CDS View'
+        name           = zif_sat_c_object_search=>c_search_type-cds_view
+        custom_options = VALUE #(
+            ( key         = zif_sat_c_os_cds_options=>c_custom_options-resolve_from_hierarchy
+              type        = zif_sat_c_object_search=>c_custom_option_data_type-boolean
+              label       = 'Consider Indirect Select Sources of "from" Filter'
+              description = |Loads Where-Used Tree of single "from" filter to restrict search scope to that hierarchy.\n\n| &&
+                            |Note: The option will only be used if a single value for "from" was provided (Wildcards/Exclusion not allowed)| ) )
+        img_info       = VALUE #( img_registry = zif_sat_c_object_search=>c_image_registry_id-adt_type
+                                  img_key      = zif_sat_c_object_types=>structured_object )
+        inputs         = VALUE #( ( name    = zif_sat_c_object_search=>c_search_fields-object_name_input_key
+                                    label   = zif_sat_c_object_search=>c_search_fields-object_name_input_label )
+                                  ( name    = zif_sat_c_object_search=>c_search_fields-object_filter_input_key
+                                    label   = zif_sat_c_object_search=>c_search_fields-object_filter_input_label
+                                    filters = lt_object_filters ) ) ).
   ENDMETHOD.
 
   METHOD zif_sat_object_search_config~get_type.
