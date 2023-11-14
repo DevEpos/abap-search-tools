@@ -12,8 +12,7 @@ define view ZSAT_I_DbFieldUsedInCdsView
     inner join            ZSAT_P_CdsViewBase  as CdsBase  on ViewField.viewname = CdsBase.ViewName
     inner join            ZSAT_I_CdsViewField as CdsField on  CdsBase.EntityId   = CdsField.EntityId
                                                           and CdsField.FieldName = ViewField.viewfield
-    left outer join       ZSAT_I_ApiStates    as ApiState on  CdsBase.DdlName     = ApiState.ObjectName
-                                                          and ApiState.ObjectType = 'DDLS'
+    inner join            ZSAT_I_DdlApiState  as ApiState on CdsBase.DdlName = ApiState.DdlName
 {
   key case
        when CdsBase.RawEntityId <> '' then CdsBase.RawEntityId
@@ -25,7 +24,7 @@ define view ZSAT_I_DbFieldUsedInCdsView
       end as FieldName,
       CdsBase.DdlName,
       CdsBase.SourceType,
-      ApiState.APIState
+      ApiState.ApiState
 }
 where
       ViewField.as4local    = 'A'
