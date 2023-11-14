@@ -16,9 +16,11 @@ ENDCLASS.
 CLASS zcl_sat_adt_res_applc_vh IMPLEMENTATION.
   METHOD get_named_items.
     DATA lt_appl_comp_name_range TYPE RANGE OF df14l-ps_posid.
+    DATA lt_appl_comp_text_range TYPE RANGE OF df14t-name.
 
     IF p_filter_name IS NOT INITIAL.
       lt_appl_comp_name_range = VALUE #( ( sign = 'I' option = 'CP' low = to_upper( p_filter_name ) ) ).
+      lt_appl_comp_text_range = VALUE #( ( sign = 'I' option = 'CP' low = p_filter_name ) ).
     ENDIF.
 
     SELECT ps_posid AS name,
@@ -28,7 +30,8 @@ CLASS zcl_sat_adt_res_applc_vh IMPLEMENTATION.
           ON  comp~fctr_id = text~fctr_id
           AND comp~as4local = text~as4local
       WHERE comp~as4local = 'A'
-        AND comp~ps_posid IN @lt_appl_comp_name_range
+        AND (    comp~ps_posid IN @lt_appl_comp_name_range
+              OR text~name     IN @lt_appl_comp_text_range )
         AND text~langu = @sy-langu
       ORDER BY comp~ps_posid
       INTO CORRESPONDING FIELDS OF TABLE @p_named_item_list-items
