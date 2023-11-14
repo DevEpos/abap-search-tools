@@ -15,8 +15,8 @@ CLASS zcl_sat_base_search_provider DEFINITION
     METHODS constructor.
 
   PROTECTED SECTION.
+    TYPES ty_search_term TYPE RANGE OF string.
     TYPES:
-      ty_search_term TYPE RANGE OF string,
       BEGIN OF ty_search_term_field,
         fieldname     TYPE string,
         null_possible TYPE abap_bool,
@@ -33,8 +33,9 @@ CLASS zcl_sat_base_search_provider DEFINITION
         created_on TYPE string VALUE 'createdon',
         changed_on TYPE string VALUE 'changedon',
         changed_by TYPE string VALUE 'changedby',
-      END OF c_general_fields,
+      END OF c_general_fields.
 
+    CONSTANTS:
       BEGIN OF c_result_fields,
         object_name        TYPE string VALUE 'OBJECT_NAME',
         raw_object_name    TYPE string VALUE 'RAW_OBJECT_NAME',
@@ -270,6 +271,12 @@ CLASS zcl_sat_base_search_provider DEFINITION
     METHODS set_filters_active.
     METHODS reset.
 
+    METHODS contains_single_i_eq_filter
+      IMPORTING
+        it_values     TYPE zif_sat_ty_object_search=>ty_t_value_range
+      RETURNING
+        VALUE(result) TYPE abap_bool.
+
   PRIVATE SECTION.
     TYPES ty_package_range TYPE RANGE OF devclass.
 
@@ -466,6 +473,16 @@ CLASS zcl_sat_base_search_provider IMPLEMENTATION.
           join_type       = iv_join_type
           conditions      = it_conditions
           parameters      = it_parameters ) ).
+  ENDMETHOD.
+
+  METHOD contains_single_i_eq_filter.
+    IF lines( it_values ) <> 1.
+      RETURN.
+    ENDIF.
+    DATA(ls_filter) = it_values[ 1 ].
+    IF ls_filter-sign = 'I' AND ls_filter-option = 'EQ'.
+      result = abap_true.
+    ENDIF.
   ENDMETHOD.
 
   METHOD add_date_filter.
