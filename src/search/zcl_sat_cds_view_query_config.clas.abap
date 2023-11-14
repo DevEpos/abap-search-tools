@@ -245,6 +245,11 @@ CLASS zcl_sat_cds_view_query_config IMPLEMENTATION.
                            |Example:\n   { c_cds_options-param } : p_test|
         img_info         = VALUE #( img_key     = c_general_image_keys-param
                                     img_encoded = get_general_image( c_general_image_keys-param ) )
-        patterns         = abap_true ).
+        patterns         = abap_true
+        content_assist   = VALUE #(
+            assist_type           = zif_sat_c_object_search=>c_filter_content_assist_type-named_item
+            category_scheme       = zif_sat_c_object_search=>c_content_assist-category_scheme
+            category_term         = zif_sat_c_object_search=>c_content_assist-terms-cds_param
+            proposal_image_source = zif_sat_c_object_search=>c_proposal_image_source-same_as_filter ) ).
   ENDMETHOD.
 ENDCLASS.
