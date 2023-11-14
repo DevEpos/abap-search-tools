@@ -12,7 +12,6 @@ CLASS zcl_sat_cds_wusi_analysis DEFINITION
 
     TYPES BEGIN OF ty_wusl_result.
             INCLUDE TYPE zif_sat_ty_adt_types=>ty_where_used_in_cds.
-    TYPES   filtervalue   TYPE zsat_i_apistates-filtervalue.
     TYPES   source_entity TYPE tabname.
     TYPES END OF ty_wusl_result.
 
@@ -275,18 +274,18 @@ CLASS zcl_sat_cds_wusi_analysis IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD add_api_state_info.
+    DATA lt_api_states TYPE SORTED TABLE OF zsat_i_ddlapistate WITH UNIQUE KEY ddlname.
+    DATA lt_ddlname_range TYPE RANGE OF ddlname.
+
     CHECK mt_result_keys IS NOT INITIAL.
 
     IF mf_released_entitites_only = abap_false.
-      SELECT DISTINCT
-             objectname AS entity_id,
-             apistate AS api_state
-        FROM zsat_i_apistates
-        FOR ALL ENTRIES IN @mt_result_keys
-        WHERE objectname = @mt_result_keys-ddlname
-          AND objecttype = @zif_sat_c_tadir_types=>data_definition
-        INTO TABLE @DATA(lt_api_states).
-
+      lt_ddlname_range = VALUE #( FOR <key> IN mt_result_keys
+                                  ( sign = 'I' option = 'EQ' low = <key>-ddlname ) ).
+      SELECT *
+        FROM zsat_i_ddlapistate
+        WHERE ddlname IN @lt_ddlname_range
+        INTO CORRESPONDING FIELDS OF TABLE @lt_api_states.
       IF sy-subrc <> 0.
         RETURN.
       ENDIF.
@@ -296,7 +295,7 @@ CLASS zcl_sat_cds_wusi_analysis IMPLEMENTATION.
       IF mf_released_entitites_only = abap_true.
         lr_result_ref->ref->api_state = zif_sat_c_cds_api_state=>released.
       ELSE.
-        lr_result_ref->ref->api_state = VALUE #( lt_api_states[ entity_id = lr_result_ref->ref->ddlname ]-api_state OPTIONAL ).
+        lr_result_ref->ref->api_state = VALUE #( lt_api_states[ ddlname = lr_result_ref->ref->ddlname ]-apistate OPTIONAL ).
       ENDIF.
     ENDLOOP.
   ENDMETHOD.
