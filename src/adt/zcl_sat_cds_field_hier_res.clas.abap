@@ -3,8 +3,7 @@
 "! of a specific field of a CDS view. The hierarchy will be return in a deep
 "! structure
 CLASS zcl_sat_cds_field_hier_res DEFINITION
-  PUBLIC
-  FINAL
+  PUBLIC FINAL
   CREATE PUBLIC.
 
   PUBLIC SECTION.
@@ -23,29 +22,30 @@ CLASS zcl_sat_cds_field_hier_res DEFINITION
         VALUE(rs_hierarchy) TYPE zif_sat_ty_adt_types=>ty_entity_field_info_result.
 
   PRIVATE SECTION.
-    TYPES:
-      BEGIN OF ty_s_cached_node,
-        entity    TYPE tabname,
-        field_ref TYPE REF TO lcl_field,
-      END OF ty_s_cached_node,
-      BEGIN OF ty_s_hierarchy_field,
-        viewname       TYPE tabname,
-        viewfield      TYPE fieldname,
-        ddlname        TYPE ddlname,
-        level          TYPE i,
-        entityname     TYPE tabname,
-        viewfieldraw   TYPE fieldname,
-        basetable      TYPE tabname,
-        baseddlname    TYPE ddlname,
-        basesourcetype TYPE zsat_cds_source_type,
-        baseentityname TYPE tabname,
-        basefield      TYPE fieldname,
-        basefieldraw   TYPE fieldname,
-      END OF ty_s_hierarchy_field,
-      ty_t_hierarchy_field TYPE STANDARD TABLE OF ty_s_hierarchy_field WITH EMPTY KEY.
+    TYPES: BEGIN OF ty_s_cached_node,
+             entity    TYPE tabname,
+             field_ref TYPE REF TO lcl_field,
+           END OF ty_s_cached_node.
+    TYPES: BEGIN OF ty_s_hierarchy_field,
+             viewname       TYPE tabname,
+             viewfield      TYPE fieldname,
+             ddlname        TYPE ddlname,
+             level          TYPE i,
+             entityname     TYPE tabname,
+             viewfieldraw   TYPE fieldname,
+             basetable      TYPE tabname,
+             baseddlname    TYPE ddlname,
+             basesourcetype TYPE zsat_cds_source_type,
+             baseentityname TYPE tabname,
+             basefield      TYPE fieldname,
+             basefieldraw   TYPE fieldname,
+           END OF ty_s_hierarchy_field,
+           ty_t_hierarchy_field TYPE STANDARD TABLE OF ty_s_hierarchy_field WITH EMPTY KEY.
 
     DATA mt_cached_nodes TYPE STANDARD TABLE OF ty_s_cached_node.
     DATA mo_path_resolver TYPE REF TO cl_ddic_adt_ddls_path_resolver.
+    DATA mt_ddlname_range TYPE RANGE OF ddlname.
+    DATA mt_ddl_apistates TYPE SORTED TABLE OF zsat_i_ddlapistate WITH UNIQUE KEY ddlname.
 
     "! <p class="shorttext synchronized">Retrieve field hierarchy</p>
     METHODS get_field_hierarchy
@@ -85,6 +85,7 @@ CLASS zcl_sat_cds_field_hier_res DEFINITION
 
     "! <p class="shorttext synchronized">Fills entity type information of fields</p>
     METHODS fill_type_information.
+    METHODS read_ddl_api_states.
 ENDCLASS.
 
 
@@ -124,6 +125,7 @@ CLASS zcl_sat_cds_field_hier_res IMPLEMENTATION.
                   io_field     = lo_root_field ).
 
     fill_type_information( ).
+    read_ddl_api_states( ).
 
     " Convert result into element info structure for ADT resource
     rs_hierarchy = convert_hier_to_adt_result( lo_root_field ).
@@ -296,6 +298,11 @@ CLASS zcl_sat_cds_field_hier_res IMPLEMENTATION.
         RETURN.
       ENDIF.
 
+      IF <ls_hierarchy>-baseddlname IS NOT INITIAL.
+        mt_ddlname_range = VALUE #( BASE mt_ddlname_range
+                                    ( sign = 'I' option = 'EQ' low = <ls_hierarchy>-baseddlname ) ).
+      ENDIF.
+
       DATA(lo_child_field) = NEW lcl_field( ).
       lo_child_field->field            = <ls_hierarchy>-basefield.
       lo_child_field->secondary_entity = <ls_hierarchy>-baseddlname.
@@ -321,7 +328,8 @@ CLASS zcl_sat_cds_field_hier_res IMPLEMENTATION.
         io_field->children = VALUE #( ).
       ENDIF.
 
-      io_field->children = VALUE #( BASE io_field->children ( lo_child_field ) ).
+      io_field->children = VALUE #( BASE io_field->children
+                                    ( lo_child_field ) ).
       mt_cached_nodes = VALUE #( BASE mt_cached_nodes
                                  ( entity = to_upper( lo_child_field->view_raw_name ) field_ref = lo_child_field ) ).
     ENDLOOP.
@@ -330,7 +338,8 @@ CLASS zcl_sat_cds_field_hier_res IMPLEMENTATION.
   METHOD convert_node_to_field_info.
     FIELD-SYMBOLS <lt_child_field_infos> TYPE zif_sat_ty_adt_types=>ty_entity_field_infos.
 
-    fill_element_info_from_field( EXPORTING io_field = io_field CHANGING cs_elem_info = cs_elem_info ).
+    fill_element_info_from_field( EXPORTING io_field     = io_field
+                                  CHANGING  cs_elem_info = cs_elem_info ).
 
     IF io_field->children IS NOT INITIAL.
       cs_elem_info-children = NEW zif_sat_ty_adt_types=>ty_entity_field_infos( ).
@@ -345,6 +354,13 @@ CLASS zcl_sat_cds_field_hier_res IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD fill_element_info_from_field.
+    IF io_field->secondary_entity IS NOT INITIAL.
+      DATA(lr_api_state) = REF #( mt_ddl_apistates[ ddlname = io_field->secondary_entity ] OPTIONAL ).
+      IF lr_api_state IS BOUND.
+        cs_elem_info-api_state = lr_api_state->apistate.
+      ENDIF.
+    ENDIF.
+
     cs_elem_info-entity_name     = COND #( WHEN io_field->secondary_entity IS NOT INITIAL
                                            THEN io_field->secondary_entity
                                            ELSE io_field->view_name ).
@@ -362,7 +378,8 @@ CLASS zcl_sat_cds_field_hier_res IMPLEMENTATION.
 
     CHECK mt_cached_nodes IS NOT INITIAL.
 
-    lt_entity = VALUE #( FOR field IN mt_cached_nodes ( sign = 'I' option = 'EQ' low = field-entity ) ).
+    lt_entity = VALUE #( FOR field IN mt_cached_nodes
+                         ( sign = 'I' option = 'EQ' low = field-entity ) ).
 
     SELECT *
       FROM zsat_i_databaseentitywotext
@@ -386,5 +403,19 @@ CLASS zcl_sat_cds_field_hier_res IMPLEMENTATION.
       ENDLOOP.
 
     ENDLOOP.
+  ENDMETHOD.
+
+  METHOD read_ddl_api_states.
+    CHECK mt_ddlname_range IS NOT INITIAL.
+
+    SORT mt_ddlname_range.
+    DELETE ADJACENT DUPLICATES FROM mt_ddlname_range.
+
+    SELECT *
+      FROM zsat_i_ddlapistate
+      WHERE ddlname IN @mt_ddlname_range
+      INTO CORRESPONDING FIELDS OF TABLE @mt_ddl_apistates.
+
+    CLEAR mt_ddlname_range.
   ENDMETHOD.
 ENDCLASS.

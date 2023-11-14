@@ -16,8 +16,7 @@ define view ZSAT_I_CdsEntity
     left outer join ddddlsrct          as FallbackText on  FallbackText.ddlname    = Base.DdlName
                                                        and FallbackText.ddlanguage = Base.OriginalLanguage
                                                        and FallbackText.as4local   = 'A'
-  association [0..*] to ZSAT_I_ApiStates as _ApiState on  Base.DdlName         = _ApiState.ObjectName
-                                                      and _ApiState.ObjectType = 'DDLS'
+  association [1] to ZSAT_I_DdlApiState as _ApiState on Base.DdlName = _ApiState.DdlName
 {
   Base.EntityId,
   Base.RawEntityId,
