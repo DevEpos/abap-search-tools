@@ -15,6 +15,11 @@ INTERFACE zif_sat_c_os_cds_options
     END OF c_filter_key.
 
   CONSTANTS:
+    BEGIN OF c_custom_options,
+      resolve_from_hierarchy TYPE string VALUE 'resolveFromHierarchy',
+    END OF c_custom_options.
+
+  CONSTANTS:
     "! Values for 'TYPE' option
     BEGIN OF c_type_option_value,
       function TYPE string VALUE 'FUNCTION',
