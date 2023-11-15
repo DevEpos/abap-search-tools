@@ -275,16 +275,18 @@ CLASS zcl_sat_cds_wusi_analysis IMPLEMENTATION.
 
   METHOD add_api_state_info.
     DATA lt_api_states TYPE SORTED TABLE OF zsat_i_ddlapistate WITH UNIQUE KEY ddlname.
-    DATA lt_ddlname_range TYPE RANGE OF ddlname.
+    DATA lt_ddlnames TYPE TABLE OF ddlname.
 
     CHECK mt_result_keys IS NOT INITIAL.
 
     IF mf_released_entitites_only = abap_false.
-      lt_ddlname_range = VALUE #( FOR <key> IN mt_result_keys
-                                  ( sign = 'I' option = 'EQ' low = <key>-ddlname ) ).
+      lt_ddlnames = VALUE #( FOR <key> IN mt_result_keys
+                             ( <key>-ddlname ) ).
+
       SELECT *
         FROM zsat_i_ddlapistate
-        WHERE ddlname IN @lt_ddlname_range
+        FOR ALL ENTRIES IN @lt_ddlnames
+        WHERE ddlname = @lt_ddlnames-table_line
         INTO CORRESPONDING FIELDS OF TABLE @lt_api_states.
       IF sy-subrc <> 0.
         RETURN.
