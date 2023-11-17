@@ -271,6 +271,7 @@ CLASS zcl_sat_cds_usage_analyzer IMPLEMENTATION.
        WHERE (    ddlname = @iv_ddlname
                OR parentname = @iv_ddlname )
          AND as4local = 'A'
+       ORDER BY parentname " The extended view needs to be analyzed first
        INTO TABLE @lt_ddlsources.
 
     IF sy-subrc <> 0.
@@ -290,6 +291,12 @@ CLASS zcl_sat_cds_usage_analyzer IMPLEMENTATION.
                                                                                     iv_locally  = abap_false
                                                                                     iv_aiepp    = abap_false
                                                                                     iv_extresol = abap_true ) ).
+
+    " There could be parsing errors in which case no parsed statement will be returned
+    IF lo_stmnt IS INITIAL.
+      RETURN.
+    ENDIF.
+
     TRY.
         lo_stmnt->accept( me ).
         update_metrics( iv_ddlname = iv_ddlname ).
