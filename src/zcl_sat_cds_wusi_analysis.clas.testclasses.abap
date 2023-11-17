@@ -42,7 +42,7 @@ CLASS ltcl_abap_unit IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD test_method3.
-    DATA(lt_result) = run_test( iv_entity           = 'ZSAT_I_APISTATES'
+    DATA(lt_result) = run_test( iv_entity           = 'ZSAT_I_DDLAPISTATE'
                                 iv_source_origin    = zcl_sat_cds_wusi_analysis=>c_source_origin-association
                                 if_released_only    = abap_false
                                 if_only_local_assoc = abap_true ).
