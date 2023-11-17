@@ -158,7 +158,9 @@ CLASS zcl_sat_cds_wusi_analysis IMPLEMENTATION.
 
     IF mf_only_local_assocs = abap_true.
       ms_sql-where = VALUE #( BASE ms_sql-where
-                              ( `and assoc~strucobjn_s = @space ` ) ).
+                              ( |AND case when assoc~strucobjn_s = @space or assoc~strucobjn_s = assoc~strucobjn | )
+                              ( |           then @abap_true| )
+                              ( |         else @space end = @abap_true | ) ).
     ENDIF.
   ENDMETHOD.
 
