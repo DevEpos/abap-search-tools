@@ -12,7 +12,10 @@ CLASS zcl_sat_cds_wusi_analysis DEFINITION
 
     TYPES BEGIN OF ty_wusl_result.
             INCLUDE TYPE zif_sat_ty_adt_types=>ty_where_used_in_cds.
-    TYPES   source_entity TYPE tabname.
+    TYPES   source_entity         TYPE tabname.
+    TYPES   has_released_children TYPE abap_bool.
+    TYPES   is_released           TYPE abap_bool.
+    TYPES   parent_ref            TYPE REF TO data.
     TYPES END OF ty_wusl_result.
 
     TYPES ty_wusl_results TYPE STANDARD TABLE OF ty_wusl_result WITH EMPTY KEY.
@@ -32,10 +35,6 @@ CLASS zcl_sat_cds_wusi_analysis DEFINITION
     METHODS get_result
       RETURNING
         VALUE(result) TYPE zif_sat_ty_adt_types=>ty_where_used_in_cds_t.
-
-    METHODS get_result_key_range
-      RETURNING
-        VALUE(result) TYPE zif_sat_ty_global=>ty_t_string_range.
 
   PRIVATE SECTION.
     TYPES: BEGIN OF ty_wusl_result_ref,
@@ -65,18 +64,13 @@ CLASS zcl_sat_cds_wusi_analysis DEFINITION
     DATA mf_only_local_assocs TYPE abap_bool.
     DATA mv_source_origin TYPE string.
     DATA mf_released_entitites_only TYPE abap_bool.
+    DATA mf_api_state_join_active TYPE abap_bool.
     DATA mf_recursive_search TYPE abap_bool.
-
-    METHODS fill_response
-      IMPORTING
-        io_response TYPE REF TO if_adt_rest_response
-      RAISING
-        cx_adt_rest.
 
     METHODS build_sql_for_assoc_search.
     METHODS build_sql_for_from_search.
 
-    METHODS run_search
+    METHODS find_references
       RAISING
         zcx_sat_application_exc.
 
@@ -85,7 +79,18 @@ CLASS zcl_sat_cds_wusi_analysis DEFINITION
     METHODS fill_other_properties.
     METHODS find_all_resursively.
     METHODS add_api_state_info.
-    METHODS do_after_search.
+
+    METHODS remove_non_released_views.
+
+    METHODS propagate_released_child_stat
+      IMPORTING
+        ir_wusl_result TYPE REF TO ty_wusl_result.
+
+    METHODS remove_non_rel_recursive
+      IMPORTING
+        ir_wusl_results TYPE REF TO ty_wusl_results.
+
+    METHODS collect_result_keys.
 ENDCLASS.
 
 
@@ -107,32 +112,33 @@ CLASS zcl_sat_cds_wusi_analysis IMPLEMENTATION.
       build_sql_for_assoc_search( ).
     ENDIF.
 
-    run_search( ).
+    find_references( ).
 
     IF mf_recursive_search = abap_true AND mv_source_origin = c_source_origin-select_from.
       find_all_resursively( ).
     ENDIF.
 
-    do_after_search( ).
-  ENDMETHOD.
+    " Results at root level still need to be added to refs
+    LOOP AT mt_result REFERENCE INTO DATA(lr_result).
+      mt_result_refs = VALUE #( BASE mt_result_refs
+                                ( ddlname = lr_result->ddlname ref = lr_result ) ).
+    ENDLOOP.
 
-  METHOD get_result_key_range.
-    result = VALUE #( FOR key IN mt_result_keys
-                      ( sign = 'I' option = 'EQ' low = key-ddlname ) ).
+    collect_result_keys( ).
+
+    add_api_state_info( ).
+
+    IF     mf_released_entitites_only = abap_true
+       AND mf_api_state_join_active   = abap_false.
+      remove_non_released_views( ).
+    ENDIF.
+
+    fill_descriptions( ).
+    fill_other_properties( ).
   ENDMETHOD.
 
   METHOD get_result.
-    fill_descriptions( ).
-    fill_other_properties( ).
-    add_api_state_info( ).
-
     result = CORRESPONDING #( mt_result ).
-  ENDMETHOD.
-
-  METHOD fill_response.
-    io_response->set_body_data(
-        content_handler = zcl_sat_adt_ch_factory=>create_where_used_in_cds_res_h( )
-        data            = CORRESPONDING zif_sat_ty_adt_types=>ty_where_used_in_cds_t(  mt_result ) ).
   ENDMETHOD.
 
   METHOD build_sql.
@@ -141,7 +147,8 @@ CLASS zcl_sat_cds_wusi_analysis IMPLEMENTATION.
                                         ( `base~ddlname` ) )
                       from   = VALUE #( ( |{ zif_sat_c_select_source_id=>zsat_p_cds } as base | ) ) ).
 
-    IF mf_released_entitites_only = abap_true.
+    IF mf_released_entitites_only = abap_true AND mf_recursive_search = abap_false.
+      mf_api_state_join_active = abap_true.
       ms_sql-from = VALUE #( BASE ms_sql-from
                              ( |inner join { zif_sat_c_select_source_id=>zsat_i_apistates } as api | )
                              ( ` on  api~objectname = base~ddlname ` )
@@ -171,7 +178,7 @@ CLASS zcl_sat_cds_wusi_analysis IMPLEMENTATION.
     ms_sql-where = VALUE #( ( `selectpart~sourceentity = @mv_entity ` ) ).
   ENDMETHOD.
 
-  METHOD run_search.
+  METHOD find_references.
     TRY.
         SELECT DISTINCT (ms_sql-select)
           FROM  (ms_sql-from)
@@ -256,13 +263,12 @@ CLASS zcl_sat_cds_wusi_analysis IMPLEMENTATION.
 
           ASSIGN lr_parent->ref->children->* TO <lt_wusl_children>.
           APPEND lr_usage->* TO <lt_wusl_children> REFERENCE INTO lr_usage_stored.
+          lr_usage_stored->parent_ref = lr_parent->ref.
 
-          IF lr_usage_stored IS BOUND.
-            lt_tmp_parent_refs = VALUE #( BASE lt_tmp_parent_refs
-                                          ( ddlname = lr_usage->ddlname ref = lr_usage_stored ) ).
-            mt_result_refs = VALUE #( BASE mt_result_refs
-                                      ( ddlname = lr_usage->ddlname ref = lr_usage_stored ) ).
-          ENDIF.
+          lt_tmp_parent_refs = VALUE #( BASE lt_tmp_parent_refs
+                                        ( ddlname = lr_usage->ddlname ref = lr_usage_stored ) ).
+          mt_result_refs = VALUE #( BASE mt_result_refs
+                                    ( ddlname = lr_usage->ddlname ref = lr_usage_stored ) ).
         ENDLOOP.
 
         CLEAR lr_usage_stored.
@@ -281,7 +287,7 @@ CLASS zcl_sat_cds_wusi_analysis IMPLEMENTATION.
 
     CHECK mt_result_keys IS NOT INITIAL.
 
-    IF mf_released_entitites_only = abap_false.
+    IF mf_api_state_join_active = abap_false.
       lt_ddlnames = VALUE #( FOR <key> IN mt_result_keys
                              ( <key>-ddlname ) ).
 
@@ -296,20 +302,59 @@ CLASS zcl_sat_cds_wusi_analysis IMPLEMENTATION.
     ENDIF.
 
     LOOP AT mt_result_refs REFERENCE INTO DATA(lr_result_ref).
-      IF mf_released_entitites_only = abap_true.
-        lr_result_ref->ref->api_state = zif_sat_c_cds_api_state=>released.
+      IF mf_api_state_join_active = abap_false.
+        lr_result_ref->ref->api_state   = VALUE #( lt_api_states[ ddlname = lr_result_ref->ref->ddlname ]-apistate OPTIONAL ).
+        lr_result_ref->ref->is_released = xsdbool( lr_result_ref->ref->api_state CS zif_sat_c_cds_api_state=>released ).
       ELSE.
-        lr_result_ref->ref->api_state = VALUE #( lt_api_states[ ddlname = lr_result_ref->ref->ddlname ]-apistate OPTIONAL ).
+        lr_result_ref->ref->api_state = zif_sat_c_cds_api_state=>released.
       ENDIF.
     ENDLOOP.
   ENDMETHOD.
 
-  METHOD do_after_search.
-    " Results at root level still need to be added to refs
-    LOOP AT mt_result REFERENCE INTO DATA(lr_result).
-      mt_result_refs = VALUE #( BASE mt_result_refs
-                                ( ddlname = lr_result->ddlname ref = lr_result ) ).
+  METHOD remove_non_released_views.
+    LOOP AT mt_result_refs REFERENCE INTO DATA(lr_result_ref) WHERE ref->is_released = abap_true.
+      IF     lr_result_ref->ref->parent_ref IS BOUND
+         AND CAST ty_wusl_result( lr_result_ref->ref->parent_ref )->has_released_children  = abap_false.
+        propagate_released_child_stat( CAST #( lr_result_ref->ref->parent_ref ) ).
+      ENDIF.
     ENDLOOP.
+
+    DELETE mt_result_refs WHERE     ref->is_released           = abap_false
+                                AND ref->has_released_children = abap_false.
+    remove_non_rel_recursive( REF #( mt_result ) ).
+
+    " refill the result keys to skip unnecessary reads
+    collect_result_keys( ).
+  ENDMETHOD.
+
+  METHOD propagate_released_child_stat.
+    DATA(lr_parent) = ir_wusl_result.
+
+    WHILE lr_parent IS BOUND.
+      lr_parent->has_released_children = abap_true.
+      lr_parent = CAST #( lr_parent->parent_ref ).
+    ENDWHILE.
+  ENDMETHOD.
+
+  METHOD remove_non_rel_recursive.
+    LOOP AT ir_wusl_results->* REFERENCE INTO DATA(lr_result).
+      IF     lr_result->is_released           = abap_false
+         AND lr_result->has_released_children = abap_false.
+        DELETE ir_wusl_results->*.
+      ELSE.
+        IF lr_result->children IS BOUND.
+          remove_non_rel_recursive( CAST #( lr_result->children ) ).
+        ENDIF.
+      ENDIF.
+    ENDLOOP.
+  ENDMETHOD.
+
+  METHOD collect_result_keys.
+    IF mt_result IS INITIAL.
+      CLEAR: mt_result_keys,
+             mt_result_refs.
+      RETURN.
+    ENDIF.
 
     mt_result_keys = CORRESPONDING #( mt_result_refs ).
     SORT mt_result_keys.
