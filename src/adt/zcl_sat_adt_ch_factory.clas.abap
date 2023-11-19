@@ -1,7 +1,6 @@
 "! <p class="shorttext synchronized">Content Handler Factory for ADT tools</p>
 CLASS zcl_sat_adt_ch_factory DEFINITION
-  PUBLIC
-  FINAL
+  PUBLIC FINAL
   CREATE PRIVATE.
 
   PUBLIC SECTION.
@@ -27,11 +26,6 @@ CLASS zcl_sat_adt_ch_factory DEFINITION
 
     "! Creates content handler for CDS Top-Down Result
     CLASS-METHODS create_top_down_res_handler
-      RETURNING
-        VALUE(result) TYPE REF TO if_adt_rest_content_handler.
-
-    "! Creates content handler for CDS Used Entities result
-    CLASS-METHODS create_used_ent_res_handler
       RETURNING
         VALUE(result) TYPE REF TO if_adt_rest_content_handler.
 
@@ -78,11 +72,6 @@ CLASS zcl_sat_adt_ch_factory IMPLEMENTATION.
   METHOD create_top_down_res_handler.
     result = cl_adt_rest_st_handler=>create_instance( st_name   = 'ZSAT_TOPDOWN_ANALYSIS_RESULT'
                                                       root_name = 'TOP_DOWN_RESULT' ).
-  ENDMETHOD.
-
-  METHOD create_used_ent_res_handler.
-    result = cl_adt_rest_st_handler=>create_instance( st_name   = 'ZSAT_CDS_USED_ENT_ANAL_RES'
-                                                      root_name = 'USED_ENTITIES_RESULT' ).
   ENDMETHOD.
 
   METHOD create_adt_obj_ref_res_handler.
