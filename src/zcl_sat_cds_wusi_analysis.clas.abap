@@ -31,10 +31,6 @@ CLASS zcl_sat_cds_wusi_analysis DEFINITION
       RETURNING
         VALUE(result) TYPE zif_sat_ty_adt_types=>ty_where_used_in_cds_t.
 
-    METHODS get_result_key_range
-      RETURNING
-        VALUE(result) TYPE zif_sat_ty_global=>ty_t_string_range.
-
   PRIVATE SECTION.
     TYPES: BEGIN OF ty_wusl_result_ref,
              ddlname TYPE tabname,
@@ -63,16 +59,10 @@ CLASS zcl_sat_cds_wusi_analysis DEFINITION
     DATA mv_source_origin TYPE string.
     DATA mf_recursive_search TYPE abap_bool.
 
-    METHODS fill_response
-      IMPORTING
-        io_response TYPE REF TO if_adt_rest_response
-      RAISING
-        cx_adt_rest.
-
     METHODS build_sql_for_assoc_search.
     METHODS build_sql_for_from_search.
 
-    METHODS run_search
+    METHODS find_references
       RAISING
         zcx_sat_application_exc.
 
@@ -80,7 +70,7 @@ CLASS zcl_sat_cds_wusi_analysis DEFINITION
     METHODS fill_descriptions.
     METHODS fill_other_properties.
     METHODS find_all_resursively.
-    METHODS do_after_search.
+    METHODS collect_result_keys.
 
     METHODS get_cds_sql_name
       IMPORTING
@@ -106,31 +96,26 @@ CLASS zcl_sat_cds_wusi_analysis IMPLEMENTATION.
       build_sql_for_assoc_search( ).
     ENDIF.
 
-    run_search( ).
+    find_references( ).
 
     IF mf_recursive_search = abap_true AND mv_source_origin = c_source_origin-select_from.
       find_all_resursively( ).
     ENDIF.
 
-    do_after_search( ).
-  ENDMETHOD.
+    " Results at root level still need to be added to refs
+    LOOP AT mt_result REFERENCE INTO DATA(lr_result).
+      mt_result_refs = VALUE #( BASE mt_result_refs
+                                ( ddlname = lr_result->ddlname ref = lr_result ) ).
+    ENDLOOP.
 
-  METHOD get_result_key_range.
-    result = VALUE #( FOR key IN mt_result_keys
-                      ( sign = 'I' option = 'EQ' low = key-ddlname ) ).
+    collect_result_keys( ).
+
+    fill_descriptions( ).
+    fill_other_properties( ).
   ENDMETHOD.
 
   METHOD get_result.
-    fill_descriptions( ).
-    fill_other_properties( ).
-
     result = CORRESPONDING #( mt_result ).
-  ENDMETHOD.
-
-  METHOD fill_response.
-    io_response->set_body_data(
-        content_handler = zcl_sat_adt_ch_factory=>create_where_used_in_cds_res_h( )
-        data            = CORRESPONDING zif_sat_ty_adt_types=>ty_where_used_in_cds_t(  mt_result ) ).
   ENDMETHOD.
 
   METHOD build_sql.
@@ -157,7 +142,7 @@ CLASS zcl_sat_cds_wusi_analysis IMPLEMENTATION.
     ms_sql-where = VALUE #( ( `selectpart~sourceentity = @mv_entity ` ) ).
   ENDMETHOD.
 
-  METHOD run_search.
+  METHOD find_references.
     TRY.
         SELECT DISTINCT (ms_sql-select)
           FROM  (ms_sql-from)
@@ -243,15 +228,16 @@ CLASS zcl_sat_cds_wusi_analysis IMPLEMENTATION.
           ASSIGN lr_parent->ref->children->* TO <lt_wusl_children>.
           APPEND lr_usage->* TO <lt_wusl_children> REFERENCE INTO lr_usage_stored.
 
-          IF lr_usage_stored IS BOUND.
-            lt_tmp_parent_refs = VALUE #( BASE lt_tmp_parent_refs
-                                          ( ddlname = lr_usage->ddlname ref = lr_usage_stored ) ).
-            mt_result_refs = VALUE #( BASE mt_result_refs
-                                      ( ddlname = lr_usage->ddlname ref = lr_usage_stored ) ).
-          ENDIF.
+          lt_tmp_parent_refs = VALUE #( BASE lt_tmp_parent_refs
+                                        ( ddlname = lr_usage->ddlname ref = lr_usage_stored ) ).
+          mt_result_refs = VALUE #( BASE mt_result_refs
+                                    ( ddlname = lr_usage->ddlname ref = lr_usage_stored ) ).
         ENDLOOP.
 
         CLEAR lr_usage_stored.
+        IF <lt_wusl_children> IS ASSIGNED.
+          SORT <lt_wusl_children> BY ddlname.
+        ENDIF.
         UNASSIGN <lt_wusl_children>.
       ENDLOOP.
 
@@ -261,13 +247,7 @@ CLASS zcl_sat_cds_wusi_analysis IMPLEMENTATION.
     ENDWHILE.
   ENDMETHOD.
 
-  METHOD do_after_search.
-    " Results at root level still need to be added to refs
-    LOOP AT mt_result REFERENCE INTO DATA(lr_result).
-      mt_result_refs = VALUE #( BASE mt_result_refs
-                                ( ddlname = lr_result->ddlname ref = lr_result ) ).
-    ENDLOOP.
-
+  METHOD collect_result_keys.
     mt_result_keys = CORRESPONDING #( mt_result_refs ).
     SORT mt_result_keys.
     DELETE ADJACENT DUPLICATES FROM mt_result_keys.
