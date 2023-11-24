@@ -272,6 +272,9 @@ CLASS zcl_sat_cds_wusi_analysis IMPLEMENTATION.
         ENDLOOP.
 
         CLEAR lr_usage_stored.
+        IF <lt_wusl_children> IS ASSIGNED.
+          SORT <lt_wusl_children> BY ddlname.
+        ENDIF.
         UNASSIGN <lt_wusl_children>.
       ENDLOOP.
 
