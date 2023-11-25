@@ -166,6 +166,13 @@ CLASS zcl_sat_adt_discovery_app IMPLEMENTATION.
         category_term   = zif_sat_c_object_search=>c_content_assist-terms-cds_field ).
 
     io_registry->register_discoverable_resource(
+        url             = '/cdsbasefield'
+        handler_class   = 'ZCL_SAT_ADT_RES_CDSBASEFLD_VH'
+        description     = 'Search for CDS View Base field.'
+        category_scheme = zif_sat_c_object_search=>c_content_assist-category_scheme
+        category_term   = zif_sat_c_object_search=>c_content_assist-terms-cds_base_field ).
+
+    io_registry->register_discoverable_resource(
         url             = '/cdsparam'
         handler_class   = 'ZCL_SAT_ADT_RES_CDS_PARAM_VH'
         description     = 'Search for CDS View Parameter.'
