@@ -6,6 +6,7 @@ INTERFACE zif_sat_c_os_cds_options
     "! <p class="shorttext synchronized" lang="en">Search options for CDS Search</p>
     BEGIN OF c_filter_key,
       field       TYPE string VALUE 'field',
+      base_field  TYPE string VALUE 'basefield',
       select_from TYPE string VALUE 'from',
       association TYPE string VALUE 'assoc',
       annotation  TYPE string VALUE 'anno',
