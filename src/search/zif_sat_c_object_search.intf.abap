@@ -94,6 +94,7 @@ INTERFACE zif_sat_c_object_search
       category_scheme TYPE string VALUE 'http://www.devepos.com/adt/saat/v2/objectsearch',
       BEGIN OF terms,
         cds_field         TYPE string VALUE 'cdsfield',
+        cds_base_field    TYPE string VALUE 'cdsbasefield',
         cds_param         TYPE string VALUE 'cdsparam',
         appl_comp         TYPE string VALUE 'applcomp',
         software_comp     TYPE string VALUE 'softcomp',
