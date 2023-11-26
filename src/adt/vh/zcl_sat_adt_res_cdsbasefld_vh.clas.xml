@@ -3,14 +3,13 @@
  <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
   <asx:values>
    <VSEOCLASS>
-    <CLSNAME>ZCL_SAT_OS_CDS_PROVIDER</CLSNAME>
+    <CLSNAME>ZCL_SAT_ADT_RES_CDSBASEFLD_VH</CLSNAME>
     <LANGU>E</LANGU>
-    <DESCRIPT>CDS View Search Provider for Object Search</DESCRIPT>
+    <DESCRIPT>Resource for &apos;basefield&apos; parameter in CDS View search</DESCRIPT>
     <STATE>1</STATE>
     <CLSCCINCL>X</CLSCCINCL>
     <FIXPT>X</FIXPT>
     <UNICODE>X</UNICODE>
-    <WITH_UNIT_TESTS>X</WITH_UNIT_TESTS>
    </VSEOCLASS>
   </asx:values>
  </asx:abap>
