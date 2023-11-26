@@ -241,13 +241,16 @@ CLASS zcl_sat_adt_res_ddic_rep_acc IMPLEMENTATION.
           ENDIF.
 
           DATA(ls_field) = VALUE zif_sat_ty_adt_types=>ty_entity_field_info(
-                                     field       = <ls_field>-fieldname_raw
-                                     description = COND #( WHEN <ls_field>-fieldlabel IS NOT INITIAL
-                                                           THEN <ls_field>-fieldlabel
-                                                           ELSE <ls_field>-ddtext )
-                                     entity_name = lv_cds_view_name
-                                     is_key      = <ls_field>-keyflag ).
-          ms_result-field_infos = VALUE #( BASE ms_result-field_infos ( ls_field ) ).
+              field       = COND #( WHEN <ls_field>-fieldname_raw IS INITIAL
+                                    THEN <ls_field>-fieldname
+                                    ELSE <ls_field>-fieldname_raw )
+              description = COND #( WHEN <ls_field>-fieldlabel IS NOT INITIAL
+                                    THEN <ls_field>-fieldlabel
+                                    ELSE <ls_field>-ddtext )
+              entity_name = lv_cds_view_name
+              is_key      = <ls_field>-keyflag ).
+          ms_result-field_infos = VALUE #( BASE ms_result-field_infos
+                                           ( ls_field ) ).
         ENDLOOP.
 
       CATCH zcx_sat_data_read_error.
