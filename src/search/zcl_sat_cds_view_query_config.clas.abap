@@ -19,6 +19,7 @@ CLASS zcl_sat_cds_view_query_config DEFINITION
     CONSTANTS:
       BEGIN OF c_image_keys,
         association TYPE string VALUE 'ABAP:IMG_ASSOC',
+        base_field  TYPE string VALUE 'ABAP:IMG_BASE_FIELD',
         anno        TYPE string VALUE 'ABAP:IMG_ANNO',
         db_entity   TYPE string VALUE 'ABAP:IMG_DB_ENTITY',
       END OF c_image_keys.
@@ -54,6 +55,10 @@ CLASS zcl_sat_cds_view_query_config DEFINITION
     METHODS get_ext_by_filter
       RETURNING
         VALUE(result) TYPE zif_sat_ty_object_search=>ty_query_filter.
+
+    METHODS get_base_field_filter
+      RETURNING
+        VALUE(result) TYPE zif_sat_ty_object_search=>ty_query_filter.
 ENDCLASS.
 
 
@@ -80,6 +85,7 @@ CLASS zcl_sat_cds_view_query_config IMPLEMENTATION.
                                                                                 ( get_association_filter( ) )
                                                                                 ( get_annotation_filter( ) )
                                                                                 ( get_field_filter( ) )
+                                                                                ( get_base_field_filter( ) )
                                                                                 ( get_ext_by_filter( ) ) ).
 
     mt_options = lt_object_filters.
@@ -203,6 +209,26 @@ CLASS zcl_sat_cds_view_query_config IMPLEMENTATION.
             assist_type           = zif_sat_c_object_search=>c_filter_content_assist_type-named_item
             category_scheme       = zif_sat_c_object_search=>c_content_assist-category_scheme
             category_term         = zif_sat_c_object_search=>c_content_assist-terms-cds_field
+            proposal_image_source = zif_sat_c_object_search=>c_proposal_image_source-same_as_filter ) ).
+  ENDMETHOD.
+
+  METHOD get_base_field_filter.
+    result = VALUE #(
+        name             = c_cds_options-base_field
+        description      = 'CDS Base Field'
+        long_description = |Use '{ c_cds_options-base_field }' to restrict the search query by certain base fields.\n\n| &&
+                           |Example:\n   { c_cds_options-base_field } : matnr|
+        img_info         = VALUE #(
+            img_key     = c_image_keys-base_field
+            img_encoded = `iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAOwQAADsEBuJFr7QAAABh0RVh0U29mdHdhcmUAcGFpbnQubmV0IDQuMS42/U4J6AAAAJRJREF` &&
+                          `UOE9joCqYveXOf3QMlYIDE/8qDDE4AGk49+gvHKMbANLslb/2P05DYAbceQXByAbANMMwVkNgBoBoGIZKwQFIM5SJCWAGgGx//xXTCyBAsQGhDccIGwCiYRgqBQdEGUCxC/AZkL3oJ24DkKMJhqFScE` &&
+                          `DQgN03/oLxw7d/yTMApBGGyTIAHUOl4ACvAQMAGBgAyskA69j6uwoAAAAASUVORK5CYII=`  )
+        allowed_length   = 30
+        patterns         = abap_true
+        content_assist   = VALUE #(
+            assist_type           = zif_sat_c_object_search=>c_filter_content_assist_type-named_item
+            category_scheme       = zif_sat_c_object_search=>c_content_assist-category_scheme
+            category_term         = zif_sat_c_object_search=>c_content_assist-terms-cds_base_field
             proposal_image_source = zif_sat_c_object_search=>c_proposal_image_source-same_as_filter ) ).
   ENDMETHOD.
 
