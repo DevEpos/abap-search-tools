@@ -1,14 +1,13 @@
 "! <p class="shorttext synchronized">CDS View Search Provider for Object Search</p>
 CLASS zcl_sat_os_cds_provider DEFINITION
   PUBLIC
-  CREATE PUBLIC
-  INHERITING FROM zcl_sat_base_search_provider.
+  INHERITING FROM zcl_sat_base_search_provider
+  CREATE PUBLIC.
 
   PUBLIC SECTION.
     INTERFACES zif_sat_c_os_cds_options.
     INTERFACES zif_sat_ty_object_search.
 
-    "! <p class="shorttext synchronized">CONSTRUCTOR</p>
     METHODS constructor.
 
   PROTECTED SECTION.
@@ -23,23 +22,26 @@ CLASS zcl_sat_os_cds_provider DEFINITION
     ALIASES ty_t_value_range    FOR zif_sat_ty_object_search~ty_t_value_range.
 
     DATA mv_field_subquery TYPE string.
+    DATA mv_base_field_subquery TYPE string.
     DATA mv_anno_subquery TYPE string.
     DATA mv_select_from_subquery TYPE string.
     DATA mv_assoc_subquery TYPE string.
     DATA mv_param_subquery TYPE string.
     DATA mv_params_subquery TYPE string.
 
+    CONSTANTS c_base_alias TYPE string VALUE 'base' ##NO_TEXT.
+    CONSTANTS c_anno_alias TYPE string VALUE 'anno' ##NO_TEXT.
+    CONSTANTS c_extension_view_alias TYPE string VALUE 'ext' ##NO_TEXT.
+    CONSTANTS c_api_alias TYPE string VALUE 'api' ##NO_TEXT.
+    CONSTANTS c_param_alias TYPE string VALUE 'param' ##NO_TEXT.
+    CONSTANTS c_select_from_alias TYPE string VALUE 'frompart' ##NO_TEXT.
+    CONSTANTS c_parameterized_view_alias TYPE string VALUE 'paramviews' ##NO_TEXT.
+    CONSTANTS c_used_in_association_alias TYPE string VALUE 'associationusage' ##NO_TEXT.
+    CONSTANTS c_field_alias TYPE string VALUE 'field'.
+    CONSTANTS c_base_field_alias TYPE string VALUE 'basefield'.
+
     CONSTANTS:
-      c_base_alias                TYPE string VALUE 'base' ##NO_TEXT,
-      c_anno_alias                TYPE string VALUE 'anno' ##NO_TEXT,
-      c_extension_view_alias      TYPE string VALUE 'ext' ##NO_TEXT,
-      c_api_alias                 TYPE string VALUE 'api' ##NO_TEXT,
-      c_param_alias               TYPE string VALUE 'param' ##NO_TEXT,
-      c_select_from_alias         TYPE string VALUE 'frompart' ##NO_TEXT,
-      c_parameterized_view_alias  TYPE string VALUE 'paramviews' ##NO_TEXT,
-      c_used_in_association_alias TYPE string VALUE 'associationusage' ##NO_TEXT,
       BEGIN OF c_fields,
-        alias               TYPE string VALUE 'field' ##NO_TEXT,
         entityid            TYPE string VALUE 'entityid' ##NO_TEXT,
         name                TYPE string VALUE 'name' ##NO_TEXT,
         value               TYPE string VALUE 'value' ##NO_TEXT,
@@ -58,38 +60,41 @@ CLASS zcl_sat_os_cds_provider DEFINITION
 
     DATA mv_param_filter_count TYPE i.
     DATA mv_field_filter_count TYPE i.
+    DATA mv_base_field_filter_count TYPE i.
     DATA mv_anno_filter_count TYPE i.
     DATA mv_from_filter_count TYPE i.
     DATA mv_assoc_filter_count TYPE i.
 
-    "! <p class="shorttext synchronized">Create filter for ANNO option</p>
-    "!
+    "! Create filter for ANNO option
     METHODS add_anno_option_filter
       IMPORTING
         it_values TYPE ty_t_value_range.
 
-    "! <p class="shorttext synchronized">Create filter for PARAM option</p>
-    "!
+    "! Create filter for PARAM option
     METHODS add_param_option_filter
       IMPORTING
         it_values TYPE ty_t_value_range.
 
-    "! <p class="shorttext synchronized">Create filter for FIELD option</p>
+    "! Create filter for FIELD option
     METHODS add_field_option_filter
       IMPORTING
         it_values TYPE ty_t_value_range.
 
-    "! <p class="shorttext synchronized">Create filter for ASSOC option</p>
+    METHODS add_base_field_filter
+      IMPORTING
+        it_values TYPE ty_t_value_range.
+
+    "! Create filter for ASSOC option
     METHODS add_association_option_filter
       IMPORTING
         it_values TYPE ty_t_value_range.
 
-    "! <p class="shorttext synchronized">Create filter for FROM option</p>
+    "! Create filter for FROM option
     METHODS add_from_option_filter
       IMPORTING
         it_values TYPE ty_t_value_range.
 
-    "! <p class="shorttext synchronized">Adds extensions filter to query</p>
+    "! Adds extensions filter to query
     METHODS add_extensions_filter
       IMPORTING
         it_values TYPE ty_t_value_range.
@@ -104,6 +109,9 @@ CLASS zcl_sat_os_cds_provider IMPLEMENTATION.
     mv_field_subquery = |SELECT DISTINCT entityid | && c_cr_lf &&
                         | FROM { zif_sat_c_select_source_id=>zsat_i_cdsviewfield } | && c_cr_lf &&
                         | WHERE |.
+    mv_base_field_subquery = |SELECT DISTINCT viewname | && c_cr_lf &&
+                             | FROM { zif_sat_c_select_source_id=>zsat_i_cdsbasefield } | && c_cr_lf &&
+                             | WHERE |.
     mv_anno_subquery = |SELECT DISTINCT entityid | && c_cr_lf &&
                        | FROM { zif_sat_c_select_source_id=>zsat_i_cdsannotation } | && c_cr_lf &&
                        | WHERE |.
@@ -249,6 +257,9 @@ CLASS zcl_sat_os_cds_provider IMPLEMENTATION.
         WHEN c_cds_search_params-field.
           add_field_option_filter( <ls_option>-value_range ).
 
+        WHEN c_cds_search_params-base_field.
+          add_base_field_filter( <ls_option>-value_range ).
+
         " Find views where an entity is used as an association
         WHEN c_cds_search_params-association.
           add_association_option_filter( <ls_option>-value_range ).
@@ -277,11 +288,12 @@ CLASS zcl_sat_os_cds_provider IMPLEMENTATION.
       RETURN.
     ENDIF.
 
-    IF    mv_anno_filter_count  > 1
-       OR mv_field_filter_count > 1
-       OR mv_assoc_filter_count > 1
-       OR mv_from_filter_count  > 1
-       OR mv_param_filter_count > 1.
+    IF    mv_anno_filter_count       > 1
+       OR mv_field_filter_count      > 1
+       OR mv_base_field_filter_count > 1
+       OR mv_assoc_filter_count      > 1
+       OR mv_from_filter_count       > 1
+       OR mv_param_filter_count      > 1.
       result = abap_true.
     ENDIF.
   ENDMETHOD.
@@ -303,8 +315,13 @@ CLASS zcl_sat_os_cds_provider IMPLEMENTATION.
     ENDIF.
 
     IF mv_field_filter_count > 1.
-      add_having_clause( iv_field           = |{ c_fields-alias }~{ c_fields-fieldname }|
+      add_having_clause( iv_field           = |{ c_field_alias }~{ c_fields-fieldname }|
                          iv_counter_compare = mv_field_filter_count ).
+    ENDIF.
+
+    IF mv_base_field_filter_count > 1.
+      add_having_clause( iv_field           = |{ c_base_field_alias }~{ c_fields-fieldname }|
+                         iv_counter_compare = mv_base_field_filter_count ).
     ENDIF.
 
     IF mv_param_filter_count > 1.
@@ -437,14 +454,39 @@ CLASS zcl_sat_os_cds_provider IMPLEMENTATION.
     IF lt_including IS NOT INITIAL.
       set_distinct_required( ).
       add_join_table( iv_join_table = |{ zif_sat_c_select_source_id=>zsat_i_cdsviewfield }|
-                      iv_alias      = c_fields-alias
+                      iv_alias      = c_field_alias
                       it_conditions = VALUE #( ( field           = c_fields-entityid
                                                  ref_field       = c_fields-entityid
                                                  ref_table_alias = c_base_alias
                                                  type            = zif_sat_c_join_cond_type=>field ) ) ).
-      add_option_filter( iv_fieldname = |{ c_fields-alias }~{ c_fields-fieldname }|
+      add_option_filter( iv_fieldname = |{ c_field_alias }~{ c_fields-fieldname }|
                          it_values    = lt_including ).
       mv_field_filter_count = lines( lt_including ).
+    ENDIF.
+  ENDMETHOD.
+
+  METHOD add_base_field_filter.
+    split_including_excluding( EXPORTING it_values    = it_values
+                               IMPORTING et_including = DATA(lt_including)
+                                         et_excluding = DATA(lt_excluding) ).
+    IF lt_excluding IS NOT INITIAL.
+      create_not_in_filter( iv_subquery_fieldname = c_fields-fieldname
+                            iv_fieldname          = |{ c_base_alias }~{ c_fields-viewname }|
+                            it_excluding          = lt_excluding
+                            iv_subquery           = mv_base_field_subquery ).
+    ENDIF.
+
+    IF lt_including IS NOT INITIAL.
+      set_distinct_required( ).
+      add_join_table( iv_join_table = |{ zif_sat_c_select_source_id=>zsat_i_cdsbasefield }|
+                      iv_alias      = c_base_field_alias
+                      it_conditions = VALUE #( ( field           = c_fields-viewname
+                                                 ref_field       = c_fields-viewname
+                                                 ref_table_alias = c_base_alias
+                                                 type            = zif_sat_c_join_cond_type=>field ) ) ).
+      add_option_filter( iv_fieldname = |{ c_base_field_alias }~{ c_fields-fieldname }|
+                         it_values    = lt_including ).
+      mv_base_field_filter_count = lines( lt_including ).
     ENDIF.
   ENDMETHOD.
 
