@@ -23,7 +23,6 @@ CLASS zcl_sat_adt_res_anno_vh IMPLEMENTATION.
                                      ( option = 'EQ' low = 'ABAPANNOTATION' )
                                      ( option = 'EQ' low = 'COMPATIBILITYCONTRACT' )
                                      ( option = 'CP' low = 'DEMO*' )
-                                     ( option = 'EQ' low = 'FEATURE' )
                                      ( option = 'CP' low = 'KTD*' )
                                      ( option = 'EQ' low = 'LANGUAGEDEPENDENCY' )
                                      ( option = 'EQ' low = 'MAPPINGROLE' ) ).
