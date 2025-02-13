@@ -1,0 +1,38 @@
+
+ABAP Search and Analysis Tools changelog
+=================
+
+Legend
+------
+* : fixed
+! : changed
++ : added
+- : removed
+
+2025-02-13 v2.1.0
+-------------------
+
++ New search type 'Structure'
+* Use sql view name for table join when using the 'include' filter in dtab search
+
+
+2023-10-18 v2.0.0
+-------------------
+
+! Complete overhaul of search API
+! Include projection views in CDS Metadata Index
++ New filters 'changedby', 'changed', 'comp', 'appl' for CDS search
++ New filters 'changedby', 'changed', 'comp', 'appl', 'enhcat', 'maintflag', 'storetype', 
+  'buffering', 'buffertype', 'dataclass', 'sizecat' for DB Table search
++ New filters 'changedby', 'changed', 'comp', 'appl' for Class/Intf search
++ New object search type 'View'
++ New object search type 'Method'
++ New object search typp 'Message'
++ CDS Where-Used analysis has a dedicated API now
++ Search log for performance/error analysis
+
+
+2019-11-26 v1.0.0
+-------------------
+
++ Initial release
