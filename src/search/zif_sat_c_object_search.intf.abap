@@ -6,6 +6,7 @@ INTERFACE zif_sat_c_object_search
     BEGIN OF c_search_type,
       cds_view        TYPE zif_sat_ty_object_search=>ty_search_type VALUE 'cds',
       db_tab          TYPE zif_sat_ty_object_search=>ty_search_type VALUE 'dbtab',
+      structure       TYPE zif_sat_ty_object_search=>ty_search_type VALUE 'struct',
       ddic_view       TYPE zif_sat_ty_object_search=>ty_search_type VALUE 'ddicview',
       class_interface TYPE zif_sat_ty_object_search=>ty_search_type VALUE 'classintf',
       method          TYPE zif_sat_ty_object_search=>ty_search_type VALUE 'method',
@@ -114,6 +115,8 @@ INTERFACE zif_sat_c_object_search
         view_root_tab     TYPE string VALUE 'viewroottable',
         view_base_tab     TYPE string VALUE 'viewbasetable',
         db_tab_include    TYPE string VALUE 'dbtableinclude',
+        structure_include TYPE string VALUE 'structureinclude',
+        structure_field   TYPE string VALUE 'structurefield',
       END OF terms,
     END OF c_content_assist.
 ENDINTERFACE.

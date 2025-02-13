@@ -48,6 +48,8 @@ CLASS zcl_sat_search_ioc IMPLEMENTATION.
                                         implementer = 'ZCL_SAT_CDS_VIEW_QUERY_CONFIG' )
                                       ( filter      = |{ c_search_type-db_tab }|
                                         implementer = 'ZCL_SAT_DBTAB_QUERY_CONFIG' )
+                                      ( filter      = |{ c_search_type-structure }|
+                                        implementer = 'ZCL_SAT_STRUCT_QUERY_CONFIG' )
                                       ( filter      = |{ c_search_type-ddic_view }|
                                         implementer = 'ZCL_SAT_DDICVIEW_QUERY_CONFIG' )
                                       ( filter      = |{ c_search_type-class_interface }|
@@ -71,6 +73,8 @@ CLASS zcl_sat_search_ioc IMPLEMENTATION.
                                         implementer = 'ZCL_SAT_OS_CDS_PROVIDER' )
                                       ( filter      = |{ c_search_type-db_tab }|
                                         implementer = 'ZCL_SAT_OS_DBTAB_PROVIDER' )
+                                      ( filter      = |{ c_search_type-structure }|
+                                        implementer = 'ZCL_SAT_OS_STRUCT_PROVIDER' )
                                       ( filter      = |{ c_search_type-ddic_view }|
                                         implementer = 'ZCL_SAT_OS_DDICVIEW_PROVIDER' )
                                       ( filter      = |{ c_search_type-class_interface }|
@@ -103,6 +107,12 @@ CLASS zcl_sat_search_ioc IMPLEMENTATION.
                   ( filter       = |{ c_search_type-db_tab }|
                     dependencies = VALUE #(
                         filter = c_search_type-db_tab
+                        ( parameter = c_dependency_params-io_configuration contract = c_contracts-query_config    )
+                        ( parameter = c_dependency_params-io_validator     contract = c_contracts-query_validator )
+                        ( parameter = c_dependency_params-io_converter     contract = c_contracts-query_converter ) ) )
+                  ( filter       = |{ c_search_type-structure }|
+                    dependencies = VALUE #(
+                        filter = c_search_type-structure
                         ( parameter = c_dependency_params-io_configuration contract = c_contracts-query_config    )
                         ( parameter = c_dependency_params-io_validator     contract = c_contracts-query_validator )
                         ( parameter = c_dependency_params-io_converter     contract = c_contracts-query_converter ) ) )
