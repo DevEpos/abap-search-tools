@@ -1,20 +1,19 @@
 CLASS zcl_sat_adt_discovery_app DEFINITION
   PUBLIC
-  INHERITING FROM cl_adt_disc_res_app_base
-  FINAL
+  INHERITING FROM cl_adt_disc_res_app_base FINAL
   CREATE PUBLIC.
 
   PUBLIC SECTION.
-    CONSTANTS c_utils_root_scheme TYPE string VALUE 'http://www.devepos.com/adt/saat'.
+    CONSTANTS c_utils_root_scheme    TYPE string VALUE 'http://www.devepos.com/adt/saat'.
     CONSTANTS c_utils_root_scheme_v2 TYPE string VALUE 'http://www.devepos.com/adt/saat/v2'.
-    CONSTANTS c_utils_rel_scheme TYPE string VALUE 'http://www.devepos.com/adt/relations/saat'.
-    CONSTANTS c_utils_rel_scheme_v2 TYPE string VALUE 'http://www.devepos.com/adt/relations/saat/v2'.
-    CONSTANTS c_object_search_uri TYPE string VALUE '/objectsearch'.
-    CONSTANTS c_sapaox_launcher_uri TYPE string VALUE '/sapaox'.
+    CONSTANTS c_utils_rel_scheme     TYPE string VALUE 'http://www.devepos.com/adt/relations/saat'.
+    CONSTANTS c_utils_rel_scheme_v2  TYPE string VALUE 'http://www.devepos.com/adt/relations/saat/v2'.
+    CONSTANTS c_object_search_uri    TYPE string VALUE '/objectsearch'.
+    CONSTANTS c_sapaox_launcher_uri  TYPE string VALUE '/sapaox'.
     CONSTANTS c_ddic_repo_access_uri TYPE string VALUE '/ddicaccess'.
-    CONSTANTS c_nav_targets_uri TYPE string VALUE '/navigationtargets'.
-    CONSTANTS c_static_uri TYPE string VALUE '/devepos/adt/saat'.
-    CONSTANTS c_app_title TYPE string VALUE 'Discovery Provider for ABAP Search and Analysis Tools'.
+    CONSTANTS c_nav_targets_uri      TYPE string VALUE '/navigationtargets'.
+    CONSTANTS c_static_uri           TYPE string VALUE '/devepos/adt/saat'.
+    CONSTANTS c_app_title            TYPE string VALUE 'Discovery Provider for ABAP Search and Analysis Tools'.
 
     CONSTANTS:
       BEGIN OF c_cds_analysis_uri,
@@ -44,33 +43,27 @@ CLASS zcl_sat_adt_discovery_app DEFINITION
   PRIVATE SECTION.
     "! <p class="shorttext synchronized">Register object search</p>
     METHODS register_object_search_res
-      IMPORTING
-        io_registry TYPE REF TO if_adt_disc_rest_rc_registry.
+      IMPORTING io_registry TYPE REF TO if_adt_disc_rest_rc_registry.
 
     "! <p class="shorttext synchronized">Register value help providers</p>
     METHODS register_value_help_providers
-      IMPORTING
-        io_registry TYPE REF TO if_adt_disc_rest_rc_registry.
+      IMPORTING io_registry TYPE REF TO if_adt_disc_rest_rc_registry.
 
     "! <p class="shorttext synchronized">Registers element info for tree expansion</p>
     METHODS register_element_info
-      IMPORTING
-        io_registry TYPE REF TO if_adt_disc_rest_rc_registry.
+      IMPORTING io_registry TYPE REF TO if_adt_disc_rest_rc_registry.
 
     "! <p class="shorttext synchronized">Registers resources for SAP Analyis for Office Tools</p>
     METHODS register_sapaox_launcher
-      IMPORTING
-        io_registry TYPE REF TO if_adt_disc_rest_rc_registry.
+      IMPORTING io_registry TYPE REF TO if_adt_disc_rest_rc_registry.
 
     "! <p class="shorttext synchronized">Registers Resources for CDS Analysis Tools</p>
     METHODS register_cds_analysis
-      IMPORTING
-        io_registry TYPE REF TO if_adt_disc_rest_rc_registry.
+      IMPORTING io_registry TYPE REF TO if_adt_disc_rest_rc_registry.
 
     "! <p class="shorttext synchronized">Registers Resources for detecting navigation targets</p>
     METHODS register_navigation_targets
-      IMPORTING
-        io_registry TYPE REF TO if_adt_disc_rest_rc_registry.
+      IMPORTING io_registry TYPE REF TO if_adt_disc_rest_rc_registry.
 
     "! <p class="shorttext synchronized">Registers resource for DDIC Repository Access</p>
     METHODS register_ddic_repo_access
@@ -297,6 +290,20 @@ CLASS zcl_sat_adt_discovery_app IMPLEMENTATION.
         description     = 'Resource for includes in a db table'
         category_scheme = zif_sat_c_object_search=>c_content_assist-category_scheme
         category_term   = zif_sat_c_object_search=>c_content_assist-terms-db_tab_include ).
+
+    io_registry->register_discoverable_resource(
+        url             = '/structureinclude'
+        handler_class   = 'ZCL_SAT_ADT_RES_STRUCTINCL_VH'
+        description     = 'Resource for includes in a structure'
+        category_scheme = zif_sat_c_object_search=>c_content_assist-category_scheme
+        category_term   = zif_sat_c_object_search=>c_content_assist-terms-structure_include ).
+
+    io_registry->register_discoverable_resource(
+        url             = '/structurefield'
+        handler_class   = 'ZCL_SAT_ADT_RES_STRUCTFIELD_VH'
+        description     = 'Resource for Structure Field'
+        category_scheme = zif_sat_c_object_search=>c_content_assist-category_scheme
+        category_term   = zif_sat_c_object_search=>c_content_assist-terms-structure_field ).
   ENDMETHOD.
 
   METHOD register_sapaox_launcher.
