@@ -9,6 +9,12 @@ Legend
 + : added
 - : removed
 
+2025-02-13 v2.1.0
+-------------------
+
++ New search type 'Structure'
+
+
 2023-10-18 v2.0.0
 -------------------
 
