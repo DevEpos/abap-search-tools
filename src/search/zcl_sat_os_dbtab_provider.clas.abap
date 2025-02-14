@@ -303,7 +303,7 @@ CLASS zcl_sat_os_dbtab_provider IMPLEMENTATION.
     ENDIF.
 
     set_distinct_required( ).
-    add_join_table( iv_join_table = |{ zif_sat_c_select_source_id=>zsat_i_tablefield }|
+    add_join_table( iv_join_table = get_cds_sql_name( |{ zif_sat_c_select_source_id=>zsat_i_tablefield }| )
                     iv_alias      = |{ c_include_table }|
                     it_conditions = VALUE #( and_or = zif_sat_c_selection_condition=>and
                                              ( field           = c_fields-tablename
