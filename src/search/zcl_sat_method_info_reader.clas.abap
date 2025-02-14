@@ -50,52 +50,50 @@ CLASS zcl_sat_method_info_reader DEFINITION
     TYPES ty_status TYPE c LENGTH 1.
     TYPES ty_method_type TYPE c LENGTH 1.
 
-    CONSTANTS:
-      BEGIN OF c_status_flags,
-        look_in_current_cls    TYPE ty_status VALUE '1',
-        look_in_current_parent TYPE ty_status VALUE '2',
-        find_next_parent       TYPE ty_status VALUE '3',
-      END OF c_status_flags,
+    CONSTANTS: BEGIN OF c_status_flags,
+                 look_in_current_cls    TYPE ty_status VALUE '1',
+                 look_in_current_parent TYPE ty_status VALUE '2',
+                 find_next_parent       TYPE ty_status VALUE '3',
+               END OF c_status_flags.
 
-      BEGIN OF c_method_types,
-        normal      TYPE ty_method_type VALUE '1',
-        implemented TYPE ty_method_type VALUE '2',
-      END OF c_method_types.
+    CONSTANTS: BEGIN OF c_method_types,
+                 normal      TYPE ty_method_type VALUE '1',
+                 implemented TYPE ty_method_type VALUE '2',
+               END OF c_method_types.
 
-    TYPES:
-      BEGIN OF ty_method_info,
-        status               TYPE ty_status,
-        type                 TYPE ty_method_type,
-        original_class_name  TYPE classname,
-        original_method_name TYPE seocpdname,
-        current_class        TYPE classname,
-        classname            TYPE classname,
-        method_name          TYPE seocmpname,
-        super_class          TYPE classname,
-        is_redefined         TYPE abap_bool,
-        result_ref           TYPE REF TO zif_sat_ty_object_search=>ty_s_search_result,
-      END OF ty_method_info,
+    TYPES: BEGIN OF ty_method_info,
+             status               TYPE ty_status,
+             type                 TYPE ty_method_type,
+             original_class_name  TYPE classname,
+             original_method_name TYPE seocpdname,
+             current_class        TYPE classname,
+             classname            TYPE classname,
+             method_name          TYPE seocmpname,
+             super_class          TYPE classname,
+             is_redefined         TYPE abap_bool,
+             result_ref           TYPE REF TO zif_sat_ty_object_search=>ty_s_search_result,
+           END OF ty_method_info.
 
-      BEGIN OF ty_method_detail,
-        clsname   TYPE seocompodf-clsname,
-        cmpname   TYPE seocompodf-cmpname,
-        exposure  TYPE seocompodf-exposure,
-        level     TYPE seocompodf-mtddecltyp,
-        is_final  TYPE seocompodf-mtdfinal,
-        descript  TYPE seocompotx-descript,
-        createdon TYPE seocompodf-createdon,
-        author    TYPE seocompodf-author,
-        changedon TYPE seocompodf-changedon,
-        changedby TYPE seocompodf-changedby,
-      END OF ty_method_detail,
+    TYPES: BEGIN OF ty_method_detail,
+             clsname   TYPE seocompodf-clsname,
+             cmpname   TYPE seocompodf-cmpname,
+             exposure  TYPE seocompodf-exposure,
+             level     TYPE seocompodf-mtddecltyp,
+             is_final  TYPE seocompodf-mtdfinal,
+             descript  TYPE seocompotx-descript,
+             createdon TYPE seocompodf-createdon,
+             author    TYPE seocompodf-author,
+             changedon TYPE seocompodf-changedon,
+             changedby TYPE seocompodf-changedby,
+           END OF ty_method_detail.
 
-      ty_method_infos TYPE SORTED TABLE OF ty_method_info WITH NON-UNIQUE KEY classname method_name,
+    TYPES ty_method_infos TYPE SORTED TABLE OF ty_method_info WITH NON-UNIQUE KEY classname method_name.
 
-      BEGIN OF ty_redef_method_info,
-        classname   TYPE seoredef-clsname,
-        method_name TYPE seoredef-mtdname,
-        is_final    TYPE seoredef-mtdfinal,
-      END OF ty_redef_method_info.
+    TYPES: BEGIN OF ty_redef_method_info,
+             classname   TYPE seoredef-clsname,
+             method_name TYPE seoredef-mtdname,
+             is_final    TYPE seoredef-mtdfinal,
+           END OF ty_redef_method_info.
 
     DATA mt_redef_method_info TYPE SORTED TABLE OF ty_redef_method_info WITH UNIQUE KEY classname method_name.
     DATA mf_processing_done TYPE abap_bool.
@@ -267,13 +265,13 @@ CLASS zcl_sat_method_info_reader IMPLEMENTATION.
     DATA lt_implemented TYPE SORTED TABLE OF helper_type WITH UNIQUE KEY clsname refclsname.
 
     SELECT DISTINCT implementer~clsname,
-           implementer~refclsname
+                    implementer~refclsname
       FROM seometarel AS implementer
       FOR ALL ENTRIES IN @it_methods
-      WHERE implementer~clsname = @it_methods-current_class
+      WHERE implementer~clsname    = @it_methods-current_class
         AND implementer~refclsname = @it_methods-classname
-        AND implementer~reltype = @seor_reltype_implementing
-        AND implementer~version = @seoc_version_active
+        AND implementer~reltype    = @seor_reltype_implementing
+        AND implementer~version    = @seoc_version_active
       INTO TABLE @lt_implemented.
 
     LOOP AT it_methods INTO DATA(ls_method).
@@ -295,8 +293,8 @@ CLASS zcl_sat_method_info_reader IMPLEMENTATION.
     DATA lt_found_methods TYPE SORTED TABLE OF helper_type WITH UNIQUE KEY clsname cmpname.
 
     SELECT DISTINCT method~clsname,
-           method~cmpname,
-           method~mtdtype
+                    method~cmpname,
+                    method~mtdtype
       FROM seocompo AS method
       FOR ALL ENTRIES IN @it_methods
       WHERE method~clsname = @it_methods-current_class
@@ -305,7 +303,8 @@ CLASS zcl_sat_method_info_reader IMPLEMENTATION.
       INTO TABLE @lt_found_methods.
 
     LOOP AT it_methods INTO DATA(ls_method).
-      DATA(lr_found_method) = REF #( lt_found_methods[ clsname = ls_method-current_class cmpname = ls_method-method_name ] OPTIONAL ).
+      DATA(lr_found_method) = REF #( lt_found_methods[ clsname = ls_method-current_class
+                                                       cmpname = ls_method-method_name ] OPTIONAL ).
       IF lr_found_method IS BOUND.
         ls_method-result_ref->method_type = lr_found_method->mtdtype.
         ls_method-classname = ls_method-current_class.
@@ -328,7 +327,7 @@ CLASS zcl_sat_method_info_reader IMPLEMENTATION.
     DATA lt_super_class TYPE SORTED TABLE OF ty_super_class WITH UNIQUE KEY clsname refclsname.
 
     SELECT DISTINCT super_class~clsname,
-           super_class~refclsname
+                    super_class~refclsname
       FROM seometarel AS super_class
       FOR ALL ENTRIES IN @it_methods
       WHERE super_class~clsname = @it_methods-current_class
@@ -358,20 +357,20 @@ CLASS zcl_sat_method_info_reader IMPLEMENTATION.
     CHECK mt_methods_processed IS NOT INITIAL.
 
     SELECT DISTINCT method~clsname,
-           method~cmpname,
-           method~exposure,
-           method~mtddecltyp AS level,
-           method~mtdfinal AS is_final,
-           method_text~descript,
-           method~createdon,
-           method~author,
-           method~changedon,
-           method~changedby
+                    method~cmpname,
+                    method~exposure,
+                    method~mtddecltyp    AS level,
+                    method~mtdfinal      AS is_final,
+                    method_text~descript,
+                    method~createdon,
+                    method~author,
+                    method~changedon,
+                    method~changedby
       FROM seocompodf AS method
-        LEFT OUTER JOIN seocompotx AS method_text
-          ON  method~clsname = method_text~clsname
-          AND method~cmpname = method_text~cmpname
-          AND method_text~langu = @sy-langu
+           LEFT OUTER JOIN seocompotx AS method_text
+             ON  method~clsname    = method_text~clsname
+             AND method~cmpname    = method_text~cmpname
+             AND method_text~langu = @sy-langu
       FOR ALL ENTRIES IN @mt_methods_processed
       WHERE method~clsname = @mt_methods_processed-classname
         AND method~cmpname = @mt_methods_processed-method_name
@@ -425,8 +424,8 @@ CLASS zcl_sat_method_info_reader IMPLEMENTATION.
     CHECK: mf_only_redefined = abap_false,
            line_exists( mt_methods_processed[ is_redefined = abap_true ] ).
 
-    SELECT clsname AS classname,
-           mtdname AS method_name,
+    SELECT clsname  AS classname,
+           mtdname  AS method_name,
            mtdfinal AS is_final
       FROM seoredef
       FOR ALL ENTRIES IN @mt_methods_processed

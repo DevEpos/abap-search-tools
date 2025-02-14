@@ -10,14 +10,13 @@ TYPES BEGIN OF ty_basetable.
         INCLUDE TYPE zsatcds2mbtab.
 TYPES END OF ty_basetable.
 
-TYPES:
-  ty_basetables TYPE SORTED TABLE OF ty_basetable WITH UNIQUE DEFAULT KEY,
-  BEGIN OF ty_literal,
-    char TYPE abap_bool,
-    num  TYPE abap_bool,
-  END OF ty_literal,
+TYPES ty_basetables TYPE SORTED TABLE OF ty_basetable WITH UNIQUE DEFAULT KEY.
+TYPES: BEGIN OF ty_literal,
+         char TYPE abap_bool,
+         num  TYPE abap_bool,
+       END OF ty_literal.
 
-  ty_fields TYPE SORTED TABLE OF ty_field WITH UNIQUE KEY ddlname fieldpos.
+TYPES ty_fields TYPE SORTED TABLE OF ty_field WITH UNIQUE KEY ddlname fieldpos.
 
 CLASS lcl_parser DEFINITION.
   PUBLIC SECTION.
@@ -36,7 +35,7 @@ ENDCLASS.
 
 
 CLASS lcl_field_visitor DEFINITION
- INHERITING FROM cl_qlast_visitor.
+  INHERITING FROM cl_qlast_visitor.
 
   PUBLIC SECTION.
     DATA current_field TYPE string.

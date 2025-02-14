@@ -1,8 +1,7 @@
 "! <p class="shorttext synchronized">Resource for reading ABAP OO Class category</p>
 CLASS zcl_sat_adt_res_class_categ_vh DEFINITION
   PUBLIC
-  INHERITING FROM cl_adt_res_named_items
-  FINAL
+  INHERITING FROM cl_adt_res_named_items FINAL
   CREATE PUBLIC.
 
   PUBLIC SECTION.

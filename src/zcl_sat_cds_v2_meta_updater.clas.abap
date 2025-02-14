@@ -1,7 +1,6 @@
 "! <p class="shorttext synchronized">Updates Metadata for CDS Views v2</p>
 CLASS zcl_sat_cds_v2_meta_updater DEFINITION
-  PUBLIC
-  FINAL
+  PUBLIC FINAL
   CREATE PUBLIC.
 
   PUBLIC SECTION.
@@ -67,15 +66,15 @@ CLASS zcl_sat_cds_v2_meta_updater IMPLEMENTATION.
   METHOD remove_invalid_index.
     DATA deleted_ddls_range TYPE RANGE OF ddlname.
 
-    SELECT 'I' AS sign,
-           'EQ' AS option,
+    SELECT 'I'     AS sign,
+           'EQ'    AS option,
            ddlname AS low
       FROM zsatcds2mhead AS index
-        LEFT OUTER JOIN tadir AS repo
-          ON index~ddlname = repo~obj_name
-          AND repo~object = 'DDLS'
+           LEFT OUTER JOIN tadir AS repo
+             ON  index~ddlname = repo~obj_name
+             AND repo~object   = 'DDLS'
       WHERE repo~obj_name IS NULL
-         OR repo~delflag = @abap_true
+         OR repo~delflag   = @abap_true
       INTO CORRESPONDING FIELDS OF TABLE @deleted_ddls_range.
 
     IF sy-subrc = 0.
@@ -94,11 +93,12 @@ CLASS zcl_sat_cds_v2_meta_updater IMPLEMENTATION.
            meta~last_generated_on,
            meta~last_generated_at
       FROM ddddlsrc AS src
-        INNER JOIN tadir AS repo ON  src~ddlname = repo~obj_name
-                                 AND repo~delflag = @abap_false
-                                 AND repo~object = 'DDLS'
-        LEFT OUTER JOIN zsatcds2mhead AS meta
-          ON  src~ddlname = meta~ddlname
+           INNER JOIN tadir AS repo
+             ON  src~ddlname  = repo~obj_name
+             AND repo~delflag = @abap_false
+             AND repo~object  = 'DDLS'
+           LEFT OUTER JOIN zsatcds2mhead AS meta
+             ON src~ddlname = meta~ddlname
       WHERE source_type IN ( 'W', 'X', 'P' )
         AND src~ddlname IN @ddlname_range
       INTO TABLE @DATA(ddls_to_update).
@@ -156,8 +156,7 @@ CLASS zcl_sat_cds_v2_meta_updater IMPLEMENTATION.
 
     CHECK line_exists( fields[ is_cds_v1 = abap_true ] ).
 
-    SELECT
-      FROM zsat_i_ddldependency
+    SELECT FROM zsat_i_ddldependency
       FIELDS viewname,
              entityname
       FOR ALL ENTRIES IN @fields

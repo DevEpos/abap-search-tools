@@ -33,8 +33,7 @@ CLASS lcl_node DEFINITION FINAL.
 ENDCLASS.
 
 
-CLASS lcl_node_helper DEFINITION
-  FINAL
+CLASS lcl_node_helper DEFINITION FINAL
   CREATE PUBLIC.
 
   PUBLIC SECTION.
@@ -53,14 +52,14 @@ CLASS lcl_node_helper DEFINITION
     "! <p class="shorttext synchronized">Adds the given element information as child</p>
     METHODS add_child
       IMPORTING
-        io_parent_node     TYPE REF TO lcl_node
-        iv_name            TYPE string           OPTIONAL
-        iv_type            TYPE string           OPTIONAL
-        iv_entity_type     TYPE zsat_entity_type OPTIONAL
-        iv_alias           TYPE string           OPTIONAL
-        iv_relation        TYPE string           OPTIONAL
+        io_parent_node  TYPE REF TO lcl_node
+        iv_name         TYPE string           OPTIONAL
+        iv_type         TYPE string           OPTIONAL
+        iv_entity_type  TYPE zsat_entity_type OPTIONAL
+        iv_alias        TYPE string           OPTIONAL
+        iv_relation     TYPE string           OPTIONAL
       RETURNING
-        VALUE(ro_added)    TYPE REF TO lcl_node.
+        VALUE(ro_added) TYPE REF TO lcl_node.
 
     "! <p class="shorttext synchronized">Sets parent of current node as new parent node</p>
     METHODS set_parent_as_current_node.
@@ -117,7 +116,7 @@ ENDCLASS.
 
 
 CLASS lcl_ddl_tab_func_stmnt_intrpt DEFINITION
- INHERITING FROM lcl_ddl_stmnt_interpreter.
+  INHERITING FROM lcl_ddl_stmnt_interpreter.
 
   PUBLIC SECTION.
     "! <p class="shorttext synchronized">CONSTRUCTOR</p>
@@ -225,8 +224,6 @@ CLASS lcl_custom_entity DEFINITION
         io_stmnt        TYPE REF TO cl_qlast_custom_entity.
 
     METHODS interpret REDEFINITION.
-
-  PROTECTED SECTION.
 
   PRIVATE SECTION.
     DATA mo_stmnt TYPE REF TO cl_qlast_custom_entity.

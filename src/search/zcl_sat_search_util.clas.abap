@@ -1,7 +1,6 @@
 "! <p class="shorttext synchronized">Utils for Object search</p>
 CLASS zcl_sat_search_util DEFINITION
-  PUBLIC
-  FINAL
+  PUBLIC FINAL
   CREATE PUBLIC.
 
   PUBLIC SECTION.

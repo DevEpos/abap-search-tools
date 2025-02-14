@@ -1,7 +1,6 @@
 "! <p class="shorttext synchronized">Factory for Accessing CDS View information</p>
 CLASS zcl_sat_cds_view_factory DEFINITION
-  PUBLIC
-  FINAL
+  PUBLIC FINAL
   CREATE PUBLIC.
 
   PUBLIC SECTION.
@@ -321,11 +320,10 @@ CLASS zcl_sat_cds_view_factory IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD exists.
-    SELECT SINGLE *
-    FROM dd02b
+    SELECT SINGLE * FROM dd02b
     " TODO: variable is assigned but never used (ABAP cleaner)
-    INTO @DATA(ls_view)
-    WHERE strucobjn = @iv_cds_view_name.
+      INTO @DATA(ls_view)
+      WHERE strucobjn = @iv_cds_view_name.
 
     result = xsdbool( sy-subrc = 0 ).
   ENDMETHOD.
@@ -349,17 +347,16 @@ CLASS zcl_sat_cds_view_factory IMPLEMENTATION.
     IF line_exists( it_header[ typekind_t = zif_sat_c_cds_assoc_type=>table ] ).
       lt_db_table_range = VALUE #( FOR dbtab IN it_header WHERE ( typekind_t = zif_sat_c_cds_assoc_type=>table )
                                    ( sign = 'I' option = 'EQ' low = dbtab-strucobjn_t ) ).
-      SELECT *
-          FROM zsat_i_databasetable
-          WHERE tablename IN @lt_db_table_range
-      INTO CORRESPONDING FIELDS OF TABLE @lt_db_tables.
+      SELECT * FROM zsat_i_databasetable
+        WHERE tablename IN @lt_db_table_range
+        INTO CORRESPONDING FIELDS OF TABLE @lt_db_tables.
     ENDIF.
 
     " read cds view texts for associations
     SELECT entityid, rawentityid, description
       FROM zsat_i_cdsentity
       WHERE entityid IN @lt_assoc_cds_view_range
-    INTO TABLE @DATA(lt_assoc_cds_view_header).
+      INTO TABLE @DATA(lt_assoc_cds_view_header).
 
     LOOP AT it_header ASSIGNING FIELD-SYMBOL(<ls_header>).
       IF <ls_header>-typekind_t = zif_sat_c_cds_assoc_type=>table.
@@ -438,9 +435,9 @@ CLASS zcl_sat_cds_view_factory IMPLEMENTATION.
     " TODO: variable is assigned but never used (ABAP cleaner)
     DATA(lv_descr_language) = zcl_sat_system_helper=>get_system_language( ).
 
-    SELECT entityid AS entity_id,
-           rawentityid AS entity_id_raw,
-           'C' AS entity_type,
+    SELECT entityid           AS entity_id,
+           rawentityid        AS entity_id_raw,
+           'C'                AS entity_type,
            description,
            developmentpackage AS devclass
       FROM zsat_i_cdsentity
@@ -448,16 +445,15 @@ CLASS zcl_sat_cds_view_factory IMPLEMENTATION.
         AND developmentpackage IN @lt_package_range
         AND description        IN @lt_description_range
       ORDER BY entity_id
-    INTO CORRESPONDING FIELDS OF TABLE @result
+      INTO CORRESPONDING FIELDS OF TABLE @result
       UP TO @iv_max_rows ROWS.
   ENDMETHOD.
 
   METHOD get_api_states.
-    SELECT filtervalue
-     FROM zsat_i_apistates
-     WHERE objectname = @iv_cds_view
-       AND objecttype = @zif_sat_c_tadir_types=>data_definition
-     INTO TABLE @rt_api_states.
+    SELECT filtervalue FROM zsat_i_apistates
+      WHERE objectname = @iv_cds_view
+        AND objecttype = @zif_sat_c_tadir_types=>data_definition
+      INTO TABLE @rt_api_states.
 
     IF sy-subrc <> 0.
       rt_api_states = VALUE #( ( zif_sat_c_cds_api_state=>not_released ) ).
@@ -467,19 +463,20 @@ CLASS zcl_sat_cds_view_factory IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD get_tadir_entry.
-    SELECT SINGLE author AS created_by, created_on AS created_date, devclass
+    SELECT SINGLE author     AS created_by,
+                  created_on AS created_date,
+                  devclass
       FROM tadir
       WHERE object   = 'STOB'
         AND pgmid    = 'R3TR'
         AND obj_name = @iv_cds_view
-    INTO @rs_tadir.
+      INTO @rs_tadir.
   ENDMETHOD.
 
   METHOD get_annotations.
-    SELECT *
-      FROM zsat_i_cdsannotation
+    SELECT * FROM zsat_i_cdsannotation
       WHERE name IN @it_annotation_name
-    INTO CORRESPONDING FIELDS OF TABLE @rt_anno.
+      INTO CORRESPONDING FIELDS OF TABLE @rt_anno.
   ENDMETHOD.
 
   METHOD get_ddl_for_entity_name.
@@ -494,19 +491,17 @@ CLASS zcl_sat_cds_view_factory IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD get_entity_name_for_ddls.
-    SELECT SINGLE objectname
-      FROM ddldependency
+    SELECT SINGLE objectname FROM ddldependency
       WHERE objecttype = 'STOB'
         AND ddlname    = @iv_ddls_name
-    INTO @rv_entity_name.
+      INTO @rv_entity_name.
   ENDMETHOD.
 
   METHOD get_ddl_for_package.
-    SELECT obj_name AS ddl
-      FROM tadir
-        WHERE object = 'STOB'
-          AND devclass = @iv_package
-    INTO TABLE @DATA(lt_cds_views).
+    SELECT obj_name AS ddl FROM tadir
+      WHERE object   = 'STOB'
+        AND devclass = @iv_package
+      INTO TABLE @DATA(lt_cds_views).
 
     IF sy-subrc <> 0.
       RETURN.
@@ -520,15 +515,13 @@ CLASS zcl_sat_cds_view_factory IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD get_description.
-    SELECT SINGLE description
-      FROM zsat_i_cdsentity
+    SELECT SINGLE description FROM zsat_i_cdsentity
       WHERE entityid = @iv_cds_view
-    INTO @rv_description.
+      INTO @rv_description.
   ENDMETHOD.
 
   METHOD get_source_type.
-    SELECT SINGLE source_type
-      FROM ddddlsrc
+    SELECT SINGLE source_type FROM ddddlsrc
       WHERE ddlname = @iv_ddl_name
       INTO @rv_source_type.
 
@@ -538,11 +531,10 @@ CLASS zcl_sat_cds_view_factory IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD on_annotation_read_request.
-    SELECT *
-      FROM zsat_i_cdsannotation
-      WHERE entityid = @sender->mv_view_name
-        AND name IN @et_anno_name_range
-    APPENDING CORRESPONDING FIELDS OF TABLE @sender->mt_annotations.
+    SELECT * FROM zsat_i_cdsannotation
+      WHERE entityid  = @sender->mv_view_name
+        AND name     IN @et_anno_name_range
+      APPENDING CORRESPONDING FIELDS OF TABLE @sender->mt_annotations.
 
     IF sy-subrc = 0.
       SORT sender->mt_annotations BY fieldname
@@ -594,12 +586,12 @@ CLASS zcl_sat_cds_view_factory IMPLEMENTATION.
     FIELD-SYMBOLS <ls_base> TYPE lty_base_table.
 
     " Select all base tables for the given generated SQL View
-    SELECT basetable AS entityname,
-           basetable AS original_base_name,
+    SELECT basetable      AS entityname,
+           basetable      AS original_base_name,
            entitytype,
            generationflag
       FROM zsat_i_cdsbasetable
-      WHERE ddlview = @iv_view_name
+      WHERE ddlview        = @iv_view_name
         AND basetable NOT IN @gt_helper_ddl_tab_names
       ORDER BY tableposition
       INTO CORRESPONDING FIELDS OF TABLE @lt_base_tables.
@@ -630,7 +622,7 @@ CLASS zcl_sat_cds_view_factory IMPLEMENTATION.
         FROM zsat_i_cdsentity
         WHERE viewname IN @lt_cds_view_range
            OR entityid IN @lt_cds_view_range
-      INTO TABLE @DATA(lt_cds_view).
+        INTO TABLE @DATA(lt_cds_view).
 
       IF sy-subrc = 0.
         LOOP AT lt_base_tables ASSIGNING <ls_base> WHERE generationflag = abap_true.
@@ -658,7 +650,7 @@ CLASS zcl_sat_cds_view_factory IMPLEMENTATION.
              description
         FROM zsat_i_databaseview
         WHERE viewname IN @lt_view_range
-      INTO TABLE @DATA(lt_view_data).
+        INTO TABLE @DATA(lt_view_data).
 
       IF sy-subrc = 0.
         LOOP AT lt_base_tables ASSIGNING <ls_base> WHERE     entitytype     = zif_sat_c_entity_type=>view
@@ -680,7 +672,7 @@ CLASS zcl_sat_cds_view_factory IMPLEMENTATION.
              description
         FROM zsat_i_databasetable
         WHERE tablename IN @lt_tab_range
-      INTO TABLE @DATA(lt_table_data).
+        INTO TABLE @DATA(lt_table_data).
 
       IF sy-subrc = 0.
         LOOP AT lt_base_tables ASSIGNING <ls_base> WHERE entitytype = zif_sat_c_entity_type=>table.
@@ -878,6 +870,8 @@ CLASS zcl_sat_cds_view_factory IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD read_param_annotations.
+    " TODO: parameter IV_CDS_VIEW is never used (ABAP cleaner)
+
     TYPES: BEGIN OF ty_param_anno,
              parametername TYPE ddparname,
              name          TYPE c LENGTH 240,
@@ -900,7 +894,7 @@ CLASS zcl_sat_cds_view_factory IMPLEMENTATION.
           FROM (lv_from)
           WHERE (lt_where)
           ORDER BY (lv_order_by)
-        INTO CORRESPONDING FIELDS OF TABLE @lt_paramanno.
+          INTO CORRESPONDING FIELDS OF TABLE @lt_paramanno.
       CATCH cx_sy_open_sql_db INTO DATA(lr_osql_db_exc). " TODO: variable is assigned but never used (ABAP cleaner)
       CATCH cx_sy_dynamic_osql_semantics INTO DATA(lr_osql_semantics_exc). " TODO: variable is assigned but never used (ABAP cleaner)
       CATCH cx_sy_dynamic_osql_syntax INTO DATA(lr_osql_syntax_exc). " TODO: variable is assigned but never used (ABAP cleaner)

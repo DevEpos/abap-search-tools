@@ -54,8 +54,9 @@ INTERFACE zif_sat_ty_global
     END OF ty_s_selopt,
 
     "! <p class="shorttext synchronized" lang="en">Generic range table</p>
-    ty_t_selopt TYPE STANDARD TABLE OF ty_s_selopt WITH EMPTY KEY,
+    ty_t_selopt TYPE STANDARD TABLE OF ty_s_selopt WITH EMPTY KEY.
 
+  TYPES:
     "! <p class="shorttext synchronized" lang="en">Extended SELOPT for SQL Where condition</p>
     BEGIN OF ty_s_seltab_sql,
       sqlfieldname TYPE ty_sql_fieldname,
@@ -70,14 +71,13 @@ INTERFACE zif_sat_ty_global
 
     ty_t_seltab_sql TYPE STANDARD TABLE OF ty_s_seltab_sql WITH EMPTY KEY.
 
-  TYPES:
-    BEGIN OF ty_s_or_seltab_sql,
-      pos    TYPE ty_selopt_tab_position,
-      values TYPE ty_t_seltab_sql,
-    END  OF ty_s_or_seltab_sql,
+  TYPES: BEGIN OF ty_s_or_seltab_sql,
+           pos    TYPE ty_selopt_tab_position,
+           values TYPE ty_t_seltab_sql,
+         END  OF ty_s_or_seltab_sql,
 
-    ty_t_or_seltab_sql  TYPE STANDARD TABLE OF ty_s_or_seltab_sql WITH EMPTY KEY,
-    ty_t_and_seltab_sql TYPE STANDARD TABLE OF ty_t_or_seltab_sql WITH EMPTY KEY.
+         ty_t_or_seltab_sql TYPE STANDARD TABLE OF ty_s_or_seltab_sql WITH EMPTY KEY.
+  TYPES ty_t_and_seltab_sql TYPE STANDARD TABLE OF ty_t_or_seltab_sql WITH EMPTY KEY.
 
   TYPES:
     BEGIN OF ty_s_join_field_condition,

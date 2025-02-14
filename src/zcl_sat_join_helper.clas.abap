@@ -74,6 +74,8 @@ ENDCLASS.
 
 CLASS zcl_sat_join_helper IMPLEMENTATION.
   METHOD build_from_clause_for_join_def.
+    " TODO: parameter IT_TABLE_ALIAS_MAP is never used (ABAP cleaner)
+
     DATA(ls_join_def) = repair_join_definition( if_use_ddl_for_select = if_use_ddl_for_select
                                                 is_join_def           = is_join_def ).
 
@@ -129,7 +131,7 @@ CLASS zcl_sat_join_helper IMPLEMENTATION.
                                      CHANGING  cv_table_part = rs_join-primary_table ).
     ENDIF.
 
-    rs_join-primary_table = rs_join-primary_table && | AS | &&
+    rs_join-primary_table = |{ rs_join-primary_table } AS | &&
                             COND #( WHEN is_join_def-primary_table_alias IS NOT INITIAL
                                     THEN is_join_def-primary_table_alias ).
 
@@ -271,8 +273,8 @@ CLASS zcl_sat_join_helper IMPLEMENTATION.
     FIELD-SYMBOLS <ls_condition> TYPE zsat_join_condition_data.
 
     rs_join_def = is_join_def.
-    IF       is_join_def-primary_table_entity_type = zif_sat_c_entity_type=>cds_view
-       AND ( if_use_ddl_for_select                 = abap_true ).
+    IF     is_join_def-primary_table_entity_type = zif_sat_c_entity_type=>cds_view
+       AND ( if_use_ddl_for_select = abap_true ).
 
       rs_join_def-primary_table = zcl_sat_cds_view_factory=>read_ddl_ddic_view_for_entity( is_join_def-primary_table ).
     ENDIF.
@@ -298,8 +300,8 @@ CLASS zcl_sat_join_helper IMPLEMENTATION.
           <ls_table>-conditions[ lines( <ls_table>-conditions ) ]-and_or = space.
         ENDIF.
       ENDIF.
-      IF       <ls_table>-entity_type = zif_sat_c_entity_type=>cds_view
-         AND ( if_use_ddl_for_select  = abap_true ).
+      IF     <ls_table>-entity_type = zif_sat_c_entity_type=>cds_view
+         AND ( if_use_ddl_for_select = abap_true ).
         <ls_table>-add_table = zcl_sat_cds_view_factory=>read_ddl_ddic_view_for_entity( <ls_table>-add_table ).
       ENDIF.
 

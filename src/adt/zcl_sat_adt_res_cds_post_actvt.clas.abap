@@ -1,8 +1,7 @@
 "! <p class="shorttext synchronized">Resource for CDS Post Activation</p>
 CLASS zcl_sat_adt_res_cds_post_actvt DEFINITION
   PUBLIC
-  INHERITING FROM cl_adt_rest_resource
-  FINAL
+  INHERITING FROM cl_adt_rest_resource FINAL
   CREATE PUBLIC.
 
   PUBLIC SECTION.

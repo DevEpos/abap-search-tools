@@ -1,8 +1,7 @@
 "! <p class="shorttext synchronized">Resource for DDIC Repository Access</p>
 CLASS zcl_sat_adt_res_ddic_rep_acc DEFINITION
   PUBLIC
-  INHERITING FROM cl_adt_rest_resource
-  FINAL
+  INHERITING FROM cl_adt_rest_resource FINAL
   CREATE PUBLIC.
 
   PUBLIC SECTION.
@@ -189,8 +188,7 @@ CLASS zcl_sat_adt_res_ddic_rep_acc IMPLEMENTATION.
       mv_object_type = zif_sat_c_entity_type=>view.
 
       " fallback if view is generated ddic sql view of ddls
-      SELECT SINGLE ddlname
-        FROM zsat_i_ddldependency
+      SELECT SINGLE ddlname FROM zsat_i_ddldependency
         WHERE viewname = @mv_object_name
         INTO @DATA(lv_ddlname_for_view).
       IF sy-subrc = 0.
@@ -222,11 +220,10 @@ CLASS zcl_sat_adt_res_ddic_rep_acc IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD read_cds_view_columns.
-    SELECT SINGLE entityid
-      FROM zsat_p_cdsviewbase
+    SELECT SINGLE entityid FROM zsat_p_cdsviewbase
       WHERE entityid = @mv_object_name
          OR ddlname  = @mv_object_name
-    INTO  @DATA(lv_cds_view_name).
+      INTO @DATA(lv_cds_view_name).
 
     IF sy-subrc <> 0.
       RETURN.
@@ -242,14 +239,14 @@ CLASS zcl_sat_adt_res_ddic_rep_acc IMPLEMENTATION.
           ENDIF.
 
           DATA(ls_field) = VALUE zif_sat_ty_adt_types=>ty_entity_field_info(
-              field       = COND #( WHEN <ls_field>-fieldname_raw IS INITIAL
-                                    THEN <ls_field>-fieldname
-                                    ELSE <ls_field>-fieldname_raw )
-              description = COND #( WHEN <ls_field>-fieldlabel IS NOT INITIAL
-                                    THEN <ls_field>-fieldlabel
-                                    ELSE <ls_field>-ddtext )
-              entity_name = lv_cds_view_name
-              is_key      = <ls_field>-keyflag ).
+                                     field       = COND #( WHEN <ls_field>-fieldname_raw IS INITIAL
+                                                           THEN <ls_field>-fieldname
+                                                           ELSE <ls_field>-fieldname_raw )
+                                     description = COND #( WHEN <ls_field>-fieldlabel IS NOT INITIAL
+                                                           THEN <ls_field>-fieldlabel
+                                                           ELSE <ls_field>-ddtext )
+                                     entity_name = lv_cds_view_name
+                                     is_key      = <ls_field>-keyflag ).
           ms_result-field_infos = VALUE #( BASE ms_result-field_infos
                                            ( ls_field ) ).
         ENDLOOP.

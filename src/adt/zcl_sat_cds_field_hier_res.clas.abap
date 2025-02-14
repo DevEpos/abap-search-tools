@@ -148,25 +148,23 @@ CLASS zcl_sat_cds_field_hier_res IMPLEMENTATION.
   METHOD get_field_hierarchy.
     DATA lt_view_fields TYPE STANDARD TABLE OF ty_s_hierarchy_field.
 
-    SELECT DISTINCT
-      field~viewname AS basetable,
-      field~viewfield AS basefield
+    SELECT DISTINCT field~viewname  AS basetable,
+                    field~viewfield AS basefield
       FROM zsat_i_cdsbasefield AS field
-        INNER JOIN zsat_p_cdsviewbase AS view_base
-           ON   view_base~viewname = field~viewname
-           AND  view_base~entityid = @iv_cds_view
+           INNER JOIN zsat_p_cdsviewbase AS view_base
+             ON  view_base~viewname = field~viewname
+             AND view_base~entityid = @iv_cds_view
       WHERE field~viewfield = @iv_cds_view_field
       INTO TABLE @DATA(lt_field_tables).
 
     WHILE lines( lt_field_tables ) > 0.
-      SELECT DISTINCT
-        field~viewname,
-        field~viewfield,
-        field~basetable,
-        field~fieldname AS basefield
+      SELECT DISTINCT field~viewname,
+                      field~viewfield,
+                      field~basetable,
+                      field~fieldname AS basefield
         FROM zsat_i_cdsbasefield AS field
         FOR ALL ENTRIES IN @lt_field_tables
-        WHERE field~viewname = @lt_field_tables-basetable
+        WHERE field~viewname  = @lt_field_tables-basetable
           AND field~viewfield = @lt_field_tables-basefield
         INTO CORRESPONDING FIELDS OF TABLE @lt_view_fields.
 
@@ -204,9 +202,9 @@ CLASS zcl_sat_cds_field_hier_res IMPLEMENTATION.
     ENDIF.
 
     SELECT DISTINCT view~viewname,
-           view~rawentityid,
-           view~ddlname,
-           view~sourcetype
+                    view~rawentityid,
+                    view~ddlname,
+                    view~sourcetype
       FROM zsat_p_cdsviewbase AS view
       FOR ALL ENTRIES IN @rt_hierarchy_flat
       WHERE view~viewname = @rt_hierarchy_flat-viewname
@@ -221,17 +219,17 @@ CLASS zcl_sat_cds_field_hier_res IMPLEMENTATION.
     ENDIF.
 
     SELECT DISTINCT view~viewname,
-           view~rawentityid,
-           view~ddlname,
-           view_field~rawfieldname,
-           view_field~fieldname
+                    view~rawentityid,
+                    view~ddlname,
+                    view_field~rawfieldname,
+                    view_field~fieldname
       FROM zsat_p_cdsviewbase AS view
-        INNER JOIN zsat_i_cdsviewfield AS view_field
-          ON  view~entityid = view_field~entityid
+           INNER JOIN zsat_i_cdsviewfield AS view_field
+             ON view~entityid = view_field~entityid
       FOR ALL ENTRIES IN @rt_hierarchy_flat
-      WHERE (    view~viewname = @rt_hierarchy_flat-viewname
-              OR view~viewname = @rt_hierarchy_flat-basetable
-              OR view~entityid = @rt_hierarchy_flat-basetable )
+      WHERE (    view~viewname        = @rt_hierarchy_flat-viewname
+              OR view~viewname        = @rt_hierarchy_flat-basetable
+              OR view~entityid        = @rt_hierarchy_flat-basetable )
         AND (    view_field~fieldname = @rt_hierarchy_flat-viewfield
               OR view_field~fieldname = @rt_hierarchy_flat-basefield )
       INTO TABLE @DATA(lt_additional_field_infos).
@@ -381,8 +379,7 @@ CLASS zcl_sat_cds_field_hier_res IMPLEMENTATION.
     lt_entity = VALUE #( FOR field IN mt_cached_nodes
                          ( sign = 'I' option = 'EQ' low = field-entity ) ).
 
-    SELECT *
-      FROM zsat_i_databaseentitywotext
+    SELECT * FROM zsat_i_databaseentitywotext
       WHERE entity IN @lt_entity
       INTO TABLE @DATA(lt_entity_type).
 
@@ -411,8 +408,7 @@ CLASS zcl_sat_cds_field_hier_res IMPLEMENTATION.
     SORT mt_ddlname_range.
     DELETE ADJACENT DUPLICATES FROM mt_ddlname_range.
 
-    SELECT *
-      FROM zsat_i_ddlapistate
+    SELECT * FROM zsat_i_ddlapistate
       WHERE ddlname IN @mt_ddlname_range
       INTO CORRESPONDING FIELDS OF TABLE @mt_ddl_apistates.
 

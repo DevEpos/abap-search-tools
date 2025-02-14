@@ -67,7 +67,7 @@ ENDCLASS.
 
 
 CLASS lcl_cds_result_converter DEFINITION
-INHERITING FROM lcl_result_converter.
+  INHERITING FROM lcl_result_converter.
 
   PROTECTED SECTION.
     METHODS convert_result_entry REDEFINITION.
@@ -75,7 +75,7 @@ ENDCLASS.
 
 
 CLASS lcl_method_result_converter DEFINITION
-INHERITING FROM lcl_result_converter.
+  INHERITING FROM lcl_result_converter.
 
   PROTECTED SECTION.
     METHODS convert_entries REDEFINITION.
@@ -105,7 +105,7 @@ ENDCLASS.
 
 
 CLASS lcl_message_result_converter DEFINITION
-INHERITING FROM lcl_result_converter.
+  INHERITING FROM lcl_result_converter.
 
   PROTECTED SECTION.
     METHODS convert_entries REDEFINITION.
