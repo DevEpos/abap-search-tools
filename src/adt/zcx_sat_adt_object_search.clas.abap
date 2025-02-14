@@ -1,8 +1,7 @@
 "! <p class="shorttext synchronized">ADT Object Search error</p>
 CLASS zcx_sat_adt_object_search DEFINITION
   PUBLIC
-  INHERITING FROM zcx_sat_adt_rest_error
-  FINAL
+  INHERITING FROM zcx_sat_adt_rest_error FINAL
   CREATE PUBLIC.
 
   PUBLIC SECTION.

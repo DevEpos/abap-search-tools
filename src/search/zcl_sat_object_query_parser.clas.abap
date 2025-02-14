@@ -282,7 +282,7 @@ CLASS zcl_sat_object_query_parser IMPLEMENTATION.
     DATA lt_values TYPE string_table.
 
     SPLIT iv_token AT c_option_separator INTO lv_option lv_value_list.
-    TRANSLATE lv_option TO LOWER CASE.
+    lv_option = to_lower( lv_option ).
     mo_configuration->map_option( CHANGING cv_option = lv_option ).
 
     IF NOT mo_configuration->has_option( lv_option ).
@@ -369,7 +369,8 @@ CLASS zcl_sat_object_query_parser IMPLEMENTATION.
 
       LOOP AT lr_search_term->values REFERENCE INTO DATA(lr_term_value).
         IF lr_term_value->sign IS INITIAL OR lr_term_value->option IS INITIAL.
-          lr_term_value->* = convert_term_to_selopt( iv_term = lr_term_value->low if_case_sensitive = lf_field_case_sensitive ).
+          lr_term_value->* = convert_term_to_selopt( iv_term           = lr_term_value->low
+                                                     if_case_sensitive = lf_field_case_sensitive ).
         ENDIF.
       ENDLOOP.
     ENDLOOP.

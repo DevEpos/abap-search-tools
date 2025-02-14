@@ -1,8 +1,7 @@
 "! <p class="shorttext synchronized">Where-Used-Analysis for Table/View/CDS in CDS Views</p>
 CLASS zcl_sat_adt_res_cds_a_wusl DEFINITION
   PUBLIC
-  INHERITING FROM cl_adt_rest_resource
-  FINAL
+  INHERITING FROM cl_adt_rest_resource FINAL
   CREATE PUBLIC.
 
   PUBLIC SECTION.

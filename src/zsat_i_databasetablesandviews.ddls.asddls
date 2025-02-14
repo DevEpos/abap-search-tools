@@ -1,14 +1,17 @@
-@AbapCatalog.sqlViewName: 'ZSATIDBTABAV'
 @AbapCatalog.compiler.compareFilter: true
 @AbapCatalog.preserveKey: true
+@AbapCatalog.sqlViewName: 'ZSATIDBTABAV'
+
 @AccessControl.authorizationCheck: #NOT_REQUIRED
+
 @EndUserText.label: 'DB Tables and DB views'
 
 define view ZSAT_I_DatabaseTablesAndViews
   as select from ZSAT_I_DatabaseTable
+
 {
-  TableName as Entity,
-  TableName as EntityRaw,
+  TableName           as Entity,
+  TableName           as EntityRaw,
   DeliveryClass,
   Description,
   Language,
@@ -19,11 +22,14 @@ define view ZSAT_I_DatabaseTablesAndViews
   ChangedDate,
   Type
 }
-union select from ZSAT_I_DatabaseView
+
+union
+  select from ZSAT_I_DatabaseView
+
 {
-  ViewName               as Entity,
-  ViewName               as EntityRaw,
-  cast( '' as contflag ) as DeliveryClass,
+  ViewName             as Entity,
+  ViewName             as EntityRaw,
+  cast('' as contflag) as DeliveryClass,
   Description,
   Language,
   DevelopmentPackage,

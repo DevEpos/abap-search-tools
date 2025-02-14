@@ -1,7 +1,6 @@
 "! <p class="shorttext synchronized">Search provider for Class/Interface Methods</p>
 CLASS zcl_sat_os_method_provider DEFINITION
-  PUBLIC
-  FINAL
+  PUBLIC FINAL
   CREATE PUBLIC.
 
   PUBLIC SECTION.

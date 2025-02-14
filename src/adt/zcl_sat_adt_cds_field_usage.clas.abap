@@ -82,23 +82,22 @@ CLASS zcl_sat_adt_cds_field_usage IMPLEMENTATION.
            base~sourcetype,
            field~viewfield
       FROM zsat_i_cdsfrompartentity AS frompart
-        INNER JOIN zsat_p_cdsviewbase AS base
-          ON base~viewname = frompart~ddlviewname
-        INNER JOIN dd27s AS field
-          ON field~viewname = base~viewname
-          AND ( field~tabname LIKE 'DDDDL%TYPES' OR
-                field~tabname = 'DDDDLNUM_DUMMY' )
+           INNER JOIN zsat_p_cdsviewbase AS base
+             ON base~viewname = frompart~ddlviewname
+           INNER JOIN dd27s AS field
+             ON field~viewname = base~viewname
+             AND ( field~tabname LIKE 'DDDDL%TYPES'
+                   OR field~tabname = 'DDDDLNUM_DUMMY' )
       WHERE frompart~sourceentity = @mv_cds_view
-    INTO CORRESPONDING FIELDS OF TABLE @mt_cds_usages.
+      INTO CORRESPONDING FIELDS OF TABLE @mt_cds_usages.
 
     rf_usages_found = xsdbool( sy-subrc = 0 ).
   ENDMETHOD.
 
   METHOD parse_view.
-    SELECT SINGLE
-        FROM ddddlsrc
-        FIELDS *
-        WHERE ddlname = @is_cds_view-ddlname
+    SELECT SINGLE FROM ddddlsrc
+      FIELDS *
+      WHERE ddlname = @is_cds_view-ddlname
       INTO @DATA(ls_cds).
 
     IF sy-subrc <> 0.
@@ -134,11 +133,11 @@ CLASS zcl_sat_adt_cds_field_usage IMPLEMENTATION.
           " Select raw field names
           SELECT fieldname,
                  rawfieldname
-             FROM zsat_i_cdsviewfield
-             FOR ALL ENTRIES IN @lt_fields
-             WHERE entityid = @is_cds_view-entityid
-               AND fieldname = @lt_fields-table_line
-          INTO TABLE @DATA(lt_field_names).
+            FROM zsat_i_cdsviewfield
+            FOR ALL ENTRIES IN @lt_fields
+            WHERE entityid  = @is_cds_view-entityid
+              AND fieldname = @lt_fields-table_line
+            INTO TABLE @DATA(lt_field_names).
         ENDIF.
 
         LOOP AT lt_fields INTO DATA(lv_field).

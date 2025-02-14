@@ -99,23 +99,23 @@ CLASS zcl_sat_os_classintf_provider IMPLEMENTATION.
   METHOD constructor.
     super->constructor( ).
     " Create sub queries for parameters where boolean operation AND is senseful
-    mv_flag_subquery = |SELECT DISTINCT { c_fields-classintf } | && c_cr_lf &&
-                       | FROM { zif_sat_c_select_source_id=>zsat_i_classflags } | && c_cr_lf &&
+    mv_flag_subquery = |SELECT DISTINCT { c_fields-classintf } { c_cr_lf }| &&
+                       | FROM { zif_sat_c_select_source_id=>zsat_i_classflags } { c_cr_lf }| &&
                        | WHERE |.
-    mv_attribute_subquery = |SELECT DISTINCT { c_fields-classintf } | && c_cr_lf &&
-                            | FROM { zif_sat_c_select_source_id=>zsat_i_classattribute } | && c_cr_lf &&
+    mv_attribute_subquery = |SELECT DISTINCT { c_fields-classintf } { c_cr_lf }| &&
+                            | FROM { zif_sat_c_select_source_id=>zsat_i_classattribute } { c_cr_lf }| &&
                             | WHERE |.
-    mv_meth_subquery = |SELECT DISTINCT { c_fields-classintf } | && c_cr_lf &&
-                       | FROM { zif_sat_c_select_source_id=>zsat_i_simpleclifmethod } | && c_cr_lf &&
+    mv_meth_subquery = |SELECT DISTINCT { c_fields-classintf } { c_cr_lf }| &&
+                       | FROM { zif_sat_c_select_source_id=>zsat_i_simpleclifmethod } { c_cr_lf }| &&
                        | WHERE |.
-    mv_friend_subquery = |SELECT DISTINCT { c_fields-classintf } | && c_cr_lf &&
-                         | FROM { zif_sat_c_select_source_id=>zsat_i_globalfriend } | && c_cr_lf &&
+    mv_friend_subquery = |SELECT DISTINCT { c_fields-classintf } { c_cr_lf }| &&
+                         | FROM { zif_sat_c_select_source_id=>zsat_i_globalfriend } { c_cr_lf }| &&
                          | WHERE |.
-    mv_intf_subquery = |SELECT DISTINCT { c_fields-classintf } | && c_cr_lf &&
-                       | FROM { zif_sat_c_select_source_id=>zsat_i_interfaceusage } | && c_cr_lf &&
+    mv_intf_subquery = |SELECT DISTINCT { c_fields-classintf } { c_cr_lf }| &&
+                       | FROM { zif_sat_c_select_source_id=>zsat_i_interfaceusage } { c_cr_lf }| &&
                        | WHERE |.
-    mv_super_subquery = |SELECT DISTINCT { c_fields-classintf } | && c_cr_lf &&
-                        | FROM { zif_sat_c_select_source_id=>zsat_i_superclass } | && c_cr_lf &&
+    mv_super_subquery = |SELECT DISTINCT { c_fields-classintf } { c_cr_lf }| &&
+                        | FROM { zif_sat_c_select_source_id=>zsat_i_superclass } { c_cr_lf }| &&
                         | WHERE |.
   ENDMETHOD.
 
@@ -175,7 +175,7 @@ CLASS zcl_sat_os_classintf_provider IMPLEMENTATION.
     ENDIF.
   ENDMETHOD.
 
-  method add_having_clauses.
+  METHOD add_having_clauses.
     IF mv_flag_filter_count > 1.
       add_having_clause( iv_field           = |{ c_alias_names-flags }~{ c_fields-flag }|
                          iv_counter_compare = mv_flag_filter_count ).
@@ -468,8 +468,9 @@ CLASS zcl_sat_os_classintf_provider IMPLEMENTATION.
                                                  type            = zif_sat_c_join_cond_type=>field  ) ) ).
       add_option_filter( iv_fieldname = |{ c_alias_names-super }~{ c_fields-super_class }|
                          it_values    = VALUE #( ( LINES OF it_values )
-                                                 ( LINES OF zcl_sat_clif_filter_util=>resolve_subclasses(
-                                                                it_values = it_values ) ) ) ).
+                                                 ( LINES OF
+                                                   zcl_sat_clif_filter_util=>resolve_subclasses(
+                                                       it_values = it_values ) ) ) ).
       RETURN.
     ENDIF.
 

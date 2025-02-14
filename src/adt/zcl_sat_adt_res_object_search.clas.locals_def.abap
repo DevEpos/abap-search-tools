@@ -67,19 +67,18 @@ ENDCLASS.
 
 
 CLASS lcl_cds_result_converter DEFINITION
-INHERITING FROM lcl_result_converter.
+  INHERITING FROM lcl_result_converter.
 
   PROTECTED SECTION.
     METHODS before_conversion    REDEFINITION.
     METHODS convert_result_entry REDEFINITION.
 
   PRIVATE SECTION.
-    TYPES:
-      BEGIN OF ty_s_ddls_source,
-        ddlname TYPE ddlname,
-        source  TYPE string,
-      END OF ty_s_ddls_source,
-      ty_lt_ddlname TYPE RANGE OF ddlname.
+    TYPES: BEGIN OF ty_s_ddls_source,
+             ddlname TYPE ddlname,
+             source  TYPE string,
+           END OF ty_s_ddls_source.
+    TYPES ty_lt_ddlname TYPE RANGE OF ddlname.
 
     DATA mt_ddls_source TYPE HASHED TABLE OF ty_s_ddls_source WITH UNIQUE KEY ddlname.
 
@@ -94,7 +93,7 @@ ENDCLASS.
 
 
 CLASS lcl_method_result_converter DEFINITION
-INHERITING FROM lcl_result_converter.
+  INHERITING FROM lcl_result_converter.
 
   PROTECTED SECTION.
     METHODS convert_entries REDEFINITION.
@@ -124,7 +123,7 @@ ENDCLASS.
 
 
 CLASS lcl_message_result_converter DEFINITION
-INHERITING FROM lcl_result_converter.
+  INHERITING FROM lcl_result_converter.
 
   PROTECTED SECTION.
     METHODS convert_entries REDEFINITION.

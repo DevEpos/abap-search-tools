@@ -1,8 +1,7 @@
 "! <p class="shorttext synchronized">General error during element information retrieval</p>
 CLASS zcx_sat_adt_element_info DEFINITION
   PUBLIC
-  INHERITING FROM zcx_sat_adt_rest_error
-  FINAL
+  INHERITING FROM zcx_sat_adt_rest_error FINAL
   CREATE PUBLIC.
 
   PUBLIC SECTION.

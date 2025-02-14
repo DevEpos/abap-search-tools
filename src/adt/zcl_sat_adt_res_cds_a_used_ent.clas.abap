@@ -27,11 +27,11 @@ CLASS zcl_sat_adt_res_cds_a_used_ent IMPLEMENTATION.
 
   METHOD execute_analysis.
     SELECT SINGLE entityid,
-           ddlname,
-           developmentpackage,
-           createdby,
-           rawentityid,
-           description
+                  ddlname,
+                  developmentpackage,
+                  createdby,
+                  rawentityid,
+                  description
       FROM zsat_i_cdsentity
       WHERE entityid = @mv_cds_view
          OR ddlname  = @mv_cds_view
