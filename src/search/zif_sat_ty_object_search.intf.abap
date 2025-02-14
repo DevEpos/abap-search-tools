@@ -1,12 +1,12 @@
 "! <p class="shorttext synchronized">Types for Object Search</p>
 INTERFACE zif_sat_ty_object_search
   PUBLIC.
-  TYPES:
-    ty_custom_field_short  TYPE c LENGTH 5,
-    ty_custom_field_medium TYPE c LENGTH 30,
-    ty_custom_field_long   TYPE c LENGTH 100,
-    ty_class_subcomp_range TYPE RANGE OF seosconame,
+  TYPES ty_custom_field_short TYPE c LENGTH 5.
+  TYPES ty_custom_field_medium TYPE c LENGTH 30.
+  TYPES ty_custom_field_long TYPE c LENGTH 100.
+  TYPES ty_class_subcomp_range TYPE RANGE OF seosconame.
 
+  TYPES:
     "! Row Object Search Result
     BEGIN OF ty_s_search_result,
       object_name        TYPE zsat_entity_id,
@@ -40,10 +40,11 @@ INTERFACE zif_sat_ty_object_search
     END OF ty_s_search_result,
 
     "! Table of object search results
-    ty_t_search_result TYPE STANDARD TABLE OF ty_s_search_result WITH EMPTY KEY,
+    ty_t_search_result TYPE STANDARD TABLE OF ty_s_search_result WITH EMPTY KEY.
 
-    "! <p class="shorttext synchronized">Type for the object search</p>
-    ty_search_type     TYPE c LENGTH 15,
+  "! <p class="shorttext synchronized">Type for the object search</p>
+  TYPES ty_search_type TYPE c LENGTH 15.
+  TYPES:
     "! <p class="shorttext synchronized">Value range for search option value entry</p>
     BEGIN OF ty_s_value_range,
       sign    TYPE ddsign,
@@ -54,8 +55,9 @@ INTERFACE zif_sat_ty_object_search
       high    TYPE string,
     END OF ty_s_value_range,
     "! <p class="shorttext synchronized">Table of option value ranges</p>
-    ty_t_value_range TYPE STANDARD TABLE OF ty_s_value_range WITH EMPTY KEY,
+    ty_t_value_range TYPE STANDARD TABLE OF ty_s_value_range WITH EMPTY KEY.
 
+  TYPES:
     "! <p class="shorttext synchronized" lang="en">Represents search option with its values</p>
     BEGIN OF ty_s_search_option,
       option      TYPE string,
@@ -65,56 +67,58 @@ INTERFACE zif_sat_ty_object_search
     END OF ty_s_search_option,
 
     "! <p class="shorttext synchronized">Table of search options</p>
-    ty_t_search_option TYPE STANDARD TABLE OF ty_s_search_option WITH KEY option,
+    ty_t_search_option TYPE STANDARD TABLE OF ty_s_search_option WITH KEY option.
 
-    BEGIN OF ty_s_search_term,
-      target TYPE string,
-      values TYPE RANGE OF string,
-    END OF ty_s_search_term,
+  TYPES: BEGIN OF ty_s_search_term,
+           target TYPE string,
+           values TYPE RANGE OF string,
+         END OF ty_s_search_term,
 
-    ty_t_search_term TYPE STANDARD TABLE OF ty_s_search_term WITH EMPTY KEY,
+         ty_t_search_term TYPE STANDARD TABLE OF ty_s_search_term WITH EMPTY KEY.
 
+  TYPES:
     "! <p class="shorttext synchronized">Search engine parameters</p>
     BEGIN OF ty_s_search_engine_params,
       use_and_cond_for_options TYPE abap_bool,
       with_api_state           TYPE abap_bool,
       get_all                  TYPE abap_bool,
       custom_options           TYPE zif_sat_ty_adt_types=>ty_t_property,
-    END OF ty_s_search_engine_params,
+    END OF ty_s_search_engine_params.
 
-    ty_t_options TYPE RANGE OF string,
+  TYPES ty_t_options TYPE RANGE OF string.
 
-    BEGIN OF ty_image_info,
-      img_key      TYPE string,
-      img_registry TYPE string,
-      img_encoded  TYPE string,
-    END OF ty_image_info,
+  TYPES: BEGIN OF ty_image_info,
+           img_key      TYPE string,
+           img_registry TYPE string,
+           img_encoded  TYPE string,
+         END OF ty_image_info,
 
-    ty_image_infos TYPE STANDARD TABLE OF ty_image_info WITH EMPTY KEY,
+         ty_image_infos TYPE STANDARD TABLE OF ty_image_info WITH EMPTY KEY.
 
-    BEGIN OF ty_content_proposal,
-      name        TYPE string,
-      data        TYPE string,
-      description TYPE string,
-    END OF ty_content_proposal,
+  TYPES: BEGIN OF ty_content_proposal,
+           name        TYPE string,
+           data        TYPE string,
+           description TYPE string,
+         END OF ty_content_proposal,
 
-    ty_content_proposals TYPE STANDARD TABLE OF ty_content_proposal WITH EMPTY KEY,
+         ty_content_proposals TYPE STANDARD TABLE OF ty_content_proposal WITH EMPTY KEY.
 
-    BEGIN OF ty_option_content_assist,
-      assist_type             TYPE string,
-      caching                 TYPE abap_bool,
-      adt_object_types        TYPE string_table,
-      category_term           TYPE string,
-      secondary_category_term TYPE string,
-      category_scheme         TYPE string,
-      "! Fixed filter to restrict
-      initial_filter          TYPE string,
-      proposal_image_source   TYPE string,
-      proposal_image_registry TYPE string,
-      proposal_values         TYPE ty_content_proposals,
-      proposal_images         TYPE ty_image_infos,
-    END OF ty_option_content_assist,
+  TYPES: BEGIN OF ty_option_content_assist,
+           assist_type             TYPE string,
+           caching                 TYPE abap_bool,
+           adt_object_types        TYPE string_table,
+           category_term           TYPE string,
+           secondary_category_term TYPE string,
+           category_scheme         TYPE string,
+           "! Fixed filter to restrict
+           initial_filter          TYPE string,
+           proposal_image_source   TYPE string,
+           proposal_image_registry TYPE string,
+           proposal_values         TYPE ty_content_proposals,
+           proposal_images         TYPE ty_image_infos,
+         END OF ty_option_content_assist.
 
+  TYPES:
     "! <p class="shorttext synchronized">Setting for search option</p>
     BEGIN OF ty_query_filter,
       name             TYPE string,
@@ -133,8 +137,9 @@ INTERFACE zif_sat_ty_object_search
     END OF ty_query_filter,
 
     "! <p class="shorttext synchronized">List of option configurations</p>
-    ty_query_filters TYPE STANDARD TABLE OF ty_query_filter WITH KEY name,
+    ty_query_filters TYPE STANDARD TABLE OF ty_query_filter WITH KEY name.
 
+  TYPES:
     "! Input field for a search type
     BEGIN OF ty_input_field,
       name    TYPE string,
@@ -143,41 +148,42 @@ INTERFACE zif_sat_ty_object_search
       filters TYPE ty_query_filters,
     END OF ty_input_field,
 
-    ty_input_fields TYPE STANDARD TABLE OF ty_input_field WITH KEY name,
+    ty_input_fields TYPE STANDARD TABLE OF ty_input_field WITH KEY name.
 
-    BEGIN OF ty_custom_option_value,
-      key   TYPE string,
-      value TYPE string,
-    END OF ty_custom_option_value,
+  TYPES: BEGIN OF ty_custom_option_value,
+           key   TYPE string,
+           value TYPE string,
+         END OF ty_custom_option_value,
 
-    ty_custom_option_values TYPE STANDARD TABLE OF ty_custom_option_value WITH EMPTY KEY,
+         ty_custom_option_values TYPE STANDARD TABLE OF ty_custom_option_value WITH EMPTY KEY.
 
-    BEGIN OF ty_custom_option,
-      key         TYPE string,
-      type        TYPE string,
-      label       TYPE string,
-      description TYPE string,
-      values      TYPE ty_custom_option_values,
-    END OF ty_custom_option,
+  TYPES: BEGIN OF ty_custom_option,
+           key         TYPE string,
+           type        TYPE string,
+           label       TYPE string,
+           description TYPE string,
+           values      TYPE ty_custom_option_values,
+         END OF ty_custom_option,
 
-    ty_custom_options TYPE STANDARD TABLE OF ty_custom_option WITH EMPTY KEY,
+         ty_custom_options TYPE STANDARD TABLE OF ty_custom_option WITH EMPTY KEY.
 
-    BEGIN OF ty_adt_type_img_map,
-      adt_type   TYPE string,
-      image_info TYPE ty_image_info,
-    END OF ty_adt_type_img_map,
+  TYPES: BEGIN OF ty_adt_type_img_map,
+           adt_type   TYPE string,
+           image_info TYPE ty_image_info,
+         END OF ty_adt_type_img_map,
 
-    ty_adt_type_img_map_entries TYPE STANDARD TABLE OF ty_adt_type_img_map WITH EMPTY KEY,
+         ty_adt_type_img_map_entries TYPE STANDARD TABLE OF ty_adt_type_img_map WITH EMPTY KEY.
 
-    BEGIN OF ty_result_output_config,
-      types_for_list           TYPE string_table,
-      is_list_output_supported TYPE abap_bool,
-      groupings                TYPE string_table,
-      adt_type_img_map_entries TYPE ty_adt_type_img_map_entries,
-    END OF ty_result_output_config,
+  TYPES: BEGIN OF ty_result_output_config,
+           types_for_list           TYPE string_table,
+           is_list_output_supported TYPE abap_bool,
+           groupings                TYPE string_table,
+           adt_type_img_map_entries TYPE ty_adt_type_img_map_entries,
+         END OF ty_result_output_config,
 
-    ty_result_output_configs TYPE STANDARD TABLE OF ty_result_output_config WITH EMPTY KEY,
+         ty_result_output_configs TYPE STANDARD TABLE OF ty_result_output_config WITH EMPTY KEY.
 
+  TYPES:
     "! Settings for a given search types
     BEGIN OF ty_search_type_config,
       name           TYPE string,
@@ -188,8 +194,9 @@ INTERFACE zif_sat_ty_object_search
       output_config  TYPE ty_result_output_config,
     END OF ty_search_type_config,
 
-    ty_search_type_configs TYPE STANDARD TABLE OF ty_search_type_config WITH KEY name,
+    ty_search_type_configs TYPE STANDARD TABLE OF ty_search_type_config WITH KEY name.
 
+  TYPES:
     "! Configuration for all available search types
     BEGIN OF ty_search_config,
       search_types TYPE ty_search_type_configs,

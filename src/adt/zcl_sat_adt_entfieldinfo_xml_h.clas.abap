@@ -1,7 +1,6 @@
 "! <p class="shorttext synchronized">XML Serializer for CDS Top Down child entries</p>
 CLASS zcl_sat_adt_entfieldinfo_xml_h DEFINITION
-  PUBLIC
-  FINAL
+  PUBLIC FINAL
   CREATE PUBLIC.
 
   PUBLIC SECTION.
@@ -56,6 +55,8 @@ CLASS zcl_sat_adt_entfieldinfo_xml_h IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD serialize_ext_attributes.
+    " TODO: parameter IO_WRITER is never used (ABAP cleaner)
+
     FIELD-SYMBOLS <lt_children> TYPE zif_sat_ty_adt_types=>ty_entity_field_infos.
 
     CHECK field_info-children IS BOUND.

@@ -12,12 +12,12 @@ CLASS lcl_devclass_util IMPLEMENTATION.
 
     WHILE packages_to_read IS NOT INITIAL.
       SELECT p~devclass,
-             parentcl AS parent_devclass,
+             parentcl   AS parent_devclass,
              t~ctext
         FROM tdevc AS p
-          LEFT OUTER JOIN tdevct AS t
-            ON p~devclass = t~devclass
-            AND t~spras = @sy-langu
+             LEFT OUTER JOIN tdevct AS t
+               ON  p~devclass = t~devclass
+               AND t~spras    = @sy-langu
         FOR ALL ENTRIES IN @packages_to_read
         WHERE p~devclass = @packages_to_read-devclass
         INTO CORRESPONDING FIELDS OF TABLE @read_packages.
@@ -173,10 +173,10 @@ CLASS lcl_cds_result_converter IMPLEMENTATION.
 
     SELECT ddlname,
            source
-       FROM ddddlsrc
-       WHERE as4local = 'A'
-         AND ddlname  IN @lt_ddlname
-    INTO CORRESPONDING FIELDS OF TABLE @mt_ddls_source.
+      FROM ddddlsrc
+      WHERE as4local  = 'A'
+        AND ddlname  IN @lt_ddlname
+      INTO CORRESPONDING FIELDS OF TABLE @mt_ddls_source.
   ENDMETHOD.
 
   METHOD set_ddl_positional_uri.
@@ -249,7 +249,7 @@ CLASS lcl_method_result_converter IMPLEMENTATION.
           ENDIF.
           lt_method_entries = VALUE #( BASE lt_method_entries
                                        ( name        = <ls_method>-method_name
-                                         type        = ls_obj_type-objtype_tr && '/' && ls_obj_type-subtype_wb
+                                         type        = |{ ls_obj_type-objtype_tr }/{ ls_obj_type-subtype_wb }|
                                          description = <ls_method>-method_descr
                                          parent_uri  = ls_object_reference-uri
                                          uri         = lv_uri
@@ -306,21 +306,26 @@ CLASS lcl_method_result_converter IMPLEMENTATION.
     ENDIF.
 
     IF is_method-method_is_final = abap_true.
-      result = VALUE #( BASE result ( key = 'isFinal' value = abap_true type = zif_sat_c_adt_utils=>c_property_type-bool ) ).
+      result = VALUE #( BASE result
+                        ( key = 'isFinal' value = abap_true type = zif_sat_c_adt_utils=>c_property_type-bool ) ).
     ENDIF.
 
     IF is_method-method_level = seoo_mtddecltyp_class_method.
-      result = VALUE #( BASE result ( key = 'isStatic' value = abap_true type = zif_sat_c_adt_utils=>c_property_type-bool ) ).
+      result = VALUE #( BASE result
+                        ( key = 'isStatic' value = abap_true type = zif_sat_c_adt_utils=>c_property_type-bool ) ).
     ENDIF.
 
     IF is_method-method_status = zif_sat_c_os_meth_options=>c_method_status_int-redefined.
-      result = VALUE #( BASE result ( key = 'isRedefined' value = abap_true type = zif_sat_c_adt_utils=>c_property_type-bool ) ).
+      result = VALUE #( BASE result
+                        ( key = 'isRedefined' value = abap_true type = zif_sat_c_adt_utils=>c_property_type-bool ) ).
     ENDIF.
 
     IF is_method-method_type = seoo_mtdtype_constructor.
-      result = VALUE #( BASE result ( key = 'isConstructor' value = abap_true type = zif_sat_c_adt_utils=>c_property_type-bool ) ).
+      result = VALUE #( BASE result
+                        ( key = 'isConstructor' value = abap_true type = zif_sat_c_adt_utils=>c_property_type-bool ) ).
     ELSEIF is_method-method_type = seoo_mtdtype_eventhandler.
-      result = VALUE #( BASE result ( key = 'isEventHandler' value = abap_true type = zif_sat_c_adt_utils=>c_property_type-bool ) ).
+      result = VALUE #( BASE result
+                        ( key = 'isEventHandler' value = abap_true type = zif_sat_c_adt_utils=>c_property_type-bool ) ).
     ENDIF.
 
     result = VALUE #(
@@ -355,7 +360,7 @@ CLASS lcl_message_result_converter IMPLEMENTATION.
 
       " 2) create message entries
       LOOP AT GROUP <ls_query_result> ASSIGNING FIELD-SYMBOL(<ls_message>).
-        DATA(lv_uri) = `/sap/bc/adt/messageclass/` &&
+        DATA(lv_uri) = |/sap/bc/adt/messageclass/| &&
                        to_lower( cl_http_utility=>escape_url( unescaped = |{ <ls_message>-object_name }| ) ) &&
                        |/messages/{ <ls_message>-message_number }|.
 

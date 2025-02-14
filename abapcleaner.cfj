@@ -1,7 +1,7 @@
 {
   "requiredVersion": 1,
-  "programVersion": 22,
-  "ruleCount": 60,
+  "programVersion": 26,
+  "ruleCount": 98,
   "autoActivateNewFeatures": true,
   "rules": [
     {
@@ -39,13 +39,29 @@
       }
     },
     {
+      "ruleID": "CDS_TEST_CLASS_LINES",
+      "isActive": true,
+      "settingCount": 6,
+      "settings": {
+        "RemoveToDoComments": "1",
+        "EmptyLineAboveInsertTestData": "1",
+        "RemoveAbapDoc": "1",
+        "EmptyLineBelowSelect": "1",
+        "EmptyLineAboveSelect": "1",
+        "MovePrepareMethods": "0"
+      }
+    },
+    {
       "ruleID": "SPACES_IN_EMPTY_BRACKETS",
       "isActive": true,
-      "settingCount": 3,
+      "settingCount": 6,
       "settings": {
         "SeparateFromCharLiterals": "1",
+        "SeparateFromComments": "1",
+        "SeparateFromOperators": "1",
         "RemoveMultiSpaceIfEmpty": "1",
-        "SeparateCondensedCases": "1"
+        "SeparateCondensedCases": "1",
+        "SeparateFromKeywords": "1"
       }
     },
     {
@@ -57,8 +73,9 @@
     {
       "ruleID": "SPACE_BEFORE_PERIOD",
       "isActive": true,
-      "settingCount": 3,
+      "settingCount": 4,
       "settings": {
+        "MoveAcrossCommentLines": "1",
         "ExecuteOnClassDefinitionSections": "1",
         "ExecuteOnComma": "1",
         "ExecuteOnPeriod": "1"
@@ -76,23 +93,35 @@
     {
       "ruleID": "NEEDLESS_SPACES",
       "isActive": true,
-      "settingCount": 3,
+      "settingCount": 4,
       "settings": {
         "ProcessLineEndComments": "0",
         "SearchAcrossCommentLines": "1",
-        "SearchAcrossEmptyLines": "1"
+        "SearchAcrossEmptyLines": "1",
+        "ProcessEmptyBrackets": "1"
       }
     },
     {
       "ruleID": "DECLARATION_CHAIN",
       "isActive": true,
-      "settingCount": 5,
+      "settingCount": 6,
       "settings": {
         "ExecuteOnClassDefinitionSections": "1",
         "ExecuteOnSimpleCommands": "0",
         "ExecuteOnLocalDeclarations": "1",
         "ExecuteOnInterfaces": "1",
+        "KeepTablesWithStructures": "1",
         "ExecuteOnComplexCommands": "1"
+      }
+    },
+    {
+      "ruleID": "NEEDLESS_CLEAR",
+      "isActive": true,
+      "settingCount": 3,
+      "settings": {
+        "ActionAtEnd": "1",
+        "ActionAtStart": "0",
+        "KeepStrucBeforeAssign": "1"
       }
     },
     {
@@ -113,16 +142,30 @@
       }
     },
     {
-      "ruleID": "UNUSED_VARIABLES",
+      "ruleID": "UNUSED_PARAMETERS",
       "isActive": true,
       "settingCount": 6,
+      "settings": {
+        "ChangingParamScope": "1",
+        "ImportingParamScope": "1",
+        "ReturningParamScope": "4",
+        "ExportingParamScope": "0",
+        "IgnoreEmptyMethods": "1",
+        "IgnoreExportingByValue": "1"
+      }
+    },
+    {
+      "ruleID": "UNUSED_VARIABLES",
+      "isActive": true,
+      "settingCount": 7,
       "settings": {
         "MeasureForConstantsOnlyUsedInComment": "1",
         "MeasureForVarsNeverUsed": "0",
         "MeasureForAssignedVars": "0",
         "MeasureForConstantsNeverUsed": "1",
         "MeasureForVarsOnlyUsedInComment": "1",
-        "MeasureForAssignedVarsOnlyUsedInComment": "0"
+        "MeasureForAssignedVarsOnlyUsedInComment": "0",
+        "MeasureForVarsOnlyAssignedInMessageInto": "0"
       }
     },
     {
@@ -151,6 +194,27 @@
       "isActive": false,
       "settingCount": 0,
       "settings": {}
+    },
+    {
+      "ruleID": "CLASS_DEFINITION",
+      "isActive": true,
+      "settingCount": 14,
+      "settings": {
+        "NewLineForPublic": "1",
+        "NewLineForBehavior": "1",
+        "NewLineForAbstractOrFinal": "0",
+        "NewLineForLocalFriends": "0",
+        "MaxLineLength": "120",
+        "NewLineForRiskAndDuration": "0",
+        "NewLineForFriends": "1",
+        "NewLineForTesting": "1",
+        "NewLineForCreate": "1",
+        "NewLineForFriendNames": "1",
+        "IndentStyle": "0",
+        "NewLineForSharedMemory": "1",
+        "OneLinerAction": "2",
+        "NewLineForInheriting": "1"
+      }
     },
     {
       "ruleID": "ESCAPE_CHAR_FOR_PARAMS",
@@ -259,8 +323,12 @@
     {
       "ruleID": "COMPARISON_OPERATOR",
       "isActive": true,
-      "settingCount": 0,
-      "settings": {}
+      "settingCount": 3,
+      "settings": {
+        "ReplaceObsoleteOperators": "1",
+        "PreferredOperatorSet": "0",
+        "ReplaceRegularOperators": "1"
+      }
     },
     {
       "ruleID": "NOT_IS",
@@ -278,6 +346,29 @@
       }
     },
     {
+      "ruleID": "STRING_TEMPLATE",
+      "isActive": true,
+      "settingCount": 5,
+      "settings": {
+        "AlwaysConvertLiterals": "1",
+        "IgnoreMultiLineOperands": "1",
+        "RequireOperandsOnSameLine": "0",
+        "KeepControlCharsSeparate": "1",
+        "StringTemplateCondition": "1"
+      }
+    },
+    {
+      "ruleID": "NEEDLESS_PARENTHESES",
+      "isActive": true,
+      "settingCount": 4,
+      "settings": {
+        "RemoveOrParenthesisAnd": "0",
+        "RemoveAroundSameOp": "0",
+        "RemoveAroundRelExpr": "0",
+        "RemoveAroundAll": "1"
+      }
+    },
+    {
       "ruleID": "EMPTY_COMMAND",
       "isActive": true,
       "settingCount": 0,
@@ -286,11 +377,12 @@
     {
       "ruleID": "VALUE_STATEMENT",
       "isActive": true,
-      "settingCount": 6,
+      "settingCount": 7,
       "settings": {
         "MoveIntegerLiterals": "1",
         "MoveFloatLiterals": "1",
         "MoveIdentifiers": "1",
+        "SkipIfRowsCommentedOut": "1",
         "MoveComplexExpressions": "1",
         "MoveMethodCalls": "0",
         "MoveStringLiterals": "1"
@@ -317,21 +409,24 @@
     {
       "ruleID": "CHECK_OUTSIDE_LOOP",
       "isActive": true,
-      "settingCount": 3,
+      "settingCount": 5,
       "settings": {
         "NegationStyle": "1",
+        "AllowCheckAfterCheckpoints": "1",
         "KeepCondition": "2",
-        "ConvertAbapFalseAndAbapTrue": "1"
+        "ConvertAbapFalseAndAbapTrue": "1",
+        "ProcessChains": "1"
       }
     },
     {
       "ruleID": "CHECK_IN_LOOP",
       "isActive": false,
-      "settingCount": 3,
+      "settingCount": 4,
       "settings": {
         "NegationStyle": "1",
         "KeepCondition": "0",
-        "ConvertAbapFalseAndAbapTrue": "1"
+        "ConvertAbapFalseAndAbapTrue": "1",
+        "ProcessChains": "1"
       }
     },
     {
@@ -363,14 +458,18 @@
     {
       "ruleID": "CALL_METHOD",
       "isActive": true,
-      "settingCount": 0,
-      "settings": {}
+      "settingCount": 1,
+      "settings": {
+        "ProcessChains": "1"
+      }
     },
     {
       "ruleID": "CREATE_OBJECT",
       "isActive": true,
-      "settingCount": 0,
-      "settings": {}
+      "settingCount": 1,
+      "settings": {
+        "ProcessChains": "1"
+      }
     },
     {
       "ruleID": "RAISE_TYPE",
@@ -381,8 +480,9 @@
     {
       "ruleID": "ADD_TO_ETC",
       "isActive": true,
-      "settingCount": 1,
+      "settingCount": 2,
       "settings": {
+        "ProcessChains": "1",
         "AddToReplacementStyle": "1"
       }
     },
@@ -397,11 +497,42 @@
     {
       "ruleID": "TRANSLATE",
       "isActive": true,
-      "settingCount": 3,
+      "settingCount": 5,
       "settings": {
         "ReplaceTranslateToUpperLower": "1",
+        "SkipUnknownTypes": "1",
         "ReplaceUnevenMasks": "0",
+        "ProcessChains": "1",
         "ReplaceTranslateUsing": "0"
+      }
+    },
+    {
+      "ruleID": "CONDENSE",
+      "isActive": false,
+      "settingCount": 5,
+      "settings": {
+        "SpecifyFromForNoGaps": "0",
+        "SpecifyValName": "0",
+        "KeepParamsOnOneLine": "0",
+        "SkipUnknownTypes": "1",
+        "SpecifyDel": "0"
+      }
+    },
+    {
+      "ruleID": "DESCRIBE_TABLE",
+      "isActive": true,
+      "settingCount": 0,
+      "settings": {}
+    },
+    {
+      "ruleID": "READ_TABLE",
+      "isActive": true,
+      "settingCount": 4,
+      "settings": {
+        "ReplaceWithLineExists": "1",
+        "ReplaceWithLineIndex": "1",
+        "ReplaceWithAssign": "1",
+        "UseComponentsKeyword": "0"
       }
     },
     {
@@ -423,9 +554,21 @@
     {
       "ruleID": "ASSERT_CLASS",
       "isActive": false,
-      "settingCount": 1,
+      "settingCount": 2,
       "settings": {
+        "ProcessChains": "1",
         "AssertClassName": "cx_assert"
+      }
+    },
+    {
+      "ruleID": "ASSERT_PARAMETER_ORDER",
+      "isActive": true,
+      "settingCount": 4,
+      "settings": {
+        "NumTextTableParamOrder": "0",
+        "ReturnCodeParamOrder": "0",
+        "ComparisonParamOrder": "0",
+        "AssertClassName": ""
       }
     },
     {
@@ -441,6 +584,35 @@
         "DefinitionIdentifierStyle": "1",
         "PragmaStyle": "2",
         "PragmaParameterStyle": "2"
+      }
+    },
+    {
+      "ruleID": "CAMEL_CASE_NAME",
+      "isActive": false,
+      "settingCount": 10,
+      "settings": {
+        "MinLengthOfSureMatch": "11",
+        "ContextWithUnknownAction": "3",
+        "CustomViewNamesFile": "CustomViewNames.txt",
+        "ContextAllKnownAction": "0",
+        "ProcessComments": "1",
+        "RequireApprovalForSureMatch": "0",
+        "ProcessFieldNames": "1",
+        "CustomFieldNamesFile": "CustomFieldNames.txt",
+        "DeviationAction": "1",
+        "ProcessViewNames": "1"
+      }
+    },
+    {
+      "ruleID": "CAMEL_CASE_IN_CDS_TEST",
+      "isActive": true,
+      "settingCount": 5,
+      "settings": {
+        "ProcessComments": "1",
+        "AddPseudoCommentNoWhere": "1",
+        "ProcessClassName": "1",
+        "ProcessVariableNames": "1",
+        "ProcessLiterals": "1"
       }
     },
     {
@@ -513,13 +685,14 @@
     {
       "ruleID": "ALIGN_DECLARATIONS",
       "isActive": true,
-      "settingCount": 10,
+      "settingCount": 11,
       "settings": {
         "CondenseInnerSpaces": "1",
         "AlignNonChainsAction": "2",
         "FillPercentageToJustifyOwnColumn": "20",
         "ExecuteOnClassDefinitionSections": "1",
         "StructureAlignStyle": "1",
+        "AlignEnumAction": "0",
         "AlignChainAction": "1",
         "AlignAcrossEmptyLines": "1",
         "AlignStructureAction": "1",
@@ -545,23 +718,74 @@
     {
       "ruleID": "ALIGN_CLEAR_FREE_AND_SORT",
       "isActive": true,
-      "settingCount": 4,
+      "settingCount": 5,
       "settings": {
         "DistinctLineSort": "0",
+        "DistinctLineCatch": "0",
         "DistinctLineClear": "0",
         "DistinctLineFree": "0",
         "MaxLineLength": "120"
       }
     },
     {
-      "ruleID": "ALIGN_PARAMETERS",
+      "ruleID": "ALIGN_SELECT_CLAUSES",
       "isActive": true,
       "settingCount": 10,
+      "settings": {
+        "MaxSelectListLengthBeforeFrom": "30",
+        "NextSelectPos": "2",
+        "SelectUnionIntoIndent": "0",
+        "NewLineForFromWithJoins": "1",
+        "SelectUnionIndent": "0",
+        "SelectClauseIndent": "0",
+        "MaxLineLength": "120",
+        "SubQueryOneLinerAction": "1",
+        "MaxSelectListLengthBeforeInto": "30",
+        "MainQueryOneLinerAction": "1"
+      }
+    },
+    {
+      "ruleID": "ALIGN_SELECT_FROM",
+      "isActive": true,
+      "settingCount": 7,
+      "settings": {
+        "AlignAsAcrossJoins": "0",
+        "FirstTableNamePosition": "0",
+        "SelectJoinIndent": "0",
+        "AlignOnAcrossJoins": "0",
+        "SelectOnPosition": "2",
+        "FurtherTableNamePositions": "0",
+        "SelectClientPosition": "1"
+      }
+    },
+    {
+      "ruleID": "ALIGN_SELECT_LISTS",
+      "isActive": true,
+      "settingCount": 11,
+      "settings": {
+        "SimpleSelectListLayout": "2",
+        "SelectIntoLayout": "2",
+        "SimpleGroupByListLayout": "2",
+        "SimpleOrderByListLayout": "0",
+        "AlignAsInSelectList": "1",
+        "ComplexSelectListLayout": "0",
+        "ComplexGroupByListLayout": "0",
+        "ComplexOrderByListLayout": "0",
+        "ConsiderTildeAsComplex": "1",
+        "MaxLineLength": "120",
+        "AlignAdditionsInOrderByList": "0"
+      }
+    },
+    {
+      "ruleID": "ALIGN_PARAMETERS",
+      "isActive": true,
+      "settingCount": 11,
       "settings": {
         "AlignAcrossTableRows": "1",
         "PutFunctionalCallKeywordsOnOwnLine": "0",
         "KeepParametersOnSingleLine": "1",
         "MaxParamCountBehindProceduralCall": "0",
+        "KeepOtherOneLiners": "1",
         "PutProceduralCallKeywordsOnOwnLine": "0",
         "MaxLineLength": "120",
         "MaxParamCountBehindFunctionalCall": "100",
@@ -573,17 +797,21 @@
     {
       "ruleID": "ALIGN_LOGICAL_EXPRESSIONS",
       "isActive": true,
-      "settingCount": 9,
+      "settingCount": 13,
       "settings": {
+        "AlignSqlWhenWithBoolOps": "0",
+        "AlignIfWithBoolOps": "0",
+        "AlignSqlOnWithBoolOps": "1",
+        "AlignCheckWithBoolOps": "0",
+        "AlignElseIfWithBoolOps": "0",
+        "AlignSqlHavingWithBoolOps": "2",
+        "OnlyAlignSameObjects": "0",
         "AlignUntilWithBoolOps": "0",
         "AlignWhileWithBoolOps": "0",
-        "AlignIfWithBoolOps": "0",
         "RightAlignComparisonOps": "1",
         "MaxInnerSpaces": "20",
         "AlignWhereWithBoolOps": "0",
-        "AlignCheckWithBoolOps": "0",
-        "AlignElseIfWithBoolOps": "0",
-        "OnlyAlignSameObjects": "0"
+        "AlignSqlWhereWithBoolOps": "2"
       }
     },
     {
@@ -599,6 +827,323 @@
         "OneLinerStyle": "1",
         "ThenOnWhenLine": "1",
         "ValueInset": "1"
+      }
+    },
+    {
+      "ruleID": "ALIGN_FORM_DECLARATION",
+      "isActive": true,
+      "settingCount": 5,
+      "settings": {
+        "ContinueAfterParamGroupKeyword": "1",
+        "RemoveEmptyLine": "1",
+        "ParamCountBehindFormName": "3",
+        "AlignTypes": "1",
+        "AddEmptyLine": "1"
+      }
+    },
+    {
+      "ruleID": "ALIGN_PERFORM",
+      "isActive": true,
+      "settingCount": 6,
+      "settings": {
+        "BreakAfterAdditions": "0",
+        "ParamCountToCondense": "16",
+        "ContinueAfterParamGroupKeyword": "1",
+        "ParamCountAfterPerform": "3",
+        "MaxLineLength": "120",
+        "AlignWithFormName": "0"
+      }
+    },
+    {
+      "ruleID": "DDL_ANNO_LAYOUT",
+      "isActive": true,
+      "settingCount": 8,
+      "settings": {
+        "SpaceInsideBrackets": "1",
+        "MaxOneLinerElemCountMain": "4",
+        "AlignTablesInArrays": "1",
+        "AlignValues": "0",
+        "SpaceInsideBraces": "1",
+        "MaxOneLinerElemCountList": "4",
+        "SpaceAfterColon": "1",
+        "MaxLineLength": "120"
+      }
+    },
+    {
+      "ruleID": "DDL_ANNO_NESTING",
+      "isActive": true,
+      "settingCount": 6,
+      "settings": {
+        "NestingAllowList": "",
+        "NestingBlockList": "",
+        "EmptyLinesMain": "1",
+        "SortOrder": "1",
+        "EmptyLinesList": "3",
+        "NestingMinDepth": "1"
+      }
+    },
+    {
+      "ruleID": "DDL_POSITION_DEFINE",
+      "isActive": true,
+      "settingCount": 7,
+      "settings": {
+        "BreakBeforeDefine": "0",
+        "DefineIndent": "0",
+        "EntityNameIndent": "2",
+        "BreakBeforeEntityName": "2",
+        "ParamsIndent": "4",
+        "WithParamsIndent": "2",
+        "BreakBeforeWithParams": "0"
+      }
+    },
+    {
+      "ruleID": "DDL_POSITION_SELECT",
+      "isActive": true,
+      "settingCount": 8,
+      "settings": {
+        "BreakBeforeSelectFrom": "0",
+        "AsSelectFromIndent": "2",
+        "BreakBeforeAsSelectFrom": "0",
+        "BreakBeforeDataSource": "2",
+        "DataSourceIndent": "4",
+        "SelectFromIndent": "2",
+        "AsProjectionOnIndent": "2",
+        "BreakBeforeAsProjectionOn": "0"
+      }
+    },
+    {
+      "ruleID": "DDL_POSITION_JOIN",
+      "isActive": true,
+      "settingCount": 6,
+      "settings": {
+        "KeywordsIndent": "4",
+        "BreakBeforeCondition": "1",
+        "BreakBeforeKeywords": "0",
+        "BreakBeforeDataSource": "2",
+        "DataSourceIndent": "4",
+        "ConditionIndent": "6"
+      }
+    },
+    {
+      "ruleID": "DDL_POSITION_ASSOCIATION",
+      "isActive": true,
+      "settingCount": 8,
+      "settings": {
+        "KeywordsIndent": "2",
+        "BreakBeforeCondition": "1",
+        "BreakBeforeKeywords": "0",
+        "BreakBeforeDataSource": "2",
+        "DataSourceIndent": "2",
+        "ConditionIndent": "4",
+        "BreakBeforeFilter": "0",
+        "FilterIndent": "4"
+      }
+    },
+    {
+      "ruleID": "DDL_POSITION_BRACES",
+      "isActive": true,
+      "settingCount": 6,
+      "settings": {
+        "FromIndent": "2",
+        "BreakBeforeFrom": "0",
+        "BreakBeforeOpeningBrace": "0",
+        "ClosingBraceIndent": "0",
+        "OpeningBraceIndent": "0",
+        "BreakBeforeClosingBrace": "0"
+      }
+    },
+    {
+      "ruleID": "DDL_POSITION_CLAUSES",
+      "isActive": true,
+      "settingCount": 4,
+      "settings": {
+        "BreakBeforeUnionEtc": "0",
+        "UnionEtcIndent": "0",
+        "WhereEtcIndent": "0",
+        "BreakBeforeWhereEtc": "0"
+      }
+    },
+    {
+      "ruleID": "DDL_SPACES_AROUND_SIGNS",
+      "isActive": true,
+      "settingCount": 8,
+      "settings": {
+        "SpaceAroundArithmeticOps": "0",
+        "SpaceAfterCommaInAbapType": "2",
+        "SpaceBeforeCommentSign": "0",
+        "SpaceBeforeColon": "1",
+        "SpaceAfterCommentSign": "0",
+        "SpaceAfterColon": "0",
+        "SpaceAfterComma": "0",
+        "SpaceBeforeComma": "2"
+      }
+    },
+    {
+      "ruleID": "DDL_SPACES_AROUND_BRACKETS",
+      "isActive": true,
+      "settingCount": 9,
+      "settings": {
+        "SpacesInsidePathBrackets": "2",
+        "SpacesInsideCardBrackets": "2",
+        "SpacesAroundCardBrackets": "0",
+        "SpacesInsideArithParens": "2",
+        "SpacesBeforeFuncParens": "2",
+        "SpacesInsideFuncParens": "2",
+        "SpacesBeforeTypeParens": "2",
+        "SpacesBeforePathBrackets": "2",
+        "SpacesInsideTypeParens": "2"
+      }
+    },
+    {
+      "ruleID": "DDL_CAMEL_CASE_NAME",
+      "isActive": true,
+      "settingCount": 6,
+      "settings": {
+        "FixAliases": "1",
+        "OnlyApprovedNames": "1",
+        "RequireAllFieldsKnown": "1",
+        "FixFieldNames": "1",
+        "FixRefsInAnnotations": "1",
+        "FixEntityName": "1"
+      }
+    },
+    {
+      "ruleID": "DDL_TYPO",
+      "isActive": true,
+      "settingCount": 5,
+      "settings": {
+        "ProcessAnnotations": "1",
+        "ProcessComments": "1",
+        "ProcessAnnotationRefs": "0",
+        "CorrectTypos": "1",
+        "ConvertBritishToAmerican": "1"
+      }
+    },
+    {
+      "ruleID": "DDL_ALIGN_ENTITY_PARAMETERS",
+      "isActive": true,
+      "settingCount": 2,
+      "settings": {
+        "AlignColons": "1",
+        "AlignTypes": "1"
+      }
+    },
+    {
+      "ruleID": "DDL_ALIGN_SOURCE_PARAMETERS",
+      "isActive": true,
+      "settingCount": 4,
+      "settings": {
+        "ParameterPos": "3",
+        "AlignActualParams": "1",
+        "AlignAssignmentOps": "1",
+        "AsAliasPos": "0"
+      }
+    },
+    {
+      "ruleID": "DDL_ALIGN_FUNCTION_PARAMETERS",
+      "isActive": true,
+      "settingCount": 3,
+      "settings": {
+        "ParameterPos": "0",
+        "AlignActualParams": "1",
+        "AlignAssignmentOps": "1"
+      }
+    },
+    {
+      "ruleID": "DDL_ALIGN_LOGICAL_EXPRESSIONS",
+      "isActive": true,
+      "settingCount": 13,
+      "settings": {
+        "AlignFilterWithBoolOps": "2",
+        "AlignAssociationOn": "1",
+        "AlignPathExpressions": "1",
+        "AlignWhenWithBoolOps": "2",
+        "AlignWhere": "1",
+        "AlignOnWithBoolOps": "1",
+        "AlignHavingWithBoolOps": "2",
+        "AlignJoinOn": "1",
+        "AlignWhen": "1",
+        "RightAlignComparisonOps": "1",
+        "AlignHaving": "1",
+        "MaxInnerSpaces": "20",
+        "AlignWhereWithBoolOps": "2"
+      }
+    },
+    {
+      "ruleID": "DDL_ALIGN_FIELD_LISTS",
+      "isActive": true,
+      "settingCount": 7,
+      "settings": {
+        "SimpleGroupByListLayout": "0",
+        "NameListPos": "1",
+        "ComplexGroupByListLayout": "0",
+        "ConsiderDotAsComplex": "1",
+        "MaxLineLength": "120",
+        "NameListLayout": "0",
+        "GroupByListPos": "0"
+      }
+    },
+    {
+      "ruleID": "DDL_ALIGN_DATA_SOURCES",
+      "isActive": true,
+      "settingCount": 5,
+      "settings": {
+        "AlignDataSources": "1",
+        "AlignAssociationsWithJoins": "0",
+        "AlignOnConditions": "1",
+        "ConsiderAllParamAssignLines": "0",
+        "AlignAliases": "1"
+      }
+    },
+    {
+      "ruleID": "DDL_ALIGN_SELECT_LIST",
+      "isActive": true,
+      "settingCount": 8,
+      "settings": {
+        "ConsiderAllElementLines": "0",
+        "AlignCommentedOutCode": "1",
+        "ConsiderSimpleElementsWithoutAlias": "1",
+        "ConsiderComplexElementsWithoutAlias": "0",
+        "AlignTextualComments": "1",
+        "MaxAliasStart": "120",
+        "AlignAliases": "1",
+        "AlignKeyKeyword": "1"
+      }
+    },
+    {
+      "ruleID": "DDL_EMPTY_LINES_BETWEEN",
+      "isActive": true,
+      "settingCount": 10,
+      "settings": {
+        "BetweenEntityAnnosAndDefine": "0",
+        "BetweenParametersAndAsSelect": "0",
+        "BeforeSelectListStart": "0",
+        "AfterSelectListStart": "3",
+        "BetweenSelectFromAndJoins": "1",
+        "BetweenJoinsAndAssociations": "0",
+        "BeforeSelectListEnd": "3",
+        "AfterSelectListEnd": "0",
+        "MaxConsecutiveEmptyLines": "2",
+        "RemoveAtDocumentEnd": "1"
+      }
+    },
+    {
+      "ruleID": "DDL_EMPTY_LINES_WITHIN",
+      "isActive": true,
+      "settingCount": 12,
+      "settings": {
+        "SurroundAssociationLineCountMin": "2",
+        "CondenseParameters": "2",
+        "CondenseAssociations": "2",
+        "DetachExposedAssociations": "1",
+        "CondenseClauses": "3",
+        "SurroundParameterLineCountMin": "2",
+        "CondenseJoins": "2",
+        "DetachKeyFields": "1",
+        "CondenseElements": "2",
+        "SurroundJoinLineCountMin": "2",
+        "SurroundElementLineCountMin": "2",
+        "SurroundClauseLineCountMin": "2"
       }
     }
   ]

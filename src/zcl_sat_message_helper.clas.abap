@@ -1,7 +1,6 @@
 "! <p class="shorttext synchronized">Helper class for Message handling</p>
 CLASS zcl_sat_message_helper DEFINITION
-  PUBLIC
-  FINAL
+  PUBLIC FINAL
   CREATE PUBLIC.
 
   PUBLIC SECTION.
@@ -45,6 +44,8 @@ CLASS zcl_sat_message_helper IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD print_exc_message.
+    " TODO: parameter IR_EXC_MESSAGE is never used (ABAP cleaner)
+
     IF is_textid-msgid = 'SY' AND is_textid-msgno = 530.
 
       " try to print message of previous exception

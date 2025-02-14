@@ -40,8 +40,7 @@ CLASS zcl_sat_adt_res_eleminfo_byuri IMPLEMENTATION.
           mv_object_type = zif_sat_c_entity_type=>table.
         ELSEIF ls_object_type-objtype_tr = 'VIEW'.
           " fallback if view is generated ddic sql view of ddls
-          SELECT SINGLE ddlname
-            FROM zsat_i_ddldependency
+          SELECT SINGLE ddlname FROM zsat_i_ddldependency
             WHERE viewname = @lv_object_name
             INTO @DATA(lv_ddlname_for_view).
           IF sy-subrc = 0.

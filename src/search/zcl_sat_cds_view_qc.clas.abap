@@ -1,8 +1,7 @@
 "! <p class="shorttext synchronized">Converter for Parameters of CDS View Search</p>
 CLASS zcl_sat_cds_view_qc DEFINITION
   PUBLIC
-  INHERITING FROM zcl_sat_general_qc
-  FINAL
+  INHERITING FROM zcl_sat_general_qc FINAL
   CREATE PUBLIC.
 
   PUBLIC SECTION.

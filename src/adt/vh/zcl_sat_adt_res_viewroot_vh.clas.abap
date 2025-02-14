@@ -1,8 +1,7 @@
 "! <p class="shorttext synchronized">Resource for root table in a ddic view</p>
 CLASS zcl_sat_adt_res_viewroot_vh DEFINITION
   PUBLIC
-  INHERITING FROM cl_adt_res_named_items
-  FINAL
+  INHERITING FROM cl_adt_res_named_items FINAL
   CREATE PUBLIC.
 
   PUBLIC SECTION.
@@ -30,19 +29,18 @@ CLASS zcl_sat_adt_res_viewroot_vh IMPLEMENTATION.
       lt_tab_range = VALUE #( ( sign = 'I' option = 'CP' low = to_upper( p_filter_name ) ) ).
     ENDIF.
 
-    SELECT DISTINCT
-           roottab AS name,
-           text~ddtext AS description
+    SELECT DISTINCT roottab     AS name,
+                    text~ddtext AS description
       FROM dd25l AS root
-        INNER JOIN tadir AS repo
-          ON repo~object = @zif_sat_c_tadir_types=>view
-          AND repo~obj_name = root~viewname
-          AND repo~genflag = ''
-        LEFT OUTER JOIN dd02t AS text
-          ON root~roottab = text~tabname
-          AND text~ddlanguage = @sy-langu
-          AND text~as4local = 'A'
-      WHERE root~roottab IN @lt_tab_range
+           INNER JOIN tadir AS repo
+             ON  repo~object   = @zif_sat_c_tadir_types=>view
+             AND repo~obj_name = root~viewname
+             AND repo~genflag  = ''
+           LEFT OUTER JOIN dd02t AS text
+             ON  root~roottab    = text~tabname
+             AND text~ddlanguage = @sy-langu
+             AND text~as4local   = 'A'
+      WHERE root~roottab   IN @lt_tab_range
         AND root~viewclass IN @lt_viewclass_range
       ORDER BY root~roottab
       INTO CORRESPONDING FIELDS OF TABLE @p_named_item_list-items

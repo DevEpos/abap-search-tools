@@ -1,8 +1,7 @@
 "! <p class="shorttext synchronized">Resource for software component vh</p>
 CLASS zcl_sat_adt_res_swcomp_vh DEFINITION
   PUBLIC
-  INHERITING FROM cl_adt_res_named_items
-  FINAL
+  INHERITING FROM cl_adt_res_named_items FINAL
   CREATE PUBLIC.
 
   PUBLIC SECTION.
