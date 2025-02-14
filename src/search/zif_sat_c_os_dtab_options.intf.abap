@@ -5,16 +5,13 @@ INTERFACE zif_sat_c_os_dtab_options
   CONSTANTS:
     "! <p class="shorttext synchronized" lang="en">Search options DB Table search</p>
     BEGIN OF c_filter_key,
-      field                TYPE string VALUE 'field',
-      delivery_class       TYPE string VALUE 'dlvclass',
-      flag                 TYPE string VALUE 'flag',
-      size_category        TYPE string VALUE 'sizecat',
-      buffering            TYPE string VALUE 'buffering',
-      buffering_type       TYPE string VALUE 'buffertype',
-      data_class           TYPE string VALUE 'dataclass',
-      enhancement_category TYPE string VALUE 'enhcat',
-      storage_type         TYPE string VALUE 'storetype',
-      include_usage        TYPE string VALUE 'include',
+      delivery_class TYPE string VALUE 'dlvclass',
+      flag           TYPE string VALUE 'flag',
+      size_category  TYPE string VALUE 'sizecat',
+      buffering      TYPE string VALUE 'buffering',
+      buffering_type TYPE string VALUE 'buffertype',
+      data_class     TYPE string VALUE 'dataclass',
+      storage_type   TYPE string VALUE 'storetype',
     END OF c_filter_key.
 
   CONSTANTS:
