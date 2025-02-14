@@ -92,6 +92,8 @@ CLASS zcl_sat_search_ioc IMPLEMENTATION.
                                         implementer = 'ZCL_SAT_CDS_VIEW_QC' )
                                       ( filter      = |{ c_search_type-db_tab }|
                                         implementer = 'ZCL_SAT_DBTAB_QC' )
+                                      ( filter      = |{ c_search_type-structure }|
+                                        implementer = 'ZCL_SAT_STRUCT_QC' )
                                       ( filter      = |{ c_search_type-ddic_view }|
                                         implementer = 'ZCL_SAT_DDICVIEW_QC' )
                                       ( implementer = 'ZCL_SAT_GENERAL_QC' ) ) )

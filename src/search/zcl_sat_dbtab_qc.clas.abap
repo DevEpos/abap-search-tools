@@ -17,7 +17,7 @@ ENDCLASS.
 CLASS zcl_sat_dbtab_qc IMPLEMENTATION.
   METHOD zif_sat_query_converter~convert_value.
     CASE iv_option.
-      WHEN zif_sat_c_os_dtab_options=>c_filter_key-enhancement_category.
+      WHEN zif_sat_c_os_tabl_options=>c_filter_key-enhancement_category.
         cv_value = zcl_sat_table_filter_mapper=>map_enhanccat_to_int( cv_value ).
 
       WHEN zif_sat_c_object_search=>c_general_search_params-maintenance.

@@ -1,7 +1,6 @@
 "! <p class="shorttext synchronized">Mapper of filter values</p>
 CLASS zcl_sat_table_filter_mapper DEFINITION
-  PUBLIC
-  FINAL
+  PUBLIC FINAL
   CREATE PUBLIC.
 
   PUBLIC SECTION.
@@ -32,15 +31,15 @@ CLASS zcl_sat_table_filter_mapper IMPLEMENTATION.
 
   METHOD map_enhanccat_to_int.
     result = SWITCH #( iv_value
-                       WHEN zif_sat_c_os_dtab_options=>c_tab_enh_categories-ext-char_like THEN
-                         zif_sat_c_os_dtab_options=>c_tab_enh_categories-int-char_like
-                       WHEN zif_sat_c_os_dtab_options=>c_tab_enh_categories-ext-not_classified THEN
-                         zif_sat_c_os_dtab_options=>c_tab_enh_categories-int-not_classified
-                       WHEN zif_sat_c_os_dtab_options=>c_tab_enh_categories-ext-char_like_and_numeric THEN
-                         zif_sat_c_os_dtab_options=>c_tab_enh_categories-int-char_like_and_numeric
-                       WHEN zif_sat_c_os_dtab_options=>c_tab_enh_categories-ext-not_extendable THEN
-                         zif_sat_c_os_dtab_options=>c_tab_enh_categories-int-not_extendable
-                       WHEN zif_sat_c_os_dtab_options=>c_tab_enh_categories-ext-any THEN
-                         zif_sat_c_os_dtab_options=>c_tab_enh_categories-int-any ).
+                       WHEN zif_sat_c_os_tabl_options=>c_tab_enh_categories-ext-char_like THEN
+                         zif_sat_c_os_tabl_options=>c_tab_enh_categories-int-char_like
+                       WHEN zif_sat_c_os_tabl_options=>c_tab_enh_categories-ext-not_classified THEN
+                         zif_sat_c_os_tabl_options=>c_tab_enh_categories-int-not_classified
+                       WHEN zif_sat_c_os_tabl_options=>c_tab_enh_categories-ext-char_like_and_numeric THEN
+                         zif_sat_c_os_tabl_options=>c_tab_enh_categories-int-char_like_and_numeric
+                       WHEN zif_sat_c_os_tabl_options=>c_tab_enh_categories-ext-not_extendable THEN
+                         zif_sat_c_os_tabl_options=>c_tab_enh_categories-int-not_extendable
+                       WHEN zif_sat_c_os_tabl_options=>c_tab_enh_categories-ext-any THEN
+                         zif_sat_c_os_tabl_options=>c_tab_enh_categories-int-any ).
   ENDMETHOD.
 ENDCLASS.
