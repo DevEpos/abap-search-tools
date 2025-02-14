@@ -143,10 +143,10 @@ CLASS zcl_sat_dbtab_query_config IMPLEMENTATION.
 
   METHOD get_field_filter.
     result = VALUE #(
-        name             = c_dbtab_options-field
+        name             = zif_sat_c_os_tabl_options=>c_filter_key-field
         description      = 'Table Field'
-        long_description = |Use '{ c_dbtab_options-field }' to restrict the search query by certain Fields.\n\n| &&
-             |Example:\n   { c_dbtab_options-field } : devclass|
+        long_description = |Use '{ zif_sat_c_os_tabl_options=>c_filter_key-field }' to restrict the search query by certain Fields.\n\n| &&
+             |Example:\n   { zif_sat_c_os_tabl_options=>c_filter_key-field } : devclass|
         img_info         = VALUE #( img_key      = zif_sat_c_object_types=>table_field
                                     img_registry = zif_sat_c_object_search=>c_image_registry_id-adt_type )
         patterns         = abap_true
@@ -235,10 +235,10 @@ CLASS zcl_sat_dbtab_query_config IMPLEMENTATION.
 
   METHOD get_enhancement_cat_filter.
     result = VALUE #(
-        name             = c_dbtab_options-enhancement_category
+        name             = zif_sat_c_os_tabl_options=>c_filter_key-enhancement_category
         description      = 'Enhancement Category'
-        long_description = |Use '{ c_dbtab_options-enhancement_category }' to find tables by their enhancement categories.\n\n| &&
-                           |Example:\n   { c_dbtab_options-enhancement_category } : not_enhanced|
+        long_description = |Use '{ zif_sat_c_os_tabl_options=>c_filter_key-enhancement_category }' to find tables by their enhancement categories.\n\n| &&
+                           |Example:\n   { zif_sat_c_os_tabl_options=>c_filter_key-enhancement_category } : not_enhanced|
         img_info         = VALUE #( img_key     = c_general_image_keys-extension
                                     img_encoded = get_general_image( c_general_image_keys-extension ) )
         content_assist   = VALUE #(
@@ -311,10 +311,10 @@ CLASS zcl_sat_dbtab_query_config IMPLEMENTATION.
 
   METHOD get_include_filter.
     result = VALUE #(
-        name             = c_dbtab_options-include_usage
+        name             = zif_sat_c_os_tabl_options=>c_filter_key-include_usage
         description      = 'Usages of include structures'
-        long_description = |Use '{ c_dbtab_options-include_usage }' to restrict the query to tables that have specific includes.\n\n| &&
-                           |Example:\n   { c_dbtab_options-include_usage } : seochange|
+        long_description = |Use '{ zif_sat_c_os_tabl_options=>c_filter_key-include_usage }' to restrict the query to tables that have specific includes.\n\n| &&
+                           |Example:\n   { zif_sat_c_os_tabl_options=>c_filter_key-include_usage } : seochange|
         patterns         = abap_true
         img_info         = VALUE #( img_key      = zif_sat_c_object_types=>structure
                                     img_registry = zif_sat_c_object_search=>c_image_registry_id-adt_type )

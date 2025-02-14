@@ -198,7 +198,7 @@ CLASS zcl_sat_os_dbtab_provider IMPLEMENTATION.
                                 iv_ref_field       = CONV #( c_fields-development_package )
                                 iv_ref_table_alias = c_base_table ).
 
-        WHEN c_dbtab_search_params-field.
+        WHEN zif_sat_c_os_tabl_options=>c_filter_key-field.
           add_field_filter( <ls_option>-value_range ).
 
         WHEN c_dbtab_search_params-delivery_class.
@@ -222,7 +222,7 @@ CLASS zcl_sat_os_dbtab_provider IMPLEMENTATION.
                                  iv_ref_table_alias = c_base_table
                                  it_tadir_type      = VALUE #( ( zif_sat_c_tadir_types=>table ) ) ).
 
-        WHEN c_dbtab_search_params-enhancement_category.
+        WHEN zif_sat_c_os_tabl_options=>c_filter_key-enhancement_category.
           add_option_filter( iv_fieldname = |{ c_base_table }~{ c_fields-extension_class }|
                              it_values    = <ls_option>-value_range ).
 
@@ -255,7 +255,7 @@ CLASS zcl_sat_os_dbtab_provider IMPLEMENTATION.
           add_option_filter( iv_fieldname = |{ c_base_table }~{ c_fields-maintenance_flag }|
                              it_values    = <ls_option>-value_range ).
 
-        WHEN c_dbtab_search_params-include_usage.
+        WHEN zif_sat_c_os_tabl_options=>c_filter_key-include_usage.
           add_include_filter( it_values = <ls_option>-value_range  ).
       ENDCASE.
     ENDLOOP.
