@@ -1,7 +1,6 @@
 "! <p class="shorttext synchronized">Content Handler Factory for ADT tools</p>
 CLASS zcl_sat_adt_ch_factory DEFINITION
-  PUBLIC
-  FINAL
+  PUBLIC FINAL
   CREATE PRIVATE.
 
   PUBLIC SECTION.

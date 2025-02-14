@@ -2,8 +2,8 @@
 "! Provider for searching methods
 CLASS zcl_sat_os_subp_meth_impl_odb DEFINITION
   PUBLIC
-  CREATE PUBLIC
-  INHERITING FROM zcl_sat_os_subp_meth_impl.
+  INHERITING FROM zcl_sat_os_subp_meth_impl
+  CREATE PUBLIC.
 
   PUBLIC SECTION.
 
@@ -12,23 +12,22 @@ CLASS zcl_sat_os_subp_meth_impl_odb DEFINITION
     METHODS do_after_search REDEFINITION.
 
   PRIVATE SECTION.
-    CONSTANTS:
-      BEGIN OF c_fields,
-        classintf  TYPE string VALUE 'classname',
-        package    TYPE string VALUE 'developmentpackage',
-        tadir_type TYPE string VALUE 'tadirtype',
-        progname   TYPE string VALUE 'progname',
-        created_by TYPE string VALUE 'cnam',
-        created_on TYPE string VALUE 'cdat',
-        changed_by TYPE string VALUE 'unam',
-        changed_on TYPE string VALUE 'udat',
-      END OF c_fields,
+    CONSTANTS: BEGIN OF c_fields,
+                 classintf  TYPE string VALUE 'classname',
+                 package    TYPE string VALUE 'developmentpackage',
+                 tadir_type TYPE string VALUE 'tadirtype',
+                 progname   TYPE string VALUE 'progname',
+                 created_by TYPE string VALUE 'cnam',
+                 created_on TYPE string VALUE 'cdat',
+                 changed_by TYPE string VALUE 'unam',
+                 changed_on TYPE string VALUE 'udat',
+               END OF c_fields.
 
-      BEGIN OF c_alias_names,
-        includes TYPE string VALUE 'incl',
-      END OF c_alias_names,
+    CONSTANTS: BEGIN OF c_alias_names,
+                 includes TYPE string VALUE 'incl',
+               END OF c_alias_names.
 
-      c_progname_filter_suffix TYPE string VALUE '*CM+++' ##NO_TEXT.
+    CONSTANTS c_progname_filter_suffix TYPE string VALUE '*CM+++' ##NO_TEXT.
 
     TYPES:
       BEGIN OF ty_class_info,
@@ -182,7 +181,8 @@ CLASS zcl_sat_os_subp_meth_impl_odb IMPLEMENTATION.
 
     reset( ).
 
-    set_base_select_table( iv_entity = |{ zif_sat_c_select_source_id=>zsat_i_classinterface }| iv_alias = c_clif_alias ).
+    set_base_select_table( iv_entity = |{ zif_sat_c_select_source_id=>zsat_i_classinterface }|
+                           iv_alias  = c_clif_alias ).
     configure_class_filters( ).
     new_and_cond_list( ).
     create_where_clause( ).

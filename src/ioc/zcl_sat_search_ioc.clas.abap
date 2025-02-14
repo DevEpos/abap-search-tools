@@ -1,8 +1,7 @@
 "! <p class="shorttext synchronized">IoC Container for Object search</p>
 CLASS zcl_sat_search_ioc DEFINITION
   PUBLIC
-  FINAL
-  INHERITING FROM zcl_sat_base_ioc
+  INHERITING FROM zcl_sat_base_ioc FINAL
   CREATE PUBLIC.
 
   PUBLIC SECTION.
@@ -15,23 +14,22 @@ CLASS zcl_sat_search_ioc DEFINITION
   PROTECTED SECTION.
 
   PRIVATE SECTION.
-    CONSTANTS:
-      BEGIN OF c_contracts,
-        query_validator TYPE classname VALUE 'ZIF_SAT_QUERY_VALIDATOR',
-        query_converter TYPE classname VALUE 'ZIF_SAT_QUERY_CONVERTER',
-        query_parser    TYPE classname VALUE 'ZIF_SAT_OBJECT_QUERY_PARSER',
-        query_config    TYPE classname VALUE 'ZIF_SAT_OBJECT_SEARCH_CONFIG',
-        search_provider TYPE classname VALUE 'ZIF_SAT_OBJECT_SEARCH_PROVIDER',
-        search_engine   TYPE classname VALUE 'ZIF_SAT_SEARCH_ENGINE',
-      END OF c_contracts,
-      BEGIN OF c_implementer,
-        query_parser TYPE classname VALUE 'ZCL_SAT_OBJECT_QUERY_PARSER',
-      END OF c_implementer,
-      BEGIN OF c_dependency_params,
-        io_configuration TYPE string VALUE 'IO_CONFIGURATION',
-        io_validator     TYPE string VALUE 'IO_VALIDATOR',
-        io_converter     TYPE string VALUE 'IO_CONVERTER',
-      END OF c_dependency_params.
+    CONSTANTS: BEGIN OF c_contracts,
+                 query_validator TYPE classname VALUE 'ZIF_SAT_QUERY_VALIDATOR',
+                 query_converter TYPE classname VALUE 'ZIF_SAT_QUERY_CONVERTER',
+                 query_parser    TYPE classname VALUE 'ZIF_SAT_OBJECT_QUERY_PARSER',
+                 query_config    TYPE classname VALUE 'ZIF_SAT_OBJECT_SEARCH_CONFIG',
+                 search_provider TYPE classname VALUE 'ZIF_SAT_OBJECT_SEARCH_PROVIDER',
+                 search_engine   TYPE classname VALUE 'ZIF_SAT_SEARCH_ENGINE',
+               END OF c_contracts.
+    CONSTANTS: BEGIN OF c_implementer,
+                 query_parser TYPE classname VALUE 'ZCL_SAT_OBJECT_QUERY_PARSER',
+               END OF c_implementer.
+    CONSTANTS: BEGIN OF c_dependency_params,
+                 io_configuration TYPE string VALUE 'IO_CONFIGURATION',
+                 io_validator     TYPE string VALUE 'IO_VALIDATOR',
+                 io_converter     TYPE string VALUE 'IO_CONVERTER',
+               END OF c_dependency_params.
 
 ENDCLASS.
 

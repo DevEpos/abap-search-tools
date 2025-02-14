@@ -3,8 +3,7 @@
 "!       with NW 7.52
 CLASS zcl_sat_adt_res_anno_value_vh DEFINITION
   PUBLIC
-  INHERITING FROM cl_adt_res_named_items
-  FINAL
+  INHERITING FROM cl_adt_res_named_items FINAL
   CREATE PUBLIC.
 
   PUBLIC SECTION.
@@ -79,8 +78,8 @@ CLASS zcl_sat_adt_res_anno_value_vh IMPLEMENTATION.
 
     SELECT SINGLE @abap_true
       FROM (c_ddla_rt_header_tab)
-      WHERE key_upper IN @it_anno_name_range
-        AND value_type = 'Boolean'
+      WHERE key_upper  IN @it_anno_name_range
+        AND value_type  = 'Boolean'
       INTO @lf_boolean_anno_found.
 
     IF lf_boolean_anno_found = abap_true.
@@ -101,11 +100,10 @@ CLASS zcl_sat_adt_res_anno_value_vh IMPLEMENTATION.
                        ( |   ON anno~key_guid = enum~key_guid| ) ).
 
     TRY.
-        SELECT DISTINCT
-               concat( '#',enum~symbol )  AS name
+        SELECT DISTINCT concat( '#',enum~symbol ) AS name
           FROM (lt_from)
           WHERE upper( concat( '#', enum~symbol ) ) IN @it_anno_value_range
-            AND key_upper                           IN @it_anno_name_range
+            AND key_upper IN @it_anno_name_range
           APPENDING CORRESPONDING FIELDS OF TABLE @cs_named_items-items
           UP TO @iv_max_row_count ROWS.
 

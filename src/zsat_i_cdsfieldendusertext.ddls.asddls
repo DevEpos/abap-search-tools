@@ -1,11 +1,14 @@
-@AbapCatalog.sqlViewName: 'ZSATICFEUTXT'
 @AbapCatalog.compiler.compareFilter: true
 @AbapCatalog.preserveKey: true
+@AbapCatalog.sqlViewName: 'ZSATICFEUTXT'
+
 @AccessControl.authorizationCheck: #CHECK
+
 @EndUserText.label: 'Enduser Text Labels for CDS field'
 
 define view ZSAT_I_CdsFieldEndUserText
   as select from ddfieldanno
+
 {
   name
 }

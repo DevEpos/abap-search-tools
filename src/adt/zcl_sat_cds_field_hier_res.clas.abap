@@ -3,8 +3,7 @@
 "! of a specific field of a CDS view. The hierarchy will be return in a deep
 "! structure
 CLASS zcl_sat_cds_field_hier_res DEFINITION
-  PUBLIC
-  FINAL
+  PUBLIC FINAL
   CREATE PUBLIC.
 
   PUBLIC SECTION.
@@ -23,26 +22,25 @@ CLASS zcl_sat_cds_field_hier_res DEFINITION
         VALUE(rs_hierarchy) TYPE zif_sat_ty_adt_types=>ty_entity_field_info_result.
 
   PRIVATE SECTION.
-    TYPES:
-      BEGIN OF ty_s_cached_node,
-        entity    TYPE tabname,
-        field_ref TYPE REF TO lcl_field,
-      END OF ty_s_cached_node,
-      BEGIN OF ty_s_hierarchy_field,
-        viewname       TYPE tabname,
-        viewfield      TYPE fieldname,
-        ddlname        TYPE ddlname,
-        level          TYPE i,
-        entityname     TYPE tabname,
-        viewfieldraw   TYPE fieldname,
-        basetable      TYPE tabname,
-        baseddlname    TYPE ddlname,
-        basesourcetype TYPE zsat_cds_source_type,
-        baseentityname TYPE tabname,
-        basefield      TYPE fieldname,
-        basefieldraw   TYPE fieldname,
-      END OF ty_s_hierarchy_field,
-      ty_t_hierarchy_field TYPE STANDARD TABLE OF ty_s_hierarchy_field WITH EMPTY KEY.
+    TYPES: BEGIN OF ty_s_cached_node,
+             entity    TYPE tabname,
+             field_ref TYPE REF TO lcl_field,
+           END OF ty_s_cached_node.
+    TYPES: BEGIN OF ty_s_hierarchy_field,
+             viewname       TYPE tabname,
+             viewfield      TYPE fieldname,
+             ddlname        TYPE ddlname,
+             level          TYPE i,
+             entityname     TYPE tabname,
+             viewfieldraw   TYPE fieldname,
+             basetable      TYPE tabname,
+             baseddlname    TYPE ddlname,
+             basesourcetype TYPE zsat_cds_source_type,
+             baseentityname TYPE tabname,
+             basefield      TYPE fieldname,
+             basefieldraw   TYPE fieldname,
+           END OF ty_s_hierarchy_field,
+           ty_t_hierarchy_field TYPE STANDARD TABLE OF ty_s_hierarchy_field WITH EMPTY KEY.
 
     DATA mt_cached_nodes TYPE STANDARD TABLE OF ty_s_cached_node.
     DATA mo_path_resolver TYPE REF TO cl_ddic_adt_ddls_path_resolver.
@@ -146,27 +144,25 @@ CLASS zcl_sat_cds_field_hier_res IMPLEMENTATION.
   METHOD get_field_hierarchy.
     DATA lt_view_fields TYPE STANDARD TABLE OF ty_s_hierarchy_field.
 
-    SELECT DISTINCT
-      field~viewname AS basetable,
-      field~viewfield AS basefield
+    SELECT DISTINCT field~viewname  AS basetable,
+                    field~viewfield AS basefield
       FROM dd27s AS field
-        INNER JOIN zsat_p_cdsviewbase AS view_base
-           ON   view_base~viewname = field~viewname
-           AND  view_base~entityid = @iv_cds_view
+           INNER JOIN zsat_p_cdsviewbase AS view_base
+             ON  view_base~viewname = field~viewname
+             AND view_base~entityid = @iv_cds_view
       WHERE field~viewfield = @iv_cds_view_field
       INTO TABLE @DATA(lt_field_tables).
 
     WHILE lines( lt_field_tables ) > 0.
-      SELECT DISTINCT
-        field~viewname AS viewname,
-        field~viewfield AS viewfield,
-        field~tabname AS basetable,
-        field~fieldname AS basefield
+      SELECT DISTINCT field~viewname  AS viewname,
+                      field~viewfield AS viewfield,
+                      field~tabname   AS basetable,
+                      field~fieldname AS basefield
         FROM dd27s AS field
         FOR ALL ENTRIES IN @lt_field_tables
-        WHERE field~rollname <> 'MANDT'
-          AND field~viewname = @lt_field_tables-basetable
-          AND field~viewfield = @lt_field_tables-basefield
+        WHERE field~rollname  <> 'MANDT'
+          AND field~viewname   = @lt_field_tables-basetable
+          AND field~viewfield  = @lt_field_tables-basefield
         INTO CORRESPONDING FIELDS OF TABLE @lt_view_fields.
 
       IF sy-subrc <> 0.
@@ -199,9 +195,9 @@ CLASS zcl_sat_cds_field_hier_res IMPLEMENTATION.
     ENDWHILE.
 
     SELECT DISTINCT view~viewname,
-           view~rawentityid,
-           view~ddlname,
-           view~sourcetype
+                    view~rawentityid,
+                    view~ddlname,
+                    view~sourcetype
       FROM zsat_p_cdsviewbase AS view
       FOR ALL ENTRIES IN @rt_hierarchy_flat
       WHERE view~viewname = @rt_hierarchy_flat-viewname
@@ -216,20 +212,20 @@ CLASS zcl_sat_cds_field_hier_res IMPLEMENTATION.
     ENDIF.
 
     SELECT DISTINCT view~viewname,
-           view~rawentityid,
-           view~ddlname,
-           view_field~rawfieldname,
-           view_field~fieldname
+                    view~rawentityid,
+                    view~ddlname,
+                    view_field~rawfieldname,
+                    view_field~fieldname
       FROM zsat_p_cdsviewbase AS view
-        INNER JOIN zsat_i_cdsviewfield AS view_field
-          ON  view~entityid = view_field~entityid
+           INNER JOIN zsat_i_cdsviewfield AS view_field
+             ON view~entityid = view_field~entityid
       FOR ALL ENTRIES IN @rt_hierarchy_flat
-      WHERE (    view~viewname = @rt_hierarchy_flat-viewname
-              OR view~viewname = @rt_hierarchy_flat-basetable
-              OR view~entityid = @rt_hierarchy_flat-basetable )
+      WHERE (    view~viewname        = @rt_hierarchy_flat-viewname
+              OR view~viewname        = @rt_hierarchy_flat-basetable
+              OR view~entityid        = @rt_hierarchy_flat-basetable )
         AND (    view_field~fieldname = @rt_hierarchy_flat-viewfield
               OR view_field~fieldname = @rt_hierarchy_flat-basefield )
-    INTO TABLE @DATA(lt_additional_field_infos).
+      INTO TABLE @DATA(lt_additional_field_infos).
 
     LOOP AT lt_additional_entity_infos ASSIGNING FIELD-SYMBOL(<ls_additional_entity_info>).
 
@@ -361,8 +357,7 @@ CLASS zcl_sat_cds_field_hier_res IMPLEMENTATION.
 
     lt_entity = VALUE #( FOR field IN mt_cached_nodes ( sign = 'I' option = 'EQ' low = field-entity ) ).
 
-    SELECT *
-      FROM zsat_i_databaseentitywotext
+    SELECT * FROM zsat_i_databaseentitywotext
       WHERE entity IN @lt_entity
       INTO TABLE @DATA(lt_entity_type).
 

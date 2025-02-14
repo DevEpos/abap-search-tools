@@ -1,7 +1,6 @@
 "! <p class="shorttext synchronized">Utilities for ADT navigation</p>
 CLASS zcl_sat_adt_util DEFINITION
-  PUBLIC
-  FINAL
+  PUBLIC FINAL
   CREATE PUBLIC.
 
   PUBLIC SECTION.
@@ -191,6 +190,8 @@ CLASS zcl_sat_adt_util IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD jump_adt.
+    " TODO: parameter IV_SUB_OBJ_TYPE is never used (ABAP cleaner)
+
     get_adt_objects_and_names( EXPORTING iv_obj_name       = iv_obj_name
                                          iv_obj_type       = iv_obj_type
                                IMPORTING er_adt_uri_mapper = DATA(lr_adt_uri_mapper)

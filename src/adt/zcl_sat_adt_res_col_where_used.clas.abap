@@ -30,11 +30,13 @@ ENDCLASS.
 
 CLASS zcl_sat_adt_res_col_where_used IMPLEMENTATION.
   METHOD fill_where_used_in_cds.
+    " TODO: parameter IV_ENTITY_TYPE is never used (ABAP cleaner)
+
     DATA lt_where_used TYPE zif_sat_ty_adt_types=>ty_t_field_usage.
 
     SELECT *
       FROM zsat_i_dbfieldusedincdsview( p_basetable = @iv_base_table, p_basefield = @mv_field )
-    INTO CORRESPONDING FIELDS OF TABLE @lt_where_used.
+      INTO CORRESPONDING FIELDS OF TABLE @lt_where_used.
 
     IF mf_search_calc_fields = abap_true.
       DATA(lo_calc_field_usage) = NEW zcl_sat_adt_cds_field_usage( iv_cds_view = mv_object_name
@@ -62,9 +64,12 @@ CLASS zcl_sat_adt_res_col_where_used IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD fill_where_used_in_view.
+    " TODO: parameter IV_ENTITY_TYPE is never used (ABAP cleaner)
+
     SELECT *
       FROM zsat_i_dbfieldusedinview( p_basetable = @iv_base_table, p_basefield = @mv_field )
-      ORDER BY viewname, viewfield
+      ORDER BY viewname,
+               viewfield
       INTO TABLE @DATA(lt_where_used).
 
     LOOP AT lt_where_used ASSIGNING FIELD-SYMBOL(<ls_where_used>).
@@ -98,8 +103,7 @@ CLASS zcl_sat_adt_res_col_where_used IMPLEMENTATION.
 
     DATA(lv_base_table) = mv_object_name.
 
-    SELECT SINGLE type
-      FROM zsat_i_databaseentitywotext
+    SELECT SINGLE type FROM zsat_i_databaseentitywotext
       WHERE entity = @lv_base_table
       INTO @DATA(lv_entity_type).
 
@@ -107,7 +111,7 @@ CLASS zcl_sat_adt_res_col_where_used IMPLEMENTATION.
       SELECT SINGLE viewname, sourcetype
         FROM zsat_p_cdsviewbase
         WHERE entityid = @lv_base_table
-        INTO (@lv_base_table,@lv_source_type).
+        INTO ( @lv_base_table,@lv_source_type ).
       IF    lv_source_type  = zif_sat_c_cds_view_type=>table_function
          OR lv_base_table  IS INITIAL.
         lv_base_table = mv_object_name.

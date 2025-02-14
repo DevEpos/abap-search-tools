@@ -1,7 +1,7 @@
 CLASS zcx_sat_data_read_error DEFINITION
   PUBLIC
-  CREATE PUBLIC
-  INHERITING FROM zcx_sat_application_exc.
+  INHERITING FROM zcx_sat_application_exc
+  CREATE PUBLIC.
 
   PUBLIC SECTION.
     CONSTANTS:

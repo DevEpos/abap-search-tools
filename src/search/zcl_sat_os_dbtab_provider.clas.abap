@@ -1,8 +1,8 @@
 "! <p class="shorttext synchronized">Database table/view search provider for Object search</p>
 CLASS zcl_sat_os_dbtab_provider DEFINITION
   PUBLIC
-  CREATE PUBLIC
-  INHERITING FROM zcl_sat_base_search_provider.
+  INHERITING FROM zcl_sat_base_search_provider
+  CREATE PUBLIC.
 
   PUBLIC SECTION.
     INTERFACES zif_sat_c_os_dtab_options.
@@ -19,40 +19,39 @@ CLASS zcl_sat_os_dbtab_provider DEFINITION
   PRIVATE SECTION.
     ALIASES c_dbtab_search_params FOR zif_sat_c_os_dtab_options~c_filter_key.
 
-    CONSTANTS:
-      c_base_table          TYPE string VALUE 'base',
-      c_field_table         TYPE string VALUE 'field',
-      c_include_table       TYPE string VALUE 'incl_usage',
-      c_tech_settings_table TYPE string VALUE 'tech',
-      BEGIN OF c_fields,
-        alias                      TYPE string VALUE 'field',
-        tablename                  TYPE string VALUE 'tablename',
-        entityid                   TYPE string VALUE 'entityid',
-        type                       TYPE string VALUE 'type',
-        fieldname                  TYPE string VALUE 'fieldname',
-        include_name               TYPE string VALUE 'includename',
-        description                TYPE string VALUE 'description',
-        development_package        TYPE string VALUE 'developmentpackage',
-        delivery_class             TYPE string VALUE 'deliveryclass',
-        created_by                 TYPE string VALUE 'createdby',
-        created_date               TYPE string VALUE 'createddate',
-        changed_by                 TYPE string VALUE 'changedby',
-        changed_date               TYPE string VALUE 'changeddate',
-        extension_class            TYPE string VALUE 'extensionclass',
-        maintenance_flag           TYPE string VALUE 'maintenanceflag',
-        search_help_binding_exists TYPE string VALUE 'searchhelpbindingexists',
-        client_dependent           TYPE string VALUE 'clientdependent',
-        is_gtt                     TYPE string VALUE 'isgtt',
-      END OF c_fields,
+    CONSTANTS c_base_table TYPE string VALUE 'base'.
+    CONSTANTS c_field_table TYPE string VALUE 'field'.
+    CONSTANTS c_include_table TYPE string VALUE 'incl_usage'.
+    CONSTANTS c_tech_settings_table TYPE string VALUE 'tech'.
+    CONSTANTS: BEGIN OF c_fields,
+                 alias                      TYPE string VALUE 'field',
+                 tablename                  TYPE string VALUE 'tablename',
+                 entityid                   TYPE string VALUE 'entityid',
+                 type                       TYPE string VALUE 'type',
+                 fieldname                  TYPE string VALUE 'fieldname',
+                 include_name               TYPE string VALUE 'includename',
+                 description                TYPE string VALUE 'description',
+                 development_package        TYPE string VALUE 'developmentpackage',
+                 delivery_class             TYPE string VALUE 'deliveryclass',
+                 created_by                 TYPE string VALUE 'createdby',
+                 created_date               TYPE string VALUE 'createddate',
+                 changed_by                 TYPE string VALUE 'changedby',
+                 changed_date               TYPE string VALUE 'changeddate',
+                 extension_class            TYPE string VALUE 'extensionclass',
+                 maintenance_flag           TYPE string VALUE 'maintenanceflag',
+                 search_help_binding_exists TYPE string VALUE 'searchhelpbindingexists',
+                 client_dependent           TYPE string VALUE 'clientdependent',
+                 is_gtt                     TYPE string VALUE 'isgtt',
+               END OF c_fields.
 
-      BEGIN OF c_tech_fields,
-        change_log_active TYPE string VALUE 'protokoll',
-        buffering_status  TYPE string VALUE 'bufallow',
-        buffering_type    TYPE string VALUE 'pufferung',
-        size_category     TYPE string VALUE 'tabkat',
-        data_class        TYPE string VALUE 'tabart',
-        storage_type      TYPE string VALUE 'roworcolst',
-      END OF c_tech_fields.
+    CONSTANTS: BEGIN OF c_tech_fields,
+                 change_log_active TYPE string VALUE 'protokoll',
+                 buffering_status  TYPE string VALUE 'bufallow',
+                 buffering_type    TYPE string VALUE 'pufferung',
+                 size_category     TYPE string VALUE 'tabkat',
+                 data_class        TYPE string VALUE 'tabart',
+                 storage_type      TYPE string VALUE 'roworcolst',
+               END OF c_tech_fields.
 
     DATA mv_field_subquery TYPE string.
     DATA mv_field_filter_count TYPE i.
@@ -87,8 +86,8 @@ ENDCLASS.
 CLASS zcl_sat_os_dbtab_provider IMPLEMENTATION.
   METHOD constructor.
     super->constructor( ).
-    mv_field_subquery = |SELECT DISTINCT tablename | && c_cr_lf &&
-                        | FROM { zif_sat_c_select_source_id=>zsat_i_tablefield } | && c_cr_lf &&
+    mv_field_subquery = |SELECT DISTINCT tablename { c_cr_lf }| &&
+                        | FROM { zif_sat_c_select_source_id=>zsat_i_tablefield } { c_cr_lf }| &&
                         | WHERE |.
   ENDMETHOD.
 

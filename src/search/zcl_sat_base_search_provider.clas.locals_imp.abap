@@ -9,8 +9,8 @@ CLASS lcl_api_state_filter_helper IMPLEMENTATION.
     mt_values = it_values.
     mv_ref_field = iv_ref_field.
     mv_ref_table_alias = iv_ref_table_alias.
-    mv_api_state_subquery = |SELECT DISTINCT { c_fields-object_name } | && cl_abap_char_utilities=>cr_lf &&
-                            | FROM { zif_sat_c_select_source_id=>zsat_i_apistates } | && cl_abap_char_utilities=>cr_lf &&
+    mv_api_state_subquery = |SELECT DISTINCT { c_fields-object_name } { cl_abap_char_utilities=>cr_lf }| &&
+                            | FROM { zif_sat_c_select_source_id=>zsat_i_apistates } { cl_abap_char_utilities=>cr_lf }| &&
                             | WHERE |.
   ENDMETHOD.
 
@@ -122,8 +122,9 @@ CLASS lcl_api_state_filter_helper IMPLEMENTATION.
             ( VALUE #(
                   ( values = VALUE #( FOR type IN mt_tadir_type
                                       ( sign = 'I' option = 'EQ' low = type sqlfieldname = c_fields-object_type ) ) ) ) )
-            ( VALUE #( ( LINES OF get_subquery_or_seltab( iv_fieldname = c_fields-api_state
-                                                          it_values    = mt_e_state_filters ) )
+            ( VALUE #( ( LINES OF
+                         get_subquery_or_seltab( iv_fieldname = c_fields-api_state
+                                                 it_values    = mt_e_state_filters ) )
                        ( LINES OF
                          get_subquery_or_seltab( iv_fieldname = c_fields-filter_value
                                                  it_values    = mt_e_value_filters ) ) ) ) ) ).

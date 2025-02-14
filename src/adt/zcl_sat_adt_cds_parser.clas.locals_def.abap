@@ -32,8 +32,7 @@ CLASS lcl_node DEFINITION FINAL.
 ENDCLASS.
 
 
-CLASS lcl_node_helper DEFINITION
-  FINAL
+CLASS lcl_node_helper DEFINITION FINAL
   CREATE PUBLIC.
 
   PUBLIC SECTION.
@@ -118,7 +117,7 @@ ENDCLASS.
 
 
 CLASS lcl_ddl_tab_func_stmnt_intrpt DEFINITION
- INHERITING FROM lcl_ddl_stmnt_interpreter.
+  INHERITING FROM lcl_ddl_stmnt_interpreter.
 
   PUBLIC SECTION.
     "! <p class="shorttext synchronized">CONSTRUCTOR</p>
