@@ -21,6 +21,7 @@ CLASS zcl_sat_os_struct_provider DEFINITION
 
     CONSTANTS c_base_table TYPE string VALUE 'base'.
     CONSTANTS c_field_table TYPE string VALUE 'field'.
+    CONSTANTS c_text_table TYPE string VALUE 'text'.
     CONSTANTS c_include_table TYPE string VALUE 'incl_usage'.
     CONSTANTS c_tech_settings_table TYPE string VALUE 'tech'.
     CONSTANTS:
@@ -39,6 +40,7 @@ CLASS zcl_sat_os_struct_provider DEFINITION
         changed_by          TYPE string VALUE 'changedby',
         changed_date        TYPE string VALUE 'changeddate',
         extension_class     TYPE string VALUE 'extensionclass',
+        language            TYPE string VALUE 'language',
       END OF c_fields.
 
     DATA mv_field_subquery TYPE string.
@@ -142,7 +144,17 @@ CLASS zcl_sat_os_struct_provider IMPLEMENTATION.
       CASE <ls_option>-option.
 
         WHEN c_general_search_options-description.
-          add_option_filter( iv_fieldname = mv_description_filter_field
+          add_join_table( iv_join_table = |{ zif_sat_c_select_source_id=>zsat_i_tabletext }|
+                          iv_alias      = c_text_table
+                          it_conditions = VALUE #( ( field           = c_fields-tabname
+                                                     ref_field       = c_fields-structure
+                                                     ref_table_alias = c_base_table
+                                                     type            = zif_sat_c_join_cond_type=>field  )
+                                                   ( field           = c_fields-language
+                                                     tabname_alias   = c_text_table
+                                                     value           = sy-langu
+                                                     type            = zif_sat_c_join_cond_type=>filter  ) ) ).
+          add_option_filter( iv_fieldname = |{ c_text_table }~{ mv_description_filter_field }|
                              it_values    = <ls_option>-value_range ).
 
         WHEN c_general_search_options-user.
