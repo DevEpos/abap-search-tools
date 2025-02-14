@@ -1,8 +1,7 @@
 "! <p class="shorttext synchronized">Resource for reading type of Class</p>
 CLASS zcl_sat_adt_res_class_type_vh DEFINITION
   PUBLIC
-  FINAL
-  INHERITING FROM cl_adt_res_named_items
+  INHERITING FROM cl_adt_res_named_items FINAL
   CREATE PUBLIC.
 
   PUBLIC SECTION.

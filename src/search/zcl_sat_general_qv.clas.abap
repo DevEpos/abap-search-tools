@@ -52,8 +52,7 @@ CLASS zcl_sat_general_qv IMPLEMENTATION.
 
       WHEN zif_sat_c_object_search=>c_general_search_params-package.
         IF iv_value NA '*+'.
-          SELECT SINGLE @abap_true
-            FROM tdevc
+          SELECT SINGLE @abap_true FROM tdevc
             WHERE devclass = @iv_value
             INTO @DATA(lf_package_exists).
           IF lf_package_exists = abap_false.

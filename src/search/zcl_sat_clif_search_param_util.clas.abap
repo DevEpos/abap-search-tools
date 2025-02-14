@@ -1,7 +1,6 @@
 "! <p class="shorttext synchronized">Utility for mapping search parameters for Class/Interface</p>
 CLASS zcl_sat_clif_search_param_util DEFINITION
-  PUBLIC
-  FINAL
+  PUBLIC FINAL
   CREATE PUBLIC.
 
   PUBLIC SECTION.

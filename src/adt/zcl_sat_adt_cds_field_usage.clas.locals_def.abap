@@ -4,7 +4,7 @@
 TYPES ty_t_fields TYPE SORTED TABLE OF fieldname WITH UNIQUE DEFAULT KEY.
 
 CLASS lcl_field_visitor DEFINITION
- INHERITING FROM cl_qlast_visitor.
+  INHERITING FROM cl_qlast_visitor.
 
   PUBLIC SECTION.
     DATA mv_current_field TYPE string.

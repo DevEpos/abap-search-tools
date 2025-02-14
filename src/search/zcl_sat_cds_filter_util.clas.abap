@@ -19,9 +19,9 @@ CLASS zcl_sat_cds_filter_util IMPLEMENTATION.
     DATA lt_tmp_usages LIKE lt_current_parents.
 
     SELECT DISTINCT base~ddlname
-      FROM  zsat_p_cds AS base
-        INNER JOIN zsat_i_cdsfrompartentity AS frompart
-          ON base~viewname = frompart~ddlviewname
+      FROM zsat_p_cds AS base
+           INNER JOIN zsat_i_cdsfrompartentity AS frompart
+             ON base~viewname = frompart~ddlviewname
       WHERE frompart~sourceentity = @iv_entity
       INTO TABLE @lt_usages.
     IF sy-subrc <> 0.
@@ -32,9 +32,9 @@ CLASS zcl_sat_cds_filter_util IMPLEMENTATION.
 
     WHILE lt_current_parents IS NOT INITIAL.
       SELECT DISTINCT base~ddlname
-        FROM  zsat_p_cds AS base
-          INNER JOIN zsat_i_cdsfrompartentity AS frompart
-            ON base~viewname = frompart~ddlviewname
+        FROM zsat_p_cds AS base
+             INNER JOIN zsat_i_cdsfrompartentity AS frompart
+               ON base~viewname = frompart~ddlviewname
         FOR ALL ENTRIES IN @lt_current_parents
         WHERE frompart~sourceentity = @lt_current_parents-table_line
         INTO TABLE @lt_tmp_usages.

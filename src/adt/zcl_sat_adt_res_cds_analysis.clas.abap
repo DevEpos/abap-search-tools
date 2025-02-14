@@ -1,8 +1,7 @@
 "! <p class="shorttext synchronized">CDS Analysis for ADT</p>
 CLASS zcl_sat_adt_res_cds_analysis DEFINITION
   PUBLIC
-  INHERITING FROM cl_adt_rest_resource
-  ABSTRACT
+  INHERITING FROM cl_adt_rest_resource ABSTRACT
   CREATE PUBLIC.
 
   PUBLIC SECTION.

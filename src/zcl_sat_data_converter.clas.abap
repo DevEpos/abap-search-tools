@@ -74,6 +74,10 @@ ENDCLASS.
 
 CLASS zcl_sat_data_converter IMPLEMENTATION.
   METHOD convert_dates_to_int_format.
+    " TODO: parameter IV_TABNAME is never used (ABAP cleaner)
+    " TODO: parameter IV_FIELDNAME is never used (ABAP cleaner)
+    " TODO: parameter IF_PRINT_ERROR_MESSAGE is never used (ABAP cleaner)
+
 *&---------------------------------------------------------------------*
 *& Description: Conversion of dates into internal format
 *& Special case: check if entered value equals to sy-datum
@@ -260,7 +264,7 @@ CLASS zcl_sat_data_converter IMPLEMENTATION.
     " create type described by name
     DATA(lr_type_descr) = CAST cl_abap_datadescr(
         cl_abap_typedescr=>describe_by_name(
-            COND string( WHEN iv_fieldname IS INITIAL THEN iv_tabname ELSE iv_tabname && '-' && iv_fieldname ) ) ).
+            COND string( WHEN iv_fieldname IS INITIAL THEN iv_tabname ELSE |{ iv_tabname }-{ iv_fieldname }| ) ) ).
     CREATE DATA lr_input TYPE HANDLE lr_type_descr.
 
     ASSIGN lr_input->* TO <lv_input>.

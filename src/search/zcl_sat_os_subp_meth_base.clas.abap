@@ -1,8 +1,7 @@
 "! <p class="shorttext synchronized">Base Search provider for Methods</p>
 CLASS zcl_sat_os_subp_meth_base DEFINITION
   PUBLIC
-  ABSTRACT
-  INHERITING FROM zcl_sat_os_classintf_provider
+  INHERITING FROM zcl_sat_os_classintf_provider ABSTRACT
   CREATE PUBLIC.
 
   PUBLIC SECTION.
@@ -13,27 +12,26 @@ CLASS zcl_sat_os_subp_meth_base DEFINITION
     ALIASES c_method_option FOR zif_sat_c_os_meth_options~c_filter_key.
     ALIASES get_method_key  FOR zif_sat_method_key_reader~get_method_key.
 
-    TYPES:
-      BEGIN OF ty_method,
-        clsname      TYPE seoclsname,
-        parent_class TYPE seoclsname,
-        cmpname      TYPE seocmpname,
-        exposure     TYPE seoexpose,
-        final        TYPE abap_bool,
-        created_by   TYPE uname,
-        created_on   TYPE dats,
-        changed_by   TYPE uname,
-        changed_on   TYPE dats,
-      END OF ty_method,
+    TYPES: BEGIN OF ty_method,
+             clsname      TYPE seoclsname,
+             parent_class TYPE seoclsname,
+             cmpname      TYPE seocmpname,
+             exposure     TYPE seoexpose,
+             final        TYPE abap_bool,
+             created_by   TYPE uname,
+             created_on   TYPE dats,
+             changed_by   TYPE uname,
+             changed_on   TYPE dats,
+           END OF ty_method.
 
-      BEGIN OF ty_class,
-        developmentpackage TYPE zsat_i_classinterface-developmentpackage,
-        tadirtype          TYPE zsat_i_classinterface-tadirtype,
-      END OF ty_class,
+    TYPES: BEGIN OF ty_class,
+             developmentpackage TYPE zsat_i_classinterface-developmentpackage,
+             tadirtype          TYPE zsat_i_classinterface-tadirtype,
+           END OF ty_class.
 
-      BEGIN OF ty_include,
-        progname TYPE reposrc-progname,
-      END OF ty_include.
+    TYPES: BEGIN OF ty_include,
+             progname TYPE reposrc-progname,
+           END OF ty_include.
 
     DATA mt_meth_final_filter TYPE RANGE OF abap_bool.
     DATA mt_meth_cls_exc_filter TYPE RANGE OF abap_bool.

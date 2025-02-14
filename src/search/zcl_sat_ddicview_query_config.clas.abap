@@ -122,10 +122,10 @@ CLASS zcl_sat_ddicview_query_config IMPLEMENTATION.
                            |Example:\n   { c_view_search_options-delivery_class } : A|
         img_info         = VALUE #(
             img_key     = c_image_keys-transport
-            img_encoded = `iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABXElEQVR4nKWRXUvCcBTG/WBdlSBEEQRCJERvBN3UTYRERGWElJpRWpRSggZtZS+uV4Vd1G2Us75Ca5pGb2tq9bT9w6lbLcIDP3ZxHn47` &&
-                          `5/xNplqLPXTiLwwFpzEXLrLAuQCc/UCcmTUWxKLzJJiRgGxBD7PjNRbQlJ8IcnL4sahni/YZC8KRVSJ4kMPP73oiGytE0DVzjF7XCfo8cfR7ExhcZJuIIBBaJ4InWSB+6AmG1lTBZbZIYK7TiuB7Ml8g` &&
-                          `QgQv8t/yn3r8wXBZcF9QUQXuJQruZQqeKjar0K0wl8DAAmt8G21VCpRSBeZhChY7jcaRbTSPRtEytovW8T1YJ/fRNsXANn2ADucRfp1AESg7XZXI5JFMS0gKEjjhDdydCI4XkeJfkboto96gNIG5cwJ1` &&
-                          `1iHy1U5g6XGQnqXbUfmM1TdQAnw6R4La/Y16ajXY7JwSqG+33/ynV3N9AVC53MX4NLXNAAAAAElFTkSuQmCC` )
+            img_encoded = |iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABXElEQVR4nKWRXUvCcBTG/WBdlSBEEQRCJERvBN3UTYRERGWElJpRWpRSggZtZS+uV4Vd1G2Us75Ca5pGb2tq9bT9w6lbLcIDP3ZxHn47| &&
+                          |5/xNplqLPXTiLwwFpzEXLrLAuQCc/UCcmTUWxKLzJJiRgGxBD7PjNRbQlJ8IcnL4sahni/YZC8KRVSJ4kMPP73oiGytE0DVzjF7XCfo8cfR7ExhcZJuIIBBaJ4InWSB+6AmG1lTBZbZIYK7TiuB7Ml8g| &&
+                          |QgQv8t/yn3r8wXBZcF9QUQXuJQruZQqeKjar0K0wl8DAAmt8G21VCpRSBeZhChY7jcaRbTSPRtEytovW8T1YJ/fRNsXANn2ADucRfp1AESg7XZXI5JFMS0gKEjjhDdydCI4XkeJfkboto96gNIG5cwJ1| &&
+                          |1iHy1U5g6XGQnqXbUfmM1TdQAnw6R4La/Y16ajXY7JwSqG+33/ynV3N9AVC53MX4NLXNAAAAAElFTkSuQmCC| )
         allowed_length   = 1
         content_assist   = VALUE #(
             assist_type           = zif_sat_c_object_search=>c_filter_content_assist_type-named_item
@@ -161,10 +161,10 @@ CLASS zcl_sat_ddicview_query_config IMPLEMENTATION.
                            |a certain base Table/View .\n\nExample:\n   { c_view_search_options-base_table } : mara|
         img_info         = VALUE #(
             img_key     = 'ABAP:IMG_VIEW_BASE_TAB'
-            img_encoded = `iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAE9SURBVDhPtZO9SsRAFIXP/GZDDKSysIi9WCho` &&
-                          `o5Y2Fm5loZUPYGMh1uITWFlbWNhqYyNY+ATCdoqixeJPhAXFDZtkx0s2LG4SEmHxm2KGe+49M/eGYFxYtg85utycZqp3SsdFwFiDFEMLEQO7NZHe2F07e0qTCZ7tQ6j4njOxYinHmvJmMec34TYmYStX` &&
-                          `CS4XSH/IUlMKBgZ9KbgCZwqO9uh+Dlu7YEymMdJHaooGxqDz/YYw+kSrfYWbuxM8f7TwFQbodF9S/TflBt13aDmB1ZkdbC8dY95fhxQWGQf1Bn1aVeT1khmM3pAnr5e2UMWfZlBFvUHNDPL6f7RQ84Kc` &&
-                          `XtbCo62dJEpCxElvEDMJEhOjoeyY9Nc0mFH4mQ4ulj0h9Z4wYose69OXlzAsZhxtKj5XMQ73m9dBlj4uwA+K6oS4j6umkwAAAABJRU5ErkJggg==` )
+            img_encoded = |iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAE9SURBVDhPtZO9SsRAFIXP/GZDDKSysIi9WCho| &&
+                          |o5Y2Fm5loZUPYGMh1uITWFlbWNhqYyNY+ATCdoqixeJPhAXFDZtkx0s2LG4SEmHxm2KGe+49M/eGYFxYtg85utycZqp3SsdFwFiDFEMLEQO7NZHe2F07e0qTCZ7tQ6j4njOxYinHmvJmMec34TYmYStX| &&
+                          |CS4XSH/IUlMKBgZ9KbgCZwqO9uh+Dlu7YEymMdJHaooGxqDz/YYw+kSrfYWbuxM8f7TwFQbodF9S/TflBt13aDmB1ZkdbC8dY95fhxQWGQf1Bn1aVeT1khmM3pAnr5e2UMWfZlBFvUHNDPL6f7RQ84Kc| &&
+                          |XtbCo62dJEpCxElvEDMJEhOjoeyY9Nc0mFH4mQ4ulj0h9Z4wYose69OXlzAsZhxtKj5XMQ73m9dBlj4uwA+K6oS4j6umkwAAAABJRU5ErkJggg==| )
         allowed_length   = 30
         patterns         = abap_true
         content_assist   = VALUE #(

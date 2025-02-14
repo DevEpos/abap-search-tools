@@ -1,8 +1,7 @@
 "! <p class="shorttext synchronized">Query Config for Dictionary Views</p>
 CLASS zcl_sat_ddicview_qc DEFINITION
   PUBLIC
-  FINAL
-  INHERITING FROM zcl_sat_general_qc
+  INHERITING FROM zcl_sat_general_qc FINAL
   CREATE PUBLIC.
 
   PUBLIC SECTION.

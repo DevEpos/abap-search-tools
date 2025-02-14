@@ -1,8 +1,7 @@
 "! <p class="shorttext synchronized">Configuration for messages Query</p>
 CLASS zcl_sat_message_query_config DEFINITION
   PUBLIC
-  INHERITING FROM zcl_sat_base_query_config
-  FINAL
+  INHERITING FROM zcl_sat_base_query_config FINAL
   CREATE PUBLIC.
 
   PUBLIC SECTION.
@@ -44,9 +43,9 @@ CLASS zcl_sat_message_query_config IMPLEMENTATION.
         ( adt_type   = zif_sat_c_object_types=>message
           image_info = VALUE #(
               img_key     = 'ABAP:IMG_ADT_TYPE__MESSAGE'
-              img_encoded = `iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAACFSURBVDhP3ZFLDoAgDETB30oP5Xk8j+fxVu` &&
-                            `6kzmAxhIV2QWLiS5p2oKVtcD9iXsXTVJq5C1DcwMm2eFHNu54x4FluHnkHfEXQUWgqzeQrxGKMFs/eHkt59UDHETapNJOv0MEFjBZUP46Yfqse6NjSVJopVzjSaMUKjNPjvB+Qt1/yW5w7AcJ5OMzr` &&
-                            `dIT0AAAAAElFTkSuQmCC` ) ) ).
+              img_encoded = |iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAACFSURBVDhP3ZFLDoAgDETB30oP5Xk8j+fxVu| &&
+                            |6kzmAxhIV2QWLiS5p2oKVtcD9iXsXTVJq5C1DcwMm2eFHNu54x4FluHnkHfEXQUWgqzeQrxGKMFs/eHkt59UDHETapNJOv0MEFjBZUP46Yfqse6NjSVJopVzjSaMUKjNPjvB+Qt1/yW5w7AcJ5OMzr| &&
+                            |dIT0AAAAAElFTkSuQmCC| ) ) ).
   ENDMETHOD.
 
   METHOD zif_sat_object_search_config~get_option_config.
@@ -111,12 +110,12 @@ CLASS zcl_sat_message_query_config IMPLEMENTATION.
         single           = abap_true
         img_info         = VALUE #(
             img_key     = 'ABAP:IMG_MSG_SELF_EXPL'
-            img_encoded = `iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAACm0lEQVR4nJ2T3U+ScRTH/QO66LLLLlu18oWFL1ludWEmZRCkVtOabuZyunLLXDUNE5CAB0ymS3PafEvtRUNBLVKH5ts0rQmaKBoiIr6B` &&
-                          `8qTRt4enxrK6oe92Ls7Z73x2zu+c4+f3S6lF2j1pSu2jBEGz6eztpw8iMmS7/XxRurKzVljVu13bNobE3AYyKL5A7BMgTdlJdg/NYPCTGfmlWjDiRWYfAe80hQ39eNM3hSR+vZtxUVjmHynYe+yC4lk4` &&
-                          `T27yP12AUA4xzzwnKz7Azdn1F+CKqPn85bwXs9GZFd+YCVLjkVhCyGRLnUXVPdsjBgsGxs0Y1ltwl1C7Qjgya0CUiOFNTs57xU8WNDlzS98iU94KXlaNK5gjw5hxEZqeCYTzCARECRERp8DwhAWqLj2C` &&
-                          `2bIFbyWpwtfO8pcD0PZP4XFDHyKvlqCssR+OLTc418oQl14By/IGLt2oRAa/kY5nipqczBgp/+cExCp09E5ilKLXtIwgkCXGrG0da+Q2FlY2sLjugn7WjuOxCtwvVNNxtY6qLFbRRwNuSlrQNWiEYcaG` &&
-                          `+rZRUD1ixbW1w45yCaTcqYN1bZP2x01LCOUSNhqQRajRRvU6op9HtWqY6k+K6YVVLG98pc1APT4Rr8DnL8veWEu3gYLKTTQgm2g9lChohIvcQn7NAKJTnqCkrhdLDpK28Wkb5BVdsK5uemNZYpXnoyXe` &&
-                          `SfByauFRHgVIV3SAyZZ9H6JGt0iVrOkxgHe9HJNzdtp/3j7mmYJ1xz78Dsgu1+EwR7IewiEcRVU69/uPczDbHdB9MOGevJWkku2Bp0TBOxbpT8BBrsQWxHq4L5Qj1zDOSMgAlthNbaQxjEcU+8f849A8` &&
-                          `ANatSpxMK0VYkhL72WLfbuF/9QNtD+HnUTyLEAAAAABJRU5ErkJggg==` ) ).
+            img_encoded = |iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAACm0lEQVR4nJ2T3U+ScRTH/QO66LLLLlu18oWFL1ludWEmZRCkVtOabuZyunLLXDUNE5CAB0ymS3PafEvtRUNBLVKH5ts0rQmaKBoiIr6B| &&
+                          |8qTRt4enxrK6oe92Ls7Z73x2zu+c4+f3S6lF2j1pSu2jBEGz6eztpw8iMmS7/XxRurKzVljVu13bNobE3AYyKL5A7BMgTdlJdg/NYPCTGfmlWjDiRWYfAe80hQ39eNM3hSR+vZtxUVjmHynYe+yC4lk4| &&
+                          |T27yP12AUA4xzzwnKz7Azdn1F+CKqPn85bwXs9GZFd+YCVLjkVhCyGRLnUXVPdsjBgsGxs0Y1ltwl1C7Qjgya0CUiOFNTs57xU8WNDlzS98iU94KXlaNK5gjw5hxEZqeCYTzCARECRERp8DwhAWqLj2C| &&
+                          |2bIFbyWpwtfO8pcD0PZP4XFDHyKvlqCssR+OLTc418oQl14By/IGLt2oRAa/kY5nipqczBgp/+cExCp09E5ilKLXtIwgkCXGrG0da+Q2FlY2sLjugn7WjuOxCtwvVNNxtY6qLFbRRwNuSlrQNWiEYcaG| &&
+                          |+rZRUD1ixbW1w45yCaTcqYN1bZP2x01LCOUSNhqQRajRRvU6op9HtWqY6k+K6YVVLG98pc1APT4Rr8DnL8veWEu3gYLKTTQgm2g9lChohIvcQn7NAKJTnqCkrhdLDpK28Wkb5BVdsK5uemNZYpXnoyXe| &&
+                          |SfByauFRHgVIV3SAyZZ9H6JGt0iVrOkxgHe9HJNzdtp/3j7mmYJ1xz78Dsgu1+EwR7IewiEcRVU69/uPczDbHdB9MOGevJWkku2Bp0TBOxbpT8BBrsQWxHq4L5Qj1zDOSMgAlthNbaQxjEcU+8f849A8| &&
+                          |ANatSpxMK0VYkhL72WLfbuF/9QNtD+HnUTyLEAAAAABJRU5ErkJggg==| ) ).
   ENDMETHOD.
 ENDCLASS.

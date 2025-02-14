@@ -1,9 +1,7 @@
 "! <p class="shorttext synchronized">CDS View</p>
 CLASS zcl_sat_cds_view DEFINITION
-  PUBLIC
-  FINAL
+  PUBLIC FINAL
   CREATE PUBLIC
-
   GLOBAL FRIENDS zcl_sat_cds_view_factory.
 
   PUBLIC SECTION.
@@ -161,8 +159,7 @@ CLASS zcl_sat_cds_view IMPLEMENTATION.
 
     IF sy-subrc <> 0.
       RAISE EVENT request_annotations
-            EXPORTING
-              et_anno_name_range = it_annotation_name.
+        EXPORTING et_anno_name_range = it_annotation_name.
     ENDIF.
 
     LOOP AT mt_annotations ASSIGNING <ls_annotation> WHERE name IN it_annotation_name.

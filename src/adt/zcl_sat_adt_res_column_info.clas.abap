@@ -1,8 +1,7 @@
 "! <p class="shorttext synchronized">Resource for reading information of a Column</p>
 CLASS zcl_sat_adt_res_column_info DEFINITION
   PUBLIC
-  INHERITING FROM cl_adt_rest_resource
-  ABSTRACT
+  INHERITING FROM cl_adt_rest_resource ABSTRACT
   CREATE PUBLIC.
 
   PUBLIC SECTION.

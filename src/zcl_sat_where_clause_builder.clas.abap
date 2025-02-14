@@ -1,6 +1,5 @@
 CLASS zcl_sat_where_clause_builder DEFINITION
-  PUBLIC
-  FINAL
+  PUBLIC FINAL
   CREATE PUBLIC.
 
   PUBLIC SECTION.
@@ -367,7 +366,7 @@ CLASS zcl_sat_where_clause_builder IMPLEMENTATION.
     DATA(lv_sign) = COND #( WHEN iv_sign = space THEN 'I' ELSE iv_sign ).
     DATA(lf_escape_char) = if_escape_char.
 
-    IF ( cv_low CS '*' OR cv_low CS '+' )
+    IF     ( cv_low CS '*' OR cv_low CS '+' )
        AND ( lf_escape_char <> abap_true ).
       lf_low_cp = abap_true.
     ENDIF.
@@ -587,6 +586,8 @@ CLASS zcl_sat_where_clause_builder IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD single_subquery_clause_new.
+    " TODO: parameter IV_FIELDNAME_LENGTH is never used (ABAP cleaner)
+
     DATA lt_subquery TYPE string_table.
 
     " Always start a new row for a subquery clause

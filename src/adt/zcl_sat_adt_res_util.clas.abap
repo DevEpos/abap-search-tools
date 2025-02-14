@@ -1,7 +1,6 @@
 "! <p class="shorttext synchronized">Resource Util for ADT</p>
 CLASS zcl_sat_adt_res_util DEFINITION
-  PUBLIC
-  FINAL
+  PUBLIC FINAL
   CREATE PUBLIC.
 
   PUBLIC SECTION.

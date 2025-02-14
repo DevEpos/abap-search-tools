@@ -1,8 +1,7 @@
 "! <p class="shorttext synchronized">Validator for Database Table/View Search query</p>
 CLASS zcl_sat_dbtab_qv DEFINITION
   PUBLIC
-  INHERITING FROM zcl_sat_general_qv
-  FINAL
+  INHERITING FROM zcl_sat_general_qv FINAL
   CREATE PUBLIC.
 
   PUBLIC SECTION.

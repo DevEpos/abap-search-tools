@@ -6,10 +6,10 @@
 INTERFACE zif_sat_ioc_container
   PUBLIC.
 
-  TYPES:
-    "! <p class="shorttext synchronized" lang="en">Table type of IoC Containers</p>
-    ty_t_ioc TYPE STANDARD TABLE OF REF TO zif_sat_ioc_container,
+  "! <p class="shorttext synchronized">Table type of IoC Containers</p>
+  TYPES ty_t_ioc TYPE STANDARD TABLE OF REF TO zif_sat_ioc_container.
 
+  TYPES:
     "! <p class="shorttext synchronized" lang="en">Contract definition</p>
     BEGIN OF ty_s_contract,
       name TYPE classname,

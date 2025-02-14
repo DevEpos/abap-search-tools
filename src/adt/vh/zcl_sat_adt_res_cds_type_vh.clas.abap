@@ -1,8 +1,7 @@
 "! <p class="shorttext synchronized">Resource for reading CDS source types</p>
 CLASS zcl_sat_adt_res_cds_type_vh DEFINITION
   PUBLIC
-  INHERITING FROM cl_adt_res_named_items
-  FINAL
+  INHERITING FROM cl_adt_res_named_items FINAL
   CREATE PUBLIC.
 
   PUBLIC SECTION.

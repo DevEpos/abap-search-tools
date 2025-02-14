@@ -1,7 +1,6 @@
 "! <p class="shorttext synchronized">Converter for LIKE pattern SQL &lt;-&gt; SAP</p>
 CLASS zcl_sat_like_pattern_convrter DEFINITION
-  PUBLIC
-  FINAL
+  PUBLIC FINAL
   CREATE PRIVATE.
 
   PUBLIC SECTION.

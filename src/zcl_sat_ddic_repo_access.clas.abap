@@ -4,21 +4,20 @@ CLASS zcl_sat_ddic_repo_access DEFINITION
   CREATE PUBLIC.
 
   PUBLIC SECTION.
-    TYPES:
-      BEGIN OF ty_s_table_info,
-        tabname     TYPE tabname,
-        description TYPE ddtext,
-      END OF ty_s_table_info,
+    TYPES: BEGIN OF ty_s_table_info,
+             tabname     TYPE tabname,
+             description TYPE ddtext,
+           END OF ty_s_table_info,
 
-      ty_t_table_info TYPE STANDARD TABLE OF ty_s_table_info WITH EMPTY KEY,
+           ty_t_table_info TYPE STANDARD TABLE OF ty_s_table_info WITH EMPTY KEY.
 
-      BEGIN OF ty_s_table_definition,
-        tabname TYPE tabname,
-        ddtext  TYPE ddtext,
-        is_view TYPE abap_bool,
-      END OF ty_s_table_definition,
+    TYPES: BEGIN OF ty_s_table_definition,
+             tabname TYPE tabname,
+             ddtext  TYPE ddtext,
+             is_view TYPE abap_bool,
+           END OF ty_s_table_definition,
 
-      ty_t_table_definition TYPE STANDARD TABLE OF ty_s_table_definition WITH EMPTY KEY.
+           ty_t_table_definition TYPE STANDARD TABLE OF ty_s_table_definition WITH EMPTY KEY.
 
     "! <p class="shorttext synchronized">Retrieve foreign key tables for the given table name</p>
     CLASS-METHODS get_foreign_key_tables
@@ -193,11 +192,13 @@ CLASS zcl_sat_ddic_repo_access IMPLEMENTATION.
     ENDIF.
 
     " only return db tables
-    SELECT tabname ddtext AS description INTO CORRESPONDING FIELDS OF TABLE result
+    SELECT tabname
+           ddtext  AS description
+      INTO CORRESPONDING FIELDS OF TABLE result
       FROM dd02v
       FOR ALL ENTRIES IN lt_tadir
-      WHERE tabname = lt_tadir-table_line
-        AND tabclass = 'TRANSP'
+      WHERE tabname    = lt_tadir-table_line
+        AND tabclass   = 'TRANSP'
         AND ddlanguage = sy-langu.
   ENDMETHOD.
 
@@ -285,28 +286,37 @@ CLASS zcl_sat_ddic_repo_access IMPLEMENTATION.
       CASE iv_type.
 
         WHEN zif_sat_c_entity_type=>table.
-          SELECT tablename AS entity_id, tablename AS entity_id_raw, type AS entity_type, description
+          SELECT tablename   AS entity_id,
+                 tablename   AS entity_id_raw,
+                 type        AS entity_type,
+                 description
             FROM zsat_i_databasetable
             WHERE developmentpackage IN @lt_package_range
-              AND tablename             IN @lt_db_range
-          INTO CORRESPONDING FIELDS OF TABLE @result
+              AND tablename          IN @lt_db_range
+            INTO CORRESPONDING FIELDS OF TABLE @result
             UP TO @lv_max_rows ROWS.
         WHEN zif_sat_c_entity_type=>view.
-          SELECT viewname AS entity_id, viewname AS entity_id_raw, type AS entity_type, description
+          SELECT viewname    AS entity_id,
+                 viewname    AS entity_id_raw,
+                 type        AS entity_type,
+                 description
             FROM zsat_i_databaseview
             WHERE developmentpackage IN @lt_package_range
-              AND viewname             IN @lt_db_range
-          INTO CORRESPONDING FIELDS OF TABLE @result
+              AND viewname           IN @lt_db_range
+            INTO CORRESPONDING FIELDS OF TABLE @result
             UP TO @lv_max_rows ROWS.
       ENDCASE.
     ELSE.
 
-      SELECT entity AS entity_id, entity AS entity_id_raw, type AS entity_type, description
+      SELECT entity      AS entity_id,
+             entity      AS entity_id_raw,
+             type        AS entity_type,
+             description
         FROM zsat_i_databaseentity
         WHERE developmentpackage IN @lt_package_range
           AND entity             IN @lt_db_range
           AND type               <> @zif_sat_c_entity_type=>cds_view
-      INTO CORRESPONDING FIELDS OF TABLE @result
+        INTO CORRESPONDING FIELDS OF TABLE @result
         UP TO @lv_max_rows ROWS.
 
     ENDIF.
@@ -315,15 +325,16 @@ CLASS zcl_sat_ddic_repo_access IMPLEMENTATION.
   METHOD find_base_tables_of_view.
     DATA(lv_descr_language) = zcl_sat_system_helper=>get_system_language( ).
 
-    SELECT basetable AS entity_id,
-           basetable AS entity_id_raw,
+    SELECT basetable  AS entity_id,
+           basetable  AS entity_id_raw,
            entitytype AS entity_type,
-           ddtext AS description
+           ddtext     AS description
       FROM zsat_i_cdsbasetable AS base
-        LEFT OUTER JOIN dd02t AS text ON base~basetable = text~tabname
-                                     AND text~ddlanguage = @lv_descr_language
+           LEFT OUTER JOIN dd02t AS text
+             ON  base~basetable  = text~tabname
+             AND text~ddlanguage = @lv_descr_language
       WHERE ddlview = @iv_view_name
-    INTO CORRESPONDING FIELDS OF TABLE @rt_result.
+      INTO CORRESPONDING FIELDS OF TABLE @rt_result.
   ENDMETHOD.
 
   METHOD get_table_description.
@@ -331,16 +342,16 @@ CLASS zcl_sat_ddic_repo_access IMPLEMENTATION.
 
     IF is_table_info-tabclass = 'VIEW'.
       SELECT SINGLE ddtext INTO @rv_description
-          FROM dd25t
-          WHERE viewname = @is_table_info-tabname
-            AND ( ddlanguage = @lv_language
-               OR ddlanguage = 'EN' ).
+        FROM dd25t
+        WHERE viewname = @is_table_info-tabname
+          AND (    ddlanguage = @lv_language
+                OR ddlanguage = 'EN' ).
     ELSE.
       SELECT SINGLE ddtext INTO @rv_description
         FROM dd02t
         WHERE tabname = @is_table_info-tabname
-          AND ( ddlanguage = @lv_language
-             OR ddlanguage = 'EN' ).
+          AND (    ddlanguage = @lv_language
+                OR ddlanguage = 'EN' ).
     ENDIF.
   ENDMETHOD.
 
@@ -348,13 +359,13 @@ CLASS zcl_sat_ddic_repo_access IMPLEMENTATION.
     " TODO: variable is assigned but never used (ABAP cleaner)
     DATA(lv_language) = zcl_sat_system_helper=>get_system_language( ).
 
-    SELECT SINGLE entity AS entity_id,
-                  entityraw AS entity_id_raw,
-                  type AS entity_type,
+    SELECT SINGLE entity      AS entity_id,
+                  entityraw   AS entity_id_raw,
+                  type        AS entity_type,
                   description
       FROM zsat_i_databaseentity
       WHERE entity = @iv_entity_id
-    INTO CORRESPONDING FIELDS OF @rs_entity.
+      INTO CORRESPONDING FIELDS OF @rs_entity.
 
     IF sy-subrc <> 0.
       RAISE EXCEPTION TYPE zcx_sat_data_read_error
@@ -364,25 +375,25 @@ CLASS zcl_sat_ddic_repo_access IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD get_entity_by_range.
-    SELECT entity AS entity_id,
-           entityraw AS entity_id_raw,
-           type AS entity_type,
+    SELECT entity      AS entity_id,
+           entityraw   AS entity_id_raw,
+           type        AS entity_type,
            description
       FROM zsat_i_databaseentity
       WHERE entity IN @it_entity_range
-    INTO CORRESPONDING FIELDS OF TABLE @rt_entities.
+      INTO CORRESPONDING FIELDS OF TABLE @rt_entities.
   ENDMETHOD.
 
   METHOD get_foreign_key_tables.
-    SELECT foreignkeytable AS entity_id,
-           foreignkeytable AS entity_id_raw,
-           createdby AS created_by,
+    SELECT foreignkeytable    AS entity_id,
+           foreignkeytable    AS entity_id_raw,
+           createdby          AS created_by,
            developmentpackage AS devclass,
            description,
-           'T' AS entity_type
+           'T'                AS entity_type
       FROM zsat_i_foreignkeytable
       WHERE tablename = @iv_tabname
       ORDER BY foreignkeytable
-    INTO CORRESPONDING FIELDS OF TABLE @rt_entity.
+      INTO CORRESPONDING FIELDS OF TABLE @rt_entity.
   ENDMETHOD.
 ENDCLASS.

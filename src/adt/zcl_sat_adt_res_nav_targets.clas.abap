@@ -1,8 +1,7 @@
 CLASS zcl_sat_adt_res_nav_targets DEFINITION
   PUBLIC
-  FINAL
-  CREATE PUBLIC
-  INHERITING FROM cl_adt_rest_resource.
+  INHERITING FROM cl_adt_rest_resource FINAL
+  CREATE PUBLIC.
 
   PUBLIC SECTION.
     METHODS get REDEFINITION.
@@ -50,11 +49,10 @@ CLASS zcl_sat_adt_res_nav_targets IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD read_cds_view_targets.
-    SELECT SINGLE entityid
-      FROM zsat_p_cdsviewbase
+    SELECT SINGLE entityid FROM zsat_p_cdsviewbase
       WHERE entityid = @mv_object_name
          OR ddlname  = @mv_object_name
-    INTO @DATA(lv_entity).
+      INTO @DATA(lv_entity).
 
     IF sy-subrc <> 0.
       RETURN.

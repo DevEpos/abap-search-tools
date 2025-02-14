@@ -1,7 +1,6 @@
 "! <p class="shorttext synchronized">Logger for Object Search</p>
 CLASS zcl_sat_os_logger DEFINITION
-  PUBLIC
-  FINAL
+  PUBLIC FINAL
   CREATE PUBLIC.
 
   PUBLIC SECTION.

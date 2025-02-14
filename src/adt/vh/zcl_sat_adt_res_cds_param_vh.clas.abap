@@ -21,8 +21,7 @@ CLASS zcl_sat_adt_res_cds_param_vh IMPLEMENTATION.
       lt_param_range = VALUE #( ( sign = 'I' option = 'CP' low = to_upper( p_filter_name ) ) ).
     ENDIF.
 
-    SELECT
-      FROM dd10b AS param
+    SELECT FROM dd10b AS param
       FIELDS DISTINCT param~parametername_raw AS name
       WHERE param~parametername IN @lt_param_range
       ORDER BY param~parametername_raw

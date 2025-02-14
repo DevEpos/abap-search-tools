@@ -1,7 +1,6 @@
 "! <p class="shorttext synchronized">Filter definitions for db table / view</p>
 CLASS zcl_sat_table_filter_values DEFINITION
-  PUBLIC
-  FINAL
+  PUBLIC FINAL
   CREATE PUBLIC.
 
   PUBLIC SECTION.

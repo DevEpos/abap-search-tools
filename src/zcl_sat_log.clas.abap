@@ -1,7 +1,6 @@
 "! <p class="shorttext synchronized">Logging Util for Search and Analysis Tools</p>
 CLASS zcl_sat_log DEFINITION
-  PUBLIC
-  FINAL
+  PUBLIC FINAL
   CREATE PUBLIC.
 
   PUBLIC SECTION.
@@ -44,8 +43,7 @@ CLASS zcl_sat_log IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD is_search_log_active.
-    SELECT SINGLE @abap_true
-      FROM zsatlogstatus
+    SELECT SINGLE @abap_true FROM zsatlogstatus
       WHERE log_id = @c_log_id-search
         AND active = @abap_true
       INTO @result.

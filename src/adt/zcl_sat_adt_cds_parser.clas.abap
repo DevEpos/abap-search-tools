@@ -1,7 +1,6 @@
 "! <p class="shorttext synchronized">Custom CDS Parser</p>
 CLASS zcl_sat_adt_cds_parser DEFINITION
-  PUBLIC
-  FINAL
+  PUBLIC FINAL
   CREATE PUBLIC.
 
   PUBLIC SECTION.
@@ -111,6 +110,8 @@ CLASS zcl_sat_adt_cds_parser IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD parse_cds.
+    " TODO: parameter IF_SELECT_PART is never used (ABAP cleaner)
+
     DATA lv_ddlname TYPE ddlname.
     DATA lv_entity TYPE zsat_entity_id.
     DATA lt_ddlsources TYPE cl_ddl_parser=>ddlsources.
@@ -121,14 +122,13 @@ CLASS zcl_sat_adt_cds_parser IMPLEMENTATION.
       FROM zsat_p_cdsviewbase
       WHERE entityid = @mv_cds_view
          OR ddlname  = @mv_cds_view
-      INTO (@lv_ddlname, @lv_entity).
+      INTO ( @lv_ddlname, @lv_entity ).
     IF sy-subrc <> 0.
       RETURN.
     ENDIF.
 
-    SELECT *
-      FROM ddddlsrc
-      WHERE (    ddlname = @lv_ddlname
+    SELECT * FROM ddddlsrc
+      WHERE (    ddlname    = @lv_ddlname
               OR parentname = @lv_ddlname )
         AND as4local = 'A'
       INTO TABLE @lt_ddlsources.
@@ -254,13 +254,13 @@ CLASS zcl_sat_adt_cds_parser IMPLEMENTATION.
            ddlname,
            viewname,
            \_apistate-apistate AS apistate,
-           sourcetype AS source_type,
+           sourcetype          AS source_type,
            developmentpackage,
            createdby,
            description
       FROM zsat_i_cdsentity
       WHERE entityid IN @lt_cds_range
-         OR ddlname IN @lt_cds_range
+         OR ddlname  IN @lt_cds_range
       INTO TABLE @DATA(lt_entity_and_text).
 
     LOOP AT io_node_helper->mt_cds_views ASSIGNING FIELD-SYMBOL(<ls_node>).
@@ -290,8 +290,8 @@ CLASS zcl_sat_adt_cds_parser IMPLEMENTATION.
     lt_tabname_range = VALUE #( FOR table IN io_node_helper->mt_tables
                                 ( sign = 'I' option = 'EQ' low = table-name ) ).
 
-    SELECT tablename AS entityid,
-           tablename AS rawentityid,
+    SELECT tablename          AS entityid,
+           tablename          AS rawentityid,
            developmentpackage,
            createdby,
            description
@@ -326,7 +326,7 @@ CLASS zcl_sat_adt_cds_parser IMPLEMENTATION.
            ddlname,
            viewname,
            \_apistate-apistate AS apistate,
-           sourcetype AS source_type,
+           sourcetype          AS source_type,
            developmentpackage,
            createdby,
            description
@@ -361,8 +361,8 @@ CLASS zcl_sat_adt_cds_parser IMPLEMENTATION.
     lt_view_range = VALUE #( FOR view IN io_node_helper->mt_views
                              ( sign = 'I' option = 'EQ' low = view-name ) ).
 
-    SELECT viewname AS entityid,
-           viewname AS rawentityid,
+    SELECT viewname           AS entityid,
+           viewname           AS rawentityid,
            developmentpackage,
            createdby,
            description
@@ -433,14 +433,14 @@ CLASS zcl_sat_adt_cds_parser IMPLEMENTATION.
       <ls_amdp_info>-entities = VALUE #( FOR cds IN lt_table_func WHERE ( name = <ls_amdp_info>-name )
                                          ( sign = 'I' option = 'EQ' low = cds-entity ) ).
       " update default arrow (=>) with unicode array
-      <ls_amdp_info>-name     = <ls_amdp_info>-class && `→` && <ls_amdp_info>-method.
+      <ls_amdp_info>-name     = |{ <ls_amdp_info>-class }→{ <ls_amdp_info>-method }|.
     ENDLOOP.
 
     SELECT clsname,
            descript
       FROM seoclasstx
       WHERE clsname IN @lt_class_name_range
-        AND langu   = @sy-langu
+        AND langu    = @sy-langu
       INTO TABLE @DATA(lt_description).
 
     LOOP AT lt_amdp_info ASSIGNING <ls_amdp_info>.

@@ -266,13 +266,12 @@ CLASS zcl_sat_cds_usage_analyzer IMPLEMENTATION.
   METHOD analyze_single_ddls.
     DATA lt_ddlsources TYPE TABLE OF ddddlsrc.
 
-    SELECT *
-       FROM ddddlsrc
-       WHERE (    ddlname = @iv_ddlname
-               OR parentname = @iv_ddlname )
-         AND as4local = 'A'
-       ORDER BY parentname " The extended view needs to be analyzed first
-       INTO TABLE @lt_ddlsources.
+    SELECT * FROM ddddlsrc
+      WHERE (    ddlname    = @iv_ddlname
+              OR parentname = @iv_ddlname )
+        AND as4local = 'A'
+      ORDER BY parentname " The extended view needs to be analyzed first
+      INTO TABLE @lt_ddlsources.
 
     IF sy-subrc <> 0.
       RETURN.
@@ -370,10 +369,14 @@ CLASS zcl_sat_cds_usage_analyzer IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD visit_join_datasource.
+    " TODO: parameter OBJECT is never used (ABAP cleaner)
+
     ms_metrics-join_count = ms_metrics-join_count + 1.
   ENDMETHOD.
 
   METHOD visit_set_operation.
+    " TODO: parameter OBJECT is only used in commented-out code (ABAP cleaner)
+
     ms_metrics-set_operation_count = ms_metrics-set_operation_count + 1.
 *    DATA union_type TYPE i.
 *
@@ -426,18 +429,26 @@ CLASS zcl_sat_cds_usage_analyzer IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD visit_case_exp_base.
+    " TODO: parameter OBJECT is never used (ABAP cleaner)
+
     ms_metrics-case_count = ms_metrics-case_count + 1.
   ENDMETHOD.
 
   METHOD visit_cast_expression.
+    " TODO: parameter OBJECT is never used (ABAP cleaner)
+
     ms_metrics-cast_count = ms_metrics-cast_count + 1.
   ENDMETHOD.
 
   METHOD visit_func_expression.
+    " TODO: parameter OBJECT is never used (ABAP cleaner)
+
     ms_metrics-function_count = ms_metrics-function_count + 1.
   ENDMETHOD.
 
   METHOD visit_groupby.
+    " TODO: parameter OBJECT is never used (ABAP cleaner)
+
     ms_metrics-group_by_count = ms_metrics-group_by_count + 1.
   ENDMETHOD.
 
@@ -557,13 +568,13 @@ CLASS zcl_sat_cds_usage_analyzer IMPLEMENTATION.
       TABLES     dd26v_tab_a    = result
       EXCEPTIONS access_failure = 1
                  OTHERS         = 2.
-    IF ( sy-subrc <> 0 ).
+    IF sy-subrc <> 0.
       CLEAR result.
     ENDIF.
   ENDMETHOD.
 
   METHOD get_ddls_name.
-    IF ( mo_dd_ddl_handler IS INITIAL ).
+    IF mo_dd_ddl_handler IS INITIAL.
       mo_dd_ddl_handler = cl_dd_ddl_handler_factory=>create( ).
     ENDIF.
 
@@ -575,7 +586,7 @@ CLASS zcl_sat_cds_usage_analyzer IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD is_external_view.
-    IF ( mo_dd_view_util IS INITIAL ).
+    IF mo_dd_view_util IS INITIAL.
       mo_dd_view_util = NEW cl_dd_view_utilities( ).
     ENDIF.
 
@@ -657,11 +668,10 @@ CLASS zcl_sat_cds_usage_analyzer IMPLEMENTATION.
 
   METHOD get_ddlname_for_entity.
     " Determine DDL Name for Entity Name
-    SELECT SINGLE ddlname
-      FROM ddldependency
+    SELECT SINGLE ddlname FROM ddldependency
       WHERE objectname = @iv_entity_name
         AND objecttype = 'STOB'
-        AND state = 'A'
+        AND state      = 'A'
       INTO @result.
   ENDMETHOD.
 

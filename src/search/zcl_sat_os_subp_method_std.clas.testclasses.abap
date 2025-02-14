@@ -44,9 +44,8 @@ ENDCLASS.
 
 
 " Definition of unit test class
-CLASS ltcl_abap_unit DEFINITION FINAL FOR TESTING
-  DURATION SHORT
-  RISK LEVEL HARMLESS.
+CLASS ltcl_abap_unit DEFINITION FINAL
+  FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
 
   PRIVATE SECTION.
     DATA mr_cut TYPE REF TO zcl_sat_os_subp_method_std.
@@ -69,8 +68,8 @@ CLASS ltcl_abap_unit IMPLEMENTATION.
     TRY.
         mr_cut->zif_sat_object_search_provider~search( EXPORTING io_query  = lo_query
                                                        IMPORTING et_result = DATA(lt_result) ).
-        cl_abap_unit_assert=>assert_equals( act = lines( lt_result )
-                                            exp = 1 ).
+        cl_abap_unit_assert=>assert_equals( exp = 1
+                                            act = lines( lt_result ) ).
       CATCH zcx_sat_object_search INTO DATA(lx_search_error).
     ENDTRY.
 

@@ -1,7 +1,6 @@
 CLASS zcx_sat_object_search DEFINITION
   PUBLIC
-  INHERITING FROM zcx_sat_application_exc
-  FINAL
+  INHERITING FROM zcx_sat_application_exc FINAL
   CREATE PUBLIC.
 
   PUBLIC SECTION.

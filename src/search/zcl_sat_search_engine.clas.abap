@@ -1,7 +1,6 @@
 "! <p class="shorttext synchronized">Search Engine to trigger Object Search</p>
 CLASS zcl_sat_search_engine DEFINITION
-  PUBLIC
-  FINAL
+  PUBLIC FINAL
   CREATE PUBLIC.
 
   PUBLIC SECTION.

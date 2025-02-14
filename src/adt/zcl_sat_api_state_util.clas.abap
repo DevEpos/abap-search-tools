@@ -1,7 +1,6 @@
 "! <p class="shorttext synchronized">API Contracts</p>
 CLASS zcl_sat_api_state_util DEFINITION
-  PUBLIC
-  FINAL
+  PUBLIC FINAL
   CREATE PRIVATE.
 
   PUBLIC SECTION.
@@ -37,25 +36,24 @@ CLASS zcl_sat_api_state_util DEFINITION
     CONSTANTS c_c3 TYPE ty_contract_id VALUE 'C3'.
     CONSTANTS c_c4 TYPE ty_contract_id VALUE 'C4'.
 
-    TYPES:
-      ty_ddl_sources TYPE STANDARD TABLE OF ddddlsrc WITH EMPTY KEY,
-      BEGIN OF ty_contract_mapping,
-        mapped_value  TYPE string,
-        contract_id   TYPE ty_contract_id,
-        release_state TYPE string,
-      END OF ty_contract_mapping,
+    TYPES ty_ddl_sources TYPE STANDARD TABLE OF ddddlsrc WITH EMPTY KEY.
+    TYPES: BEGIN OF ty_contract_mapping,
+             mapped_value  TYPE string,
+             contract_id   TYPE ty_contract_id,
+             release_state TYPE string,
+           END OF ty_contract_mapping,
 
-      ty_contract_mappings TYPE STANDARD TABLE OF ty_contract_mapping WITH EMPTY KEY,
+           ty_contract_mappings TYPE STANDARD TABLE OF ty_contract_mapping WITH EMPTY KEY.
 
-      BEGIN OF ty_contract_obj_info,
-        object_type           TYPE trobjtype,
-        c0_supported          TYPE abap_bool,
-        c1_supported          TYPE abap_bool,
-        c2_supported          TYPE abap_bool,
-        c3_supported          TYPE abap_bool,
-        c4_supported          TYPE abap_bool,
-        deprecation_supported TYPE abap_bool,
-      END OF ty_contract_obj_info.
+    TYPES: BEGIN OF ty_contract_obj_info,
+             object_type           TYPE trobjtype,
+             c0_supported          TYPE abap_bool,
+             c1_supported          TYPE abap_bool,
+             c2_supported          TYPE abap_bool,
+             c3_supported          TYPE abap_bool,
+             c4_supported          TYPE abap_bool,
+             deprecation_supported TYPE abap_bool,
+           END OF ty_contract_obj_info.
 
     CLASS-DATA instance TYPE REF TO zcl_sat_api_state_util.
 
@@ -168,9 +166,8 @@ CLASS zcl_sat_api_state_util IMPLEMENTATION.
   METHOD get_object_type_info.
     SPLIT i_object_type AT '/' INTO DATA(object_type) DATA(sub_obj_type).
 
-    SELECT SINGLE *
-      FROM ars_s_obj_type
-      WHERE object_type = @object_type
+    SELECT SINGLE * FROM ars_s_obj_type
+      WHERE object_type           = @object_type
         AND workbench_object_type = @sub_obj_type
       INTO CORRESPONDING FIELDS OF @r_result.
   ENDMETHOD.
@@ -293,9 +290,8 @@ CLASS zcl_sat_api_state_util IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD read_api_view.
-    SELECT *
-      FROM ddddlsrc
-      WHERE ddlname = @c_api_view_name
+    SELECT * FROM ddddlsrc
+      WHERE ddlname  = @c_api_view_name
         AND as4local = 'A'
       INTO TABLE @r_result.
   ENDMETHOD.

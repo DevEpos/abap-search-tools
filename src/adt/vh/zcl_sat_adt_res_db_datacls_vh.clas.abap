@@ -1,8 +1,7 @@
 "! <p class="shorttext synchronized">Table Data Class VH</p>
 CLASS zcl_sat_adt_res_db_datacls_vh DEFINITION
   PUBLIC
-  INHERITING FROM cl_adt_res_named_items
-  FINAL
+  INHERITING FROM cl_adt_res_named_items FINAL
   CREATE PUBLIC.
 
   PUBLIC SECTION.
@@ -21,12 +20,12 @@ CLASS zcl_sat_adt_res_db_datacls_vh IMPLEMENTATION.
       lv_langu = 'E'.
     ENDIF.
 
-    SELECT text~tabart AS name,
+    SELECT text~tabart   AS name,
            text~darttext AS description
       FROM ddart AS data_class
-        INNER JOIN dartt AS text
-          ON data_class~tabart = text~tabart
-          AND text~ddlangu = @lv_langu
+           INNER JOIN dartt AS text
+             ON  data_class~tabart = text~tabart
+             AND text~ddlangu      = @lv_langu
       WHERE data_class~ddclass <> 'INT' " hide internal classes
       ORDER BY data_class~tabart
       INTO CORRESPONDING FIELDS OF TABLE @p_named_item_list-items.

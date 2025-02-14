@@ -21,7 +21,7 @@ CLASS zcl_sat_adt_res_structfield_vh IMPLEMENTATION.
       lt_field_range = VALUE #( ( sign = 'I' option = 'CP' low = to_upper( p_filter_name ) ) ).
     ENDIF.
 
-    SELECT FROM ZSAT_I_StructureFieldVh AS field
+    SELECT FROM zsat_i_structurefieldvh AS field
       FIELDS DISTINCT fieldname AS name
       WHERE fieldname       IN @lt_field_range
         AND fieldname NOT LIKE '.%'

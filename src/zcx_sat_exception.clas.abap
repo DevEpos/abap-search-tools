@@ -1,7 +1,6 @@
 CLASS zcx_sat_exception DEFINITION
   PUBLIC
-  INHERITING FROM zcx_sat_nc_exception
-  FINAL
+  INHERITING FROM zcx_sat_nc_exception FINAL
   CREATE PUBLIC.
 
   PUBLIC SECTION.

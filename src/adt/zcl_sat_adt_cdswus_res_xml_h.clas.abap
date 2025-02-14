@@ -1,7 +1,6 @@
 "! <p class="shorttext synchronized">XML Serializer for Where-Used in CDS entries</p>
 CLASS zcl_sat_adt_cdswus_res_xml_h DEFINITION
-  PUBLIC
-  FINAL
+  PUBLIC FINAL
   CREATE PUBLIC.
 
   PUBLIC SECTION.
@@ -56,6 +55,8 @@ CLASS zcl_sat_adt_cdswus_res_xml_h IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD serialize_ext_attributes.
+    " TODO: parameter IO_WRITER is never used (ABAP cleaner)
+
     FIELD-SYMBOLS <lr_children> TYPE REF TO data.
     FIELD-SYMBOLS <lt_children> TYPE table.
 

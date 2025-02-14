@@ -281,7 +281,7 @@ CLASS zcl_sat_object_query_parser IMPLEMENTATION.
     DATA lt_values TYPE string_table.
 
     SPLIT iv_token AT c_option_separator INTO lv_option lv_value_list.
-    TRANSLATE lv_option TO LOWER CASE.
+    lv_option = to_lower( lv_option ).
     mo_configuration->map_option( CHANGING cv_option = lv_option ).
 
     IF NOT mo_configuration->has_option( lv_option ).

@@ -1,8 +1,7 @@
 "! <p class="shorttext synchronized">Validator for CDS Search query</p>
 CLASS zcl_sat_cds_view_qv DEFINITION
   PUBLIC
-  FINAL
-  INHERITING FROM zcl_sat_general_qv
+  INHERITING FROM zcl_sat_general_qv FINAL
   CREATE PUBLIC.
 
   PUBLIC SECTION.

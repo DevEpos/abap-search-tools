@@ -1,7 +1,6 @@
 "! <p class="shorttext synchronized">Analysis for Office Util</p>
 CLASS zcl_sat_query_monitor_util DEFINITION
-  PUBLIC
-  FINAL
+  PUBLIC FINAL
   CREATE PUBLIC.
 
   PUBLIC SECTION.
@@ -78,13 +77,13 @@ CLASS zcl_sat_query_monitor_util IMPLEMENTATION.
     lt_bdc_input = VALUE #( ( program = 'SAPMRRI1'      dynpro = '0100' dynbegin = abap_true )
                             ( fnam = c_general_fields-cursor   fval = 'GENUNIID' )
                             ( fnam = c_general_fields-ok_code  fval = '/00' )
-                            ( fnam = 'GENUNIID'                fval = '2C/' && iv_query_ddlname )
+                            ( fnam = 'GENUNIID'                fval = |2C/{ iv_query_ddlname }| )
 *.... ABAP BICS
                             ( fnam = 'G_DISPMODE'              fval = '3' )
                             ( program = 'SAPMRRI1'      dynpro = '0100' dynbegin = abap_true )
                             ( fnam = c_general_fields-cursor   fval = 'GENUNIID' )
                             ( fnam = c_general_fields-ok_code  fval = '=GO' )
-                            ( fnam = 'GENUNIID'                fval = '2C' && iv_query_ddlname )
+                            ( fnam = 'GENUNIID'                fval = |2C{ iv_query_ddlname }| )
 *.... ABAP BICS
                             ( fnam = 'G_DISPMODE'              fval = '3' ) ).
 

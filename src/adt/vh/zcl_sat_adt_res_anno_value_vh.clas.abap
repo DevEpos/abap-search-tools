@@ -1,8 +1,7 @@
 "! <p class="shorttext synchronized">Resource for reading Annotation values</p>
 CLASS zcl_sat_adt_res_anno_value_vh DEFINITION
   PUBLIC
-  INHERITING FROM cl_adt_res_named_items
-  FINAL
+  INHERITING FROM cl_adt_res_named_items FINAL
   CREATE PUBLIC.
 
   PUBLIC SECTION.
@@ -31,10 +30,8 @@ CLASS zcl_sat_adt_res_anno_value_vh IMPLEMENTATION.
       lt_anno_name_range = VALUE #( ( sign = 'I' option = 'CP' low = to_upper( p_filter_data ) ) ).
     ENDIF.
 
-    SELECT
-      FROM zsat_i_cdsannotationvalue
-      FIELDS DISTINCT
-             value AS name
+    SELECT FROM zsat_i_cdsannotationvalue
+      FIELDS DISTINCT value AS name
       WHERE annotationnameupper IN @lt_anno_name_range
         AND upper( value )      IN @lt_anno_value_range
       ORDER BY value

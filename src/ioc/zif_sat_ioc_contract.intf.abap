@@ -1,9 +1,9 @@
 "! <p class="shorttext synchronized">Contract for IoC</p>
 INTERFACE zif_sat_ioc_contract
   PUBLIC.
+  "! <p class="shorttext synchronized">Lifetime of instances in IoC</p>
+  TYPES ty_lifetime TYPE i.
   TYPES:
-    "! <p class="shorttext synchronized" lang="en">Lifetime of instances in IoC</p>
-    ty_lifetime TYPE i,
     "! <p class="shorttext synchronized" lang="en">Dependency definition for constructor DI</p>
     BEGIN OF ty_s_dependency,
       parameter TYPE seocmpname,
@@ -11,8 +11,9 @@ INTERFACE zif_sat_ioc_contract
       filter    TYPE string,
     END OF ty_s_dependency,
     "! <p class="shorttext synchronized" lang="en">List of Constructor DI definitions</p>
-    ty_t_dependencies TYPE STANDARD TABLE OF ty_s_dependency WITH KEY parameter,
+    ty_t_dependencies TYPE STANDARD TABLE OF ty_s_dependency WITH KEY parameter.
 
+  TYPES:
     "! <p class="shorttext synchronized" lang="en">Describes an implementer of an interface</p>
     BEGIN OF ty_s_implementer,
       filter       TYPE string,
@@ -22,15 +23,17 @@ INTERFACE zif_sat_ioc_contract
       dependencies TYPE ty_t_dependencies,
     END OF ty_s_implementer,
     "! <p class="shorttext synchronized" lang="en">Table type of implementers</p>
-    ty_t_implementer TYPE SORTED TABLE OF ty_s_implementer WITH UNIQUE KEY filter,
+    ty_t_implementer TYPE SORTED TABLE OF ty_s_implementer WITH UNIQUE KEY filter.
+  TYPES:
     "! <p class="shorttext synchronized" lang="en">Maps filter of a contract to another</p>
     BEGIN OF ty_s_filter_map,
       filter        TYPE string,
       mapped_filter TYPE string,
     END OF ty_s_filter_map,
     "! <p class="shorttext synchronized" lang="en">A table of filter mappings for implementers</p>
-    ty_t_filter_map TYPE HASHED TABLE OF ty_s_filter_map WITH UNIQUE KEY filter,
+    ty_t_filter_map TYPE HASHED TABLE OF ty_s_filter_map WITH UNIQUE KEY filter.
 
+  TYPES:
     "! <p class="shorttext synchronized" lang="en">Resolved constructor dependency</p>
     BEGIN OF ty_s_resolved_dependency,
       parameter TYPE seocmpname,

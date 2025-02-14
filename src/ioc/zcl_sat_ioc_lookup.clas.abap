@@ -1,7 +1,6 @@
 "! <p class="shorttext synchronized">Instance Lookup via IoC</p>
 CLASS zcl_sat_ioc_lookup DEFINITION
- PUBLIC
-  FINAL
+  PUBLIC FINAL
   CREATE PUBLIC.
 
   PUBLIC SECTION.
@@ -88,7 +87,8 @@ CLASS zcl_sat_ioc_lookup IMPLEMENTATION.
       CREATE DATA lr_contract_type TYPE REF TO (<ls_dependency>-contract).
       ASSIGN lr_contract_type->* TO FIELD-SYMBOL(<lo_contract_type>).
       <lo_contract_type> ?= lo_dependency.
-      et_resolved_dependency = VALUE #( BASE et_resolved_dependency ( parameter = <ls_dependency>-parameter ref = lr_contract_type ) ).
+      et_resolved_dependency = VALUE #( BASE et_resolved_dependency
+                                        ( parameter = <ls_dependency>-parameter ref = lr_contract_type ) ).
     ENDLOOP.
   ENDMETHOD.
 
@@ -115,8 +115,7 @@ CLASS zcl_sat_ioc_lookup IMPLEMENTATION.
   METHOD load_ioc_containers.
     DATA lo_ioc_container TYPE REF TO zif_sat_ioc_container.
 
-    SELECT clsname AS classname
-      FROM seometarel
+    SELECT clsname AS classname FROM seometarel
       WHERE refclsname = @c_ioc_container_intf_name
         AND version    = @seoc_version_active
         AND impabstrct = @abap_false

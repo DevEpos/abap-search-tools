@@ -1,8 +1,7 @@
 "! <p class="shorttext synchronized">Resource for base tables of ddic views</p>
 CLASS zcl_sat_adt_res_viewbaset_vh DEFINITION
   PUBLIC
-  INHERITING FROM cl_adt_res_named_items
-  FINAL
+  INHERITING FROM cl_adt_res_named_items FINAL
   CREATE PUBLIC.
 
   PUBLIC SECTION.
@@ -30,17 +29,16 @@ CLASS zcl_sat_adt_res_viewbaset_vh IMPLEMENTATION.
       lt_tab_range = VALUE #( ( sign = 'I' option = 'CP' low = to_upper( p_filter_name ) ) ).
     ENDIF.
 
-    SELECT DISTINCT
-           basetab~tabname AS name
+    SELECT DISTINCT basetab~tabname AS name
       FROM dd26s AS basetab
-        INNER JOIN dd25l AS view
-          ON basetab~viewname = view~viewname
-        INNER JOIN tadir AS repo
-          ON  repo~object = @zif_sat_c_tadir_types=>view
-          AND repo~obj_name = view~viewname
-          AND repo~genflag = ''
+           INNER JOIN dd25l AS view
+             ON basetab~viewname = view~viewname
+           INNER JOIN tadir AS repo
+             ON  repo~object   = @zif_sat_c_tadir_types=>view
+             AND repo~obj_name = view~viewname
+             AND repo~genflag  = ''
       WHERE basetab~tabname IN @lt_tab_range
-        AND view~viewclass IN @lt_viewclass_range
+        AND view~viewclass  IN @lt_viewclass_range
       ORDER BY basetab~tabname
       INTO CORRESPONDING FIELDS OF TABLE @p_named_item_list-items
       UP TO @p_filter_max_item_count ROWS.

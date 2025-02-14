@@ -1,8 +1,7 @@
 "! <p class="shorttext synchronized">Query Config for Database Tables</p>
 CLASS zcl_sat_dbtab_qc DEFINITION
   PUBLIC
-  FINAL
-  INHERITING FROM zcl_sat_general_qc
+  INHERITING FROM zcl_sat_general_qc FINAL
   CREATE PUBLIC.
 
   PUBLIC SECTION.
