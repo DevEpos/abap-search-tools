@@ -29,7 +29,6 @@ CLASS zcl_sat_os_struct_provider DEFINITION
         alias               TYPE string VALUE 'field',
         tabname             TYPE string VALUE 'tablename',
         structure           TYPE string VALUE 'structure',
-        entityid            TYPE string VALUE 'entityid',
         type                TYPE string VALUE 'type',
         fieldname           TYPE string VALUE 'fieldname',
         include_name        TYPE string VALUE 'includename',
@@ -197,6 +196,10 @@ CLASS zcl_sat_os_struct_provider IMPLEMENTATION.
 
         WHEN c_tabl_search_params-include_usage.
           add_include_filter( it_values = <ls_option>-value_range  ).
+
+        WHEN c_general_search_options-type.
+          add_option_filter( iv_fieldname = |{ c_base_table }~{ c_fields-type }|
+                             it_values    = <ls_option>-value_range ).
       ENDCASE.
     ENDLOOP.
   ENDMETHOD.
