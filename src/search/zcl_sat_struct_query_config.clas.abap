@@ -16,6 +16,10 @@ CLASS zcl_sat_struct_query_config DEFINITION
     METHODS build_config REDEFINITION.
 
   PRIVATE SECTION.
+    METHODS get_type_filter
+      RETURNING
+        VALUE(result) TYPE zif_sat_ty_object_search=>ty_query_filter.
+
     METHODS get_field_filter
       RETURNING
         VALUE(result) TYPE zif_sat_ty_object_search=>ty_query_filter.
@@ -49,6 +53,7 @@ CLASS zcl_sat_struct_query_config IMPLEMENTATION.
                                                                                 ( get_softw_comp_filt_conf( ) )
                                                                                 ( get_appl_comp_filt_conf( ) )
                                                                                 ( get_description_filt_conf( ) )
+                                                                                ( get_type_filter( ) )
                                                                                 ( get_rel_state_filt_conf( ) )
                                                                                 ( get_max_rows_filt_conf( ) )
                                                                                 ( get_field_filter( ) )
@@ -67,6 +72,23 @@ CLASS zcl_sat_struct_query_config IMPLEMENTATION.
                               filters = lt_object_filters ) ) ).
 
     mt_options = lt_object_filters.
+  ENDMETHOD.
+
+  METHOD get_type_filter.
+    result = VALUE #(
+        name             = c_general_options-type
+        description      = 'Type'
+        long_description = |Use '{ c_general_options-type }' to restrict the search query to Structure which are of a certain type.\n\n| &&
+                           |Example:\n   { c_general_options-type } : struct|
+        img_info         = VALUE #( img_key     = c_general_image_keys-type_folder
+                                    img_encoded = get_general_image( c_general_image_keys-type_folder ) )
+        content_assist   = VALUE #(
+            assist_type     = zif_sat_c_object_search=>c_filter_content_assist_type-fixed_named_item
+            proposal_images = VALUE #( ( img_key     = c_general_image_keys-type_group
+                                         img_encoded = get_general_image( c_general_image_keys-type_group ) ) )
+            proposal_values = VALUE #(
+                ( name = zif_sat_c_os_struct_options=>c_structure_type-structure description = 'Structure' )
+                ( name = zif_sat_c_os_struct_options=>c_structure_type-append_structure description = 'APPEND Structure' ) ) ) ).
   ENDMETHOD.
 
   METHOD get_field_filter.
