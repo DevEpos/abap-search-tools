@@ -5,25 +5,28 @@ CLASS zcl_sat_struct_query_config DEFINITION
   CREATE PUBLIC.
 
   PUBLIC SECTION.
-    INTERFACES zif_sat_c_os_dtab_options.
+    INTERFACES zif_sat_c_os_tabl_options.
 
     METHODS constructor.
     METHODS zif_sat_object_search_config~get_type REDEFINITION.
 
   PROTECTED SECTION.
-    ALIASES c_dbtab_options FOR zif_sat_c_os_dtab_options~c_filter_key.
+    ALIASES c_tabl_options FOR zif_sat_c_os_tabl_options~c_filter_key.
 
     METHODS build_config REDEFINITION.
 
   PRIVATE SECTION.
     METHODS get_field_filter
-      RETURNING VALUE(result) TYPE zif_sat_ty_object_search=>ty_query_filter.
+      RETURNING
+        VALUE(result) TYPE zif_sat_ty_object_search=>ty_query_filter.
 
     METHODS get_enhancement_cat_filter
-      RETURNING VALUE(result) TYPE zif_sat_ty_object_search=>ty_query_filter.
+      RETURNING
+        VALUE(result) TYPE zif_sat_ty_object_search=>ty_query_filter.
 
     METHODS get_include_filter
-      RETURNING VALUE(result) TYPE zif_sat_ty_object_search=>ty_query_filter.
+      RETURNING
+        VALUE(result) TYPE zif_sat_ty_object_search=>ty_query_filter.
 ENDCLASS.
 
 
@@ -69,10 +72,10 @@ CLASS zcl_sat_struct_query_config IMPLEMENTATION.
 
   METHOD get_field_filter.
     result = VALUE #(
-        name             = c_dbtab_options-field
+        name             = c_tabl_options-field
         description      = 'Structure Field'
-        long_description = |Use '{ c_dbtab_options-field }' to restrict the search query by certain Fields.\n\n| &&
-             |Example:\n   { c_dbtab_options-field } : devclass|
+        long_description = |Use '{ c_tabl_options-field }' to restrict the search query by certain Fields.\n\n| &&
+             |Example:\n   { c_tabl_options-field } : devclass|
         img_info         = VALUE #( img_key      = zif_sat_c_object_types=>table_field
                                     img_registry = zif_sat_c_object_search=>c_image_registry_id-adt_type )
         patterns         = abap_true
@@ -86,10 +89,10 @@ CLASS zcl_sat_struct_query_config IMPLEMENTATION.
 
   METHOD get_enhancement_cat_filter.
     result = VALUE #(
-        name             = c_dbtab_options-enhancement_category
+        name             = c_tabl_options-enhancement_category
         description      = 'Enhancement Category'
-        long_description = |Use '{ c_dbtab_options-enhancement_category }' to find structures by their enhancement categories.\n\n| &&
-                           |Example:\n   { c_dbtab_options-enhancement_category } : not_enhanced|
+        long_description = |Use '{ c_tabl_options-enhancement_category }' to find structures by their enhancement categories.\n\n| &&
+                           |Example:\n   { c_tabl_options-enhancement_category } : not_enhanced|
         img_info         = VALUE #( img_key     = c_general_image_keys-extension
                                     img_encoded = get_general_image( c_general_image_keys-extension ) )
         content_assist   = VALUE #(
@@ -100,10 +103,10 @@ CLASS zcl_sat_struct_query_config IMPLEMENTATION.
 
   METHOD get_include_filter.
     result = VALUE #(
-        name             = c_dbtab_options-include_usage
+        name             = c_tabl_options-include_usage
         description      = 'Usages of include structures'
-        long_description = |Use '{ c_dbtab_options-include_usage }' to restrict the query to structures that have specific includes.\n\n| &&
-                           |Example:\n   { c_dbtab_options-include_usage } : seochange|
+        long_description = |Use '{ c_tabl_options-include_usage }' to restrict the query to structures that have specific includes.\n\n| &&
+                           |Example:\n   { c_tabl_options-include_usage } : seochange|
         patterns         = abap_true
         img_info         = VALUE #( img_key      = zif_sat_c_object_types=>structure
                                     img_registry = zif_sat_c_object_search=>c_image_registry_id-adt_type )
