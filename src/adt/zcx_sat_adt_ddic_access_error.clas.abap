@@ -1,8 +1,7 @@
 "! <p class="shorttext synchronized">Error in ADT DDIC Repository Access</p>
 CLASS zcx_sat_adt_ddic_access_error DEFINITION
   PUBLIC
-  INHERITING FROM zcx_sat_adt_rest_error
-  FINAL
+  INHERITING FROM zcx_sat_adt_rest_error FINAL
   CREATE PUBLIC.
 
   PUBLIC SECTION.

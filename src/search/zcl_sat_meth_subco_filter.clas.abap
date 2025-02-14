@@ -1,7 +1,6 @@
 "! <p class="shorttext synchronized">Filters methods by sub components</p>
 CLASS zcl_sat_meth_subco_filter DEFINITION
-  PUBLIC
-  FINAL
+  PUBLIC FINAL
   CREATE PUBLIC.
 
   PUBLIC SECTION.
@@ -15,18 +14,17 @@ CLASS zcl_sat_meth_subco_filter DEFINITION
     METHODS apply.
 
   PRIVATE SECTION.
-    TYPES:
-      BEGIN OF ty_comp,
-        clsname TYPE seocompo-clsname,
-        cmpname TYPE seocompo-cmpname,
-      END OF ty_comp,
+    TYPES: BEGIN OF ty_comp,
+             clsname TYPE seocompo-clsname,
+             cmpname TYPE seocompo-cmpname,
+           END OF ty_comp.
 
-      BEGIN OF ty_sub_comp,
-        clsname TYPE seosubco-clsname,
-        cmpname TYPE seosubco-cmpname,
-        sconame TYPE seosubco-sconame,
-        scotype TYPE seosubco-scotype,
-      END OF ty_sub_comp.
+    TYPES: BEGIN OF ty_sub_comp,
+             clsname TYPE seosubco-clsname,
+             cmpname TYPE seosubco-cmpname,
+             sconame TYPE seosubco-sconame,
+             scotype TYPE seosubco-scotype,
+           END OF ty_sub_comp.
 
     DATA mr_method_result TYPE REF TO zif_sat_ty_object_search=>ty_t_search_result.
     DATA mt_meth_param_filter TYPE zif_sat_ty_object_search=>ty_class_subcomp_range.
@@ -125,8 +123,8 @@ CLASS zcl_sat_meth_subco_filter IMPLEMENTATION.
     SELECT DISTINCT (lt_dyn_select)
       FROM seosubco
       FOR ALL ENTRIES IN @mr_method_result->*
-      WHERE clsname = @mr_method_result->*-method_decl_clif
-        AND cmpname = @mr_method_result->*-method_decl_method
+      WHERE clsname  = @mr_method_result->*-method_decl_clif
+        AND cmpname  = @mr_method_result->*-method_decl_method
         AND scotype IN @lt_comp_type_filter
         AND sconame IN @lt_comp_filter
       INTO CORRESPONDING FIELDS OF TABLE @mt_sub_components.
@@ -142,9 +140,9 @@ CLASS zcl_sat_meth_subco_filter IMPLEMENTATION.
     " Group sub components that match both param and exception filters
     " TODO: consider 'AND' flag of search options
     LOOP AT mt_sub_components REFERENCE INTO lr_sub_comp
-         GROUP BY ( classname = lr_sub_comp->clsname
+         GROUP BY ( classname  = lr_sub_comp->clsname
                     methodname = lr_sub_comp->cmpname
-                    size = GROUP SIZE ) REFERENCE INTO DATA(lr_group).
+                    size       = GROUP SIZE ) REFERENCE INTO DATA(lr_group).
 
       IF mf_use_and_for_options = abap_true AND lr_group->size < lv_subcomp_filter_count.
         CONTINUE.

@@ -145,7 +145,7 @@ CLASS zcl_sat_cds_wusi_analysis IMPLEMENTATION.
   METHOD find_references.
     TRY.
         SELECT DISTINCT (ms_sql-select)
-          FROM  (ms_sql-from)
+          FROM (ms_sql-from)
           WHERE (ms_sql-where)
           ORDER BY base~rawentityid ASCENDING
           INTO CORRESPONDING FIELDS OF TABLE @mt_result.
@@ -210,7 +210,7 @@ CLASS zcl_sat_cds_wusi_analysis IMPLEMENTATION.
 
     WHILE lt_current_parent_refs IS NOT INITIAL.
       SELECT DISTINCT (ms_sql-select)
-        FROM  (ms_sql-from)
+        FROM (ms_sql-from)
         FOR ALL ENTRIES IN @lt_current_parent_refs
         WHERE selectpart~sourceentity = @lt_current_parent_refs-ddlname
         INTO CORRESPONDING FIELDS OF TABLE @lt_usages.

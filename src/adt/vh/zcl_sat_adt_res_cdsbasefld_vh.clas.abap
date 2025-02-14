@@ -21,8 +21,7 @@ CLASS zcl_sat_adt_res_cdsbasefld_vh IMPLEMENTATION.
       lt_field_range = VALUE #( ( sign = 'I' option = 'CP' low = to_upper( p_filter_name ) ) ).
     ENDIF.
 
-    SELECT DISTINCT
-           fieldname AS name
+    SELECT DISTINCT fieldname AS name
       FROM zsat_i_cdsbasefield AS base_field
       WHERE base_field~fieldname IN @lt_field_range
       ORDER BY base_field~fieldname

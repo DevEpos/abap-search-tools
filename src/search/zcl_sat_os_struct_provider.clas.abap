@@ -62,8 +62,8 @@ ENDCLASS.
 CLASS zcl_sat_os_struct_provider IMPLEMENTATION.
   METHOD constructor.
     super->constructor( ).
-    mv_field_subquery = |SELECT DISTINCT tablename | && c_cr_lf &&
-                        | FROM { get_cds_sql_name( |{ zif_sat_c_select_source_id=>zsat_i_tablefield }| ) } | && c_cr_lf &&
+    mv_field_subquery = |SELECT DISTINCT tablename { c_cr_lf }| &&
+                        | FROM { get_cds_sql_name( |{ zif_sat_c_select_source_id=>zsat_i_tablefield }| ) } { c_cr_lf }| &&
                         | WHERE |.
   ENDMETHOD.
 

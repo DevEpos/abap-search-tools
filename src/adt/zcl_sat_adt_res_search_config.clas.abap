@@ -1,8 +1,7 @@
 "! <p class="shorttext synchronized">Resource for reading the object search configuration</p>
 CLASS zcl_sat_adt_res_search_config DEFINITION
   PUBLIC
-  INHERITING FROM cl_adt_rest_resource
-  FINAL
+  INHERITING FROM cl_adt_rest_resource FINAL
   CREATE PUBLIC.
 
   PUBLIC SECTION.

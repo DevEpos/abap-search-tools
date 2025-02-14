@@ -1,8 +1,7 @@
 "! <p class="shorttext synchronized">Where-Used-Analysis for Table/View/CDS in CDS Views</p>
 CLASS zcl_sat_adt_res_cds_a_wusl DEFINITION
   PUBLIC
-  INHERITING FROM cl_adt_rest_resource
-  FINAL
+  INHERITING FROM cl_adt_rest_resource FINAL
   CREATE PUBLIC.
 
   PUBLIC SECTION.
@@ -56,10 +55,9 @@ CLASS zcl_sat_adt_res_cds_a_wusl IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD execute_where_used_in_cds.
-    DATA(lo_cds_where_used_analysis) = NEW zcl_sat_cds_wusi_analysis(
-                                               iv_entity           = mv_entity
-                                               iv_source_origin    = mv_source_origin
-                                               if_recursive        = mf_recursive_search ).
+    DATA(lo_cds_where_used_analysis) = NEW zcl_sat_cds_wusi_analysis( iv_entity        = mv_entity
+                                                                      iv_source_origin = mv_source_origin
+                                                                      if_recursive     = mf_recursive_search ).
     TRY.
         lo_cds_where_used_analysis->run( ).
         mt_result = lo_cds_where_used_analysis->get_result( ).

@@ -661,7 +661,7 @@ CLASS zcl_sat_base_search_provider IMPLEMENTATION.
     DATA(lv_line_count) = lines( mt_order_by ).
     LOOP AT mt_order_by ASSIGNING FIELD-SYMBOL(<lv_order_by>).
       IF sy-tabix <> lv_line_count.
-        <lv_order_by> = <lv_order_by> && |, |.
+        <lv_order_by> = |{ <lv_order_by> }, |.
       ENDIF.
     ENDLOOP.
   ENDMETHOD.
@@ -687,7 +687,7 @@ CLASS zcl_sat_base_search_provider IMPLEMENTATION.
     DATA(lv_line_count) = lines( mt_select ).
     LOOP AT mt_select ASSIGNING FIELD-SYMBOL(<lv_select>).
       IF sy-tabix <> lv_line_count.
-        <lv_select> = <lv_select> && |, |.
+        <lv_select> = |{ <lv_select> }, |.
       ENDIF.
     ENDLOOP.
   ENDMETHOD.
@@ -807,7 +807,7 @@ CLASS zcl_sat_base_search_provider IMPLEMENTATION.
   METHOD get_select_string.
     add_select_part(
       EXPORTING
-        iv_part_name = 'SELECT' &&
+        iv_part_name = |SELECT| &&
                        COND #( WHEN mf_distinct_required = abap_true AND mt_group_by IS INITIAL THEN ` DISTINCT` )
         it_part      = mt_select
       CHANGING
@@ -847,10 +847,10 @@ CLASS zcl_sat_base_search_provider IMPLEMENTATION.
       RETURN.
     ENDIF.
 
-    IF     mt_criteria     IS INITIAL
-       AND mt_criteria_and IS INITIAL
-       AND mt_criteria_or  IS INITIAL
-       AND mf_filters_active = abap_false.
+    IF     mt_criteria       IS INITIAL
+       AND mt_criteria_and   IS INITIAL
+       AND mt_criteria_or    IS INITIAL
+       AND mf_filters_active  = abap_false.
       result = abap_false.
       RETURN.
     ENDIF.
@@ -867,7 +867,8 @@ CLASS zcl_sat_base_search_provider IMPLEMENTATION.
     ENDIF.
 
     DATA(lv_devclass_entity) = COND #( WHEN if_use_ddic_sql_view = abap_true
-                                       THEN get_cds_sql_name( |{ zif_sat_c_select_source_id=>zsat_i_developmentpackage }| )
+                                       THEN get_cds_sql_name(
+                                                |{ zif_sat_c_select_source_id=>zsat_i_developmentpackage }| )
                                        ELSE |{ zif_sat_c_select_source_id=>zsat_i_developmentpackage }| ).
     add_join_table( iv_join_table = lv_devclass_entity
                     iv_alias      = c_devc_tab_alias

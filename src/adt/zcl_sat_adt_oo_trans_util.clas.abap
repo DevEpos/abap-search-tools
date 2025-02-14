@@ -1,7 +1,6 @@
 "! <p class="shorttext synchronized">Utility for Transactions</p>
 CLASS zcl_sat_adt_oo_trans_util DEFINITION
-  PUBLIC
-  FINAL
+  PUBLIC FINAL
   CREATE PUBLIC.
 
   PUBLIC SECTION.
@@ -39,9 +38,8 @@ CLASS zcl_sat_adt_oo_trans_util IMPLEMENTATION.
       RETURN.
     ENDIF.
 
-    SELECT SINGLE viewname
-      FROM zsat_p_cdsviewbase
-      WHERE ddlname = @lv_entity_id
+    SELECT SINGLE viewname FROM zsat_p_cdsviewbase
+      WHERE ddlname  = @lv_entity_id
          OR entityid = @lv_entity_id
       INTO @DATA(lv_ddic_view).
     IF sy-subrc = 0.

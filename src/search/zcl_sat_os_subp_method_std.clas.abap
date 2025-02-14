@@ -30,45 +30,43 @@ CLASS zcl_sat_os_subp_method_std DEFINITION
         exception   TYPE string VALUE 'exc',
       END OF c_alias_names.
 
-    CONSTANTS:
-      BEGIN OF c_class_fields,
-        classname  TYPE string VALUE 'classname',
-        package    TYPE string VALUE 'developmentpackage',
-        tadir_type TYPE string VALUE 'tadirtype',
-      END OF c_class_fields,
-      BEGIN OF c_method_fields,
-        classname            TYPE string VALUE 'classname',
-        methodname           TYPE string VALUE 'methodname',
-        methodtype           TYPE string VALUE 'methodtype',
-        isabstract           TYPE string VALUE 'isabstract',
-        isoptional           TYPE string VALUE 'isoptional',
-        isfinal              TYPE string VALUE 'isfinal',
-        exposure             TYPE string VALUE 'exposure',
-        isusingnewexceptions TYPE string VALUE 'isusingnewexceptions',
-        methodlevel          TYPE string VALUE 'methodlevel',
-        originalclifname     TYPE string VALUE 'originalclifname',
-        originalmethodname   TYPE string VALUE 'originalmethodname',
-        createdby            TYPE string VALUE 'createdby',
-        createdon            TYPE string VALUE 'createdon',
-        changedby            TYPE string VALUE 'changedby',
-        changedon            TYPE string VALUE 'changedon',
-        category             TYPE string VALUE 'category',
-      END OF c_method_fields,
-      BEGIN OF c_text_fields,
-        language    TYPE string VALUE 'language',
-        method      TYPE string VALUE 'component',
-        description TYPE string VALUE 'description',
-      END OF c_text_fields.
+    CONSTANTS: BEGIN OF c_class_fields,
+                 classname  TYPE string VALUE 'classname',
+                 package    TYPE string VALUE 'developmentpackage',
+                 tadir_type TYPE string VALUE 'tadirtype',
+               END OF c_class_fields.
+    CONSTANTS: BEGIN OF c_method_fields,
+                 classname            TYPE string VALUE 'classname',
+                 methodname           TYPE string VALUE 'methodname',
+                 methodtype           TYPE string VALUE 'methodtype',
+                 isabstract           TYPE string VALUE 'isabstract',
+                 isoptional           TYPE string VALUE 'isoptional',
+                 isfinal              TYPE string VALUE 'isfinal',
+                 exposure             TYPE string VALUE 'exposure',
+                 isusingnewexceptions TYPE string VALUE 'isusingnewexceptions',
+                 methodlevel          TYPE string VALUE 'methodlevel',
+                 originalclifname     TYPE string VALUE 'originalclifname',
+                 originalmethodname   TYPE string VALUE 'originalmethodname',
+                 createdby            TYPE string VALUE 'createdby',
+                 createdon            TYPE string VALUE 'createdon',
+                 changedby            TYPE string VALUE 'changedby',
+                 changedon            TYPE string VALUE 'changedon',
+                 category             TYPE string VALUE 'category',
+               END OF c_method_fields.
+    CONSTANTS: BEGIN OF c_text_fields,
+                 language    TYPE string VALUE 'language',
+                 method      TYPE string VALUE 'component',
+                 description TYPE string VALUE 'description',
+               END OF c_text_fields.
 
-    TYPES:
-      BEGIN OF ty_tadir_name,
-        obj_name TYPE tadir-obj_name,
-      END OF ty_tadir_name,
-      BEGIN OF ty_tadir_info,
-        devclass TYPE tadir-devclass,
-        obj_name TYPE tadir-obj_name,
-        object   TYPE tadir-object,
-      END OF ty_tadir_info.
+    TYPES: BEGIN OF ty_tadir_name,
+             obj_name TYPE tadir-obj_name,
+           END OF ty_tadir_name.
+    TYPES: BEGIN OF ty_tadir_info,
+             devclass TYPE tadir-devclass,
+             obj_name TYPE tadir-obj_name,
+             object   TYPE tadir-object,
+           END OF ty_tadir_info.
 
     DATA mv_param_subquery TYPE string.
     DATA mv_exc_subquery TYPE string.
@@ -119,16 +117,16 @@ CLASS zcl_sat_os_subp_method_std IMPLEMENTATION.
   METHOD constructor.
     super->constructor( ).
 
-    mv_param_subquery = |SELECT DISTINCT methodname | && c_cr_lf &&
-                        | FROM { zif_sat_c_select_source_id=>zsat_i_clifmethodparam } | && c_cr_lf &&
-                        | WHERE classname = { c_alias_names-method }~{ c_method_fields-classname } | && c_cr_lf &&
-                        |   AND methodname = { c_alias_names-method }~{ c_method_fields-methodname } | && c_cr_lf &&
+    mv_param_subquery = |SELECT DISTINCT methodname { c_cr_lf }| &&
+                        | FROM { zif_sat_c_select_source_id=>zsat_i_clifmethodparam } { c_cr_lf }| &&
+                        | WHERE classname = { c_alias_names-method }~{ c_method_fields-classname } { c_cr_lf }| &&
+                        |   AND methodname = { c_alias_names-method }~{ c_method_fields-methodname } { c_cr_lf }| &&
                         |   AND |.
 
-    mv_exc_subquery = |SELECT DISTINCT methodname | && c_cr_lf &&
-                        | FROM { zif_sat_c_select_source_id=>zsat_i_clifmethodexception } | && c_cr_lf &&
-                        | WHERE classname = { c_alias_names-method }~{ c_method_fields-classname } | && c_cr_lf &&
-                        |   AND methodname = { c_alias_names-method }~{ c_method_fields-methodname } | && c_cr_lf &&
+    mv_exc_subquery = |SELECT DISTINCT methodname { c_cr_lf }| &&
+                        | FROM { zif_sat_c_select_source_id=>zsat_i_clifmethodexception } { c_cr_lf }| &&
+                        | WHERE classname = { c_alias_names-method }~{ c_method_fields-classname } { c_cr_lf }| &&
+                        |   AND methodname = { c_alias_names-method }~{ c_method_fields-methodname } { c_cr_lf }| &&
                         |   AND |.
   ENDMETHOD.
 
@@ -476,12 +474,12 @@ CLASS zcl_sat_os_subp_method_std IMPLEMENTATION.
     lt_tadir_names = CORRESPONDING #( mt_result MAPPING obj_name = object_name ).
 
     SELECT DISTINCT devclass,
-           obj_name,
-           object
+                    obj_name,
+                    object
       FROM tadir
       FOR ALL ENTRIES IN @lt_tadir_names
-      WHERE obj_name = @lt_tadir_names-obj_name
-        AND object IN ( @zif_sat_c_tadir_types=>class, @zif_sat_c_tadir_types=>interface )
+      WHERE obj_name  = @lt_tadir_names-obj_name
+        AND object   IN ( @zif_sat_c_tadir_types=>class, @zif_sat_c_tadir_types=>interface )
       INTO TABLE @lt_tadir_info.
 
     LOOP AT mt_result REFERENCE INTO DATA(lr_result).
@@ -503,7 +501,7 @@ CLASS zcl_sat_os_subp_method_std IMPLEMENTATION.
       FOR ALL ENTRIES IN @mt_result
       WHERE classname = @mt_result-method_decl_clif
         AND component = @mt_result-method_decl_method
-        AND language = @sy-langu
+        AND language  = @sy-langu
       INTO CORRESPONDING FIELDS OF TABLE @lt_method_texts.
 
     IF sy-subrc <> 0.

@@ -20,16 +20,15 @@ CLASS zcl_sat_os_subp_meth_impl DEFINITION
     METHODS create_method_info_reader REDEFINITION.
 
   PRIVATE SECTION.
-    CONSTANTS:
-      BEGIN OF c_fields,
-        classintf  TYPE string VALUE 'classname',
-        package    TYPE string VALUE 'developmentpackage',
-        tadir_type TYPE string VALUE 'tadirtype',
-      END OF c_fields,
+    CONSTANTS: BEGIN OF c_fields,
+                 classintf  TYPE string VALUE 'classname',
+                 package    TYPE string VALUE 'developmentpackage',
+                 tadir_type TYPE string VALUE 'tadirtype',
+               END OF c_fields.
 
-      BEGIN OF c_alias_names,
-        includes TYPE string VALUE 'incl',
-      END OF c_alias_names.
+    CONSTANTS: BEGIN OF c_alias_names,
+                 includes TYPE string VALUE 'incl',
+               END OF c_alias_names.
 
     METHODS configure_incl_filters.
     METHODS add_fixed_incl_filters.

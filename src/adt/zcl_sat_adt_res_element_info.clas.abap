@@ -51,13 +51,13 @@ CLASS zcl_sat_adt_res_element_info IMPLEMENTATION.
     DATA(lv_entity) = to_upper( mv_object_name ).
 
     IF mv_object_type = zif_sat_c_entity_type=>cds_view.
-      SELECT SINGLE entityid AS entity_id,
-                    rawentityid AS entity_id_raw,
-                    createdby AS created_by,
+      SELECT SINGLE entityid           AS entity_id,
+                    rawentityid        AS entity_id_raw,
+                    createdby          AS created_by,
                     description,
-                    sourcetype AS source_type,
-                    ddlsource AS source_code,
-                    ddlname AS secondary_entity_id,
+                    sourcetype         AS source_type,
+                    ddlsource          AS source_code,
+                    ddlname            AS secondary_entity_id,
                     developmentpackage AS devclass
         FROM zsat_i_cdsentity( p_language = @sy-langu )
         WHERE entityid = @lv_entity
@@ -68,10 +68,10 @@ CLASS zcl_sat_adt_res_element_info IMPLEMENTATION.
         RETURN.
       ENDIF.
     ELSE.
-      SELECT SINGLE entity AS entity_id,
-                    entityraw AS entity_id_raw,
+      SELECT SINGLE entity             AS entity_id,
+                    entityraw          AS entity_id_raw,
                     description,
-                    createdby AS created_by,
+                    createdby          AS created_by,
                     developmentpackage AS devclass
         FROM zsat_i_databasetablesandviews( p_language = @sy-langu )
         WHERE entity = @lv_entity
@@ -106,7 +106,8 @@ CLASS zcl_sat_adt_res_element_info IMPLEMENTATION.
     ENDIF.
 
     IF ls_entity-source_type IS NOT INITIAL.
-      ls_adt_obj_ref-properties = VALUE #( BASE ls_adt_obj_ref-properties ( key = 'SOURCE_TYPE' value = ls_entity-source_type ) ).
+      ls_adt_obj_ref-properties = VALUE #( BASE ls_adt_obj_ref-properties
+                                           ( key = 'SOURCE_TYPE' value = ls_entity-source_type ) ).
     ENDIF.
 
     io_response->set_body_data( content_handler = zcl_sat_adt_ch_factory=>create_adt_obj_ref_res_handler( )

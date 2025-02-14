@@ -15,19 +15,18 @@ CLASS zcl_sat_os_subp_meth_redef DEFINITION
     METHODS create_method_info_reader REDEFINITION.
 
   PRIVATE SECTION.
-    CONSTANTS:
-      BEGIN OF c_alias_names,
-        method TYPE string VALUE 'method',
-      END OF c_alias_names,
+    CONSTANTS: BEGIN OF c_alias_names,
+                 method TYPE string VALUE 'method',
+               END OF c_alias_names.
 
-      BEGIN OF c_fields,
-        classname  TYPE string VALUE 'classname',
-        package    TYPE string VALUE 'developmentpackage',
-        tadir_type TYPE string VALUE 'tadirtype',
-        is_final   TYPE string VALUE 'isfinal',
-        methodname TYPE string VALUE 'methodname',
-        isabstract TYPE string VALUE 'isabstract',
-      END OF c_fields.
+    CONSTANTS: BEGIN OF c_fields,
+                 classname  TYPE string VALUE 'classname',
+                 package    TYPE string VALUE 'developmentpackage',
+                 tadir_type TYPE string VALUE 'tadirtype',
+                 is_final   TYPE string VALUE 'isfinal',
+                 methodname TYPE string VALUE 'methodname',
+                 isabstract TYPE string VALUE 'isabstract',
+               END OF c_fields.
 
     DATA mt_changed_on_filter TYPE RANGE OF dats.
     DATA mt_created_on_filter TYPE RANGE OF dats.

@@ -10,9 +10,8 @@ CLASS lcl_field_visitor IMPLEMENTATION.
 
   METHOD visit_atomic_expression.
     CHECK: object IS BOUND,
-           mv_current_field IS NOT INITIAL ",
+           mv_current_field IS NOT INITIAL. ",
 *           mf_calc_field_found = abap_true.
-           .
 
     DATA(lo_atomic_expr) = CAST cl_qlast_atomic_expression( object ).
     DATA(lv_identifier) = lo_atomic_expr->get_identifier( ).

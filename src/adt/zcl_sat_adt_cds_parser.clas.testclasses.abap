@@ -1,7 +1,6 @@
 *"* use this source file for your ABAP unit test classes
-CLASS lcl_abap_unit DEFINITION FINAL FOR TESTING
-  DURATION SHORT
-  RISK LEVEL HARMLESS.
+CLASS lcl_abap_unit DEFINITION FINAL
+  FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
 
   PRIVATE SECTION.
     DATA mr_cut TYPE REF TO zcl_sat_adt_cds_parser.

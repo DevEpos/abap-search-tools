@@ -18,6 +18,8 @@ ENDCLASS.
 
 CLASS lcl_query IMPLEMENTATION.
   METHOD constructor.
+    " TODO: parameter IV_QUERY is never used (ABAP cleaner)
+
     zif_sat_object_search_query~mt_search_term = it_search_term.
     IF zif_sat_object_search_query~mt_search_term IS NOT INITIAL.
       zif_sat_object_search_query~mt_search_term[ 1 ]-target = zif_sat_c_object_search=>c_search_fields-object_name_input_key.
@@ -48,9 +50,8 @@ ENDCLASS.
 
 
 " Definition of unit test class
-CLASS ltcl_abap_unit DEFINITION FINAL FOR TESTING
-  DURATION SHORT
-  RISK LEVEL HARMLESS.
+CLASS ltcl_abap_unit DEFINITION FINAL
+  FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
 
   PRIVATE SECTION.
     DATA mr_cut TYPE REF TO zcl_sat_os_classintf_provider.
@@ -87,8 +88,8 @@ CLASS ltcl_abap_unit IMPLEMENTATION.
     TRY.
         mr_cut->zif_sat_object_search_provider~search( EXPORTING io_query  = lo_query
                                                        IMPORTING et_result = DATA(lt_result) ).
-        cl_abap_unit_assert=>assert_equals( act = lines( lt_result )
-                                            exp = 1 ).
+        cl_abap_unit_assert=>assert_equals( exp = 1
+                                            act = lines( lt_result ) ).
       CATCH zcx_sat_object_search INTO DATA(lx_search_error).
     ENDTRY.
 
@@ -108,8 +109,8 @@ CLASS ltcl_abap_unit IMPLEMENTATION.
     TRY.
         mr_cut->zif_sat_object_search_provider~search( EXPORTING io_query  = lo_query
                                                        IMPORTING et_result = DATA(lt_result) ).
-        cl_abap_unit_assert=>assert_equals( act  = lines( lt_result )
-                                            exp  = 1
+        cl_abap_unit_assert=>assert_equals( exp  = 1
+                                            act  = lines( lt_result )
                                             quit = if_aunit_constants=>quit-test ).
       CATCH zcx_sat_object_search INTO DATA(lx_search_error).
     ENDTRY.
@@ -129,7 +130,7 @@ CLASS ltcl_abap_unit IMPLEMENTATION.
     TRY.
         mr_cut->zif_sat_object_search_provider~search( EXPORTING io_query  = lo_query
                                                        IMPORTING et_result = DATA(lt_result) ).
-        cl_abap_unit_assert=>assert_equals( act = lines( lt_result ) exp = 1 ).
+        cl_abap_unit_assert=>assert_equals( exp = 1 act = lines( lt_result ) ).
       CATCH zcx_sat_object_search INTO DATA(lx_search_error).
     ENDTRY.
 
@@ -154,8 +155,8 @@ CLASS ltcl_abap_unit IMPLEMENTATION.
           EXPORTING io_query                = lo_query
                     is_search_engine_params = VALUE #( use_and_cond_for_options = abap_true )
           IMPORTING et_result               = DATA(lt_result) ).
-        cl_abap_unit_assert=>assert_equals( act = lines( lt_result )
-                                            exp = 1 ).
+        cl_abap_unit_assert=>assert_equals( exp = 1
+                                            act = lines( lt_result ) ).
       CATCH zcx_sat_object_search INTO DATA(lx_search_error).
     ENDTRY.
 
@@ -199,8 +200,8 @@ CLASS ltcl_abap_unit IMPLEMENTATION.
                                                        IMPORTING et_result = DATA(lt_result) ).
         cl_abap_unit_assert=>assert_not_initial( act = lt_result ).
 
-        cl_abap_unit_assert=>assert_equals( act = lt_result[ 1 ]-tadir_type
-                                            exp = zif_sat_c_os_clif_options=>c_class_types-interface ).
+        cl_abap_unit_assert=>assert_equals( exp = zif_sat_c_os_clif_options=>c_class_types-interface
+                                            act = lt_result[ 1 ]-tadir_type ).
       CATCH zcx_sat_object_search INTO DATA(lx_search_error).
     ENDTRY.
 
@@ -220,8 +221,8 @@ CLASS ltcl_abap_unit IMPLEMENTATION.
     TRY.
         mr_cut->zif_sat_object_search_provider~search( EXPORTING io_query  = lo_query
                                                        IMPORTING et_result = DATA(lt_result) ).
-        cl_abap_unit_assert=>assert_equals( act = lines( lt_result )
-                                            exp = 1 ).
+        cl_abap_unit_assert=>assert_equals( exp = 1
+                                            act = lines( lt_result ) ).
       CATCH zcx_sat_object_search INTO DATA(lx_search_error).
     ENDTRY.
 
@@ -242,8 +243,8 @@ CLASS ltcl_abap_unit IMPLEMENTATION.
     TRY.
         mr_cut->zif_sat_object_search_provider~search( EXPORTING io_query  = lo_query
                                                        IMPORTING et_result = DATA(lt_result) ).
-        cl_abap_unit_assert=>assert_equals( act = lines( lt_result )
-                                            exp = 1 ).
+        cl_abap_unit_assert=>assert_equals( exp = 1
+                                            act = lines( lt_result ) ).
       CATCH zcx_sat_object_search INTO DATA(lx_search_error).
     ENDTRY.
 
@@ -288,7 +289,7 @@ CLASS ltcl_abap_unit IMPLEMENTATION.
     TRY.
         mr_cut->zif_sat_object_search_provider~search( EXPORTING io_query  = lo_query
                                                        IMPORTING et_result = DATA(lt_result) ).
-        cl_abap_unit_assert=>assert_equals( act = lines( lt_result ) exp = 1 ).
+        cl_abap_unit_assert=>assert_equals( exp = 1 act = lines( lt_result ) ).
       CATCH zcx_sat_object_search INTO DATA(lx_search_error).
     ENDTRY.
 
@@ -309,7 +310,7 @@ CLASS ltcl_abap_unit IMPLEMENTATION.
     TRY.
         mr_cut->zif_sat_object_search_provider~search( EXPORTING io_query  = lo_query
                                                        IMPORTING et_result = DATA(lt_result) ).
-        cl_abap_unit_assert=>assert_equals( act = lines( lt_result ) exp = 1 ).
+        cl_abap_unit_assert=>assert_equals( exp = 1 act = lines( lt_result ) ).
       CATCH zcx_sat_object_search INTO DATA(lx_search_error).
     ENDTRY.
 

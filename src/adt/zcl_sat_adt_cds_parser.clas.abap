@@ -1,7 +1,6 @@
 "! <p class="shorttext synchronized">Custom CDS Parser</p>
 CLASS zcl_sat_adt_cds_parser DEFINITION
-  PUBLIC
-  FINAL
+  PUBLIC FINAL
   CREATE PUBLIC.
 
   PUBLIC SECTION.
@@ -101,6 +100,8 @@ CLASS zcl_sat_adt_cds_parser IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD parse_cds.
+    " TODO: parameter IF_SELECT_PART is never used (ABAP cleaner)
+
     DATA lv_ddlname TYPE ddlname.
     DATA lv_entity TYPE zsat_entity_id.
 
@@ -110,13 +111,12 @@ CLASS zcl_sat_adt_cds_parser IMPLEMENTATION.
       FROM zsat_p_cdsviewbase
       WHERE entityid = @mv_cds_view
          OR ddlname  = @mv_cds_view
-      INTO (@lv_ddlname, @lv_entity).
+      INTO ( @lv_ddlname, @lv_entity ).
 
     IF sy-subrc <> 0.
       RETURN.
     ENDIF.
-    SELECT SINGLE *
-      FROM ddddlsrc
+    SELECT SINGLE * FROM ddddlsrc
       WHERE ddlname = @lv_ddlname
       INTO @DATA(ls_cds).
 
@@ -167,8 +167,10 @@ CLASS zcl_sat_adt_cds_parser IMPLEMENTATION.
     lt_uri = VALUE #(
         ( LINES OF VALUE #( FOR cds IN io_node_helper->mt_cds_views
                             ( name = cds-name entity_type = cds-node->entity_type ddlname = cds-node->ddls_name ) ) )
-        ( LINES OF VALUE #( FOR table IN io_node_helper->mt_tables ( name = table-name entity_type = table-node->entity_type ) ) )
-        ( LINES OF VALUE #( FOR view IN io_node_helper->mt_views ( name = view-name entity_type = view-node->entity_type ) ) ) ).
+        ( LINES OF VALUE #( FOR table IN io_node_helper->mt_tables
+                            ( name = table-name entity_type = table-node->entity_type ) ) )
+        ( LINES OF VALUE #( FOR view IN io_node_helper->mt_views
+                            ( name = view-name entity_type = view-node->entity_type ) ) ) ).
 
     SORT lt_uri BY name.
     DELETE ADJACENT DUPLICATES FROM lt_uri COMPARING name.
@@ -213,13 +215,13 @@ CLASS zcl_sat_adt_cds_parser IMPLEMENTATION.
            rawentityid,
            ddlname,
            viewname,
-           sourcetype AS source_type,
+           sourcetype         AS source_type,
            developmentpackage,
            createdby,
            description
       FROM zsat_i_cdsentity( p_language = @sy-langu )
       WHERE entityid IN @lt_cds_range
-         OR ddlname IN @lt_cds_range
+         OR ddlname  IN @lt_cds_range
       INTO TABLE @DATA(lt_entity_and_text).
 
     LOOP AT io_node_helper->mt_cds_views ASSIGNING FIELD-SYMBOL(<ls_node>).
@@ -245,16 +247,17 @@ CLASS zcl_sat_adt_cds_parser IMPLEMENTATION.
 
     CHECK io_node_helper->mt_tables IS NOT INITIAL.
 
-    lt_tabname_range = VALUE #( FOR table IN io_node_helper->mt_tables ( sign = 'I' option = 'EQ' low = table-name ) ).
+    lt_tabname_range = VALUE #( FOR table IN io_node_helper->mt_tables
+                                ( sign = 'I' option = 'EQ' low = table-name ) ).
 
-    SELECT tablename AS entityid,
-           tablename AS rawentityid,
+    SELECT tablename          AS entityid,
+           tablename          AS rawentityid,
            developmentpackage,
            createdby,
            description
-     FROM zsat_i_databasetable( p_language = @sy-langu )
-     WHERE tablename IN @lt_tabname_range
-    INTO TABLE @DATA(lt_entity_and_text).
+      FROM zsat_i_databasetable( p_language = @sy-langu )
+      WHERE tablename IN @lt_tabname_range
+      INTO TABLE @DATA(lt_entity_and_text).
 
     LOOP AT io_node_helper->mt_tables ASSIGNING FIELD-SYMBOL(<ls_node>).
       ASSIGN lt_entity_and_text[ entityid = <ls_node>-name ] TO FIELD-SYMBOL(<ls_entity_info>).
@@ -281,7 +284,7 @@ CLASS zcl_sat_adt_cds_parser IMPLEMENTATION.
            rawentityid,
            ddlname,
            viewname,
-           sourcetype AS source_type,
+           sourcetype         AS source_type,
            developmentpackage,
            createdby,
            description
@@ -314,8 +317,8 @@ CLASS zcl_sat_adt_cds_parser IMPLEMENTATION.
     ENDIF.
     lt_view_range = VALUE #( FOR view IN io_node_helper->mt_views ( sign = 'I' option = 'EQ' low = view-name ) ).
 
-    SELECT viewname AS entityid,
-           viewname AS rawentityid,
+    SELECT viewname           AS entityid,
+           viewname           AS rawentityid,
            developmentpackage,
            createdby,
            description

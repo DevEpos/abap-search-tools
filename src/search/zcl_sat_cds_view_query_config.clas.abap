@@ -122,12 +122,12 @@ CLASS zcl_sat_cds_view_query_config IMPLEMENTATION.
         no_uppercase     = abap_true
         img_info         = VALUE #(
             img_key     = c_image_keys-anno
-            img_encoded = `iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAACXUlEQVR4nGNgwAJcWjbbuLVt6Xdt3XIZiO8D8XWX1q3rgXSMQ8N+Dmx6wMCtdYsOUNF5IH4MMWBrgkvzFhe3tq0+QEObQeIgA11atllg` &&
-                          `aPbu3qnj1bn9tVfX9nagLTzYLADZ7tOxvdm7c/t3n/btDiiSAd07Twf07uyH8/t3GQT27cgI6t3ZENSzKyWoc5sMTC6oZ3dzYO/O5wH9+wXAAuH9e1PCJuz5HtmzXwSmKGzinudhk/asD5+wZ37YxL2X` &&
-                          `wyfueR8+abcF1CUsQPnHERP3loAVB/ft2h/cv2s+rrABaQjq3XUZiOFqAnt3LQbi42COb9f2575d20rQNXl373AByiWA/OvTuX25T9f2/TB5IL8BGBb3IaHftvU/KMRhku7tO1TcWrdeB+L7rm1b9gNj` &&
-                          `5zYQ/wexYWrcWjc3gGIEYlvjps8OTRtzELZv6geK3XZo2AwPE/uGTfPtmzbtR/A3LwfyN4M5VrUbrlvWbpgOk7SqXTfbqm79aYSB8zmA/MOWtevBBljWb1SxrFn/2bJmnQ9YgUnVmunGlWvvg/wN4htX` &&
-                          `rgkwqVz736Ry9Wogu9u4Ys11MC5f896kYnUDkH3fpHw1PMoZdIvXaOiVrvquV7oSHpA6JasddEtWTQZhEFs7axWPbvHqGt3iVfP1SlZHwCyDA/XC5RkaBcv/qxcsK8CQJBYo5i4JUcxZ+l4xZ8luxdzF` &&
-                          `OUpZy2wUCpYrgLBy3iIdheylEUD5yQq5SxNwGiKVtkxEOnNRjVTmou3S6YveS2cs+g/E34H4MZC/XypjUbt06nwDslyIDQAAQgkg3iT77dwAAAAASUVORK5CYII=` )
+            img_encoded = |iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAACXUlEQVR4nGNgwAJcWjbbuLVt6Xdt3XIZiO8D8XWX1q3rgXSMQ8N+Dmx6wMCtdYsOUNF5IH4MMWBrgkvzFhe3tq0+QEObQeIgA11atllg| &&
+                          |aPbu3qnj1bn9tVfX9nagLTzYLADZ7tOxvdm7c/t3n/btDiiSAd07Twf07uyH8/t3GQT27cgI6t3ZENSzKyWoc5sMTC6oZ3dzYO/O5wH9+wXAAuH9e1PCJuz5HtmzXwSmKGzinudhk/asD5+wZ37YxL2X| &&
+                          |wyfueR8+abcF1CUsQPnHERP3loAVB/ft2h/cv2s+rrABaQjq3XUZiOFqAnt3LQbi42COb9f2575d20rQNXl373AByiWA/OvTuX25T9f2/TB5IL8BGBb3IaHftvU/KMRhku7tO1TcWrdeB+L7rm1b9gNj| &&
+                          |5zYQ/wexYWrcWjc3gGIEYlvjps8OTRtzELZv6geK3XZo2AwPE/uGTfPtmzbtR/A3LwfyN4M5VrUbrlvWbpgOk7SqXTfbqm79aYSB8zmA/MOWtevBBljWb1SxrFn/2bJmnQ9YgUnVmunGlWvvg/wN4htX| &&
+                          |rgkwqVz736Ry9Wogu9u4Ys11MC5f896kYnUDkH3fpHw1PMoZdIvXaOiVrvquV7oSHpA6JasddEtWTQZhEFs7axWPbvHqGt3iVfP1SlZHwCyDA/XC5RkaBcv/qxcsK8CQJBYo5i4JUcxZ+l4xZ8luxdzF| &&
+                          |OUpZy2wUCpYrgLBy3iIdheylEUD5yQq5SxNwGiKVtkxEOnNRjVTmou3S6YveS2cs+g/E34H4MZC/XypjUbt06nwDslyIDQAAQgkg3iT77dwAAAAASUVORK5CYII=| )
         key_value        = abap_true
         patterns         = abap_true
         content_assist   = VALUE #(
@@ -146,9 +146,9 @@ CLASS zcl_sat_cds_view_query_config IMPLEMENTATION.
                            |a certain Table/View/CDS view as an Association.\n\nExample:\n   { c_cds_options-association } : i_product|
         img_info         = VALUE #(
             img_key     = c_image_keys-association
-            img_encoded = `iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABBElEQVR4nGNgoAYQaD+vINJ69qBI65l3oq2nj4L4JBkg1n72RPbWh397jz3/n7D+3l+x1tPHSDOg7cxH+wXX//suv/Xfbv71/6Itp74z` &&
-                          `hM78jxOjA/GOs6cNZl75bzr76n8QLdZ+5jhO27AZAPKzaNvZ06JtZz6Jt509gzcMsBlAEiDbgNCZk1HCIWTWdNIMcGhgAWrcDjFg1n6GhPkcZLhiKg9D6IzNDJEzRUjWCwpYyc5zV5R6z/+Q7Dhzg5zE` &&
-                          `djlry/3/fcdBie3uf9H2sxdIMgAYzV8s513777To+n8QDeR/INUFJwxmXv1jAk5sV/+ItZGY3OEZru3MO1BeITkMcAEAZhGbMbBbTB8AAAAASUVORK5CYII=` )
+            img_encoded = |iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABBElEQVR4nGNgoAYQaD+vINJ69qBI65l3oq2nj4L4JBkg1n72RPbWh397jz3/n7D+3l+x1tPHSDOg7cxH+wXX//suv/Xfbv71/6Itp74z| &&
+                          |hM78jxOjA/GOs6cNZl75bzr76n8QLdZ+5jhO27AZAPKzaNvZ06JtZz6Jt509gzcMsBlAEiDbgNCZk1HCIWTWdNIMcGhgAWrcDjFg1n6GhPkcZLhiKg9D6IzNDJEzRUjWCwpYyc5zV5R6z/+Q7Dhzg5zE| &&
+                          |djlry/3/fcdBie3uf9H2sxdIMgAYzV8s513777To+n8QDeR/INUFJwxmXv1jAk5sV/+ItZGY3OEZru3MO1BeITkMcAEAZhGbMbBbTB8AAAAASUVORK5CYII=| )
         allowed_length   = 30
         patterns         = abap_true
         content_assist   = VALUE #(
@@ -220,9 +220,9 @@ CLASS zcl_sat_cds_view_query_config IMPLEMENTATION.
                            |Example:\n   { c_cds_options-base_field } : matnr|
         img_info         = VALUE #(
             img_key     = c_image_keys-base_field
-            img_encoded = `iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAOwQAADsEBuJFr7QAAABh0RVh0U29mdHdhcmUAcGFpbnQubmV0IDQuMS42/U4J6AAAAJRJREF` &&
-                          `UOE9joCqYveXOf3QMlYIDE/8qDDE4AGk49+gvHKMbANLslb/2P05DYAbceQXByAbANMMwVkNgBoBoGIZKwQFIM5SJCWAGgGx//xXTCyBAsQGhDccIGwCiYRgqBQdEGUCxC/AZkL3oJ24DkKMJhqFScE` &&
-                          `DQgN03/oLxw7d/yTMApBGGyTIAHUOl4ACvAQMAGBgAyskA69j6uwoAAAAASUVORK5CYII=`  )
+            img_encoded = |iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAOwQAADsEBuJFr7QAAABh0RVh0U29mdHdhcmUAcGFpbnQubmV0IDQuMS42/U4J6AAAAJRJREF| &&
+                          |UOE9joCqYveXOf3QMlYIDE/8qDDE4AGk49+gvHKMbANLslb/2P05DYAbceQXByAbANMMwVkNgBoBoGIZKwQFIM5SJCWAGgGx//xXTCyBAsQGhDccIGwCiYRgqBQdEGUCxC/AZkL3oJ24DkKMJhqFScE| &&
+                          |DQgN03/oLxw7d/yTMApBGGyTIAHUOl4ACvAQMAGBgAyskA69j6uwoAAAAASUVORK5CYII=|  )
         allowed_length   = 30
         patterns         = abap_true
         content_assist   = VALUE #(

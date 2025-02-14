@@ -22,7 +22,7 @@ CLASS zcl_sat_adt_res_structfield_vh IMPLEMENTATION.
     ENDIF.
 
     SELECT DISTINCT fieldname AS name
-      FROM ZSAT_I_StructureFieldVh AS field
+      FROM zsat_i_structurefieldvh AS field
       WHERE fieldname       IN @lt_field_range
         AND fieldname NOT LIKE '.%'
       ORDER BY fieldname

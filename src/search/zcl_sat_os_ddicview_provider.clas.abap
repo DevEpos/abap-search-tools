@@ -18,27 +18,26 @@ CLASS zcl_sat_os_ddicview_provider DEFINITION
   PRIVATE SECTION.
     ALIASES c_search_params FOR zif_sat_c_os_view_options~c_filter_key.
 
-    CONSTANTS:
-      c_base_table     TYPE string VALUE 'base',
-      c_field_table    TYPE string VALUE 'field',
-      c_base_tab_table TYPE string VALUE 'basetab',
+    CONSTANTS c_base_table TYPE string VALUE 'base'.
+    CONSTANTS c_field_table TYPE string VALUE 'field'.
+    CONSTANTS c_base_tab_table TYPE string VALUE 'basetab'.
 
-      BEGIN OF c_fields,
-        alias               TYPE string VALUE 'field',
-        viewname            TYPE string VALUE 'viewname',
-        tablename           TYPE string VALUE 'tablename',
-        type                TYPE string VALUE 'viewclass',
-        fieldname           TYPE string VALUE 'fieldname',
-        description         TYPE string VALUE 'description',
-        primary_table       TYPE string VALUE 'primarytable',
-        development_package TYPE string VALUE 'developmentpackage',
-        delivery_class      TYPE string VALUE 'deliveryclass',
-        created_by          TYPE string VALUE 'createdby',
-        created_date        TYPE string VALUE 'createddate',
-        changed_by          TYPE string VALUE 'changedby',
-        changed_date        TYPE string VALUE 'changeddate',
-        maintenance_flag    TYPE string VALUE 'maintenanceflag',
-      END OF c_fields.
+    CONSTANTS: BEGIN OF c_fields,
+                 alias               TYPE string VALUE 'field',
+                 viewname            TYPE string VALUE 'viewname',
+                 tablename           TYPE string VALUE 'tablename',
+                 type                TYPE string VALUE 'viewclass',
+                 fieldname           TYPE string VALUE 'fieldname',
+                 description         TYPE string VALUE 'description',
+                 primary_table       TYPE string VALUE 'primarytable',
+                 development_package TYPE string VALUE 'developmentpackage',
+                 delivery_class      TYPE string VALUE 'deliveryclass',
+                 created_by          TYPE string VALUE 'createdby',
+                 created_date        TYPE string VALUE 'createddate',
+                 changed_by          TYPE string VALUE 'changedby',
+                 changed_date        TYPE string VALUE 'changeddate',
+                 maintenance_flag    TYPE string VALUE 'maintenanceflag',
+               END OF c_fields.
 
     DATA mv_field_subquery TYPE string.
     DATA mv_basetab_subquery TYPE string.
@@ -61,11 +60,11 @@ ENDCLASS.
 CLASS zcl_sat_os_ddicview_provider IMPLEMENTATION.
   METHOD constructor.
     super->constructor( ).
-    mv_field_subquery = |SELECT DISTINCT tablename | && c_cr_lf &&
-                        | FROM { get_cds_sql_name( |{ zif_sat_c_select_source_id=>zsat_i_tablefield }| ) } | && c_cr_lf &&
+    mv_field_subquery = |SELECT DISTINCT tablename { c_cr_lf }| &&
+                        | FROM { get_cds_sql_name( |{ zif_sat_c_select_source_id=>zsat_i_tablefield }| ) } { c_cr_lf }| &&
                         | WHERE |.
-    mv_basetab_subquery = |SELECT DISTINCT viewname | && c_cr_lf &&
-                          | FROM { zif_sat_c_select_source_id=>dd26s } | && c_cr_lf &&
+    mv_basetab_subquery = |SELECT DISTINCT viewname { c_cr_lf }| &&
+                          | FROM { zif_sat_c_select_source_id=>dd26s } { c_cr_lf }| &&
                           | WHERE |.
   ENDMETHOD.
 

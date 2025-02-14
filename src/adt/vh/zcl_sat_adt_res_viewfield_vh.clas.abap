@@ -1,8 +1,7 @@
 "! <p class="shorttext synchronized">Resource for 'field' parameter in ddic view search</p>
 CLASS zcl_sat_adt_res_viewfield_vh DEFINITION
   PUBLIC
-  INHERITING FROM cl_adt_res_named_items
-  FINAL
+  INHERITING FROM cl_adt_res_named_items FINAL
   CREATE PUBLIC.
 
   PUBLIC SECTION.
@@ -22,11 +21,10 @@ CLASS zcl_sat_adt_res_viewfield_vh IMPLEMENTATION.
       lt_field_range = VALUE #( ( sign = 'I' option = 'CP' low = to_upper( p_filter_name ) ) ).
     ENDIF.
 
-    SELECT DISTINCT
-           fieldname AS name
+    SELECT DISTINCT fieldname AS name
       FROM zsat_i_tablefieldvh AS field
-      WHERE fieldname IN @lt_field_range
-        AND tableclass = @zif_sat_c_tadir_types=>view
+      WHERE fieldname  IN @lt_field_range
+        AND tableclass  = @zif_sat_c_tadir_types=>view
       ORDER BY fieldname
       INTO CORRESPONDING FIELDS OF TABLE @p_named_item_list-items
       UP TO @p_filter_max_item_count ROWS.

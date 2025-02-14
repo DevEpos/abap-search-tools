@@ -1,7 +1,6 @@
 "! <p class="shorttext synchronized">Util for Class/Interface filters</p>
 CLASS zcl_sat_clif_filter_util DEFINITION
-  PUBLIC
-  FINAL
+  PUBLIC FINAL
   CREATE PUBLIC.
 
   PUBLIC SECTION.
@@ -23,14 +22,13 @@ CLASS zcl_sat_clif_filter_util DEFINITION
         VALUE(result) TYPE zif_sat_ty_object_search=>ty_t_value_range.
 
   PRIVATE SECTION.
-    TYPES:
-      BEGIN OF ty_class,
-        classname  TYPE classname,
-        superclass TYPE classname,
-      END OF ty_class,
-      BEGIN OF ty_super_class,
-        classname TYPE classname,
-      END OF ty_super_class.
+    TYPES: BEGIN OF ty_class,
+             classname  TYPE classname,
+             superclass TYPE classname,
+           END OF ty_class.
+    TYPES: BEGIN OF ty_super_class,
+             classname TYPE classname,
+           END OF ty_super_class.
 ENDCLASS.
 
 
@@ -48,13 +46,13 @@ CLASS zcl_sat_clif_filter_util IMPLEMENTATION.
     ENDIF.
 
     WHILE lt_classes IS NOT INITIAL.
-      SELECT super_class~clsname AS classname,
+      SELECT super_class~clsname    AS classname,
              super_class~refclsname AS superclass
         FROM seometarel AS super_class
         FOR ALL ENTRIES IN @lt_classes
         WHERE super_class~refclsname = @lt_classes-classname
-          AND super_class~reltype = @seor_reltype_inheritance
-          AND super_class~version = @seoc_version_active
+          AND super_class~reltype    = @seor_reltype_inheritance
+          AND super_class~version    = @seoc_version_active
         INTO TABLE @lt_classes_temp.
 
       INSERT LINES OF lt_classes_temp INTO TABLE lt_class_hier_temp.
@@ -75,11 +73,11 @@ CLASS zcl_sat_clif_filter_util IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD get_intf_implementers.
-    SELECT 'I' AS sign,
-           'EQ' AS option,
+    SELECT 'I'     AS sign,
+           'EQ'    AS option,
            clsname AS low
       FROM seometarel
-      WHERE reltype = @seor_reltype_implementing
+      WHERE reltype    = @seor_reltype_implementing
         AND refclsname = @iv_intf_name
       INTO CORRESPONDING FIELDS OF TABLE @result.
   ENDMETHOD.

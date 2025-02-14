@@ -86,8 +86,8 @@ CLASS zcl_sat_system_helper IMPLEMENTATION.
     DATA lv_word TYPE string.
 
     SELECT SINGLE * FROM trdir
-    INTO @DATA(dir)
-    WHERE name = @sy-repid.
+      INTO @DATA(dir)
+      WHERE name = @sy-repid.
 
     DATA lv_message TYPE string.
 

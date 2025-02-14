@@ -74,6 +74,8 @@ ENDCLASS.
 
 CLASS zcl_sat_join_helper IMPLEMENTATION.
   METHOD build_from_clause_for_join_def.
+    " TODO: parameter IT_TABLE_ALIAS_MAP is never used (ABAP cleaner)
+
     DATA(ls_join_def) = repair_join_definition( if_use_ddl_for_select = if_use_ddl_for_select
                                                 is_join_def           = is_join_def ).
 
@@ -129,7 +131,7 @@ CLASS zcl_sat_join_helper IMPLEMENTATION.
                                      CHANGING  cv_table_part = rs_join-primary_table ).
     ENDIF.
 
-    rs_join-primary_table = rs_join-primary_table && | AS | &&
+    rs_join-primary_table = |{ rs_join-primary_table } AS | &&
                             COND #( WHEN is_join_def-primary_table_alias IS NOT INITIAL
                                     THEN is_join_def-primary_table_alias ).
 

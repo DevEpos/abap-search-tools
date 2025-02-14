@@ -105,25 +105,25 @@ CLASS zcl_sat_os_cds_provider IMPLEMENTATION.
   METHOD constructor.
     super->constructor( ).
     " Create sub queries for parameters where boolean operation AND is senseful
-    mv_field_subquery = |SELECT DISTINCT entityid | && c_cr_lf &&
-                        | FROM { get_cds_sql_name( CONV #( zif_sat_c_select_source_id=>zsat_i_cdsviewfield ) ) } | && c_cr_lf &&
+    mv_field_subquery = |SELECT DISTINCT entityid { c_cr_lf }| &&
+                        | FROM { get_cds_sql_name( CONV #( zif_sat_c_select_source_id=>zsat_i_cdsviewfield ) ) } { c_cr_lf }| &&
                         | WHERE |.
-    mv_base_field_subquery = |SELECT DISTINCT viewname | && c_cr_lf &&
-                             | FROM { get_cds_sql_name( CONV #( zif_sat_c_select_source_id=>zsat_i_cdsbasefield ) ) } | && c_cr_lf &&
+    mv_base_field_subquery = |SELECT DISTINCT viewname { c_cr_lf }| &&
+                             | FROM { get_cds_sql_name( CONV #( zif_sat_c_select_source_id=>zsat_i_cdsbasefield ) ) } { c_cr_lf }| &&
                              | WHERE |.
-    mv_anno_subquery = |SELECT DISTINCT entityid | && c_cr_lf &&
-                       | FROM { get_cds_sql_name( CONV #( zif_sat_c_select_source_id=>zsat_i_cdsannotation ) ) } | && c_cr_lf &&
+    mv_anno_subquery = |SELECT DISTINCT entityid { c_cr_lf }| &&
+                       | FROM { get_cds_sql_name( CONV #( zif_sat_c_select_source_id=>zsat_i_cdsannotation ) ) } { c_cr_lf }| &&
                        | WHERE |.
-    mv_assoc_subquery = |SELECT DISTINCT strucobjn | && c_cr_lf &&
-                        | FROM { zif_sat_c_select_source_id=>dd08b } | && c_cr_lf &&
+    mv_assoc_subquery = |SELECT DISTINCT strucobjn { c_cr_lf }| &&
+                        | FROM { zif_sat_c_select_source_id=>dd08b } { c_cr_lf }| &&
                         | WHERE |.
-    mv_select_from_subquery = |SELECT DISTINCT ddlviewname | && c_cr_lf &&
-                              | FROM { get_cds_sql_name( CONV #( zif_sat_c_select_source_id=>zsat_i_cdsfrompartentity ) ) } | && c_cr_lf &&
+    mv_select_from_subquery = |SELECT DISTINCT ddlviewname { c_cr_lf }| &&
+                              | FROM { get_cds_sql_name( CONV #( zif_sat_c_select_source_id=>zsat_i_cdsfrompartentity ) ) } { c_cr_lf }| &&
                               | WHERE |.
-    mv_param_subquery = |SELECT DISTINCT strucobjn | && c_cr_lf &&
-                        | FROM { zif_sat_c_select_source_id=>dd10b } | && c_cr_lf &&
+    mv_param_subquery = |SELECT DISTINCT strucobjn { c_cr_lf }| &&
+                        | FROM { zif_sat_c_select_source_id=>dd10b } { c_cr_lf }| &&
                         | WHERE |.
-    mv_params_subquery = |SELECT DISTINCT entityid | && c_cr_lf &&
+    mv_params_subquery = |SELECT DISTINCT entityid { c_cr_lf }| &&
                          | FROM { get_cds_sql_name( CONV #( zif_sat_c_select_source_id=>zsat_i_cdsviewwithparameter ) ) }|.
   ENDMETHOD.
 

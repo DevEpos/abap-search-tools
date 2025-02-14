@@ -51,8 +51,11 @@ CLASS ltcl_abap_unit IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD run_test.
-    DATA(lo_analyzer) = NEW zcl_sat_cds_wusi_analysis( iv_entity           = iv_entity
-                                                       iv_source_origin    = iv_source_origin ).
+    " TODO: parameter IF_RELEASED_ONLY is never used (ABAP cleaner)
+    " TODO: parameter IF_ONLY_LOCAL_ASSOC is never used (ABAP cleaner)
+
+    DATA(lo_analyzer) = NEW zcl_sat_cds_wusi_analysis( iv_entity        = iv_entity
+                                                       iv_source_origin = iv_source_origin ).
     TRY.
         lo_analyzer->run( ).
         result = lo_analyzer->get_result( ).

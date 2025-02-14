@@ -13,25 +13,24 @@ CLASS zcl_sat_os_message_provider DEFINITION
   PRIVATE SECTION.
     ALIASES c_msg_search_params FOR zif_sat_c_os_mess_options~c_filter_key.
 
-    CONSTANTS:
-      BEGIN OF c_aliases,
-        msg_clas TYPE string VALUE 'msgclas',
-        message  TYPE string VALUE 'msg',
-      END OF c_aliases,
+    CONSTANTS: BEGIN OF c_aliases,
+                 msg_clas TYPE string VALUE 'msgclas',
+                 message  TYPE string VALUE 'msg',
+               END OF c_aliases.
 
-      BEGIN OF c_fields,
-        message_class       TYPE string VALUE 'messageclass',
-        message_number      TYPE string VALUE 'messagenumber',
-        short_text          TYPE string VALUE 'shorttext',
-        language            TYPE string VALUE 'language',
-        created_by          TYPE string VALUE 'createdby',
-        created_on          TYPE string VALUE 'createdon',
-        changed_by          TYPE string VALUE 'changedby',
-        changed_on          TYPE string VALUE 'changedon',
-        description         TYPE string VALUE 'description',
-        development_package TYPE string VALUE 'developmentpackage',
-        is_self_explanatory TYPE string VALUE 'isselfexplanatory',
-      END OF c_fields.
+    CONSTANTS: BEGIN OF c_fields,
+                 message_class       TYPE string VALUE 'messageclass',
+                 message_number      TYPE string VALUE 'messagenumber',
+                 short_text          TYPE string VALUE 'shorttext',
+                 language            TYPE string VALUE 'language',
+                 created_by          TYPE string VALUE 'createdby',
+                 created_on          TYPE string VALUE 'createdon',
+                 changed_by          TYPE string VALUE 'changedby',
+                 changed_on          TYPE string VALUE 'changedon',
+                 description         TYPE string VALUE 'description',
+                 development_package TYPE string VALUE 'developmentpackage',
+                 is_self_explanatory TYPE string VALUE 'isselfexplanatory',
+               END OF c_fields.
 
     METHODS configure_msg_clas_filters.
     METHODS configure_message_filters.

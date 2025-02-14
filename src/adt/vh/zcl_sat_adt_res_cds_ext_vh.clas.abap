@@ -1,8 +1,7 @@
 "! <p class="shorttext synchronized">Resource for 'extby' parameter in CDS View search</p>
 CLASS zcl_sat_adt_res_cds_ext_vh DEFINITION
   PUBLIC
-  INHERITING FROM cl_adt_res_named_items
-  FINAL
+  INHERITING FROM cl_adt_res_named_items FINAL
   CREATE PUBLIC.
 
   PUBLIC SECTION.
@@ -25,10 +24,10 @@ CLASS zcl_sat_adt_res_cds_ext_vh IMPLEMENTATION.
     SELECT rawentityid AS name,
            description AS description
       FROM zsat_i_cdsentity( p_language = @sy-langu )
-      WHERE ddlname IN @lt_extend_range
-        AND sourcetype = @zif_sat_c_cds_view_type=>extend
+      WHERE ddlname    IN @lt_extend_range
+        AND sourcetype  = @zif_sat_c_cds_view_type=>extend
       ORDER BY ddlname
-    INTO CORRESPONDING FIELDS OF TABLE @p_named_item_list-items
+      INTO CORRESPONDING FIELDS OF TABLE @p_named_item_list-items
       UP TO @p_filter_max_item_count ROWS.
 
     p_filter_already_applied = abap_true.

@@ -1,7 +1,6 @@
 *"* use this source file for your ABAP unit test classes
-CLASS lcl_abap_unit DEFINITION FINAL FOR TESTING
-  DURATION SHORT
-  RISK LEVEL HARMLESS.
+CLASS lcl_abap_unit DEFINITION FINAL
+  FOR TESTING RISK LEVEL HARMLESS DURATION SHORT.
 
   PRIVATE SECTION.
     METHODS test_get_instance         FOR TESTING RAISING cx_static_check.

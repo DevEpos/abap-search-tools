@@ -41,19 +41,18 @@ CLASS zcl_sat_struct_query_config IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD build_config.
-    DATA(lt_object_filters) = VALUE zif_sat_ty_object_search=>ty_query_filters(
-        ( get_user_filt_conf( ) )
-        ( get_created_on_filt_conf( ) )
-        ( get_changed_by_filt_conf( ) )
-        ( get_changed_on_filt_conf( ) )
-        ( get_package_filt_conf( ) )
-        ( get_softw_comp_filt_conf( ) )
-        ( get_appl_comp_filt_conf( ) )
-        ( get_description_filt_conf( ) )
-        ( get_max_rows_filt_conf( ) )
-        ( get_field_filter( ) )
-        ( get_include_filter( ) )
-        ( get_enhancement_cat_filter( ) ) ).
+    DATA(lt_object_filters) = VALUE zif_sat_ty_object_search=>ty_query_filters( ( get_user_filt_conf( ) )
+                                                                                ( get_created_on_filt_conf( ) )
+                                                                                ( get_changed_by_filt_conf( ) )
+                                                                                ( get_changed_on_filt_conf( ) )
+                                                                                ( get_package_filt_conf( ) )
+                                                                                ( get_softw_comp_filt_conf( ) )
+                                                                                ( get_appl_comp_filt_conf( ) )
+                                                                                ( get_description_filt_conf( ) )
+                                                                                ( get_max_rows_filt_conf( ) )
+                                                                                ( get_field_filter( ) )
+                                                                                ( get_include_filter( ) )
+                                                                                ( get_enhancement_cat_filter( ) ) ).
 
     ms_search_type = VALUE zif_sat_ty_object_search=>ty_search_type_config(
         label    = 'Structure'
