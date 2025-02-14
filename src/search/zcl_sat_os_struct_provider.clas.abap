@@ -158,14 +158,16 @@ CLASS zcl_sat_os_struct_provider IMPLEMENTATION.
                               it_values    = <ls_option>-value_range ).
 
         WHEN c_general_search_options-software_component.
-          add_softw_comp_filter( it_values          = <ls_option>-value_range
-                                 iv_ref_field       = CONV #( c_fields-development_package )
-                                 iv_ref_table_alias = c_base_table ).
+          add_softw_comp_filter( if_use_ddic_sql_view = abap_true
+                                 it_values            = <ls_option>-value_range
+                                 iv_ref_field         = CONV #( c_fields-development_package )
+                                 iv_ref_table_alias   = c_base_table ).
 
         WHEN c_general_search_options-application_component.
-          add_appl_comp_filter( it_values          = <ls_option>-value_range
-                                iv_ref_field       = CONV #( c_fields-development_package )
-                                iv_ref_table_alias = c_base_table ).
+          add_appl_comp_filter( if_use_ddic_sql_view = abap_true
+                                it_values            = <ls_option>-value_range
+                                iv_ref_field         = CONV #( c_fields-development_package )
+                                iv_ref_table_alias   = c_base_table ).
 
         WHEN c_dbtab_search_params-field.
           add_field_filter( <ls_option>-value_range ).
