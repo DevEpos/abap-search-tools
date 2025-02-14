@@ -5,7 +5,7 @@ CLASS zcl_sat_os_struct_provider DEFINITION
   CREATE PUBLIC.
 
   PUBLIC SECTION.
-    INTERFACES zif_sat_c_os_dtab_options.
+    INTERFACES zif_sat_c_os_tabl_options.
 
     "! <p class="shorttext synchronized">CONSTRUCTOR</p>
     METHODS constructor.
@@ -17,11 +17,11 @@ CLASS zcl_sat_os_struct_provider DEFINITION
     METHODS do_after_search      REDEFINITION.
 
   PRIVATE SECTION.
-    ALIASES c_dbtab_search_params FOR zif_sat_c_os_dtab_options~c_filter_key.
+    ALIASES c_tabl_search_params FOR zif_sat_c_os_tabl_options~c_filter_key.
 
-    CONSTANTS c_base_table          TYPE string VALUE 'base'.
-    CONSTANTS c_field_table         TYPE string VALUE 'field'.
-    CONSTANTS c_include_table       TYPE string VALUE 'incl_usage'.
+    CONSTANTS c_base_table TYPE string VALUE 'base'.
+    CONSTANTS c_field_table TYPE string VALUE 'field'.
+    CONSTANTS c_include_table TYPE string VALUE 'incl_usage'.
     CONSTANTS c_tech_settings_table TYPE string VALUE 'tech'.
     CONSTANTS:
       BEGIN OF c_fields,
@@ -41,17 +41,19 @@ CLASS zcl_sat_os_struct_provider DEFINITION
         extension_class     TYPE string VALUE 'extensionclass',
       END OF c_fields.
 
-    DATA mv_field_subquery     TYPE string.
+    DATA mv_field_subquery TYPE string.
     DATA mv_field_filter_count TYPE i.
-    DATA mv_incl_filter_count  TYPE i.
-    DATA mf_dd09l_join_needed  TYPE abap_bool.
+    DATA mv_incl_filter_count TYPE i.
+    DATA mf_dd09l_join_needed TYPE abap_bool.
 
     "! <p class="shorttext synchronized">Create filter for FIELD option</p>
     METHODS add_field_filter
-      IMPORTING it_values TYPE zif_sat_ty_object_search=>ty_t_value_range.
+      IMPORTING
+        it_values TYPE zif_sat_ty_object_search=>ty_t_value_range.
 
     METHODS add_include_filter
-      IMPORTING it_values TYPE zif_sat_ty_object_search=>ty_t_value_range.
+      IMPORTING
+        it_values TYPE zif_sat_ty_object_search=>ty_t_value_range.
 
     METHODS configure_filters.
 ENDCLASS.
@@ -169,7 +171,7 @@ CLASS zcl_sat_os_struct_provider IMPLEMENTATION.
                                 iv_ref_field         = CONV #( c_fields-development_package )
                                 iv_ref_table_alias   = c_base_table ).
 
-        WHEN c_dbtab_search_params-field.
+        WHEN c_tabl_search_params-field.
           add_field_filter( <ls_option>-value_range ).
 
         WHEN c_general_search_options-changed_on.
@@ -180,11 +182,11 @@ CLASS zcl_sat_os_struct_provider IMPLEMENTATION.
           add_option_filter( iv_fieldname = c_fields-changed_by
                              it_values    = <ls_option>-value_range ).
 
-        WHEN c_dbtab_search_params-enhancement_category.
+        WHEN c_tabl_search_params-enhancement_category.
           add_option_filter( iv_fieldname = |{ c_base_table }~{ c_fields-extension_class }|
                              it_values    = <ls_option>-value_range ).
 
-        WHEN c_dbtab_search_params-include_usage.
+        WHEN c_tabl_search_params-include_usage.
           add_include_filter( it_values = <ls_option>-value_range  ).
       ENDCASE.
     ENDLOOP.
