@@ -15,6 +15,7 @@ CLASS zcl_sat_base_query_config DEFINITION
 
     CONSTANTS c_type_image_key_prefix TYPE string VALUE `ABAP:IMG_SEARCHTYPE_`.
     CONSTANTS: BEGIN OF c_general_image_keys,
+                 folder         TYPE string VALUE 'ABAP:IMG_FOLDER',
                  type_group     TYPE string VALUE 'ABAP:IMG_TYPE_GROUP',
                  type_folder    TYPE string VALUE 'ABAP:IMG_TYPE_FOLDER',
                  column         TYPE string VALUE 'ABAP:IMG_COLUMN',
@@ -24,6 +25,7 @@ CLASS zcl_sat_base_query_config DEFINITION
                  extension      TYPE string VALUE 'ABAP:IMG_EXTENSION',
                  maintenance    TYPE string VALUE 'ABAP:IMG_MAINTENANCE',
                  table_source   TYPE string VALUE 'ABAP:IMG_TABLE_DATA_SOURCE',
+                 length         TYPE string VALUE 'ABAP:IMG_LENGTH',
                END OF c_general_image_keys.
 
     CONSTANTS: BEGIN OF c_output_option,
@@ -356,6 +358,18 @@ CLASS zcl_sat_base_query_config IMPLEMENTATION.
                  |GIY5f+ZXTSDw3ytVuAmqxeaFqjufiaIDVW46E7rzJWfX1FlAPvaTJQczlTaWTh4gLj0sVO8we9jGZMmFRH5YYEJ3MFV2MX90i+XTJ6SvPCwed7r36YMWqLPAeKEJRTOQ3HcRz1oICwOxjImxvI2onFNn| &&
                  |gdF8E71rNcyVW6ha77BfP7B+/tIFaU6dBUb2bBagzgLDOR6gzgLxLA9QZ4FYxmIB6iwwlOYB6iwwuGuyAHUWUDQeoM4CYWF2gpv175R8UGm8dYGVs2ckCg76N+p+RJgeCwxs1XvC29aq/I33ijB8+olR| &&
                  |0fAjmvkYEuZOKFfrY4G/rl+7wFtBvoD5FwAAAABJRU5ErkJggg==|.
+
+      WHEN c_general_image_keys-folder.
+        result = |iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAAVFBMVEUAAAD48Mj46LDo0Ijw2JD44Jj44KD42Ij40HjgwHj42JD40IDYsHC8hTLDiza0fzKlbCStciu8fzLDhTatbCSeZietci+eXx2e| &&
+                 |XyCPUhn////46JgjdYhrAAAAAXRSTlMAQObYZgAAAFlJREFUeJydz0kSgCAMRNEoKojiBMaB+9/TEFPo0vLtfu8a4JeBvDucJDztY6xU2/uEB1dkjoelzHYexoZgBjBba7EWioZJa9QiNWwGO8ENBxpx| &&
+                 |N8CafTt2AcOvBf0oDmf4AAAAAElFTkSuQmCC|.
+
+      WHEN c_general_image_keys-length.
+        result = |iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAAAdAAAAHQGqQWv9AAAAGXRFWHRTb2Z0d2FyZQB3d3cuaW5rc2NhcGUub3Jnm+48GgAAAX5JREFUOI1jYBhowEysQk9PW9EQ| &&
+                 |F61dOppyv89cun+JJAPc3S2FHPWEtoU4SWkI8LDa8wuIvD175cFFBgYGBiZibHYxFN1WEq1s9vnb7+9q8jxcIoIcKTB5FnyabWx0Be10+DcWRiiaMzEyMLz7+Ftq3+k3Z8/f/xpE0AB3d0shJ32R7cVR| &&
+                 |SmbMTIwMu0+9Zth58s3Na4+/Be3Zc+Q1XgOQNf/89Y/hxqOvDBsOv7x998VPxz17jjxHVothALLmj1/+MLx8/4th/pbHt+6/+mmzc+fh1+jqUQywsdEVdNAT3lIcpWT2/z8Dw7O3PxlmrH1w6+azH67I| &&
+                 |zsZqgI2NrqC3pfzW0mhlS2YmRoZjl98zLN359Pbt598d9+w5+gxXWCEM0JHeXBajYsnEyMCw69Rrhi1HXty8//qX7e7dR7HaDAPwhKSpKf9NgJvV5vqDLzxbjry8fev5b5edOw8/x6cZxYBzl+5f4eAR| &&
+                 |fnX/2TeZq4++eu7Zc/QJIc2DAwAA08igClI5EHcAAAAASUVORK5CYII=|.
     ENDCASE.
   ENDMETHOD.
 ENDCLASS.

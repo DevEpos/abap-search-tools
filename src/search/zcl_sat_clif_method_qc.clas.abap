@@ -23,7 +23,10 @@ CLASS zcl_sat_clif_method_qc IMPLEMENTATION.
 
   METHOD zif_sat_query_converter~convert_value.
     IF iv_target = zif_sat_c_object_search=>c_search_fields-object_filter_input_key.
-      mo_class_qc->convert_value( EXPORTING iv_option = iv_option
+      mo_class_qc->convert_value( EXPORTING iv_sign   = iv_sign
+                                            iv_sign2  = iv_sign2
+                                            iv_option = iv_option
+                                  IMPORTING es_range  = es_range
                                   CHANGING  cv_value  = cv_value
                                             cv_value2 = cv_value2 ).
     ELSE.
@@ -65,7 +68,10 @@ CLASS zcl_sat_clif_method_qc IMPLEMENTATION.
                                WHEN zif_sat_c_os_meth_options=>c_method_status-redefined THEN
                                  zif_sat_c_os_meth_options=>c_method_status_int-redefined ).
         WHEN OTHERS.
-          super->zif_sat_query_converter~convert_value( EXPORTING iv_option = iv_option
+          super->zif_sat_query_converter~convert_value( EXPORTING iv_sign   = iv_sign
+                                                                  iv_sign2  = iv_sign2
+                                                                  iv_option = iv_option
+                                                        IMPORTING es_range  = es_range
                                                         CHANGING  cv_value  = cv_value
                                                                   cv_value2 = cv_value2 ).
       ENDCASE.
