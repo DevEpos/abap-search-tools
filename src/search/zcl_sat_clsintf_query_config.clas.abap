@@ -31,7 +31,6 @@ CLASS zcl_sat_clsintf_query_config DEFINITION
   PRIVATE SECTION.
     CONSTANTS:
       BEGIN OF c_image_keys,
-        folder    TYPE string VALUE 'ABAP:IMG_FOLDER',
         abap_lang TYPE string VALUE 'ABAP:IMG_SOURCE_CODE',
         friend    TYPE string VALUE 'ABAP:IMG_FRIEND',
         interface TYPE string VALUE 'ABAP:IMG_INTERFACE',
@@ -181,11 +180,8 @@ CLASS zcl_sat_clsintf_query_config IMPLEMENTATION.
         description      = 'Class Category'
         long_description = |Use '{ c_class_intf_search_option-category }' to restrict search result to Classes/Interfaces that have a certain category.\n\n| &&
                            |Example:\n   { c_class_intf_search_option-category } : exception|
-        img_info         = VALUE #(
-            img_key     = c_image_keys-folder
-            img_encoded = |iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAAVFBMVEUAAAD48Mj46LDo0Ijw2JD44Jj44KD42Ij40HjgwHj42JD40IDYsHC8hTLDiza0fzKlbCStciu8fzLDhTatbCSeZietci+eXx2e| &&
-                          |XyCPUhn////46JgjdYhrAAAAAXRSTlMAQObYZgAAAFlJREFUeJydz0kSgCAMRNEoKojiBMaB+9/TEFPo0vLtfu8a4JeBvDucJDztY6xU2/uEB1dkjoelzHYexoZgBjBba7EWioZJa9QiNWwGO8ENBxpx| &&
-                          |N8CafTt2AcOvBf0oDmf4AAAAAElFTkSuQmCC| )
+        img_info         = VALUE #( img_key     = c_general_image_keys-folder
+                                    img_encoded = get_general_image( iv_image_key = c_general_image_keys-folder ) )
         content_assist   = VALUE #(
             assist_type     = zif_sat_c_object_search=>c_filter_content_assist_type-named_item
             caching         = abap_true

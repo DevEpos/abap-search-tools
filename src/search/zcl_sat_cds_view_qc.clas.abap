@@ -56,7 +56,10 @@ CLASS zcl_sat_cds_view_qc IMPLEMENTATION.
         ENDCASE.
 
       WHEN OTHERS.
-        super->zif_sat_query_converter~convert_value( EXPORTING iv_option = iv_option
+        super->zif_sat_query_converter~convert_value( EXPORTING iv_sign   = iv_sign
+                                                                iv_sign2  = iv_sign2
+                                                                iv_option = iv_option
+                                                      IMPORTING es_range  = es_range
                                                       CHANGING  cv_value  = cv_value
                                                                 cv_value2 = cv_value2 ).
 
