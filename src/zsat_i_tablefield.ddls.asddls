@@ -7,7 +7,7 @@
 @EndUserText.label: 'Field in table'
 
 define view ZSAT_I_TableField
-  as select distinct from dd03l as Field
+  as select from dd03l as Field
 
 {
   key Field.tabname   as TableName,

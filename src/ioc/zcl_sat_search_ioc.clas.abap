@@ -55,7 +55,11 @@ CLASS zcl_sat_search_ioc IMPLEMENTATION.
                                       ( filter      = |{ c_search_type-method }|
                                         implementer = 'ZCL_SAT_CLIF_METH_QUERY_CONFIG' )
                                       ( filter      = |{ c_search_type-message }|
-                                        implementer = 'ZCL_SAT_MESSAGE_QUERY_CONFIG' ) ) )
+                                        implementer = 'ZCL_SAT_MESSAGE_QUERY_CONFIG' )
+                                      ( filter      = |{ c_search_type-data_element }|
+                                        implementer = 'ZCL_SAT_DTEL_QUERY_CONFIG' )
+                                      ( filter      = |{ c_search_type-domain }|
+                                        implementer = 'ZCL_SAT_DOMA_QUERY_CONFIG' ) ) )
             ( name         = c_contracts-query_validator
               implementers = VALUE #( ( filter      = |{ c_search_type-cds_view }|
                                         implementer = 'ZCL_SAT_CDS_VIEW_QV' )
@@ -80,7 +84,11 @@ CLASS zcl_sat_search_ioc IMPLEMENTATION.
                                       ( filter      = |{ c_search_type-method }|
                                         implementer = 'ZCL_SAT_OS_METHOD_PROVIDER' )
                                       ( filter      = |{ c_search_type-message }|
-                                        implementer = 'ZCL_SAT_OS_MESSAGE_PROVIDER' ) ) )
+                                        implementer = 'ZCL_SAT_OS_MESSAGE_PROVIDER' )
+                                      ( filter      = |{ c_search_type-data_element }|
+                                        implementer = 'ZCL_SAT_OS_DTEL_PROVIDER' )
+                                      ( filter      = |{ c_search_type-domain }|
+                                        implementer = 'ZCL_SAT_OS_DOMA_PROVIDER' ) ) )
             ( name         = c_contracts-query_converter
               implementers = VALUE #( ( filter      = |{ c_search_type-class_interface }|
                                         implementer = 'ZCL_SAT_CLSINTF_QC' )
@@ -94,6 +102,10 @@ CLASS zcl_sat_search_ioc IMPLEMENTATION.
                                         implementer = 'ZCL_SAT_STRUCT_QC' )
                                       ( filter      = |{ c_search_type-ddic_view }|
                                         implementer = 'ZCL_SAT_DDICVIEW_QC' )
+                                      ( filter      = |{ c_search_type-data_element }|
+                                        implementer = 'ZCL_SAT_DTEL_QC' )
+                                      ( filter      = |{ c_search_type-domain }|
+                                        implementer = 'ZCL_SAT_DOMA_QC' )
                                       ( implementer = 'ZCL_SAT_GENERAL_QC' ) ) )
             ( name         = c_contracts-query_parser
               implementers = VALUE #(
@@ -137,6 +149,18 @@ CLASS zcl_sat_search_ioc IMPLEMENTATION.
                   ( filter       = |{ c_search_type-message }|
                     dependencies = VALUE #(
                         filter = c_search_type-message
+                        ( parameter = c_dependency_params-io_configuration contract = c_contracts-query_config )
+                        ( parameter = c_dependency_params-io_validator     contract = c_contracts-query_validator )
+                        ( parameter = c_dependency_params-io_converter     contract = c_contracts-query_converter ) ) )
+                  ( filter       = |{ c_search_type-data_element }|
+                    dependencies = VALUE #(
+                        filter = c_search_type-data_element
+                        ( parameter = c_dependency_params-io_configuration contract = c_contracts-query_config )
+                        ( parameter = c_dependency_params-io_validator     contract = c_contracts-query_validator )
+                        ( parameter = c_dependency_params-io_converter     contract = c_contracts-query_converter ) ) )
+                  ( filter       = |{ c_search_type-domain }|
+                    dependencies = VALUE #(
+                        filter = c_search_type-domain
                         ( parameter = c_dependency_params-io_configuration contract = c_contracts-query_config )
                         ( parameter = c_dependency_params-io_validator     contract = c_contracts-query_validator )
                         ( parameter = c_dependency_params-io_converter     contract = c_contracts-query_converter ) ) ) ) ) ) ).

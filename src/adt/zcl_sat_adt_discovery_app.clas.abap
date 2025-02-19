@@ -282,6 +282,13 @@ CLASS zcl_sat_adt_discovery_app IMPLEMENTATION.
         description     = 'Resource for Structure Field'
         category_scheme = zif_sat_c_object_search=>c_content_assist-category_scheme
         category_term   = zif_sat_c_object_search=>c_content_assist-terms-structure_field ).
+
+    io_registry->register_discoverable_resource(
+        url             = '/builtindatatype'
+        handler_class   = 'ZCL_SAT_ADT_RES_DTYPE_VH'
+        description     = 'Resource for built-in data types'
+        category_scheme = zif_sat_c_object_search=>c_content_assist-category_scheme
+        category_term   = zif_sat_c_object_search=>c_content_assist-terms-builtin_data_type ).
   ENDMETHOD.
 
   METHOD register_sapaox_launcher.

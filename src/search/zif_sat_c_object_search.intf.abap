@@ -13,6 +13,8 @@ INTERFACE zif_sat_c_object_search
       db_field        TYPE zif_sat_ty_object_search=>ty_search_type VALUE 'dbfield',
       cds_field       TYPE zif_sat_ty_object_search=>ty_search_type VALUE 'cdsfield',
       message         TYPE zif_sat_ty_object_search=>ty_search_type VALUE 'message',
+      data_element    TYPE zif_sat_ty_object_search=>ty_search_type VALUE 'dtel',
+      domain          TYPE zif_sat_ty_object_search=>ty_search_type VALUE 'doma',
     END OF c_search_type.
 
   CONSTANTS:
@@ -40,6 +42,7 @@ INTERFACE zif_sat_c_object_search
     BEGIN OF c_filter_data_type,
       default TYPE string VALUE '',
       date    TYPE string VALUE 'DATE',
+      number  TYPE string VALUE 'NUMBER',
       boolean TYPE string VALUE 'BOOLEAN',
     END OF c_filter_data_type.
 
@@ -117,6 +120,7 @@ INTERFACE zif_sat_c_object_search
         db_tab_include    TYPE string VALUE 'dbtableinclude',
         structure_include TYPE string VALUE 'structureinclude',
         structure_field   TYPE string VALUE 'structurefield',
+        builtin_data_type TYPE string VALUE 'builtindtype',
       END OF terms,
     END OF c_content_assist.
 ENDINTERFACE.

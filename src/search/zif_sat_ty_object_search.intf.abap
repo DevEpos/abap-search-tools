@@ -125,6 +125,7 @@ INTERFACE zif_sat_ty_object_search
       no_uppercase     TYPE abap_bool,
       single           TYPE abap_bool,
       patterns         TYPE abap_bool,
+      range            TYPE abap_bool,
       key_value        TYPE abap_bool,
       no_negation      TYPE abap_bool,
       description      TYPE string,
