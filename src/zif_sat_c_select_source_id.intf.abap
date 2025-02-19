@@ -26,6 +26,11 @@ INTERFACE zif_sat_c_select_source_id
   CONSTANTS zsat_i_redefinedmethod TYPE string VALUE 'ZSAT_I_REDEFINEDMETHOD'.
   CONSTANTS zsat_i_associatedincds TYPE string VALUE 'ZSAT_I_ASSOCIATEDINCDS'.
   CONSTANTS zsat_i_cdsfrompartentity TYPE string VALUE 'ZSAT_I_CDSFROMPARTENTITY'.
+  CONSTANTS zsat_i_dataelement TYPE string VALUE 'ZSAT_I_DATAELEMENT'.
+  CONSTANTS zsat_i_dataelementtext TYPE string VALUE 'ZSAT_I_DATAELEMENTTEXT'.
+  CONSTANTS zsat_i_domain TYPE string VALUE 'ZSAT_I_DOMAIN'.
+  CONSTANTS zsat_i_domaintext TYPE string VALUE 'ZSAT_I_DOMAINTEXT'.
+  CONSTANTS zsat_i_domainfixvalue TYPE string VALUE 'ZSAT_I_DOMAINFIXVALUE'.
   CONSTANTS zsat_i_ddicview TYPE string VALUE 'ZSAT_I_DDICVIEW'.
   CONSTANTS zsat_i_databasetable TYPE string VALUE 'ZSAT_I_DATABASETABLE'.
   CONSTANTS zsat_i_databaseentity TYPE string VALUE 'ZSAT_I_DATABASEENTITY'.

@@ -9,6 +9,14 @@ Legend
 + : added
 - : removed
 
+2025-02-19 v2.2.0
+-------------------
+
++ New search type 'Domain'
++ New saerch type 'Data Element'
+* Fixes downport issue in ZSAT_I_Structure
+
+
 2025-02-13 v2.1.0
 -------------------
 

@@ -86,6 +86,10 @@ CLASS zcl_sat_base_search_provider DEFINITION
     "! <p class="shorttext synchronized">Start new criteria table connected with AND</p>
     METHODS new_and_cond_list.
 
+    METHODS new_cond_list
+      IMPORTING
+        if_and TYPE abap_bool.
+
     "! <p class="shorttext synchronized">Starts the object search</p>
     METHODS execute_sql_query
       RAISING
@@ -513,7 +517,8 @@ CLASS zcl_sat_base_search_provider IMPLEMENTATION.
                                                  sql_function = iv_sql_function
                                                  sign         = value-sign
                                                  option       = value-option
-                                                 low          = value-low ) ) ) ).
+                                                 low          = value-low
+                                                 high         = value-high ) ) ) ).
 
     IF mf_excluding_found = abap_true.
       RETURN.
@@ -589,7 +594,7 @@ CLASS zcl_sat_base_search_provider IMPLEMENTATION.
         ENDIF.
       ENDLOOP.
 
-      IF lv_tabix <> lines( mo_search_query->mt_search_term ).
+      IF lv_tabix <> lines( lt_search_terms ).
         IF lf_use_and_between_terms = abap_true.
           new_and_cond_list( ).
         ELSE.
@@ -759,6 +764,14 @@ CLASS zcl_sat_base_search_provider IMPLEMENTATION.
       mt_criteria_or = VALUE #( BASE mt_criteria_or
                                 ( values = mt_criteria ) ).
       CLEAR mt_criteria.
+    ENDIF.
+  ENDMETHOD.
+
+  METHOD new_cond_list.
+    IF if_and = abap_true.
+      new_and_cond_list( ).
+    ELSE.
+      new_or_cond_list( ).
     ENDIF.
   ENDMETHOD.
 
