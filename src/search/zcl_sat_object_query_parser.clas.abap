@@ -245,13 +245,20 @@ CLASS zcl_sat_object_query_parser IMPLEMENTATION.
                                    iv_value2         = lv_value2 ).
 
     IF is_option-data_type = zif_sat_c_object_search=>c_filter_data_type-boolean.
-      lv_value = to_upper( lv_value ).
-      lv_value = xsdbool( lv_value = 'TRUE' OR lv_value = abap_true ).
+      lv_value = xsdbool( to_upper( lv_value ) = 'TRUE' OR lv_value = abap_true ).
     ELSE.
-      mo_converter->convert_value( EXPORTING iv_option = is_option-name
+      mo_converter->convert_value( EXPORTING iv_sign   = lv_sign
+                                             iv_sign2  = lv_sign2
+                                             iv_option = is_option-name
                                              iv_target = iv_target
+                                   IMPORTING es_range  = DATA(ls_range)
                                    CHANGING  cv_value  = lv_value
                                              cv_value2 = lv_value2 ).
+
+      IF is_option-range = abap_true AND ls_range IS NOT INITIAL.
+        <ls_option>-value_range = VALUE #( BASE <ls_option>-value_range ( ls_range ) ).
+        RETURN.
+      ENDIF.
     ENDIF.
 
     " Crop input if necessary

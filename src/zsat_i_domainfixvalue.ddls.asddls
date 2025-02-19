@@ -15,11 +15,12 @@ define view ZSAT_I_DomainFixValue
       and FixedValue.as4local   = ValueText.as4local
 
 {
-  key FixedValue.domname    as DomainName,
-  key FixedValue.domvalue_l as Low,
-  key ValueText.ddlanguage  as Language,
+  key FixedValue.domname      as DomainName,
+  key FixedValue.domvalue_l   as Low,
+  key ValueText.ddlanguage    as Language,
 
-      ValueText.ddtext      as Text
+      ValueText.ddtext        as Text,
+      upper(ValueText.ddtext) as TextUpper
 }
 
 where FixedValue.as4local = 'A' -- Active

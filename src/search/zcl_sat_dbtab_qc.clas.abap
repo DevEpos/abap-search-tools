@@ -52,8 +52,10 @@ CLASS zcl_sat_dbtab_qc IMPLEMENTATION.
                                zif_sat_c_os_dtab_options=>c_table_storage_type-int-undefined ).
 
       WHEN OTHERS.
-        super->zif_sat_query_converter~convert_value( EXPORTING iv_option = iv_option
-                                                                iv_target = iv_target
+        super->zif_sat_query_converter~convert_value( EXPORTING iv_sign   = iv_sign
+                                                                iv_sign2  = iv_sign2
+                                                                iv_option = iv_option
+                                                      IMPORTING es_range  = es_range
                                                       CHANGING  cv_value  = cv_value
                                                                 cv_value2 = cv_value2 ).
     ENDCASE.
