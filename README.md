@@ -1,4 +1,4 @@
-[![abap package version](https://img.shields.io/endpoint?url=https://shield.abap.space/version-shield-json/github/DevEpos/abap-search-tools/src/zif_sat_version.intf.abap/version&label=version)](https://github.com/DevEpos/abap-search-tools/blob/main/src/zif_sat_version.intf.abap)
+[![abap package version](https://img.shields.io/endpoint?url=https://shield.abappm.com/github/DevEpos/abap-search-tools/-main/src/zif_sat_version.intf.abap/version&label=version)](https://github.com/DevEpos/abap-search-tools/blob/main/src/zif_sat_version.intf.abap)
 
 # abap-search-tools
 
