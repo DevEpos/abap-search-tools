@@ -1,7 +1,6 @@
 # abap-search-tools
 
-This Repository contains the ADT Backend that is needed to use the eclipse plugin
-[ABAP Search and Analysis Tools](https://www.github.com/DevEpos/abap-search-tools-ui)
+This Repository contains the ADT Backend that is needed to use the eclipse plugin [ABAP Search and Analysis Tools](https://github.com/DevEpos/eclipse-adt-plugins/tree/main/features/search-tools).
 
 ## Installation
 
