@@ -324,6 +324,13 @@ CLASS zcl_sat_adt_discovery_app IMPLEMENTATION.
         description     = 'Resource for built-in data types'
         category_scheme = zif_sat_c_object_search=>c_content_assist-category_scheme
         category_term   = zif_sat_c_object_search=>c_content_assist-terms-builtin_data_type ).
+
+    io_registry->register_discoverable_resource(
+        url             = '/originalsystem'
+        handler_class   = 'ZCL_SAT_ADT_RES_ORIG_SYST_VH'
+        description     = 'Resource for original systems'
+        category_scheme = zif_sat_c_object_search=>c_content_assist-category_scheme
+        category_term   = zif_sat_c_object_search=>c_content_assist-terms-original_system ).
   ENDMETHOD.
 
   METHOD register_sapaox_launcher.

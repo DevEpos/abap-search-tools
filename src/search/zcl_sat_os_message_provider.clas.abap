@@ -148,6 +148,10 @@ CLASS zcl_sat_os_message_provider IMPLEMENTATION.
                                  iv_ref_field       = |{ c_fields-message_class }|
                                  iv_ref_table_alias = c_aliases-msg_clas
                                  it_tadir_type      = VALUE #( ( zif_sat_c_tadir_types=>message_class ) ) ).
+
+        WHEN c_general_search_options-original_system.
+          add_option_filter( iv_fieldname = c_general_fields-original_system
+                             it_values    = <ls_option>-value_range ).
       ENDCASE.
     ENDLOOP.
   ENDMETHOD.

@@ -24,5 +24,6 @@ define view ZSAT_I_MessageClass
       lastuser                as ChangedBy,
       ldate                   as ChangedOn,
       stext                   as Description,
-      upper(stext)            as DescriptionUpper
+      upper(stext)            as DescriptionUpper,
+      Repo.srcsystem          as OriginalSystem
 }

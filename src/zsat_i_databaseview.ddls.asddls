@@ -38,5 +38,6 @@ define view ZSAT_I_DatabaseView
   DbView.ChangedDate,
   DbView.ChangedBy,
   DbView.DevelopmentPackage,
-  DbView.Type
+  DbView.Type,
+  DbView.OriginalSystem
 }

@@ -70,6 +70,7 @@ CLASS zcl_sat_ddicview_query_config IMPLEMENTATION.
         ( get_package_filt_conf( ) )
         ( get_softw_comp_filt_conf( ) )
         ( get_appl_comp_filt_conf( ) )
+        ( get_original_system_filt_conf( ) )
         ( get_rel_state_filt_conf( iv_object_filter = zif_sat_c_object_types=>view_definition ) )
         ( get_root_tab_filt_conf( ) )
         ( get_base_tab_filt_conf( ) )
