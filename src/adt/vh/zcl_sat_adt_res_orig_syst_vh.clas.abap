@@ -14,14 +14,8 @@ ENDCLASS.
 
 CLASS zcl_sat_adt_res_orig_syst_vh IMPLEMENTATION.
   METHOD get_named_items.
-    DATA lt_original_system_range TYPE RANGE OF df14l-ps_posid.
 
-    IF p_filter_name IS NOT INITIAL.
-      lt_original_system_range = VALUE #( ( sign = 'I' option = 'CP' low = to_upper( p_filter_name ) ) ).
-    ENDIF.
-
-    SELECT originalsystem AS name FROM zsat_i_originalsystemvh
-      WHERE originalsystem IN @lt_original_system_range
+    SELECT DISTINCT srcsystem AS name FROM tadir
       INTO CORRESPONDING FIELDS OF TABLE @p_named_item_list-items
       UP TO @p_filter_max_item_count ROWS.
 
