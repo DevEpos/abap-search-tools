@@ -93,6 +93,10 @@ CLASS zcl_sat_os_subp_meth_redef IMPLEMENTATION.
                          sign   = 'I'
                          option = 'EQ'
                          low    = abap_false ) ).
+    add_filter( VALUE #( field  = |{ c_alias_names-method }~version|
+                         sign   = 'I'
+                         option = 'EQ'
+                         low    = '1' ) ).
     configure_method_filters( ).
     add_method_name_filter( ).
 
