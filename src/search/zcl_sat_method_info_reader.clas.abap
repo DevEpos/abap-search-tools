@@ -429,7 +429,8 @@ CLASS zcl_sat_method_info_reader IMPLEMENTATION.
            mtdfinal AS is_final
       FROM seoredef
       FOR ALL ENTRIES IN @mt_methods_processed
-      WHERE clsname = @mt_methods_processed-original_class_name
+      WHERE version = '1'
+        AND clsname = @mt_methods_processed-original_class_name
         AND mtdname = @mt_methods_processed-original_method_name
       INTO CORRESPONDING FIELDS OF TABLE @mt_redef_method_info.
   ENDMETHOD.

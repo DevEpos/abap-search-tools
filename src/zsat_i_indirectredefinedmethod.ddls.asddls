@@ -10,10 +10,10 @@ define view ZSAT_I_IndirectRedefinedMethod
   as select from    seometarel        as Meta
 
     inner join      seoredef          as RedefinedMethod
-      on  Meta.clsname    = RedefinedMethod.clsname
-      and Meta.refclsname = RedefinedMethod.refclsname
-      and Meta.version    = RedefinedMethod.version
-      and Meta.reltype    = '2'
+      on  Meta.clsname            = RedefinedMethod.clsname
+      and Meta.refclsname         = RedefinedMethod.refclsname
+      and RedefinedMethod.version = '1'
+      and Meta.reltype            = '2'
 
     left outer join seocompodf        as MethodDef
       on  RedefinedMethod.refclsname = MethodDef.clsname

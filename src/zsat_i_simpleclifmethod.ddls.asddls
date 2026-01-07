@@ -33,6 +33,7 @@ union
       and Meta.refclsname           = AbstractMethod.refclsname
       and Method.cmpname            = AbstractMethod.mtdname
       and AbstractMethod.mtdabstrct = 'X'
+      and AbstractMethod.version    = '1'
 
 {
   key Meta.clsname                                        as ClassName,
@@ -48,8 +49,9 @@ union
   select from  seometarel as Meta
 
     inner join seoredef   as RedefinedMethod
-      on  Meta.clsname = RedefinedMethod.clsname
-      and Meta.reltype = '2'
+      on  Meta.clsname            = RedefinedMethod.clsname
+      and Meta.reltype            = '2'
+      and RedefinedMethod.version = '1'
 
 {
   key Meta.clsname            as ClassName,

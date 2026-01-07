@@ -20,9 +20,10 @@ define view ZSAT_I_ClassImplementedMethod
       and MethodDef.alias = ''
 
     left outer join seoredef   as RedefinedMethod
-      on  Meta.clsname    = RedefinedMethod.clsname
-      and Meta.refclsname = RedefinedMethod.refclsname
-      and Method.cmpname  = RedefinedMethod.mtdname
+      on  Meta.clsname            = RedefinedMethod.clsname
+      and Meta.refclsname         = RedefinedMethod.refclsname
+      and Method.cmpname          = RedefinedMethod.mtdname
+      and RedefinedMethod.version = '1'
 
 {
   key Meta.clsname                                        as ClassName,
