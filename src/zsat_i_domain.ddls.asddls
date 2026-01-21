@@ -37,7 +37,8 @@ define view ZSAT_I_Domain
         else 'DOMAIN'
       end              as Type,
 
-      Domain.appexist  as HasAppend
+      Domain.appexist  as HasAppend,
+      Repo.srcsystem   as OriginalSystem
 }
 
 where Domain.as4local = 'A'

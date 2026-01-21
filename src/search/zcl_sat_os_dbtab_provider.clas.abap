@@ -256,6 +256,10 @@ CLASS zcl_sat_os_dbtab_provider IMPLEMENTATION.
 
         WHEN zif_sat_c_os_tabl_options=>c_filter_key-include_usage.
           add_include_filter( it_values = <ls_option>-value_range  ).
+
+        WHEN c_general_search_options-original_system.
+          add_option_filter( iv_fieldname = c_general_fields-original_system
+                             it_values    = <ls_option>-value_range ).
       ENDCASE.
     ENDLOOP.
   ENDMETHOD.

@@ -48,7 +48,8 @@ define view ZSAT_I_DdicView
       Repo.created_on          as CreatedDate,
       as4date                  as ChangedDate,
       as4user                  as ChangedBy,
-      Repo.masterlang          as OriginalLanguage
+      Repo.masterlang          as OriginalLanguage,
+      Repo.srcsystem           as OriginalSystem
 }
 
 where DbView.as4local = 'A'

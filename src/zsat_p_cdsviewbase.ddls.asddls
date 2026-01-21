@@ -30,5 +30,6 @@ define view ZSAT_P_CdsViewBase
       Repo.created_on        as CreatedDate,
       Repo.masterlang        as OriginalLanguage,
       CdsBase.ChangedDate,
-      CdsBase.ChangedBy
+      CdsBase.ChangedBy,
+      Repo.srcsystem         as OriginalSystem
 }

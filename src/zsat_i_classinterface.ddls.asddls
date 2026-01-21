@@ -40,5 +40,6 @@ define view ZSAT_I_ClassInterface
       Class.HasUnitTests,
       Class.DurationType,
       Class.RiskLevel,
-      Class.IsOpenedForPackage
+      Class.IsOpenedForPackage,
+      Repo.srcsystem               as OriginalSystem
 }

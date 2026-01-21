@@ -29,10 +29,11 @@ CLASS zcl_sat_base_search_provider DEFINITION
 
     CONSTANTS:
       BEGIN OF c_general_fields,
-        created_by TYPE string VALUE 'createdby',
-        created_on TYPE string VALUE 'createdon',
-        changed_on TYPE string VALUE 'changedon',
-        changed_by TYPE string VALUE 'changedby',
+        created_by      TYPE string VALUE 'createdby',
+        created_on      TYPE string VALUE 'createdon',
+        changed_on      TYPE string VALUE 'changedon',
+        changed_by      TYPE string VALUE 'changedby',
+        original_system TYPE string VALUE 'originalsystem',
       END OF c_general_fields.
 
     CONSTANTS:

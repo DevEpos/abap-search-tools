@@ -48,7 +48,8 @@ define view ZSAT_I_DatabaseTable
       DbTable.as4date          as ChangedDate,
       DbTable.as4user          as ChangedBy,
       Repo.devclass            as DevelopmentPackage,
-      'T'                      as Type
+      'T'                      as Type,
+      Repo.srcsystem           as OriginalSystem
 }
 
 where DbTable.tabclass = 'TRANSP'

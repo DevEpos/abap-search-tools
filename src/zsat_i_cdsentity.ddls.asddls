@@ -56,6 +56,7 @@ define view ZSAT_I_CdsEntity
   Base.ChangedBy,
   Base.ChangedDate,
   'C'                      as Type,
+  Base.OriginalSystem,
 
   _ApiState
 }

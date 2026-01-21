@@ -21,6 +21,8 @@ define view ZSAT_I_Structure
       Struct.as4user        as ChangedBy,
       Repo.devclass         as DevelopmentPackage,
 
+      Repo.srcsystem        as OriginalSystem,
+
       cast(case
         when Struct.tabclass = 'APPEND' then 'APPEND_STRUCT'
         else 'STRUCT'

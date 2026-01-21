@@ -20,7 +20,8 @@ define view ZSAT_I_DatabaseEntity
   CreatedDate,
   ChangedBy,
   ChangedDate,
-  Type
+  Type,
+  OriginalSystem
 }
 
 union
@@ -37,7 +38,8 @@ union
   CreatedDate,
   ChangedBy,
   ChangedDate,
-  Type
+  Type,
+  OriginalSystem
 }
 
 union
@@ -54,7 +56,8 @@ union
   CreatedDate,
   ChangedBy,
   ChangedDate,
-  Type
+  Type,
+  OriginalSystem
 }
 
 where IsExtend = ''

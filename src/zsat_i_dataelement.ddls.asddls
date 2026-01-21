@@ -11,9 +11,9 @@
 define view ZSAT_I_DataElement
   as select from dd04l as Dtel
 
-    inner join   tadir as repo
-      on  Dtel.rollname = repo.obj_name
-      and repo.object   = 'DTEL'
+    inner join   tadir as Repo
+      on  Dtel.rollname = Repo.obj_name
+      and Repo.object   = 'DTEL'
 
 {
   key Dtel.rollname   as Rollname,
@@ -23,9 +23,9 @@ define view ZSAT_I_DataElement
       Dtel.as4user    as ChangedBy,
       Dtel.as4date    as ChangedDate,
       Dtel.as4time    as ChangedTime,
-      repo.author     as CreatedBy,
-      repo.created_on as CreatedDate,
-      repo.devclass   as DevelopmentPackage,
+      Repo.author     as CreatedBy,
+      Repo.created_on as CreatedDate,
+      Repo.devclass   as DevelopmentPackage,
       Dtel.dtelmaster as OriginalLanguage,
       Dtel.shlpname   as ShlpName,
       Dtel.shlpfield  as ShlpField,
@@ -54,8 +54,9 @@ define view ZSAT_I_DataElement
       Dtel.valexi     as HasFixValues,
       Dtel.lowercase  as IsLowercase,
       Dtel.entitytab  as ValueTable,
-      Dtel.convexit   as ConvExit
+      Dtel.convexit   as ConvExit,
+      Repo.srcsystem  as OriginalSystem
 }
 
 where Dtel.as4local = 'A'
-  and repo.pgmid    = 'R3TR'
+  and Repo.pgmid    = 'R3TR'

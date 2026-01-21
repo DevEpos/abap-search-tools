@@ -316,6 +316,10 @@ CLASS zcl_sat_os_classintf_provider IMPLEMENTATION.
         WHEN c_general_search_options-changed_on.
           add_date_filter( iv_fieldname = |{ c_clif_alias }~{ c_fields-changed_on }|
                            it_values    = <ls_option>-value_range ).
+
+        WHEN c_general_search_options-original_system.
+          add_option_filter( iv_fieldname = c_general_fields-original_system
+                             it_values    = <ls_option>-value_range ).
       ENDCASE.
     ENDLOOP.
   ENDMETHOD.

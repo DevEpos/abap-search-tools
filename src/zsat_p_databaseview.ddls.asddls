@@ -22,7 +22,8 @@ define view ZSAT_P_DatabaseView
   DbView.as4user  as ChangedBy,
   Repo.devclass   as DevelopmentPackage,
   Repo.masterlang as OriginalLanguage,
-  'V'             as Type
+  'V'             as Type,
+  Repo.srcsystem  as OriginalSystem
 }
 
 where DbView.as4local = 'A'

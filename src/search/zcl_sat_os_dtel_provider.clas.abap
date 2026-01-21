@@ -218,6 +218,10 @@ CLASS zcl_sat_os_dtel_provider IMPLEMENTATION.
           add_option_filter( iv_fieldname = |{ c_base_table }~{ c_fields-search_help_param }|
                              it_values    = <ls_option>-value_range ).
 
+        WHEN c_general_search_options-original_system.
+          add_option_filter( iv_fieldname = c_general_fields-original_system
+                             it_values    = <ls_option>-value_range ).
+
       ENDCASE.
     ENDLOOP.
   ENDMETHOD.

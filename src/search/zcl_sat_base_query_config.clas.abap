@@ -75,6 +75,10 @@ CLASS zcl_sat_base_query_config DEFINITION
       RETURNING
         VALUE(result) TYPE zif_sat_ty_object_search=>ty_query_filter.
 
+    METHODS get_original_system_filt_conf
+      RETURNING
+        VALUE(result) TYPE zif_sat_ty_object_search=>ty_query_filter.
+
     METHODS get_softw_comp_filt_conf
       RETURNING
         VALUE(result) TYPE zif_sat_ty_object_search=>ty_query_filter.
@@ -96,14 +100,15 @@ CLASS zcl_sat_base_query_config DEFINITION
   PRIVATE SECTION.
     CONSTANTS:
       BEGIN OF c_image_keys,
-        owner       TYPE string VALUE 'ABAP:IMG_USER',
-        owner_entry TYPE string VALUE 'ABAP:IMG_USER_EDIT',
-        package     TYPE string VALUE 'ABAP:IMG_PACKAGE',
-        api         TYPE string VALUE 'ABAP:IMG_API',
-        description TYPE string VALUE 'ABAP:IMG_DESCRIPTION',
-        appl_comp   TYPE string VALUE 'ABAP:IMG_APPL_COMP',
-        soft_comp   TYPE string VALUE 'ABAP:IMG_SOFT_COMP',
-        changed_on  TYPE string VALUE 'ABAP:IMG_CHANGED_ON',
+        owner           TYPE string VALUE 'ABAP:IMG_USER',
+        owner_entry     TYPE string VALUE 'ABAP:IMG_USER_EDIT',
+        package         TYPE string VALUE 'ABAP:IMG_PACKAGE',
+        api             TYPE string VALUE 'ABAP:IMG_API',
+        description     TYPE string VALUE 'ABAP:IMG_DESCRIPTION',
+        appl_comp       TYPE string VALUE 'ABAP:IMG_APPL_COMP',
+        original_system TYPE string VALUE 'ABAP:IMG_ORIG_SYST',
+        soft_comp       TYPE string VALUE 'ABAP:IMG_SOFT_COMP',
+        changed_on      TYPE string VALUE 'ABAP:IMG_CHANGED_ON',
       END OF c_image_keys.
 
 ENDCLASS.
@@ -374,5 +379,27 @@ CLASS zcl_sat_base_query_config IMPLEMENTATION.
                  |zsZqgI2NrqC3pfzW0mhlS2YmRoZjl98zLN359Pbt598d9+w5+gxXWCEM0JHeXBajYsnEyMCw69Rrhi1HXty8//qX7e7dR7HaDAPwhKSpKf9NgJvV5vqDLzxbjry8fev5b5edOw8/x6cZxYBzl+5f4eAR| &&
                  |fnX/2TeZq4++eu7Zc/QJIc2DAwAA08igClI5EHcAAAAASUVORK5CYII=|.
     ENDCASE.
+  ENDMETHOD.
+
+  METHOD get_original_system_filt_conf.
+    result = VALUE #(
+        name             = c_general_options-original_system
+        description      = 'Original System'
+        long_description = |Use '{ c_general_options-original_system }' to restrict the search query by Original System.\n\n| &&
+                           |Example:\n   { c_general_options-original_system } : A4H|
+        img_info         = VALUE #(
+            img_key     = c_image_keys-original_system
+            img_encoded = |iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABxUlEQVR4nGNgoDZYuyjvxdrF+U9A7HULW5NWza7LJMmAld2Jz1f2pdxeMasha+uavp/bVvf8XjmnrpAkA5ZPLHi1aUXXjy0| &&
+                          |ru/9vWNr+f9Pyzl8LptYUE2XA0r7sDxuWNP3btqrjf3db9f+u1qr/G5e1/V+/tOXnvMnVJXg1T++vSlq/qO7f7jXN/xtqS///+vsfjJsbK/9vWtr8f9vK1p8z+suxGzK5pzx/7aK6nztWNP| &&
+                          |6rry35//3PfxRcWVnyf93C2v8bFtf9mNJXVoqiub+jKHvtvIrXa+dV/q+pLv7/9fd/rBgkt25BFRBXvpvQWYIwpKWpsHliZ+G74Ojk/59+/Qdjn+qK/04luWDsWVkGFw+Nz/4/qbvwbWtzf| &&
+                          |g+KKwpKsww0Pbv/v//xD4w14zL/X7nFD8YgNlwcqAakFms4GAVN/P/m+z8w1ozM+3/tCQ8Yg9gwcZAanLFgHT39/8tv/8BYM7j4/+7bEmAMYsPEQWpwGuCSMvf/s6//wFjDr/L/wkvKYAxi| &&
+                          |w8RBanAa4Ju7+P/jL//AWMOj7n/VLkswBrFh4iA1OA0IK1v5H4YN/dr+6/s0g7GBbytcPLx81U+cBpADAOgXe/qFDkw2AAAAAElFTkSuQmCC| )
+        patterns         = abap_true
+        content_assist   = VALUE #(
+            assist_type           = zif_sat_c_object_search=>c_filter_content_assist_type-named_item
+            caching               = abap_true
+            category_scheme       = zif_sat_c_object_search=>c_content_assist-category_scheme
+            category_term         = zif_sat_c_object_search=>c_content_assist-terms-original_system
+            proposal_image_source = zif_sat_c_object_search=>c_proposal_image_source-same_as_filter ) ).
   ENDMETHOD.
 ENDCLASS.

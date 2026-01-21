@@ -196,6 +196,10 @@ CLASS zcl_sat_os_doma_provider IMPLEMENTATION.
 
         WHEN zif_sat_c_os_doma_options=>c_filter_key-fix_value.
           add_fixval_filter( it_values = <ls_option>-value_range ).
+
+        WHEN c_general_search_options-original_system.
+          add_option_filter( iv_fieldname = c_general_fields-original_system
+                             it_values    = <ls_option>-value_range ).
       ENDCASE.
     ENDLOOP.
   ENDMETHOD.
